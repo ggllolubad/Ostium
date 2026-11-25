@@ -30,17 +30,17 @@ creature(
 
 creature(
     "abbess", "Abbess of Salt", "elite", 100, armor=2, ranks=[2, 3],
-    resist={"water": "resist", "void": "weak"}, role="afflicter", personality="cruel",
+    resist={"water": "resist", "void": "weak"}, role="afflicter",
     intents={
         "sermon": I("Silent Sermon", "debuff", "all_heroes", [STRESS(6), A("water", 1, attr="stable")]),
         "salt": I("Salt the Wound", "attack", "front", [D(11), ST("vulnerable", 1)]),
         "rites": I("Last Rites", "heal", "ally_lowest", [H(16), CLEANSE(3)]),
-        "seal": I("Seal the Door", "debuff", "most_cards", [DISCARD_RANDOM(), STRESS(5)]),
+        "seal": I("Seal the Door", "debuff", "most_cards", [ADD("t_drowned_sewn_shut"), STRESS(4)]),
     },
     ai=[{"use": "rites", "if": "ally_hurt75", "not_twice": True}, {"use": "seal", "every": 3},
         {"use": "sermon", "every": 3, "offset": 1}, {"use": "salt"}],
-    traits=[T("round_start", "Salt Crust", "Round start: gains 2 Ward, so the first course stacks on her are cancelled.",
-              [WARD(2, to="self")])],
+    traits=[T("round_start", "Salt Crust", "Round start: if she has no Ward, she gains 2 Ward, so the first course stacks on her are cancelled.",
+              [WARD(2, to="self", if_="ward<1")])],
     lore="Her mouth is sewn shut. She preaches anyway.", world=W)
 
 creature(
@@ -59,7 +59,7 @@ creature(
 
 creature(
     "pearl_diver", "Pearl Diver", "elite", 90, armor=2, ranks=[2, 3],
-    resist={"water": "resist", "toxin": "weak"}, role="attacker", personality="cunning",
+    resist={"water": "resist", "toxin": "weak"}, role="attacker",
     intents={
         "knife": I("Shucking Knife", "attack", "back", [D(6, times=2), D(5, if_="!t.block")]),
         "leap": I("Leap the Line", "attack", "rank3", [D(10), ST("bleed", 2)]),
@@ -70,6 +70,13 @@ creature(
         {"use": "leap", "every": 3, "offset": 1}, {"use": "knife"}],
     traits=[T("hit", "Nacre Crust", "When hit, its pearl crust hardens: it gains 3 Block.", [B(3, to="self")])],
     lore="It goes for the soft ones at the back. It always has.", world=W)
+
+# ================================================================== cards foes put in a hand
+card("t_drowned_sewn_shut", "Sewn Shut", 1, "Curse", "none", [STRESS(-2)],
+     "Cut the stitches: shed 2 stress. Exhaust. Until it is played it comes back with every reshuffle; removed at fight end.",
+     kw=["Temporary", "Curse", "Exhaust"],
+     flavour="The order sewed her mouth shut with waxed cord. She has kept the needle.",
+     note="The Abbess of Salt drawing a length of waxed cord through a hero's hand like a seam.")
 
 # ================================================================== foes
 creature(
@@ -84,7 +91,7 @@ creature(
 
 creature(
     "siren", "Brine Siren", "foe", 34, ranks=[3, 4], resist={"water": "resist", "lightning": "weak"},
-    role="afflicter", personality="cruel",
+    role="afflicter",
     intents={
         "song": I("Drowning Song", "debuff", "all_heroes", [STRESS(5)]),
         "lure": I("Lure", "attack", "back", [D(4), A("void", 1, attr="volatile")]),
@@ -153,7 +160,7 @@ creature(
     lore="Gas swells the dead until the skin will not hold. Do not be close when it fails.", world=W)
 
 creature(
-    "hookline", "Hookline Fisher", "foe", 34, ranks=[3, 4], resist=WATER, personality="cunning",
+    "hookline", "Hookline Fisher", "foe", 34, ranks=[3, 4], resist=WATER,
     intents={
         "reel": I("Reel In", "attack", "back", [D(5), PULL(2)]),
         "gaff": I("Gaff", "attack", "front", [D(8)]),
@@ -216,8 +223,8 @@ creature(
         "backhand": I("Sceptre Backhand", "attack", "front", [D(16)]),
         "decree": I("Drown the Court", "debuff", "all_heroes", [A("void", 1, attr="volatile"), STRESS(3)]),
         "reach": I("Long Backhand", "attack", "front2", [D(10)]),
-        "breath": I("Royal Breath", "charge", "self", [B(14)]),
-        "gorge": I("Gorge on the Court", "heal", "self", [H(30), SELF("might", 2)]),
+        "breath": I("Royal Breath", "defend", "self", [B(14)]),
+        "gorge": I("Gorge on the Court", "heal", "self", [H(8), H(14, if_="allies>=2"), H(14, if_="allies>=3"), SELF("might", 1, if_="allies>=2")]),
     },
     ai=[{"use": "crown", "every": 3}, {"use": "breath", "every": 3, "offset": 2}, {"use": "backhand"}],
     traits=[T("round_start", "Kept Court",
@@ -227,7 +234,7 @@ creature(
         P(60, "The King rises from the throne.",
           ai=[{"use": "crown", "every": 3, "offset": 1}, {"use": "decree", "every": 3}, {"use": "reach"}]),
         P(30, "The King gorges on his court.", might=1,
-          ai=[{"use": "gorge", "if": "allies>=2", "every": 3, "not_twice": True}, {"use": "crown", "every": 3, "offset": 1},
+          ai=[{"use": "gorge", "every": 3, "not_twice": True}, {"use": "crown", "every": 3, "offset": 1},
               {"use": "decree", "every": 3}, {"use": "reach"}]),
     ],
     lore="He kept his crown. The sea grew it into him.", world=W)
@@ -261,24 +268,24 @@ creature(
 
 creature(
     "mother_of_brine", "Mother of Brine", "ruler", 260, armor=2, span=2, ranks=[3, 4],
-    resist={"water": "resist", "lightning": "weak"}, role="summoner",
+    resist={"water": "resist", "lightning": "weak"}, role="summoner", charge_name="Daughters",
     intents={
-        "bear": I("Bear a Daughter", "summon", "self", [SUMMON("siren", max=4)]),
+        "bear": I("Bear a Daughter", "summon", "self", [SUMMON("siren", max=4), SELF("charge", 1)]),
         "lullaby": I("Lullaby", "debuff", "all_heroes", [STRESS(6), A("water", 1, attr="stable")]),
         "embrace": I("Embrace", "attack", "front", [D(13, lifesteal=100), ST("anchor", 1)]),
         "chorus": I("Cradle Song", "debuff", "all_heroes", [A("void", 1, attr="volatile"), STRESS(3)]),
         "devour": I("Devour the Weak", "attack", "weakest", [D(22)]),
-        "eat": I("Eat Her Own", "heal", "self", [H(36)]),
+        "eat": I("Eat Her Own", "heal", "self", [H(10), H(14, if_="allies>=2"), H(14, if_="allies>=3")]),
     },
-    ai=[{"use": "bear", "if": "allies<3", "not_twice": True}, {"use": "lullaby", "every": 3}, {"use": "embrace"}],
+    ai=[{"use": "bear", "if": "allies<3&charge<4", "not_twice": True}, {"use": "lullaby", "every": 3}, {"use": "embrace"}],
     traits=[T("ally_death", "Mother's Grief", "When one of her daughters dies, every hero gains 5 stress.",
               [STRESS(5, to="all_enemies")])],
     phases=[
         P(55, "The lullaby turns to a scream.", might=1,
-          ai=[{"use": "devour", "if": "hero_dd", "not_twice": True}, {"use": "bear", "if": "allies<3", "every": 2},
+          ai=[{"use": "devour", "if": "hero_dd", "not_twice": True}, {"use": "bear", "if": "allies<3&charge<4", "every": 2},
               {"use": "chorus", "every": 3}, {"use": "lullaby", "every": 3, "offset": 2}, {"use": "embrace"}]),
         P(25, "She devours her own.",
-          ai=[{"use": "eat", "if": "allies>=2", "not_twice": True, "every": 2}, {"use": "devour", "if": "hero_dd"},
+          ai=[{"use": "eat", "not_twice": True, "every": 2}, {"use": "devour", "if": "hero_dd"},
               {"use": "chorus", "every": 2}, {"use": "embrace"}]),
     ],
     lore="Every siren is her daughter. Every drowned child is hers.", world=W)
@@ -313,13 +320,13 @@ encounter(W, "drowned_e1", "The Sunken Door", "The Tidewarden keeps the Siren's 
           ["warden", "thrall", "siren"], "nave", E_,
           "The lodger Erodes rank 1 and the sweep Soaks it: Drown on the front hero unless Warded or rotated.")
 encounter(W, "drowned_e2", "The Silent Chapter", "Salt sermon in a drowned chapter house.",
-          ["barnacle_knight", "abbess", "weeping_nun"], "ossuary", E_,
-          "Stress and heals behind a guard; her seal strikes whoever holds the most cards.")
+          ["abbess", "barnacle_knight", "weeping_nun"], "ossuary", E_,
+          "She stands in front behind the knight's guard; her seal stitches a hand shut, and sermons and heals keep the chapter up.")
 encounter(W, "drowned_e3", "The Breach", "The floor gives way to something enormous.",
-          ["eelkin", "lamprey", "kraken_arm"], "stair", E_,
-          "Grabbed heroes land in rank 1 beside two latchers and stay held until they strike the arm.")
+          ["kraken_arm", "eelkin", "lamprey"], "stair", E_,
+          "The arm fills the front; grabbed heroes are dragged to rank 1 under it, with two latchers behind, and stay held until they strike the arm.")
 encounter(W, "drowned_e4", "The Pearl Beds", "The diver goes for the back; the fisher reels the rest forward.",
-          ["barnacle_knight", "pearl_diver", "hookline"], "ossuary", E_,
+          ["pearl_diver", "barnacle_knight", "hookline"], "ossuary", E_,
           "The diver's knife hits the rearmost twice: Block the back ranks while the fisher reels heroes out of place.")
 encounter(W, "drowned_r_drowned_king", "The Drowned King", "The king on his throne, and his court.",
           ["barnacle_knight", "thrall", "drowned_king"], "throne", R,
@@ -367,7 +374,7 @@ card("w_drowned_deep_pressure", "Deep Pressure", 1, "W", "enemy",
 NEEDS = [
     "drowned_king Gorge on the Court / mother_of_brine Eat Her Own: should kill a living ally and heal by its HP; "
     "written as a plain heal gated on allies>=2.",
-    "abbess Seal the Door: should shut one hero's kit skill for a round; written as a random discard and stress.",
+    "abbess Seal the Door: should shut one hero's kit skill for a round; written as a Sewn Shut curse (1 vigour to clear) and stress.",
     "kraken_arm Held Fast: any hero's hit on the arm should free the grabbed hero; written as the hitter's own "
     "Anchor ending.",
     "eelkin Latched: the bitten hero's Bleed should end when any hero hits the Biter or the bitten hero moves; written "

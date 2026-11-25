@@ -661,7 +661,7 @@ card("al_black_death", "Black Death", 2, "L", "self", [],
                                      SPREAD(T, 1, to="all_enemies")]},
      flavour="It does not end. It only moves on.",
      note="The Plaguewright stands still among the dying as the black spreads foe to foe.",
-     up={"text": "Apply 2 Toxin to every foe. Rite: at the end of each round, every foe with Toxin gains 1 Toxin, "
+     up={"text": "Apply 2 Toxin to every foe. Rite: at the end of each round, every foe with Toxin gains 1 Toxin. "
                  "Then, from rank 1 back, each foe with Toxin copies 1 onto each foe beside it, so one sick foe can pass "
                  "it down the line. Exhaust.",
          "fx": [A(T, 2, attr="stable", to="all_enemies")]})

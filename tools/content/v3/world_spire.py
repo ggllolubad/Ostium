@@ -13,34 +13,27 @@ set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 
 LOCK = [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile")]
 
-# ================================================================== cards foes put in a hand
-card("t_spire_written_in", "Written into the Table", 0, "Curse", "none", [],
-     "Unplayable. When drawn, you act last this round. Temporary.",
-     kw=["Temporary", "Curse", "Unplayable"], on_draw=[ST("lockdown", 1)],
-     flavour="It worked out where every star would be for the next hundred years. It is still right.",
-     note="The Ephemeris Clerk's quill scratches a hero's name into a frosted column of figures.")
-
 # ================================================================== world cards (Lockdown)
 card("w_spire_stop_the_watch", "Stop the Watch", 1, "W", "enemy",
-     [DELAY(), B(4, to="self", if_="t.attacking")],
-     "The target acts last this round. If it means to attack, you gain 4 Block.", world=W, arch="world",
+     [DELAY(if_="t.attacking"), B(3, to="self", if_="t.attacking")],
+     "If the target means to attack, its action waits until next round and you gain 3 Block.", world=W, arch="world",
      flavour="They mostly succeeded. The clocks still tick inside the ice.",
      note="A hero closes a frosted pocket watch, and the foe across from them freezes mid-stride.",
-     up={"text": "The target acts last this round. If it means to attack, you gain 7 Block.",
-         "fx": [DELAY(), B(7, to="self", if_="t.attacking")]})
+     up={"text": "If the target means to attack, its action waits until next round and you gain 6 Block.",
+         "fx": [DELAY(if_="t.attacking"), B(6, to="self", if_="t.attacking")]})
 card("w_spire_unwind", "Unwind", 1, "W", "ally",
      [CONS(e="frost"), dsl.W(1, per="consumed", k=1, max=4)],
-     "Remove all Weaken from a hero. They gain 1 Ward, plus 1 per Weaken removed (max 4).", world=W, arch="world",
+     "Remove all Frost from a hero. They gain 1 Ward, plus 1 per Frost removed (max 4).", world=W, arch="world",
      flavour="Wind it back far enough and the frost was never there.",
      note="A hero turns a brass key in a companion's back plate; rime falls from their sleeves.",
-     up={"text": "Remove all Weaken from a hero. They gain 2 Ward, plus 1 per Weaken removed (max 5).",
+     up={"text": "Remove all Frost from a hero. They gain 2 Ward, plus 1 per Frost removed (max 5).",
          "fx": [CONS(e="frost"), dsl.W(2, per="consumed", k=1, max=5)]})
 card("w_spire_second_hand", "Second Hand", 0, "W", "self",
      [PRIME(1, per="played", k=1, max=4)],
-     "Prime 1, plus 1 per card you have played this round (max 4).", world=W, arch="world",
+     "Prime 1, plus 1 per card you have played this round (max 4). Exhaust.", kw=["Exhaust"], world=W, arch="world",
      flavour="Idle is the second hand ticking and stopping.",
      note="A hero counts beats under their breath beside the stopped orrery, hand raised for the next strike.",
-     up={"text": "Prime 2, plus 1 per card you have played this round (max 5).",
+     up={"text": "Prime 2, plus 1 per card you have played this round (max 5). Exhaust.",
          "fx": [PRIME(2, per="played", k=1, max=5)]})
 card("w_spire_midnight", "Midnight", 2, "W", "all_enemies",
      [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile"), D(0, per="reactions", k=2, max=8)],
@@ -61,7 +54,7 @@ creature("stopped_pilgrim", "Stopped Pilgrim", "foe", 40, armor=1, ranks=[2, 3],
          ai=[{"use": "still", "every": 3}, {"use": "stare", "every": 2}, {"use": "staff"}],
          traits=[T("hit", "Has Not Blinked", "Struck by a hero who moved this round, it jerks round to follow: that hero "
                    "gains 3 stress.", [STRESS(3, if_="t.moved")])],
-         personality="cruel", lore="It came to see the stars stop. It has not blinked since.", world=W)
+         lore="It came to see the stars stop. It has not blinked since.", world=W)
 
 creature("clock_sentry", "Clock Sentry", "foe", 46, armor=2, ranks=[1], role="defender", flags=["unstunnable"],
          charge_name="Tick",
@@ -78,7 +71,7 @@ creature("gear_spider", "Gear Spider", "foe", 32, armor=1, ranks=[3, 4], role="s
                   "mend": I("Mend", "heal", "ally_lowest", [H(8)]),
                   "web": I("Copper Web", "debuff", "front", [D(3), ST("anchor", 2)]),
                   "needle": I("Needle Leg", "attack", "back", [D(6), A("lightning", 1, attr="stable")])},
-         ai=[{"use": "rebuild", "if": "allies<3", "not_twice": True}, {"use": "mend", "if": "ally_hurt", "not_twice": True},
+         ai=[{"use": "rebuild", "if": "allies<3", "once": True}, {"use": "mend", "if": "ally_hurt", "not_twice": True},
              {"use": "web", "every": 3}, {"use": "needle"}],
          lore="It repairs the orrery. It considers you a fault.", world=W)
 
@@ -89,7 +82,7 @@ creature("aurora_moth", "Aurora Moth", "foe", 30, ranks=[3, 4], role="afflicter"
                   "dazzle": I("Dazzling Beat", "debuff", "most_stress", [STRESS(8)]),
                   "flutter": I("Flutter", "defend", "self", [SELF("dodge", 1)])},
          ai=[{"use": "flutter", "if": "hp_pct<50", "not_twice": True}, {"use": "dust", "every": 2}, {"use": "dazzle"}],
-         personality="cruel", lore="Drawn to the frozen stars. Its wings carry the northern lights.", world=W)
+         lore="Drawn to the frozen stars. Its wings carry the northern lights.", world=W)
 
 creature("frozen_halberdier", "Frozen Halberdier", "foe", 44, armor=2, ranks=[2], role="attacker",
          resist={"frost": "resist", "physical": "resist", "fire": "weak"},
@@ -101,7 +94,7 @@ creature("frozen_halberdier", "Frozen Halberdier", "foe", 44, armor=2, ranks=[2]
 
 creature("ephemeris_clerk", "Ephemeris Clerk", "foe", 34, ranks=[3, 4], role="afflicter",
          resist={"frost": "resist", "lightning": "resist", "fire": "weak"},
-         intents={"write": I("Write into the Table", "debuff", "random", [ADD("t_spire_written_in")]),
+         intents={"write": I("Write into the Table", "debuff", "random", [ST("lockdown", 1)]),
                   "quill": I("Quill Flick", "attack", "marked", [D(6), A("lightning", 1, attr="stable")]),
                   "sums": I("The Long Sums", "debuff", "all_heroes", [A("frost", 1, attr="stable")])},
          ai=[{"use": "write", "every": 3}, {"use": "sums", "every": 3, "offset": 1}, {"use": "quill"}],
@@ -127,7 +120,6 @@ creature("patroness", "The Patroness", "foe", 34, ranks=[3, 4], role="support",
                   "cane": I("Silver Cane", "attack", "front", [D(6)])},
          ai=[{"use": "spyglass", "every": 3}, {"use": "household", "if": "ally_hurt", "not_twice": True},
              {"use": "sniff", "every": 4, "offset": 2}, {"use": "cane"}],
-         personality="cunning",
          lore="She paid for the spire so she could watch the stars stop. She is getting her money's worth.", world=W)
 
 creature("patroness_monkey", "The Patroness's Monkey", "foe", 30, ranks=[4], role="afflicter",
@@ -138,7 +130,6 @@ creature("patroness_monkey", "The Patroness's Monkey", "foe", 30, ranks=[4], rol
          ai=[{"use": "scamper", "if": "hp_pct<50", "not_twice": True}, {"use": "chatter", "every": 3}, {"use": "steal"}],
          traits=[T("hit", "Light Fingers", "Struck by a hero with Momentum, it snatches the pace from them: it gains "
                    "1 Dodge.", [SELF("dodge", 1, if_="t.momentum>0")])],
-         personality="cunning",
          lore="It came up the spire on a brass chain for the last night. It stole a star-glass on the way.", world=W)
 
 creature("speculum_bearer", "Speculum Bearer", "foe", 46, armor=1, ranks=[1, 2], role="defender",
@@ -148,8 +139,8 @@ creature("speculum_bearer", "Speculum Bearer", "foe", 46, armor=1, ranks=[1, 2],
                   "flash": I("The Mirror Flashes", "debuff", "random",
                              [A("frost", 1, attr="stable"), A("lightning", 1, attr="stable")])},
          ai=[{"use": "wall", "if": "ally_hurt", "not_twice": True}, {"use": "flash", "every": 3}, {"use": "edge"}],
-         traits=[T("course", "Face-Out", "The first course laid on the mirror each round is flashed back: the hero who "
-                   "laid it gains 1 Static.", [A("lightning", 1, attr="stable")])],
+         traits=[T("hit", "Face-Out", "Struck by a hero carrying any course, the mirror flashes it back: that hero gains "
+                   "1 Static.", [A("lightning", 1, attr="stable", if_="t.spectrum>0")])],
          lore="The great mirror was too heavy for two men. They gave it to one.", world=W)
 
 creature("clock_jack", "Clock Jack", "foe", 40, armor=1, ranks=[2], role="attacker", charge_name="Hours",
@@ -161,7 +152,7 @@ creature("clock_jack", "Clock Jack", "foe", 40, armor=1, ranks=[2], role="attack
              {"use": "jerk"}],
          traits=[T("round_start", "Saving Up", "Round start: it saves 1 hour; at 3 it strikes the bell. Soak in its "
                    "works stops the saving.", [SELF("charge", 1, if_="!water")])],
-         personality="cruel", lore="It struck the hours. There have been none to strike. It has been saving up.", world=W)
+         lore="It struck the hours. There have been none to strike. It has been saving up.", world=W)
 
 creature("gate_mastiff", "Gate Mastiff", "foe", 42, armor=1, ranks=[1], role="attacker",
          resist={"frost": "resist", "fire": "weak"},
@@ -209,9 +200,9 @@ creature("gin_ox", "The Gin Ox", "elite", 115, armor=3, ranks=[1], role="attacke
                   "walk": I("Keep Walking", "heal", "self", [H(12), B(6)])},
          ai=[{"use": "walk", "if": "doom>=5", "not_twice": True}, {"use": "trudge", "every": 3},
              {"use": "horn", "every": 3, "offset": 1}, {"use": "shove"}],
-         traits=[T("hit", "The Dome Has Stopped", "It cannot be Stunned. The first hero to strike it each round while it "
-                   "is Anchored or has Weaken finds it still walking: it gains 4 Block.",
-                   [B(4, to="self", if_="frost>0"), B(4, to="self", if_="anchor>0")])],
+         traits=[T("hit", "The Dome Has Stopped", "It cannot be Stunned. Each hit on it while it is Anchored or has Weaken "
+                   "finds it still walking: it gains 2 Block for each of the two it has.",
+                   [B(2, to="self", if_="frost>0"), B(2, to="self", if_="anchor>0")])],
          lore="It walked the dome round for forty years. The dome has stopped. It has not.", world=W)
 
 creature("rodwarden", "The Rodwarden", "elite", 100, armor=2, ranks=[2, 3], role="afflicter",
@@ -239,7 +230,7 @@ creature("last_hour", "The Last Hour", "ruler", 300, armor=3, span=2, ranks=[3, 
                   "stop": I("Stop All Clocks", "debuff", "all_heroes",
                             [A("frost", 2, attr="stable"), A("lightning", 1, attr="stable"), STRESS(6)]),
                   "wind": I("Wind the Spring", "defend", "self", [B(16), SELF("might", 1)]),
-                  "midnight": I("Midnight", "attack", "all_heroes", [D(8)] + LOCK)},
+                  "midnight": I("Midnight", "attack", "all_heroes", [D(8)] + LOCK + [CLR("charge")])},
          ai=[{"use": "midnight", "if": "charge>=10"}, {"use": "chime", "every": 3},
              {"use": "pendulum", "every": 3, "offset": 1}, {"use": "strike"}],
          phases=[P(60, "The hands spin backwards. Every plan must be read from its end.",
@@ -249,7 +240,7 @@ creature("last_hour", "The Last Hour", "ruler", 300, armor=3, span=2, ranks=[3, 
                  P(25, "Twelve. The pivot is bare, and the world stops every second round.",
                    ai=[{"use": "midnight", "every": 2}, {"use": "strike"}], fx=[LOSE_ARMOR(3, to="self")])],
          traits=[T("round_start", "The Minute Hand", "Round start: the hand moves one minute toward twelve; at 10 it "
-                   "strikes Midnight whatever its phase.", [SELF("charge", 1)])],
+                   "strikes Midnight whatever its phase, and the hand starts again.", [SELF("charge", 1)])],
          lore="The great clock at the top of the spire. When it strikes twelve, the world stops. It is one minute to.",
          world=W)
 
@@ -267,10 +258,10 @@ creature("stilled_college", "The Stilled College", "ruler", 290, armor=3, span=2
                    ai=[{"use": "carried", "every": 3}, {"use": "wave", "every": 2}, {"use": "vote"}], might=1),
                  P(20, "Quorum fails. Every arm swings down at once.",
                    ai=[{"use": "carried", "every": 2}, {"use": "wave"}], might=1)],
-         traits=[T("round_start", "Aye", "Round start: if the company carries 6 or more Weaken in all, the motion gains "
-                   "1 Might.", [SELF("might", 1, if_="total_frost>=6")]),
-                 T("hit", "Out of Order", "The first hero to strike it each round with 2 or more Momentum is ruled out of "
-                   "order: they gain 1 Frost, then 1 Volatile Lightning.",
+         traits=[T("round_start", "Aye", "Round start: another vote carries: the motion gains 1 Might, up to 3.",
+                   [SELF("might", 1, if_="might<3")]),
+                 T("hit", "Out of Order", "Each hero who strikes it with 2 or more Momentum is ruled out of order: they "
+                   "gain 1 Frost, then 1 Volatile Lightning.",
                    [A("frost", 1, attr="stable", if_="t.momentum>=2"),
                     A("lightning", 1, attr="volatile", if_="t.momentum>=2")])],
          lore="They voted to stop the hour. The motion carried.", world=W)
@@ -323,7 +314,7 @@ E(W, "spire_f8", "The Star Tables", "Four small hands, each with its own way to 
   ["stopped_pilgrim", "ephemeris_clerk", "patroness_monkey", "aurora_moth"], "spire_dome", "foe",
   "Four small locks and thefts: a fight against plans, not HP.")
 E(W, "spire_e1", "The Horologist's Study", "He has been waiting for you, for ever.",
-  ["frozen_halberdier", "horologist", "ephemeris_clerk"], "spire_stair", "elite",
+  ["horologist", "frozen_halberdier", "ephemeris_clerk"], "spire_stair", "elite",
   "He locks a hero, rewinds wounds and winds back your course setups; his death frees every lock.")
 E(W, "spire_e2", "The Founder Stands", "Someone wound up the statue.",
   ["rime_colossus", "aurora_moth", "stopped_pilgrim"], "spire_top", "elite",
@@ -332,7 +323,7 @@ E(W, "spire_e3", "The Undercroft", "The ox still walks its circle under the dome
   ["gin_ox", "clock_sentry", "gear_spider"], "spire_orrery", "elite",
   "The ox and the sentry shrug off locks and stuns; Block for the beam, damage the sentry first.")
 E(W, "spire_e4", "The Rod Gallery", "Rods on the roof, a mirror at the door.",
-  ["speculum_bearer", "rodwarden", "aurora_moth"], "spire_dome", "elite",
+  ["rodwarden", "speculum_bearer", "aurora_moth"], "spire_dome", "elite",
   "He grounds the company's lightning into his own strike; switch courses or strike physically.")
 E(W, "spire_r_last_hour", "The Last Hour", "One minute to midnight.",
   ["clock_sentry", "clock_jack", "last_hour"], "spire_boss", "ruler",
@@ -349,11 +340,12 @@ NEEDS = [
     "clock_sentry, gin_ox: should also ignore Lockdown (flag 'unlockable'); written as unstunnable.",
     "last_hour Stop All Clocks: the company's Ordo should resolve in reverse for a round; written as frost, Static and "
     "stress. The Minute Hand should also move once more for each hero it locked last round.",
-    "stilled_college Aye: should count locked heroes (quantity 'heroes_locked'); written as total Weaken.",
+    "stilled_college Aye: should gain Might per locked hero (quantity 'heroes_locked'); written as 1 a round up to 3.",
     "great_refractor: the sight should be a rank resolved when it acts, so a Swap dodges it; the assistant on the "
     "ladder (rank 4 behind the pier) is left out.",
     "gear_spider Rebuild: should rebuild the brass ally that fell (Sentry or Jack); written as a Clock Sentry.",
     "patroness_monkey: should steal the hero's next buff (Prime, Might, Momentum) and jump ranks at round start; "
     "written as stealing Block.",
-    "speculum_bearer Face-Out: should return the same course it was given (redirect); written as Static.",
+    "speculum_bearer Face-Out: should return the course laid on it to the hero who laid it (course trait target "
+    "'source'); written as a hit trait giving Static.",
 ]

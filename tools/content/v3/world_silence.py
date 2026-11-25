@@ -14,19 +14,19 @@ set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 # ================================================================== world cards (Absolute Zero)
 card("w_silence_cold_eye", "The Cold Eye", 1, "W", "enemy",
      [A("frost", 1, per="t.void", k=1, max=4, attr="stable"), A("void", 1, attr="volatile")],
-     "Apply 1 Frost, plus 1 per Erode on the target (max 4). Apply 1 Volatile Void.", cat="frost", world=W,
+     "Apply 1 Frost, plus 1 per Void on the target (max 4). Apply 1 Volatile Void.", cat="frost", world=W,
      arch="world",
      flavour="The eye opens and warmth drains away.",
      note="A hero meets the black star's stare and turns it on a foe; the foe whitens from the edges in.",
-     up={"text": "Apply 2 Frost, plus 1 per Erode on the target (max 5). Apply 1 Volatile Void.",
+     up={"text": "Apply 2 Frost, plus 1 per Void on the target (max 5). Apply 1 Volatile Void.",
          "fx": [A("frost", 2, per="t.void", k=1, max=5, attr="stable"), A("void", 1, attr="volatile")]})
 card("w_silence_say_it_aloud", "Say It Aloud", 1, "W", "ally",
      [CONS(e="void"), B(0, per="consumed", k=1, max=6), STRESS(-6)],
-     "Remove all Erode from a hero. They gain 1 Block per Erode removed (max 6) and shed 6 stress.", world=W,
+     "Remove all Void from a hero. They gain 1 Block per Void removed (max 6) and shed 6 stress.", world=W,
      arch="world",
      flavour="A black star rose and took all the warmth and all the sound.",
      note="A hero shouts into a companion's face across the snow, and for a moment there is sound.",
-     up={"text": "Remove all Erode from a hero. They gain 2 Block, plus 1 per Erode removed (max 8), and shed 8 stress.",
+     up={"text": "Remove all Void from a hero. They gain 2 Block, plus 1 per Void removed (max 8), and shed 8 stress.",
          "fx": [CONS(e="void"), B(2, per="consumed", k=1, max=8), STRESS(-8)]})
 card("w_silence_hold_your_breath", "Hold Your Breath", 0, "W", "self",
      [CONS(s="block"), dsl.W(0, per="consumed", k=0.34, max=3)],
@@ -51,7 +51,7 @@ creature("hollow_wanderer", "Hollow Wanderer", "foe", 38, ranks=[1, 2], role="at
                   "empty": I("Emptiness", "debuff", "front", [A("void", 2, attr="stable"), STRESS(5)]),
                   "sweep": I("Crook Sweep", "attack", "front2", [D(5)])},
          ai=[{"use": "empty", "every": 3}, {"use": "sweep", "every": 3, "offset": 1}, {"use": "crook"}],
-         personality="cruel", lore="It walks the tundra looking for its face.", world=W)
+         lore="It walks the tundra looking for its face.", world=W)
 
 creature("silence_stag", "Silence Stag", "foe", 44, armor=1, ranks=[1], role="attacker",
          resist={"frost": "resist", "fire": "weak"},
@@ -110,7 +110,7 @@ creature("hush_child", "Hush-Child", "foe", 30, ranks=[3, 4], role="afflicter",
                   "cradle": I("Cradleboard", "defend", "self", [B(8)])},
          ai=[{"use": "cradle", "if": "hp_pct<50", "not_twice": True}, {"use": "wail", "every": 3}, {"use": "cry"}],
          traits=[T("death", "The Cry Stops", "On death: every hero sheds 8 stress.", [STRESS(-8, to="all_enemies")])],
-         personality="cruel", lore="It cries without stopping. Be grateful you cannot hear it.", world=W)
+         lore="It cries without stopping. Be grateful you cannot hear it.", world=W)
 
 creature("lemming_drift", "Lemming Drift", "foe", 32, ranks=[1, 2], role="attacker", flags=["swarm"],
          resist={"frost": "resist", "fire": "weak"},
@@ -143,7 +143,7 @@ creature("silent_singers", "The Silent Singers", "foe", 40, ranks=[2, 3], role="
                   "full": I("Full Voice", "debuff", "all_heroes", [STRESS(9), A("void", 1, attr="stable"), CLR("charge")]),
                   "rock": I("Rocking", "defend", "self", [B(8)])},
          ai=[{"use": "full", "if": "charge>=2"}, {"use": "rock", "if": "hp_pct<50", "not_twice": True}, {"use": "song"}],
-         traits=[T("hit", "One Laughs", "The first hit each round breaks their verse: it resets to 0.",
+         traits=[T("hit", "One Laughs", "Any hit breaks their verse: it resets to 0.",
                    [CLR("charge", to="self")])],
          lore="They sang into each other's mouths until one laughed and lost. Neither has lost yet.", world=W)
 
@@ -161,15 +161,15 @@ creature("snow_house_builder", "Snow-House Builder", "foe", 44, armor=1, ranks=[
 # ================================================================== elites
 creature("pale_hunter", "The Pale Hunter", "elite", 100, armor=2, ranks=[2, 3], role="attacker",
          resist={"frost": "resist", "void": "resist", "fire": "weak"},
-         intents={"arrow": I("Arrow at the Warm", "attack", "healthiest", [D(9), D(4, if_="t.hp_pct>=100")]),
+         intents={"arrow": I("Arrow at the Warm", "attack", "healthiest", [D(9), D(4, if_="!t.missing_hp")]),
                   "spear": I("Hunting Spear", "attack", "back", [D(9), A("frost", 1, attr="stable")]),
                   "prey": I("Mark the Prey", "debuff", "healthiest", [ST("mark", 1), ST("vulnerable", 1)]),
                   "close": I("Close In", "buff", "self", [SELF("might", 1), B(6)]),
                   "ground": I("Go to Ground", "defend", "self", [B(12), SELF("dodge", 1)])},
          ai=[{"use": "ground", "if": "vulnerable>0", "not_twice": True}, {"use": "prey", "every": 3},
              {"use": "close", "every": 4, "offset": 2}, {"use": "spear", "every": 3, "offset": 1}, {"use": "arrow"}],
-         traits=[T("hit", "Into the Snow", "The first hit on it each round: it fades into the snow and dodges the next "
-                   "hit.", [SELF("dodge", 1)])],
+         traits=[T("round_start", "Into the Snow", "Round start: it fades into the snow and dodges the next hit.",
+                   [SELF("dodge", 1)])],
          lore="It hunts the warm. There are not many left.", world=W)
 
 creature("void_mammoth", "Void Mammoth", "elite", 130, armor=3, span=2, ranks=[1, 2], role="attacker",
@@ -182,8 +182,8 @@ creature("void_mammoth", "Void Mammoth", "elite", 130, armor=3, span=2, ranks=[1
                   "shake": I("Shake It Off", "defend", "self", [B(15)])},
          ai=[{"use": "shake", "if": "armor<3", "not_twice": True}, {"use": "trumpet", "every": 4, "offset": 1},
              {"use": "trample", "every": 3}, {"use": "trunk", "every": 4, "offset": 3}, {"use": "tusk"}],
-         traits=[T("hit", "It Did Not Notice", "It cannot be Stunned or moved. The first hit each round: it gains 4 "
-                   "Block.", [B(4, to="self")])],
+         traits=[T("hit", "It Did Not Notice", "It cannot be Stunned or moved. Each hit on it: it gains 2 Block.",
+                   [B(2, to="self")])],
          lore="Its herd died out an age ago. It did not notice.", world=W)
 
 creature("drum_seer", "The Drum-Seer", "elite", 95, armor=2, ranks=[2, 3], role="summoner",
@@ -232,8 +232,8 @@ creature("cold_star", "The Cold Star", "ruler", 290, armor=2, span=2, ranks=[3, 
                    ai=[{"use": "wide", "every": 3}, {"use": "collapse"}], fx=[LOSE_ARMOR(2, to="self")])],
          traits=[T("round_start", "The Warmth Goes", "Round start: the front hero gains 1 Frost.",
                    [A("frost", 1, attr="stable", to="front_enemy")]),
-                 T("hit", "Warmth Calls to It", "The first hero to strike it each round while carrying Ward has the "
-                   "Ward drawn off as Erode: they gain 2 Erode.", [A("void", 2, attr="stable", if_="t.ward>0")])],
+                 T("hit", "Warmth Calls to It", "Each hero who strikes it while carrying Ward feels the warmth drawn out: "
+                   "they gain 1 Erode.", [A("void", 1, attr="stable", if_="t.ward>0")])],
          lore="The black star came down to see what was making all the noise.", world=W)
 
 creature("unspoken_bear", "The Unspoken Bear", "ruler", 310, armor=3, span=2, ranks=[1, 2], role="attacker",
@@ -251,8 +251,8 @@ creature("unspoken_bear", "The Unspoken Bear", "ruler", 310, armor=3, span=2, ra
                    ai=[{"use": "mouth", "every": 3}, {"use": "takes", "every": 3, "offset": 1}, {"use": "blow"}]),
                  P(20, "She rears to her full height, and the drift on her flank slides away.",
                    ai=[{"use": "mouth", "every": 2}, {"use": "blow"}], might=2)],
-         traits=[T("hit", "The Hunters' Rule", "The first hero to strike her each round gains 3 stress, 6 if they struck "
-                   "with 2 or more Momentum.", [STRESS(3), STRESS(3, if_="t.momentum>=2")])],
+         traits=[T("hit", "The Hunters' Rule", "Each time a hero strikes her, they gain 2 stress, 4 if they struck with "
+                   "2 or more Momentum.", [STRESS(2), STRESS(2, if_="t.momentum>=2")])],
          lore="The hunters never said her name aloud. Now nothing can be said aloud.", world=W)
 
 creature("hearth_grandmother", "The Hearth Grandmother", "ruler", 280, armor=2, span=2, ranks=[3, 4], role="summoner",
@@ -264,10 +264,10 @@ creature("hearth_grandmother", "The Hearth Grandmother", "ruler", 280, armor=2, 
                   "stitches": I("Two Stitches", "debuff", "front2", [ST("anchor", 2), STRESS(5), A("void", 1, attr="stable")]),
                   "hearth": I("The Cold Hearth", "attack", "all_heroes",
                               [D(4), A("frost", 1, attr="stable"), A("void", 1, attr="volatile")])},
-         ai=[{"use": "call", "if": "allies<3"}, {"use": "stitch", "every": 3}, {"use": "fit", "if": "ally_hurt", "not_twice": True},
+         ai=[{"use": "call", "if": "allies<3", "not_twice": True}, {"use": "stitch", "every": 3}, {"use": "fit", "if": "ally_hurt", "not_twice": True},
              {"use": "needle"}],
          phases=[P(50, "None of them fit. She cuts the failed masks loose, and the stitch takes two.",
-                   ai=[{"use": "call", "if": "allies<3"}, {"use": "hearth", "every": 3}, {"use": "stitches", "every": 3,
+                   ai=[{"use": "call", "if": "allies<3", "not_twice": True}, {"use": "hearth", "every": 3}, {"use": "stitches", "every": 3,
                                                                                          "offset": 1},
                        {"use": "needle"}], might=1),
                  P(20, "Where the hearth burned there is only a round black hole.",
@@ -305,16 +305,16 @@ E(W, "silence_f8", "The Vigil", "A wall, a healer and two voices.",
   ["sledge_hauler", "frozen_saint", "silent_singers", "hush_child"], "silence_shrine", "foe",
   "A wall, a healer and two voices: a stress race.")
 E(W, "silence_e1", "The Hunt", "It found you first.",
-  ["silence_stag", "pale_hunter", "hollow_wanderer"], "silence_tundra", "elite",
+  ["pale_hunter", "silence_stag", "hollow_wanderer"], "silence_tundra", "elite",
   "The front hero is the prey and Vulnerable makes it go to ground; few heavy hits beat many light ones.")
 E(W, "silence_e2", "The Last Herd", "The mammoth and the shadows round its feet.",
   ["void_mammoth", "rime_shade", "starless_eye"], "silence_rift", "elite",
   "Stuns and moves do not stop the trample; stripping its Armor only makes it shake. Block and heal through it.")
 E(W, "silence_e3", "The Drum", "A dog, the drummer, a cradleboard, and room for the herd.",
-  ["lead_dog", "drum_seer", "hush_child"], "silence_camp", "elite",
+  ["drum_seer", "lead_dog", "hush_child"], "silence_camp", "elite",
   "Rank 4 is left for the herd; kill the seer and the stags stop coming, and the camp goes quiet.")
 E(W, "silence_e4", "The Chief's Orders", "The chief points, and they obey.",
-  ["sledge_hauler", "voiceless_chief", "snow_house_builder", "starless_eye"], "silence_tundra", "elite",
+  ["voiceless_chief", "sledge_hauler", "snow_house_builder", "starless_eye"], "silence_tundra", "elite",
   "His orders Block every foe each round; the builder walls in a Taunting guard.")
 E(W, "silence_r_cold_star", "The Cold Star", "The black star comes down.",
   ["frozen_saint", "ice_fisher", "cold_star"], "silence_boss", "ruler",
@@ -333,6 +333,6 @@ NEEDS = [
     "drum_seer The Herds Stop Coming: summoned Stags should flee on his death; written as stress shed.",
     "voiceless_chief The Baton Points: should point at the hero who dealt the most damage last round and override "
     "Taunt for every foe; written as the hero who played most cards, with his and the builder's blows on the Marked.",
-    "unspoken_bear The Hunters' Rule and pale_hunter Into the Snow: should trigger on every hit, not once a round.",
+
     "void_mammoth: span 2 is the world's one large elite (row 13).",
 ]

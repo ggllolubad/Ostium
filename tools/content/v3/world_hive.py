@@ -20,20 +20,21 @@ card("w_hive_paralysing_sting", "Paralysing Sting", 1, "W", "enemy",
      up={"text": "Deal 3, plus 2 per Toxin on the target (max 13). If it has Toxin, apply 1 Volatile Lightning.",
          "fx": [D(3, per="t.toxin", k=2, max=13), A("lightning", 1, attr="volatile", if_="t.toxin>0")]})
 card("w_hive_lightning_rod", "Lightning Rod", 1, "W", "enemy",
-     [CONS(e="lightning", to="lowest_ally"), A("lightning", 0, per="consumed", k=1, max=3, attr="volatile")],
-     "Remove all Static from the most wounded hero. Apply that much Volatile Lightning to the target (max 3).",
+     [CONS(e="lightning", to="lowest_ally"), A("lightning", 1, per="consumed", k=1, max=3, attr="volatile")],
+     "Remove all Lightning from the most wounded hero. Apply 1 Volatile Lightning to the target, plus 1 per Lightning "
+     "removed (max 3).",
      cat="lightning", world=W, arch="world",
      flavour="Lightning struck the plain, and the insects built towers to catch it.",
      note="A hero plants an iron rod between a stung companion and a foe; the white-violet fern jumps across.",
-     up={"text": "Remove all Static from the most wounded hero. Apply 1 Volatile Lightning to the target, plus 1 per "
-                 "Static removed (max 4).",
-         "fx": [CONS(e="lightning", to="lowest_ally"), A("lightning", 1, per="consumed", k=1, max=4, attr="volatile")]})
-card("w_hive_take_the_sting", "Take the Sting", 0, "W", "self",
-     [B(0, per="ailments", k=1, max=6)],
-     "Gain 1 Block per ailment on you (max 6).", world=W, arch="world",
+     up={"text": "Remove all Lightning from the most wounded hero. Apply 2 Volatile Lightning to the target, plus 1 "
+                 "per Lightning removed (max 5).",
+         "fx": [CONS(e="lightning", to="lowest_ally"), A("lightning", 2, per="consumed", k=1, max=5, attr="volatile")]})
+card("w_hive_take_the_sting", "Take the Sting", 1, "W", "self",
+     [B(2, per="ailments", k=2, max=12)],
+     "Gain 2 Block, plus 2 per ailment on you (max 12).", world=W, arch="world",
      flavour="Let the cheap card take the paralysis. Then play the one that matters.",
      note="A twitching hero raises a battered pot lid as the wasps come down on him.",
-     up={"text": "Gain 1 Block, plus 1 per ailment on you (max 8).", "fx": [B(1, per="ailments", k=1, max=8)]})
+     up={"text": "Gain 4 Block, plus 2 per ailment on you (max 15).", "fx": [B(4, per="ailments", k=2, max=15)]})
 card("w_hive_spire_storm", "Spire Storm", 2, "W", "all_enemies",
      [D(0, per="t.toxin", k=1, max=6), A("lightning", 1, attr="volatile")],
      "Each foe takes 1 per Toxin on it (max 6), then gains 1 Volatile Lightning.", cat="lightning", world=W,
@@ -75,7 +76,7 @@ creature("puppet_host", "Puppet Host", "foe", 40, ranks=[1], role="attacker",
 
 creature("galvanic_beetle", "Galvanic Beetle", "foe", 44, armor=2, ranks=[1], role="defender",
          charge_name="Stored Lightning",
-         resist={"lightning": "immune", "physical": "resist", "water": "weak"},
+         resist={"lightning": "resist", "physical": "resist", "water": "weak"},
          intents={"carapace": I("Carapace", "defend", "self", [B(10)]),
                   "ram": I("Charged Horn", "attack", "front", [D(7), A("lightning", 2, attr="stable")]),
                   "release": I("Release the Charge", "attack", "front",
@@ -105,7 +106,6 @@ creature("dowser", "The Dowser", "foe", 36, ranks=[2, 3], role="afflicter", char
          ai=[{"use": "snap", "if": "charge>=1"}, {"use": "dip", "every": 2}, {"use": "fork"}],
          traits=[T("hit", "The Fork Still Pulls", "Struck by a hero after a flask was drunk this round, the rod turns to "
                    "the water: that hero gains 4 stress.", [STRESS(4, if_="flasks_used>0")])],
-         personality="cruel",
          lore="He walked the plain with a hazel fork and told each village where to dig its well. The fork still pulls.",
          world=W)
 
@@ -128,7 +128,7 @@ creature("highwayman", "Highwayman", "foe", 34, ranks=[3, 4], role="attacker",
              {"use": "bolt"}],
          traits=[T("round_start", "Smells the Purse", "Round start: if a hero is at Death's Door, he gains 2 Might "
                    "(once).", [SELF("might", 2, if_="hero_dd&might<2")])],
-         personality="cunning", lore="He robbed travellers on the plain road. The hive takes a bigger share.", world=W)
+         lore="He robbed travellers on the plain road. The hive takes a bigger share.", world=W)
 
 creature("tinker", "The Tinker", "foe", 42, armor=2, ranks=[1], role="defender",
          resist={"lightning": "resist", "physical": "resist", "water": "weak"},
@@ -137,13 +137,13 @@ creature("tinker", "The Tinker", "foe", 42, armor=2, ranks=[1], role="defender",
                   "hammer": I("Tinker's Hammer", "attack", "front", [D(7)])},
          ai=[{"use": "swing", "every": 4, "offset": 2}, {"use": "shell", "if": "hp_pct<50", "not_twice": True},
              {"use": "hammer"}],
-         traits=[T("hit", "Wasps in the Kettles", "The first hero to hit him each round gains 1 Toxin.",
+         traits=[T("hit", "Wasps in the Kettles", "Each hero who hits him gains 1 Toxin.",
                    [A("toxin", 1, attr="stable")])],
          lore="He carried every pot on the road on his back. The lightning welded them to him.", world=W)
 
 creature("road_warden", "Road-Warden", "foe", 46, armor=2, ranks=[1], role="defender",
          resist={"lightning": "resist", "toxin": "resist", "fire": "weak"},
-         intents={"attention": I("Stand to Attention", "defend", "self", [SELF("taunt", 1), B(8)]),
+         intents={"attention": I("Stand to Attention", "defend", "self", [B(8), {"t": "guard_weakest"}]),
                   "thrust": I("Pike Thrust", "attack", "rank2", [D(8)]),
                   "shackle": I("Shackles", "attack", "front", [D(4), ST("anchor", 2)])},
          ai=[{"use": "attention", "every": 3}, {"use": "shackle", "every": 3, "offset": 1}, {"use": "thrust"}],
@@ -177,8 +177,8 @@ creature("mantis_duelist", "Mantis Duelist", "elite", 100, armor=2, ranks=[1, 2]
                   "stance": I("Praying Stance", "defend", "self", [SELF("riposte", 6), B(10)])},
          ai=[{"use": "stance", "if": "mark>0", "not_twice": True}, {"use": "paralyse", "every": 3},
              {"use": "lunge", "every": 3, "offset": 1}, {"use": "scythe"}],
-         traits=[T("round_start", "Salute", "Round start: it bows and gains 2 Riposte, so many small cuts feed its "
-                   "replies.", [SELF("riposte", 2)])],
+         traits=[T("round_start", "Salute", "Round start: it bows and gains 2 Riposte while it has fewer than 4, so "
+                   "many small cuts feed its replies.", [SELF("riposte", 2, if_="riposte<4")])],
          lore="It bows before every duel. It eats the loser.", world=W)
 
 creature("brood_mother", "Brood Mother", "elite", 110, armor=2, ranks=[2, 3], role="summoner",
@@ -187,9 +187,9 @@ creature("brood_mother", "Brood Mother", "elite", 110, armor=2, ranks=[2, 3], ro
                   "web": I("Web the Rear", "debuff", "back", [D(4), ST("anchor", 2), STRESS(6)]),
                   "spawn": I("Spiderlings", "summon", "self", [SUMMON("venom_spider", max=2)]),
                   "hatch": I("Hatch", "buff", "all_allies", [ST("might", 1), ST("regen", 3)])},
-         ai=[{"use": "hatch", "if": "allies<2", "not_twice": True}, {"use": "spawn", "every": 3},
+         ai=[{"use": "hatch", "if": "allies<2", "not_twice": True}, {"use": "spawn", "every": 3, "if": "allies<4"},
              {"use": "web", "every": 3, "offset": 1}, {"use": "bite"}],
-         traits=[T("death", "The Brood Scatters", "On death: Venom Spiders fill up to two empty ranks.",
+         traits=[T("death", "The Brood Scatters", "On death: up to two Venom Spiders join the fight if ranks are free.",
                    [SUMMON("venom_spider", max=4), SUMMON("venom_spider", max=4)])],
          lore="The spiders' queen. Her back crawls with young.", world=W)
 
@@ -199,7 +199,7 @@ creature("courier", "The Courier", "elite", 105, armor=2, ranks=[1, 2], role="at
                   "crop": I("Riding Crop", "attack", "back", [D(10), A("toxin", 1, attr="stable")]),
                   "seal": I("The Broken Seal", "summon", "self", [SUMMON("spire_wasps", max=2)]),
                   "spasm": I("Spasm", "attack", "all_heroes", [D(6), A("lightning", 1, attr="volatile")])},
-         ai=[{"use": "spasm", "if": "tenacity>0", "not_twice": True}, {"use": "seal", "every": 4, "offset": 1},
+         ai=[{"use": "spasm", "if": "hex>=4", "not_twice": True}, {"use": "seal", "every": 4, "offset": 1, "if": "allies<4"},
              {"use": "crop", "every": 3}, {"use": "trample"}],
          traits=[T("lost_action", "Spasm", "When it is Stunned or loses an action, horse and rider lash out: the two front "
                    "heroes take 6.", [D(6, to="front2")])],
@@ -229,7 +229,7 @@ creature("hive_queen", "The Hive Queen", "ruler", 300, armor=3, span=2, ranks=[3
                   "jelly": I("Royal Jelly", "heal", "self", [H(30)]),
                   "rod": I("The Rod Draws the Strike", "attack", "all_heroes",
                            [D(4), A("lightning", 2, attr="volatile")])},
-         ai=[{"use": "drone", "if": "round<2"}, {"use": "eggs", "every": 3, "offset": 1}, {"use": "neuro", "every": 3},
+         ai=[{"use": "drone", "if": "round<2"}, {"use": "eggs", "every": 3, "offset": 1, "if": "allies<3"}, {"use": "neuro", "every": 3},
              {"use": "drone", "every": 4, "offset": 2}, {"use": "sting"}],
          phases=[P(50, "She takes wing. She lays no more eggs, and her swarm comes for the rear.",
                    ai=[{"use": "jelly", "if": "hp_pct<35", "once": True, "not_twice": True}, {"use": "neuro", "every": 3},
@@ -238,8 +238,7 @@ creature("hive_queen", "The Hive Queen", "ruler", 300, armor=3, span=2, ranks=[3
                    ai=[{"use": "rod", "every": 2}, {"use": "sting"}], might=1)],
          traits=[T("round_start", "Royal Guard", "Round start: while any other foe stands, her wasps close round her: "
                    "she gains 8 Block.", [B(8, to="self", if_="allies>1")]),
-                 T("hit", "The Rod", "The first hero to strike her each round while carrying Toxin gains 1 Volatile "
-                   "Lightning.", [A("lightning", 1, attr="volatile", if_="t.toxin>0")])],
+                 T("hit", "The Rod", "Each hero who strikes her while carrying Toxin gains 1 Volatile Lightning.", [A("lightning", 1, attr="volatile", if_="t.toxin>0")])],
          lore="The heart of the spires. Every sting on the plain is hers.", world=W)
 
 creature("procession", "The Procession", "ruler", 300, armor=3, span=2, ranks=[3, 4], role="defender",
@@ -252,7 +251,7 @@ creature("procession", "The Procession", "ruler", 300, armor=3, span=2, ranks=[3
                   "comb": I("The Comb Spills", "debuff", "front2", [A("toxin", 2, attr="volatile")]),
                   "topple": I("The Saint Falls", "attack", "all_heroes", [D(12)]),
                   "pour": I("The Comb Pours", "debuff", "all_heroes", [A("toxin", 2, attr="volatile"), STRESS(4)])},
-         ai=[{"use": "tip", "if": "round<2"}, {"use": "split", "every": 4, "offset": 1}, {"use": "burn", "every": 2},
+         ai=[{"use": "tip", "if": "round<2"}, {"use": "split", "every": 4, "offset": 1, "if": "allies<3"}, {"use": "burn", "every": 2},
              {"use": "tip"}],
          phases=[P(65, "The bearers falter. The float lists, and the saint swings across two ranks.",
                    ai=[{"use": "comb", "every": 2}, {"use": "burn", "every": 3}, {"use": "swing"}]),
@@ -269,12 +268,12 @@ creature("cicada_under_the_road", "The Cicada Under the Road", "ruler", 280, arm
          resist={"lightning": "resist", "toxin": "resist", "frost": "weak"},
          intents={"dig": I("Spade Forelegs", "attack", "front", [D(14)]),
                   "heave": I("The Paving Heaves", "attack", "front2", [D(7), A("lightning", 1, attr="stable")]),
-                  "creak": I("The Shell Creaks", "defend", "self", [B(14)]),
+                  "creak": I("The Shell Creaks", "defend", "self", [B(14), CLR("charge")]),
                   "song": I("The Song", "debuff", "all_heroes",
                             [STRESS(6), A("toxin", 1, attr="stable"), A("lightning", 1, attr="volatile"), CLR("charge")]),
                   "beak": I("Venom Beak", "attack", "random", [D(12), A("toxin", 2, attr="stable")]),
                   "shrill": I("The Shrill", "attack", "random", [D(8), ST("stun", 1)])},
-         ai=[{"use": "creak", "if": "hp_pct<80", "not_twice": True, "every": 3}, {"use": "heave", "every": 3},
+         ai=[{"use": "creak", "if": "charge>=3", "not_twice": True}, {"use": "heave", "every": 3},
              {"use": "dig"}],
          phases=[P(65, "Its back splits along the lightning scar, and the pale adult pushes out. The shell's Armor is "
                        "gone.", ai=[{"use": "song", "every": 3}, {"use": "beak", "every": 2}, {"use": "dig"}],
@@ -282,8 +281,8 @@ creature("cicada_under_the_road", "The Cicada Under the Road", "ruler", 280, arm
                  P(25, "The wings unfurl. It sings every other turn, and the road stones jump.",
                    ai=[{"use": "song", "every": 2}, {"use": "shrill"}], might=1)],
          traits=[T("round_start", "The Hum", "Round start: the hum rises 1; every hero gains 2 stress per step of the "
-                   "hum (max 10). The Song resets it.",
-                   [SELF("charge", 1), STRESS(0, per="charge", k=2, max=10, to="all_enemies")])],
+                   "hum (max 6). The shell's creak and the Song reset it.",
+                   [SELF("charge", 1), STRESS(0, per="charge", k=2, max=6, to="all_enemies")])],
          lore="It went underground the year the lightning came. It has come up to sing.", world=W)
 
 # ================================================================== encounters
@@ -302,8 +301,8 @@ E(W, "hive_f4", "The Beetle Gallery", "A beetle, the clay builders, a drone.",
   "A slow wall while the termites build round the still; Swap every other round.")
 E(W, "hive_f5", "The Plain Road", "A warden, a shepherd and a robber on the road.",
   ["road_warden", "struck_shepherd", "highwayman"], "hive_spires", "foe",
-  "The Warden Taunts while bolts fall on the rear and the Shepherd shields the wounded; break the Taunt, then the "
-  "Shepherd.")
+  "The Warden guards the weakest while bolts fall on the rear and the Shepherd shields the wounded; go round him to "
+  "the Shepherd.")
 E(W, "hive_f6", "Under the Road", "A host, a pit and a thread in the dark.",
   ["puppet_host", "antlion", "venom_spider"], "hive_brood", "foe",
   "The pit pulls and paralyses; moving costs Toxin from the spider; keep a plain damage card for the turn after.")
@@ -312,7 +311,7 @@ E(W, "hive_f7", "The Dry Well", "The tinker, the dowser and the wasps from the w
   "The Dowser shows his target a turn ahead; move that hero or Ward it. Hitting the Tinker costs Toxin.")
 E(W, "hive_f8", "The Builders", "Clay cones in the road and a warden standing over them.",
   ["road_warden", "antlion", "spire_termites"], "hive_brood", "foe",
-  "Taunt holds the company while the termites encase the still and the antlion pulls; move or be built in.")
+  "The Warden stands guard while the termites encase the still and the antlion pulls; move or be built in.")
 E(W, "hive_f9", "The Nursery", "Everything the hive raises, all at once.",
   ["puppet_host", "spire_wasps", "venom_spider", "hive_drone"], "hive_comb", "foe",
   "Four small threats: area damage first, then the drone before it heals the host.")
@@ -321,11 +320,11 @@ E(W, "hive_e1", "The Duelling Ground", "The mantis bows.",
   "Riposte punishes many small cuts and a Mark makes it raise its guard; strike it hard and seldom while the others "
   "kill the drone.")
 E(W, "hive_e2", "The Brood Chamber", "Something enormous with something small on its back.",
-  ["venom_spider", "brood_mother"], "hive_brood", "elite",
+  ["brood_mother", "venom_spider"], "hive_brood", "elite",
   "Each dead spider leaves her alone to Hatch and her death scatters more; kill her with the spiders low, then sweep.")
 E(W, "hive_e3", "The Courier", "A horse and rider locked mid-step, a message held out.",
   ["courier", "struck_shepherd", "spire_wasps"], "hive_spires", "elite",
-  "Stuns turn into a lash and then a spasm on everyone; damage it plainly instead of controlling it.")
+  "Stuns turn into a lash on the front ranks and Hex into a spasm on everyone; damage it plainly instead.")
 E(W, "hive_e4", "The Fallen Beam", "A beam across the road, with legs.",
   ["road_centipede", "puppet_host", "hive_drone"], "hive_comb", "elite",
   "Its claws reach any rank and its middle regrows Armor; stripping it makes it coil, so burst it when it does.")

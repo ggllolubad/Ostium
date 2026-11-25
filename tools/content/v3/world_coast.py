@@ -9,6 +9,13 @@ from creatures import *
 W = "coast"
 set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 
+# ================================================================== cards foes put in a hand
+card("t_coast_glare", "Lens Glare", 0, "Curse", "none", [DISCARD_RANDOM()],
+     "Unplayable. When drawn: discard a random card from your hand.", use=[], kw=["Temporary", "Unplayable", "Curse"],
+     on_draw=[DISCARD_RANDOM()],
+     flavour="He keeps the light burning in the wrong place.",
+     note="The Lighthouse Keeper's false beam fills a hero's eyes; the cards in their hand go white.")
+
 # ================================================================== world cards (Electrocute)
 card("w_coast_breaking_sea", "Breaking Sea", 1, "W", "all_enemies",
      [A("water", 1, attr="stable"), A("water", 2, attr="stable", if_="t.lightning>0")],
@@ -144,7 +151,7 @@ creature("drowned_merchant", "Drowned Merchant", "foe", 48, ranks=[1, 2], role="
 # ================================================================== elites
 creature("lighthouse_keeper", "The Lighthouse Keeper", "elite", 96, armor=2, ranks=[3, 4], role="afflicter",
          resist={"lightning": "resist", "water": "resist", "void": "weak"},
-         intents={"beam": I("False Beam", "debuff", "most_cards", [ST("mark", 1), DISCARD_RANDOM(), A("lightning", 1, attr="stable")]),
+         intents={"beam": I("False Beam", "debuff", "most_cards", [ST("mark", 1), ADD("t_coast_glare"), A("lightning", 1, attr="stable")]),
                   "flash": I("The Lens Flashes", "attack", "marked", [D(10), A("lightning", 1, attr="volatile")]),
                   "fog": I("Sea Fog", "debuff", "all_heroes", [CONS(s="ward"), A("water", 2, attr="stable")]),
                   "signal": I("Signal the Wreckers", "buff", "all_allies", [ST("might", 1)])},
@@ -183,7 +190,7 @@ creature("strand_wife", "The Strand-Wife", "elite", 106, armor=2, ranks=[1, 2], 
          resist={"water": "resist", "lightning": "resist", "toxin": "weak"},
          intents={"rings": I("Ringed Fist", "attack", "heaviest", [STEAL(), D(7), A("lightning", 2, attr="stable")]),
                   "hook": I("Boat Hook", "attack", "back", [D(5), PULL(1)]),
-                  "pockets": I("Go Through the Pockets", "debuff", "random", [DISCARD_RANDOM(), D(4)]),
+                  "pockets": I("Go Through the Pockets", "attack", "random", [D(5), CONS(s="might"), SELF("might", 1)]),
                   "fist": I("Heavy Fist", "attack", "front", [D(13)])},
          ai=[{"use": "pockets", "if": "flasks>=2", "not_twice": True}, {"use": "rings", "every": 2},
              {"use": "hook", "every": 3, "offset": 1}, {"use": "fist"}],
@@ -229,8 +236,8 @@ creature("last_prize", "The Last Prize", "ruler", 300, armor=4, span=2, ranks=[3
                        {"use": "surf"}], might=1),
                  P(25, "She is going down. The bell rings, and the drowned drag the living down with her.",
                    ai=[{"use": "drag", "every": 2}, {"use": "aboard", "every": 2, "offset": 1}, {"use": "bell"}], might=2)],
-         traits=[T("phase", "Taking Water", "Each time she lists further the sea floods in: she gains 6 Soak (3 after her resistance), and the "
-                   "company's lightning finds her.", [A("water", 6, attr="stable", to="self")])],
+         traits=[T("phase", "Taking Water", "Each time she lists further the sea floods in: she gains 6 Soak "
+                   "(3 after her resistance), and the company's lightning finds her.", [A("water", 6, attr="stable", to="self")])],
          lore="The richest ship the coast ever took. It has been going down for a hundred years and has not finished.",
          world=W)
 
@@ -307,8 +314,8 @@ NEEDS = [
     "when Static is laid on him, plus his own Creak.",
     "lantern_cow Lightning Rod: lightning applied to her allies should land on her (needs course redirection); written "
     "as guarding the weakest foe.",
-    "strand_wife: should move one good status (Prime, Might, Riposte) from a hero to herself; written as taking Block "
-    "from the most armoured hero, and her death spill as Block for every hero.",
+    "strand_wife: should move any one good status (Prime, Riposte) from a hero to herself; written as taking Block from "
+    "the most armoured hero and stripping Might for 1 Might of her own, and her death spill as Block for every hero.",
     "strand_wife Salvage Sack and drowned_merchant strongbox: gold on death (postponed by row 14).",
     "thunder_whale and last_prize: 3-rank bodies redesigned to 2 ranks (row 13).",
 ]

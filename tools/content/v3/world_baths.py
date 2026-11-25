@@ -145,7 +145,6 @@ creature(
 # ================================================================== elites
 creature(
     "bath_mistress", "The Bath-Mistress", "elite", 100, armor=2, ranks=[2, 3], resist=HOT, role="support",
-    personality="cruel",
     intents={
         "ladle": I("Ladleful", "attack", "most_burn", [D(4), A("water", 1, attr="stable"), A("fire", 1, attr="volatile")]),
         "scold": I("Scold", "debuff", "most_stress", [STRESS(6), ST("mark", 1)]),
@@ -189,14 +188,14 @@ creature(
 
 creature(
     "invalid_countess", "The Invalid Countess", "elite", 120, armor=2, span=2, ranks=[1, 2], resist=HOT,
-    role="support", flags=["immovable"],
+    role="support", flags=["immovable"], charge_name="Dogs Called",
     intents={
         "ram": I("Ram the Pole", "attack", "front", [D(11), PUSH(1)]),
         "bottle": I("Bottle of Boiling Water", "attack", "random", [D(3), A("water", 1, attr="stable"), A("fire", 1, attr="volatile")]),
-        "bell": I("Ring for the Dog", "summon", "self", [SUMMON("lapdog", max=2)]),
+        "bell": I("Ring for the Dog", "summon", "self", [SUMMON("lapdog", max=2), SELF("charge", 1)]),
         "dose": I("Medicine", "heal", "self", [H(12)]),
     },
-    ai=[{"use": "bell", "if": "allies<3", "not_twice": True}, {"use": "dose", "if": "hp_pct<50", "every": 3},
+    ai=[{"use": "bell", "if": "allies<3&charge<2", "not_twice": True}, {"use": "dose", "if": "hp_pct<50", "every": 3},
         {"use": "bottle", "every": 2}, {"use": "ram"}],
     traits=[T("round_start", "Never Put Down", "Round start: the front bearer braces under the pole: gains 6 Block.",
               [B(6)])],
@@ -229,11 +228,12 @@ creature(
 
 creature(
     "best_families", "The Best Families", "ruler", 270, armor=2, span=2, ranks=[3, 4], resist=HOT, role="summoner",
+    charge_name="Bathers Out",
     intents={
         "arms": I("A Dozen Arms", "attack", "back", [D(6), PULL(2), ST("anchor", 1), A("water", 1, attr="stable")]),
         "surge": I("The Heap Surges", "attack", "front2", [D(8)]),
         "complain": I("Complaint", "debuff", "most_played", [STRESS(9)]),
-        "fall": I("A Bather Falls Out", "summon", "self", [SUMMON("scalded_attendant", max=3)]),
+        "fall": I("A Bather Falls Out", "summon", "self", [SUMMON("scalded_attendant", max=3), SELF("charge", 1)]),
         "steam": I("Steam of the Seventh Pool", "attack", "all_heroes", [A("water", 2, attr="stable"), A("fire", 1, attr="volatile")]),
         "settle": I("Settle", "defend", "self", [B(16)]),
     },
@@ -242,10 +242,10 @@ creature(
     traits=[T("hit", "Complaint", "Every hero who hits the heap is complained at: 2 stress per hit (up to 5 times a round).", [STRESS(2)])],
     phases=[
         P(50, "The heap parts. Bathers fall out of it.",
-          ai=[{"use": "fall", "if": "allies<3", "every": 2}, {"use": "steam", "every": 3}, {"use": "arms", "every": 3, "offset": 1},
+          ai=[{"use": "fall", "if": "allies<3&charge<3", "every": 2}, {"use": "steam", "every": 3}, {"use": "arms", "every": 3, "offset": 1},
               {"use": "surge"}]),
         P(20, "The patriarch rises on the heap, shouting.", might=1,
-          ai=[{"use": "fall", "if": "allies<3", "every": 2}, {"use": "steam", "every": 2}, {"use": "settle", "every": 4},
+          ai=[{"use": "fall", "if": "allies<3&charge<3", "every": 2}, {"use": "steam", "every": 2}, {"use": "settle", "every": 4},
               {"use": "surge"}]),
     ],
     lore="The seventh pool was kept for the best families. They have climbed out to complain about the water.", world=W)
@@ -304,7 +304,7 @@ encounter(W, "baths_f8", "The Drained Cistern", "Four small bodies.",
           ["pump_mule", "hypocaust_roaches", "lapdog", "bath_leech"], "baths_cistern", F,
           "Hits on every foe win; control does not.")
 encounter(W, "baths_e1", "The Mistress Receives", "While she lives the company stays wet.",
-          ["scalded_attendant", "bath_mistress", "steam_nymph"], "baths_pool", E_,
+          ["bath_mistress", "scalded_attendant", "steam_nymph"], "baths_pool", E_,
           "Every hero gains Soak each round, so every Burn is a Scald: kill her or Ward the beats.")
 encounter(W, "baths_e2", "The Furnace Stair", "The bearer comes up with both cauldrons full.",
           ["cauldron_bearer", "kettle_crab", "hypocaust_stoker"], "baths_furnace", E_,

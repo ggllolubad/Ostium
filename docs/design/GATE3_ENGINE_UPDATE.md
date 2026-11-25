@@ -63,3 +63,6 @@ gold. Keep the nearest legal version and the NEEDS line.
 - **Absolute Zero** treats the foe's HP as lower by its Doom.
 - **`TRANSFER(frm="ally_most")`** never picks the hero casting it.
 - **`targeting_me` on a hero** (`t.targeting_me` from a hero card) is 1 when any foe aims an attack at that hero.
+- **Hex** never takes more than half of a blow (the brief's floor).
+- **A foe's Taunt** forces single-target hero cards that can reach it to target it.
+- **Rites do not spend Focus:** a rite's course application leaves the owner's Focus for its next card.

@@ -13,9 +13,9 @@ FEN = {"toxin": "resist", "water": "resist"}
 FEN_FIRE = {"toxin": "resist", "water": "resist", "fire": "weak"}
 
 # ================================================================== cards foes put in a hand
-card("t_mire_offering", "Hag's Offering", 0, "Curse", "none", [A("toxin", 2, attr="stable")],
-     "Unplayable. When drawn: gain 2 Toxin, and draw a replacement. Removed at fight end.",
-     use=[], kw=["Temporary", "Unplayable", "Curse"], on_draw=[A("toxin", 2, attr="stable")], cat="toxin",
+card("t_mire_offering", "Hag's Offering", 1, "Curse", "self", [A("toxin", 1, attr="stable")],
+     "Retch it up: gain 1 Toxin. Exhaust. Until it is played it comes back with every reshuffle; removed at fight end.",
+     kw=["Temporary", "Curse", "Exhaust"], cat="toxin",
      flavour="The hags fed her for centuries. She is giving some of it back.",
      note="The Mire Mother's mouth opens and a wet bundle of charms and bones lands at a hero's feet.")
 
@@ -31,7 +31,7 @@ creature(
     lore="Tanned by the bog. Leather now, and hungry.", world=W)
 
 creature(
-    "fen_hag", "Fen Hag", "foe", 32, ranks=[3, 4], resist=FEN, role="afflicter", personality="cunning",
+    "fen_hag", "Fen Hag", "foe", 32, ranks=[3, 4], resist=FEN, role="afflicter",
     intents={
         "mud": I("Foul Mud", "attack", "back", [D(3), A("toxin", 2, attr="stable")]),
         "curse": I("Fen Curse", "debuff", "back", [STRESS(8)]),
@@ -107,14 +107,14 @@ creature(
     lore="She cut turf for the village fires and carried it home on her back. The load has taken root.", world=W)
 
 creature(
-    "frog_catcher", "Frog-Catcher", "foe", 30, ranks=[3, 4], resist=FEN, role="summoner",
+    "frog_catcher", "Frog-Catcher", "foe", 30, ranks=[3, 4], resist=FEN, role="summoner", charge_name="Toads",
     intents={
         "croak": I("Croak", "debuff", "all_heroes", [STRESS(4)]),
         "jab": I("Reed Spear", "attack", "rank2", [D(6)]),
-        "sack": I("Empty the Sack", "summon", "self", [SUMMON("mire_toad", max=2)]),
+        "sack": I("Empty the Sack", "summon", "self", [SUMMON("mire_toad", max=2), SELF("charge", 1)]),
         "gulp": I("Eat a Frog", "heal", "self", [H(8)]),
     },
-    ai=[{"use": "sack", "if": "allies<4", "every": 3}, {"use": "gulp", "if": "hp_pct<50", "not_twice": True},
+    ai=[{"use": "sack", "if": "allies<4&charge<2", "every": 3}, {"use": "gulp", "if": "hp_pct<50", "not_twice": True},
         {"use": "croak", "every": 2}, {"use": "jab"}],
     lore="He caught frogs for his mother's pot. When the pot ran out he ate them as they came.", world=W)
 
@@ -131,10 +131,10 @@ creature(
 creature(
     "sin_eater", "Sin-Eater", "foe", 40, ranks=[2, 3], resist=FEN, role="support",
     intents={
-        "eat": I("Eat the Sin", "buff", "ally_lowest", [CLEANSE(4), SELF("might", 1)]),
+        "eat": I("Eat the Sin", "buff", "ally_lowest", [CLEANSE(4)]),
         "feast": I("Funeral Feast", "buff", "all_allies", [CLEANSE(2)]),
         "bite": I("Lurching Bite", "attack", "front", [D(8)]),
-        "ale": I("Funeral Ale", "heal", "self", [H(8)]),
+        "ale": I("Funeral Ale", "heal", "self", [H(8), SELF("might", 1)]),
     },
     ai=[{"use": "eat", "if": "ally_hurt", "every": 2}, {"use": "feast", "every": 4, "offset": 1},
         {"use": "ale", "if": "hp_pct<50", "not_twice": True}, {"use": "bite"}],
@@ -239,12 +239,12 @@ creature(
     lore="The fen's oldest drowned head, swollen to the size of a house. The hags call her Mother.", world=W)
 
 creature(
-    "stilt_hall", "The Stilt Hall", "ruler", 280, armor=3, span=2, ranks=[3, 4], resist=FEN_FIRE, role="summoner",
+    "stilt_hall", "The Stilt Hall", "ruler", 280, armor=3, span=2, ranks=[3, 4], resist=FEN_FIRE, role="summoner", charge_name="Household Out",
     intents={
         "stamp": I("Stamp the Pile", "attack", "random", [D(8), A("toxin", 1, attr="stable"), A("water", 1, attr="volatile")]),
         "reach": I("The Household Reaches", "attack", "back", [D(5), PULL(2), ST("anchor", 1)]),
         "creak": I("Shift Weight", "defend", "self", [B(16)]),
-        "doors": I("Open the Doors", "summon", "self", [SUMMON("bog_body", max=3)]),
+        "doors": I("Open the Doors", "summon", "self", [SUMMON("bog_body", max=3), SELF("charge", 1)]),
         "inside": I("Pulled Inside", "attack", "weakest", [D(6), ST("anchor", 2), ST("bleed", 3), STRESS(6)]),
         "wade": I("Wade the Mere", "attack", "all_heroes", [D(4), A("toxin", 1, attr="stable"), A("water", 1, attr="volatile")]),
     },
@@ -254,7 +254,7 @@ creature(
               [A("toxin", 1, attr="stable", to="front_enemy")])],
     phases=[
         P(50, "The doors open.",
-          ai=[{"use": "doors", "if": "allies<3", "not_twice": True}, {"use": "inside", "every": 2},
+          ai=[{"use": "doors", "if": "allies<3&charge<3", "not_twice": True}, {"use": "inside", "every": 2},
               {"use": "wade", "every": 3}, {"use": "stamp"}]),
         P(20, "The front piles buckle. The hall lurches forward.", might=2,
           ai=[{"use": "wade", "every": 2}, {"use": "inside", "every": 3}, {"use": "stamp"}]),
@@ -314,13 +314,13 @@ encounter(W, "mire_e1", "Under the Bridge", "Something heavy in the mud, and a m
           ["bog_troll", "sin_eater", "leech_swarm"], "mire_bog", E_,
           "Burn stops the troll's regrowth, and the Sin-Eater eats the Burn off it: kill order is the fight.")
 encounter(W, "mire_e2", "The Tithe", "The Reeve has come for his due.",
-          ["turf_wife", "tithe_reeve", "eel_catcher"], "mire_hut", E_,
-          "The Reeve takes the most armoured hero's Block, the catcher pins, the turf stack guards him.")
+          ["tithe_reeve", "turf_wife", "eel_catcher"], "mire_hut", E_,
+          "The Reeve takes the most armoured hero's Block while the turf-wife guards him and the catcher pins.")
 encounter(W, "mire_e3", "The Midden", "The sow breaks out of the pen beneath the houses.",
           ["midden_sow", "mire_toad", "fen_hag"], "mire_hut", E_,
           "The charge shoves the front heroes back into ranks the hag has pooled; multi-hits on the ridge cost Toxin.")
 encounter(W, "mire_e4", "The Coven", "The hags gather around the eldest.",
-          ["fen_hag", "coven_mother", "lantern_gnats"], "mire_drown", E_,
+          ["coven_mother", "fen_hag", "lantern_gnats"], "mire_drown", E_,
           "Pools under every hero and a cord that binds the most stressed: cleanse and move, or race her down.")
 encounter(W, "mire_r_mire_mother", "The Mire Mother", "The fen's mother and her hags.",
           ["fen_hag", "fen_hag", "mire_mother"], "mire_boss", R,
@@ -335,7 +335,7 @@ encounter(W, "mire_r_old_heron", "The Old Heron", "The great grey heron in the e
           props="old_heron")
 
 # ================================================================== world cards (Toxic Pool)
-card("w_mire_fen_water", "Fen Water", 1, "W", "enemy",
+card("w_mire_poisoned_shallows", "Poisoned Shallows", 1, "W", "enemy",
      [D(3), CONV("water", "toxin"), A("water", 1, attr="volatile")],
      "Deal 3. Turn the foe's Water into Toxin. Apply 1 Volatile Water.",
      cat="water", attr="volatile", world=W, arch="world",

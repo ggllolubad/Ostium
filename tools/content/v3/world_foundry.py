@@ -222,7 +222,7 @@ creature("anvil_titan", "The Anvil Titan", "ruler", 300, armor=4, span=2, ranks=
          world=W)
 
 creature("crucible", "The Crucible", "ruler", 290, armor=3, span=2, ranks=[3, 4], role="attacker",
-         flags=["immovable"], charge_name="The Bell", resist={"fire": "resist", "lightning": "resist", "frost": "weak"},
+         flags=["immovable"], charge_name="Bell Count", resist={"fire": "resist", "lightning": "resist", "frost": "weak"},
          intents={"wave": I("Wave of Bronze", "attack", "front2", [D(7), A("fire", 2, attr="stable")]),
                   "skim": I("Skimming Rod", "attack", "back", [D(10)]),
                   "swing": I("Swing on the Chains", "defend", "self", [B(18)]),

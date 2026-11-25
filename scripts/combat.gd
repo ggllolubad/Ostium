@@ -440,6 +440,14 @@ static func check_action(s: Dictionary, a: Dictionary) -> String:
 					hit_ok = true
 			if not hit_ok:
 				return "target must be in rank %s" % _ranks_text(c.hit)
+			# a taunting foe the card can reach must be the target (foes' Taunt, Gate 3)
+			if t.st.get("taunt", 0) <= 0:
+				for e in s.enemies:
+					if e.dead or e.st.get("taunt", 0) <= 0:
+						continue
+					for rr in ranks_of(s, e):
+						if c.get("hit", [rr]).has(rr):
+							return "%s taunts: strike it first" % e.name
 		"ally", "adjacent_ally", "ally_other":
 			var t := find(s, a.target)
 			if t.is_empty() or t.dead or t.side != "hero":
@@ -1476,7 +1484,7 @@ static func _attack(s: Dictionary, src: Dictionary, t: Dictionary, base: int, ph
 	if src.get("side", "") == "enemy" and float(s.get("foe_dmg", 1.0)) != 1.0:
 		d = int(round(d * float(s.foe_dmg)))   # Threat (Rules v2): foes hit harder with every descent cleared
 	if RULES.hex:
-		d -= int(src.st.get("hex", 0) / 2)   # Hex: 1 less damage per 2 stacks (Rules v2, rule 9)
+		d -= min(int(src.st.get("hex", 0) / 2), int(d / 2))   # Hex: 1 less per 2 stacks, never more than half the blow
 	d = max(0, d)
 	if t.st.vulnerable > 0:
 		d = int(ceil(d * 1.5))
@@ -1698,8 +1706,8 @@ static func _apply_element(s: Dictionary, src: Dictionary, t: Dictionary, e: Str
 	if t.get("key", "") == "vessel":
 		_hold(s, t, e, n)   # the body rule: courses settle on the Vessel's skin and wait
 		return
-	if src.side == "hero" and src.st.focus > 0:
-		n += src.st.focus
+	if src.side == "hero" and src.st.focus > 0 and int(s.get("rite_depth", 0)) == 0:
+		n += src.st.focus   # a rite firing does not spend the hero's Focus
 		src.st.focus = 0
 	var rs: String = t.get("resist", {}).get(e, "")
 	if rs == "immune":
