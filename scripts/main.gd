@@ -3,6 +3,15 @@ extends Control
 
 var party: Array = ["bulwark", "duelist", "elementalist"]
 const FEET_Y := 466.0
+## The board (room, units, effects) is drawn in its own 1600x600 space and scaled up to fill the screen's width and
+## most of its height (Cole, 2026-11-25: the board is the centre of attention; titles and buttons stay small).
+const BOARD_SCALE := 1.2
+## Full-screen world (Cole, 2026-11-25): the room fills the screen and every panel is layered over it. The room is
+## scaled so its floor line (the camera's feet line, 430 of 480) sits at FLOOR_Y; units stand on that line.
+const FLOOR_Y := 641.0
+const ROOM_SCALE := 1.617
+const ROOM_POS := Vector2(800.0 - 800.0 * ROOM_SCALE, -40.0 - 96.0 * ROOM_SCALE)
+const BOARD_POS := Vector2(800.0 - 800.0 * BOARD_SCALE, FLOOR_Y - FEET_Y * BOARD_SCALE)
 const HERO_X := {1: [690.0], 2: [690.0, 450.0], 3: [690.0, 455.0, 222.0], 4: [705.0, 530.0, 355.0, 180.0]}
 const ENEMY_X := {1: {1: 1110.0}, 2: {1: 1010.0, 2: 1300.0}, 3: {1: 972.0, 2: 1196.0, 3: 1414.0}}
 
@@ -24,6 +33,9 @@ var attempt := 0
 var carry := {}
 
 var field: Control
+var board: Control
+var room_root: Control
+var floor_ext: TextureRect
 var room_far: TextureRect
 var room_mid: TextureRect
 var room_fore: TextureRect
@@ -47,6 +59,11 @@ var log_panel: PanelContainer
 var log_r: RichTextLabel
 var overlay: Control
 var deck_l: Label
+var summary_panel: PanelContainer
+var summary_r: RichTextLabel
+var slot_detail: PanelContainer
+var slot_detail_r: RichTextLabel
+var hovered_card: UiCard = null
 
 func _ready() -> void:
 	UiStyle.load_settings()
@@ -69,12 +86,58 @@ func _build_static() -> void:
 	bg.size = Vector2(1600, 1000)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
+	room_root = Control.new()
+	room_root.size = Vector2(1600, 600)
+	room_root.scale = Vector2(ROOM_SCALE, ROOM_SCALE)
+	room_root.position = ROOM_POS
+	room_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(room_root)
+	# below the painted room: its floor carried on to the screen's foot, darkening, under the hand
+	floor_ext = TextureRect.new()
+	floor_ext.position = Vector2(0, 700)
+	floor_ext.size = Vector2(1600, 300)
+	floor_ext.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	floor_ext.stretch_mode = TextureRect.STRETCH_SCALE
+	floor_ext.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(floor_ext)
+	var shade := TextureRect.new()
+	var gt := GradientTexture2D.new()
+	var gr := Gradient.new()
+	gr.set_color(0, Color(0.08, 0.06, 0.05, 0.0))
+	gr.set_color(1, Color(0.08, 0.06, 0.05, 0.88))
+	gr.add_point(0.35, Color(0.08, 0.06, 0.05, 0.35))
+	gt.gradient = gr
+	gt.fill_from = Vector2(0, 0)
+	gt.fill_to = Vector2(0, 1)
+	shade.texture = gt
+	shade.position = Vector2(0, 640)
+	shade.size = Vector2(1600, 360)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
+	var top_shade := TextureRect.new()
+	var gt2 := GradientTexture2D.new()
+	var gr2 := Gradient.new()
+	gr2.set_color(0, Color(0.08, 0.06, 0.05, 0.7))
+	gr2.set_color(1, Color(0.08, 0.06, 0.05, 0.0))
+	gt2.gradient = gr2
+	gt2.fill_from = Vector2(0, 0)
+	gt2.fill_to = Vector2(0, 1)
+	top_shade.texture = gt2
+	top_shade.size = Vector2(1600, 150)
+	top_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(top_shade)
+	board = Control.new()
+	board.size = Vector2(1600, 600)
+	board.scale = Vector2(BOARD_SCALE, BOARD_SCALE)
+	board.position = BOARD_POS
+	board.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(board)
 	field = Control.new()
 	field.size = Vector2(1600, 600)
 	field.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	room_far = _room_layer()
 	room_mid = _room_layer()
-	add_child(field)
+	board.add_child(field)
 	motes = CPUParticles2D.new()
 	motes.position = Vector2(800, 560)
 	motes.amount = 70
@@ -90,8 +153,15 @@ func _build_static() -> void:
 	motes.scale_amount_min = 1.0
 	motes.scale_amount_max = 3.0
 	motes.color = Color(0.85, 0.92, 0.88, 0.35)
-	add_child(motes)
+	board.add_child(motes)
 	room_fore = _room_layer()
+	var room_front := Control.new()   # the foreground layer draws in front of the units
+	room_front.scale = room_root.scale
+	room_front.position = room_root.position
+	room_front.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(room_front)
+	room_root.remove_child(room_fore)
+	room_front.add_child(room_fore)
 	var frame := Panel.new()
 	var fsb := StyleBoxFlat.new()
 	fsb.draw_center = false
@@ -101,7 +171,8 @@ func _build_static() -> void:
 	frame.position = Vector2(57, 93)
 	frame.size = Vector2(1486, 476)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(frame)
+	frame.visible = false   # no cut-out frame: the world fills the screen
+	board.add_child(frame)
 	var frame2 := Panel.new()
 	var fsb2 := StyleBoxFlat.new()
 	fsb2.draw_center = false
@@ -111,17 +182,20 @@ func _build_static() -> void:
 	frame2.position = Vector2(54, 90)
 	frame2.size = Vector2(1492, 482)
 	frame2.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(frame2)
+	frame2.visible = false
+	board.add_child(frame2)
 	# top bar
-	title_l = UiStyle.label("Of the Drowned Kingdom", 30, UiStyle.font_sc)
-	title_l.position = Vector2(104, 18)
+	title_l = UiStyle.label("Of the Drowned Kingdom", 18, UiStyle.font_sc)
+	title_l.position = Vector2(20, 6)
 	add_child(title_l)
-	round_l = UiStyle.label("", 17, UiStyle.font_it, UiStyle.BROWN)
-	round_l.position = Vector2(106, 56)
+	round_l = UiStyle.label("", 15, UiStyle.font_it, UiStyle.BROWN)
+	round_l.position = Vector2(620, 8)
 	add_child(round_l)
-	var log_btn := _button("Chronicle (L)", Vector2(1300, 26), Vector2(140, 40))
+	var log_btn := _button("Chronicle (L)", Vector2(1330, 4), Vector2(130, 28))
+	log_btn.add_theme_font_size_override("font_size", 15)
 	log_btn.pressed.connect(_toggle_log)
-	leave_btn = _button("Leave", Vector2(1450, 26), Vector2(90, 40))
+	leave_btn = _button("Leave", Vector2(1470, 4), Vector2(110, 28))
+	leave_btn.add_theme_font_size_override("font_size", 15)
 	leave_btn.tooltip_text = "Return to the abbey. On a descent the fight is kept exactly as it stands: continue it from the church."
 	leave_btn.pressed.connect(_leave)
 	# timeline
@@ -131,8 +205,8 @@ func _build_static() -> void:
 	tsb.shadow_offset = Vector2(4, 5)
 	tsb.shadow_size = 1
 	tl.add_theme_stylebox_override("panel", tsb)
-	tl.position = Vector2(60, 598)
-	tl.size = Vector2(1480, 82)
+	tl.position = Vector2(16, 606)
+	tl.size = Vector2(1164, 82)
 	tl.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(tl)
 	var ordo := UiStyle.label("Ordo", 28, UiStyle.font_bl, UiStyle.RED_D)
@@ -143,7 +217,7 @@ func _build_static() -> void:
 	tl.add_child(ordo2)
 	var scroll := ScrollContainer.new()
 	scroll.position = Vector2(104, 10)
-	scroll.size = Vector2(756, 62)
+	scroll.size = Vector2(560, 62)
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	tl.add_child(scroll)
 	timeline_plan = HBoxContainer.new()
@@ -151,31 +225,59 @@ func _build_static() -> void:
 	scroll.add_child(timeline_plan)
 	var div := UiStyle.label("then\nthe foe", 14, UiStyle.font_it, UiStyle.BROWN)
 	div.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	div.position = Vector2(866, 16)
+	div.position = Vector2(668, 16)
 	div.size = Vector2(60, 50)
 	tl.add_child(div)
 	timeline_enemy = HBoxContainer.new()
-	timeline_enemy.position = Vector2(930, 10)
+	timeline_enemy.position = Vector2(732, 10)
 	timeline_enemy.add_theme_constant_override("separation", 8)
 	tl.add_child(timeline_enemy)
 	# party column
-	var pl := UiStyle.label("the company · keys 1-4", 15, UiStyle.font_sc, UiStyle.BROWN)
-	pl.position = Vector2(60, 694)
-	add_child(pl)
-	party_box = VBoxContainer.new()
-	party_box.position = Vector2(60, 718)
-	party_box.size = Vector2(240, 260)
-	party_box.add_theme_constant_override("separation", 8)
+	party_box = VBoxContainer.new()   # kept for older callers; the headshot row replaces it
+	party_box.visible = false
 	add_child(party_box)
+	# order summary: what the whole Ordo will do (Cole, 2026-11-25)
+	summary_panel = PanelContainer.new()
+	var ssb := UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 3)
+	ssb.shadow_color = UiStyle.INK
+	ssb.shadow_offset = Vector2(4, 5)
+	ssb.shadow_size = 1
+	ssb.content_margin_left = 10
+	ssb.content_margin_right = 8
+	ssb.content_margin_top = 6
+	ssb.content_margin_bottom = 6
+	summary_panel.add_theme_stylebox_override("panel", ssb)
+	summary_panel.position = Vector2(1190, 606)
+	summary_panel.size = Vector2(394, 186)
+	summary_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(summary_panel)
+	summary_r = UiStyle.rich(14)
+	summary_r.custom_minimum_size = Vector2(374, 172)
+	summary_r.fit_content = false
+	summary_r.scroll_active = true
+	summary_r.mouse_filter = Control.MOUSE_FILTER_PASS
+	summary_panel.add_child(summary_r)
+	# the detail of one Ordo slot, shown while it is hovered
+	slot_detail = PanelContainer.new()
+	slot_detail.add_theme_stylebox_override("panel", ssb.duplicate())
+	slot_detail.visible = false
+	slot_detail.z_index = 30
+	slot_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(slot_detail)
+	slot_detail_r = UiStyle.rich(14)
+	slot_detail_r.custom_minimum_size = Vector2(340, 0)
+	slot_detail_r.fit_content = true
+	slot_detail_r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot_detail.add_child(slot_detail_r)
 	# kit row + hint
-	kit_box = HBoxContainer.new()
-	kit_box.position = Vector2(330, 694)
-	kit_box.add_theme_constant_override("separation", 8)
+	kit_box = HBoxContainer.new()   # belt flasks
+	kit_box.position = Vector2(1190, 800)
+	kit_box.add_theme_constant_override("separation", 6)
 	add_child(kit_box)
 	hint_l = UiStyle.label("", 15, UiStyle.font_it, UiStyle.RED_D)
-	hint_l.position = Vector2(760, 700)
-	hint_l.size = Vector2(600, 24)
-	hint_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hint_l.position = Vector2(200, 692)
+	hint_l.size = Vector2(980, 24)
+	hint_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(hint_l)
 	hand_layer = Control.new()
 	hand_layer.position = Vector2(0, 0)
@@ -184,16 +286,16 @@ func _build_static() -> void:
 	add_child(hand_layer)
 	# energy + commit
 	energy_view = Control.new()
-	energy_view.position = Vector2(1386, 700)
+	energy_view.position = Vector2(1440, 806)
 	energy_view.size = Vector2(130, 130)
 	energy_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	energy_view.draw.connect(_draw_energy)
 	add_child(energy_view)
 	deck_l = UiStyle.label("", 14, UiStyle.font_it, UiStyle.BROWN)
-	deck_l.position = Vector2(1150, 880)
-	deck_l.size = Vector2(200, 80)
+	deck_l.position = Vector2(1190, 846)
+	deck_l.size = Vector2(240, 80)
 	add_child(deck_l)
-	commit_btn = _button("Let it be done", Vector2(1362, 858), Vector2(178, 60))
+	commit_btn = _button("Play the Ordo", Vector2(1410, 924), Vector2(176, 48))
 	commit_btn.add_theme_font_size_override("font_size", 22)
 	var csb := UiStyle.box(UiStyle.RED, UiStyle.INK, 3)
 	csb.shadow_color = UiStyle.INK
@@ -206,13 +308,13 @@ func _build_static() -> void:
 	commit_btn.add_theme_color_override("font_color", UiStyle.CREAM)
 	commit_btn.add_theme_color_override("font_hover_color", UiStyle.CREAM)
 	commit_btn.pressed.connect(_commit)
-	undo_btn = _button("strike the last", Vector2(1362, 926), Vector2(178, 36))
+	undo_btn = _button("strike the last", Vector2(1190, 966), Vector2(200, 28))
 	undo_btn.add_theme_font_override("font", UiStyle.font_it)
 	undo_btn.pressed.connect(func(): if plan.size() > 0: remove_slot(plan.size() - 1))
 	fx_layer = Control.new()
 	fx_layer.size = Vector2(1600, 1000)
 	fx_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(fx_layer)
+	board.add_child(fx_layer)
 	# log panel
 	log_panel = PanelContainer.new()
 	log_panel.add_theme_stylebox_override("panel", UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 3))
@@ -226,6 +328,46 @@ func _build_static() -> void:
 	log_r.scroll_following = true
 	log_r.custom_minimum_size = Vector2(460, 480)
 	log_panel.add_child(log_r)
+	_layout_overlay(tl)
+
+## Every panel sits over the world (Cole, 2026-11-25): a thin title line, the Ordo across the top, the hand fans and
+## headshots at the foot, and the order summary, vigour and Play in the bottom-right corner.
+func _layout_overlay(tl: Panel) -> void:
+	for l in [title_l, round_l]:
+		l.add_theme_color_override("font_color", UiStyle.CREAM)
+		l.add_theme_color_override("font_outline_color", UiStyle.INK)
+		l.add_theme_constant_override("outline_size", 5)
+	tl.position = Vector2(16, 36)
+	tl.size = Vector2(1568, 78)
+	var tsb := UiStyle.box(Color(UiStyle.PARCH_L, 0.9), UiStyle.INK, 2)
+	tsb.shadow_color = Color(0, 0, 0, 0.45)
+	tsb.shadow_offset = Vector2(0, 4)
+	tsb.shadow_size = 6
+	tl.add_theme_stylebox_override("panel", tsb)
+	var sc: ScrollContainer = timeline_plan.get_parent()
+	sc.position = Vector2(104, 8)
+	sc.size = Vector2(840, 62)
+	for c in tl.get_children():
+		if c is Label and c.text.begins_with("then"):
+			c.position = Vector2(950, 14)
+	timeline_enemy.position = Vector2(1014, 8)
+	hint_l.position = Vector2(200, 120)
+	hint_l.size = Vector2(1200, 26)
+	hint_l.add_theme_color_override("font_color", UiStyle.CREAM)
+	hint_l.add_theme_color_override("font_outline_color", UiStyle.INK)
+	hint_l.add_theme_constant_override("outline_size", 5)
+	summary_panel.position = Vector2(1196, 768)
+	summary_panel.size = Vector2(390, 126)
+	summary_r.custom_minimum_size = Vector2(370, 112)
+	kit_box.position = Vector2(1196, 734)
+	deck_l.visible = false
+	energy_view.position = Vector2(1188, 900)
+	energy_view.scale = Vector2(0.72, 0.72)
+	commit_btn.position = Vector2(1290, 930)
+	commit_btn.size = Vector2(294, 56)
+	undo_btn.position = Vector2(1444, 900)
+	undo_btn.size = Vector2(140, 26)
+	undo_btn.add_theme_font_size_override("font_size", 14)
 
 func _room_layer() -> TextureRect:
 	var r := TextureRect.new()
@@ -235,13 +377,22 @@ func _room_layer() -> TextureRect:
 	r.stretch_mode = TextureRect.STRETCH_SCALE
 	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	r.pivot_offset = r.size / 2
-	add_child(r)
+	room_root.add_child(r)
 	return r
 
 func _set_room(room: String) -> void:
-	room_far.texture = load("res://assets/art/rooms/%s_far.png" % room)
-	room_mid.texture = load("res://assets/art/rooms/%s_mid.png" % room)
-	room_fore.texture = load("res://assets/art/rooms/%s_fore.png" % room)
+	# Living Ink rooms are WebP at twice the frame; the older painted rooms are PNG
+	var ext := "webp" if ResourceLoader.exists("res://assets/art/rooms/%s_far.webp" % room) else "png"
+	room_far.texture = load("res://assets/art/rooms/%s_far.%s" % [room, ext])
+	if room_far.texture != null:
+		var ft := AtlasTexture.new()
+		var tw: float = room_far.texture.get_width()
+		var th: float = room_far.texture.get_height()
+		ft.atlas = room_far.texture
+		ft.region = Rect2(tw * 0.17, th * 0.955, tw * 0.66, th * 0.04)
+		floor_ext.texture = ft
+	room_mid.texture = load("res://assets/art/rooms/%s_mid.%s" % [room, ext])
+	room_fore.texture = load("res://assets/art/rooms/%s_fore.%s" % [room, ext])
 	# slow ambient sway: midground and foreground drift at different rates for depth
 	for pair in [[room_mid, 3.0, 7.0], [room_fore, 6.0, 5.0]]:
 		var r: TextureRect = pair[0]
@@ -516,6 +667,7 @@ func _place(u: Dictionary, cx: float, animate: bool) -> void:
 	var v: UiUnit = unit_views.get(u.id)
 	if v == null:
 		return
+	cx = 800.0 + (cx - 800.0) * 0.86  # the scaled board crops its edges; draw the lines in a little
 	var p := Vector2(cx - v.size.x / 2, FEET_Y - v.feet_y())
 	if animate:
 		var tw := v.create_tween()
@@ -547,6 +699,7 @@ func refresh_all() -> void:
 	_rebuild_timeline()
 	_rebuild_party()
 	_rebuild_hand()
+	_rebuild_summary()
 	energy_view.queue_redraw()
 	var where: String = Data.ENCOUNTERS[encounter_idx].tier
 	if run_mode and not Run.r.is_empty():
@@ -620,53 +773,7 @@ func _rebuild_timeline() -> void:
 		timeline_enemy.add_child(slot)
 
 func _rebuild_party() -> void:
-	_clear(party_box)
-	for i in s.heroes.size():
-		var h: Dictionary = s.heroes[i]
-		var b := Button.new()
-		b.custom_minimum_size = Vector2(236, 76 if s.heroes.size() < 4 else 56)
-		b.focus_mode = Control.FOCUS_NONE
-		var active: bool = h.id == active_hero
-		if active:
-			var sb := UiStyle.box(UiStyle.HI, UiStyle.RED, 3)
-			sb.shadow_color = UiStyle.INK
-			sb.shadow_offset = Vector2(4, 4)
-			sb.shadow_size = 1
-			b.add_theme_stylebox_override("normal", sb)
-			b.add_theme_stylebox_override("hover", sb)
-		var hb := HBoxContainer.new()
-		hb.position = Vector2(8, 8)
-		hb.size = Vector2(220, 60)
-		hb.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		b.add_child(hb)
-		var at := AtlasTexture.new()
-		var tex: Texture2D = load(h.art)
-		at.atlas = tex
-		var fr: Array = Data.HEROES[h.key].face
-		at.region = Rect2(tex.get_width() * fr[0], tex.get_height() * fr[1], tex.get_width() * fr[2], tex.get_height() * fr[3])
-		var tr := TextureRect.new()
-		tr.texture = at
-		tr.custom_minimum_size = Vector2(50, 58)
-		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		hb.add_child(tr)
-		var v := VBoxContainer.new()
-		v.add_theme_constant_override("separation", 0)
-		v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		v.add_child(UiStyle.label("%s · %s" % [_roman(i + 1), h.name], 17, UiStyle.font_sc))
-		var q := 0
-		for a in plan:
-			if a.hero == h.id:
-				q += 1
-		var line := "%d cards · %d queued" % [h.hand.size(), q]
-		if h.st.freeze > 0:
-			line = "frozen: kit only"
-		v.add_child(UiStyle.label(line, 14, UiStyle.font_it, UiStyle.RED_D if h.st.freeze > 0 else UiStyle.BROWN))
-		hb.add_child(v)
-		var hid: int = h.id
-		b.pressed.connect(func(): set_active(hid))
-		party_box.add_child(b)
+	pass   # the headshot row is built with the hand fans in _rebuild_hand
 
 func set_active(hid: int) -> void:
 	if resolving:
@@ -675,65 +782,235 @@ func set_active(hid: int) -> void:
 	cancel_targeting()
 	refresh_all()
 
+## The bottom of the screen (Cole, 2026-11-25): one headshot per hero in a row, each hero's drawn cards fanned above
+## their head, kit skill and Swap beside it. Sweeping the mouse along the row passes every playable card; hovering lifts
+## a card to full size. A queued card leaves its fan for the Ordo.
+const FAN_SCALE := 0.62
+const ROW_Y := 924.0
 func _rebuild_hand() -> void:
 	_clear(kit_box)
 	_clear(hand_layer)
-	var h := Combat.find(s, active_hero)
-	if h.is_empty():
-		if s.heroes.size() > 0:
-			active_hero = s.heroes[0].id
-			h = s.heroes[0]
-		else:
-			return
-	kit_box.add_child(UiStyle.label("kit", 15, UiStyle.font_sc, UiStyle.BROWN))
-	for kid in h.kit + ["swap"]:
-		var c: Dictionary = Data.CARDS[kid]
-		var b := Button.new()
-		b.text = "%s · %d" % [c.name, c.cost]
-		b.custom_minimum_size = Vector2(0, 36)
-		b.focus_mode = Control.FOCUS_NONE
-		b.tooltip_text = UiStyle.keyword_tip(c) + "\nKit: once per round."
-		var used: bool = _kit_queued(h.id, kid) or h.kit_used.get(kid, false)
-		b.disabled = resolving or used or c.cost > energy_left()
-		var k: String = kid
-		var hid: int = h.id
-		b.pressed.connect(func(): on_kit_clicked(hid, k))
-		kit_box.add_child(b)
+	hovered_card = null
+	var n_h: int = s.heroes.size()
+	if n_h == 0:
+		return
+	var x0 := 20.0
+	var x1 := 1180.0
+	var colw := (x1 - x0) / n_h
+	for hi in n_h:
+		var h: Dictionary = s.heroes[hi]
+		var cx := x0 + colw * (hi + 0.5)
+		_headshot(h, hi, Vector2(cx - 112, ROW_Y))
+		# kit skill and Swap beside the head
+		var ky := ROW_Y
+		for kid in h.kit + ["swap"]:
+			var c: Dictionary = Data.CARDS[kid]
+			var b := Button.new()
+			b.text = "%s · %d" % [c.name, c.cost]
+			b.position = Vector2(cx + 40, ky)
+			b.size = Vector2(min(colw / 2 - 44, 124), 28)
+			b.add_theme_font_size_override("font_size", 14)
+			b.focus_mode = Control.FOCUS_NONE
+			b.tooltip_text = UiStyle.keyword_tip(c) + "\nKit: once per round."
+			var used: bool = _kit_queued(h.id, kid) or h.kit_used.get(kid, false)
+			b.disabled = resolving or used or c.cost > energy_left()
+			var k: String = kid
+			var hid: int = h.id
+			b.pressed.connect(func(): on_kit_clicked(hid, k))
+			hand_layer.add_child(b)
+			ky += 32
+		# the fan: cards still in hand (queued ones have gone up to the Ordo)
+		var idxs := []
+		for i in h.hand.size():
+			var q := -1
+			for j in plan.size():
+				if plan[j].hero == h.id and plan[j].source == "hand" and plan[j].hand_index == i:
+					q = j
+			if q < 0:
+				idxs.append(i)
+		var n := idxs.size()
+		var cw := UiCard.W * FAN_SCALE
+		var spacing: float = min(cw * 0.78, (colw - cw - 16) / max(1, n - 1))
+		for k in n:
+			var i: int = idxs[k]
+			var off := k - (n - 1) / 2.0
+			var cv := UiCard.new()
+			cv.setup(self, h.id, i, h.hand[i])
+			cv.pivot_offset = Vector2(UiCard.W / 2.0, UiCard.H)
+			var px := cx + off * spacing - UiCard.W / 2.0
+			var py: float = ROW_Y - 8 - UiCard.H + off * off * 3.0
+			cv.fan(Vector2(px, py), deg_to_rad(off * 4.0), FAN_SCALE, Vector2(clamp(cx + off * spacing - UiCard.W / 2.0, 4.0, 1596.0 - UiCard.W), 996.0 - UiCard.H))
+			var c: Dictionary = Data.CARDS[h.hand[i]]
+			var cost: int = c.cost if c.cost >= 0 else 1
+			cv.set_state(-1, cost <= energy_left() and c.target != "none" and h.st.freeze == 0)
+			hand_layer.add_child(cv)
+	# belt flasks
+	if s.get("belt", []).size() > 0:
+		kit_box.add_child(UiStyle.label("belt", 14, UiStyle.font_sc, UiStyle.BROWN))
 	for bi in s.get("belt", []).size():
 		var fid: String = s.belt[bi]
 		var fc: Dictionary = Data.CARDS[fid]
 		var bb := Button.new()
-		bb.text = "belt: %s" % fc.name
-		bb.custom_minimum_size = Vector2(0, 36)
+		bb.text = fc.name
+		bb.custom_minimum_size = Vector2(0, 30)
+		bb.add_theme_font_size_override("font_size", 14)
 		bb.focus_mode = Control.FOCUS_NONE
-		bb.tooltip_text = UiStyle.keyword_tip(fc) + "\nBelt: used up when played. Costs no vigour."
+		bb.tooltip_text = UiStyle.keyword_tip(fc) + "\nBelt: used up when played. Costs no vigour. The front hero uses it."
 		var queued_belt := 0
 		for a in plan:
 			if a.source == "belt" and a.card == fid:
 				queued_belt += 1
 		bb.disabled = resolving or queued_belt >= s.belt.count(fid)
-		var hid2: int = h.id
+		var hid2: int = s.heroes[0].id
 		bb.pressed.connect(func(): if not resolving: _begin_action({"hero": hid2, "card": fid, "source": "belt", "hand_index": -1, "target": -1, "x": 0, "cost": 0}))
 		kit_box.add_child(bb)
-	var n: int = h.hand.size()
-	var spacing: float = min(198.0, 790.0 / max(1, n))
-	for i in n:
-		var cv := UiCard.new()
-		cv.setup(self, h.id, i, h.hand[i])
-		cv.position = Vector2(330 + i * spacing, 740)
-		cv.base_y = 740
-		var q := -1
-		for j in plan.size():
-			if plan[j].hero == h.id and plan[j].source == "hand" and plan[j].hand_index == i:
-				q = j
-		var c: Dictionary = Data.CARDS[h.hand[i]]
-		var cost: int = c.cost if c.cost >= 0 else 1
-		cv.set_state(q, q >= 0 or (cost <= energy_left() and c.target != "none" and h.st.freeze == 0))
-		hand_layer.add_child(cv)
-	var dl := "%s's deck\ndraw %d · discard %d" % [h.name, h.draw.size(), h.discard.size()]
-	if h.exhaust.size() > 0:
-		dl += " · exhaust %d" % h.exhaust.size()
+	var dl := ""
+	for h in s.heroes:
+		dl += "%s: draw %d · discard %d\n" % [h.name, h.draw.size(), h.discard.size()]
 	deck_l.text = dl
+
+## One hero's headshot: portrait, name, HP and stress; frozen heroes say so.
+func _headshot(h: Dictionary, i: int, pos: Vector2) -> void:
+	var b := Button.new()
+	b.position = pos
+	b.size = Vector2(148, 60)
+	b.focus_mode = Control.FOCUS_NONE
+	var sb := UiStyle.box(UiStyle.PARCH_L, Color(h.get("color", "6f5036")), 3)
+	sb.shadow_color = UiStyle.INK
+	sb.shadow_offset = Vector2(3, 3)
+	sb.shadow_size = 1
+	b.add_theme_stylebox_override("normal", sb)
+	b.add_theme_stylebox_override("hover", sb)
+	b.tooltip_text = "%s · %d/%d HP · %d stress%s" % [h.name, h.hp, h.max_hp, h.stress, "\nFrozen: kit only this round." if h.st.freeze > 0 else ""]
+	var tr := TextureRect.new()
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	tr.texture = hero_face(h)
+	tr.position = Vector2(5, 4)
+	tr.size = Vector2(46, 52)
+	tr.clip_contents = true
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(tr)
+	var nl := UiStyle.label("%s · %s" % [_roman(i + 1), h.name], 15, UiStyle.font_sc)
+	nl.position = Vector2(56, 4)
+	nl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(nl)
+	var line := "%d/%d · stress %d" % [h.hp, h.max_hp, h.stress]
+	if h.st.freeze > 0:
+		line = "frozen: kit only"
+	var sl := UiStyle.label(line, 13, UiStyle.font_it, UiStyle.RED_D if h.st.freeze > 0 or h.get("deaths_door", false) else UiStyle.BROWN)
+	sl.position = Vector2(56, 30)
+	sl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	b.add_child(sl)
+	var hid: int = h.id
+	b.pressed.connect(func(): set_active(hid))
+	hand_layer.add_child(b)
+
+## A hero's face: cut from the Living Ink rig around its head bone (the path's rig when it has one), else the old art.
+func hero_face(h: Dictionary) -> Texture2D:
+	var key: String = h.key
+	if String(h.get("sub", "")) != "" and BoneRig.has_rig("%s__%s" % [h.key, h.sub]):
+		key = "%s__%s" % [h.key, h.sub]
+	var at := AtlasTexture.new()
+	if BoneRig.has_rig(key):
+		var j: Dictionary = Data._load_json(BoneRig.path_for(key))
+		var tex: Texture2D = load("res://assets/art/rigs_li/%s/full.webp" % key)
+		if tex != null and j.bones.has("head"):
+			var hp: Array = j.bones.head.pivot
+			var r := 74.0
+			at.atlas = tex
+			at.region = Rect2(hp[0] - r * 0.9, hp[1] - r * 1.25, r * 1.8, r * 2.0)
+			return at
+	var old: Texture2D = load(h.art)
+	at.atlas = old
+	var fr: Array = Data.HEROES[h.key].face
+	at.region = Rect2(old.get_width() * fr[0], old.get_height() * fr[1], old.get_width() * fr[2], old.get_height() * fr[3])
+	return at
+
+## Only one fan card is lifted at a time.
+func card_hovered(cv: UiCard, on: bool) -> void:
+	if on:
+		if hovered_card != null and hovered_card != cv and is_instance_valid(hovered_card):
+			hovered_card.unlift()
+		hovered_card = cv
+	elif hovered_card == cv:
+		hovered_card = null
+
+# ------------------------------------------------------------------ what the Ordo will do
+## A readable list of what changed between two states: damage, Block, healing, stress, statuses, elements and deaths.
+func _diff_lines(a: Dictionary, b: Dictionary) -> Array:
+	var out := []
+	for side in ["enemies", "heroes"]:
+		for ub in b[side]:
+			var ua := Combat.find(a, ub.id)
+			if ua.is_empty():
+				out.append("%s arrives" % ub.name)
+				continue
+			var bits := []
+			var dhp: int = int(ub.hp) - int(ua.hp)
+			if ub.dead and not ua.dead:
+				bits.append("[color=#9c3d2b]dies[/color]")
+			elif dhp < 0:
+				bits.append("[color=#9c3d2b]%d HP[/color]" % dhp)
+			elif dhp > 0:
+				bits.append("[color=#4f7a3a]+%d HP[/color]" % dhp)
+			var db: int = int(ub.block) - int(ua.block)
+			if db != 0:
+				bits.append("%+d Block" % db)
+			if side == "heroes":
+				var ds: int = int(ub.get("stress", 0)) - int(ua.get("stress", 0))
+				if ds != 0:
+					bits.append("%+d stress" % ds)
+				if ub.get("deaths_door", false) and not ua.get("deaths_door", false):
+					bits.append("[color=#9c3d2b]Death's Door[/color]")
+			for k in ub.st:
+				var d: int = int(ub.st[k]) - int(ua.st.get(k, 0))
+				if d != 0 and k not in ["freeze_bonus", "tenacity"]:
+					bits.append("%+d %s" % [d, k.capitalize()])
+			for e in ub.elements:
+				var d2: int = int(ub.elements[e]) - int(ua.elements.get(e, 0))
+				if d2 != 0:
+					bits.append("%+d %s" % [d2, e.capitalize()])
+			if int(ub.armor) != int(ua.armor):
+				bits.append("%+d Armor" % (int(ub.armor) - int(ua.armor)))
+			if not bits.is_empty():
+				out.append("[b]%s[/b]: %s" % [ub.name, ", ".join(bits)])
+	return out
+
+func _rebuild_summary() -> void:
+	if plan.is_empty():
+		summary_r.text = "[i]The order summary appears here: what your whole Ordo does, then what the foes still do.[/i]"
+		return
+	var mine: Dictionary = Combat.simulate(s, plan, false).state
+	var lines := _diff_lines(s, mine)
+	var t := "[b]Your Ordo[/b] · %d of %d vigour\n" % [s.energy - energy_left(), s.energy]
+	t += "\n".join(lines) if not lines.is_empty() else "[i]no effect yet[/i]"
+	var after: Array = _diff_lines(mine, preview.state)
+	var heroes_only := after.filter(func(l): return true)
+	t += "\n[b]Then the foes[/b]\n" + ("\n".join(heroes_only) if not heroes_only.is_empty() else "[i]nothing lands[/i]")
+	summary_r.text = t
+
+func _slot_detail(i: int) -> void:
+	if i < 0 or i >= plan.size():
+		slot_detail.visible = false
+		return
+	var before: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
+	var after: Dictionary = Combat.simulate(s, plan.slice(0, i + 1), false).state
+	var c: Dictionary = Data.CARDS[plan[i].card]
+	var lines := _diff_lines(before, after)
+	var why := ""
+	var oi: int = preview.get("ordered", plan).find(plan[i])
+	if oi >= 0 and oi < preview.reasons.size():
+		why = preview.reasons[oi]
+	var t := "[b]%s. %s[/b]\n" % [_roman(i + 1), c.name]
+	if why != "":
+		t += "[color=#9c3d2b]Fizzles: %s[/color]" % why
+	else:
+		t += "\n".join(lines) if not lines.is_empty() else "[i]no visible change[/i]"
+	slot_detail_r.text = t
+	slot_detail.visible = true
+	slot_detail.reset_size()
+	slot_detail.position = Vector2(clamp(get_global_mouse_position().x - 170, 8, 1240), 600 - slot_detail.size.y - 6)
 
 func _clear(n: Node) -> void:
 	for c in n.get_children():
@@ -888,6 +1165,7 @@ func _recompute_x() -> void:
 			spent += a.cost
 
 func highlight_slot(i: int, on: bool) -> void:
+	_slot_detail(i if on and i >= 0 else -1)
 	for id in unit_views:
 		unit_views[id].hovered = false
 	if on:

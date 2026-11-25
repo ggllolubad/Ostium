@@ -178,6 +178,19 @@ static func rules_bbcode(text: String) -> String:
 		out = out.replace(k, "[b]%s[/b]" % k)
 	return out
 
+## Card text with every keyword underlined as a link (its definition shows on hover) and courses in their colours.
+static var _kw_re: RegEx = null
+static func rules_links(text: String) -> String:
+	if _kw_re == null:
+		var keys: Array = Data.KEYWORDS.keys()
+		keys.sort_custom(func(a, b): return String(a).length() > String(b).length())
+		_kw_re = RegEx.create_from_string("\\b(" + "|".join(keys) + ")\\b")
+	var out := text
+	var words := {"Water": "water", "Fire": "fire", "Frost": "frost", "Lightning": "lightning", "Toxin": "toxin", "Void": "void"}
+	for w in words:
+		out = out.replace(w, "[color=#%s]%s[/color]" % [Data.ELEMENT_COLOR[words[w]].to_html(false), w])
+	return _kw_re.sub(out, "[url=$1]$1[/url]", true)
+
 static func keyword_tip(card: Dictionary) -> String:
 	var lines := [card.name + (" · cost X" if card.cost < 0 else " · cost %d" % card.cost), card.text]
 	var seen := {}

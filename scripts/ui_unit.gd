@@ -16,6 +16,10 @@ var act := {}            # current action animation: {kind, t, dur}
 var hit_t := -1.0
 var seed_phase := 0.0
 var sprite_size := Vector2(240, 288)
+var bone: BoneRig = null   # Living Ink bone rig, when the unit has one
+## Display px per stored Living Ink rig px: the rooms' camera draws figures at 0.2971 of rig px, stored at 0.6.
+const LI_DISPLAY := 0.2971 / 0.6 * 1.18
+const MAX_RISE := 400.0   # display px a figure may stand above its feet
 var info: VBoxContainer
 var name_l: Label
 var status_r: RichTextLabel
@@ -39,6 +43,10 @@ func setup(m: Node, u: Dictionary, sz: Vector2, feet := 0.966) -> void:
 	side = u.side
 	facing = 1.0 if side == "hero" else -1.0
 	seed_phase = float(unit_id) * 1.37
+	var li_key := _li_key(u)
+	if li_key != "":
+		_setup_bone(u, li_key)
+		return
 	var rig_path := "res://data/rigs/%s.json" % u.key
 	var tex: Texture2D = null
 	if FileAccess.file_exists(rig_path):
@@ -82,11 +90,52 @@ func setup(m: Node, u: Dictionary, sz: Vector2, feet := 0.966) -> void:
 				parts[g] = []
 			parts[g].append(tr)
 			sprite.add_child(tr)
+	_setup_info(u)
+
+## Which Living Ink rig draws this unit: a hero on a path uses that path's rig when one exists.
+func _li_key(u: Dictionary) -> String:
+	if u.side == "hero" and String(u.get("sub", "")) != "" and BoneRig.has_rig("%s__%s" % [u.key, u.sub]):
+		return "%s__%s" % [u.key, u.sub]
+	return u.key if BoneRig.has_rig(u.key) else ""
+
+func _setup_bone(u: Dictionary, key: String) -> void:
+	var j: Dictionary = Data._load_json(BoneRig.path_for(key))
+	var k := LI_DISPLAY * (0.92 if main.s.get("heroes", []).size() >= 4 else 1.0)
+	var ink: Array = j.get("ink", [0, 0, j.canvas[0], j.canvas[1]])
+	var gy := float(j.ground)
+	var x0 := float(ink[0]) - 6.0
+	var y0 := float(ink[1]) - 6.0
+	var x1 := float(ink[2]) + 6.0
+	var y1: float = max(float(ink[3]), gy) + 6.0
+	# the tallest rulers would break the frame: cap the figure's height above its feet
+	if (gy - y0) * k > MAX_RISE:
+		k = MAX_RISE / (gy - y0)
+	sprite_size = Vector2(x1 - x0, y1 - y0) * k
+	FEET = (gy - y0) / (y1 - y0)
+	size = Vector2(max(sprite_size.x, 220), sprite_size.y + 110)
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	sprite = Control.new()
+	sprite.size = sprite_size
+	sprite.position = Vector2((size.x - sprite_size.x) / 2, 0)
+	sprite.pivot_offset = sprite_size * Vector2(0.5, FEET)
+	sprite.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(sprite)
+	bone = BoneRig.new()
+	bone.setup(key, Vector2(j.canvas[0], j.canvas[1]) * k)
+	bone.base_offset = Vector2(-x0, -y0) * k
+	sprite.add_child(bone)
+	if j.has("variants"):
+		bone.set_variant(Data.ELEMENTS[int(u.get("attuned", 0))])
+	_setup_info(u)
+
+func _setup_info(u: Dictionary) -> void:
 	set_process(true)
 	info = VBoxContainer.new()
 	info.position = Vector2(0, sprite_size.y * FEET + 8)
 	info.size = Vector2(size.x, 100)
 	info.add_theme_constant_override("separation", 1)
+	info.scale = Vector2(0.84, 0.84)   # the board is drawn at 1.2: keep the plates compact over the floor
+	info.pivot_offset = Vector2(info.size.x / 2, 0)
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(info)
 	name_l = UiStyle.label(u.name, 17, UiStyle.font_sc)
@@ -120,6 +169,8 @@ func feet_y() -> float:
 	return sprite_size.y * FEET
 
 func refresh(u: Dictionary, pred: Dictionary, s: Dictionary) -> void:
+	if bone != null and u.side == "hero":
+		bone.set_variant(Data.ELEMENTS[int(u.get("attuned", 0))])
 	hp = u.hp
 	max_hp = u.max_hp
 	block = u.block
@@ -276,6 +327,9 @@ func _process(delta: float) -> void:
 	_pose()
 
 func _pose() -> void:
+	if bone != null:
+		_pose_bones()
+		return
 	if parts.is_empty():
 		return
 	var tt := t_idle + seed_phase
@@ -414,6 +468,11 @@ func play_hit() -> void:
 
 ## Hand point in this view's local coordinates (projectile origin).
 func hand_point() -> Vector2:
+	if bone != null:
+		for b in ["hand_f", "forearm_f", "hand_n", "head"]:
+			if bone.bones().has(b):
+				return sprite.position + bone.bone_point(b)
+		return sprite.position + sprite_size * Vector2(0.5 + 0.25 * facing, 0.35)
 	var hp: Array = rig.get("anim", {}).get("hand", [])
 	if hp.is_empty():
 		return sprite.position + sprite_size * Vector2(0.5 + 0.25 * facing, 0.35)
@@ -422,3 +481,82 @@ func hand_point() -> Vector2:
 func body_point() -> Vector2:
 	return sprite.position + Vector2(sprite_size.x * 0.5, sprite_size.y * FEET * 0.55)
 
+
+# ================================================================== Living Ink bone rigs
+const ARM_F := ["upperarm_f", "forearm_f", "hand_f"]
+const ARM_N := ["upperarm_n", "forearm_n", "hand_n"]
+const REACH := ["arm", "claw", "jaw", "tail", "tentacle", "wing", "neck", "head", "pincer", "hand", "fist", "weapon", "sword", "axe",
+	"spear", "hook", "mace", "staff", "blade", "scythe", "hammer", "censer", "lantern", "trunk", "tusk", "stinger", "tongue"]
+
+## Idle breathing, the current action and the hit recoil, as bone angles. Humanoid bones get named motions; any other
+## bone (tentacles, wings, tails) sways a little on its own phase, so every creature lives without hand-made tracks.
+func _pose_bones() -> void:
+	var B: Dictionary = bone.bones()
+	var tt := t_idle + seed_phase
+	var ang := {}
+	var i := 0
+	for b in B:
+		i += 1
+		var amp := 1.2 if B[b].parent != null else 0.0
+		for r in REACH:
+			if String(b).contains(r):
+				amp = 2.2
+				break
+		ang[b] = amp * sin(tt * (0.9 + 0.13 * (i % 5)) + i * 0.7)
+	ang["torso"] = ang.get("torso", 0.0) + 0.8 * sin(tt * 1.1)
+	ang["head"] = ang.get("head", 0.0) + 1.4 * sin(tt * 1.3 + 0.5)
+	var off := Vector2.ZERO
+	var lean := 0.0
+	var squash := 1.0 + 0.006 * sin(tt * 1.6)
+	if not act.is_empty():
+		var p: float = clamp(act.t / act.dur, 0.0, 1.0)
+		var f := facing
+		var wind := 0.0
+		var strike := 0.0
+		if p < 0.42:
+			wind = p / 0.42
+		elif p < 0.58:
+			wind = 1.0 - (p - 0.42) / 0.16
+			strike = (p - 0.42) / 0.16
+		else:
+			strike = 1.0 - (p - 0.58) / 0.42
+		var kind: String = act.kind
+		match kind:
+			"cast", "raise", "ring", "wail":
+				for b in ARM_F:
+					if B.has(b):
+						ang[b] = ang.get(b, 0.0) - f * 55.0 * min(1.0, p * 2.5) * (1.0 - max(0.0, (p - 0.7) / 0.3)) / (1 + ARM_F.find(b))
+				ang["head"] = ang.get("head", 0.0) - f * 6.0 * strike
+				off.y -= 8.0 * strike
+			"block":
+				for b in ARM_N + ARM_F:
+					if B.has(b):
+						ang[b] = ang.get(b, 0.0) - f * 18.0 * strike
+				off.x -= f * 4.0 * strike
+			_:
+				var swing := f * (-40.0 * wind + 95.0 * strike)
+				var any_arm := false
+				for b in ARM_F:
+					if B.has(b):
+						any_arm = true
+						ang[b] = ang.get(b, 0.0) + swing * [1.0, 0.45, 0.2][ARM_F.find(b)]
+				if not any_arm:
+					for b in B:
+						for r in REACH:
+							if String(b).contains(r):
+								ang[b] = ang.get(b, 0.0) + swing * 0.35
+								break
+				ang["torso"] = ang.get("torso", 0.0) + f * (-6.0 * wind + 9.0 * strike)
+				lean = f * (-3.0 * wind + 5.0 * strike)
+				off.x += f * 30.0 * strike
+	if hit_t >= 0.0:
+		var k: float = 1.0 - hit_t / 0.35
+		lean -= facing * 4.0 * k
+		off.x -= facing * 12.0 * k
+		ang["torso"] = ang.get("torso", 0.0) - facing * 6.0 * k
+		ang["head"] = ang.get("head", 0.0) - facing * 8.0 * k
+	bone.angles = ang
+	bone.offset = bone.base_offset + off
+	bone.lean = lean
+	bone.squash = squash
+	bone.queue_redraw()

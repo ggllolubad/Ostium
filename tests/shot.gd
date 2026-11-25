@@ -30,8 +30,10 @@ func _initialize() -> void:
 			m.run_ui.show_reward()
 	elif mode != "menu":
 		m._start_encounter(int(OS.get_environment("ENC")) if OS.get_environment("ENC") != "" else 3)
-		await process_frame
-		if mode == "combat" or mode == "target":
+		m.hub.visible = false
+		for k in 20:
+			await process_frame
+		if mode == "combat" or mode == "target" or mode == "detail":
 			var h = m.s.heroes
 			var e = m.s.enemies
 			m.set_active(h[2].id)
@@ -43,6 +45,14 @@ func _initialize() -> void:
 			if not m.targeting.is_empty():
 				m.on_unit_clicked(m.valid_targets[0])
 			m.set_active(h[1].id)
+			if mode == "detail":
+				m.highlight_slot(0, true)
+				for c in m.hand_layer.get_children():
+					if c is UiCard:
+						c._notification(Control.NOTIFICATION_MOUSE_ENTER)
+						break
+				for k in 15:
+					await process_frame
 			if mode == "target":
 				m.on_card_clicked(h[1].id, 0)
 		if mode == "resolve":

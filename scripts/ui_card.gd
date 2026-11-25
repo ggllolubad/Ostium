@@ -14,6 +14,13 @@ var playable := true
 var base_y := 0.0
 var _hover := false
 var reward_cb: Callable
+# fan mode (combat hand): rest pose in the fan, lifted pose on hover
+var fanned := false
+var rest_pos := Vector2.ZERO
+var rest_rot := 0.0
+var rest_scale := 1.0
+var lift_pos := Vector2.ZERO
+var _tw: Tween
 var badge := ""
 const RARITY_COL := {"S": Color("6f5036"), "K": Color("6f5036"), "C": Color("2b1d12"), "U": Color("3f6fa0"), "R": Color("a9822f"), "X": Color("6d5a8a"), "F": Color("62804f"), "Curse": Color("9c3d2b")}
 
@@ -52,20 +59,10 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	v.add_theme_constant_override("separation", 3)
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(v)
+	# Card layout (Cole, 2026-11-25): name, art, description with underlined keywords that explain themselves on
+	# hover, then flavour text.
 	var top := HBoxContainer.new()
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var init := UiStyle.label(c.name.substr(0, 1), 24, UiStyle.font_bl, UiStyle.CREAM)
-	var init_bg := PanelContainer.new()
-	init_bg.add_theme_stylebox_override("panel", UiStyle.box(col, UiStyle.INK, 2))
-	init_bg.custom_minimum_size = Vector2(30, 30)
-	init.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	init_bg.add_child(init)
-	init_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	top.add_child(init_bg)
-	var nm := UiStyle.label(c.name.substr(1), 18, UiStyle.font_sc)
-	nm.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	nm.clip_text = true
-	top.add_child(nm)
 	var cost := UiStyle.label("X" if c.cost < 0 else str(c.cost), 18, UiStyle.font_sc)
 	var cost_bg := PanelContainer.new()
 	var csb := UiStyle.box(UiStyle.GOLD, UiStyle.INK, 2)
@@ -76,10 +73,19 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	cost_bg.add_child(cost)
 	cost_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(cost_bg)
+	var nm := UiStyle.label(c.name, 17 if c.name.length() < 16 else 14, UiStyle.font_sc)
+	nm.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	nm.clip_text = true
+	top.add_child(nm)
+	var pad := Control.new()
+	pad.custom_minimum_size = Vector2(22, 0)
+	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	top.add_child(pad)
 	v.add_child(top)
 	var art := TextureRect.new()
 	art.texture = _art(c.art, c.cat)
-	art.custom_minimum_size = Vector2(W - 18, 92)
+	art.custom_minimum_size = Vector2(W - 18, 86)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -91,14 +97,56 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 		line = c.sub.capitalize().replace("_", " ") + " · " + line
 	if c.has("use"):
 		line += "  ·  " + UiStyle._r(c.use) + (" ▸ " + UiStyle._r(c.hit) if c.has("hit") else "")
-	var tl := UiStyle.label(line, 13, UiStyle.font_it, UiStyle.BROWN)
+	var tl := UiStyle.label(line, 12, UiStyle.font_it, UiStyle.BROWN)
 	tl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tl.clip_text = true
 	v.add_child(tl)
 	var rules := UiStyle.rich(15)
-	rules.text = "[center]" + UiStyle.rules_bbcode(c.text) + "[/center]"
+	rules.text = "[center]" + UiStyle.rules_links(c.text) + "[/center]"
 	rules.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	rules.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rules.mouse_filter = Control.MOUSE_FILTER_PASS
+	rules.meta_underlined = true
+	rules.meta_hover_started.connect(_kw_on)
+	rules.meta_hover_ended.connect(_kw_off)
 	v.add_child(rules)
+	var fl: String = c.get("flavour", "")
+	if fl != "":
+		var fr := UiStyle.label(fl, 12, UiStyle.font_it, UiStyle.BROWN)
+		fr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		fr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		fr.custom_minimum_size = Vector2(W - 22, 0)
+		v.add_child(fr)
+
+var _kw_tip: PanelContainer = null
+
+## Hovering an underlined keyword shows its definition beside the card.
+func _kw_on(meta: Variant) -> void:
+	_kw_off(meta)
+	var k := String(meta)
+	var d: String = Data.KEYWORDS.get(k, "")
+	if d == "":
+		return
+	_kw_tip = PanelContainer.new()
+	_kw_tip.add_theme_stylebox_override("panel", UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 2))
+	_kw_tip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var r := UiStyle.rich(14)
+	r.text = "[b]%s[/b]: %s" % [k, d]
+	r.fit_content = true
+	r.custom_minimum_size = Vector2(240, 0)
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_kw_tip.add_child(r)
+	_kw_tip.top_level = true
+	_kw_tip.z_index = 100
+	add_child(_kw_tip)
+	var gp := get_global_rect()
+	_kw_tip.global_position = Vector2(clamp(gp.end.x + 6, 4, 1600 - 254), clamp(gp.position.y + 40, 4, 900))
+	if gp.end.x + 260 > 1600:
+		_kw_tip.global_position.x = gp.position.x - 256
+
+func _kw_off(_meta: Variant) -> void:
+	if _kw_tip != null and is_instance_valid(_kw_tip):
+		_kw_tip.queue_free()
+	_kw_tip = null
 
 static func _art(key: String, cat := "physical") -> Texture2D:
 	if not _art_cache.has(key):
@@ -108,6 +156,30 @@ static func _art(key: String, cat := "physical") -> Texture2D:
 			p = "res://assets/art/card_%s.png" % fb
 		_art_cache[key] = load(p) if ResourceLoader.exists(p) else null
 	return _art_cache[key]
+
+## Places the card in a hand fan: rest pose (position, rotation, scale) and where it rises to when hovered.
+func fan(pos: Vector2, rot: float, sc: float, lift: Vector2) -> void:
+	fanned = true
+	rest_pos = pos
+	rest_rot = rot
+	rest_scale = sc
+	lift_pos = lift
+	position = pos
+	rotation = rot
+	scale = Vector2(sc, sc)
+
+func _go(pos: Vector2, rot: float, sc: float) -> void:
+	if _tw != null and _tw.is_valid():
+		_tw.kill()
+	_tw = create_tween().set_parallel(true)
+	_tw.tween_property(self, "position", pos, 0.09)
+	_tw.tween_property(self, "rotation", rot, 0.09)
+	_tw.tween_property(self, "scale", Vector2(sc, sc), 0.09)
+
+func unlift() -> void:
+	_hover = false
+	z_index = 0
+	_go(rest_pos, rest_rot, rest_scale)
 
 func set_state(q: int, can_play: bool) -> void:
 	queued_at = q
@@ -134,6 +206,18 @@ func _gui_input(ev: InputEvent) -> void:
 			main.remove_slot(queued_at)
 
 func _notification(what: int) -> void:
+	if fanned:
+		if what == NOTIFICATION_MOUSE_ENTER:
+			_hover = true
+			z_index = 40
+			if main.has_method("card_hovered"):
+				main.card_hovered(self, true)
+			_go(lift_pos, 0.0, 1.0)
+		elif what == NOTIFICATION_MOUSE_EXIT:
+			if main.has_method("card_hovered"):
+				main.card_hovered(self, false)
+			unlift()
+		return
 	if what == NOTIFICATION_MOUSE_ENTER:
 		_hover = true
 		var tw := create_tween()

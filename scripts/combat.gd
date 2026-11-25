@@ -77,6 +77,7 @@ static func new_state_run(setup: Dictionary, enemy_keys: Array, seed: int) -> Di
 		h.stress_res = int(hs.stats.get("stress_res", 0)) + int(setup.get("stress_res", 0))
 		h.passives = hs.get("passives", [])
 		h.run_index = int(hs.get("index", i))
+		h.sub = String(hs.get("sub", ""))
 		h.st.might += int(hs.stats.get("might", 0))
 	for e in s.enemies:
 		var mult := float(setup.get("foe_hp", 1.0)) * (float(setup.get("boss_hp", 1.0)) if Data.ENEMIES[e.key].tier == "boss" else 1.0)

@@ -238,7 +238,7 @@ static func combat_setup() -> Dictionary:
 		var st := stats(h)
 		energy += int(st.get("energy", 0))
 		hs.append({"index": i, "key": h.key, "max_hp": max_hp(h), "hp": min(h.hp, max_hp(h)), "stress": h.stress, "resolve": h.resolve,
-			"deck": full_deck(h), "grit": grit(h), "armor": int(Data.HEROES[h.key].armor) + int(st.get("armor", 0)), "stats": st, "passives": passives(h)})
+			"deck": full_deck(h), "grit": grit(h), "armor": int(Data.HEROES[h.key].armor) + int(st.get("armor", 0)), "stats": st, "passives": passives(h), "sub": h.get("subclass", "")})
 	var lvl := doom_level()
 	var foe_hp := 1.0 + 0.08 * lvl * (2 if has_asc("a_scaling") else 1) + (0.1 if has_asc("a_hp") else 0.0)
 	var foe_might := (1 if has_asc("a_might") else 0) + (1 if r.supplies.light <= 0 else 0) + (lvl / 3)
