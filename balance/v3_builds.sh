@@ -9,9 +9,11 @@ declare -A P=(
  [C]=bulwark:thornguard,alchemist:plaguewright,oracle:augur
  [D]=duelist:executioner,hexweaver:pactbound,alchemist:apothecary
  [E]=duelist:bloodletter,elementalist:accumulator,oracle:chronomancer
- [F]=elementalist:prismatic,alchemist:transmuter,hexweaver:mirrorhex
+ [F]=bulwark:thornguard,elementalist:prismatic,alchemist:transmuter
+ [G]=duelist:bladedancer,hexweaver:mirrorhex,oracle:augur
 )
 run() { for d in 1 7 13; do $G --headless --path . --script res://balance/descent.gd -- door=$d runs=$N seed=$((d*1000+31)) builds=${P[$1]} world=random ${EXTRA} out=$O/$1_d$d.jsonl >/dev/null 2>&1; done; echo "$1 done"; }
 run A & run B & run C & wait
 run D & run E & run F & wait
+run G & wait
 echo ALL DONE
