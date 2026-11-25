@@ -1,69 +1,71 @@
-# Card art: gritty pass
+# Card art: gritty pass (approved look, 2026-11-25)
 
-Run: `node cards/render.js [ids]` (no ids renders the eight samples). Output: `/home/claude/ostium/build/emblem2/<id>.jpg`
-(560 x 306) and `contact.jpg`. Each card is drawn at 1120 x 612 (full PNG and SVG in `_full/`), then downscaled once
-with Lanczos. `-t` writes to `emblem2/_test` instead. `node cards/posepeek.js <module> <key> '<pose>' out.png`
-shows a posed hero with every joint named, for tuning poses.
+Run: `node cards/render.js [ids]`. With no ids it renders the eight samples to `/home/claude/ostium/build/emblem2/`;
+`-r` writes to `emblem2/review/`, `-t` to `emblem2/_test/`. Each card is drawn at 1120 x 612 (full PNG and SVG in
+`_full/`), downscaled once with Lanczos to 560 x 306, plus a `contact.jpg` (review and test sheets are labelled with
+the id and what the card got). Test ids `@<calling>/<kind>[/<course>]` render a rig without a real card.
+Tools: `posepeek.js` (a posed hero with every joint named), `objsheet.js <out.png> [course]` (the object library).
 
-Files: `card_kit.js` (grounds, ink FX, detail helpers, hero posing), `objects.js` (devices drawn with Fig),
-`samples.js` (data rules, compositions per kind, per-card overrides), `render.js`, `downscale.py`.
+Files: `card_kit.js` (grounds, ink FX, detail helpers, hero posing), `objects.js` (flask, hourglass, robe scrap,
+mirror, bell, shield), `objects2.js` (the rest of the library), `samples.js` (data rules, rigs, compositions,
+object picking, overrides), `render.js`, `downscale.py`.
 
 ## Style rules
 
-1. **Same engine, same settings.** Heroes, foes and objects are all `Fig` drawings with `kit.base` (cel band, hatch,
-   crosshatch, variable ink, grit, wobble, key light upper left). Objects are drawn at figure scale, about 440 figure
-   px tall, and placed at 0.9 to 1.0. Heroes are placed at 1.2 to 1.45. That keeps the hatch spacing within a pixel of
-   the hero renders at card size.
-2. **Tilt objects through a frame, never with an SVG rotate.** A rotate would turn the key light with the object.
-3. **Break big areas up into parts.** One big `f.part` reads flat. Bands, straps, labels, strips, patches and rims are
-   each their own part, so each gets its own shadow band and outline. Then add `D.contour` (cross-contour hatching
-   clipped to the form) and `D.wear` (pits, nicks, scratches). At least six secondary details per object (cork, pitch,
-   twine, tag, cage, crack, mould, sediment; or wax, twine repair, chips, stains, star chart, bored hole).
-4. **Grounds are the room, not a gradient.** The card's battle room (far + mid layers) is cropped, blurred a little,
-   greyed, darkened and multiplied by the course wash. Inside the focal pool the same room is lifted rather than covered
-   by a glow, so the pool keeps the room's texture. Then soot, water blots and specks, then hand-laid crosshatch
-   closing in from the edges. No ray lines, no clean vignettes.
-5. **FX are ink, not shapes.** Dry brush with bristles that break as the brush dries (`drybrush`); tapered flicks and a
-   ragged blot for impacts (`impact`, `flick`); crescents with a broken paper edge for cuts (`slash`); hatched motion
-   lines (`motionHatch`); splatter with tear-shaped drops (`splatter`); woodcut billows for gas and smoke (`billow`).
-   Everything passes through a displacement filter. No stars, no perfect arcs, no soft glows.
-6. **Course marks follow the bible.** Void is a clean bored hole with its wall showing (`D.hole`), never sparkles.
-   Toxin is mould, pustules and grey-green woodcut mist, never neon or slime. Water ink is deep blue-black.
-7. **Colour.** The course wash for the ground; the course's own ink (bible 01: vermilion, pale blue, gold, deep blue,
-   sick green, violet-black) for that course's FX. Red only for blood. Gold only on holy things: bronze, brass, oak and
-   pewter stand in for it on every sample.
-8. **Foes are fragments.** A foe (Drowned Thrall by default) sits at the right edge, darkened by `kFoe`, so the hero
-   reads first.
-9. **Read at 170 px.** One subject, one focal pool, one act. If the FX hide the subject, cut FX.
+1. **Same engine, same settings.** Heroes and objects are `Fig` drawings with `kit.base` (cel band, hatch,
+   crosshatch, variable ink, grit, wobble, key light upper left). Objects are drawn about 360 to 440 figure px tall and
+   placed at 0.95 to 1.2; heroes at 1.2 to 1.45. Hatch spacing then matches the hero renders at card size.
+2. **No foes.** A hero card shows the hero mid-act and the ink FX only. The blow lands on empty air: the smash, the cut
+   marks hanging in space, the splatter carry the impact (Cole, 2026-11-25).
+3. **Tilt objects through a frame, never an SVG rotate**, so the key light stays put.
+4. **Break big areas into parts, then dress them.** Each band, strap, label or rim is its own `f.part`. `D.dress`
+   lays contour hatching on the shadow side and clipped wear and grime over a part. At least six secondary details
+   per object (twine, wax, labels, chips, cracks, rust, stains, rivets, holes).
+5. **Grounds are the room**: the card's battle room, greyed, darkened and multiplied by the course wash; the focal pool
+   lifts the same room instead of glowing over it; soot, blots, specks and hand-laid crosshatch toward the edges.
+6. **FX are ink**: dry brush that breaks as it dries, tapered flicks, ragged smashes, cuts with a broken light edge,
+   hatched motion lines, tear-drop splatter, woodcut billows. All roughened. No stars, perfect arcs or glows.
+7. **Course ink** for a course's FX is its bible ink pulled most of the way to the game's ink (0.6 to 0.74 toward
+   near-black), so it reads as ink, not as paint. Physical FX are plain ink, with dark blood flecks on blows.
+8. **Course marks**: void is a clean bored hole with its wall showing (`D.hole`); toxin is mould and grey-green
+   hatched mist; frost falls as pale specks and rimes the floor; lightning burns branch along the floor; fire throws
+   ash and embers. Never sparkles, neon, slime or clean crystals.
+9. **Colour**: red only for blood (and the rubric on a powder keg's warning); gold only on holy things (the
+   reliquary) and money (the purse).
+10. **Read at 170 px**: one subject, one focal pool, one act.
 
-## Which kinds get a hero, which get an object
+## What gets a hero and what gets an object
 
-`kindOf(card)` in `samples.js`, from the card data:
+`kindOf(card)` from the card data:
 
 | Kind | Rule | Composition |
-|---|---|---|
-| attack | deals damage to a foe, physical course | hero, `swing` (weapon arc onto a foe's head) or `cuts` (one cut per hit) |
-| cast | deals damage to a foe, any other course or the Elementalist | hero, a bead of the course's ink flung onto a foe |
-| block | block, guard, ward, armour | hero behind their guard, a foe's weapon biting it |
-| flask | Flask keyword, or an Alchemist card that applies or brews | object: flask |
-| rite, device, curse | everything else | object chosen by calling: flask, hourglass, mirror, bell, shield |
+|:-|:-|:-|
+| attack | damage to a foe by the Bulwark or Duelist; physical damage by the Alchemist, Oracle, Hexweaver, Vessel | hero: `swing` (Bulwark), `cuts` (Duelist, one cut per hit), `strike` (Hexweaver, Vessel); callings with no attack rig throw instead (cast) |
+| cast | damage to a foe by the Elementalist, or any other course's damage | hero: the course's ink (or a flask) flung from the hand, bursting in the air |
+| block | block, guard, ward, armour | hero behind their guard, an unseen blow smashing on it |
+| flask | Flask keyword, or an Alchemist card that applies or brews | object: flask, vial, jar or keg |
+| curse | Curse rarity or the Affliction keyword | object |
+| rite, device | everything else | object |
 
-Shared and world cards have no hero, so their hero kinds fall back to an object.
+Shared, world and foe-added cards have no hero, so their hero kinds become objects.
 
-## Data-driven and hand-made
+## Data-driven
 
-Data-driven: course (wash, ink colour, default room), calling and path (hero figure: the path variant from
-`worlds/hero_paths_A/B` when the card's `arch` names one), number of hits (number of cuts), target (foe fragment),
-world cards (room by world).
+- **Hero**: the calling's figure, or the path variant from `worlds/hero_paths_A/B` when the card's `arch` names one.
+  The Vessel has no path figures, so its path cards use the base Vessel.
+- **Rigs** (`RIG` in `samples.js`): attack, cast and block poses for all seven callings, tuned by eye. Path variants
+  share their calling's rig. FX anchor on named bones (`mace`, `rapier`, `flask`, `hourglass`, `poppet`, hands) and
+  fall back to the near hand when a variant lacks the bone.
+- **Room**: world cards, foe-added cards and afflictions use their own world's room (from the cls or the id);
+  everything else uses the course's room.
+- **Object**: `pickObject` scores about 40 word lists against the card's name (weight 3), note (1) and rules text
+  (0.3). Flask cards choose only among flask, vial, jar and keg. Eyes only on void cards. If nothing matches:
+  flask for flasks, chain for curses, then the calling's object, then the course's object.
+- **Course** sets the wash, the FX ink and the course marks round an object.
 
-Needs a hand-made entry:
+## Needs a hand-made override
 
-- **Poses** (`RIG` in `samples.js`). Tuned so far: Bulwark attack and block, Duelist attack, Elementalist cast.
-  Every other calling and kind falls back to the rest pose, which renders but reads weakly (the Alchemist's block and
-  the Oracle's cast in a test run were usable but plain). Tune each with `posepeek.js`: keep the face clear of the arms
-  and keep the held object facing its user.
-- **Rooms named in the note** (`OVR`: the belfry for Two-Step, the nave for Ink Bolt).
-- **Rare and odd cards** get an `ART` entry with their own device and FX (the four object samples). The generic object
-  card is plain on purpose: one calling object with a course-ink arc and splatter.
-- **World cards** need their own objects: the calling table has nothing for them, so they default to the hourglass.
-- **Curses and afflictions** have no object of their own yet.
+- Rare and odd cards that deserve their own scene: an `ART` entry (the four object samples are examples).
+- Rooms named in a note that the course does not give (`OVR`: belfry for Two-Step, nave for Ink Bolt).
+- Pose and FX anchor fixes for any path variant whose weapon sits away from the base figure's.
+- A card whose words pick the wrong object: set `OVR[id].device`.

@@ -27,7 +27,7 @@ function kindOf(card) {
   if (card.rarity === 'Curse' || kw.includes('Affliction')) return 'curse';
   if (kw.includes('Flask') || (card.cls === 'alchemist' && (t.has('apply') || t.has('brew')))) return 'flask';
   if (kw.includes('Rite')) return 'rite';
-  if (t.has('dmg') && /enem/.test(card.target)) return card.cls === 'elementalist' || card.cat !== 'physical' ? 'cast' : 'attack';
+  if (t.has('dmg') && /enem/.test(card.target)) return ['bulwark', 'duelist'].includes(card.cls) ? 'attack' : card.cls === 'elementalist' || card.cat !== 'physical' ? 'cast' : 'attack';
   if (t.has('block') || t.has('guard') || t.has('ward') || t.has('armor')) return 'block';
   return 'device';
 }
@@ -39,145 +39,175 @@ function heroOf(card, course) {
   const h = HERO[card.cls]; if (!h) return null;
   return [h[0], h[1].replace('%c', course === 'physical' ? 'fire' : course), h[2]];
 }
-const roomOf = (card, course) => ROOM_BY_WORLD[card.cls] || ROOM_BY_COURSE[card.cat] || ROOM_BY_COURSE[course];
+// world cards, foe-added cards and afflictions use their own world's room; the world is in the cls or the id
+const worldOf = (card, id = '') => { const m = /^(?:aff|t|w)_([a-z]+)/.exec(id); return card.cls && card.cls.startsWith('world_') ? card.cls.slice(6) : m ? m[1] : null; };
+const roomOf = (card, course, id) => ROOM_BY_WORLD['world_' + worldOf(card, id)] || ROOM_BY_COURSE[card.cat] || ROOM_BY_COURSE[course];
 
 // ==== shared composition pieces
-const FOE_FILTER = c => `<filter id="kFoe" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0.35"/><feComponentTransfer><feFuncR type="linear" slope="0.42"/><feFuncG type="linear" slope="0.42"/><feFuncB type="linear" slope="0.47"/></feComponentTransfer></filter>`;
-// a foe fragment (default the Drowned Thrall) at the frame edge, darkened so the hero reads first
-function foe(pose, anchorJoint, to, s, o = {}) {
-  const t = K.hero(o.mod || 'dirAC2', o.key || 'thrall', pose, 'heroes', o);
-  const A = t.joint(anchorJoint);
-  return { t, svg: K.place(t.body, A, to, s, { filter: 'url(#kFoe)' }), defs: t.defs, M: p => K.mapPt(p, A, to, s) };
-}
+// No foes on any card (Cole, 2026-11-25): the hero acts on empty air and the ink FX carry the blow.
 function placeHero(spec) {
   const h = K.hero(spec.hero[0], spec.hero[1], spec.pose, spec.hero[2] || 'heroes', { hide: spec.hide });
   const A = h.joint(spec.anchor || 'head');
-  return { h, svg: K.place(h.body, A, spec.at, spec.scale), defs: h.defs, M: p => K.mapPt(p, A, spec.at, spec.scale), J: n => K.mapPt(h.joint(n), A, spec.at, spec.scale) };
+  return { h, svg: K.place(h.body, A, spec.at, spec.scale), defs: h.defs, M: p => K.mapPt(p, A, spec.at, spec.scale), J: n => (h.J[n] ? K.mapPt(h.joint(n), A, spec.at, spec.scale) : null) };
 }
 // the swing: a dry-brush arc trailing a weapon head round a pivot, heavy at the head, dry and split at its tail
 function swing(r, piv, head, sweep, w, o = {}) {
   const R = len(sub(head, piv)), a1 = Math.atan2(head[1] - piv[1], head[0] - piv[0]), a0 = a1 - sweep * Math.PI / 180;
-  const pts = []; for (let i = 0; i <= 12; i++) { const a = a0 + (a1 - a0) * i / 12, rr = R * (o.spiral ? 1 - o.spiral * (1 - i / 12) : 1); pts.push(add(piv, [Math.cos(a) * rr, Math.sin(a) * rr])); }
+  const pts = []; for (let i = 0; i <= 12; i++) { const a = a0 + (a1 - a0) * i / 12; pts.push(add(piv, [Math.cos(a) * R, Math.sin(a) * R])); }
   let s = K.drybrush(r, pts, w, o.col || INK, { profile: t => 0.12 + 0.88 * Math.pow(t, 1.6) * (t > 0.93 ? (1 - t) * 14 : 1), dry: 1, bodyLen: 0.0, body: false, op: o.op ?? 0.8, ragStart: 0, bristles: o.bristles || 16 });
-  const inner = pts.map(p => add(piv, mul(sub(p, piv), 0.78)));
-  s += K.motionHatch(r, inner, w * 0.9, o.col || INK, { lw: 2.2, op: 0.7 });
+  s += K.motionHatch(r, pts.map(p => add(piv, mul(sub(p, piv), 0.78))), w * 0.9, INK, { lw: 2.2, op: 0.7 });
   return s;
 }
-
-// ==== hero rigs per calling and kind
-// Pose (bone rotations for card_figure-style posing), placement (anchor joint `head` lands on `at`, at `scale`) and
-// the points the FX hang on, in figure px on a named bone. Tuned by eye with posepeek.js. A calling or kind with no
-// entry falls back to DEFAULT_RIG, which gives a usable but plain card until someone tunes it.
-const RIG = {
-  bulwark: {
-    attack: { style: 'swing', pose: { upperarm_n: -160, forearm_n: 40, hand_n: 160, torso: 10, upperarm_f: -10, lean: 4 }, at: [330, 372], scale: 1.22, weapon: ['mace', [500, 236]], pivot: 'upperarm_n', sweep: 85 },
-    block: { pose: { torso: 4, head: 4, lean: -2, upperarm_f: -2 }, at: [380, 352], scale: 1.42, face: ['door', [526, 330]] },
-  },
-  duelist: {
-    attack: { style: 'cuts', pose: { upperarm_n: -35, forearm_n: -5, hand_n: -10, torso: 6, lean: 6, head: -6, cape: -10 }, at: [300, 236], scale: 1.2, weapon: ['rapier', [588, 518]], off: ['dagger', null] },
-  },
-  elementalist: {
-    cast: { pose: { upperarm_n: -60, forearm_n: 110, hand_n: -30, torso: -4, head: -10 }, hide: ['sign'], at: [262, 300], scale: 1.32, hand: ['hand_n', [394, 296]] },
-  },
-};
-const DEFAULT_RIG = { attack: { style: 'cuts', pose: {}, at: [330, 300], scale: 1.2 }, cast: { pose: {}, at: [300, 300], scale: 1.25 }, block: { pose: {}, at: [380, 330], scale: 1.35 } };
-const rigOf = (cls, kind) => Object.assign({}, DEFAULT_RIG[kind], (RIG[cls] || {})[kind] || {});
-const seedOf = id => { let h = 7; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return 1000 + (h % 8000); };
-const handPt = (P, R) => R.hand ? P.M(P.h.at(R.hand[0], R.hand[1])) : P.J('hand_n');
-const weaponPt = (P, R) => R.weapon ? P.M(P.h.at(R.weapon[0], R.weapon[1])) : handPt(P, R);
-
-// ==== hero compositions (attack, cast, block)
-// ATTACK, swing style: the weapon comes round in a dry-brush arc onto a foe's head at the frame's right; ink smash,
-// blood, bone chips. Cuts style: thrust and cut marks laid on a foe's chest, one cut per hit (fx times).
-function attack(card, id, o = {}) {
-  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card.cls, 'attack'), o.rig || {});
-  const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
-  const room = o.room || roomOf(card, course);
-  const hits = Math.max(1, ...(card.fx || []).map(x => x.times || 1));
-  if ((o.style || R.style) === 'swing') {
-    const head = weaponPt(P, R), piv = R.pivot ? P.J(R.pivot) : P.J('torso');
-    const T = foe({ head: 18, torso: 8, lean: 4 }, 'head', [head[0] + 95, head[1] + 128], R.scale, { hide: ['boat_hook'] });
-    const hit = add(head, [20, 30]);
-    let body = K.ground(r, Object.assign({ room, x: 820, w: 1450, c, pool: [hit[0] - 120, hit[1] + 120, 420, 260], dark: 0.3 }, o.ground || {}));
-    body += swing(r, piv, head, R.sweep || 80, 70, { op: 0.9 });
-    body += T.svg + P.svg;
-    body += K.impact(r, hit, 70, INK, { rays: 7, a0: -1.4, fan: 0.8, splat: { dir: [1, 0.35], spread: 1.6 } });
-    body += K.splatter(r, add(hit, [30, 30]), 130, BLOOD, { dir: [1, 0.6], spread: 1.0, n: 22, blotR: 0.12, op: 0.9 });
-    body += chips(r, hit, 120, [1, -0.3]);
-    return { course: c, defs: P.defs + T.defs + FOE_FILTER(c), body };
-  }
-  // cuts
-  const tip = weaponPt(P, R);
-  const T = foe({ torso: -4, head: -6 }, 'torso', [tip[0] + 150, 560], 1.25, { hide: ['boat_hook'] });
-  const X = add(tip, o.cutAt || [110, 40]);
-  let body = K.ground(r, Object.assign({ room, x: 400, w: 1500, c, pool: [X[0] - 180, X[1] - 40, 430, 280], dark: 0.3 }, o.ground || {}));
-  body += T.svg;
-  // the cuts: a long falling slash and shorter ones that cross it off-centre; blood opens along each and runs
-  const CUTS = [[[-80, -150], [-10, -60], [40, 40], [70, 120]], [[-110, 60], [-20, 10], [80, -20]], [[-60, 120], [10, 90], [90, 60]]].slice(0, Math.min(3, hits));
-  const cuts = CUTS.map(cu => cu.map(q => add(X, q)));
-  cuts.forEach((cu, k) => { body += K.drybrush(r, cu.map(q => add(q, [5, 7])), 22 - k * 4, '#460b07', { dry: 0.5, op: 0.85, bodyLen: 0.6, bristles: 9 }); });
-  for (let i = 0; i < 7; i++) { const P2 = K.catmull(cuts[i % cuts.length], 6), q = P2[3 + (i % 4) * 3] || X, L = 24 + r() * 60; body += K.drybrush(r, [add(q, [4, 8]), add(q, [6, 8 + L * 0.5]), add(q, [4, 8 + L])], 6, '#460b07', { dry: 0.2, op: 0.85, bristles: 3, profile: t => 1 - t * 0.6 }); }
-  cuts.forEach((cu, k) => { body += K.slash(r, cu, 26 - k * 6); });
-  body += K.splatter(r, add(X, [50, -20]), 130, BLOOD, { dir: [1, -0.3], spread: 1.4, n: 18, blotR: 0.05, op: 0.85 });
-  body += P.svg;
-  // the blade's path: hatched motion along the thrust, and round from the off hand when there is one
-  body += K.drybrush(r, [add(tip, [-300, 40]), add(tip, [-150, 26]), add(tip, [-20, 16])], 16, INK, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.55, bristles: 7 });
-  if (R.off && P.h.J[R.off[0]]) { const dag = P.M(P.h.at(R.off[0], [P.h.J[R.off[0]].pivot[0], P.h.J[R.off[0]].pivot[1] - 90])); body += K.motionHatch(r, [add(dag, [-40, -30]), add(dag, [80, -80]), add(X, [-60, -140])], 30, INK, { lw: 2, op: 0.6 }); }
-  return { course: c, defs: P.defs + T.defs + FOE_FILTER(c), body };
-}
-// bone and tooth chips flung from an impact: little inked shards with a lit face
-function chips(r, c, R, dir, col = BONE) {
+// ink flecks thrown off a smash: small inked shards, some in the course's ink
+function flecks(r, c, R, dir, col) {
   let s = '';
-  for (let i = 0; i < 6; i++) {
-    const a = Math.atan2(dir[1], dir[0]) + (r() - 0.5) * 2.2, d = R * (0.4 + r() * 0.8), p = add(c, [Math.cos(a) * d, Math.sin(a) * d]), z = 3 + r() * 5;
+  for (let i = 0; i < 7; i++) {
+    const a = Math.atan2(dir[1], dir[0]) + (r() - 0.5) * 2.2, d = R * (0.4 + r() * 0.8), p = add(c, [Math.cos(a) * d, Math.sin(a) * d]), z = 3 + r() * 6;
     const q = [add(p, rot([z, 0], a)), add(p, rot([-z * 0.4, z * 0.6], a)), add(p, rot([-z * 0.7, -z * 0.3], a))];
-    s += `<path d="${K.polyD(q)}" fill="${mix(col, '#6a5a44', 0.3 + r() * 0.5)}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>`;
+    s += `<path d="${K.polyD(q)}" fill="${r() < 0.5 ? col : INK}" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>`;
   }
   return `<g filter="url(#kWob)">${s}</g>`;
 }
+const fxInk = course => course === 'physical' ? INK : mix(INK6[course] || INK, '#16110e', 0.6);
 
-// CAST: a bead of the course's ink flung from the hand in an arc onto a foe's chest at the frame's right edge
-function cast(card, id, o = {}) {
-  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), ink = mix(INK6[course] || INK, '#0c0a10', 0.55), R = Object.assign(rigOf(card.cls, 'cast'), o.rig || {});
+// ==== hero rigs per calling and kind
+// Pose (bone rotations, posed the way card_figure.js does), placement (the head joint lands on `at`, at `scale`) and
+// the points the FX hang on, in figure px on a named bone. Tuned by eye with posepeek.js and the @cls/kind test ids.
+// Path variants share their calling's rig: their joints sit where the base figure's do.
+const RIG = {
+  bulwark: {
+    attack: { style: 'swing', pose: { upperarm_n: -160, forearm_n: 40, hand_n: 160, torso: 10, upperarm_f: -10, lean: 4 }, at: [330, 372], scale: 1.22, weapon: ['mace', [500, 236]], pivot: 'upperarm_n', sweep: 85 },
+    block: { pose: { torso: 4, head: 4, lean: -2, upperarm_f: -2 }, at: [380, 352], scale: 1.42, face: ['door', [526, 330]], wood: true },
+  },
+  duelist: {
+    attack: { style: 'cuts', pose: { upperarm_n: -35, forearm_n: -5, hand_n: -10, torso: 6, lean: 6, head: -6, cape: -10 }, at: [300, 236], scale: 1.2, weapon: ['rapier', [588, 518]], off: 'dagger' },
+    block: { pose: { upperarm_n: -30, forearm_n: -70, hand_n: -30, torso: -4, lean: -3 }, at: [330, 250], scale: 1.25, face: ['rapier', [520, 460]] },
+  },
+  elementalist: {
+    cast: { pose: { upperarm_n: -60, forearm_n: 110, hand_n: -30, torso: -4, head: -10 }, hide: ['sign'], at: [262, 300], scale: 1.32, hand: ['hand_n', [394, 296]] },
+    block: { pose: { upperarm_f: -12, forearm_f: -12, torso: -5, head: -4, upperarm_n: 10 }, hide: ['sign'], at: [300, 290], scale: 1.3, face: ['book', null] },
+  },
+  alchemist: {
+    cast: { pose: { upperarm_f: -25, forearm_f: -15, torso: 5, lean: 4 }, at: [300, 300], scale: 1.2, hand: ['flask', null], glass: true },
+    block: { pose: { upperarm_n: -25, forearm_n: -60, torso: -4, lean: -2 }, at: [330, 300], scale: 1.25, face: ['hand_n', null] },
+  },
+  oracle: {
+    cast: { pose: { upperarm_n: -55, forearm_n: 25, torso: 3, head: -4 }, at: [300, 280], scale: 1.25, hand: ['hourglass', null] },
+    block: { pose: { upperarm_n: -35, forearm_n: -35, torso: -5, lean: -2 }, at: [330, 290], scale: 1.25, face: ['hourglass', null] },
+  },
+  hexweaver: {
+    cast: { pose: { upperarm_n: -45, forearm_n: 15, torso: 4, head: -6 }, at: [300, 300], scale: 1.3, hand: ['poppet', null] },
+    attack: { style: 'strike', pose: { upperarm_f: 50, forearm_f: 60, hand_f: 10, torso: 8, lean: 5 }, at: [300, 300], scale: 1.3, weapon: ['hand_f', null] },
+    block: { pose: { upperarm_n: -20, forearm_n: -40, torso: -8, lean: -3 }, at: [320, 300], scale: 1.3, face: ['poppet', null] },
+  },
+  vessel: {
+    cast: { pose: { upperarm_n: -60, forearm_n: -15, torso: 3 }, at: [330, 250], scale: 1.2, hand: ['hand_n', null] },
+    attack: { style: 'strike', pose: { upperarm_f: -60, forearm_f: -20, torso: 6, lean: 4 }, at: [330, 250], scale: 1.2, weapon: ['hand_f', null] },
+    block: { pose: { upperarm_n: 30, forearm_n: -60, upperarm_f: -30, forearm_f: -60, torso: -3 }, at: [340, 250], scale: 1.2, face: ['hand_f', null] },
+  },
+};
+// a calling with no attack rig attacks the way it casts (the Elementalist, Alchemist and Oracle throw or flick)
+const DEFAULT_RIG = { attack: { style: 'strike', pose: {}, at: [330, 300], scale: 1.2 }, cast: { pose: {}, at: [300, 300], scale: 1.25 }, block: { pose: {}, at: [380, 330], scale: 1.3 } };
+const rigOf = (cls, kind) => Object.assign({}, DEFAULT_RIG[kind], (RIG[cls] || {})[kind] || {});
+const seedOf = id => { let h = 7; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return 1000 + (h % 8000); };
+// a point on a bone (null point = that bone's joint), mapped to the card; falls back to the near hand
+const bonePt = (P, ref) => { if (!ref || !P.h.J[ref[0]]) return P.J('hand_n'); return ref[1] ? P.M(P.h.at(ref[0], ref[1])) : P.J(ref[0]); };
+
+// ==== hero compositions (attack, cast, block)
+function attack(card, id, o = {}) {
+  if (!RIG[card.cls] || !RIG[card.cls].attack) return cast(card, id, Object.assign({ asAttack: true }, o));
+  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card.cls, 'attack'), o.rig || {});
   const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
-  const tipF = handPt(P, R);
-  const T = foe({ torso: 8, head: 10, lean: 3 }, 'torso', [1010, 610], 1.2, { hide: ['boat_hook'] });
-  const hitP = T.M(T.t.at('torso', [300, 380]));
-  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course), x: 700, w: 1500, c, pool: [560, 270, 470, 260], dark: 0.3 }, o.ground || {}));
-  body += T.svg;
-  const mid = [660, tipF[1] - 50], path = [tipF, lerp(tipF, mid, 0.5), mid, lerp(mid, hitP, 0.55), hitP];
-  const PP = K.catmull(path, 10), bead = PP[Math.round(PP.length * 0.56)];
-  // the trail: thin where it left the finger, a dry split body, the bead ahead of it
+  const room = o.room || roomOf(card, course, id), ink = fxInk(course);
+  const hits = Math.max(1, ...(card.fx || []).map(x => x.times || 1));
+  const style = o.style || R.style;
+  let body;
+  if (style === 'swing') {
+    // the weapon comes round in a dry-brush arc and smashes into the air ahead of it
+    const head = bonePt(P, R.weapon), piv = P.J(R.pivot) || P.J('torso'), hit = add(head, [34, 26]);
+    body = K.ground(r, Object.assign({ room, x: 820, w: 1450, c, pool: [hit[0] - 80, hit[1] + 120, 430, 270], dark: 0.3 }, o.ground || {}));
+    body += swing(r, piv, head, R.sweep || 80, 70, { op: 0.9 });
+    body += P.svg;
+    body += K.impact(r, hit, 78, ink, { rays: 8, a0: -1.3, fan: 0.85, splat: { dir: [1, 0.4], spread: 1.8 } });
+    body += K.splatter(r, add(hit, [60, 30]), 160, ink, { dir: [1, 0.3], spread: 1.2, n: 22, blotR: 0.08, blot: false });
+    if (course === 'physical') body += K.splatter(r, add(hit, [40, 40]), 110, BLOOD, { dir: [1, 0.5], spread: 1.0, n: 10, blot: false, op: 0.85 });
+    body += flecks(r, hit, 130, [1, -0.2], ink === INK ? '#5a4a3a' : ink);
+  } else if (style === 'cuts') {
+    // the cuts hang in the air where the blade passed: crescents of ink with a dark wet line in them, flung drops
+    const tip = bonePt(P, R.weapon), X = add(tip, o.cutAt || [140, 10]);
+    body = K.ground(r, Object.assign({ room, x: 400, w: 1500, c, pool: [X[0] - 200, X[1] - 30, 440, 280], dark: 0.3 }, o.ground || {}));
+    body += P.svg;
+    const base = [[-80, -120], [-25, -40], [25, 50], [55, 120]], n = Math.min(3, hits), CUTS = Array.from({ length: n }, (_, k) => base.map(q => add(q, [(k - (n - 1) / 2) * 62, (k - (n - 1) / 2) * -18 + (k % 2) * 14])));
+    CUTS.map(cu => cu.map(q => add(X, q))).forEach((cu, k) => {
+      body += K.slash(r, cu, 30 - k * 6, ink);
+      body += K.drybrush(r, cu.slice(1, 3).map(q => add(q, [2, 3])), 4, course === 'physical' ? BLOOD : mix(ink, '#fff', 0.25), { dry: 0.6, op: 0.85, bristles: 2, body: false });
+    });
+    body += K.splatter(r, add(X, [70, -10]), 170, ink, { dir: [1, -0.1], spread: 1.6, n: 22, blot: false });
+    if (course === 'physical') body += K.splatter(r, add(X, [60, 10]), 130, BLOOD, { dir: [1, 0.2], spread: 1.4, n: 12, blot: false, op: 0.85 });
+    body += K.drybrush(r, [add(tip, [-300, 40]), add(tip, [-150, 26]), add(tip, [-20, 16])], 16, INK, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.55, bristles: 7 });
+    if (R.off && P.h.J[R.off]) { const dag = P.J(R.off); body += K.motionHatch(r, [add(dag, [-30, -60]), add(dag, [90, -100]), add(X, [-70, -150])], 30, INK, { lw: 2, op: 0.6 }); }
+  } else {
+    // strike: a short hard blow; hatched motion from behind the hand, the smash just past it
+    const hand = bonePt(P, R.weapon), hit = add(hand, [90, 10]);
+    body = K.ground(r, Object.assign({ room, x: 700, w: 1500, c, pool: [hit[0] - 120, hit[1], 430, 270], dark: 0.3 }, o.ground || {}));
+    body += K.motionHatch(r, [add(hand, [-230, 30]), add(hand, [-120, 14]), add(hand, [-20, 4])], 44, INK, { lw: 2.4, op: 0.75 });
+    body += P.svg;
+    body += K.impact(r, hit, 66, ink, { rays: 7, a0: -1.0, fan: 0.75, splat: { dir: [1, 0], spread: 1.8 } });
+    body += flecks(r, hit, 110, [1, 0], ink === INK ? '#5a4a3a' : ink);
+  }
+  return { course: c, defs: P.defs, body };
+}
+
+// CAST: the course's ink flung from the hand (or a flask from it) in an arc that bursts in the air at the right
+function cast(card, id, o = {}) {
+  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), ink = mix(INK6[course] || INK, '#16110e', course === 'physical' ? 0 : 0.74), R = Object.assign(rigOf(card.cls, 'cast'), o.rig || {});
+  const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
+  const tipF = bonePt(P, R.hand);
+  const hitP = o.hitAt || [930, Math.min(470, tipF[1] + 70)];
+  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 700, w: 1500, c, pool: [600, 280, 480, 270], dark: 0.3 }, o.ground || {}));
+  const mid = [lerp(tipF, hitP, 0.5)[0], Math.min(tipF[1], hitP[1]) - 70], path = [tipF, lerp(tipF, mid, 0.5), mid, lerp(mid, hitP, 0.55), hitP];
+  const PP = K.catmull(path, 10), bi = Math.round(PP.length * 0.62), bead = PP[bi];
   body += K.drybrush(r, K.catmull(path, 3).filter(q => q[0] < bead[0] - 10), 30, ink, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.85, bristles: 12 });
   body += K.motionHatch(r, K.catmull(path, 3).filter(q => q[0] < bead[0] - 30).map(q => add(q, [0, 26])), 26, INK, { lw: 2, op: 0.6 });
   body += P.svg;
-  body += beadDrop(r, bead, norm(sub(PP[Math.round(PP.length * 0.56) + 2], bead)), 21, ink);
-  body += K.splatter(r, hitP, 120, ink, { dir: [1, -0.1], spread: 2.6, n: 30, blotR: 0.3 });
+  body += beadDrop(r, bead, norm(sub(PP[Math.min(PP.length - 1, bi + 2)], bead)), 21, ink);
+  // the burst in the air: a ragged blot, drops flung on past it, the course's mark in what falls
+  body += K.impact(r, hitP, 58, ink, { rays: 7, core: false, a0: -0.5, splat: { dir: [1, 0.1], spread: 2.4 } });
+  body += K.splatter(r, add(hitP, [30, 10]), 150, ink, { dir: [1, 0.2], spread: 2.4, n: 26, blot: false });
+  if (R.glass || o.glass) body += shards(r, hitP, 150, [1, -0.2], '#b8c4a8');
   for (let i = 0; i < 9; i++) { const q = K.catmull(path, 6)[Math.round(r() * 12) + 2]; body += `<circle cx="${(q[0] + (r() - 0.5) * 30).toFixed(1)}" cy="${(q[1] + 12 + r() * 30).toFixed(1)}" r="${(1.5 + r() * 3).toFixed(1)}" fill="${ink}"/>`; }
-  return { course: c, defs: P.defs + T.defs + FOE_FILTER(c), body };
+  return { course: c, defs: P.defs, body };
 }
 // a flung drop of ink: a round head with a drawn-out tail, inked, with a lit fleck and a dark lower side
 function beadDrop(r, p, dir, rad, col) {
   const d = norm(dir), n = [-d[1], d[0]], tail = add(p, mul(d, -rad * 3.2));
   const pts = [tail, add(add(p, mul(n, rad)), mul(d, -rad * 0.2)), add(p, mul(d, rad)), add(add(p, mul(n, -rad)), mul(d, -rad * 0.2))];
   return `<g filter="url(#kRag)"><path d="${K.pathD(pts, true)}" fill="${mix(col, '#000', 0.3)}" stroke="${INK}" stroke-width="${Math.max(1.2, rad * 0.14)}"/>`
-    + (rad > 8 ? `<path d="${K.pathD([add(p, [-rad * 0.5, -rad * 0.5]), add(p, [-rad * 0.1, -rad * 0.7]), add(p, [-rad * 0.3, -rad * 0.2])], true)}" fill="${mix(col, '#fff', 0.55)}" opacity="0.8"/><path d="${K.pathD([add(p, [rad * 0.6, rad * 0.2]), add(p, [0, rad * 0.85]), add(p, [-rad * 0.55, rad * 0.4]), add(p, [0, rad * 0.5])], true)}" fill="#000" opacity="0.45"/>` : '') + '</g>';
+    + (rad > 8 ? `<path d="${K.pathD([add(p, [-rad * 0.5, -rad * 0.5]), add(p, [-rad * 0.1, -rad * 0.7]), add(p, [-rad * 0.3, -rad * 0.2])], true)}" fill="${mix(col, '#fff', 0.45)}" opacity="0.7"/><path d="${K.pathD([add(p, [rad * 0.6, rad * 0.2]), add(p, [0, rad * 0.85]), add(p, [-rad * 0.55, rad * 0.4]), add(p, [0, rad * 0.5])], true)}" fill="#000" opacity="0.45"/>` : '') + '</g>';
+}
+// glass shards: thin inked slivers with a lit edge
+function shards(r, c, R, dir, col) {
+  let s = '';
+  for (let i = 0; i < 8; i++) {
+    const a = Math.atan2(dir[1], dir[0]) + (r() - 0.5) * 2, d = R * (0.3 + r() * 0.8), p = add(c, [Math.cos(a) * d, Math.sin(a) * d]), z = 6 + r() * 12, b = r() * 6;
+    const q = [add(p, rot([z, 0], b)), add(p, rot([-z * 0.3, z * 0.35], b)), add(p, rot([-z * 0.8, -z * 0.1], b))];
+    s += `<path d="${K.polyD(q)}" fill="${col}" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round" opacity="0.9"/><path d="M${q[0][0].toFixed(1)},${q[0][1].toFixed(1)}L${q[2][0].toFixed(1)},${q[2][1].toFixed(1)}" stroke="#f4f4e4" stroke-width="1" opacity="0.8"/>`;
+  }
+  return `<g filter="url(#kWob)">${s}</g>`;
 }
 
-// BLOCK: the hero set behind the guard, a foe's weapon biting it from the right; pressure lines, splinters, dust
+// BLOCK: the hero set behind their guard; an unseen blow smashes on it from the right
 function block(card, id, o = {}) {
   const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card.cls, 'block'), o.rig || {});
   const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
-  const T = foe({ lean: 9, torso: 6, upperarm_n: -14 }, 'head', [1010, 250], 1.3);
-  const hit = R.face ? P.M(P.h.at(R.face[0], R.face[1])) : add(P.J('hand_n'), [60, 0]);
-  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course), x: 1200, w: 1500, c, pool: [500, 260, 450, 280], dark: 0.3 }, o.ground || {}));
-  body += T.svg;
-  for (let i = 0; i < 4; i++) { const y = hit[1] - 120 + i * 85 + (r() - 0.5) * 20; body += K.motionHatch(r, [[hit[0] + 320, y + 30], [hit[0] + 170, y + 10], [hit[0] + 30, y]], 30, INK, { lw: 2.3, op: 0.7, slant: 0.35 }); }
+  const g = bonePt(P, R.face), hit = R.face && R.face[1] ? g : add(g, [120, 10]), ink = fxInk(course);
+  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 1200, w: 1500, c, pool: [hit[0] - 40, hit[1] - 40, 450, 280], dark: 0.3 }, o.ground || {}));
+  for (let i = 0; i < 4; i++) { const y = hit[1] - 120 + i * 85 + (r() - 0.5) * 20; body += K.motionHatch(r, [[hit[0] + 340, y + 30], [hit[0] + 190, y + 10], [hit[0] + 50, y]], 32, INK, { lw: 2.4, op: 0.75, slant: 0.35 }); }
   body += P.svg;
-  body += K.impact(r, add(hit, [8, 0]), 54, INK, { rays: 6, a0: 1.9, fan: 0.45, core: false, splat: { dir: [-0.2, -1], spread: 2.6 } });
-  body += splinters(r, add(hit, [10, -10]), 110, [0.6, -1]);
-  body += grit(r, [hit[0] - 150, 600], 260);
-  return { course: c, defs: P.defs + T.defs + FOE_FILTER(c), body };
+  body += K.impact(r, add(hit, [8, 0]), 60, ink, { rays: 7, a0: 1.7, fan: 0.55, core: false, splat: { dir: [0.3, -1], spread: 2.6 } });
+  body += R.wood ? splinters(r, add(hit, [10, -10]), 120, [0.6, -1]) : flecks(r, hit, 120, [0.6, -1], ink === INK ? '#5a4a3a' : ink);
+  body += grit(r, [hit[0] - 120, 600], 300);
+  return { course: c, defs: P.defs, body };
 }
 // oak splinters thrown off a struck plank edge
 function splinters(r, c, R, dir) {
@@ -230,14 +260,14 @@ ART.al_plague_flask = (card) => {
       // the sick mist rolling out low to the foes on either side: dry, hatched drifts and a few small billows
       let s = '';
       for (const [x, y, dx] of [[420, 520, -1], [380, 560, -1], [700, 520, 1], [740, 565, 1], [470, 480, -1], [660, 485, 1]]) s += K.drybrush(r, [[x, y], [x + dx * 140, y - 12 + (r() - 0.5) * 20], [x + dx * 300, y + 6]], 40, '#5e6848', { profile: t => 0.3 + 0.7 * Math.sin(Math.PI * t), dry: 1, body: false, op: 0.6, bristles: 16 });
-      for (const [x, y, w, h] of [[250, 505, 80, 28], [880, 500, 90, 30], [150, 545, 70, 24], [990, 545, 80, 26]]) s += K.billow(r, [x, y], w, h, '#68705a', { op: 0.6, lw: 4 });
+      for (const [x, y, w, h] of [[250, 505, 80, 28], [880, 500, 90, 30], [150, 545, 70, 24], [990, 545, 80, 26]]) s += K.billow(r, [x, y], w * 0.8, h * 0.8, '#68705a', { op: 0.4, lw: 4 });
       return s;
     },
     front: (r, M, p) => {
       const m = M(p.mouth);
       let s = '';
       // the burst: gas jetting out of the split and turning over as it climbs, brew spat out with it
-      for (const [dx, dy, w, h] of [[34, -8, 30, 20], [80, -40, 44, 28], [140, -86, 58, 36], [205, -132, 68, 40]]) s += K.billow(r, add(m, [dx, dy]), w, h, '#727a5a', { op: 0.7, lw: 4 });
+      for (const [dx, dy, w, h] of [[34, -8, 30, 20], [80, -40, 44, 28], [140, -86, 58, 36], [205, -132, 68, 40]]) s += K.billow(r, add(m, [dx, dy]), w, h, '#727a5a', { op: 0.5, lw: 4 });
       s += K.splatter(r, add(m, [20, 10]), 120, '#4a5a22', { dir: [1, 0.3], spread: 1.4, n: 18, blotR: 0.1 });
       for (let i = 0; i < 5; i++) s += beadDrop(r, add(m, [60 + r() * 130, 10 + r() * 80]), [1, 0.2 + r() * 0.5], 4 + r() * 5, '#7a8a3a');
       s += shards(r, add(m, [20, 0]), 150, [1, -0.2], '#a8b888');
@@ -247,16 +277,6 @@ ART.al_plague_flask = (card) => {
     },
   });
 };
-// glass shards: thin inked slivers with a lit edge
-function shards(r, c, R, dir, col) {
-  let s = '';
-  for (let i = 0; i < 8; i++) {
-    const a = Math.atan2(dir[1], dir[0]) + (r() - 0.5) * 2, d = R * (0.3 + r() * 0.8), p = add(c, [Math.cos(a) * d, Math.sin(a) * d]), z = 6 + r() * 12, b = r() * 6;
-    const q = [add(p, rot([z, 0], b)), add(p, rot([-z * 0.3, z * 0.35], b)), add(p, rot([-z * 0.8, -z * 0.1], b))];
-    s += `<path d="${K.polyD(q)}" fill="${col}" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round" opacity="0.9"/><path d="M${q[0][0].toFixed(1)},${q[0][1].toFixed(1)}L${q[2][0].toFixed(1)},${q[2][1].toFixed(1)}" stroke="#f4f4e4" stroke-width="1" opacity="0.8"/>`;
-  }
-  return `<g filter="url(#kWob)">${s}</g>`;
-}
 
 // STOLEN HOUR: stars peel off the Oracle's robe and become grains in the hourglass.
 ART.or_stolen_hour = (card) => {
@@ -320,35 +340,91 @@ ART.el_strike_the_ring = (card) => {
       let s = '';
       // the target's spectrum daubed on the bronze by a scribe's brush: five short loaded strokes
       const b = M(p.body), five = ['fire', 'lightning', 'toxin', 'water', 'void'];
-      five.forEach((k, i) => { const q = add(b, [-120 + i * 52 + (r() - 0.5) * 12, 30 - Math.abs(i - 2) * 16 + (r() - 0.5) * 14]); s += K.drybrush(r, [add(q, [-26, 18]), q, add(q, [22, -22])], 26, mix(INK6[k], '#3a2a1a', 0.22), { dry: 0.9, op: 0.9, bodyLen: 0.5 }); });
+      five.forEach((k, i) => { const q = add(b, [-120 + i * 52 + (r() - 0.5) * 12, 30 - Math.abs(i - 2) * 16 + (r() - 0.5) * 14]); s += K.drybrush(r, [add(q, [-16, 22]), q, add(q, [14, -24])], 16, mix(INK6[k], '#2a1a10', 0.5), { dry: 1, op: 0.85, bodyLen: 0.35, bristles: 7 }); });
       // the stroke that strikes it: one heavy cut of the brush into the bell's flank
       const hit = M(p.strike);
       s += K.slash(r, [add(hit, [250, 120]), add(hit, [140, 40]), add(hit, [30, -6]), add(hit, [-40, -14])], 46, INK, { edgeCol: '#e8d8b0' });
       s += K.impact(r, hit, 60, INK, { rays: 6, a0: 1.2, fan: 0.9, core: false });
-      five.forEach((k, i) => { s += K.splatter(r, add(hit, [(r() - 0.5) * 50, (r() - 0.5) * 50]), 120, mix(INK6[k], '#2a1a10', 0.3), { blot: false, n: 4, dir: [Math.cos(2.4 + i * 0.5), Math.sin(2.4 + i * 0.5)], spread: 1.2 }); });
+      five.forEach((k, i) => { s += K.splatter(r, add(hit, [(r() - 0.5) * 50, (r() - 0.5) * 50]), 120, mix(INK6[k], '#2a1a10', 0.5), { blot: false, n: 4, dir: [Math.cos(2.4 + i * 0.5), Math.sin(2.4 + i * 0.5)], spread: 1.2 }); });
       return s;
     },
   });
 };
 
 // ==== generic device card (any card without a hand-made one)
-// The object comes from the calling (or the kind), its scale and tilt from OBJ_PLACE; the FX from the course: a dry
-// arc of the course's ink behind, splatter, and a hatched ring. Plain on purpose: a rare card earns an ART entry.
-const DEVICE_BY_CLS = { alchemist: 'flask', oracle: 'hourglass', hexweaver: 'mirror', elementalist: 'bell', bulwark: 'shield', duelist: 'shield', vessel: 'bell', shared: 'hourglass' };
-const DEVICE_BY_KIND = { flask: 'flask' };
-const OBJ_PLACE = { flask: [[548, 352], 1.0, -0.15], hourglass: [[560, 330], 1.0, -0.1], mirror: [[600, 262], 0.92, -0.2], bell: [[540, 330], 0.98, 0.06], shield: [[560, 300], 1.0, 0.1] };
+// The object is picked from the card's own words (name weighs most, then the note, then the rules text), so cards
+// about bells get a bell and cards about salt get salt. Kind, calling and course break ties and fill gaps. The FX come
+// from the course. Plain on purpose: a rare card earns an ART entry.
+const { O } = require('./objects2');
+const FLASK_COL = { physical: ['#5a4a30', '#8a5a2a'], fire: ['#7a5a2a', '#c8742a'], frost: ['#6a8a9a', '#b8d0dc'], lightning: ['#7a7040', '#d8c870'], water: ['#3a5a4a', '#3a6a8a'], toxin: ['#4a6232', '#7a8636'], void: ['#3a3048', '#2a1a3a'] };
+const LIB = Object.assign({ flask: (f, o) => OB.flask(f, Object.assign({ glass: (FLASK_COL[o.course] || FLASK_COL.physical)[0], liquid: (FLASK_COL[o.course] || FLASK_COL.physical)[1], skull: o.course === 'toxin' }, o)), hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7, bites: o.course === 'void' ? [[50, -30, 20], [20, 50, 12]] : [] }, o)) }, O);
+const OBJ_WORDS = [
+  ['poppet', /poppet|doll|effigy|straw/], ['mirror', /mirror|silver|reflection|glint|\bglass\b/], ['shard', /shard|splinter/],
+  ['bell', /\bbells?\b|toll|knell|tailors|dirge|handbell|chime|ringing/], ['hourglass', /\bhour|time|clock|delay|hasten|stillness|second hand|watch\b/],
+  ['needle', /needle|sewn|stitch|seam|\bpins?\b/], ['candle', /candle|tallow|taper|\bwax|vigil|witching/], ['eye', /\beyes?\b|stare|gaze|\bseen\b/],
+  ['knife', /knife|blade|bleed|letting|\bcut|scar|stab|dagger|edge/], ['skull', /skull|death|doom|grave|corpse|barrow|dread|final|harbinger|prophet|tomb|draugr|dead/],
+  ['bone', /\bbones?\b|marrow|knuckle/], ['cord', /\bcord|knot|thread|ladder|\bbind|\btie/], ['rope', /rope|hook|\bhaul|harpoon|keelhaul|lash|\bline\b/],
+  ['chain', /chain|flail|shackle|penitent/], ['book', /codex|\bbook|\bpage|ledger|\bread|tome/], ['scroll', /scroll|signed|letter|\bnames?\b|chalk|writ/],
+  ['inkpot', /\bink\b|quill|\bnib|\bwrite|spectrum|six courses/], ['key', /\bkeys?\b|\block\b|threshold|\bgate/], ['lantern', /\blamp|lantern|glare|beam|false light/],
+  ['purse', /alms|purse|coin|tithe|price|debt|\bgold|wealth|\bpay/], ['bandage', /bandage|linen|wound|festering|towel|\brag\b|cloth|vinegar|\bsores?\b|fever|frostbite|sickness/],
+  ['herbs', /herb|simple|sage|bloom|flower|seed|spore|garden|blight|moss|\broot/], ['bread', /bread|feast|cellar|sin-eater|\beats?\b/],
+  ['bowl', /broth|ladle|milk|\bbowl|soup|stew/], ['brazier', /brazier|coals|\bfire\b|burn|\bash|flame|fire-setting|ember|smoulder/], ['salt', /\bsalt\b/],
+  ['cup', /drink|\bcup|chalice|wine|offering|drain|blood/], ['hammer', /hammer|anvil|wedge|forge|temper|quench|weld|melt|smith/],
+  ['rod', /\brod\b|storm|\bbolt|lightning/], ['stinger', /sting|venom|wasp|hive/], ['reliquary', /relic|saint|holy|hymn|prayer|abbey|blessing|vigil/],
+  ['boot', /\bstep|march|shoulder|\bswap|\brank|fall back|\bgap\b|advance|retreat|wade|stride|dodge|stumble/],
+  ['anchor', /anchor|\bsea\b|drown|keel|\bwave|undertow|pressure|flood|brine|\btide|\bdeep\b/], ['door', /\bdoor|bar the|barricade|hold the line/],
+  ['shield', /shield|guard|\bwall\b|\bward|parry|brace|\bblock/], ['keg', /powder|\bkeg|blast|charge|explo/], ['jar', /\bjar\b|\bpot\b|firepot|crock/],
+  ['vial', /draught|phial|vial|tincture|bottle|potion|salts|tonic/], ['flask', /flask|\bbrew|acid/],
+];
+const OBJ_BY_CLS = { alchemist: 'vial', oracle: 'hourglass', hexweaver: 'poppet', elementalist: 'inkpot', bulwark: 'shield', duelist: 'knife', vessel: 'reliquary' };
+const OBJ_BY_COURSE = { physical: 'boot', fire: 'brazier', frost: 'bandage', water: 'anchor', toxin: 'herbs', void: 'candle', lightning: 'rod', attuned: 'inkpot' };
+function pickObject(card, id = '') {
+  const course = courseOf(card), kind = kindOf(card);
+  const name = (card.name || '').toLowerCase(), note = (card.note || '').toLowerCase(), text = (card.text || '').toLowerCase();
+  let best = null, bs = 0;
+  const FLASKS = ['flask', 'vial', 'jar', 'keg'];
+  if (kind === 'flask' && /drink|sip|throws back|bites the cork|lifts .* drinks|holds a small open vial|hangs from/.test(note)) return /powder|blast/.test(note + name) ? 'keg' : 'vial';
+  OBJ_WORDS.forEach(([k, re], i) => {
+    if (k === 'eye' && course !== 'void') return;
+    if (kind === 'flask' && !FLASKS.includes(k)) return;
+    const sc = (re.test(name) ? 3 : 0) + (re.test(note) ? 1 : 0) + (re.test(text) ? 0.3 : 0) - i * 0.001;
+    if (sc > bs) { bs = sc; best = k; }
+  });
+  if (bs >= 0.9) return best;
+  if (kind === 'flask') return 'flask';
+  if (kind === 'curse') return 'chain';
+  return OBJ_BY_CLS[card.cls] || OBJ_BY_COURSE[course] || 'skull';
+}
+// the course's mark round the object: what the course does to the air and the floor, never sparkles or glows
+function courseFX(r, at, course, back) {
+  const ink = fxInk(course); let s = '';
+  if (back) {
+    // the object's shadow on the floor: a dry ink pool, hatched, so it sits in the room instead of floating
+    s += K.drybrush(r, [[at[0] - 230, 560], [at[0], 548], [at[0] + 260, 562]], 40, '#120c08', { dry: 0.6, op: 0.55, bodyLen: 0.6, bristles: 14 });
+    s += K.motionHatch(r, [[at[0] - 200, 575], [at[0], 568], [at[0] + 240, 578]], 24, INK, { lw: 1.8, op: 0.5, grow: false });
+    const side = r() < 0.5 ? -1 : 1, a0 = side < 0 ? 150 : -40;
+    for (const R of [300, 360]) s += K.motionHatch(r, K.arc(at, R, R * 0.72, a0, a0 + 70, 10), 24, INK, { lw: 2, op: 0.45, grow: false });
+    if (course === 'toxin') for (const [x, w] of [[at[0] - 260, 110], [at[0] + 270, 120]]) s += K.billow(r, [x, 540], w, 34, '#68705a', { op: 0.4, lw: 4 });
+    if (course === 'water') for (let i = 0; i < 3; i++) s += K.drybrush(r, [[at[0] - 420, 540 + i * 22], [at[0], 520 + i * 26], [at[0] + 420, 545 + i * 20]], 26, mix('#2f4f8f', '#16110e', 0.65), { dry: 1, body: false, op: 0.65, bristles: 12 });
+    return s;
+  }
+  if (course === 'fire') for (let i = 0; i < 30; i++) { const p = [at[0] - 260 + r() * 520, 80 + r() * 300]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l${(2 + r() * 4).toFixed(1)},${(-3 - r() * 5).toFixed(1)}" stroke="${r() < 0.6 ? '#2a2020' : '#d8742a'}" stroke-width="${(1.5 + r() * 2).toFixed(1)}" stroke-linecap="round"/>`; }
+  else if (course === 'frost') { for (let i = 0; i < 40; i++) { const p = [at[0] - 300 + r() * 600, 60 + r() * 480]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l0,${(3 + r() * 6).toFixed(1)}" stroke="#e8eef0" stroke-width="${(1 + r() * 1.6).toFixed(1)}" stroke-linecap="round" opacity="0.8"/>`; } s += K.drybrush(r, [[0, 596], [W / 2, 580], [W, 598]], 34, '#d8e4e8', { dry: 1, body: false, op: 0.6, bristles: 18 }); }
+  else if (course === 'lightning') { const br = (p, a, l, d) => { if (d > 4) return ''; const q = add(p, [Math.cos(a) * l, Math.sin(a) * l]); return `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}L${q[0].toFixed(1)},${q[1].toFixed(1)}" stroke="#f0e8c0" stroke-width="${(3 - d * 0.5).toFixed(1)}" stroke-linecap="round"/><path d="M${(p[0] + 2).toFixed(1)},${(p[1] + 2).toFixed(1)}L${(q[0] + 2).toFixed(1)},${(q[1] + 2).toFixed(1)}" stroke="${INK}" stroke-width="1.2" opacity="0.7"/>` + br(q, a + 0.3 + r() * 0.4, l * 0.72, d + 1) + (r() < 0.7 ? br(q, a - 0.3 - r() * 0.4, l * 0.65, d + 1) : ''); }; s += `<g filter="url(#kWob)">${br([at[0] - 40, 600], -1.9, 70, 0)}${br([at[0] + 60, 600], -1.3, 64, 0)}</g>`; }
+  else if (course === 'void') { for (const [x, y, rr] of [[at[0] - 300, 470, 26], [at[0] + 330, 150, 18], [at[0] + 270, 500, 12]]) s += `<ellipse cx="${x}" cy="${y}" rx="${rr}" ry="${rr * 0.9}" fill="#060509" stroke="${INK}" stroke-width="2.4"/><path d="M${x - rr * 0.8},${y - rr * 0.6}A${rr} ${rr * 0.9} 0 0 1 ${x + rr * 0.6},${y - rr * 0.8}" stroke="#d8d0e0" stroke-width="1.2" fill="none" opacity="0.8"/>`; }
+  else if (course === 'water') for (let i = 0; i < 12; i++) { const p = [at[0] - 200 + r() * 400, 320 + r() * 200]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}q-4,8 0,12q4,-4 0,-12z" fill="${mix('#2f4f8f', '#16110e', 0.5)}" stroke="${INK}" stroke-width="1"/>`; }
+  else if (course === 'toxin') for (let i = 0; i < 30; i++) { const p = [at[0] - 300 + r() * 600, 150 + r() * 380]; s += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${(1 + r() * 2).toFixed(1)}" fill="${r() < 0.5 ? '#c8c890' : '#22220e'}" opacity="0.75"/>`; }
+  s += K.splatter(r, add(at, [220, -80]), 130, ink, { blot: false, n: 14, dir: [1, -0.4], spread: 1.4 });
+  return s;
+}
+const OBJ_SCALE = { knife: 1.2, needle: 1.15, bandage: 1.1, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, jar: 1.15, skull: 1.05, cord: 1.0, purse: 1.05, cup: 1.05, eye: 1.05, shard: 1.15, poppet: 1.05, hammer: 1.0, salt: 0.95, book: 1.0, bread: 1.05, boot: 1.05 };
 function deviceGeneric(card, id, o = {}) {
-  const course = courseOf(card, o), obj = o.device || DEVICE_BY_KIND[kindOf(card)] || DEVICE_BY_CLS[card.cls] || 'hourglass';
-  const [at, scale, ang] = OBJ_PLACE[obj], inkC = mix(INK6[course] || '#3a2a1a', '#1a120c', 0.3);
+  const course = courseOf(card, o), obj = o.device || pickObject(card, id), at = o.at || [560, 318], scale = o.scale || OBJ_SCALE[obj] || 0.95;
   return device({
-    course, seed: o.seed || seedOf(id), at, scale, ground: Object.assign({ room: o.room || roomOf(card, course), x: 800, w: 1500, pool: [at[0], at[1] - 20, 430, 270], dark: 0.3 }, o.ground || {}),
-    build: f => obj === 'shield' ? OB.shield(f, { ang, s: 1.7, bites: course === 'void' ? [[50, -30, 20], [20, 50, 12]] : [] }) : OB[obj](f, { ang }),
-    back: (r) => {
-      let s = K.drybrush(r, K.arc(at, 300, 220, 200, 330, 10), 60, inkC, { dry: 1, body: false, op: 0.7, bristles: 16 });
-      for (const R of [330, 390]) s += K.motionHatch(r, K.arc(at, R, R * 0.7, 20, 160, 14), 26, INK, { lw: 2, op: 0.6, grow: false });
-      return s;
-    },
-    front: (r) => K.splatter(r, add(at, [180, -60]), 140, inkC, { blot: false, n: 18, dir: [1, -0.4], spread: 1.4 }),
+    course, seed: o.seed || seedOf(id), at, scale, ground: Object.assign({ room: o.room || roomOf(card, course, id), x: 800, w: 1500, pool: [at[0], at[1] - 20, 430, 270], dark: 0.3 }, o.ground || {}),
+    build: f => LIB[obj](f, { course, ang: o.ang }),
+    back: r => courseFX(r, at, course, true),
+    front: r => courseFX(r, at, course, false),
   });
 }
 const DEVICE_KIND = { flask: deviceGeneric, device: deviceGeneric, rite: deviceGeneric, curse: deviceGeneric };
@@ -357,13 +433,15 @@ const DEVICE_KIND = { flask: deviceGeneric, device: deviceGeneric, rite: deviceG
 // Per-card overrides: which composition, and anything the data cannot say (a room named in the note, a style).
 const OVR = {
   bw_mace_blow: { kind: 'attack', room: 'stair' },
-  du_two_step: { kind: 'attack', room: 'belfry', cutAt: [105, 60], ground: { shaft: [250, 160, 640, 260] } },
+  du_two_step: { kind: 'attack', room: 'belfry', ground: { shaft: [250, 160, 640, 260] } },
   el_ink_bolt: { kind: 'cast', room: 'nave' },
   bw_brace: { kind: 'block', room: 'stair' },
 };
 const KIND = { attack, cast, block };
+// test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
+function testCard(id) { const [cls, kind, cat = 'physical'] = id.slice(1).split('/'); return { name: id, cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind }; }
 function card(id) {
-  const cd = CARDS[id] || {}, o = OVR[id] || {};
+  const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}, o = Object.assign({}, OVR[id] || {}, cd._kind ? { kind: cd._kind } : {});
   let kind = o.kind || kindOf(cd);
   if (KIND[kind] && !ART[id] && !heroOf(cd, courseOf(cd, o))) kind = 'device';   // shared and world cards have no hero
   const fn = ART[id] || KIND[kind] || DEVICE_KIND[kind] || generic;
@@ -372,4 +450,6 @@ function card(id) {
 }
 function generic(cd) { throw new Error('no composition yet for kind ' + kindOf(cd)); }
 
-module.exports = { SAMPLES, CARDS, card, kindOf, heroOf, roomOf, courseOf, W, H };
+// one line saying what a card got: its kind and hero or object (for review sheets)
+function describe(id) { const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}; const o = OVR[id] || {}; let k = cd._kind || o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; const h = KIND[k] && !ART[id] ? (heroOf(cd, courseOf(cd, o)) || [])[1] : (o.device || (typeof pickObject === 'function' ? pickObject(cd, id) : '')); return k + ' ' + (h || ''); }
+module.exports = { SAMPLES, CARDS, card, worldOf, describe, kindOf, heroOf, roomOf, courseOf, W, H };

@@ -19,7 +19,7 @@ const f1 = n => Math.round(n * 10) / 10;
 // pool = the light behind the subject, ink = the course's ink from the Elementalist's six pots (bible 01).
 const COURSE = {
   physical: { wash: '#8a7458', deep: '#1c140d', pool: '#ead8b4', ink: '#6a4a2e' },
-  fire: { wash: '#9a5032', deep: '#1e0e08', pool: '#efc898', ink: '#b8341f' },
+  fire: { wash: '#8a5a40', deep: '#1c0e08', pool: '#e8c8a0', ink: '#b8341f' },
   frost: { wash: '#6c8696', deep: '#10181e', pool: '#e2eaea', ink: '#8fb2c9' },
   lightning: { wash: '#8a7a48', deep: '#18140a', pool: '#efe6c2', ink: '#c9a43a' },
   water: { wash: '#3e5e74', deep: '#0a1218', pool: '#cad8d6', ink: '#2f4f8f' },
@@ -236,7 +236,7 @@ function billow(r, c, w, h, col, o = {}) {
   const id = 'kBl' + (billowN++), n = 48, lobes = o.lobes || 5, ph = r() * 6, pts = [];
   for (let i = 0; i < n; i++) { const t = Math.PI * 2 * i / n, up = Math.sin(t) < 0.15; const bump = up ? 0.2 * Math.abs(Math.sin(lobes * t / 2 + ph)) : 0.04 * Math.abs(Math.sin(lobes * t + ph)); pts.push(add(c, [Math.cos(t) * w * (1 + bump), Math.sin(t) * h * (up ? 1 + bump * 1.6 : 0.7)])); }
   let s = `<defs><clipPath id="${id}"><path d="${pathD(pts, true)}"/></clipPath></defs>`;
-  s += `<path d="${pathD(pts, true)}" fill="${col}" opacity="${o.op ?? 0.8}"/>`;
+  s += `<path d="${pathD(pts, true)}" fill="${col}" opacity="${o.op ?? 0.55}" filter="url(#kRag)"/>`;
   let hl = ''; const ang = E.deg(o.hatchAng ?? 52), d = [Math.cos(ang), Math.sin(ang)], nn = [-d[1], d[0]];
   for (let k = -60; k < 60; k++) { const q = add(c, mul(nn, k * 6.5)); const a = add(q, mul(d, -w * 1.6)), b = add(q, mul(d, w * 1.6)); hl += `<path d="M${f1(a[0])},${f1(a[1])}L${f1(b[0])},${f1(b[1])}" stroke="${INK}" stroke-width="1.4"/>`; }
   // hatch only on the lower, away-from-light part: a soft mask that grows toward the lower right
@@ -244,8 +244,8 @@ function billow(r, c, w, h, col, o = {}) {
   s += `<defs><mask id="${id}m" maskUnits="userSpaceOnUse" x="${f1(c[0] - w * 2)}" y="${f1(c[1] - h * 3)}" width="${f1(w * 4)}" height="${f1(h * 6)}"><rect x="${f1(c[0] - w * 2)}" y="${f1(c[1] - h * 3)}" width="${f1(w * 4)}" height="${f1(h * 6)}" fill="#000"/><ellipse cx="${f1(c[0] + w * 0.55)}" cy="${f1(c[1] + h * 0.6)}" rx="${f1(w * 1.1)}" ry="${f1(h * 1.0)}" fill="#fff" filter="url(#kSoft)"/></mask></defs>`;
   const top = pts.filter((p, i) => Math.sin(Math.PI * 2 * i / n) < 0.1);
   const ordered = pts.slice(Math.round(n / 2)).concat(pts.slice(0, 1));
-  s += drybrush(r, ordered, o.lw || 6, INK, { dry: 0.8, body: false, op: 0.85, bristles: 3, profile: t => 0.4 + 0.6 * Math.sin(Math.PI * t) });
-  for (let i = 0; i < (o.curls ?? 2); i++) { const q = add(c, [(r() - 0.5) * w, -h * (0.1 + r() * 0.5)]); s += `<path d="M${f1(q[0] - w * 0.18)},${f1(q[1] + 6)}q${f1(w * 0.08)},${f1(-h * 0.35)} ${f1(w * 0.2)},${f1(-h * 0.1)}" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>`; }
+  s += drybrush(r, ordered, o.lw || 6, INK, { dry: 1, body: false, op: 0.7, bristles: 4, profile: t => 0.2 + 0.8 * Math.sin(Math.PI * t), filter: 'kRag' });
+  for (let i = 0; i < (o.curls ?? 4); i++) { const q = add(c, [(r() - 0.5) * w, -h * (0.1 + r() * 0.5)]); s += `<path d="M${f1(q[0] - w * 0.18)},${f1(q[1] + 6)}q${f1(w * 0.08)},${f1(-h * 0.35)} ${f1(w * 0.2)},${f1(-h * 0.1)}" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>`; }
   return `<g filter="url(#kWob)">${s}</g>`;
 }
 
@@ -272,6 +272,25 @@ const D = {
     f.flat(wallP, wall); f.flat(wallP.slice(0, 8).concat(wallP.slice(-8)), mix(wall, '#000', 0.35), { op: 0.6 });
     f.line(ell(c, rx, ry, a, 28).concat([ell(c, rx, ry, a, 28)[0]]), o.w || 2.2, INK);
     f.line(ell(c, rx + 1.6, ry + 1.6, a, 28).slice(15, 22), 1.1, o.glint || '#e8e2d8', { op: 0.8 });
+  },
+  // dress a finished part so it never reads flat: cross-contour hatching laid over its shadow side and wear (pits,
+  // nicks, scratches) and a grime stain, all clipped to the part's outline. o.dir: hatch direction angle (radians).
+  dress(f, outline, o = {}) {
+    const r = f.r, bb = E.bbox(outline), w = bb[2] - bb[0], h = bb[3] - bb[1], cx = (bb[0] + bb[2]) / 2, cy = (bb[1] + bb[3]) / 2;
+    const i0 = f.out.length, step = o.step || 8, a = o.dir ?? 0.12, d = [Math.cos(a), Math.sin(a)], n = [-d[1], d[0]];
+    const L = [];
+    for (let k = -Math.ceil((w + h) / step); k < Math.ceil((w + h) / step); k++) {
+      const c0 = add([cx, cy], mul(n, k * step)), t0 = (-0.5 + (o.from ?? 0.45)) * w + (r() - 0.5) * w * 0.14;
+      L.push([add(c0, mul(d, t0)), add(c0, mul(d, t0 + w * 0.5)), add(c0, add(mul(d, w * 1.2), mul(n, 3)))]);
+    }
+    let g = '';
+    for (const q of L) g += `<path d="${smooth(q, false, 1)}" fill="none" stroke="${INK}" stroke-width="${o.lw || 1.3}" stroke-linecap="round" stroke-dasharray="${(14 + r() * 20).toFixed(0)} ${(3 + r() * 5).toFixed(0)}" opacity="${o.op ?? 0.5}"/>`;
+    f.raw(`<g>${g}</g>`);
+    if (o.wear !== false) D.wear(f, [cx, cy], w * 0.42, h * 0.42, Math.round((w * h) / 900) + 6, o.dark || '#1a120c', o.lt || '#e8dcc0');
+    if (o.stain !== false) D.stain(f, [bb[0] + w * (0.3 + r() * 0.4), bb[1] + h * (0.5 + r() * 0.3)], Math.min(w, h) * 0.18, o.grime || '#2a1a0c', { op: 0.25 });
+    const body = f.out.splice(i0).join('\n'), id = f.id('dr');
+    f.defs.push(`<clipPath id="${id}"><path d="${smooth(outline, true, o.k ?? 1)}"/></clipPath>`);
+    f.raw(`<g clip-path="url(#${id})">${body}</g>`);
   },
   // surface breakup for a large plain area: pits, nicks and fine scratches scattered in a region
   wear(f, c, rx, ry, n = 20, col = '#1a120c', lt = '#e8dcc0') {

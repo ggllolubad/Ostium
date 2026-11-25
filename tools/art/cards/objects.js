@@ -72,10 +72,12 @@ function flask(f, o = {}) {
   const tagC = F([[70, -58]])[0];
   f.line([F([[32, -142]])[0], F([[52, -96]])[0], add(tagC, rot([-4, -38], o.ang || 0))], 1.8, '#3a2a18');
   D.label(f, tagC, 64, 76, (o.ang || 0) + 0.22, '#cdbb94', (G, w, h) => {
+    if (o.skull !== false) {
     const sk = G([[-14, -24], [0, -30], [14, -24], [16, -8], [8, 0], [8, 8], [-8, 8], [-8, 0], [-16, -8]]);
-    f.line(closedLine(sk), 2, INK);
-    f.flat(G(ell([-6, -14], 4.5, 4, 0, 8)), INK); f.flat(G(ell([7, -14], 4.5, 4, 0, 8)), INK); f.flat(G([[0, -8], [-2, -3], [2, -3]]), INK);
-    for (let i = 0; i < 4; i++) f.line(G([[-6 + i * 4, 1], [-6 + i * 4, 8]]), 1.1, INK, { straight: true });
+      f.line(closedLine(sk), 2, INK);
+      f.flat(G(ell([-6, -14], 4.5, 4, 0, 8)), INK); f.flat(G(ell([7, -14], 4.5, 4, 0, 8)), INK); f.flat(G([[0, -8], [-2, -3], [2, -3]]), INK);
+      for (let i = 0; i < 4; i++) f.line(G([[-6 + i * 4, 1], [-6 + i * 4, 8]]), 1.1, INK, { straight: true });
+    }
     f.line(G([[-20, 18], [-6, 20], [6, 17], [20, 20]]), 1.2, INK, { op: 0.8 }); f.line(G([[-20, 27], [2, 28], [14, 26]]), 1.2, INK, { op: 0.7 });
     f.flat(G(ell([-22, -30], 3, 3, 0, 8)), '#1a120c'); // eyelet
   });
@@ -83,6 +85,12 @@ function flask(f, o = {}) {
   const crackA = [104, 110], cr = D.crack(f, F([crackA])[0], (o.ang || 0) - 2.3, 150, { n: 7, w: 2.2 });
   D.crack(f, F([[90, 120]])[0], (o.ang || 0) - 1.4, 70, { n: 4, forks: false });
   for (let i = 0; i < 5; i++) { const p = F([[110 + r() * 40, 70 + r() * 70]])[0], z = 6 + r() * 9, a = r() * 6; f.part([add(p, rot([z, 0], a)), add(p, rot([-z * 0.5, z * 0.5], a)), add(p, rot([-z * 0.3, -z * 0.6], a))], { fill: mix(glass, '#d8e0c0', 0.45), shade: 0.3, inkW: 1.1, inkHeavy: 1.4, cast: false, sharp: true }); }
+  for (let i = 0; i < 5; i++) { const y = -128 + i * 7; f.line(F([[-29, y], [0, y + 5], [29, y + 2]]), 3, INK); f.line(F([[-28, y], [0, y + 5], [28, y + 2]]), 1.4, '#7a6448'); }
+  f.line([F([[-30, -120]])[0], F([[-52, -96]])[0], F([[-58, -70]])[0]], 1.4, '#3a2a18');
+  f.part(F(ell([-60, -60], 11, 10, 0, 12)), { fill: '#6e7072', shade: 0.4, inkW: 1.2, cast: true, tex: T(f, 'mottle'), texOp: 0.5 });
+  f.line(F([[-66, -62], [-54, -58]]), 1, INK, { op: 0.7 }); f.line(F([[-60, -68], [-60, -52]]), 1, INK, { op: 0.7 });
+  for (let i = 0; i < 10; i++) { const p = [-100 + r() * 60, 120 + r() * 40]; f.flat(F(ell(p, 2 + r() * 4, 2 + r() * 3, 0, 8)), mix('#a8a878', '#e0dcc0', r()), { op: 0.8 }); }
+  f.scratches(F([[-30, 60]])[0], 40, 8, '#e8ecd0');
   return { mouth: F([[118, 96]])[0], neck: F([[0, -150]])[0], crack: cr };
 }
 
@@ -205,6 +213,14 @@ function mirror(f, o = {}) {
   for (const [x, y] of [[120, 60], [-140, -40], [60, 170], [-60, -175], [140, -90]]) D.bloom(f, F([[x, y]])[0], 14, '#2a2c28', { n: 3, specks: 6, op: 0.5 });
   f.scratches(F([[100, -130]])[0], 18, 5, '#e8e8e2'); f.flat(F(ell([-146, 80], 9, 14, 0.2, 10)), '#2a2c2a', { op: 0.45 });
   D.chip(f, F([[0, -190]])[0], 9, a0);
+  f.part(F([[-30, -186], [-18, -212], [0, -222], [18, -212], [30, -186], [12, -196], [0, -200], [-12, -196]]), { fill: mix(PEWTER, '#000', 0.08), shade: 0.45, inkW: 1.3 });
+  f.rivet(F([[0, -208]])[0], 3.4, '#9a9c96');
+  f.line([F([[0, -214]])[0], F([[40, -236]])[0], F([[96, -222]])[0], F([[130, -186]])[0]], 1.6, '#2a2a20');
+  f.part(F(ell([136, -170], 10, 13, 0.3, 10)), { fill: BONE, shade: 0.35, inkW: 1.2, tex: T(f, 'mottle'), texOp: 0.4 });
+  f.flat(F(ell([136, -172], 2.4, 2.4, 0, 6)), INK);
+  for (let i = 0; i < 6; i++) { const y = -60 + i * 8; f.line(F([[148, y], [166, y + 4]]), 3.4, INK); f.line(F([[148, y], [166, y + 4]]), 1.6, '#2e3428'); } // thread binding a cracked frame
+  D.crack(f, F([[160, -70]])[0], a0 + 1.7, 60, { n: 4, forks: false, w: 1.6 });
+  f.flat(F([[-90, -120], [-40, -150], [40, -152], [90, -120], [40, -128], [-40, -126]]), '#0a0a0e', { op: 0.35 }); // candle soot on the glass
   return { glass: F([[0, 0]])[0], left: F([[-158, -20]])[0], strike: F([cp])[0], holes };
 }
 
@@ -256,6 +272,11 @@ function bell(f, o = {}) {
   f.scratches(F([[40, -40]])[0], 30, 7, '#e8d0a0');
   D.chip(f, F([[-150, 162]])[0], 9, a0 + Math.PI);
   // the target's spectrum: five courses daubed on the bronze by hand
+  D.label(f, F([[-100, -244]])[0], 40, 30, a0 - 0.08, '#cdbb94', (G) => { for (let k = 0; k < 3; k++) f.line(G([[-14, -8 + k * 7], [12, -8 + k * 7]]), 1, INK, { op: 0.7, dash: '5 2 3 2' }); });
+  f.rivet(F([[-100, -254]])[0], 2.4, '#5a5a56');
+  for (let i = 0; i < 4; i++) { const x = 120 + i * 9; f.line(F([[x, -268], [x + 4, -222]]), 3.4, INK); f.line(F([[x, -268], [x + 4, -222]]), 1.8, '#8a7454'); }
+  for (const [x, y] of [[-40, -264], [20, -266], [130, -266]]) { f.flat(F([[x, y], [x + 6, y], [x + 4, y + 10], [x + 2, y + 14]]), '#d8d4c4', { op: 0.85 }); }
+  D.wear(f, F([[0, -175]])[0], 60, 20, 16, '#2a1a0c', '#e8c890');
   return { strike: F([[150, 96]])[0], body: F([[0, -10]])[0], lip: F([[0, 170]])[0] };
 }
 
