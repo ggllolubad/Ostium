@@ -1,0 +1,247 @@
+{
+"key": "lantern_gnats",
+"source": "worlds/world_II_b_lantern_gnats",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+2,
+161,
+343,
+484
+],
+"bones": {
+"ground": {
+"pivot": [
+180.0,
+474.0
+],
+"parent": null
+},
+"pole": {
+"pivot": [
+252.0,
+468.0
+],
+"parent": "ground"
+},
+"lantern": {
+"pivot": [
+105.6,
+210.0
+],
+"parent": "pole"
+},
+"swarm": {
+"pivot": [
+105.6,
+258.0
+],
+"parent": "ground"
+},
+"tail_1": {
+"pivot": [
+132.0,
+324.0
+],
+"parent": "swarm"
+},
+"tail_2": {
+"pivot": [
+168.0,
+408.0
+],
+"parent": "tail_1"
+},
+"gnat_1": {
+"pivot": [
+169.2,
+211.2
+],
+"parent": "swarm"
+},
+"gnat_2": {
+"pivot": [
+48.0,
+282.0
+],
+"parent": "swarm"
+},
+"gnat_3": {
+"pivot": [
+73.2,
+190.8
+],
+"parent": "swarm"
+},
+"gnat_4": {
+"pivot": [
+144.0,
+312.0
+],
+"parent": "swarm"
+}
+},
+"layers": [
+{
+"name": "00_ground",
+"bone": "ground",
+"z": 0,
+"pos": [
+28.2,
+441.0
+],
+"size": [
+316,
+41
+]
+},
+{
+"name": "01_swarm",
+"bone": "swarm",
+"z": 1,
+"pos": [
+1.2,
+159.6
+],
+"size": [
+208,
+314
+]
+},
+{
+"name": "02_tail_1",
+"bone": "tail_1",
+"z": 2,
+"pos": [
+64.8,
+271.8
+],
+"size": [
+115,
+122
+]
+},
+{
+"name": "03_tail_2",
+"bone": "tail_2",
+"z": 3,
+"pos": [
+127.2,
+378.0
+],
+"size": [
+67,
+98
+]
+},
+{
+"name": "04_pole",
+"bone": "pole",
+"z": 4,
+"pos": [
+90.6,
+199.2
+],
+"size": [
+176,
+286
+]
+},
+{
+"name": "05_lantern",
+"bone": "lantern",
+"z": 5,
+"pos": [
+63.0,
+221.4
+],
+"size": [
+85,
+77
+]
+},
+{
+"name": "06_swarm",
+"bone": "swarm",
+"z": 6,
+"pos": [
+23.4,
+175.2
+],
+"size": [
+163,
+166
+]
+},
+{
+"name": "07_tail_1",
+"bone": "tail_1",
+"z": 7,
+"pos": [
+91.2,
+307.8
+],
+"size": [
+55,
+71
+]
+},
+{
+"name": "08_gnat_1",
+"bone": "gnat_1",
+"z": 8,
+"pos": [
+162.0,
+203.4
+],
+"size": [
+20,
+19
+]
+},
+{
+"name": "09_gnat_2",
+"bone": "gnat_2",
+"z": 9,
+"pos": [
+36.0,
+273.0
+],
+"size": [
+19,
+19
+]
+},
+{
+"name": "10_gnat_3",
+"bone": "gnat_3",
+"z": 10,
+"pos": [
+66.0,
+182.4
+],
+"size": [
+18,
+17
+]
+},
+{
+"name": "11_gnat_4",
+"bone": "gnat_4",
+"z": 11,
+"pos": [
+136.8,
+301.8
+],
+"size": [
+16,
+17
+]
+}
+]
+}

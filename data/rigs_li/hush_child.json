@@ -1,0 +1,167 @@
+{
+"key": "hush_child",
+"source": "worlds/world_XII_b_hush_child",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+67,
+257,
+306,
+492
+],
+"bones": {
+"board": {
+"pivot": [
+180.0,
+471.6
+],
+"parent": null
+},
+"head": {
+"pivot": [
+190.44,
+352.08
+],
+"parent": "board"
+},
+"fist": {
+"pivot": [
+214.68,
+350.58
+],
+"parent": "board"
+},
+"hoop": {
+"pivot": [
+194.1,
+310.2
+],
+"parent": "board"
+},
+"charms": {
+"pivot": [
+196.62,
+281.52
+],
+"parent": "hoop"
+},
+"strap": {
+"pivot": [
+222.12,
+403.02
+],
+"parent": "board"
+}
+},
+"layers": [
+{
+"name": "00_root",
+"bone": "root",
+"z": 0,
+"pos": [
+66.0,
+468.6
+],
+"size": [
+230,
+23
+]
+},
+{
+"name": "01_strap",
+"bone": "strap",
+"z": 1,
+"pos": [
+218.4,
+381.6
+],
+"size": [
+88,
+101
+]
+},
+{
+"name": "02_board",
+"bone": "board",
+"z": 2,
+"pos": [
+124.2,
+270.6
+],
+"size": [
+115,
+218
+]
+},
+{
+"name": "03_head",
+"bone": "head",
+"z": 3,
+"pos": [
+148.8,
+283.8
+],
+"size": [
+84,
+93
+]
+},
+{
+"name": "04_fist",
+"bone": "fist",
+"z": 4,
+"pos": [
+208.8,
+334.2
+],
+"size": [
+29,
+38
+]
+},
+{
+"name": "05_hoop",
+"bone": "hoop",
+"z": 5,
+"pos": [
+146.4,
+257.4
+],
+"size": [
+91,
+77
+]
+},
+{
+"name": "06_charms",
+"bone": "charms",
+"z": 6,
+"pos": [
+150.0,
+267.0
+],
+"size": [
+85,
+58
+]
+},
+{
+"name": "07_board",
+"bone": "board",
+"z": 7,
+"pos": [
+111.6,
+466.2
+],
+"size": [
+142,
+15
+]
+}
+]
+}

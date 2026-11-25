@@ -1,0 +1,180 @@
+{
+"key": "pit_adder",
+"source": "worlds/world_VIII_b_pit_adder",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+73,
+274,
+294,
+491
+],
+"bones": {
+"coil": {
+"pivot": [
+202.8,
+438.0
+],
+"parent": null
+},
+"neck_1": {
+"pivot": [
+159.84,
+400.32
+],
+"parent": "coil"
+},
+"neck_2": {
+"pivot": [
+142.8,
+363.42
+],
+"parent": "neck_1"
+},
+"neck_3": {
+"pivot": [
+161.82,
+330.78
+],
+"parent": "neck_2"
+},
+"head": {
+"pivot": [
+154.8,
+296.4
+],
+"parent": "neck_3"
+},
+"jaw": {
+"pivot": [
+153.3,
+298.86
+],
+"parent": "head"
+}
+},
+"layers": [
+{
+"name": "00_coil",
+"bone": "coil",
+"z": 0,
+"pos": [
+106.2,
+379.8
+],
+"size": [
+181,
+112
+]
+},
+{
+"name": "01_coil",
+"bone": "coil",
+"z": 1,
+"pos": [
+139.8,
+381.0
+],
+"size": [
+49,
+49
+]
+},
+{
+"name": "02_neck_1",
+"bone": "neck_1",
+"z": 2,
+"pos": [
+124.2,
+343.8
+],
+"size": [
+55,
+77
+]
+},
+{
+"name": "03_neck_2",
+"bone": "neck_2",
+"z": 3,
+"pos": [
+124.2,
+311.4
+],
+"size": [
+56,
+72
+]
+},
+{
+"name": "04_neck_3",
+"bone": "neck_3",
+"z": 4,
+"pos": [
+142.2,
+287.4
+],
+"size": [
+44,
+64
+]
+},
+{
+"name": "05_neck_3",
+"bone": "neck_3",
+"z": 5,
+"pos": [
+155.4,
+296.4
+],
+"size": [
+30,
+25
+]
+},
+{
+"name": "06_jaw",
+"bone": "jaw",
+"z": 6,
+"pos": [
+104.4,
+292.8
+],
+"size": [
+62,
+32
+]
+},
+{
+"name": "07_head",
+"bone": "head",
+"z": 7,
+"pos": [
+73.2,
+274.2
+],
+"size": [
+98,
+43
+]
+},
+{
+"name": "08_root",
+"bone": "root",
+"z": 8,
+"pos": [
+111.6,
+458.4
+],
+"size": [
+182,
+24
+]
+}
+]
+}

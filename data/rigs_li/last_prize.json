@@ -1,0 +1,602 @@
+{
+"key": "last_prize",
+"source": "worlds/world_VI_b_last_prize",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"sea": {
+"pivot": [
+654.0,
+942.0
+],
+"parent": null
+},
+"hull_aft": {
+"pivot": [
+654.0,
+864.0
+],
+"parent": "sea"
+},
+"hull_fore": {
+"pivot": [
+654.0,
+864.0
+],
+"parent": "sea"
+},
+"gun_1": {
+"pivot": [
+875.1,
+465.18
+],
+"parent": "hull_aft"
+},
+"gun_2": {
+"pivot": [
+743.16,
+471.36
+],
+"parent": "hull_aft"
+},
+"gun_3": {
+"pivot": [
+496.08,
+484.8
+],
+"parent": "hull_fore"
+},
+"gun_4": {
+"pivot": [
+372.9,
+463.92
+],
+"parent": "hull_fore"
+},
+"sailor_1": {
+"pivot": [
+941.16,
+125.1
+],
+"parent": "hull_aft"
+},
+"sailor_1_arm": {
+"pivot": [
+928.5,
+89.28
+],
+"parent": "sailor_1"
+},
+"sailor_2": {
+"pivot": [
+786.12,
+181.5
+],
+"parent": "hull_aft"
+},
+"sailor_2_arm": {
+"pivot": [
+773.46,
+145.68
+],
+"parent": "sailor_2"
+},
+"sailor_3": {
+"pivot": [
+451.2,
+197.04
+],
+"parent": "hull_fore"
+},
+"sailor_3_arm": {
+"pivot": [
+435.18,
+162.6
+],
+"parent": "sailor_3"
+},
+"boat": {
+"pivot": [
+271.2,
+154.2
+],
+"parent": "hull_fore"
+},
+"anchor": {
+"pivot": [
+197.1,
+203.46
+],
+"parent": "hull_fore"
+},
+"bell": {
+"pivot": [
+248.4,
+113.1
+],
+"parent": "hull_fore"
+},
+"sail": {
+"pivot": [
+905.94,
+171.6
+],
+"parent": "hull_aft"
+},
+"lantern": {
+"pivot": [
+921.9,
+55.2
+],
+"parent": "hull_aft"
+}
+},
+"layers": [
+{
+"name": "00_sea",
+"bone": "sea",
+"z": 0,
+"pos": [
+0.0,
+768.0
+],
+"size": [
+960,
+192
+]
+},
+{
+"name": "01_hull_aft",
+"bone": "hull_aft",
+"z": 1,
+"pos": [
+639.0,
+69.6
+],
+"size": [
+321,
+808
+]
+},
+{
+"name": "02_hull_fore",
+"bone": "hull_fore",
+"z": 2,
+"pos": [
+147.0,
+134.4
+],
+"size": [
+510,
+773
+]
+},
+{
+"name": "03_hull_aft",
+"bone": "hull_aft",
+"z": 3,
+"pos": [
+661.8,
+52.8
+],
+"size": [
+298,
+134
+]
+},
+{
+"name": "04_hull_fore",
+"bone": "hull_fore",
+"z": 4,
+"pos": [
+187.8,
+33.0
+],
+"size": [
+410,
+163
+]
+},
+{
+"name": "05_hull_aft",
+"bone": "hull_aft",
+"z": 5,
+"pos": [
+661.8,
+0.0
+],
+"size": [
+127,
+213
+]
+},
+{
+"name": "06_hull_fore",
+"bone": "hull_fore",
+"z": 6,
+"pos": [
+237.6,
+0.0
+],
+"size": [
+134,
+178
+]
+},
+{
+"name": "07_hull_aft",
+"bone": "hull_aft",
+"z": 7,
+"pos": [
+799.8,
+285.6
+],
+"size": [
+160,
+252
+]
+},
+{
+"name": "08_gun_1",
+"bone": "gun_1",
+"z": 8,
+"pos": [
+822.6,
+409.2
+],
+"size": [
+137,
+182
+]
+},
+{
+"name": "09_hull_aft",
+"bone": "hull_aft",
+"z": 9,
+"pos": [
+667.8,
+291.0
+],
+"size": [
+147,
+253
+]
+},
+{
+"name": "10_gun_2",
+"bone": "gun_2",
+"z": 10,
+"pos": [
+690.6,
+415.8
+],
+"size": [
+138,
+182
+]
+},
+{
+"name": "11_hull_fore",
+"bone": "hull_fore",
+"z": 11,
+"pos": [
+405.6,
+300.0
+],
+"size": [
+168,
+263
+]
+},
+{
+"name": "12_gun_3",
+"bone": "gun_3",
+"z": 12,
+"pos": [
+444.6,
+426.6
+],
+"size": [
+134,
+181
+]
+},
+{
+"name": "13_hull_fore",
+"bone": "hull_fore",
+"z": 13,
+"pos": [
+282.0,
+279.6
+],
+"size": [
+169,
+262
+]
+},
+{
+"name": "14_gun_4",
+"bone": "gun_4",
+"z": 14,
+"pos": [
+322.2,
+406.2
+],
+"size": [
+134,
+181
+]
+},
+{
+"name": "15_hull_fore",
+"bone": "hull_fore",
+"z": 15,
+"pos": [
+498.0,
+170.4
+],
+"size": [
+249,
+789
+]
+},
+{
+"name": "16_sail",
+"bone": "sail",
+"z": 16,
+"pos": [
+800.4,
+58.8
+],
+"size": [
+160,
+531
+]
+},
+{
+"name": "17_hull_aft",
+"bone": "hull_aft",
+"z": 17,
+"pos": [
+813.0,
+574.2
+],
+"size": [
+147,
+118
+]
+},
+{
+"name": "18_lantern",
+"bone": "lantern",
+"z": 18,
+"pos": [
+882.0,
+4.8
+],
+"size": [
+78,
+113
+]
+},
+{
+"name": "19_boat",
+"bone": "boat",
+"z": 19,
+"pos": [
+197.4,
+150.0
+],
+"size": [
+111,
+424
+]
+},
+{
+"name": "20_anchor",
+"bone": "anchor",
+"z": 20,
+"pos": [
+77.4,
+191.4
+],
+"size": [
+209,
+446
+]
+},
+{
+"name": "21_bell",
+"bone": "bell",
+"z": 21,
+"pos": [
+208.8,
+60.0
+],
+"size": [
+80,
+185
+]
+},
+{
+"name": "22_hull_fore",
+"bone": "hull_fore",
+"z": 22,
+"pos": [
+33.6,
+69.6
+],
+"size": [
+174,
+264
+]
+},
+{
+"name": "23_hull_aft",
+"bone": "hull_aft",
+"z": 23,
+"pos": [
+823.2,
+147.0
+],
+"size": [
+123,
+811
+]
+},
+{
+"name": "24_hull_fore",
+"bone": "hull_fore",
+"z": 24,
+"pos": [
+493.8,
+163.8
+],
+"size": [
+122,
+796
+]
+},
+{
+"name": "25_hull_fore",
+"bone": "hull_fore",
+"z": 25,
+"pos": [
+444.0,
+67.8
+],
+"size": [
+107,
+129
+]
+},
+{
+"name": "26_sailor_1",
+"bone": "sailor_1",
+"z": 26,
+"pos": [
+888.0,
+0.0
+],
+"size": [
+72,
+148
+]
+},
+{
+"name": "27_sailor_1_arm",
+"bone": "sailor_1_arm",
+"z": 27,
+"pos": [
+830.4,
+18.0
+],
+"size": [
+130,
+513
+]
+},
+{
+"name": "28_sailor_2",
+"bone": "sailor_2",
+"z": 28,
+"pos": [
+733.2,
+0.0
+],
+"size": [
+112,
+205
+]
+},
+{
+"name": "29_sailor_2_arm",
+"bone": "sailor_2_arm",
+"z": 29,
+"pos": [
+681.6,
+75.0
+],
+"size": [
+140,
+540
+]
+},
+{
+"name": "30_sailor_3",
+"bone": "sailor_3",
+"z": 30,
+"pos": [
+398.4,
+3.6
+],
+"size": [
+110,
+217
+]
+},
+{
+"name": "31_sailor_3_arm",
+"bone": "sailor_3_arm",
+"z": 31,
+"pos": [
+341.4,
+90.6
+],
+"size": [
+139,
+518
+]
+},
+{
+"name": "32_hull_aft",
+"bone": "hull_aft",
+"z": 32,
+"pos": [
+649.8,
+69.0
+],
+"size": [
+310,
+131
+]
+},
+{
+"name": "33_hull_fore",
+"bone": "hull_fore",
+"z": 33,
+"pos": [
+368.4,
+142.8
+],
+"size": [
+210,
+70
+]
+},
+{
+"name": "34_sea",
+"bone": "sea",
+"z": 34,
+"pos": [
+0.0,
+726.6
+],
+"size": [
+960,
+233
+]
+}
+]
+}

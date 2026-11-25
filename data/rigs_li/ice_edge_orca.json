@@ -1,0 +1,266 @@
+{
+"key": "ice_edge_orca",
+"source": "worlds/world_VII_b_ice_edge_orca",
+"scale": 0.6,
+"canvas": [
+1080,
+660
+],
+"ground": 642.0,
+"flip": true,
+"ink": [
+34,
+99,
+1080,
+660
+],
+"bones": {
+"body": {
+"pivot": [
+480.0,
+540.0
+],
+"parent": null
+},
+"head": {
+"pivot": [
+228.0,
+492.0
+],
+"parent": "body"
+},
+"jaw": {
+"pivot": [
+212.4,
+495.6
+],
+"parent": "head"
+},
+"fin": {
+"pivot": [
+456.0,
+408.0
+],
+"parent": "body"
+},
+"tail": {
+"pivot": [
+660.0,
+540.0
+],
+"parent": "body"
+},
+"flipper_n": {
+"pivot": [
+300.0,
+588.0
+],
+"parent": "body"
+},
+"flipper_f": {
+"pivot": [
+324.0,
+576.0
+],
+"parent": "body"
+},
+"harpoon": {
+"pivot": [
+360.0,
+576.0
+],
+"parent": "body"
+},
+"net": {
+"pivot": [
+144.0,
+504.0
+],
+"parent": "jaw"
+}
+},
+"layers": [
+{
+"name": "00_root",
+"bone": "root",
+"z": 0,
+"pos": [
+544.8,
+634.2
+],
+"size": [
+535,
+26
+]
+},
+{
+"name": "01_flipper_f",
+"bone": "flipper_f",
+"z": 1,
+"pos": [
+211.8,
+567.6
+],
+"size": [
+415,
+92
+]
+},
+{
+"name": "02_tail",
+"bone": "tail",
+"z": 2,
+"pos": [
+526.2,
+428.4
+],
+"size": [
+292,
+232
+]
+},
+{
+"name": "03_body",
+"bone": "body",
+"z": 3,
+"pos": [
+160.2,
+351.6
+],
+"size": [
+512,
+299
+]
+},
+{
+"name": "04_head",
+"bone": "head",
+"z": 4,
+"pos": [
+109.2,
+352.2
+],
+"size": [
+186,
+243
+]
+},
+{
+"name": "05_tail",
+"bone": "tail",
+"z": 5,
+"pos": [
+561.0,
+426.0
+],
+"size": [
+239,
+216
+]
+},
+{
+"name": "06_body",
+"bone": "body",
+"z": 6,
+"pos": [
+225.0,
+347.4
+],
+"size": [
+343,
+95
+]
+},
+{
+"name": "07_harpoon",
+"bone": "harpoon",
+"z": 7,
+"pos": [
+324.6,
+526.8
+],
+"size": [
+57,
+40
+]
+},
+{
+"name": "08_fin",
+"bone": "fin",
+"z": 8,
+"pos": [
+399.6,
+99.0
+],
+"size": [
+194,
+331
+]
+},
+{
+"name": "09_jaw",
+"bone": "jaw",
+"z": 9,
+"pos": [
+82.2,
+492.0
+],
+"size": [
+152,
+72
+]
+},
+{
+"name": "10_net",
+"bone": "net",
+"z": 10,
+"pos": [
+120.6,
+501.6
+],
+"size": [
+46,
+107
+]
+},
+{
+"name": "11_head",
+"bone": "head",
+"z": 11,
+"pos": [
+33.6,
+347.4
+],
+"size": [
+202,
+166
+]
+},
+{
+"name": "12_flipper_n",
+"bone": "flipper_n",
+"z": 12,
+"pos": [
+174.6,
+568.2
+],
+"size": [
+149,
+82
+]
+},
+{
+"name": "13_root",
+"bone": "root",
+"z": 13,
+"pos": [
+73.2,
+586.8
+],
+"size": [
+570,
+65
+]
+}
+]
+}

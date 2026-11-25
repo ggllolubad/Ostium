@@ -1,0 +1,453 @@
+{
+"key": "patroness_monkey",
+"source": "worlds/world_XI_b_patroness_monkey",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+73,
+306,
+242,
+481
+],
+"bones": {
+"pelvis": {
+"pivot": [
+147.6,
+438.0
+],
+"parent": null
+},
+"torso": {
+"pivot": [
+162.0,
+396.0
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+176.4,
+345.6
+],
+"parent": "torso"
+},
+"astrolabe": {
+"pivot": [
+218.4,
+384.0
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+184.8,
+375.6
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+171.6,
+408.0
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+207.6,
+400.8
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+194.4,
+370.8
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+202.8,
+392.4
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+220.8,
+374.4
+],
+"parent": "forearm_f"
+},
+"thigh_n": {
+"pivot": [
+150.0,
+440.4
+],
+"parent": "pelvis"
+},
+"shin_n": {
+"pivot": [
+213.6,
+408.0
+],
+"parent": "thigh_n"
+},
+"foot_n": {
+"pivot": [
+172.8,
+458.4
+],
+"parent": "shin_n"
+},
+"thigh_f": {
+"pivot": [
+142.8,
+435.6
+],
+"parent": "pelvis"
+},
+"shin_f": {
+"pivot": [
+202.8,
+399.6
+],
+"parent": "thigh_f"
+},
+"foot_f": {
+"pivot": [
+159.6,
+456.0
+],
+"parent": "shin_f"
+},
+"tail_1": {
+"pivot": [
+138.0,
+435.6
+],
+"parent": "pelvis"
+},
+"tail_2": {
+"pivot": [
+86.4,
+381.6
+],
+"parent": "tail_1"
+},
+"tail_3": {
+"pivot": [
+96.0,
+322.8
+],
+"parent": "tail_2"
+}
+},
+"layers": [
+{
+"name": "00_tail_1",
+"bone": "tail_1",
+"z": 0,
+"pos": [
+81.0,
+385.2
+],
+"size": [
+64,
+62
+]
+},
+{
+"name": "01_tail_2",
+"bone": "tail_2",
+"z": 1,
+"pos": [
+73.2,
+325.2
+],
+"size": [
+28,
+79
+]
+},
+{
+"name": "02_tail_3",
+"bone": "tail_3",
+"z": 2,
+"pos": [
+81.0,
+307.8
+],
+"size": [
+54,
+135
+]
+},
+{
+"name": "03_thigh_f",
+"bone": "thigh_f",
+"z": 3,
+"pos": [
+132.0,
+388.8
+],
+"size": [
+82,
+59
+]
+},
+{
+"name": "04_shin_f",
+"bone": "shin_f",
+"z": 4,
+"pos": [
+144.0,
+389.4
+],
+"size": [
+74,
+77
+]
+},
+{
+"name": "05_thigh_f",
+"bone": "thigh_f",
+"z": 5,
+"pos": [
+139.8,
+399.6
+],
+"size": [
+64,
+41
+]
+},
+{
+"name": "06_foot_f",
+"bone": "foot_f",
+"z": 6,
+"pos": [
+146.4,
+448.8
+],
+"size": [
+49,
+33
+]
+},
+{
+"name": "07_upperarm_f",
+"bone": "upperarm_f",
+"z": 7,
+"pos": [
+183.6,
+365.4
+],
+"size": [
+28,
+41
+]
+},
+{
+"name": "08_forearm_f",
+"bone": "forearm_f",
+"z": 8,
+"pos": [
+194.4,
+367.2
+],
+"size": [
+35,
+40
+]
+},
+{
+"name": "09_hand_f",
+"bone": "hand_f",
+"z": 9,
+"pos": [
+209.4,
+353.4
+],
+"size": [
+20,
+25
+]
+},
+{
+"name": "10_torso",
+"bone": "torso",
+"z": 10,
+"pos": [
+114.0,
+342.0
+],
+"size": [
+106,
+118
+]
+},
+{
+"name": "11_astrolabe",
+"bone": "astrolabe",
+"z": 11,
+"pos": [
+197.4,
+346.8
+],
+"size": [
+45,
+74
+]
+},
+{
+"name": "12_thigh_n",
+"bone": "thigh_n",
+"z": 12,
+"pos": [
+139.8,
+394.8
+],
+"size": [
+87,
+69
+]
+},
+{
+"name": "13_shin_n",
+"bone": "shin_n",
+"z": 13,
+"pos": [
+169.2,
+395.4
+],
+"size": [
+59,
+74
+]
+},
+{
+"name": "14_thigh_n",
+"bone": "thigh_n",
+"z": 14,
+"pos": [
+147.6,
+406.2
+],
+"size": [
+69,
+53
+]
+},
+{
+"name": "15_foot_n",
+"bone": "foot_n",
+"z": 15,
+"pos": [
+160.2,
+451.8
+],
+"size": [
+49,
+30
+]
+},
+{
+"name": "16_head",
+"bone": "head",
+"z": 16,
+"pos": [
+133.2,
+306.0
+],
+"size": [
+66,
+67
+]
+},
+{
+"name": "17_upperarm_n",
+"bone": "upperarm_n",
+"z": 17,
+"pos": [
+161.4,
+370.8
+],
+"size": [
+37,
+46
+]
+},
+{
+"name": "18_forearm_n",
+"bone": "forearm_n",
+"z": 18,
+"pos": [
+162.0,
+386.4
+],
+"size": [
+52,
+35
+]
+},
+{
+"name": "19_upperarm_n",
+"bone": "upperarm_n",
+"z": 19,
+"pos": [
+168.6,
+366.0
+],
+"size": [
+26,
+44
+]
+},
+{
+"name": "20_forearm_n",
+"bone": "forearm_n",
+"z": 20,
+"pos": [
+165.6,
+397.2
+],
+"size": [
+37,
+29
+]
+},
+{
+"name": "21_hand_n",
+"bone": "hand_n",
+"z": 21,
+"pos": [
+202.8,
+391.8
+],
+"size": [
+25,
+24
+]
+},
+{
+"name": "22_root",
+"bone": "root",
+"z": 22,
+"pos": [
+124.8,
+470.4
+],
+"size": [
+110,
+11
+]
+}
+]
+}

@@ -1,0 +1,469 @@
+{
+"key": "great_copper",
+"source": "worlds/world_III_b_great_copper",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"firebox": {
+"pivot": [
+480.0,
+942.0
+],
+"parent": null
+},
+"boiler": {
+"pivot": [
+504.0,
+624.0
+],
+"parent": "firebox"
+},
+"valve": {
+"pivot": [
+252.0,
+126.0
+],
+"parent": "boiler"
+},
+"door": {
+"pivot": [
+296.4,
+738.0
+],
+"parent": "firebox"
+},
+"steam_1": {
+"pivot": [
+180.0,
+384.0
+],
+"parent": "boiler"
+},
+"steam_2": {
+"pivot": [
+660.0,
+492.0
+],
+"parent": "boiler"
+},
+"steam_3": {
+"pivot": [
+252.0,
+120.0
+],
+"parent": "boiler"
+},
+"attendant": {
+"pivot": [
+780.0,
+384.0
+],
+"parent": "boiler"
+},
+"stoker_1": {
+"pivot": [
+318.0,
+738.0
+],
+"parent": "firebox"
+},
+"stoker_2": {
+"pivot": [
+138.0,
+738.0
+],
+"parent": "firebox"
+},
+"stoker_3": {
+"pivot": [
+264.0,
+678.0
+],
+"parent": "firebox"
+},
+"stoker_4": {
+"pivot": [
+330.0,
+852.0
+],
+"parent": "firebox"
+}
+},
+"layers": [
+{
+"name": "00_boiler",
+"bone": "boiler",
+"z": 0,
+"pos": [
+67.8,
+0.0
+],
+"size": [
+892,
+754
+]
+},
+{
+"name": "01_valve",
+"bone": "valve",
+"z": 1,
+"pos": [
+65.4,
+99.0
+],
+"size": [
+235,
+80
+]
+},
+{
+"name": "02_steam_1",
+"bone": "steam_1",
+"z": 2,
+"pos": [
+0.0,
+61.8
+],
+"size": [
+229,
+345
+]
+},
+{
+"name": "03_steam_2",
+"bone": "steam_2",
+"z": 3,
+"pos": [
+614.4,
+221.4
+],
+"size": [
+209,
+292
+]
+},
+{
+"name": "04_steam_3",
+"bone": "steam_3",
+"z": 4,
+"pos": [
+177.6,
+0.0
+],
+"size": [
+101,
+121
+]
+},
+{
+"name": "05_boiler",
+"bone": "boiler",
+"z": 5,
+"pos": [
+648.6,
+0.0
+],
+"size": [
+173,
+957
+]
+},
+{
+"name": "06_attendant",
+"bone": "attendant",
+"z": 6,
+"pos": [
+655.8,
+268.8
+],
+"size": [
+204,
+463
+]
+},
+{
+"name": "07_firebox",
+"bone": "firebox",
+"z": 7,
+"pos": [
+9.0,
+594.6
+],
+"size": [
+879,
+365
+]
+},
+{
+"name": "08_firebox",
+"bone": "firebox",
+"z": 8,
+"pos": [
+292.8,
+762.6
+],
+"size": [
+191,
+197
+]
+},
+{
+"name": "09_stoker_4",
+"bone": "stoker_4",
+"z": 9,
+"pos": [
+272.4,
+831.6
+],
+"size": [
+75,
+44
+]
+},
+{
+"name": "10_stoker_4",
+"bone": "stoker_4",
+"z": 10,
+"pos": [
+264.6,
+838.2
+],
+"size": [
+38,
+76
+]
+},
+{
+"name": "11_stoker_4",
+"bone": "stoker_4",
+"z": 11,
+"pos": [
+16.8,
+844.8
+],
+"size": [
+301,
+82
+]
+},
+{
+"name": "12_firebox",
+"bone": "firebox",
+"z": 12,
+"pos": [
+280.8,
+637.2
+],
+"size": [
+195,
+226
+]
+},
+{
+"name": "13_stoker_1",
+"bone": "stoker_1",
+"z": 13,
+"pos": [
+262.2,
+720.0
+],
+"size": [
+73,
+47
+]
+},
+{
+"name": "14_stoker_1",
+"bone": "stoker_1",
+"z": 14,
+"pos": [
+256.8,
+736.2
+],
+"size": [
+37,
+76
+]
+},
+{
+"name": "15_stoker_1",
+"bone": "stoker_1",
+"z": 15,
+"pos": [
+0.0,
+721.2
+],
+"size": [
+293,
+127
+]
+},
+{
+"name": "16_firebox",
+"bone": "firebox",
+"z": 16,
+"pos": [
+12.6,
+649.8
+],
+"size": [
+196,
+215
+]
+},
+{
+"name": "17_stoker_2",
+"bone": "stoker_2",
+"z": 17,
+"pos": [
+123.0,
+720.0
+],
+"size": [
+70,
+49
+]
+},
+{
+"name": "18_stoker_2",
+"bone": "stoker_2",
+"z": 18,
+"pos": [
+162.0,
+737.4
+],
+"size": [
+38,
+75
+]
+},
+{
+"name": "19_stoker_2",
+"bone": "stoker_2",
+"z": 19,
+"pos": [
+0.0,
+768.6
+],
+"size": [
+236,
+82
+]
+},
+{
+"name": "20_firebox",
+"bone": "firebox",
+"z": 20,
+"pos": [
+147.6,
+578.4
+],
+"size": [
+193,
+156
+]
+},
+{
+"name": "21_stoker_3",
+"bone": "stoker_3",
+"z": 21,
+"pos": [
+247.8,
+663.0
+],
+"size": [
+52,
+62
+]
+},
+{
+"name": "22_stoker_3",
+"bone": "stoker_3",
+"z": 22,
+"pos": [
+220.2,
+694.2
+],
+"size": [
+78,
+37
+]
+},
+{
+"name": "23_stoker_3",
+"bone": "stoker_3",
+"z": 23,
+"pos": [
+187.8,
+693.6
+],
+"size": [
+88,
+42
+]
+},
+{
+"name": "24_door",
+"bone": "door",
+"z": 24,
+"pos": [
+284.4,
+741.0
+],
+"size": [
+96,
+178
+]
+},
+{
+"name": "25_firebox",
+"bone": "firebox",
+"z": 25,
+"pos": [
+74.4,
+547.2
+],
+"size": [
+463,
+402
+]
+},
+{
+"name": "26_boiler",
+"bone": "boiler",
+"z": 26,
+"pos": [
+0.0,
+147.0
+],
+"size": [
+128,
+188
+]
+},
+{
+"name": "27_root",
+"bone": "root",
+"z": 27,
+"pos": [
+0.0,
+933.6
+],
+"size": [
+960,
+25
+]
+}
+]
+}

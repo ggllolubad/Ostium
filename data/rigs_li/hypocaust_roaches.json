@@ -1,0 +1,233 @@
+{
+"key": "hypocaust_roaches",
+"source": "worlds/world_III_b_hypocaust_roaches",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+6,
+230,
+348,
+492
+],
+"bones": {
+"heap": {
+"pivot": [
+180.0,
+456.0
+],
+"parent": null
+},
+"grate": {
+"pivot": [
+198.0,
+446.4
+],
+"parent": "heap"
+},
+"crest": {
+"pivot": [
+180.0,
+384.0
+],
+"parent": "heap"
+},
+"spill_1": {
+"pivot": [
+108.0,
+456.0
+],
+"parent": "heap"
+},
+"spill_2": {
+"pivot": [
+60.0,
+465.6
+],
+"parent": "spill_1"
+},
+"runner_1": {
+"pivot": [
+24.0,
+468.0
+],
+"parent": "heap"
+},
+"runner_2": {
+"pivot": [
+284.4,
+470.4
+],
+"parent": "heap"
+},
+"runner_3": {
+"pivot": [
+78.0,
+445.2
+],
+"parent": "heap"
+}
+},
+"layers": [
+{
+"name": "00_heap",
+"bone": "heap",
+"z": 0,
+"pos": [
+10.2,
+436.8
+],
+"size": [
+339,
+44
+]
+},
+{
+"name": "01_grate",
+"bone": "grate",
+"z": 1,
+"pos": [
+69.0,
+307.8
+],
+"size": [
+196,
+152
+]
+},
+{
+"name": "02_heap",
+"bone": "heap",
+"z": 2,
+"pos": [
+24.0,
+363.6
+],
+"size": [
+284,
+125
+]
+},
+{
+"name": "03_crest",
+"bone": "crest",
+"z": 3,
+"pos": [
+126.6,
+349.8
+],
+"size": [
+117,
+77
+]
+},
+{
+"name": "04_spill_1",
+"bone": "spill_1",
+"z": 4,
+"pos": [
+37.8,
+449.4
+],
+"size": [
+87,
+39
+]
+},
+{
+"name": "05_spill_2",
+"bone": "spill_2",
+"z": 5,
+"pos": [
+21.0,
+450.6
+],
+"size": [
+45,
+28
+]
+},
+{
+"name": "06_runner_1",
+"bone": "runner_1",
+"z": 6,
+"pos": [
+4.8,
+457.8
+],
+"size": [
+27,
+23
+]
+},
+{
+"name": "07_runner_2",
+"bone": "runner_2",
+"z": 7,
+"pos": [
+278.4,
+460.2
+],
+"size": [
+25,
+21
+]
+},
+{
+"name": "08_runner_3",
+"bone": "runner_3",
+"z": 8,
+"pos": [
+64.2,
+430.2
+],
+"size": [
+23,
+22
+]
+},
+{
+"name": "09_heap",
+"bone": "heap",
+"z": 9,
+"pos": [
+7.8,
+463.8
+],
+"size": [
+313,
+28
+]
+},
+{
+"name": "10_crest",
+"bone": "crest",
+"z": 10,
+"pos": [
+106.8,
+228.6
+],
+"size": [
+80,
+140
+]
+},
+{
+"name": "11_heap",
+"bone": "heap",
+"z": 11,
+"pos": [
+83.4,
+366.6
+],
+"size": [
+176,
+71
+]
+}
+]
+}
