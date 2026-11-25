@@ -69,7 +69,7 @@ creature("arc_smith", "Arc-Smith", "foe", 38, armor=1, ranks=[1, 2], role="attac
 
 creature("bellows_imp", "Bellows Imp", "foe", 28, ranks=[3, 4], role="support",
          resist={"fire": "immune", "physical": "weak"},
-         intents={"fan": I("Fan the Flames", "debuff", "all_heroes", [A("fire", 1, attr="stable")]),
+         intents={"fan": I("Fan the Flames", "debuff", "all_heroes", [A("fire", 1, attr="stable", if_="t.fire>0")]),
                   "peck": I("Peck", "attack", "back", [D(3, times=2)]),
                   "flit": I("Flit", "defend", "self", [SELF("dodge", 1)]),
                   "stoke": I("Stoke", "buff", "ally_front", [ST("might", 1)])},
@@ -146,14 +146,15 @@ creature("hearth_cat", "Hearth Cat", "foe", 28, ranks=[1, 2], role="attacker", r
 
 # ================================================================== elites
 creature("cyclops_smith", "The Sparkblind Smith", "elite", 116, armor=3, ranks=[1, 2], role="attacker", resist=FORGE,
-         intents={"brand": I("Brand", "attack", "random", [D(9), A("fire", 2, attr="stable"), ST("mark", 1)]),
+         intents={"brand": I("Brand", "attack", "most_played", [D(9), A("fire", 2, attr="stable"), ST("mark", 1)]),
                   "bar": I("Turn the Bar", "buff", "self", [SELF("might", 2)]),
                   "bellow": I("Bellow", "debuff", "all_heroes", [STRESS(8)]),
-                  "hammer": I("Hammer Blow", "attack", "front", [D(15)]),
+                  "hammer": I("Hammer Blow", "attack", "marked", [D(15)]),
                   "quench": I("Quench", "defend", "self", [B(14), CLEANSE(3)])},
          ai=[{"use": "quench", "if": "elements_all>=6", "not_twice": True}, {"use": "brand", "every": 3},
              {"use": "bar", "every": 3, "offset": 1}, {"use": "bellow", "every": 4, "offset": 2}, {"use": "hammer"}],
-         traits=[T("hit", "By Ear", "He hears whoever strikes him: the attacker is Marked.", [ST("mark", 1)])],
+         traits=[T("hit", "By Ear", "He hears whoever strikes him: the attacker is Marked, and his hammer follows the Mark.",
+                   [ST("mark", 1)])],
          lore="The master smith watched the fire until the sparks took his eyes. He works by the ring of the iron now.",
          world=W)
 
@@ -200,14 +201,14 @@ creature("dray_horse", "The Dray Horse", "elite", 122, armor=3, ranks=[1], role=
 # ================================================================== rulers
 creature("anvil_titan", "The Anvil Titan", "ruler", 300, armor=4, span=2, ranks=[3, 4], role="attacker",
          charge_name="Rhythm", resist={"physical": "resist", "fire": "resist", "lightning": "resist", "water": "weak"},
-         intents={"tap": I("Tap the Anvil", "attack", "front", [D(9), A("lightning", 1, attr="stable")]),
-                  "blow": I("The Full Blow", "attack", "front",
+         intents={"tap": I("Tap the Anvil", "attack", "front", [D(9), A("lightning", 1, attr="stable"), ST("mark", 1)]),
+                  "blow": I("The Full Blow", "attack", "marked",
                             [D(14, pierce=True), A("lightning", 2, attr="stable"), A("fire", 1, attr="volatile"), CLR("charge")]),
                   "anvil": I("Become the Anvil", "defend", "self", [B(22), SELF("fortify", 2)]),
                   "furnace": I("Plasma Furnace", "attack", "all_heroes",
                                [D(3), A("lightning", 1, attr="stable"), A("fire", 1, attr="volatile")]),
                   "rivet": I("Rivet", "attack", "back", [D(10), ST("anchor", 2)]),
-                  "plasma": I("Every Blow Is Plasma", "attack", "front",
+                  "plasma": I("Every Blow Is Plasma", "attack", "marked",
                               [D(12, pierce=True), A("lightning", 1, attr="stable"), A("fire", 1, attr="volatile")])},
          ai=[{"use": "blow", "if": "charge>=2"}, {"use": "anvil", "every": 5, "offset": 3}, {"use": "tap"}],
          phases=[P(55, "The core splits and lightning spills from the seams.",
@@ -215,8 +216,8 @@ creature("anvil_titan", "The Anvil Titan", "ruler", 300, armor=4, span=2, ranks=
                        {"use": "tap"}], might=2),
                  P(20, "It leaves the anvil. There is no count now, and every blow is Plasma.",
                    ai=[{"use": "furnace", "every": 3}, {"use": "plasma"}], might=1)],
-         traits=[T("round_start", "Rhythm", "It taps on a count of three; the third beat is the full blow, Plasma "
-                   "through Block.", [SELF("charge", 1)])],
+         traits=[T("round_start", "Rhythm", "It taps on a count of three, Marking the hero it strikes; the third beat is "
+                   "the full blow on the Marked hero, Plasma through Block. A Taunt or Guard turns it.", [SELF("charge", 1)])],
          lore="The foundry's first work. Its makers built it to strike the anvil forever. It found something softer.",
          world=W)
 
@@ -244,7 +245,8 @@ creature("crucible", "The Crucible", "ruler", 290, armor=3, span=2, ranks=[3, 4]
 creature("storm_catcher", "The Storm-Catcher", "ruler", 280, armor=3, span=2, ranks=[3, 4], role="afflicter",
          flags=["immovable"], resist={"fire": "resist", "lightning": "resist", "frost": "weak"},
          intents={"fern": I("Fern the Skin", "debuff", "random", [ST("mark", 1), A("lightning", 2, attr="stable")]),
-                  "heave": I("Heave on the Cables", "attack", "all_heroes", [D(4), A("fire", 1, attr="volatile")]),
+                  "heave": I("Heave on the Cables", "attack", "all_heroes",
+                             [D(3), D(6, if_="t.mark>0"), A("fire", 1, attr="volatile")]),
                   "spark": I("Spark Down the Cable", "attack", "back", [D(10), A("fire", 1, attr="stable")]),
                   "lean": I("Lean Back", "defend", "self", [B(16)]),
                   "ferns": I("The Cables Sing", "debuff", "back2", [ST("mark", 1), A("lightning", 2, attr="stable")]),
@@ -310,18 +312,12 @@ E(W, "foundry_r_storm_catcher", "The Storm-Catcher", "He holds the storm by two 
   props="storm_catcher")
 
 NEEDS = [
-    "cyclops_smith By Ear: should target the hero who played the most cards last round (needs intent target "
-    "'most_played'); written as a trait that Marks whoever strikes him, with a random-target brand.",
-    "anvil_titan Something Softer: the full blow should fall on the hero it struck last unless Taunt or Guard turns it "
-    "(needs intent target 'last_struck'); written on the front hero.",
     "automaton_tender Wind the Machine: the wound machine should act twice next round; written as clearing its "
     "Clockwork and 2 Might.",
-    "bellows_imp Fan the Flames: should raise only Burn a hero already carries by 1; written as 1 Burn on every hero.",
-    "storm_catcher The Cables: Ward on a marked hero should clear the mark; Ward already cancels the Static his strike "
-    "needs, so the Plasma fails, but the Mark stays.",
+    "storm_catcher The Cables: Ward on a marked hero should clear the Mark (stripping one status); Ward already "
+    "cancels the Static his Plasma needs, but the Mark's bonus damage stays.",
     "crucible: phase 3 should also begin when the bell count completes, not only at 20% HP; written as the bell ringing "
     "at 6 in every phase.",
-    "bronze_automaton Wound Down: the intent text reads 'spends its Clockwork' for a round in which it does nothing.",
     "automaton_tender Wind the Machine: the intent text reads 'spends its charge' but the charge cleared is the "
     "machine's Clockwork (text should read 'winds it').",
 ]

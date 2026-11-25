@@ -16,7 +16,7 @@ TYPICAL = {"momentum": 3, "consumed": 4, "missing_hp": 14, "scars": 12, "hp_pct"
            "played": 2, "prime_count": 1, "reactions": 1, "enemies": 3, "allies": 4, "total_bleed": 6, "total_hex": 6,
            "total_doom": 6, "total_frost": 3, "ailments": 3, "flasks": 2, "flasks_used": 1, "stress": 40, "thorns": 3,
            "dealt": 8, "incoming": 15, "incoming_me": 8, "attackers": 1, "ward": 2, "focus": 1, "riposte": 2}
-MULT = {"S": 0.95, "C": 1.0, "U": 1.15, "R": 1.3, "X": 1.2, "K": 1.0, "N": 1.0, "W": 1.1, "F": 1.0}
+MULT = {"S": 0.95, "C": 1.0, "U": 1.15, "R": 1.3, "X": 1.2, "K": 0.7, "N": 1.0, "W": 1.1, "F": 1.0}
 
 
 def _qty(name):
@@ -55,6 +55,8 @@ def fx_points(fxs, card_target):
             v = 0
         else:
             v = PTS.get(t, 1) * max(1, n)
+        if t == "dmg" and "times_per" in f:
+            v *= 1 + _qty(f["times_per"])
         to = f.get("to", "")
         wide = to in ("all_enemies",) or (card_target == "all_enemies" and to in ("", "target"))
         allies = to in ("all_allies", "allies_other") or (card_target == "all_allies" and to in ("", "target"))
@@ -76,13 +78,15 @@ def report(cards):
             continue
         cost = c["cost"]
         pts = fx_points(c["fx"], c["target"])
-        if cost == "X" or not isinstance(cost, int):
+        if r == "F":
+            want = 5.0   # a flask is free to use; Brew prices it at 5 points (GATE3_VOCAB section 6)
+        elif cost == "X" or not isinstance(cost, int):
             want = 0
         elif cost == 0:
             want = 2.5
         else:
             want = 6 * cost * MULT[r]
-        if "Exhaust" in c.get("kw", []):
+        if "Exhaust" in c.get("kw", []) and r != "F":
             want *= 1.25
         if "Retain" in c.get("kw", []):
             want *= 0.95

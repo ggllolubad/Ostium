@@ -15,27 +15,27 @@ BACK = [3, 4]
 SB, IW, TG = "last_bastion", "ironwarden", "thornguard"
 
 # ------------------------------------------------------------------ kit
-card("bw_k_bar_the_door", "Bar the Door", 1, "K", "ally_other", [GUARD(), B(0, to="self", per="attackers", k=2)],
-     "Guard another hero this round. Gain 2 Block for each foe that means to strike you.", use=COVER, arch="core",
+card("bw_k_bar_the_door", "Bar the Door", 1, "K", "ally_other", [GUARD(), B(0, to="self", per="m.targeted", k=1)],
+     "Guard another hero this round. Gain 1 Block for each foe that means to strike them.", use=COVER, arch="core",
      flavour="A door is for keeping things out. He keeps it shut.",
      note="The Bulwark steps across the nave and sets the church door in front of the Oracle.",
-     up={"text": "Guard another hero this round. Gain 3 Block for each foe that means to strike you.",
-         "fx": [GUARD(), B(0, to="self", per="attackers", k=3)]})
+     up={"text": "Guard another hero this round. Gain 2 Block for each foe that means to strike them.",
+         "fx": [GUARD(), B(0, to="self", per="m.targeted", k=2)]})
 card("bw_k_come_on_then", "Come On, Then", 1, "K", "self", [SELF("taunt"), STRESS(-4)], "Taunt. Shed 4 stress.",
      sub=SB, arch=SB,
      flavour="He has been hit by worse. He says so, through the slit.",
      note="The bandaged Bulwark bangs the mace on the cracked door, calling the drowned to him.",
      up={"text": "Taunt. Shed 7 stress.", "fx": [SELF("taunt"), STRESS(-7)]})
-card("bw_k_bank_the_cold", "Bank the Cold", 1, "K", "self", [B(4), SELF("fortify")], "Gain 4 Block. Fortify.",
+card("bw_k_bank_the_cold", "Bank the Cold", 1, "K", "self", [B(3), SELF("fortify")], "Gain 3 Block. Fortify.",
      use=ALL, sub=IW, cat="frost", arch=IW,
      flavour="In the north they let the snow drift high against the wall. It holds.",
      note="Frost creeps across the pine door's windward planks as the Ironwarden settles behind it.",
-     up={"text": "Gain 6 Block. Fortify.", "fx": [B(6), SELF("fortify")]})
-card("bw_k_scourge", "Scourge", 1, "K", "self", [SELFDMG(1), SELF("thorns", 5)], "Lose 1 HP. Gain 5 Thorns.",
+     up={"text": "Gain 5 Block. Fortify.", "fx": [B(5), SELF("fortify")]})
+card("bw_k_scourge", "Scourge", 1, "K", "self", [SELFDMG(1), SELF("thorns", 4)], "Lose 1 HP. Gain 4 Thorns.",
      use=ALL, sub=TG, arch=TG,
      flavour="One stroke for the tower. One for the ones inside it.",
      note="The Thornguard lashes his own shoulder with the flagellant's cord; the barbs on his arms stand up.",
-     up={"text": "Lose 1 HP. Gain 7 Thorns.", "fx": [SELFDMG(1), SELF("thorns", 7)]})
+     up={"text": "Lose 1 HP. Gain 6 Thorns.", "fx": [SELFDMG(1), SELF("thorns", 6)]})
 
 # ------------------------------------------------------------------ starter (deck: 3 Brace, 3 Mace Blow, 2 Interpose,
 # 1 Hold the Line, 1 Over the Rim)
@@ -309,10 +309,10 @@ card("bw_weight_of_the_door", "Weight of the Door", 2, "U", "enemy", [D(6, per="
      note="The Bulwark charges behind the door and slams its full face into a foe.",
      up={"text": "Deal 9, plus your Block.", "fx": [D(9, per="block", k=1)]})
 card("bw_counterweight", "Counterweight", 1, "U", "enemy", [PULL(2), PRIME(3)],
-     "Pull the target forward 2. The next action in the Ordo deals 3 more.", hit=BACK, arch="core+duelist_followup",
+     "Pull the target forward 2. Prime 3.", hit=BACK, arch="core+duelist_followup",
      flavour="Out of the back rank. Into the blade's reach.",
      note="The Bulwark hauls a back-rank caster forward on the mace's flanges, straight onto the Duelist's line.",
-     up={"text": "Pull the target forward 2. The next action in the Ordo deals 5 more.", "fx": [PULL(2), PRIME(5)]})
+     up={"text": "Pull the target forward 2. Prime 5.", "fx": [PULL(2), PRIME(5)]})
 card("bw_close_ranks", "Close Ranks", 1, "U", "all_allies", [B(2), B(1, if_="t.ailments")],
      "Every hero gains 2 Block, and 1 more if they have an ailment.", use=ALL, arch="core",
      flavour="Shoulder to shoulder. The garrison way.",
@@ -541,15 +541,16 @@ card("bw_crown_of_iron_thorns", "Crown of Iron Thorns", 1, "L", "self", [SELF("t
      up={"text": "Gain 4 Thorns. Every other hero gains 2 Thorns. Rite: each time a foe strikes another hero, deal "
                  "damage equal to your Thorns to it. Exhaust.",
          "fx": [SELF("thorns", 4), ST("thorns", 2, to="allies_other")]})
-card("bw_the_scourged_hand", "The Scourged Hand", 2, "L", "enemy", [D(0, per="thorns", k=2)],
-     "Deal 2 for each Thorns you have. Rite: at the start of each round, double your Thorns. Exhaust.",
-     kw=["Rite", "Exhaust"], sub=TG, arch=TG,
-     rite={"on": "round_start", "fx": [DBL(s="thorns", to="self")]},
+card("bw_the_scourged_hand", "The Scourged Hand", 1, "L", "self", [SELF("thorns", 5)],
+     "Gain 5 Thorns. Rite: each time you play a card on a foe that means to attack, deal damage equal to your Thorns "
+     "to it. Exhaust.",
+     use=ALL, kw=["Rite", "Exhaust"], sub=TG, arch=TG,
+     rite={"on": "play", "if": "t.attacking", "fx": [D(0, per="thorns", k=1)]},
      flavour="Penance was the wound. Now it is the weapon.",
      note="The Thornguard's mace hand, wrapped in barbed cord to the elbow, comes down bloody.",
-     up={"text": "Gain 4 Thorns, then deal 2 for each Thorns you have. Rite: at the start of each round, double your "
-                 "Thorns. Exhaust.",
-         "fx": [SELF("thorns", 4), D(0, per="thorns", k=2)]})
+     up={"text": "Gain 5 Thorns and 6 Block. Rite: each time you play a card on a foe that means to attack, deal "
+                 "damage equal to your Thorns to it. Exhaust.",
+         "fx": [SELF("thorns", 5), B(6)]})
 
 # ------------------------------------------------------------------ hero
 HERO = {"name": "Bulwark", "hp": 48, "armor": 2, "grit": 3, "color": "7f9cc6", "kit": ["bw_k_bar_the_door"],
@@ -567,11 +568,8 @@ ARCHETYPES = {
 }
 
 NEEDS = [
-    "bw_k_bar_the_door: a target-side count of foes that mean to strike a hero (t.attackers), so the kit's Block counts "
-    "the blows aimed at the guarded hero as the brief intends. Written for now as foes that mean to strike the Bulwark.",
-    "bw_the_scourged_hand: the brief's 'his Thorns no longer fall' and 'his mace blows deal his Thorns twice'. Needs a "
-    "status or rite that stops the round-end Thorns halving, and a 'play' rite filter for attack cards (or 'hit by "
-    "this hero') to add Thorns to each blow. Written as doubling Thorns at round start plus one big blow.",
+    "bw_the_scourged_hand: the brief's 'his Thorns no longer fall' needs a way to stop the round-end Thorns halving, "
+    "and a 'play' rite filter for attack cards; the rite fires on any card played on a foe that means to attack.",
     "bw_the_door_does_not_fall: the brief's 'at Death's Door his last Grit is spent only once his Block is gone' needs "
     "an engine rule (a hit fully absorbed by Block costs no Grit). Written as a hit-at-Death's-Door rite.",
     "bw_the_long_night: a direct 'Freeze the target' effect at a Frost threshold. Written as 1 Volatile Water at 4 Frost, "

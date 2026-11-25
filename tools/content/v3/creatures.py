@@ -37,6 +37,10 @@ COND_WORD = {"hp_pct": "HP", "round": "round", "charge": "charge", "allies": "fo
              "armor": "Armor", "stress": "stress", "dd": "at Death's Door", "spectrum": "different courses"}
 
 
+TO_WHO = {"front2": "the two front heroes", "self_adjacent": "its neighbours", "killer": "its killer",
+          "all_enemies": "every hero", "front_enemy": "the front hero", "behind": "the hero behind", "adjacent": "the heroes beside them"}
+
+
 def humanize(c):
     """A short reading of a condition for intent text: 't.mark>0' -> 'if Marked', 'hp_pct<50' -> 'below 50% HP'."""
     import re as _re
@@ -76,9 +80,11 @@ def humanize(c):
 def text_of(fx, target, charge="charge"):
     """Plain intent text from effects. Kept short: the panel shows it beside the intent icon."""
     head, tail = [], []
+    extra = {}
     for f in fx:
         t, n = f["t"], f.get("n")
         to = f.get("to")
+        h0 = len(head)
         if t == "dmg":
             s = f"{n}"
             if f.get("times"):
@@ -157,10 +163,18 @@ def text_of(fx, target, charge="charge"):
                 head[-1] += f" ({cond})"
             elif tail:
                 tail[-1] += f" ({cond})"
+        if to in TO_WHO and len(head) > h0:
+            extra.setdefault(TO_WHO[to], []).append(head.pop())
     who = WHO[target]
+    def _join(items):
+        return ", ".join(items[:-1]) + " and " + items[-1] if len(items) > 1 else items[0]
+    clauses = []
     if head:
-        s = (", ".join(head[:-1]) + " and " + head[-1] if len(head) > 1 else head[0]) + f" to {who}"
-        return s + ("; " + ", ".join(tail) if tail else "")
+        clauses.append(_join(head) + f" to {who}")
+    for w2, items in extra.items():
+        clauses.append(_join(items) + f" to {w2}")
+    if clauses:
+        return "; ".join(clauses) + ("; " + ", ".join(tail) if tail else "")
     return (who[0].upper() + who[1:] + ": " if target != "self" else "") + ", ".join(tail)
 
 

@@ -284,7 +284,7 @@ creature("charred_destrier", "Charred Destrier", "foe", 46, armor=1, ranks=[1], 
          resist={"fire": "resist", "void": "resist", "water": "weak"},
          intents={
              "hooves": I("Both Forehooves", "attack", "front", [D(4, times=2)]),
-             "stake": I("It Knows the Way", "attack", "weakest", [D(11)]),
+             "stake": I("It Knows the Way", "attack", "most_burn", [D(11)]),
              "toss": I("Head Toss", "attack", "front2", [D(5)]),
          },
          ai=[{"use": "stake", "every": 3}, {"use": "toss", "every": 3, "offset": 1}, {"use": "hooves"}],
@@ -360,7 +360,6 @@ card("w_pyre_black_wax", "Black Wax", 1, "W", "enemy", [A("void", 1), D(2, per="
 NEEDS = [
     "confessor: 'The Grille' should strip one buff (any helpful status) from only the first hero to strike it each round; written as losing all Block and Momentum on every hit.",
     "candle_wraith: on death it should light again once next round at half HP unless Soaked (a self-revive); written as healing 4 each round while not Soaked.",
-    "charred_destrier: 'It Knows the Way' should target the hero with the most Burn (an intent target 'most_burn'); written as the most wounded hero.",
     "bellows_sister: on death every hero's Burn should halve, and 'Hard Pump' should also heat the company's fire on foes; written as 2 ailment stacks cleansed from every hero.",
     "saint_unending: a quantity for whether a unit carries Hollow Flame, so 'burns hotter' reads only Hollow Flame; written as any hero with Burn.",
     "ash_pardoner: 'Sell a Pardon' should pick the foe carrying the most Hex, Doom or Mark (an intent target); written as the most wounded foe, chosen when the company has laid 3+ Hex or Doom.",

@@ -57,9 +57,10 @@ creature("gas_miner", "Gas-Lung Miner", "foe", 38, armor=1, ranks=[1, 2], role="
                   "cough": I("Wet Cough", "debuff", "all_heroes", [A("toxin", 1, attr="stable")]),
                   "heavy": I("Wheezing Swing", "attack", "front", [D(6), A("toxin", 2, attr="stable")])},
          ai=[{"use": "cough", "every": 3}, {"use": "heavy", "every": 3, "offset": 1}, {"use": "pick"}],
-         traits=[T("hit", "Keep It from the Lamp", "Struck while it Burns, its chest bursts: it takes 10 and the hero "
-                   "who struck it gains 2 Burn.",
-                   [D(10, to="self", if_="fire>0"), A("fire", 2, attr="stable", if_="fire>0")])],
+         traits=[T("hit", "Keep It from the Lamp", "Struck while it Burns, its chest bursts: it takes 10, and the hero "
+                   "who struck it and the foes beside it gain 2 Burn.",
+                   [D(10, to="self", if_="fire>0"), A("fire", 2, attr="stable", if_="fire>0"),
+                    A("fire", 2, attr="stable", to="self_adjacent", if_="fire>0")])],
          lore="Its lungs are full of yellow gas. Keep it away from the lamp.", world=W)
 
 creature("brimstone_toad", "Brimstone Toad", "foe", 36, ranks=[2, 3], role="afflicter",
@@ -145,7 +146,7 @@ creature("weighman", "Weighman", "foe", 34, ranks=[3, 4], role="support",
 
 creature("lamp_room_girl", "Lamp-Room Girl", "foe", 30, ranks=[3, 4], role="support",
          resist={"fire": "resist", "water": "weak"},
-         intents={"hand_foe": I("Lamp for the Shift", "buff", "ally_front", [ST("might", 2)]),
+         intents={"hand_foe": I("Lamp for the Shift", "buff", "ally_front", [ST("empower", 4)]),
                   "hand_hero": I("Everyone Takes One", "debuff", "random", [ADD("t_pits_lamp")]),
                   "throw": I("Thrown Lamp", "attack", "back", [D(4), A("fire", 2, attr="stable")])},
          ai=[{"use": "hand_hero", "every": 3}, {"use": "hand_foe", "every": 3, "offset": 1}, {"use": "throw"}],
@@ -192,7 +193,7 @@ creature("miasma_matriarch", "Miasma Matriarch", "elite", 96, armor=2, ranks=[3,
 creature("mounted_overseer", "The Mounted Overseer", "elite", 110, armor=3, ranks=[1], role="support",
          resist={"fire": "resist", "toxin": "resist", "frost": "weak"},
          intents={"lash": I("Whip Lash", "debuff", "back", [D(6), ST("mark", 1)]),
-                  "barge": I("Pony Barges", "attack", "back", [D(12)]),
+                  "barge": I("Pony Barges", "attack", "marked", [D(12)]),
                   "drive": I("Drive the Shift", "buff", "all_allies", [ST("might", 1)]),
                   "cudgel": I("Cudgel", "attack", "front", [D(10), PUSH(1)])},
          ai=[{"use": "lash", "every": 3}, {"use": "barge", "every": 3, "offset": 2}, {"use": "drive", "every": 4, "offset": 1},
@@ -256,8 +257,8 @@ creature("owner", "The Owner", "ruler", 280, armor=3, span=2, ranks=[3, 4], role
                        {"use": "reach"}], might=2),
                  P(20, "He drops the lamp into the gas.",
                    ai=[{"use": "grab", "every": 3}, {"use": "lamp"}], might=1)],
-         traits=[T("hit", "Lamp in His Fist", "Struck while Stunned, he drops the lamp into the gas: every hero gains 2 "
-                   "Volatile Burn.", [A("fire", 2, attr="volatile", to="all_enemies", if_="stun>0")])],
+         traits=[T("lost_action", "Lamp in His Fist", "If he is Stunned or Frozen, he drops the lamp into the gas: every "
+                   "hero gains 2 Volatile Burn.", [A("fire", 2, attr="volatile", to="all_enemies")])],
          lore="He came down the shaft once, to see the gas for himself. He has swollen too fat to go back up.", world=W)
 
 creature("powder_mill", "The Powder Mill", "ruler", 300, armor=4, span=2, ranks=[3, 4], role="attacker",
@@ -338,17 +339,13 @@ E(W, "pits_r_powder_mill", "The Powder Mill", "The horse leans into the collar a
 NEEDS = [
     "lamp_room_girl / t_pits_lamp: the Lit Lamp should Burn its holder at round end if still in hand (no held-card "
     "round-end trigger); written as a throwable card that also Burns the thrower.",
-    "lamp_room_girl Lamp for the Shift: should make one foe's next attack add Burn; written as 2 Might on the front foe.",
+    "lamp_room_girl Lamp for the Shift: the lamp should make the foe's next attack add Burn; written as Empower 4.",
     "weighman Dock the Pay and Purse of Fines (gold theft, postponed by row 14): stress only, no death trait.",
     "burning_lung The Tongue: swallows the rearmost hero (postponed by row 14); written as a pull to the front plus stress.",
     "burning_lung Inhale/Exhale: the sac should hold what Inhale took and size Exhale by it; intents show fixed numbers, "
     "so Exhale is fixed and the sac drives timing and the Gas Sac trait.",
-    "owner Lamp in His Fist: should trigger when he is Stunned, Frozen or loses an action, not only when struck while "
-    "Stunned (needs an on-lost-action trigger).",
-    "mounted_overseer Drive the Shift: every foe's next attack should go at the Marked hero (needs intent target "
-    "'marked'); written as Might to every foe, with his own lash and barge both on the rear hero.",
+    "mounted_overseer Drive the Shift: every foe's next attack should go at the Marked hero (redirecting other foes' "
+    "attacks); written as Might to every foe, with his own barge on the Marked hero.",
     "miasma_matriarch: her gas-head young drift into empty ranks (no bible entry for the young, so no summon).",
-    "gas_miner Keep It from the Lamp: the burst should also Burn the foes beside it (needs 'adjacent to self' for traits).",
-    "burning_lung Inhale: intent text reads 'consume' for CONS(e=toxin); it should read 'draws off their Toxin'.",
     "powder_mill The Full Turn: the mill rolls forward; the 3-rank stone is redesigned to 2 ranks (row 13).",
 ]

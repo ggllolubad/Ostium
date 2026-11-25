@@ -32,7 +32,7 @@ creature(
         "shell": I("Hard Shell", "defend", "self", [B(10)]),
     },
     ai=[{"use": "shell", "if": "hp_pct<50", "not_twice": True}, {"use": "vent", "every": 3}, {"use": "pinch"}],
-    traits=[T("hit", "Steam Spout", "Every hit cracks the shell and it vents: the hero who hit it gains 1 Burn.",
+    traits=[T("hit", "Steam Spout", "Every hit cracks the shell and it vents: the hero who hit it gains 1 Burn (up to 5 times a round).",
               [A("fire", 1, attr="stable")])],
     lore="Cooked alive in the pools and somehow still walking.", world=W)
 
@@ -147,7 +147,7 @@ creature(
     "bath_mistress", "The Bath-Mistress", "elite", 100, armor=2, ranks=[2, 3], resist=HOT, role="support",
     personality="cruel",
     intents={
-        "ladle": I("Ladleful", "attack", "random", [D(4), A("water", 1, attr="stable"), A("fire", 1, attr="volatile")]),
+        "ladle": I("Ladleful", "attack", "most_burn", [D(4), A("water", 1, attr="stable"), A("fire", 1, attr="volatile")]),
         "scold": I("Scold", "debuff", "most_stress", [STRESS(6), ST("mark", 1)]),
         "attend": I("Attend", "heal", "ally_lowest", [H(14)]),
         "scrub": I("Scrubbing Brush", "attack", "front", [D(8), STEAL()]),
@@ -169,14 +169,14 @@ creature(
     },
     ai=[{"use": "refill", "if": "charge>=2"}, {"use": "pour", "every": 2}, {"use": "barge", "every": 5},
         {"use": "yoke"}],
-    traits=[T("hit", "Slopping Over", "Every hit on it slops water: the hero who hit it gains 1 Soak.",
+    traits=[T("hit", "Slopping Over", "Every hit on it slops water: the hero who hit it gains 1 Soak (up to 5 times a round).",
               [A("water", 1, attr="stable")])],
     lore="It carries the boiling water from the furnace to the pools. It carries other things, too.", world=W)
 
 creature(
     "strigil_master", "The Strigil-Master", "elite", 110, armor=3, ranks=[1], resist=HOT,
     intents={
-        "scrape": I("Long Scrape", "attack", "front", [D(6), STEAL(), LOSE_ARMOR(1)]),
+        "scrape": I("Long Scrape", "attack", "heaviest", [D(6), STEAL(), LOSE_ARMOR(1)]),
         "hands": I("Boiled Hands", "attack", "front", [D(13)]),
         "rake": I("Raking Scrape", "attack", "front2", [D(6), STEAL()]),
         "oil": I("Oil Down", "defend", "self", [B(8), SELF("dodge", 1)]),
@@ -232,14 +232,14 @@ creature(
     intents={
         "arms": I("A Dozen Arms", "attack", "back", [D(6), PULL(2), ST("anchor", 1), A("water", 1, attr="stable")]),
         "surge": I("The Heap Surges", "attack", "front2", [D(8)]),
-        "complain": I("Complaint", "debuff", "all_heroes", [STRESS(4)]),
+        "complain": I("Complaint", "debuff", "most_played", [STRESS(9)]),
         "fall": I("A Bather Falls Out", "summon", "self", [SUMMON("scalded_attendant", max=3)]),
         "steam": I("Steam of the Seventh Pool", "attack", "all_heroes", [A("water", 2, attr="stable"), A("fire", 1, attr="volatile")]),
         "settle": I("Settle", "defend", "self", [B(16)]),
     },
     ai=[{"use": "arms", "every": 3}, {"use": "steam", "every": 3, "offset": 1}, {"use": "complain", "every": 4, "offset": 2},
         {"use": "surge"}],
-    traits=[T("hit", "Complaint", "Every hero who hits the heap is complained at: 2 stress per hit.", [STRESS(2)])],
+    traits=[T("hit", "Complaint", "Every hero who hits the heap is complained at: 2 stress per hit (up to 5 times a round).", [STRESS(2)])],
     phases=[
         P(50, "The heap parts. Bathers fall out of it.",
           ai=[{"use": "fall", "if": "allies<3", "every": 2}, {"use": "steam", "every": 3}, {"use": "arms", "every": 3, "offset": 1},
@@ -311,7 +311,7 @@ encounter(W, "baths_e2", "The Furnace Stair", "The bearer comes up with both cau
           "Two cauldrons, two Scalds on the front ranks, then a round to strike back while it refills.")
 encounter(W, "baths_e3", "The Strigil Room", "He strips the guests, and the priest and the physic scald them.",
           ["strigil_master", "lustral_priest", "physic_of_the_waters"], "baths_furnace", E_,
-          "He takes Block and Armor and sheds courses; the priest and the Physic scald the stripped hero.")
+          "He scrapes the most armoured hero's Block and Armor and sheds courses; the priest and the Physic scald the stripped hero.")
 encounter(W, "baths_e4", "The Countess Is Carried In", "Her bearers, her dog and her pilgrim.",
           ["invalid_countess", "lapdog", "votive_pilgrim"], "baths_pool", E_,
           "She cannot be moved; the dog guards the wounded and her bell calls more of them.")
@@ -359,9 +359,8 @@ card("w_baths_open_valve", "Open the Valve", 1, "W", "all_enemies",
          "fx": [D(2, per="reactions", k=3)]})
 
 NEEDS = [
-    "best_families Complaint: should stress only the hero who dealt the heap the most damage last round; written as "
-    "2 stress per hit to the hero who hits it.",
-    "best_families: the role map's 3-rank heap is redesigned to 2 ranks (DECISIONS row 13); phase 2's 'shrinks' is flavour only.",
+    "best_families Complaint: should stress the hero who dealt the heap the most damage last round; written as 2 "
+    "stress per hit on the hitter and a Complaint intent at the busiest hero.",
     "simmering_matron Sloughing: written as a round-start CLEANSE gated on hp_pct<55; CLEANSE on a foe must remove "
     "its course stacks.",
     "bath_mistress Keeps the Water Hot: should stop Soak fading on heroes; written as 1 Soak to every hero each round.",
@@ -369,5 +368,4 @@ NEEDS = [
     "as 6 Block each round plus the immovable flag.",
     "lapdog Her Dog: should Guard the Invalid Countess specifically; written as guarding the weakest foe.",
     "strigil_master Long Scrape: should also strip Ward (no enemy Ward-removal effect).",
-    "cauldron_bearer Two cauldrons: counted with the charge status ('Empty'); refills at 2.",
 ]

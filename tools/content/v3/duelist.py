@@ -237,15 +237,15 @@ card("du_catch_the_rhythm", "Catch the Rhythm", 0, "U", "self",
      up={"text": "Gain 1 Momentum. If you have played a card this round, gain 1 more.",
          "fx": [SELF("momentum", 1), SELF("momentum", 1, if_="played>=1")]})
 card("du_serrated_rhythm", "Serrated Rhythm", 1, "U", "self", [ST("bleed", 1, to="front_enemy")],
-     "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play applies 1 Bleed "
-     "to the foe in rank 1, up to 3 times a round. Exhaust.",
+     "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play on a foe also "
+     "applies 1 Bleed to it, up to 3 times a round. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], arch=BD + "+" + BL,
-     rite={"on": "play", "cat": "physical", "per_round": 3, "fx": [ST("bleed", 1, to="front_enemy")]},
+     rite={"on": "play", "cat": "physical", "if": "!t.played", "per_round": 3, "fx": [ST("bleed", 1)]},
      flavour="Notch the edge. Every touch after that leaves something behind.",
      note="The Bladedancer draws a file along the second blade; its edge comes up toothed.",
-     up={"text": "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play "
-                 "applies 1 Bleed to the foe in rank 1, up to 5 times a round. Exhaust.",
-         "rite": {"on": "play", "cat": "physical", "per_round": 5, "fx": [ST("bleed", 1, to="front_enemy")]}})
+     up={"text": "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play on "
+                 "a foe also applies 1 Bleed to it, up to 5 times a round. Exhaust.",
+         "rite": {"on": "play", "cat": "physical", "if": "!t.played", "per_round": 5, "fx": [ST("bleed", 1)]}})
 card("du_shatter_point", "Shatter Point", 1, "U", "enemy", [D(4), D(4, if_="t.frost>0")],
      "Deal 4. Deal 4 more if the target has Weaken.", arch=BD + "+elementalist_frost",
      flavour="Cold steel, colder foe. Strike the frost and it breaks.",
@@ -529,16 +529,15 @@ card("du_full_letting", "Full Letting", 2, "X", "enemy", [FIN(), ST("bleed", 2, 
 
 # ------------------------------------------------------------------ legendary (win conditions, not budgeted)
 card("du_the_endless_measure", "The Endless Measure", 1, "L", "self", [SELF("momentum", 1)],
-     "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play after your second in a round "
-     "also deals 3 to the foe in rank 1. Exhaust.",
+     "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play on a foe after your second card "
+     "in a round also deals 3 to it. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], sub=BD, arch=BD,
-     rite={"on": "play", "cat": "physical", "if": "played>=3", "fx": [D(3, to="front_enemy")]},
+     rite={"on": "play", "cat": "physical", "if": "played>=3&!t.played", "fx": [D(3)]},
      flavour="The music never stops. The dancer stopped counting long ago.",
      note="The Bladedancer moves through the whole throne room in one unbroken phrase of cuts.",
-     up={"text": "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play after your second "
-                 "in a round also deals 3 to the foe in rank 1 and applies 1 Bleed to it. Exhaust.",
-         "rite": {"on": "play", "cat": "physical", "if": "played>=3",
-                  "fx": [D(3, to="front_enemy"), ST("bleed", 1, to="front_enemy")]}})
+     up={"text": "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play on a foe after your "
+                 "second card in a round also deals 3 to it and applies 1 Bleed to it. Exhaust.",
+         "rite": {"on": "play", "cat": "physical", "if": "played>=3&!t.played", "fx": [D(3), ST("bleed", 1)]}})
 card("du_two_blades_one_heart", "Two Blades, One Heart", 1, "L", "self", [SELF("momentum", 2)],
      "Gain 2 Momentum. Rite: for the rest of the fight, each Finisher you play also deals 5 to each foe in ranks 1 "
      "and 2, and you Dodge the next hit this round. Exhaust.",
@@ -575,15 +574,15 @@ card("du_the_long_sentence", "The Long Sentence", 1, "L", "enemy", [ST("mark", 2
          "rite": {"on": "play", "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=10"),
                                        D(2, to="all_enemies", if_="t.mark>=10")]}})
 card("du_red_tide", "Red Tide", 1, "L", "self", [ST("bleed", 2, to="all_enemies")],
-     "Apply 2 Bleed to every foe. Rite: at the end of each round, every foe with Bleed gains 1 Bleed. Exhaust.",
+     "Apply 2 Bleed to every foe. Rite: for the rest of the fight, when a foe dies, every foe gains Bleed equal to "
+     "the Bleed it had. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], sub=BL, arch=BL,
-     rite={"on": "round_end", "fx": [ST("bleed", 1, to="all_enemies", if_="t.bleed>0")]},
+     rite={"on": "kill", "fx": [ST("bleed", 0, per="m.bleed", k=1, to="all_enemies")]},
      flavour="The bowl was never big enough. Let the floor hold it.",
      note="The nave floor runs red from wall to wall, and the Bloodletter wades through it.",
-     up={"text": "Apply 2 Bleed to every foe. Rite: at the end of each round, every foe with Bleed gains 1 Bleed, "
-                 "and the foe in rank 1 gains 2 more. Exhaust.",
-         "rite": {"on": "round_end", "fx": [ST("bleed", 1, to="all_enemies", if_="t.bleed>0"),
-                                            ST("bleed", 2, to="front_enemy")]}})
+     up={"text": "Apply 2 Bleed to every foe. Rite: for the rest of the fight, when a foe dies, every foe gains Bleed "
+                 "equal to the Bleed it had, plus 2. Exhaust.",
+         "rite": {"on": "kill", "fx": [ST("bleed", 2, per="m.bleed", k=1, to="all_enemies")]}})
 card("du_the_bowl_runs_over", "The Bowl Runs Over", 1, "L", "self",
      [H(0, per="total_bleed", k=1, to="lowest_ally")],
      "The most wounded hero heals 1 per Bleed on all foes. Rite: at the end of each round, the most wounded hero "
@@ -614,11 +613,11 @@ ARCHETYPES = {
 }
 
 NEEDS = [
-    "du_serrated_rhythm and du_the_endless_measure: 'play' rites have no target (they land on the owner), so the brief's "
-    "'each hit adds Bleed' and 'each cut strikes again' are written on the foe in rank 1. Wanted: the played card's "
-    "target as the rite's target, and a filter for cards aimed at a foe so Parry and Light Feet do not count.",
-    "du_the_endless_measure: wanted each cut after the second to repeat at half power (an Echo per card). Written as a "
-    "flat 3 damage to the front foe.",
+    "du_serrated_rhythm and du_the_endless_measure: a play-rite filter for cards aimed at a foe. Written as "
+    "'!t.played' (foes never play cards; the owner always has), which still lets a physical card played on an ally "
+    "who has not acted yet (Quickstep, Let the Fever Out) trigger the rite on that ally.",
+    "du_the_endless_measure: wanted each cut after the second to repeat at half power (an Echo per card). Written as "
+    "a flat 3 damage to the card's target.",
     "du_two_blades_one_heart: the brief's 'while holding 3+ Momentum, Dodge the first blow each round' is a second "
     "trigger (round_start, if momentum>=3); a rite has one. The Dodge rides on the Finisher trigger instead.",
     "du_the_headsmans_round: wanted the Execute to refund its vigour this round and strike only the next Marked foe. "
@@ -626,6 +625,6 @@ NEEDS = [
     "du_the_long_sentence: wanted its own Sentence counter fed by every hero's hits on one foe. Written as Doom (the "
     "Hexweaver's status) from this hero's plays, with Mark 20 tagging the sentenced foe (rite reads t.mark>=10). "
     "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
-    "du_red_tide: wanted Bleed that does not fall and passes to neighbours when a bleeding foe dies (the 'kill' "
-    "trigger carries no subject). Written as +1 Bleed to every bleeding foe at round end, which offsets the fall.",
+    "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
+    "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",
 ]

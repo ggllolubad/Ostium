@@ -69,12 +69,12 @@ card("or_stutter", "Stutter", 1, "C", "enemy", [D(4), A(V, 1)], "Echo. Deal 4. A
      flavour="The moment skips, and the foe is struck twice by one blow.",
      note="Two ghost images of the same pointing hand, one a beat behind.",
      arch=CH, up={"text": "Echo. Deal 6. Apply 1 Void.", "fx": [D(6), A(V, 1)]})
-card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, if_="same_target")],
-     "Deal 4. Deal 4 more if the action just before this one targeted the same foe.", cat=V,
+card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, if_="t.delayed")],
+     "Deal 4. Deal 4 more if the target was Delayed this round.", cat=V,
      flavour="It waited for you. It should not have.",
      note="A foe frozen mid-step while a second blow arrives from behind it.",
-     arch=CH + "+" + FB, up={"text": "Deal 5. Deal 6 more if the action just before this one targeted the same foe.",
-                             "fx": [D(5), D(6, if_="same_target")]})
+     arch=CH, up={"text": "Deal 5. Deal 6 more if the target was Delayed this round.",
+                   "fx": [D(5), D(6, if_="t.delayed")]})
 card("or_quicken", "Quicken", 1, "C", "ally_other", [ST("momentum", 2), B(3)],
      "Another hero gains 2 Momentum and 3 Block.", cat=V,
      flavour="Your hour, given early. Spend it well.",
@@ -95,12 +95,12 @@ card("or_knucklebones", "Cast the Knucklebones", 1, "C", "enemy", [D(3), A(V, 1)
      note="Knucklebones skitter across the floor toward a foe's raised weapon.",
      arch=AU, up={"text": "Deal 4. Apply 1 Void. If the target means to attack, gain 3 Omen.",
                   "fx": [D(4), A(V, 1), OMEN(3, if_="m.attacking")]})
-card("or_forewarn", "Forewarn", 1, "C", "ally", [B(3, per="incoming", k=0.25)],
-     "A hero gains 3 Block, plus 1 per 4 damage the foes mean to deal this round.", cat=V,
+card("or_forewarn", "Forewarn", 1, "C", "ally", [B(3, per="t.incoming_to", k=0.5)],
+     "A hero gains 3 Block, plus 1 per 2 damage the foes mean to deal them this round.", cat=V,
      flavour="Left shoulder. Now.",
      note="The Oracle's hand on an ally's arm, turning them a half step.",
-     arch=AU, up={"text": "A hero gains 4 Block, plus 1 per 3 damage the foes mean to deal this round.",
-                  "fx": [B(4, per="incoming", k=0.34)]})
+     arch=AU, up={"text": "A hero gains 4 Block, plus 2 per 3 damage the foes mean to deal them this round.",
+                  "fx": [B(4, per="t.incoming_to", k=0.67)]})
 card("or_bird_bone_ward", "Bird-Bone Ward", 1, "C", "self", [W(1, to="all_allies"), OMEN(1, if_="incoming")],
      "Every hero gains 1 Ward. If any foe means to attack, gain 1 Omen.", cat=V,
      flavour="A wren's skull on a thread. It hears the course before it comes.",
@@ -570,8 +570,6 @@ HERO = {"name": "Oracle", "hp": 28, "armor": 0, "grit": 2, "color": "6d5a8a", "k
         "blurb": "The Anchorite. Reads the foes' intents, Delays the blow that matters and Primes the company's best."}
 
 NEEDS = [
-    "Late Blow: wanted bonus damage against a foe Delayed this round (a t.delayed quantity); written as a follow-up.",
-    "Forewarn: wanted Block that grows with the damage aimed at the chosen hero (t.incoming); uses the company total.",
     "Bird-Bone Ward: wanted Ward only on heroes a course intent targets, and Omen when a Ward cancels a stack.",
     "Turn the Glass (Chronomancer kit): wanted 'your next card this round gains Echo'; written as a small Echo hit.",
     "Read the Bones (Augur kit): wanted to reveal one foe's intent for next round as well as gain Omen.",
@@ -581,9 +579,4 @@ NEEDS = [
     "damage to a foe pushed into next round; written on the front foe. The rite must fire after intents are chosen.",
     "The Rubric: wanted every Prime to also strengthen the action after it; written as Prime 3 per card played.",
     "The Severed Thread: wanted 'the action that spends the round's third Prime resolves twice'; written as an "
-    "Execute at the damage dealt once 3 Primes are spent.",
-    "Prime: the engine spends Prime only on damage. The brief has Prime boost course applications and belt flasks "
-    "(row 'Prime on belt flasks'); Guiding Word and Needle and Thread give Focus until then.",
-    "Prime stacking: the engine zeroes Prime at every action, so a Prime-only card (Knot, Bind Fate) eats the Prime "
-    "placed before it. The brief wants consecutive Primes to add up onto the next damaging action.",
-]
+    "Execute at the damage dealt once 3 Primes are spent.",]

@@ -15,7 +15,7 @@ Text words: "attuned course" is the course the Elementalist is attuned to; "the 
 the ring (fire, frost, lightning, water, toxin, void, then fire again). Conjoin n: one Stable stack of the target's
 largest course becomes n Volatile, setting off its Conjunctions now.
 
-Card ids carry the prefix el_. Cards that apply the attuned course use cat=ATT (see NEEDS)."""
+Card ids carry the prefix el_. Cards that apply the attuned course use cat="attuned"."""
 from dsl import *
 
 set_class("elementalist", [2, 3, 4], [1, 2, 3, 4])
@@ -23,7 +23,7 @@ ALL = [1, 2, 3, 4]
 CLOSE = [1, 2]
 BACK = [3, 4]
 F, FR, L, WA, T, V = "fire", "frost", "lightning", "water", "toxin", "void"
-ATT = "void"  # placeholder for the engine's "attuned" cat, which build_v3 does not list yet (NEEDS)
+ATT = "attuned"
 AC, CA, PR = "accumulator", "catalyst", "prismatic"
 VOL = "volatile"
 
@@ -618,8 +618,6 @@ ARCHETYPES = {
 }
 
 NEEDS = [
-    "Cards that apply the attuned course want cat='attuned' (the engine and card UI already support it); build_v3 "
-    "CATS lacks it, so they are written with cat=ATT ('void') as a placeholder.",
     "el_turn_the_ring: the brief's 'Attune to a course you choose' needs a course picker for ATTUNE_TO. Written as a "
     "one-step ATTUNE, which cannot dodge a resisted course quickly.",
     "el_stopper_the_jar, el_seal_the_jar: the brief's 'the target's stacks do not fall this round / next round' without "

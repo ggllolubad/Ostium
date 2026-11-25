@@ -15,8 +15,8 @@ LOCK = [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile")]
 
 # ================================================================== cards foes put in a hand
 card("t_spire_written_in", "Written into the Table", 0, "Curse", "none", [],
-     "Unplayable. When drawn, you gain 1 Frost, then 1 Volatile Lightning. Temporary.",
-     kw=["Temporary", "Curse", "Unplayable"], on_draw=list(LOCK),
+     "Unplayable. When drawn, you act last this round. Temporary.",
+     kw=["Temporary", "Curse", "Unplayable"], on_draw=[ST("lockdown", 1)],
      flavour="It worked out where every star would be for the next hundred years. It is still right.",
      note="The Ephemeris Clerk's quill scratches a hero's name into a frosted column of figures.")
 
@@ -102,7 +102,7 @@ creature("frozen_halberdier", "Frozen Halberdier", "foe", 44, armor=2, ranks=[2]
 creature("ephemeris_clerk", "Ephemeris Clerk", "foe", 34, ranks=[3, 4], role="afflicter",
          resist={"frost": "resist", "lightning": "resist", "fire": "weak"},
          intents={"write": I("Write into the Table", "debuff", "random", [ADD("t_spire_written_in")]),
-                  "quill": I("Quill Flick", "attack", "random", [D(6), A("lightning", 1, attr="stable")]),
+                  "quill": I("Quill Flick", "attack", "marked", [D(6), A("lightning", 1, attr="stable")]),
                   "sums": I("The Long Sums", "debuff", "all_heroes", [A("frost", 1, attr="stable")])},
          ai=[{"use": "write", "every": 3}, {"use": "sums", "every": 3, "offset": 1}, {"use": "quill"}],
          personality="cunning",
@@ -110,7 +110,7 @@ creature("ephemeris_clerk", "Ephemeris Clerk", "foe", 34, ranks=[3, 4], role="af
 
 creature("college_tortoise", "The College Tortoise", "foe", 50, armor=2, ranks=[1], role="defender",
          resist={"frost": "resist", "fire": "weak"},
-         intents={"bite": I("Slow Crushing Bite", "attack", "front", [D(12), A("frost", 2, attr="stable")]),
+         intents={"bite": I("Slow Crushing Bite", "attack", "front", [D(12), A("frost", 1, attr="stable"), ST("lockdown", 1)]),
                   "shell": I("Into the Shell", "defend", "self", [B(12)]),
                   "pause": I("The Long Pause", "defend", "self", [B(6)])},
          ai=[{"use": "bite", "every": 2}, {"use": "shell", "if": "hp_pct<50", "not_twice": True}, {"use": "pause"}],
@@ -132,7 +132,7 @@ creature("patroness", "The Patroness", "foe", 34, ranks=[3, 4], role="support",
 
 creature("patroness_monkey", "The Patroness's Monkey", "foe", 30, ranks=[4], role="afflicter",
          resist={"frost": "resist", "fire": "weak"},
-         intents={"steal": I("Leap and Bite", "attack", "random", [STEAL(), D(5)]),
+         intents={"steal": I("Leap and Bite", "attack", "marked", [STEAL(), D(5)]),
                   "chatter": I("Chatter", "debuff", "back", [A("frost", 2, attr="stable")]),
                   "scamper": I("Scamper", "defend", "self", [SELF("dodge", 1)])},
          ai=[{"use": "scamper", "if": "hp_pct<50", "not_twice": True}, {"use": "chatter", "every": 3}, {"use": "steal"}],
@@ -148,8 +148,8 @@ creature("speculum_bearer", "Speculum Bearer", "foe", 46, armor=1, ranks=[1, 2],
                   "flash": I("The Mirror Flashes", "debuff", "random",
                              [A("frost", 1, attr="stable"), A("lightning", 1, attr="stable")])},
          ai=[{"use": "wall", "if": "ally_hurt", "not_twice": True}, {"use": "flash", "every": 3}, {"use": "edge"}],
-         traits=[T("hit", "Face-Out", "The first hero to strike the mirror each round while carrying any course sees it "
-                   "returned: they gain 1 Static.", [A("lightning", 1, attr="stable", if_="t.spectrum>0")])],
+         traits=[T("course", "Face-Out", "The first course laid on the mirror each round is flashed back: the hero who "
+                   "laid it gains 1 Static.", [A("lightning", 1, attr="stable")])],
          lore="The great mirror was too heavy for two men. They gave it to one.", world=W)
 
 creature("clock_jack", "Clock Jack", "foe", 40, armor=1, ranks=[2], role="attacker", charge_name="Hours",
@@ -167,7 +167,7 @@ creature("gate_mastiff", "Gate Mastiff", "foe", 42, armor=1, ranks=[1], role="at
          resist={"frost": "resist", "fire": "weak"},
          intents={"bite": I("Chain-Length Bite", "attack", "front", [D(7), ST("anchor", 2)]),
                   "lunge": I("Lunge", "attack", "front", [D(10)]),
-                  "snap": I("Snap", "attack", "rank2", [D(6)])},
+                  "snap": I("Snap", "attack", "marked", [D(6)])},
          ai=[{"use": "bite", "every": 3}, {"use": "snap", "every": 3, "offset": 1}, {"use": "lunge"}],
          traits=[T("hit", "Barks at Strangers", "Struck by a hero who moved this round, it lunges back: that hero takes "
                    "3.", [D(3, if_="t.moved")])],
@@ -176,7 +176,7 @@ creature("gate_mastiff", "Gate Mastiff", "foe", 42, armor=1, ranks=[1], role="at
 # ================================================================== elites
 creature("horologist", "The Horologist", "elite", 95, armor=2, ranks=[2, 3], role="support",
          resist={"frost": "resist", "lightning": "resist", "fire": "weak"},
-         intents={"click": I("Click of the Watch", "debuff", "random", list(LOCK)),
+         intents={"click": I("Click of the Watch", "debuff", "first_actor", [ST("lockdown", 1), A("frost", 1, attr="stable")]),
                   "rewind": I("Rewind", "heal", "all_allies", [H(8)]),
                   "spark": I("Escapement Spark", "attack", "back", [D(9), A("lightning", 2, attr="stable")]),
                   "wind": I("Wind the Watch", "buff", "all_allies", [ST("might", 1)]),
@@ -225,8 +225,8 @@ creature("rodwarden", "The Rodwarden", "elite", 100, armor=2, ranks=[2, 3], role
          ai=[{"use": "strike", "if": "charge>=3"}, {"use": "mend", "if": "hp_pct<50", "not_twice": True},
              {"use": "ground", "every": 3}, {"use": "plant"}],
          traits=[T("round_start", "Lightning Rods", "Round start: he draws all Static off every foe into his rods and "
-                   "stores 1 Strike for it.",
-                   [CONS(e="lightning", to="all_allies"), SELF("charge", 1, if_="consumed>0")])],
+                   "stores 1 Strike per Static drawn.",
+                   [CONS(e="lightning", to="all_allies"), SELF("charge", 0, per="consumed", k=1)])],
          lore="He kept the spire's rods so the lightning went into the ground. Then the ground froze.", world=W)
 
 # ================================================================== rulers
@@ -235,7 +235,7 @@ creature("last_hour", "The Last Hour", "ruler", 300, armor=3, span=2, ranks=[3, 
          resist={"frost": "resist", "lightning": "resist", "physical": "resist", "water": "weak"},
          intents={"strike": I("Strike the Hour", "attack", "front", [D(16)]),
                   "pendulum": I("Pendulum", "attack", "back2", [D(7)]),
-                  "chime": I("The Chime", "debuff", "all_heroes", list(LOCK)),
+                  "chime": I("The Chime", "debuff", "first_actor", [ST("lockdown", 2), STRESS(4)]),
                   "stop": I("Stop All Clocks", "debuff", "all_heroes",
                             [A("frost", 2, attr="stable"), A("lightning", 1, attr="stable"), STRESS(6)]),
                   "wind": I("Wind the Spring", "defend", "self", [B(16), SELF("might", 1)]),
@@ -255,7 +255,7 @@ creature("last_hour", "The Last Hour", "ruler", 300, armor=3, span=2, ranks=[3, 
 
 creature("stilled_college", "The Stilled College", "ruler", 290, armor=3, span=2, ranks=[1, 2], role="afflicter",
          resist={"frost": "resist", "lightning": "resist", "fire": "weak"},
-         intents={"vote": I("The Vote", "debuff", "front", [D(6)] + LOCK),
+         intents={"vote": I("The Vote", "debuff", "first_actor", [D(6)] + LOCK),
                   "order": I("Point of Order", "debuff", "back", [A("frost", 2, attr="stable"), STRESS(6)]),
                   "arms": I("Forest of Arms", "attack", "front2", [D(9)]),
                   "minutes": I("Enter It in the Minutes", "defend", "self", [B(14)]),
@@ -346,21 +346,14 @@ E(W, "spire_r_great_refractor", "The Great Refractor", "The telescope is aimed d
   "Read the sight a round ahead and Swap out of it.", props="great_refractor")
 
 NEEDS = [
-    "Lockdown as a plain hero ailment ('acts last next round', no Conjunction, so Ward does not stop it): wanted by "
-    "ephemeris_clerk (written as a Temporary curse that locks on draw), college_tortoise's bite and the Last Hour's "
-    "chime on the hero who acted first.",
-    "t_spire_written_in: on_draw must fire for cards added to the next hand.",
     "clock_sentry, gin_ox: should also ignore Lockdown (flag 'unlockable'); written as unstunnable.",
     "last_hour Stop All Clocks: the company's Ordo should resolve in reverse for a round; written as frost, Static and "
     "stress. The Minute Hand should also move once more for each hero it locked last round.",
-    "stilled_college The Vote: should lock the hero who led the last Ordo (intent target 'first_actor'); Aye should "
-    "count locked heroes (quantity 'heroes_locked').",
+    "stilled_college Aye: should count locked heroes (quantity 'heroes_locked'); written as total Weaken.",
     "great_refractor: the sight should be a rank resolved when it acts, so a Swap dodges it; the assistant on the "
     "ladder (rank 4 behind the pier) is left out.",
     "gear_spider Rebuild: should rebuild the brass ally that fell (Sentry or Jack); written as a Clock Sentry.",
-    "patroness Through the Spyglass: every foe should act on the Marked hero first (intent target 'marked').",
     "patroness_monkey: should steal the hero's next buff (Prime, Might, Momentum) and jump ranks at round start; "
     "written as stealing Block.",
-    "speculum_bearer Face-Out: should reflect the first course stack applied to it each round.",
-    "rodwarden Lightning Rods: should store 1 Strike per Static drawn, not 1 a round.",
+    "speculum_bearer Face-Out: should return the same course it was given (redirect); written as Static.",
 ]

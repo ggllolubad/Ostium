@@ -9,9 +9,9 @@ func _init() -> void:
 		var c: Dictionary = Data.CARDS[id]
 		if c.cls == "shared" or c.target == "none":
 			continue
-		var cls: String = c.cls
-		var party: Array = others[cls].duplicate()
-		var rank: int = c.use[0]
+		var cls: String = c.cls if Data.HEROES.has(c.cls) else "oracle"   # neutral, world and flask cards: any calling
+		var party: Array = others.get(cls, ["bulwark", "duelist"]).duplicate()
+		var rank: int = c.use[0] if c.use.size() > 0 else 1
 		party.insert(min(rank - 1, party.size()), cls)
 		var s := Combat.new_state(party, ["thrall", "warden", "siren"], 7)
 		Combat.start_round(s)
@@ -42,12 +42,12 @@ func _init() -> void:
 			if a.target == -1:
 				push_error("no legal target for " + id)
 				continue
-		var before := JSON.stringify(s.heroes) + JSON.stringify(s.enemies)
+		var before := JSON.stringify(s.heroes) + JSON.stringify(s.enemies) + JSON.stringify([s.rites, s.belt, s.belt_next, s.prime])
 		var r := Combat.resolve_player_action(s, a)
 		if r != "":
 			push_error("card %s fizzled: %s" % [id, r])
 		Combat.resolve_echoes(s)
-		var after := JSON.stringify(s.heroes) + JSON.stringify(s.enemies)
+		var after := JSON.stringify(s.heroes) + JSON.stringify(s.enemies) + JSON.stringify([s.rites, s.belt, s.belt_next, s.prime])
 		if before == after and s.bonus_energy == 0:
 			inert.append(id)
 		for eid in s.enemy_queue.duplicate():

@@ -12,9 +12,9 @@ F, TX, FI = "frost", "toxin", "fire"
 BOTH = {F: "resist", TX: "resist"}
 
 # ================================================================== cards foes put in a hand
-card("t_barrow_fleas", "Plague Fleas", 0, "Curse", "none", [A(TX, 1, attr="stable")],
-     "Unplayable. When drawn: gain 1 Toxin, and draw a replacement. Removed at fight end.",
-     use=[], kw=["Temporary", "Unplayable", "Curse"], on_draw=[A(TX, 1, attr="stable")],
+card("t_barrow_fleas", "Plague Fleas", 0, "Curse", "none", [A(TX, 1, attr="stable"), ST("blight", 1)],
+     "Unplayable. When drawn: gain 1 Toxin and Blight (no healing this round), and draw a replacement. Removed at fight end.",
+     use=[], kw=["Temporary", "Unplayable", "Curse"], on_draw=[A(TX, 1, attr="stable"), ST("blight", 1)],
      flavour="He was paid by the tail. The fleas came free.",
      note="The Rat-Catcher's pole swings over a hero, and a dark dust of fleas falls from the rats.")
 
@@ -110,8 +110,8 @@ creature("court_fool", "Court Fool", "foe", 30, ranks=[3, 4], world=W, role="aff
          lore="He kept the court laughing while the doors were sealed. It is the only joke he remembers.")
 creature("kings_hawk", "The King's Hawk", "foe", 30, ranks=[3, 4], world=W, role="attacker",
          resist={F: "resist", "lightning": "weak"},
-         intents={"bate": I("Bate to the Leash", "attack", "random", [D(7), A(TX, 2, attr="stable")]),
-                  "rake": I("Swollen Talons", "attack", "random", [D(4, times=2)]),
+         intents={"bate": I("Bate to the Leash", "attack", "acted_last", [D(7), A(TX, 2, attr="stable")]),
+                  "rake": I("Swollen Talons", "attack", "acted_last", [D(4, times=2)]),
                   "mantle": I("Mantle", "defend", "self", [B(4), me("dodge", 1)])},
          ai=[{"use": "mantle", "if": "hp_pct<50", "not_twice": True}, {"use": "rake", "every": 3}, {"use": "bate"}],
          lore="It was buried hooded on its block at the king's right hand, so he would not ride out alone. It is still waiting for the hood to come off.")
@@ -179,7 +179,7 @@ creature("pest_house_watchman", "Pest-House Watchman", "elite", 115, armor=3, ra
          resist={F: "resist", "physical": "resist", "lightning": "weak"},
          intents={"bar": I("Door-Bar", "attack", "front", [D(13)]),
                   # answer: he bars the hero the company is trying to keep alive
-                  "nail": I("Nail Them In", "attack", "weakest", [D(5), ST("stun", 1), ST("anchor", 2)]),
+                  "nail": I("Nail Them In", "attack", "weakest", [D(5), ST("stun", 1), ST("anchor", 2), ST("blight", 1)]),
                   "padlock": I("Padlock and Chain", "attack", "back", [D(8), PULL(1)]),
                   "plea": I("The Plea on the Box", "debuff", "all_heroes", [STRESS(6)])},
          ai=[{"use": "nail", "every": 3}, {"use": "padlock", "every": 3, "offset": 1}, {"use": "plea", "every": 4, "offset": 3},
@@ -232,7 +232,7 @@ creature("dead_cart", "The Dead-Cart", "ruler", 270, armor=3, span=2, ranks=[3, 
                   "seize": I("The Heap Reaches", "attack", "back",
                              [D(6), PULL(3), ST("anchor", 2), A(TX, 2, attr="stable")]),
                   "hook": I("Carter's Hook", "attack", "front", [D(12)]),
-                  "raise": I("Raise from the Heap", "summon", "self", [SUMMON("barrow_draugr", max=2)]),
+                  "raise": I("Raise from the Heap", "summon", "self", [SUMMON("barrow_draugr", max=2, front=True)]),
                   "take": I("It No Longer Waits", "attack", "weakest",
                             [D(9), PULL(3), ST("anchor", 2), A(TX, 2, attr="stable")]),
                   "spill": I("The Heap Spills", "attack", "all_heroes",
@@ -299,9 +299,6 @@ E("barrow_r_dead_cart", "The Dead-Cart", "A cart under a heap of the dead, comin
 
 NEEDS = [
     "rot_witch: Embalmer should stop her allies' max HP being cut (no Cryo-rot on them); written as shedding 1 ailment stack each round.",
-    "pest_house_watchman: Nail Them In should also stop that hero being healed this round.",
-    "t_barrow_fleas / rat_catcher: the bitten hero should not be healable next round; the curse gives Toxin only.",
-    "kings_hawk: Hooded should strike the hero who acted last in the previous round's Ordo (an intent target 'acted_last'); written as a random hero.",
-    "dead_cart: Raise from the Heap should return a fallen foe of this fight at low HP; written as summoning a Barrow Draugr.",
+    "dead_cart: Raise from the Heap should return a fallen foe of this fight at low HP; written as a Barrow Draugr called into rank 1.",
     "rat_king: Always Hungry should also heal when a hero falls; Plague Fleas should end in phase 2.",
 ]

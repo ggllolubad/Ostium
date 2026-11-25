@@ -145,14 +145,13 @@ creature("drowned_merchant", "Drowned Merchant", "foe", 48, ranks=[1, 2], role="
 # ================================================================== elites
 creature("lighthouse_keeper", "The Lighthouse Keeper", "elite", 96, armor=2, ranks=[3, 4], role="afflicter",
          resist={"lightning": "resist", "water": "resist", "void": "weak"},
-         intents={"beam": I("False Beam", "debuff", "front", [DISCARD_RANDOM(), A("lightning", 1, attr="stable")]),
-                  "flash": I("The Lens Flashes", "attack", "front", [D(10), A("lightning", 1, attr="volatile")]),
+         intents={"beam": I("False Beam", "debuff", "most_cards", [ST("mark", 1), DISCARD_RANDOM(), A("lightning", 1, attr="stable")]),
+                  "flash": I("The Lens Flashes", "attack", "marked", [D(10), A("lightning", 1, attr="volatile")]),
                   "fog": I("Sea Fog", "debuff", "all_heroes", [CONS(s="ward"), A("water", 2, attr="stable")]),
                   "signal": I("Signal the Wreckers", "buff", "all_allies", [ST("might", 1)])},
          ai=[{"use": "fog", "every": 3}, {"use": "flash", "every": 3, "offset": 2}, {"use": "signal", "every": 5, "offset": 4},
              {"use": "beam"}],
-         traits=[T("round_start", "The Beam Falls", "Each round the beam falls on the front hero: Marked.",
-                   [ST("mark", 1, to="front_enemy")])],
+         traits=[T("hit", "Glare of the Lens", "Whoever strikes him is lit by the lens: Marked.", [ST("mark", 1)])],
          lore="He keeps the light burning in the wrong place.", world=W)
 
 creature("harpy_matron", "Harpy Matron", "elite", 100, armor=2, ranks=[2], role="summoner",
@@ -171,19 +170,19 @@ creature("gibbeted_wrecker", "The Gibbeted Wrecker", "elite", 124, armor=3, span
          resist={"lightning": "resist", "physical": "resist", "water": "weak"},
          intents={"kick": I("Dangling Kick", "attack", "front", [D(10)]),
                   "rattle": I("Rattle the Cage", "debuff", "all_heroes", [STRESS(6)]),
-                  "creak": I("Creak in the Wind", "defend", "self", [B(12), SELF("charge", 1)]),
+                  "creak": I("Creak in the Wind", "defend", "self", [B(12), SELF("charge", 2)]),
                   "struck": I("The Gibbet Is Struck", "attack", "all_heroes",
                               [D(5), A("lightning", 2, attr="volatile"), CLR("charge")])},
          ai=[{"use": "struck", "if": "charge>=4"}, {"use": "rattle", "every": 3}, {"use": "creak", "every": 3, "offset": 1},
              {"use": "kick"}],
-         traits=[T("round_start", "Lightning Rod", "The highest metal for miles: the irons take 1 charge each round; at "
-                   "4 the strike jumps to every hero.", [SELF("charge", 1)])],
+         traits=[T("course", "Lightning Rod", "The highest metal for miles: Static laid on him charges the irons by 2; at "
+                   "4 the strike jumps to every hero.", [SELF("charge", 2)], e="lightning")],
          lore="Hanged in irons on the headland as a warning to the coast. The irons are the highest metal for miles.",
          world=W)
 
 creature("strand_wife", "The Strand-Wife", "elite", 106, armor=2, ranks=[1, 2], role="afflicter",
          resist={"water": "resist", "lightning": "resist", "toxin": "weak"},
-         intents={"rings": I("Ringed Fist", "attack", "front", [STEAL(), D(7), A("lightning", 2, attr="stable")]),
+         intents={"rings": I("Ringed Fist", "attack", "heaviest", [STEAL(), D(7), A("lightning", 2, attr="stable")]),
                   "hook": I("Boat Hook", "attack", "back", [D(5), PULL(1)]),
                   "pockets": I("Go Through the Pockets", "debuff", "random", [DISCARD_RANDOM(), D(4)]),
                   "fist": I("Heavy Fist", "attack", "front", [D(13)])},
@@ -208,12 +207,12 @@ creature("thunder_whale", "The Thunder Whale", "ruler", 310, armor=3, span=2, ra
          phases=[P(66, "The harpoons light. It sings, and the storm answers.",
                    ai=[{"use": "song", "every": 2}, {"use": "breach"}], might=1),
                  P(25, "It sounds, and rises blind in both eyes.",
-                   ai=[{"use": "sound", "every": 4}, {"use": "song", "every": 2}, {"use": "tail", "every": 3},
+                   ai=[{"use": "sound", "once": True}, {"use": "song", "every": 2}, {"use": "tail", "every": 3},
                        {"use": "breach"}], might=2)],
-         traits=[T("hit", "Harpoon Rods", "The storm runs back up the harpoons: whoever strikes it gains 1 Static.",
-                   [A("lightning", 1, attr="stable")]),
-                 T("round_start", "Cataract Eye", "Its single-target moves never pick the rearmost hero until it is blind "
-                   "in both eyes.", [])],
+         traits=[T("course", "Harpoon Rods", "Static laid on it does no harm and loads its next blow: Empower 4.",
+                   [SELF("empower", 4)], e="lightning"),
+                 T("hit", "Storm in the Ropes", "The storm runs back up the harpoons: whoever strikes it gains 1 Static.",
+                   [A("lightning", 1, attr="stable")])],
          lore="The storm on the coast is its song.", world=W)
 
 creature("last_prize", "The Last Prize", "ruler", 300, armor=4, span=2, ranks=[3, 4], role="summoner",
@@ -305,17 +304,12 @@ E(W, "coast_r_wind_seller", "The Wind-Seller", "She stands on the sea-stack, wor
   props="wind_seller")
 
 NEEDS = [
-    "lighthouse_keeper The Beam Falls: the beam should fall on the hero holding the most cards (needs target "
-    "'most_cards'); written as the front hero.",
-    "lighthouse_keeper Sea Fog: intent text reads 'consume' for CONS(s=ward); it should read 'strips their Ward'.",
-    "gibbeted_wrecker Lightning Rod: should gain a charge whenever any unit gains Static (needs an on-course-applied "
-    "trigger); written as 1 charge a round.",
+    "gibbeted_wrecker Lightning Rod: should charge whenever any unit, hero or foe, gains Static; written as charging "
+    "when Static is laid on him, plus his own Creak.",
     "lantern_cow Lightning Rod: lightning applied to her allies should land on her (needs course redirection); written "
     "as guarding the weakest foe.",
-    "strand_wife: should move one good status (Prime, Might, Riposte, Block) from a hero to herself and target "
-    "whoever banked the most; written as taking Block, and her death spill as Block for every hero.",
+    "strand_wife: should move one good status (Prime, Might, Riposte) from a hero to herself; written as taking Block "
+    "from the most armoured hero, and her death spill as Block for every hero.",
     "strand_wife Salvage Sack and drowned_merchant strongbox: gold on death (postponed by row 14).",
-    "thunder_whale Harpoon Rods: lightning applied to it should add power to its next Song (needs an on-course-applied "
-    "trigger); written as Static on whoever strikes it. Cataract Eye is kept by its move targets (no fx).",
     "thunder_whale and last_prize: 3-rank bodies redesigned to 2 ranks (row 13).",
 ]

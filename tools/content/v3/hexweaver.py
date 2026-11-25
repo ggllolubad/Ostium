@@ -12,13 +12,14 @@ KNIFE = [2, 3]      # Pactbound knife strikes are made from close behind the lin
 PB, DS, MH = "pactbound", "doomsayer", "mirrorhex"
 
 # ------------------------------------------------------------------ kit
-card("pass_it_on", "Pass It On", 1, "K", "enemy", [TRANSFER("ally_most", n=1)],
-     "Move one ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as Stable stacks.",
+card("pass_it_on", "Pass It On", 1, "K", "enemy", [TRANSFER("ally_most", n=1), ST("hex", 1)],
+     "Move the largest ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as "
+     "Stable stacks. Apply 1 Hex.",
      cat=V, arch="core",
      flavour="Say the rhyme, tie the knot, and the fever is someone else's.",
      note="The Hexweaver draws a sick hero's rot into a cloth poppet and flings it at a foe.",
-     up={"text": "Move one ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as "
-                 "Stable stacks. Apply 1 Hex.", "fx": [TRANSFER("ally_most", n=1), ST("hex", 1)]})
+     up={"text": "Move the largest ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as "
+                 "Stable stacks. Apply 2 Hex.", "fx": [TRANSFER("ally_most", n=1), ST("hex", 2)]})
 card("bloodletting", "Bloodletting", 1, "K", "enemy", [SELFDMG(2), ST("hex", 5), STRESS(-2, to="self")],
      "Lose 2 HP. Apply 5 Hex. Shed 2 stress.", cat=V, sub=PB, arch=PB,
      flavour="The cut is always fresh. The bandage is never clean.",
@@ -29,11 +30,11 @@ card("ring_the_bell", "Ring the Bell", 1, "K", "all_enemies", [ST("doom", 2, if_
      flavour="One stroke for each of you. Count them.",
      note="The Doomsayer rings the handbell once, and every hexed foe looks up.",
      up={"text": "Every foe with Hex gains 3 Doom.", "fx": [ST("doom", 3, if_="t.hex>0")]})
-card("glint", "Glint", 1, "K", "ally", [W(2), ST("thorns", 2)],
-     "A hero gains 2 Ward and 2 Thorns.", cat=V, sub=MH, arch=MH,
+card("glint", "Glint", 1, "K", "ally", [W(2), ST("thorns", 1)],
+     "A hero gains 2 Ward and 1 Thorns.", cat=V, sub=MH, arch=MH,
      flavour="Look into the glass. It looks back harder.",
      note="The Mirrorhex tilts the cracked hand mirror and a hero's outline glints in it.",
-     up={"text": "A hero gains 3 Ward and 2 Thorns.", "fx": [W(3), ST("thorns", 2)]})
+     up={"text": "A hero gains 2 Ward and 2 Thorns.", "fx": [W(2), ST("thorns", 2)]})
 
 # ------------------------------------------------------------------ starters (10 in the deck)
 card("pin_the_poppet", "Pin the Poppet", 1, "S", "enemy", [D(4), ST("hex", 1)],
@@ -553,12 +554,12 @@ card("death_knell", "Death Knell", 2, "L", "self", [],
      up={"text": "Apply 3 Doom to every foe. Rite. When a foe dies, every other foe gains its Hex and Doom.",
          "fx": [ST("doom", 3, to="all_enemies")]})
 card("hall_of_mirrors", "Hall of Mirrors", 2, "L", "self", [TURN(to="all_enemies")],
-     "Rite. This round and next round, every foe's single-target attack strikes its neighbour instead.",
+     "Rite. This round and next round, every foe's attack strikes its neighbour instead.",
      cat=V, kw=["Rite"], sub=MH, arch="mirrorhex+core",
      rite={"on": "round_start", "fx": [TURN(to="all_enemies")], "rounds": 1},
      flavour="A hundred glasses, and in every one, the face you hate.",
      note="The room fills with cracked mirrors and the foes turn on their own reflections.",
-     up={"text": "Every hero gains 2 Ward. Rite. This round and next round, every foe's single-target attack strikes "
+     up={"text": "Every hero gains 2 Ward. Rite. This round and next round, every foe's attack strikes "
                  "its neighbour instead.", "fx": [W(2, to="all_allies"), TURN(to="all_enemies")]})
 card("the_witchs_glass", "The Witch's Glass", 2, "L", "self", [],
      "Rite. Whenever a foe hits another hero, every ailment on the hero carrying the most moves onto that foe, and it "
@@ -578,23 +579,18 @@ HERO = {"name": "Hexweaver", "hp": 30, "armor": 0, "grit": 2, "color": "62804f",
                  "the company's ailments to the foes."}
 
 NEEDS = [
-    "pass_it_on: TRANSFER with n=1 should move one ailment (one status or one course, all its stacks), not every "
-    "ailment; the brief also lets the player pick the hero, written here as the hero carrying the most.",
+    "pass_it_on: the brief lets the player choose which hero to take the ailment from (a hero picker); written as the "
+    "hero carrying the most.",
     "bloodletting: the brief's 'the next Hex you apply this round is doubled' needs a Hex focus status; written as "
     "plain Hex.",
     "glint: the brief's 'the next ailment a foe lays on a hero this round lands on that foe instead' needs an "
-    "ailment-redirect status; written as Ward and Thorns.",
-    "hall_of_mirrors: a Rite duration key ('rounds': 1) so the round-start turn happens once more and then the Rite "
-    "ends; TURN should also skip attacks that hit every hero (the text says single-target).",
+    "ailment redirect; written as Ward and Thorns.",
+    "hall_of_mirrors: the brief limits it to single-target attacks; TURN has no filter for attacks on every hero, so "
+    "the text says every foe's attack.",
     "signed_in_blood: the brief wants 'HP you lose to your own cards is also dealt to a foe as true damage', which needs "
-    "a self-damage Rite trigger carrying the HP lost; written on the play trigger.",
+    "a self-damage Rite trigger carrying the HP lost; written on the play trigger against the front foe.",
     "the_open_door: the brief's 'cards cost less at Death's Door' and 'your own cards cannot kill you' need a cost "
-    "modifier and a self-damage floor; written as Prime and Grit per card.",
-    "death_knell: in a kill Rite, 'm.' must read the foe that died (its Hex and Doom) before it is removed.",
-    "the_witchs_glass: the brief wants every ailment a foe lays on a hero redirected, doubled; that needs an "
-    "'ailment laid' trigger. Written on ally_hit, and 'consumed' must reset for each trigger.",
-    "Doom on rulers: when Toll drops a ruler a phase, its Doom should clear (or halve), or The Great Bell drops a phase "
-    "every round.",
-    "UNBIND (bind_the_fear, take_the_curse_in): say whether the Hex still lands when the company holds no affliction "
-    "card.",
+    "cut and a self-damage floor; written as Prime and Grit per card.",
+    "the_witchs_glass: the brief redirects every ailment a foe lays on a hero, doubled; that needs an 'ailment laid' "
+    "trigger. Written on ally_hit; 'consumed' must reset for each trigger.",
 ]

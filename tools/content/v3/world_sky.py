@@ -52,12 +52,12 @@ creature("shattered_god", "The Shattered God", "ruler", 310, armor=2, span=2, ra
 creature("wheel_of_thrones", "The Wheel of Thrones", "ruler", 290, armor=4, span=2, ranks=[1, 2], role="attacker",
          charge_name="Spin", resist=HEAVEN,
          intents={
-             "grind": I("The Rim Grinds", "attack", "front", [D(13)]),
+             "grind": I("The Rim Grinds", "attack", "heaviest", [D(13)]),
              "eyes": I("The Eyes Roll Past", "debuff", "front2", [A("lightning", 2, attr="stable")]),
              "spin": I("Spinning Up", "charge", "self", [B(12), SELF("charge", 1)]),
              "hub": I("The Hub Eye Opens", "attack", "all_heroes", [D(4), CLR("charge")] + DIS(1)),
              "tyre": I("Sprung Tyre", "attack", "rank2", [D(10)]),
-             "crush": I("The Weight Is Found", "attack", "front", [D(18)]),
+             "crush": I("The Weight Is Found", "attack", "heaviest", [D(18)]),
          },
          ai=[{"use": "eyes", "every": 2}, {"use": "grind"}],
          phases=[
@@ -124,29 +124,29 @@ creature("rift_leviathan", "Rift Leviathan", "elite", 115, armor=2, span=2, rank
 creature("recording_angel", "The Recording Angel", "elite", 95, armor=2, ranks=[3], role="afflicter", resist=HEAVEN,
          intents={
              "strike": I("Strike the Name", "attack", "weakest",
-                         [A("void", 1, attr="stable"), A("toxin", 1, attr="volatile")] + DIS(1)),
+                         [ST("blight", 2)] + DIS(1)),
              "quill": I("The Quill", "attack", "front", [D(10)]),
              "ink": I("Black Ink", "debuff", "all_heroes", [A("void", 1, attr="stable")]),
              "close": I("Close the Book", "defend", "self", [B(12)]),
          },
          ai=[{"use": "close", "if": "hp_pct<50", "not_twice": True}, {"use": "strike", "every": 2},
              {"use": "ink", "every": 3, "offset": 1}, {"use": "quill"}],
-         traits=[T("death", "The Names Restored", "On death: the struck names are restored; every hero loses 2 ailment stacks.",
-                   [CLEANSE(2, to="all_enemies")])],
+         traits=[T("death", "The Names Restored", "On death: the struck names are restored; every hero's heal-block (Blight) ends.",
+                   [CLR("blight", to="all_enemies")])],
          lore="It wrote down every soul. It has started crossing them out.",
          world=W)
 
 creature("weigher_of_souls", "The Weigher of Souls", "elite", 115, armor=3, ranks=[2, 3], role="attacker", resist=HEAVEN,
          intents={
-             "weigh": I("Weigh the Soul", "attack", "front", DIS(2)),
+             "weigh": I("Weigh the Soul", "attack", "healthiest", DIS(2)),
              "pans": I("The Pans Swing", "attack", "front2", [D(7)]),
              "ash": I("Ash of Souls", "debuff", "all_heroes", [A("void", 1, attr="stable"), STRESS(4)]),
              "balance": I("Even the Scales", "heal", "all_allies", [H(6)]),
          },
          ai=[{"use": "balance", "if": "ally_hurt75", "not_twice": True}, {"use": "weigh", "every": 2},
              {"use": "ash", "every": 3, "offset": 1}, {"use": "pans"}],
-         traits=[T("round_start", "The Needle", "Round start: the needle swings over the company; the front hero gains 1 Static.",
-                   [A("lightning", 1, attr="stable", to="front_enemy")])],
+         traits=[T("round_start", "The Needle", "Round start: the needle swings over the two front heroes; each gains 1 Static.",
+                   [A("lightning", 1, attr="stable", to="front2")])],
          lore="It weighed every soul against a feather. It has lost the feather.",
          world=W)
 
@@ -158,8 +158,8 @@ creature("fallen_angel", "Fallen Angel", "foe", 40, armor=1, ranks=[1], role="at
              "guard": I("Broken Guard", "defend", "self", [B(8)]),
          },
          ai=[{"use": "guard", "if": "hp_pct<50", "not_twice": True}, {"use": "smite", "every": 3}, {"use": "sword"}],
-         traits=[T("death", "It Has Not Stopped Fighting", "On death: it strikes the front hero once more for 7.",
-                   [D(7, to="front_enemy")])],
+         traits=[T("death", "It Has Not Stopped Fighting", "On death: it strikes the hero who felled it once more for 7.",
+                   [D(7, to="killer")])],
          lore="It fell when the void tore the sky, and it has not stopped fighting.",
          world=W)
 
@@ -331,10 +331,6 @@ card("w_sky_something_leans_closer", "Something Leans Closer", 1, "W", "none", [
          "rite": {"on": "conjunction", "fx": [D(3, per="reactions", k=1, pierce=True)]}})
 
 NEEDS = [
-    "wheel_of_thrones: single-target moves should seek the hero with the most Block and Armor (an intent target 'heaviest'); written as the front hero.",
-    "weigher_of_souls: 'Weigh the Soul' should strike the hero with the most HP, shown at round start (an intent target 'healthiest'); written as the front hero.",
     "rift_leviathan: should surface at a new pair of ranks each round, swapping with the foes there (self-movement for a two-rank foe); written as a Dodge each round. Swallow is postponed (row 14): written as a heavy lunge.",
-    "recording_angel: 'Strike the Name' should heal-block a hero without a course (no healing until the turn after next); written as Blight, which needs Toxin, and its death cleanses 2 ailment stacks rather than ending heal-blocks.",
-    "fourfold_beast: the next face should be shown at round start; the visible intent already shows it, so the trait is 'It Watches' instead.",
     "shattered_god: her weakness is open in the role map (toxin has no lore ground); she has none, and her phase 3 Vulnerable stands in for the exposed Tooth.",
 ]

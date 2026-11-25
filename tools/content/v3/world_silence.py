@@ -69,8 +69,8 @@ creature("starless_eye", "Starless Eye", "foe", 30, ranks=[3, 4], role="afflicte
                   "blink": I("Blink", "defend", "self", [SELF("dodge", 1)]),
                   "ray": I("Cold Ray", "attack", "random", [D(6), A("frost", 1, attr="stable")])},
          ai=[{"use": "blink", "if": "hp_pct<50", "not_twice": True}, {"use": "stare", "every": 2}, {"use": "ray"}],
-         traits=[T("death", "Torn Edge", "On death: its torn void edge spills 1 Erode on every hero.",
-                   [A("void", 1, attr="stable", to="all_enemies")])],
+         traits=[T("death", "Torn Edge", "On death: its torn void edge spills 2 Erode on the hero who killed it.",
+                   [A("void", 2, attr="stable", to="killer")])],
          personality="cruel",
          lore="An eye that fell from the black star. It is still looking for the rest of the face.", world=W)
 
@@ -151,7 +151,7 @@ creature("snow_house_builder", "Snow-House Builder", "foe", 44, armor=1, ranks=[
          resist={"frost": "resist", "void": "resist", "fire": "weak"},
          intents={"bury": I("Bury", "attack", "random", [D(6), ST("stun", 1)]),
                   "cut": I("Cut a Block", "defend", "self", [B(10)]),
-                  "drop": I("Bring It Down", "attack", "front", [D(10)])},
+                  "drop": I("Bring It Down", "attack", "marked", [D(10)])},
          ai=[{"use": "bury", "every": 3, "offset": 1}, {"use": "cut", "if": "hp_pct<50", "not_twice": True},
              {"use": "drop"}],
          traits=[T("hit", "A Very Small House", "Struck by a hero with Taunt, it walls them in: they are Anchored for "
@@ -161,9 +161,9 @@ creature("snow_house_builder", "Snow-House Builder", "foe", 44, armor=1, ranks=[
 # ================================================================== elites
 creature("pale_hunter", "The Pale Hunter", "elite", 100, armor=2, ranks=[2, 3], role="attacker",
          resist={"frost": "resist", "void": "resist", "fire": "weak"},
-         intents={"arrow": I("Arrow at the Warm", "attack", "front", [D(11)]),
+         intents={"arrow": I("Arrow at the Warm", "attack", "healthiest", [D(9), D(4, if_="t.hp_pct>=100")]),
                   "spear": I("Hunting Spear", "attack", "back", [D(9), A("frost", 1, attr="stable")]),
-                  "prey": I("Mark the Prey", "debuff", "front", [ST("mark", 1), ST("vulnerable", 1)]),
+                  "prey": I("Mark the Prey", "debuff", "healthiest", [ST("mark", 1), ST("vulnerable", 1)]),
                   "close": I("Close In", "buff", "self", [SELF("might", 1), B(6)]),
                   "ground": I("Go to Ground", "defend", "self", [B(12), SELF("dodge", 1)])},
          ai=[{"use": "ground", "if": "vulnerable>0", "not_twice": True}, {"use": "prey", "every": 3},
@@ -201,10 +201,10 @@ creature("drum_seer", "The Drum-Seer", "elite", 95, armor=2, ranks=[2, 3], role=
 
 creature("voiceless_chief", "The Voiceless Chief", "elite", 105, armor=3, ranks=[2], role="support",
          resist={"frost": "resist", "void": "resist", "physical": "resist", "fire": "weak"},
-         intents={"point": I("The Baton Points", "debuff", "weakest", [ST("mark", 1), ST("vulnerable", 1)]),
+         intents={"point": I("The Baton Points", "debuff", "most_played", [ST("mark", 1), ST("vulnerable", 1)]),
                   "order": I("An Order", "buff", "all_allies", [ST("might", 1)]),
                   "direct": I("Hold the Line", "defend", "all_allies", [B(6)]),
-                  "baton": I("Baton Strike", "attack", "front", [D(10)]),
+                  "baton": I("Baton Strike", "attack", "marked", [D(10)]),
                   "bind": I("Bind the Wounds", "heal", "all_allies", [H(8)])},
          ai=[{"use": "bind", "if": "total_bleed>=4", "not_twice": True}, {"use": "point", "every": 3},
              {"use": "order", "every": 4, "offset": 2}, {"use": "direct", "if": "ally_hurt", "not_twice": True},
@@ -219,7 +219,7 @@ creature("cold_star", "The Cold Star", "ruler", 290, armor=2, span=2, ranks=[3, 
          intents={"gaze": I("Black Gaze", "debuff", "all_heroes", [STRESS(8)]),
                   "chill": I("Stop the Warmth", "debuff", "all_heroes",
                              [A("frost", 1, attr="stable"), A("void", 1, attr="stable")]),
-                  "eye": I("The Eye Opens", "attack", "front", [D(6), A("void", 1, attr="stable"),
+                  "eye": I("The Eye Opens", "attack", "healthiest", [D(6), A("void", 1, attr="stable"),
                                                                    A("frost", 2, attr="volatile")]),
                   "lance": I("Star Lance", "attack", "back", [D(12), A("void", 1, attr="stable")]),
                   "wide": I("It Opens Wider", "attack", "all_heroes", [D(3), A("void", 1, attr="volatile")]),
@@ -327,14 +327,12 @@ E(W, "silence_r_hearth_grandmother", "The Hearth Grandmother", "The faceless com
   "The ranks refill and every fallen mask feeds her; reach the back ranks.", props="hearth_grandmother")
 
 NEEDS = [
-    "Intent target 'warmest' (most HP): wanted by the cold_star's eye and round-start Frost, and the pale_hunter's "
-    "prey (with more damage to a hero at full HP); written as the front hero.",
+    "cold_star The Warmth Goes: should land on the healthiest hero (effect target 'healthiest'); written as the front hero.",
     "snow_house_builder Bury: the buried hero should also be untargetable for a round.",
     "hearth_grandmother The Stitch: should also block kit skills for a round; written as Anchored (no Swap) and stress.",
     "drum_seer The Herds Stop Coming: summoned Stags should flee on his death; written as stress shed.",
-    "voiceless_chief The Baton Points: every foe should act on that hero first, over Taunt (intent target 'marked'); "
-    "Still Obeyed should point at the hero who dealt the most damage last round.",
-    "starless_eye Torn Edge: should spill Erode on the hero who killed it (trait target 'killer'); written as every hero.",
+    "voiceless_chief The Baton Points: should point at the hero who dealt the most damage last round and override "
+    "Taunt for every foe; written as the hero who played most cards, with his and the builder's blows on the Marked.",
     "unspoken_bear The Hunters' Rule and pale_hunter Into the Snow: should trigger on every hit, not once a round.",
     "void_mammoth: span 2 is the world's one large elite (row 13).",
 ]

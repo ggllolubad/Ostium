@@ -68,8 +68,8 @@ creature("puppet_host", "Puppet Host", "foe", 40, ranks=[1], role="attacker",
                   "spores": I("Spores", "debuff", "all_heroes", [A("toxin", 1, attr="stable"), STRESS(4)]),
                   "lurch": I("Larval Lurch", "attack", "rank2", [D(5), A("toxin", 2, attr="stable")])},
          ai=[{"use": "spores", "every": 3}, {"use": "lurch", "every": 3, "offset": 1}, {"use": "flail"}],
-         traits=[T("death", "The Larvae Burst Out", "On death: the front hero gains 3 Toxin.",
-                   [A("toxin", 3, attr="stable", to="front_enemy")])],
+         traits=[T("death", "The Larvae Burst Out", "On death: the two front heroes gain 2 Toxin.",
+                   [A("toxin", 2, attr="stable", to="front2")])],
          personality="mindless",
          lore="A traveller the hive has hollowed out and filled with larvae. It moves when they do.", world=W)
 
@@ -82,8 +82,8 @@ creature("galvanic_beetle", "Galvanic Beetle", "foe", 44, armor=2, ranks=[1], ro
                                [D(11), A("lightning", 1, attr="volatile"), CLR("charge")])},
          ai=[{"use": "release", "if": "charge>=3"}, {"use": "carapace", "if": "hp_pct<50", "not_twice": True},
              {"use": "ram"}],
-         traits=[T("hit", "Stores the Strike", "The first hit on it each round stores 1 Lightning in its shell; at 3 its "
-                   "horn releases it as a Volatile jolt.", [SELF("charge", 1)])],
+         traits=[T("course", "Stores the Strike", "Lightning laid on it is stored in its shell; at 3 its horn releases it as "
+                   "a Volatile jolt.", [SELF("charge", 1)], e="lightning")],
          lore="It stores lightning in its shell.", world=W)
 
 creature("hive_drone", "Hive Drone", "foe", 30, ranks=[3, 4], role="support",
@@ -121,7 +121,7 @@ creature("struck_shepherd", "Struck Shepherd", "foe", 38, ranks=[2], role="suppo
 
 creature("highwayman", "Highwayman", "foe", 34, ranks=[3, 4], role="attacker",
          resist={"lightning": "resist", "physical": "weak"},
-         intents={"bolt": I("Crossbow Bolt", "attack", "back", [D(8)]),
+         intents={"bolt": I("Crossbow Bolt", "attack", "back", [D(7), D(4, if_="t.neuro>0")]),
                   "twitch": I("Twitching Trigger", "attack", "weakest", [D(5, times=2)]),
                   "span": I("Span the Bow", "buff", "self", [SELF("might", 1), B(4)])},
          ai=[{"use": "twitch", "if": "hero_dd"}, {"use": "span", "every": 4, "offset": 3}, {"use": "twitch", "every": 3},
@@ -170,9 +170,9 @@ creature("antlion", "Antlion", "foe", 40, armor=1, ranks=[2, 3], role="afflicter
 # ================================================================== elites
 creature("mantis_duelist", "Mantis Duelist", "elite", 100, armor=2, ranks=[1, 2], role="attacker",
          resist={"toxin": "resist", "lightning": "resist", "frost": "weak"},
-         intents={"scythe": I("Double Scythe", "attack", "front", [D(6, times=2)]),
+         intents={"scythe": I("Double Scythe", "attack", "first_actor", [D(6, times=2)]),
                   "lunge": I("Lunge", "attack", "back", [D(9), A("toxin", 2, attr="stable")]),
-                  "paralyse": I("Paralysing Strike", "attack", "front",
+                  "paralyse": I("Paralysing Strike", "attack", "first_actor",
                                 [D(6), A("toxin", 1, attr="stable"), A("lightning", 1, attr="volatile")]),
                   "stance": I("Praying Stance", "defend", "self", [SELF("riposte", 6), B(10)])},
          ai=[{"use": "stance", "if": "mark>0", "not_twice": True}, {"use": "paralyse", "every": 3},
@@ -201,8 +201,8 @@ creature("courier", "The Courier", "elite", 105, armor=2, ranks=[1, 2], role="at
                   "spasm": I("Spasm", "attack", "all_heroes", [D(6), A("lightning", 1, attr="volatile")])},
          ai=[{"use": "spasm", "if": "tenacity>0", "not_twice": True}, {"use": "seal", "every": 4, "offset": 1},
              {"use": "crop", "every": 3}, {"use": "trample"}],
-         traits=[T("hit", "Spasm", "Struck while Stunned, horse and rider jerk: the hero who hit it takes 8.",
-                   [D(8, if_="stun>0")])],
+         traits=[T("lost_action", "Spasm", "When it is Stunned or loses an action, horse and rider lash out: the two front "
+                   "heroes take 6.", [D(6, to="front2")])],
          lore="The storm caught him in the open with a message. The hive has rewritten it.", world=W)
 
 creature("road_centipede", "Road Centipede", "elite", 125, armor=4, span=2, ranks=[1, 2], role="attacker",
@@ -344,17 +344,14 @@ E(W, "hive_r_cicada_under_the_road", "The Cicada Under the Road", "The road heav
 NEEDS = [
     "hive_queen Royal Guard: the first hit aimed at her each round should strike a wasp instead (redirect); written as "
     "Block while another foe stands.",
-    "mantis_duelist Salute: should name one hero as its opponent, attack only that hero and riposte only them (needs "
-    "a 'chosen hero' intent target); written as Riposte each round.",
-    "galvanic_beetle Stores the Strike: should store only the Lightning applied to it (trigger on course applied); "
-    "written as the first hit each round.",
+    "mantis_duelist Salute: should riposte only its chosen opponent; it duels the hero who led the last Ordo, and its "
+    "Riposte answers anyone.",
     "dowser The Ground Splits: should land on the hero The Rod Dips showed (remembered target); both use the most "
     "stressed hero.",
     "struck_shepherd Herd the Flock: should swap the most wounded foe one rank back (enemy swap); written as Block.",
-    "highwayman Twitching Trigger: should prefer a paralysed hero (intent target 'neurotoxined').",
-    "spire_termites Build Round the Still: should Stun a hero who has not moved for two rounds; the condition only sees "
-    "this round, and intent text cannot show it (intent text should print conditions).",
-    "puppet_host The Larvae Burst Out: should hit ranks 1 and 2 (trait target 'front2'); written as the front hero.",
+    "highwayman: should aim at a paralysed hero (intent target 'neuro'); written as a bonus on the bolt.",
+    "spire_termites Build Round the Still: should Stun a hero who has not moved for two rounds (quantity "
+    "'rounds_still'); written as this round.",
     "procession Twelve Backs: each bearer that falls should also weaken its blows (negative Might on phase).",
     "brood_mother / courier: the bible makes both 2 ranks wide; only Road Centipede takes 2 (row 13).",
     "hive_queen, procession, cicada_under_the_road: 3 ranks in the role map, redesigned to 2 (row 13).",

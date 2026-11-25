@@ -51,8 +51,8 @@ creature("antlered_mother", "The Antlered Mother", "ruler", 300, armor=2, span=2
              P(20, "The fungus takes her whole. She stops healing herself.", might=2,
                ai=[{"use": "rot", "every": 2}, {"use": "gore"}]),
          ],
-         traits=[T("round_start", "The Garden's Heart", "Round start: above a fifth of her HP she regrows 8, unless she is Burning.",
-                   [H(8, if_="!fire&hp_pct>20")])],
+         traits=[T("round_start", "The Garden's Heart", "Round start: above a fifth of her HP she regrows 8, unless she is Blighted or Burning.",
+                   [H(8, if_="!blight&!fire&hp_pct>20")])],
          lore="The garden's heart: a great stag grown through with fungus and eyes. She is the garden now.",
          world=W)
 
@@ -151,8 +151,8 @@ creature("blight_dryad", "Blight Dryad", "elite", 105, armor=2, ranks=[2, 3], ro
          },
          ai=[{"use": "root", "if": "hp_pct<50", "not_twice": True}, {"use": "roots", "every": 3},
              {"use": "heart", "every": 3, "offset": 1}, {"use": "claws"}],
-         traits=[T("round_start", "Dead Oak", "Round start: below half HP she gains 3 Regen, unless she is Burning.",
-                   [SELF("regen", 3, if_="hp_pct<50&!fire")])],
+         traits=[T("round_start", "Dead Oak", "Round start: below half HP she gains 3 Regen, unless she is Blighted or Burning.",
+                   [SELF("regen", 3, if_="hp_pct<50&!blight&!fire")])],
          lore="She was the spirit of an oak. The oak is dead. She is not.",
          world=W)
 
@@ -301,14 +301,14 @@ E("garden_f8", "The Lady's Walk", "Her household is still at work.", ["pond_swan
 E("garden_e1", "The Gardener's Shed", "He is pruning.", ["fungal_husk", "the_gardener", "flower_strewer"],
   "garden_hedge", "elite", "Every fallen ally sprouts a husk; kill the Gardener first.")
 E("garden_e2", "The Dead Oak", "Her oak is dead. She is not.", ["spore_deer", "blight_dryad", "moth_witch"],
-  "garden_grove", "elite", "Keep fire on the Dryad or she regrows.")
+  "garden_grove", "elite", "Keep Blight or fire on the Dryad or she regrows.")
 E("garden_e3", "The Fool's Caper", "He has a joke for you.", ["thorn_knight", "ladys_fool", "flower_strewer"],
   "garden_walk", "elite", "His slap puts a spore in your hand that strikes a friend; spread out and plan small.")
 E("garden_e4", "The Truffle Oaks", "Something has been rooting here.", ["truffle_boar", "mole_catcher", "beekeeper"],
   "garden_heart", "elite", "The boar ploughs through Block, the ground gives way; strike it and catch spore.")
 E("garden_r_antlered_mother", "The Antlered Mother", "The garden's heart, with the Tooth in her antlers.",
   ["thorn_knight", "root_horror", "antlered_mother"], "garden_boss", "ruler",
-  "Rank 2 refills with roots; keep her Burning to deny her regrowth.")
+  "Rank 2 refills with roots; Blight or burn her to deny her regrowth.")
 E("garden_r_lady_of_the_bower", "The Lady of the Bower", "She has woken enough to want her garden's heart back.",
   ["pond_swan", "flower_strewer", "lady_of_the_bower"], "garden_boss", "ruler",
   "Burn the blooms; keep the back rank awake.", props="lady_of_the_bower")
@@ -345,7 +345,6 @@ card("w_garden_nothing_regrows", "Nothing Regrows", 1, "W", "none", [],
          "kw": ["Rite", "Exhaust", "Retain"]})
 
 NEEDS = [
-    "antlered_mother, blight_dryad: a 'blight' quantity for 'regrows unless Blighted'; both are toxin-immune (made of the rot), so the company cannot Blight them anyway. Written as 'unless Burning'.",
     "ladys_fool: the slapped hero's next action should strike an ally (TURN on a hero); written as a Temporary curse that hits the heroes beside the drawer.",
     "the_gardener: 'Pruning Shears' should strip one buff (any helpful status); written as taking the hero's Block.",
     "blight_snails: the first hit each round should glance off (reduced); written as 5 Block at round start.",

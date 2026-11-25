@@ -27,88 +27,88 @@ FRONT = "t.rank<=2"
 
 # ------------------------------------------------------------------ flasks (belt items; 0 cost, Exhaust, never in card rewards)
 # Basic brewed flasks (the brief's fire pot, brine jar and plain draught)
-card("fl_firepot", "Fire Pot", 0, "F", "enemy", [D(2), A(F, 1, attr="stable")], "Deal 2. Apply 1 Fire. Exhaust.",
+card("fl_firepot", "Fire Pot", 0, "F", "enemy", [D(3), A(F, 2, attr="stable")], "Deal 3. Apply 2 Fire. Exhaust.",
      use=ALL, hit=ALL, cat=F, attr="stable", kw=FK, flask=True, arch=TR,
      flavour="Pitch in a clay pot, a lit rag for a cork.",
      note="A hero takes a smoking clay pot from the belt and lobs it at a drowned thrall on the stair.",
-     up={"text": "Deal 3. Apply 2 Fire. Exhaust.", "fx": [D(3), A(F, 2, attr="stable")]})
-card("fl_brinejar", "Brine Jar", 0, "F", "enemy", [A(WA, 2, attr="stable"), A(WA, 1, attr="stable", to="adjacent")],
-     "Apply 2 Water to the target and 1 to the foes beside it. Exhaust.",
+     up={"text": "Deal 4. Apply 3 Fire. Exhaust.", "fx": [D(4), A(F, 3, attr="stable")]})
+card("fl_brinejar", "Brine Jar", 0, "F", "enemy", [A(WA, 3, attr="stable"), A(WA, 1, attr="stable", to="adjacent")],
+     "Apply 3 Water to the target and 1 to the foes beside it. Exhaust.",
      use=ALL, hit=ALL, cat=WA, attr="stable", kw=FK, flask=True, arch=TR,
      flavour="Sea salt boiled down in the abbey kitchen. It clings.",
      note="A waxed jar bursts on a crab's shell in the brine grotto, spraying its neighbours.",
-     up={"text": "Apply 3 Water to the target and 2 to the foes beside it. Exhaust.",
-         "fx": [A(WA, 3, attr="stable"), A(WA, 2, attr="stable", to="adjacent")]})
-card("fl_draught", "Plain Draught", 0, "F", "ally", [H(2), STRESS(-2)], "A hero heals 2 and sheds 2 stress. Exhaust.",
+     up={"text": "Apply 4 Water to the target and 2 to the foes beside it. Exhaust.",
+         "fx": [A(WA, 4, attr="stable"), A(WA, 2, attr="stable", to="adjacent")]})
+card("fl_draught", "Plain Draught", 0, "F", "ally", [H(3), STRESS(-3)], "A hero heals 3 and sheds 3 stress. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Small beer, honey and willow bark. It does what it can.",
      note="The Duelist uncorks a plain brown bottle from the belt and drinks without looking away from the foe.",
-     up={"text": "A hero heals 3 and sheds 4 stress. Exhaust.", "fx": [H(3), STRESS(-4)]})
+     up={"text": "A hero heals 4 and sheds 5 stress. Exhaust.", "fx": [H(4), STRESS(-5)]})
 # The ten run flasks (shop, provisions), rebalanced for brewing
-card("fl_fire", "Fire Flask", 0, "F", "enemy", [A(F, 3, attr="stable")], "Apply 3 Fire. Exhaust.",
+card("fl_fire", "Fire Flask", 0, "F", "enemy", [A(F, 4, attr="stable")], "Apply 4 Fire. Exhaust.",
      use=ALL, hit=ALL, cat=F, attr="stable", kw=FK, flask=True, arch=TR,
      flavour="Amber glass, warm to the touch even when the fire is out.",
      note="An amber flask shatters on a barnacle knight's helm and runs burning down the plate.",
-     up={"text": "Deal 2. Apply 4 Fire. Exhaust.", "fx": [D(2), A(F, 4, attr="stable")]})
-card("fl_brine", "Brine Flask", 0, "F", "enemy", [A(WA, 3, attr="stable")], "Apply 3 Water. Exhaust.",
+     up={"text": "Deal 2. Apply 5 Fire. Exhaust.", "fx": [D(2), A(F, 5, attr="stable")]})
+card("fl_brine", "Brine Flask", 0, "F", "enemy", [A(WA, 4, attr="stable")], "Apply 4 Water. Exhaust.",
      use=ALL, hit=ALL, cat=WA, attr="stable", kw=FK, flask=True, arch=TR,
      flavour="Drawn from the Drowned Kingdom's own tide. It remembers.",
      note="A green bottle of seawater breaks over an eelkin in the nave and soaks it through.",
-     up={"text": "Apply 5 Water. Exhaust.", "fx": [A(WA, 5, attr="stable")]})
-card("fl_heal", "Healing Draught", 0, "F", "ally", [H(3)], "A hero heals 3. Exhaust.",
+     up={"text": "Apply 6 Water. Exhaust.", "fx": [A(WA, 6, attr="stable")]})
+card("fl_heal", "Healing Draught", 0, "F", "ally", [H(4)], "A hero heals 4. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Sister Wenna's recipe. She will not say what is in it.",
      note="The Bulwark lifts his helm an inch and drinks a red draught from the belt.",
-     up={"text": "A hero heals 5. Exhaust.", "fx": [H(5)]})
-card("fl_salts", "Smelling Salts", 0, "F", "ally", [STRESS(-7)], "A hero sheds 7 stress. Exhaust.",
+     up={"text": "A hero heals 6. Exhaust.", "fx": [H(6)]})
+card("fl_salts", "Smelling Salts", 0, "F", "ally", [STRESS(-10)], "A hero sheds 10 stress. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Hartshorn and vinegar. Nobody faints twice.",
      note="The Alchemist holds a small open vial under the Oracle's nose in the dark ossuary.",
-     up={"text": "A hero sheds 11 stress. Exhaust.", "fx": [STRESS(-11)]})
-card("fl_acid", "Acid Flask", 0, "F", "enemy", [A(T, 3, attr="stable")], "Apply 3 Toxin. Exhaust.",
+     up={"text": "A hero sheds 14 stress. Exhaust.", "fx": [STRESS(-14)]})
+card("fl_acid", "Acid Flask", 0, "F", "enemy", [A(T, 4, attr="stable")], "Apply 4 Toxin. Exhaust.",
      use=ALL, hit=ALL, cat=T, attr="stable", kw=FK, flask=True, arch=PW,
      flavour="Green vitriol. Keep the cork waxed and the flask upright.",
      note="A green flask smokes as it eats into an anchor brute's chain mail.",
-     up={"text": "Apply 3 Toxin. The target loses 1 Armor. Exhaust.",
-         "fx": [A(T, 3, attr="stable"), AR(-1, to="target")]})
-card("fl_blast", "Blasting Powder", 0, "F", "all_enemies", [D(2, if_=FRONT)],
-     "Deal 2 to each foe in ranks 1 and 2. Exhaust.", use=ALL, hit=FRONT2, kw=FK, flask=True, arch="core",
+     up={"text": "Apply 2 Toxin. The target loses 1 Armor. Exhaust.",
+         "fx": [A(T, 2, attr="stable"), AR(-1, to="target")]})
+card("fl_blast", "Blasting Powder", 0, "F", "all_enemies", [D(3, if_=FRONT)],
+     "Deal 3 to each foe in ranks 1 and 2. Exhaust.", use=ALL, hit=FRONT2, kw=FK, flask=True, arch="core",
      flavour="Saltpetre, charcoal and sulphur, packed tight. Throw it far.",
      note="A powder flask bursts between two hooklines at the front, throwing them apart.",
      up={"text": "Deal 4 to each foe in ranks 1 and 2. Exhaust.", "fx": [D(4, if_=FRONT)]})
-card("fl_frost", "Frost Phial", 0, "F", "enemy", [A(FR, 3, attr="stable")], "Apply 3 Frost. Exhaust.",
+card("fl_frost", "Frost Phial", 0, "F", "enemy", [A(FR, 4, attr="stable")], "Apply 4 Frost. Exhaust.",
      use=ALL, hit=ALL, cat=FR, attr="stable", kw=FK, flask=True, arch=TR,
      flavour="Packed in snow from the Icebound Fleet. Frost blooms on the glass.",
      note="A pale blue phial cracks on a siren and rime spreads across her scales.",
-     up={"text": "Apply 5 Frost. Exhaust.", "fx": [A(FR, 5, attr="stable")]})
-card("fl_iron", "Ironbark Tincture", 0, "F", "ally", [B(4)], "A hero gains 4 Block. Exhaust.",
+     up={"text": "Apply 6 Frost. Exhaust.", "fx": [A(FR, 6, attr="stable")]})
+card("fl_iron", "Ironbark Tincture", 0, "F", "ally", [B(6)], "A hero gains 6 Block. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Oak bark steeped in iron water. It tastes like a door.",
      note="The Bulwark drinks a dark tincture and sets his feet behind the church door.",
-     up={"text": "A hero gains 7 Block. Exhaust.", "fx": [B(7)]})
-card("fl_rage", "Bloodrage Draught", 0, "F", "ally", [ST("might", 1), STRESS(3)],
-     "A hero gains 1 Might and 3 stress. Exhaust.", use=ALL, kw=FK, flask=True, arch=AP,
+     up={"text": "A hero gains 8 Block. Exhaust.", "fx": [B(8)]})
+card("fl_rage", "Bloodrage Draught", 0, "F", "ally", [ST("might", 1)],
+     "A hero gains 1 Might. Exhaust.", use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Red wine, black pepper and something from a bull. It burns going down.",
      note="The Duelist throws back a red draught and grins, sword already lifting.",
-     up={"text": "A hero gains 1 Might. Exhaust.", "fx": [ST("might", 1)]})
-card("fl_steam", "Steam Flask", 0, "F", "enemy", [A(WA, 1, attr="stable"), A(F, 1, attr="volatile")],
-     "Apply 1 Water, then 1 Volatile Fire. Exhaust.", use=ALL, hit=ALL, cat=F, attr="volatile", kw=FK, flask=True,
+     up={"text": "A hero gains 1 Might and sheds 4 stress. Exhaust.", "fx": [ST("might", 1), STRESS(-4)]})
+card("fl_steam", "Steam Flask", 0, "F", "enemy", [A(WA, 1, attr="stable"), A(F, 2, attr="volatile")],
+     "Apply 1 Water, then 2 Volatile Fire. Exhaust.", use=ALL, hit=ALL, cat=F, attr="volatile", kw=FK, flask=True,
      arch=TR, flavour="Two chambers and a wax wall between them. Do not shake it.",
      note="A double flask breaks on a bloated foe and a cloud of scalding steam rolls off it.",
-     up={"text": "Apply 2 Water, then 2 Volatile Fire. Exhaust.",
-         "fx": [A(WA, 2, attr="stable"), A(F, 2, attr="volatile")]})
+     up={"text": "Apply 3 Water, then 2 Volatile Fire. Exhaust.",
+         "fx": [A(WA, 3, attr="stable"), A(F, 2, attr="volatile")]})
 # Flasks that cards brew
-card("fl_haste", "Haste Draught", 0, "F", "ally", [ST("momentum", 2)], "A hero gains 2 Momentum. Exhaust.",
+card("fl_haste", "Haste Draught", 0, "F", "ally", [ST("momentum", 3)], "A hero gains 3 Momentum. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="Strong coffee from the south and a pinch of something worse.",
      note="The Bladedancer bites the cork out of a small flask mid-step.",
-     up={"text": "A hero gains 3 Momentum. Exhaust.", "fx": [ST("momentum", 3)]})
-card("fl_focus", "Clarity Draught", 0, "F", "ally", [ST("focus", 3)], "A hero gains 3 Focus. Exhaust.",
+     up={"text": "A hero gains 4 Momentum. Exhaust.", "fx": [ST("momentum", 4)]})
+card("fl_focus", "Clarity Draught", 0, "F", "ally", [ST("focus", 5)], "A hero gains 5 Focus. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=TR,
      flavour="Rosemary and cold water. The scholars drink it by the jug.",
      note="The Elementalist sips a clear flask, stained fingers steady on the glass.",
-     up={"text": "A hero gains 5 Focus. Exhaust.", "fx": [ST("focus", 5)]})
-card("fl_simple", "Garden Simple", 0, "F", "ally", [H(2), B(1)], "A hero heals 2 and gains 1 Block. Exhaust.",
+     up={"text": "A hero gains 7 Focus. Exhaust.", "fx": [ST("focus", 7)]})
+card("fl_simple", "Garden Simple", 0, "F", "ally", [H(2), B(2), STRESS(-2)], "A hero heals 2, gains 2 Block and sheds 2 stress. Exhaust.",
      use=ALL, kw=FK, flask=True, arch=AP,
      flavour="One herb, one use. Simples are what the garden gives.",
      note="A small green bottle tied with a sprig of sage hangs from the Apothecary's belt.",
@@ -132,11 +132,11 @@ card("al_lance_the_boil", "Lance the Boil", 1, "K", "enemy", [D(2), SPREAD(T, 1)
      flavour="What is let out must go somewhere.",
      note="The Plaguewright jabs the pointer cane into a swollen foe; green mist leaks to its neighbours.",
      up={"text": "Deal 3. Copy up to 2 of the target's Toxin onto each foe beside it.", "fx": [D(3), SPREAD(T, 2)]})
-card("al_refill", "Refill", 1, "K", "self", [REFILL(1), B(2)], "Refill 1 flask. Gain 2 Block.",
+card("al_refill", "Refill", 1, "K", "self", [REFILL(1)], "Refill 1 flask.",
      use=ALL, sub=AP, arch=AP,
      flavour="Rinse, steep, cork, wax. The hands know it in the dark.",
      note="The Apothecary refills an empty bottle from a herb-stuffed jar at the back of the line.",
-     up={"text": "Refill 1 flask. Gain 4 Block.", "fx": [REFILL(1), B(4)]})
+     up={"text": "Refill 1 flask. Gain 3 Block.", "fx": [REFILL(1), B(3)]})
 
 # ------------------------------------------------------------------ starters (deck: 3 Hurled Pitch, 2 Brine Splash,
 # 2 Quicklime, 2 Clean Linen, 1 Decant)
@@ -345,11 +345,12 @@ card("al_alkahest", "Alkahest", 1, "U", "enemy", [D(1, per="t.spectrum", k=3)],
      up={"text": "Deal 2, plus 4 per course on the target (its Spectrum).", "fx": [D(2, per="t.spectrum", k=4)]})
 # Plaguewright
 card("al_rat_bag", "Rat Bag", 1, "U", "enemy", [A(T, 2, attr="stable")],
-     "Apply 2 Toxin. Rite: whenever a foe with Toxin dies, the foes beside it gain its Toxin. Exhaust.",
-     cat=T, attr="stable", kw=RITE, arch=PW, rite={"on": "kill", "if": "t.toxin", "fx": [SPREAD(T)]},
+     "Apply 2 Toxin. Rite: whenever a foe with Toxin dies, the foe in rank 1 gains its Toxin. Exhaust.",
+     cat=T, attr="stable", kw=RITE, arch=PW,
+     rite={"on": "kill", "if": "m.toxin", "fx": [A(T, 0, attr="stable", per="m.toxin", k=1, to="front_enemy")]},
      flavour="The rats leave the dead first. Then they go next door.",
      note="A sack of plague rats splits open on a lamprey and the rats pour along the line.",
-     up={"text": "Apply 4 Toxin. Rite: whenever a foe with Toxin dies, the foes beside it gain its Toxin. Exhaust.",
+     up={"text": "Apply 4 Toxin. Rite: whenever a foe with Toxin dies, the foe in rank 1 gains its Toxin. Exhaust.",
          "fx": [A(T, 4, attr="stable")]})
 card("al_fester", "Fester", 1, "U", "enemy", [A(T, 2, attr="stable"), DBL(e=T)],
      "Apply 2 Toxin, then double the target's Toxin.", cat=T, attr="stable", arch=PW,
@@ -659,14 +660,15 @@ card("al_black_death", "Black Death", 2, "L", "self", [],
                  "then copies 1 Toxin onto each foe beside it. Exhaust.",
          "fx": [A(T, 2, attr="stable", to="all_enemies")]})
 card("al_firedamp", "Firedamp", 1, "L", "self", [],
-     "Rite: whenever a foe with Toxin dies, the foes beside it take 2 per Toxin it had. Exhaust.",
+     "Rite: whenever a foe with Toxin dies, every foe takes 1 per Toxin it had. Exhaust.",
      use=ALL, cat=F, kw=RITE, sub=PW, arch=PW,
-     rite={"on": "kill", "if": "t.toxin", "fx": [D(0, per="m.toxin", k=2, to="adjacent")]},
+     rite={"on": "kill", "if": "m.toxin", "fx": [D(0, per="m.toxin", k=1, to="all_enemies")]},
      flavour="Mine gas gathers in the dead. A spark finds it.",
-     note="A dying foe bursts in green flame and the blast throws its neighbours back.",
-     up={"text": "Rite: whenever a foe with Toxin dies, the foes beside it take 2 per Toxin it had, then gain its "
-                 "Toxin. Exhaust.",
-         "rite": {"on": "kill", "if": "t.toxin", "fx": [D(0, per="m.toxin", k=2, to="adjacent"), SPREAD(T)]}})
+     note="A dying foe bursts in green flame and the blast rolls down the whole line.",
+     up={"text": "Rite: whenever a foe with Toxin dies, every foe takes 1 per Toxin it had, then the foe in rank 1 "
+                 "gains its Toxin. Exhaust.",
+         "rite": {"on": "kill", "if": "m.toxin", "fx": [D(0, per="m.toxin", k=1, to="all_enemies"),
+                                                       A(T, 0, attr="stable", per="m.toxin", k=1, to="front_enemy")]}})
 card("al_the_physick_garden", "The Physick Garden", 2, "L", "self", [],
      "Rite: at the start of each round, Brew a Garden Simple and Improve 1 flask on the belt. Exhaust.",
      use=ALL, kw=RITE, sub=AP, arch=AP,
@@ -702,13 +704,10 @@ ARCHETYPES = {
 
 NEEDS = [
     "al_brew: the brief lets the player choose the basic flask (Fire Pot, Brine Jar or Plain Draught). Written as "
-    "a Plain Draught when another hero is below half HP, otherwise a Fire Pot.",
-    "al_solve_et_coagula: pour the removed stacks as a course the player chooses; written as Fire.",
+    "a Plain Draught when another hero is below half HP, otherwise a Fire Pot (a picker).",
+    "al_solve_et_coagula: pour the removed stacks as a course the player chooses; written as Fire (a picker).",
     "al_the_physick_garden: brew an Improved flask of the player's choice; written as a Garden Simple (an "
-    "all-purpose flask) plus Improve 1.",
+    "all-purpose flask) plus Improve 1 (a picker).",
     "al_black_death: Toxin on foes should never fade; written as +1 Toxin at round end to offset the fade.",
-    "al_rat_bag, al_firedamp: kill rites must resolve against the dying foe (t./m. read its Toxin, 'adjacent' and "
-    "SPREAD reach its neighbours) before it leaves the line.",
     "al_steady_hand: the brief wanted 'the next flask used this round counts as Improved'; written as Improve 1.",
-    "Belt full: say what BREW and REFILL do when every slot is taken (suggest the brew is lost).",
 ]

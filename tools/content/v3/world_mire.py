@@ -51,8 +51,8 @@ creature(
         "puff": I("Puff Up", "defend", "self", [B(8), SELF("thorns", 2)]),
     },
     ai=[{"use": "puff", "if": "hp_pct<50", "not_twice": True}, {"use": "tongue", "every": 3}, {"use": "spit"}],
-    traits=[T("death", "Burst Sacs", "On death its poison sacs burst over the front hero: 2 Toxin.",
-              [A("toxin", 2, attr="stable", to="front_enemy")])],
+    traits=[T("death", "Burst Sacs", "On death its poison sacs burst over the hero who killed it: 2 Toxin.",
+              [A("toxin", 2, attr="stable", to="killer")])],
     lore="Fat on the fen's poison.", world=W)
 
 creature(
@@ -93,6 +93,7 @@ creature(
         "decoy": I("Decoy", "defend", "self", [B(5), SELF("dodge", 1)]),
     },
     ai=[{"use": "net", "every": 3}, {"use": "decoy", "if": "hp_pct<50", "not_twice": True}, {"use": "sling"}],
+    traits=[T("moved", "Teetering", "When he is pushed or pulled, he topples: Stunned.", [SELF("stun", 1)])],
     lore="He walked the deep fen on stilts to net the wildfowl. He has not come down since.", world=W)
 
 creature(
@@ -137,8 +138,8 @@ creature(
     },
     ai=[{"use": "eat", "if": "ally_hurt", "every": 2}, {"use": "feast", "every": 4, "offset": 1},
         {"use": "ale", "if": "hp_pct<50", "not_twice": True}, {"use": "bite"}],
-    traits=[T("death", "Sins", "On death the sins he ate spill out: every hero gains 1 Toxin and 3 stress.",
-              [A("toxin", 1, attr="stable", to="all_enemies"), STRESS(3, to="all_enemies")])],
+    traits=[T("death", "Sins", "On death the sins he ate spill onto the hero who killed him: 2 Toxin and 5 stress.",
+              [A("toxin", 2, attr="stable", to="killer"), STRESS(5, to="killer")])],
     lore="Paid a coin to eat the bread off a dead man's chest, and his sins with it. The fen has kept him busy.", world=W)
 
 creature(
@@ -186,7 +187,7 @@ creature(
 creature(
     "tithe_reeve", "The Tithe Reeve", "elite", 105, armor=3, ranks=[2], resist=FEN, role="support",
     intents={
-        "tally": I("Tap the Tally", "debuff", "front", [STEAL(), ST("mark", 1)]),
+        "tally": I("Tap the Tally", "debuff", "heaviest", [STEAL(), ST("mark", 1)]),
         "pole": I("Eel Pole", "attack", "front", [D(13)]),
         "sweep": I("Pole Sweep", "attack", "front2", [D(7)]),
         "count": I("Count the Notches", "defend", "self", [B(10), H(8)]),
@@ -207,7 +208,7 @@ creature(
     },
     ai=[{"use": "wallow", "if": "el_total>=3", "not_twice": True}, {"use": "charge", "every": 3},
         {"use": "trample", "every": 3, "offset": 1}, {"use": "gore"}],
-    traits=[T("hit", "Spore Ridge", "Every hit on her puffs spores: the hero who hit her gains 1 Toxin.",
+    traits=[T("hit", "Spore Ridge", "Every hit on her puffs spores: the hero who hit her gains 1 Toxin (up to 5 times a round).",
               [A("toxin", 1, attr="stable")])],
     lore="Every house kept a pig under the floor to eat what fell through. In the Rotmire, a great deal fell through.",
     world=W)
@@ -296,7 +297,7 @@ encounter(W, "mire_f3", "The Sin-Eater's Porch", "A toad, a hag and the man who 
           "The Sin-Eater eats every Hex, Mark and course off the toad and the hag; kill him first.")
 encounter(W, "mire_f4", "Village Trades", "The barber, the frog boy and the fowler.",
           ["leech_barber", "frog_catcher", "stilt_fowler"], "mire_hut", F,
-          "The barber drains the front, the boy croaks and adds toads, the fowler nets from above.")
+          "The barber drains the front, the boy croaks and adds toads, the fowler nets from above; push or pull him to topple him.")
 encounter(W, "mire_f5", "Night Water", "A log in the water, leeches and a lantern.",
           ["fen_lurker", "leech_swarm", "lantern_gnats"], "mire_drown", F,
           "The log ambushes the back on the first round; two swarms want hits on every foe.")
@@ -314,7 +315,7 @@ encounter(W, "mire_e1", "Under the Bridge", "Something heavy in the mud, and a m
           "Burn stops the troll's regrowth, and the Sin-Eater eats the Burn off it: kill order is the fight.")
 encounter(W, "mire_e2", "The Tithe", "The Reeve has come for his due.",
           ["turf_wife", "tithe_reeve", "eel_catcher"], "mire_hut", E_,
-          "The Reeve takes the front hero's Block, the catcher pins, the turf stack guards him.")
+          "The Reeve takes the most armoured hero's Block, the catcher pins, the turf stack guards him.")
 encounter(W, "mire_e3", "The Midden", "The sow breaks out of the pen beneath the houses.",
           ["midden_sow", "mire_toad", "fen_hag"], "mire_hut", E_,
           "The charge shoves the front heroes back into ranks the hag has pooled; multi-hits on the ridge cost Toxin.")
@@ -373,14 +374,10 @@ NEEDS = [
     "old_heron: Still water should target the hero who moved last round (a 'moved last round' intent target); The Beak "
     "Falls hits the rearmost instead. Swallowing the lifted hero is postponed: Gulp hits the weakest hero. Swollen crop "
     "(a heavy hit disgorges) needs a damage-threshold hit trigger.",
-    "mire_mother Spit the Offerings: intent text prints the card id (t_mire_offering); it should print the card name.",
     "coven_mother Curse-seller: her Toxin and stress should ignore Ward (an 'unwardable' flag on an intent).",
     "fen_hag Safe path: should never be poisoned by a Toxic Pool (a hazard-immunity flag).",
-    "mire_toad Burst Sacs / sin_eater Sins: should land on the hero who killed it (a 'killer' target on death traits); "
-    "written as the front hero and every hero.",
     "sin_eater Eat the Sin: CLEANSE on a foe should strip Hex, Mark and course stacks.",
-    "stilt_fowler Teetering (pushed or pulled, it loses its next action) needs a 'moved' trait trigger; Clap-Net's "
-    "'cannot be Guarded this round' needs a no-Guard status.",
+    "stilt_fowler Clap-Net: 'cannot be Guarded this round' needs a no-Guard status.",
     "tithe_reeve Tap the Tally: should divert the marked hero's next Block or healing to him; written as taking their "
     "Block now.",
     "fen_lurker Ambush: its first strike should act before the Ordo; written as a round-1 hit on the rearmost hero.",

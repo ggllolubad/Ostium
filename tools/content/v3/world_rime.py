@@ -96,7 +96,7 @@ creature("skald", "The Skald", "foe", 32, ranks=[3, 4], world=W, role="afflicter
          lore="He kept the hold's saga in his head. He is adding the last verse.")
 creature("mead_bearer", "Mead-Bearer", "foe", 32, ranks=[2, 3], world=W, role="support",
          resist={F: "resist", FI: "weak"},
-         intents={"horn": I("The Horn", "heal", "ally_lowest", [H(8), ST("might", 1)]),
+         intents={"horn": I("The Horn", "heal", "ally_lowest", [H(8), ST("empower", 4)]),
                   "pour": I("Fill the Horns", "heal", "all_allies", [H(4)]),
                   "keys": I("Storeroom Keys", "defend", "ally_front", [B(8)]),
                   "shelter": I("Step Back", "defend", "self", [B(8), me("dodge", 1)])},
@@ -109,8 +109,8 @@ creature("ore_hauler", "Ore-Hauler", "foe", 48, armor=2, ranks=[1], world=W, rol
                   "swing": I("Heave the Sledge Round", "attack", "front2", [D(6), A(FI, 2, attr="stable"), CLR("charge")]),
                   "barge": I("Shoulder Barge", "attack", "front", [D(8)])},
          ai=[{"use": "swing", "if": "charge>=1"}, {"use": "lean", "every": 3}, {"use": "barge"}],
-         traits=[T("death", "The Load Spills", "When he falls, the burning ore spills over the front hero: 3 Fire.",
-                   [A(FI, 3, attr="stable", to="front_enemy")])],
+         traits=[T("death", "The Load Spills", "When he falls, the burning ore spills over the two front heroes: 3 Fire each.",
+                   [A(FI, 3, attr="stable", to="front2")])],
          lore="Thralls hauled the ore up from the deep shaft. The last load came up burning.")
 creature("snow_hare", "Snow Hare", "foe", 28, ranks=[3, 4], world=W, role="afflicter", charge_name="Listening",
          resist=dict(BOTH, physical="weak"),
@@ -173,7 +173,7 @@ creature("berserker", "Berserker", "elite", 120, armor=0, ranks=[1], world=W, ro
                   "gang": I("Berserkergang", "attack", "front2", [D(6, times=2)])},
          ai=[{"use": "gang", "if": "hp_pct<50", "not_twice": True}, {"use": "fire", "if": "round==2"},
              {"use": "charge", "every": 3}, {"use": "howl", "every": 4, "offset": 2}, {"use": "sweep"}],
-         traits=[T("hit", "Wounds Feed Him", "Each hit he takes gives him 1 Might.", [SELF("might", 1)])],
+         traits=[T("hit", "Wounds Feed Him", "Each hit he takes adds 2 to his next blow.", [SELF("empower", 2)])],
          lore="He walked into the fire on purpose. He walked out again, and kept fighting.")
 creature("musk_ox", "Musk Ox", "elite", 110, armor=4, ranks=[1], world=W, role="defender",
          resist={F: "resist", "physical": "resist", FI: "weak"},
@@ -303,8 +303,5 @@ E("rime_r_firstbreaker", "The Firstbreaker", "A head and two arms over the rim o
 NEEDS = [
     "riven_jarl: Two Halves should switch which course he resists each turn (shown), and end in phase 2; written as 1 Ward a round.",
     "riven_jarl: Riven Cleave should put Fire on one front hero and Frost on the other; written as 1 of each on both.",
-    "berserker: Wounds Feed Him Might should fade at round end; written as lasting Might.",
     "glacier_wolverine: Keeps Coming Back should return it once at low HP after it dies; written as one heal at the brink (a death summon of itself would chain).",
-    "ore_hauler: The Load Spills should Burn the heroes in ranks 1 and 2 (same front-two target as fleet sea_lice); written as the front hero.",
-    "mead_bearer: The Horn should strengthen the ally's next blow only; written as lasting Might (same one-shot bonus as fleet powder_monkey).",
 ]

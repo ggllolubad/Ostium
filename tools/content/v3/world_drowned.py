@@ -35,7 +35,7 @@ creature(
         "sermon": I("Silent Sermon", "debuff", "all_heroes", [STRESS(6), A("water", 1, attr="stable")]),
         "salt": I("Salt the Wound", "attack", "front", [D(11), ST("vulnerable", 1)]),
         "rites": I("Last Rites", "heal", "ally_lowest", [H(16), CLEANSE(3)]),
-        "seal": I("Seal the Door", "debuff", "most_stress", [DISCARD_RANDOM(), STRESS(5)]),
+        "seal": I("Seal the Door", "debuff", "most_cards", [DISCARD_RANDOM(), STRESS(5)]),
     },
     ai=[{"use": "rites", "if": "ally_hurt75", "not_twice": True}, {"use": "seal", "every": 3},
         {"use": "sermon", "every": 3, "offset": 1}, {"use": "salt"}],
@@ -61,7 +61,7 @@ creature(
     "pearl_diver", "Pearl Diver", "elite", 90, armor=2, ranks=[2, 3],
     resist={"water": "resist", "toxin": "weak"}, role="attacker", personality="cunning",
     intents={
-        "knife": I("Shucking Knife", "attack", "back", [D(6, times=2)]),
+        "knife": I("Shucking Knife", "attack", "back", [D(6, times=2), D(5, if_="!t.block")]),
         "leap": I("Leap the Line", "attack", "rank3", [D(10), ST("bleed", 2)]),
         "weight": I("Stone Weight", "attack", "back", [D(4), A("water", 2, attr="stable"), PULL(1)]),
         "sink": I("Sink from Sight", "defend", "self", [B(8), SELF("dodge", 1)]),
@@ -221,8 +221,8 @@ creature(
     },
     ai=[{"use": "crown", "every": 3}, {"use": "breath", "every": 3, "offset": 2}, {"use": "backhand"}],
     traits=[T("round_start", "Kept Court",
-              "Round start: if fewer than three of his court stand, he calls a Barnacle Knight (once a fight).",
-              [SUMMON("barnacle_knight", max=1, if_="allies<3")])],
+              "Round start: if fewer than three of his court stand, he calls a Barnacle Knight into the front rank (once a fight).",
+              [SUMMON("barnacle_knight", max=1, front=True, if_="allies<3")])],
     phases=[
         P(60, "The King rises from the throne.",
           ai=[{"use": "crown", "every": 3, "offset": 1}, {"use": "decree", "every": 3}, {"use": "reach"}]),
@@ -246,7 +246,7 @@ creature(
     },
     ai=[{"use": "toll", "if": "charge>=3"}, {"use": "reach", "every": 2}, {"use": "hum", "if": "hp_pct<80", "every": 4},
         {"use": "swing"}],
-    traits=[T("hit", "Struck Bronze", "Every hit on the bell rings: every hero gains 1 stress.",
+    traits=[T("hit", "Struck Bronze", "Every hit on the bell rings: every hero gains 1 stress (up to 5 times a round).",
               [STRESS(1, to="all_enemies")]),
             T("round_start", "Count of the Drowned", "Round start: the Toll rises by 1. At 3 it tolls.",
               [SELF("charge", 1)])],
@@ -314,7 +314,7 @@ encounter(W, "drowned_e1", "The Sunken Door", "The Tidewarden keeps the Siren's 
           "The lodger Erodes rank 1 and the sweep Soaks it: Drown on the front hero unless Warded or rotated.")
 encounter(W, "drowned_e2", "The Silent Chapter", "Salt sermon in a drowned chapter house.",
           ["barnacle_knight", "abbess", "weeping_nun"], "ossuary", E_,
-          "Stress and heals behind a guard; her seal empties the most stressed hero's hand.")
+          "Stress and heals behind a guard; her seal strikes whoever holds the most cards.")
 encounter(W, "drowned_e3", "The Breach", "The floor gives way to something enormous.",
           ["eelkin", "lamprey", "kraken_arm"], "stair", E_,
           "Grabbed heroes land in rank 1 beside two latchers and stay held until they strike the arm.")
@@ -365,7 +365,6 @@ card("w_drowned_deep_pressure", "Deep Pressure", 1, "W", "enemy",
      up={"text": "Deal 5. Double the Water on the foe.", "fx": [D(5), DBL(e="water")]})
 
 NEEDS = [
-    "drowned_king Kept Court: the summoned Barnacle Knight should enter the front rank, not the rearmost.",
     "drowned_king Gorge on the Court / mother_of_brine Eat Her Own: should kill a living ally and heal by its HP; "
     "written as a plain heal gated on allies>=2.",
     "abbess Seal the Door: should shut one hero's kit skill for a round; written as a random discard and stress.",
@@ -373,6 +372,4 @@ NEEDS = [
     "Anchor ending.",
     "eelkin Latched: the bitten hero's Bleed should end when any hero hits the Biter or the bitten hero moves; written "
     "as the hitter's own Bleed ending.",
-    "pearl_diver Back-biter: more damage to a rank 3 or 4 hero with no Block needs a target condition the intent text "
-    "can show; replaced by Nacre Crust (Block when hit).",
 ]
