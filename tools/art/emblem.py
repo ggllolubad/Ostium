@@ -133,40 +133,44 @@ def burst(cx, cy, r0, r1, k, seed=1):
 
 
 # ------------------------------------------------------------------ grounds (StS2 grammar: a loud field behind one subject)
-def rays(cx, cy, c1, c2, n=22, rot=0, dark=0.35):
-    out = f'<rect width="{Wd}" height="{Ht}" fill="{c1}"/>'
-    R = 1600
-    for i in range(n):
-        if i % 2:
-            continue
-        a0 = math.radians(rot + i * 360 / n)
-        a1 = math.radians(rot + (i + 1) * 360 / n)
-        out += f'<path d="M{cx} {cy} L{cx + R * math.cos(a0):.0f} {cy + R * math.sin(a0):.0f} L{cx + R * math.cos(a1):.0f} {cy + R * math.sin(a1):.0f} Z" fill="{c2}"/>'
-    out += (f'<radialGradient id="rg" cx="{cx/Wd:.2f}" cy="{cy/Ht:.2f}" r="0.75"><stop offset="0" stop-color="#fff2cc" stop-opacity="0.55"/>'
-            f'<stop offset="0.35" stop-color="#fff2cc" stop-opacity="0"/><stop offset="1" stop-color="#140a04" stop-opacity="{dark}"/></radialGradient>'
-            f'<rect width="{Wd}" height="{Ht}" fill="url(#rg)"/>')
-    return out + f'<rect width="{Wd}" height="{Ht}" fill="#000" filter="url(#mottle)" opacity="0.3"/>'
+def _field(cx, cy, c1, c2, dark, lines):
+    """The game's page: parchment, a course wash blooming from the subject, engraved lines, a brown vignette."""
+    return (f'<rect width="{Wd}" height="{Ht}" fill="#e3d2ab"/>'
+            f'<rect width="{Wd}" height="{Ht}" fill="#000" filter="url(#mottle)" opacity="0.35"/>'
+            f'<ellipse cx="{cx}" cy="{cy}" rx="760" ry="520" fill="{c2}" opacity="0.5" filter="url(#bloom)"/>'
+            f'<rect width="{Wd}" height="{Ht}" fill="{c1}" opacity="0.55" mask="url(#edge)"/>'
+            f'{lines}'
+            f'<ellipse cx="{cx}" cy="{cy}" rx="300" ry="220" fill="#f3e6c6" opacity="0.55" filter="url(#pool)"/>'
+            f'<radialGradient id="rg" cx="{cx/Wd:.2f}" cy="{cy/Ht:.2f}" r="0.8"><stop offset="0.45" stop-color="#2b1d12" stop-opacity="0"/>'
+            f'<stop offset="1" stop-color="#2b1d12" stop-opacity="{dark}"/></radialGradient><rect width="{Wd}" height="{Ht}" fill="url(#rg)"/>')
 
 
-def swirl(cx, cy, c1, c2, turns=3.2, dark=0.4):
-    out = f'<rect width="{Wd}" height="{Ht}" fill="{c1}"/>'
-    for k in range(3):
+def rays(cx, cy, c1, c2, n=22, rot=0, dark=0.45):
+    """Engraved glory: fine ink rays from the subject, as an engraver draws light."""
+    ln = ""
+    for i in range(n * 3):
+        a = math.radians(rot + i * 360 / (n * 3))
+        w = 2.4 if i % 3 == 0 else 1.2
+        ln += f'<path d="M{cx + 90 * math.cos(a):.0f} {cy + 90 * math.sin(a):.0f} L{cx + 1500 * math.cos(a):.0f} {cy + 1500 * math.sin(a):.0f}" stroke="{INK}" stroke-width="{w}" opacity="0.28"/>'
+    return _field(cx, cy, c1, c2, dark, f'<g filter="url(#ink)">{ln}</g>')
+
+
+def swirl(cx, cy, c1, c2, turns=3.2, dark=0.45):
+    ln = ""
+    for k in range(4):
         pts = []
-        for i in range(160):
-            t = i / 159
-            a = t * turns * 2 * math.pi + k * 2 * math.pi / 3
-            r = 20 + t * 900
-            pts.append((cx + r * math.cos(a), cy + r * math.sin(a) * 0.8))
-        out += stroke(pts, 30, 260, c2, 0.85, 1.0)
-    out += (f'<radialGradient id="rg" cx="{cx/Wd:.2f}" cy="{cy/Ht:.2f}" r="0.75"><stop offset="0" stop-color="#fff2cc" stop-opacity="0.45"/>'
-            f'<stop offset="0.3" stop-color="#fff2cc" stop-opacity="0"/><stop offset="1" stop-color="#140a04" stop-opacity="{dark}"/></radialGradient>'
-            f'<rect width="{Wd}" height="{Ht}" fill="url(#rg)"/>')
-    return out + f'<rect width="{Wd}" height="{Ht}" fill="#000" filter="url(#mottle)" opacity="0.3"/>'
+        for i in range(140):
+            t = i / 139
+            a = t * turns * 2 * math.pi + k * math.pi / 2
+            r = 40 + t * 900
+            pts.append(f"{cx + r * math.cos(a):.0f} {cy + r * math.sin(a) * 0.8:.0f}")
+        ln += f'<path d="M{" L".join(pts)}" fill="none" stroke="{INK}" stroke-width="{3 - k * 0.5}" opacity="0.3"/>'
+    return _field(cx, cy, c1, c2, dark, f'<g filter="url(#ink)">{ln}</g>')
 
 
-O = lambda w=7: S(w)          # the heavy outline every subject gets
-SKIN, SKIN_D = "#e2b48c", "#b07a58"
-STEEL, STEEL_D = "#a9adb3", "#6c7077"
+O = lambda w=7: S(round(max(3, w * 0.72), 1))   # the game's ink weight, a little heavier than the map
+SKIN, SKIN_D = "#d8b08a", "#a07656"
+STEEL, STEEL_D = "#9fa19f", "#6a6c6a"
 
 # hands by calling: (skin, skin shade, cuff, cuff shade, plated?, rings?)
 HANDS = {"bulwark": (STEEL, STEEL_D, "#7a4a2a", "#4e2e18", True, False), "duelist": ("#7a4a2c", "#4f2e1a", RUB, "#6a2418", False, False),
@@ -261,8 +265,13 @@ def plague_flask():
             d += f" A{r:.0f} {r:.0f} 0 0 1 {x1:.0f} {y1:.0f}"
         return (f'<path d="{d} Z" fill="{fill}"/><path d="{d} Z" fill="#4c7a2c" opacity="0.55" transform="translate({cx*0.06:.0f} {cy*0.1+h*0.35:.0f}) scale(0.94 0.8)"/>'
                 f'<path d="{d} Z" {O(6)}/>' + "".join(f'<path d="M{cx+w*dx:.0f} {cy+h*dy:.0f} q{w*0.12:.0f} {-h*0.25:.0f} {w*0.25:.0f} 0" {S(4)}/>' for dx, dy in [(-0.6, 0.1), (0.3, 0.3), (-0.2, -0.4), (0.55, -0.2)]))
-    gas = cloud(560, 200, 240, 130, 13, 3, "#a6d36a") + cloud(240, 300, 130, 70, 9, 1, "#86b552") + cloud(880, 300, 130, 70, 9, 2, "#86b552")
-    skull = (f'<ellipse cx="520" cy="196" rx="26" ry="32" fill="#1e3a1a"/><ellipse cx="604" cy="196" rx="26" ry="32" fill="#1e3a1a"/>'
+    wash = "".join(f'<ellipse cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="{c}" opacity="{o}" filter="url(#bloom)"/>' for x, y, rx, ry, c, o in
+                   [(560, 200, 230, 140, "#9fb878", 0.85), (560, 220, 150, 100, "#7f9a5a", 0.6), (250, 300, 140, 80, "#9fb878", 0.7), (870, 300, 140, 80, "#9fb878", 0.7)])
+    def wisp(pts, w):
+        return stroke(pts, w * 0.3, w, INK, 0.85)
+    curl = lambda cx, cy, r, a0, a1: arc_pts(cx, cy, r, a0, a1, 24)
+    gas = wash + wisp(line_pts(600, 380, 760, 150, -0.3, 30) + curl(790, 150, 34, 180, 400)[:16], 8)
+    skull = (f'<ellipse cx="520" cy="196" rx="26" ry="32" fill="#1e3a1a" opacity="0.8"/><ellipse cx="604" cy="196" rx="26" ry="32" fill="#1e3a1a"/>'
              f'<path d="M562 230 l-12 24 h24 z" fill="#1e3a1a"/><path d="M516 268 H608 M530 258 V280 M552 258 V282 M574 258 V282 M596 258 V280" {S(6, "#1e3a1a")}/>')
     flask = f"""
  <path d="M430 480 Q430 400 506 388 L522 360 L548 384 L574 352 L600 382 L626 362 L636 388 Q690 400 690 480 Q690 600 560 600 Q430 600 430 480 Z" fill="#7fb04a"/>
@@ -290,7 +299,7 @@ def stolen_hour():
   <path d="M-96 -222 Q-96 -60 -12 0 Q-96 60 -96 222 M96 222 Q96 60 12 0 Q96 -60 96 -222" {O(7)}/>
   <path d="M-70 -200 Q-74 -120 -40 -60" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.7"/>
  </g>"""
-    return bg + f'<g filter="url(#ink)">{stars}{glass}{fist("oracle", 690, 318, -10, 0.95, True)}</g>'
+    return bg + f'<g filter="url(#ink)">{stars}{glass}</g>'
 
 
 def silver_lie():
@@ -309,7 +318,7 @@ def silver_lie():
  </g>"""
     ghost = (f'<path d="M110 200 H220 V280 Q220 350 165 384 Q110 350 110 280 Z" fill="none" stroke="#e0d4ee" stroke-width="6" stroke-dasharray="14 12"/>'
              + stroke(line_pts(230, 300, 480, 260, -0.15), 50, 16, "#b9a3d6", 0.8))
-    return bg + f'<g filter="url(#ink)">{ghost}{mirror}{fist("hexweaver", 720, 590, -14, 0.9, True)}</g>'
+    return bg + f'<g filter="url(#ink)">{ghost}{mirror}</g>'
 
 
 def strike_the_ring():
@@ -326,13 +335,76 @@ def strike_the_ring():
  <path d="M516 110 Q504 200 460 290" stroke="#fff6dc" stroke-width="9" stroke-linecap="round" fill="none"/>"""
     strike = (f'<path d="{burst(744, 300, 30, 110, 9, 9)}" fill="#fff6dc"/><path d="{burst(744, 300, 30, 110, 9, 9)}" {O(5)}/>'
               + sparks([(860, 220, 20, 10), (820, 420, 16, 30), (690, 180, 12, 0)]))
-    brush = (f'<path d="M1060 610 L800 312" stroke="{INK}" stroke-width="30" stroke-linecap="round"/><path d="M1060 610 L800 312" stroke="#8a5a36" stroke-width="18" stroke-linecap="round"/>'
-             f'<path d="M812 330 L770 270 Q752 250 760 286 L790 344 Z" fill="{INK}"/><path d="M790 320 l18 -12 M800 334 l18 -12" stroke="#d6ad52" stroke-width="7"/>')
-    return bg + f'<g filter="url(#ink)">{rings}{bell}{brush}{strike}{fist("elementalist", 930, 470, -41, 0.85)}</g>'
+    brush = stroke(line_pts(1130, 600, 760, 310, 0.1, 40), 10, 70, INK, 0.95)
+    return bg + f'<g filter="url(#ink)">{rings}{bell}{brush}{strike}</g>'
 
 
-ART = {"bw_mace_blow": mace_blow, "du_two_step": two_step, "al_plague_flask": plague_flask, "or_stolen_hour": stolen_hour,
-       "silver_lie": silver_lie, "el_strike_the_ring": strike_the_ring}
+# ------------------------------------------------------------------ the company itself (StS2's character cards)
+PARTY = os.environ.get("PARTY", "/home/claude/party")
+FIG = {"bulwark": ("dirAC", "bulwark"), "duelist": ("dirAC", "duelist"), "elementalist": ("dirAC", "elementalist"),
+       "alchemist": ("dirAC2", "alchemist"), "oracle": ("dirAC2", "oracle"), "hexweaver": ("dirAC2", "hexweaver")}
+
+
+def figure(who, pose, at, joint="torso", sc=1.0):
+    """The calling's Living Ink figure, posed as vector and placed so `joint` lands on `at`."""
+    import subprocess, base64, json as js
+    mod, key = FIG[who]
+    tmp = os.path.join(OUT, f"_fig_{who}.svg")
+    meta = js.loads(subprocess.run(["node", "card_figure.js", mod, key, js.dumps(pose), tmp], cwd=PARTY, capture_output=True, text=True, check=True).stdout)
+    P, W0, H0 = meta["pad"], meta["W"], meta["H"]
+    jx, jy = meta["joints"][joint]
+    b64 = base64.b64encode(open(tmp, "rb").read()).decode()
+    x, y = at[0] - (jx + P) * sc, at[1] - (jy + P) * sc
+    return f'<image href="data:image/svg+xml;base64,{b64}" x="{x:.0f}" y="{y:.0f}" width="{(W0 + 2 * P) * sc:.0f}" height="{(H0 + 2 * P) * sc:.0f}"/>'
+
+
+def f_mace_blow():
+    hx, hy = 880, 200
+    bg = rays(hx, hy, "#5a3a26", "#a0603c", 20, 8)
+    arcs = "".join(stroke(arc_pts(440, 520, r, -96, -36), 22 - i * 6, 12 - i * 3, INK, 0.75 - i * 0.2) for i, r in enumerate([470, 420, 370]))
+    imp = (f'<path d="{burst(hx, hy, 40, 150, 9, 3)}" fill="{RUB}" opacity="0.92"/><path d="{burst(hx, hy, 40, 150, 9, 3)}" {O(6)}/>'
+           f'<path d="{burst(hx, hy, 18, 62, 7, 5)}" fill="{PAPER}"/>'
+           + "".join(f'<path d="{star(x, y, r, 3, 0.4, a)}" fill="{INK}"/>' for x, y, r, a in [(1050, 290, 16, 10), (1010, 80, 12, 30), (1080, 190, 10, 20), (960, 360, 10, 0)]))
+    fig = figure("bulwark", {"upperarm_n": -40, "forearm_n": -20, "hand_n": 70, "torso": 6, "lean": 4}, (380, 470), "torso", 1.25)
+    return bg + f'<g filter="url(#ink)">{arcs}{imp}</g>{fig}'
+
+
+def f_two_step():
+    bg = swirl(860, 300, "#5a2a26", "#a05a4c", 2.6)
+    fig = figure("duelist", {"upperarm_n": -62, "forearm_n": -6, "hand_n": -8, "torso": 10, "lean": 9, "cape": -14}, (330, 420), "torso", 1.2)
+    cuts = (stroke(line_pts(700, 110, 1080, 470, 0.14), 56, 30, RUB, 0.95) + stroke(line_pts(720, 500, 1070, 90, -0.14), 50, 26, RUB, 0.95)
+            + stroke(line_pts(712, 124, 1068, 462, 0.14), 8, 4, INK, 0.9) + stroke(line_pts(732, 490, 1060, 100, -0.14), 7, 4, INK, 0.9))
+    return bg + fig + f'<g filter="url(#ink)">{cuts}</g>'
+
+
+def f_ink_bolt():
+    col = COURSE["void"]
+    bg = rays(330, 260, "#3a3046", "#8e7aa6", 18, 0)
+    fig = figure("elementalist", {"upperarm_n": -95, "forearm_n": 55, "hand_n": 20, "torso": 8, "lean": 5}, (300, 500), "torso", 1.15)
+    trail = (stroke(line_pts(560, 130, 1000, 330, -0.24, 40), 6, 40, INK, 0.95)
+             + f'<circle cx="1010" cy="330" r="34" fill="{INK}"/>'
+             + "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{INK}"/>' for x, y, r in [(1062, 296, 12), (1076, 360, 9), (980, 380, 8), (1050, 400, 6), (1090, 320, 5)])
+             + "".join(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{col}" opacity="0.8"/>' for x, y, r in [(650, 110, 8), (780, 150, 6), (890, 220, 7)]))
+    return bg + fig + f'<g filter="url(#ink)">{trail}</g>'
+
+
+def f_brace():
+    bg = rays(700, 330, "#4a3a2a", "#8a6a46", 22, 4)
+    arcs = "".join(stroke(arc_pts(560, 360, 260 + i * 40, -58, 58), 26 - i * 6, 26 - i * 6, c, 0.9) for i, c in enumerate([INK, "#8a6a46", INK]))
+    fig = figure("bulwark", {"upperarm_n": -10, "torso": -4, "lean": -3}, (380, 420), "torso", 1.15)
+    return bg + fig + f'<g filter="url(#ink)">{arcs}</g>'
+
+
+ART = {"bw_mace_blow": f_mace_blow, "du_two_step": f_two_step, "el_ink_bolt": f_ink_bolt, "bw_brace": f_brace,
+       "al_plague_flask": plague_flask, "or_stolen_hour": stolen_hour, "silver_lie": silver_lie, "el_strike_the_ring": strike_the_ring}
+
+# the earlier saturated devices, brought to the game's inks
+TONE = {"#e04a3a": RUB, "#ffd9c0": PAPER, "#a6d36a": "#a4bb7c", "#86b552": "#8aa266", "#7fb04a": "#8aa66a", "#4c7a2c": "#56703e",
+        "#1e3a1a": "#2f3a24", "#3f6a2a": "#62804f", "#3a3070": "#4a3e66", "#f2d27a": "#d9bd78", "#c8d4ec": "#c9cfd6",
+        "#d8dceb": "#d9d8cf", "#a7acc4": "#a3a49e", "#c64a3a": RUB, "#8a2a20": "#6a2418", "#d6ad52": "#c9a24a", "#9c7428": "#8a6a2e",
+        "#fff6dc": PAPER, "#b9a3d6": "#8e7aa6", "#e0d4ee": "#d8cfe0", '"#fff"': '"#f3e8cf"', "#dff0c0": "#e6ecd0",
+        "#7a2a1c": "#6a3a2a", "#a8442c": "#9c5a40", "#3a1018": "#4a2a28", "#6e1c26": "#8a4a40", "#1c1630": "#2e2840", "#2c2448": "#6d5a8a",
+        "#2a2236": "#3a3046", "#4a3d5e": "#8e7aa6", "#6a4a14": "#6a5228", "#a3761e": "#a9822f", "#a0704a": "#8a6446", "#6a4428": "#5a3c24"}
 
 
 def main():
@@ -342,7 +414,10 @@ def main():
         b = p.chromium.launch()
         pg = b.new_page(viewport={"width": Wd, "height": Ht})
         for i, k in enumerate(ids):
-            svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{Wd}" height="{Ht}" viewBox="0 0 {Wd} {Ht}">{defs(3 + i)}{ART[k]()}{finish()}</svg>'
+            body = ART[k]()
+            for a_, b_ in TONE.items():
+                body = body.replace(a_, b_)
+            svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{Wd}" height="{Ht}" viewBox="0 0 {Wd} {Ht}">{defs(3 + i)}{body}{finish()}</svg>'
             open(os.path.join(OUT, k + ".svg"), "w").write(svg)
             pg.set_content(f'<html><body style="margin:0">{svg}</body></html>')
             pg.screenshot(path=os.path.join(OUT, k + "_full.png"))
