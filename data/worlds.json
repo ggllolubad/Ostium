@@ -62,14 +62,25 @@
    "magma_hound",
    "obsidian_maiden",
    "steam_wraith",
-   "fissure_worm"
+   "fissure_worm",
+   "fire_setter",
+   "skald",
+   "mead_bearer",
+   "ore_hauler",
+   "snow_hare",
+   "pit_adder",
+   "glacier_wolverine"
   ],
   "elites": [
    "jotun_thane",
-   "twin_seeress"
+   "twin_seeress",
+   "berserker",
+   "musk_ox"
   ],
   "bosses": [
-   "riven_jarl"
+   "riven_jarl",
+   "sleeper_under_the_hold",
+   "firstbreaker"
   ],
   "story": 7,
   "act": 3,
@@ -94,14 +105,25 @@
    "bronze_automaton",
    "arc_smith",
    "bellows_imp",
-   "spark_swarm"
+   "spark_swarm",
+   "salamander",
+   "mould_sitter",
+   "coke_heaver",
+   "nail_wife",
+   "guild_warden",
+   "automaton_tender",
+   "hearth_cat"
   ],
   "elites": [
    "cyclops_smith",
-   "talos_sentinel"
+   "talos_sentinel",
+   "wire_drawer",
+   "dray_horse"
   ],
   "bosses": [
-   "anvil_titan"
+   "anvil_titan",
+   "crucible",
+   "storm_catcher"
   ],
   "story": 4,
   "act": 2,
@@ -126,14 +148,25 @@
    "kettle_crab",
    "boiled_brute",
    "steam_nymph",
-   "bath_leech"
+   "bath_leech",
+   "hypocaust_stoker",
+   "votive_pilgrim",
+   "physic_of_the_waters",
+   "lustral_priest",
+   "lapdog",
+   "hypocaust_roaches",
+   "pump_mule"
   ],
   "elites": [
    "bath_mistress",
-   "cauldron_bearer"
+   "cauldron_bearer",
+   "strigil_master",
+   "invalid_countess"
   ],
   "bosses": [
-   "simmering_matron"
+   "simmering_matron",
+   "best_families",
+   "great_copper"
   ],
   "story": 2,
   "act": 1,
@@ -158,14 +191,25 @@
    "brimstone_toad",
    "fuse_imp",
    "pit_crawler",
-   "canary_priest"
+   "canary_priest",
+   "gas_burner",
+   "pit_boy",
+   "timberman",
+   "gallery_rats",
+   "weighman",
+   "lamp_room_girl",
+   "tub_hurrier"
   ],
   "elites": [
    "powder_ogre",
-   "miasma_matriarch"
+   "miasma_matriarch",
+   "mounted_overseer",
+   "shrine_bearer"
   ],
   "bosses": [
-   "burning_lung"
+   "burning_lung",
+   "owner",
+   "powder_mill"
   ],
   "story": 3,
   "act": 2,
@@ -186,18 +230,29 @@
    "pyre_crypt"
   ],
   "foes": [
+   "recanter",
    "ash_penitent",
    "cinder_hound",
    "censer_deacon",
    "candle_wraith",
-   "pyre_knight"
+   "pyre_knight",
+   "belfry_bats",
+   "familiar",
+   "faggot_bearer",
+   "scold",
+   "ash_pardoner",
+   "charred_destrier"
   ],
   "elites": [
    "unburnt_inquisitor",
-   "pyre_seraph"
+   "pyre_seraph",
+   "questioner",
+   "bellows_sister"
   ],
   "bosses": [
-   "saint_unending"
+   "saint_unending",
+   "iron_bull",
+   "confessor"
   ],
   "story": 12,
   "act": 5,
@@ -222,14 +277,25 @@
    "clock_sentry",
    "gear_spider",
    "aurora_moth",
-   "frozen_halberdier"
+   "frozen_halberdier",
+   "ephemeris_clerk",
+   "college_tortoise",
+   "patroness",
+   "patroness_monkey",
+   "speculum_bearer",
+   "clock_jack",
+   "gate_mastiff"
   ],
   "elites": [
    "horologist",
-   "rime_colossus"
+   "rime_colossus",
+   "gin_ox",
+   "rodwarden"
   ],
   "bosses": [
-   "last_hour"
+   "last_hour",
+   "stilled_college",
+   "great_refractor"
   ],
   "story": 10,
   "act": 4,
@@ -254,14 +320,25 @@
    "rime_gulls",
    "ice_eel",
    "deck_hand",
-   "walrus_brute"
+   "walrus_brute",
+   "powder_monkey",
+   "sea_lice",
+   "capstan_gang",
+   "sailmaker",
+   "fleet_marine",
+   "galley_cook",
+   "ice_edge_orca"
   ],
   "elites": [
    "icewed_captain",
-   "frost_selkie"
+   "frost_selkie",
+   "white_bear",
+   "ships_surgeon"
   ],
   "bosses": [
-   "leviathan_ice"
+   "leviathan_ice",
+   "the_broadside",
+   "the_shrouds"
   ],
   "story": 6,
   "act": 3,
@@ -286,14 +363,25 @@
    "plague_wolf",
    "frostbit_leper",
    "mold_wight",
-   "grave_worm"
+   "grave_worm",
+   "gravedigger",
+   "the_swollen",
+   "court_fool",
+   "kings_hawk",
+   "sexton_beetles",
+   "barrow_mason",
+   "rat_catcher"
   ],
   "elites": [
    "barrow_thane",
-   "rot_witch"
+   "rot_witch",
+   "barrow_chaplain",
+   "pest_house_watchman"
   ],
   "bosses": [
-   "barrow_king"
+   "barrow_king",
+   "rat_king",
+   "dead_cart"
   ],
   "story": 8,
   "act": 3,
@@ -318,14 +406,25 @@
    "silence_stag",
    "starless_eye",
    "frozen_saint",
-   "rime_shade"
+   "rime_shade",
+   "ice_fisher",
+   "hush_child",
+   "lemming_drift",
+   "lead_dog",
+   "sledge_hauler",
+   "silent_singers",
+   "snow_house_builder"
   ],
   "elites": [
    "pale_hunter",
-   "void_mammoth"
+   "void_mammoth",
+   "drum_seer",
+   "voiceless_chief"
   ],
   "bosses": [
-   "cold_star"
+   "cold_star",
+   "unspoken_bear",
+   "hearth_grandmother"
   ],
   "story": 11,
   "act": 4,
@@ -350,14 +449,25 @@
    "shock_eel",
    "storm_harpy",
    "tide_crab",
-   "drowned_bosun"
+   "drowned_bosun",
+   "lantern_cow",
+   "ship_breaker",
+   "storm_petrels",
+   "rock_octopus",
+   "drowned_drummer",
+   "cragsman",
+   "drowned_merchant"
   ],
   "elites": [
    "lighthouse_keeper",
-   "harpy_matron"
+   "harpy_matron",
+   "gibbeted_wrecker",
+   "strand_wife"
   ],
   "bosses": [
-   "thunder_whale"
+   "thunder_whale",
+   "last_prize",
+   "wind_seller"
   ],
   "story": 5,
   "act": 2,
@@ -382,14 +492,25 @@
    "venom_spider",
    "puppet_host",
    "galvanic_beetle",
-   "hive_drone"
+   "hive_drone",
+   "dowser",
+   "struck_shepherd",
+   "highwayman",
+   "tinker",
+   "road_warden",
+   "spire_termites",
+   "antlion"
   ],
   "elites": [
    "mantis_duelist",
-   "brood_mother"
+   "brood_mother",
+   "courier",
+   "road_centipede"
   ],
   "bosses": [
-   "hive_queen"
+   "hive_queen",
+   "procession",
+   "cicada_under_the_road"
   ],
   "story": 9,
   "act": 4,
@@ -410,18 +531,29 @@
    "sky_choir"
   ],
   "foes": [
-   "fallen_angel",
    "rift_hound",
+   "fallen_angel",
    "storm_shade",
    "choir_of_eyes",
-   "skywreck_knight"
+   "skywreck_knight",
+   "porter_of_heaven",
+   "herald_of_heaven",
+   "putto",
+   "scorched_doves",
+   "throne_lion",
+   "rift_crawler",
+   "star_lighter"
   ],
   "elites": [
    "thunder_seraph",
-   "rift_leviathan"
+   "rift_leviathan",
+   "recording_angel",
+   "weigher_of_souls"
   ],
   "bosses": [
-   "shattered_god"
+   "shattered_god",
+   "wheel_of_thrones",
+   "fourfold_beast"
   ],
   "story": 14,
   "act": 5,
@@ -446,14 +578,25 @@
    "fen_hag",
    "mire_toad",
    "leech_swarm",
-   "fen_lurker"
+   "fen_lurker",
+   "eel_catcher",
+   "stilt_fowler",
+   "turf_wife",
+   "frog_catcher",
+   "lantern_gnats",
+   "sin_eater",
+   "leech_barber"
   ],
   "elites": [
    "bog_troll",
-   "coven_mother"
+   "coven_mother",
+   "tithe_reeve",
+   "midden_sow"
   ],
   "bosses": [
-   "mire_mother"
+   "mire_mother",
+   "stilt_hall",
+   "old_heron"
   ],
   "story": 1,
   "act": 1,
@@ -474,18 +617,29 @@
    "garden_heart"
   ],
   "foes": [
+   "root_horror",
+   "flower_strewer",
    "fungal_husk",
    "spore_deer",
    "thorn_knight",
    "moth_witch",
-   "root_horror"
+   "scarecrow",
+   "blight_snails",
+   "mole_catcher",
+   "pond_swan",
+   "orchard_picker",
+   "beekeeper"
   ],
   "elites": [
    "the_gardener",
-   "blight_dryad"
+   "blight_dryad",
+   "ladys_fool",
+   "truffle_boar"
   ],
   "bosses": [
-   "antlered_mother"
+   "antlered_mother",
+   "lady_of_the_bower",
+   "green_lion"
   ],
   "story": 13,
   "act": 5,

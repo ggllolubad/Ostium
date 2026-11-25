@@ -733,7 +733,7 @@ static func merchant_stock() -> Dictionary:
 	var cards := []
 	for h in living():
 		for c in card_choices(h, 2):
-			cards.append({"hero": r.heroes.find(h), "card": c, "price": price({"C": 45, "U": 70, "R": 110, "X": 85}[Data.CARDS[c].rarity])})
+			cards.append({"hero": r.heroes.find(h), "card": c, "price": price({"C": 45, "U": 70, "R": 110, "X": 85, "N": 60, "W": 70, "L": 150}.get(Data.CARDS[c].rarity, 60))})
 	var gear := []
 	for i in 3:
 		var it := gear_drop()

@@ -1,4 +1,39 @@
 {
+ "alchemist": {
+  "name": "Alchemist",
+  "hp": 32,
+  "armor": 0,
+  "grit": 2,
+  "color": "a8653b",
+  "kit": [
+   "al_brew"
+  ],
+  "deck": [
+   "al_hurled_pitch",
+   "al_hurled_pitch",
+   "al_hurled_pitch",
+   "al_brine_splash",
+   "al_brine_splash",
+   "al_quicklime",
+   "al_quicklime",
+   "al_clean_linen",
+   "al_clean_linen",
+   "al_decant"
+  ],
+  "subclasses": {
+   "apothecary": "Apothecary",
+   "plaguewright": "Plaguewright",
+   "transmuter": "Transmuter"
+  },
+  "blurb": "The Brewer. Throws Stable Fire and Water for anyone's Volatile to set off, and keeps the company's belt full of flasks.",
+  "art": "res://assets/art/alchemist.png",
+  "face": [
+   0.465,
+   0.16,
+   0.239,
+   0.177
+  ]
+ },
  "bulwark": {
   "name": "Bulwark",
   "hp": 48,
@@ -6,26 +41,26 @@
   "grit": 3,
   "color": "7f9cc6",
   "kit": [
-   "k_challenge"
+   "bw_k_bar_the_door"
   ],
   "deck": [
-   "brace",
-   "brace",
-   "brace",
-   "shield_slam",
-   "shield_slam",
-   "interpose",
-   "interpose",
-   "iron_vow",
-   "hold_the_line",
-   "warhammer"
+   "bw_brace",
+   "bw_brace",
+   "bw_brace",
+   "bw_mace_blow",
+   "bw_mace_blow",
+   "bw_mace_blow",
+   "bw_interpose",
+   "bw_interpose",
+   "bw_hold_the_line",
+   "bw_over_the_rim"
   ],
   "subclasses": {
    "last_bastion": "Last Bastion",
    "ironwarden": "Ironwarden",
    "thornguard": "Thornguard"
   },
-  "blurb": "Front-rank wall. Block, Armor, Taunt and Guard; turns punishment back on the foe.",
+  "blurb": "The Iron Vow. A church door for a shield: he stands where the blow is going, covers the company with Guard and Taunt, and makes every blow cost the foe.",
   "art": "res://assets/art/bulwark.png",
   "face": [
    0.432,
@@ -41,26 +76,26 @@
   "grit": 2,
   "color": "8aa271",
   "kit": [
-   "k_slash"
+   "du_find_the_gap"
   ],
   "deck": [
-   "arc_lash",
-   "arc_lash",
-   "lunge",
-   "lunge",
-   "bleed_out",
-   "bleed_out",
-   "riposte",
-   "flourish",
-   "flourish",
-   "coup"
+   "du_first_touch",
+   "du_first_touch",
+   "du_lunge",
+   "du_lunge",
+   "du_sighting_cut",
+   "du_sighting_cut",
+   "du_parry",
+   "du_parry",
+   "du_close_the_measure",
+   "du_close_the_measure"
   ],
   "subclasses": {
    "bladedancer": "Bladedancer",
-   "executioner": "Executioner",
-   "bloodletter": "Bloodletter"
+   "bloodletter": "Bloodletter",
+   "executioner": "Executioner"
   },
-  "blurb": "Mobile skirmisher. Momentum, Mark, Riposte, Bleed and Lightning.",
+  "blurb": "The Quick Blade. Chains actions back to back for Momentum, picks a foe with Mark, cuts in right after the company's blows, and spends it all on a Finisher.",
   "art": "res://assets/art/duelist.png",
   "face": [
    0.435,
@@ -75,104 +110,34 @@
   "armor": 0,
   "grit": 1,
   "color": "8e7aa6",
+  "attuned": 0,
   "kit": [
-   "k_attune"
+   "el_turn_the_ring"
   ],
   "deck": [
-   "tidebolt",
-   "tidebolt",
-   "kindle",
-   "kindle",
-   "rimeshard",
-   "arc_torrent",
-   "miasma",
-   "unmake",
-   "ward_sigil",
-   "convergence"
+   "el_ink_bolt",
+   "el_ink_bolt",
+   "el_ink_bolt",
+   "el_sigil_flick",
+   "el_sigil_flick",
+   "el_wet_the_nib",
+   "el_wet_the_nib",
+   "el_ward_sigil",
+   "el_ward_sigil",
+   "el_strike_across"
   ],
   "subclasses": {
    "accumulator": "Accumulator",
    "catalyst": "Catalyst",
    "prismatic": "Prismatic"
   },
-  "blurb": "Wields all six elements. Lays stacks, then sets them against each other.",
+  "blurb": "The Conjoiner. Lays one course on a foe and strikes another across it, and sets off what the company leaves behind.",
   "art": "res://assets/art/elementalist.png",
   "face": [
    0.448,
    0.157,
    0.226,
    0.177
-  ]
- },
- "alchemist": {
-  "name": "Alchemist",
-  "hp": 32,
-  "armor": 0,
-  "grit": 2,
-  "color": "a8653b",
-  "kit": [
-   "k_brew"
-  ],
-  "deck": [
-   "firepot",
-   "firepot",
-   "brine_jar",
-   "brine_jar",
-   "field_dressing",
-   "field_dressing",
-   "quicklime",
-   "distill",
-   "smoke_bomb",
-   "scald_jar"
-  ],
-  "subclasses": {
-   "transmuter": "Transmuter",
-   "plaguewright": "Plaguewright",
-   "apothecary": "Apothecary"
-  },
-  "blurb": "Back-rank brewer. Fire and Water, flasks for next round, healing and remedies.",
-  "art": "res://assets/art/alchemist.png",
-  "face": [
-   0.465,
-   0.16,
-   0.239,
-   0.177
-  ]
- },
- "oracle": {
-  "name": "Oracle",
-  "hp": 28,
-  "armor": 0,
-  "grit": 2,
-  "color": "6d5a8a",
-  "kit": [
-   "k_foresee"
-  ],
-  "attuned": 5,
-  "deck": [
-   "void_glimpse",
-   "void_glimpse",
-   "portent",
-   "portent",
-   "stall",
-   "ill_omen",
-   "time_shear",
-   "foreseen_blow",
-   "glimpse_ahead",
-   "crack_of_doom"
-  ],
-  "subclasses": {
-   "chronomancer": "Chronomancer",
-   "augur": "Augur",
-   "fatebinder": "Fatebinder"
-  },
-  "blurb": "Seer of the Void. Delays the foe, Primes the company, and writes Doom.",
-  "art": "res://assets/art/oracle.png",
-  "face": [
-   0.448,
-   0.131,
-   0.209,
-   0.166
   ]
  },
  "hexweaver": {
@@ -182,33 +147,67 @@
   "grit": 2,
   "color": "62804f",
   "kit": [
-   "k_hex"
+   "pass_it_on"
   ],
-  "attuned": 4,
   "deck": [
-   "curse_bolt",
-   "curse_bolt",
-   "blight_touch",
-   "blight_touch",
-   "withering",
-   "dark_pact",
-   "hex_ward",
-   "malediction",
+   "pin_the_poppet",
+   "pin_the_poppet",
+   "pin_the_poppet",
+   "knotted_cord",
+   "knotted_cord",
+   "knotted_cord",
    "evil_eye",
-   "drain"
+   "evil_eye",
+   "graveyard_dirt",
+   "blood_price"
   ],
   "subclasses": {
    "pactbound": "Pactbound",
    "doomsayer": "Doomsayer",
    "mirrorhex": "Mirrorhex"
   },
-  "blurb": "Curse-weaver of Toxin and Void. Lays Hex, shifts the company's afflictions onto the foe.",
+  "blurb": "Cunning folk of Toxin and Void. Lays Hex that blunts every blow, spends it for payoffs, and hands the company's ailments to the foes.",
   "art": "res://assets/art/hexweaver.png",
   "face": [
    0.448,
    0.16,
    0.226,
    0.171
+  ]
+ },
+ "oracle": {
+  "name": "Oracle",
+  "hp": 28,
+  "armor": 0,
+  "grit": 2,
+  "color": "6d5a8a",
+  "kit": [
+   "or_hasten"
+  ],
+  "deck": [
+   "or_void_glimpse",
+   "or_void_glimpse",
+   "or_void_glimpse",
+   "or_foretelling",
+   "or_foretelling",
+   "or_stall",
+   "or_stall",
+   "or_drawn_veil",
+   "or_drawn_veil",
+   "or_time_shear"
+  ],
+  "subclasses": {
+   "augur": "Augur",
+   "chronomancer": "Chronomancer",
+   "fatebinder": "Fatebinder"
+  },
+  "blurb": "The Anchorite. Reads the foes' intents, Delays the blow that matters and Primes the company's best.",
+  "art": "res://assets/art/oracle.png",
+  "face": [
+   0.448,
+   0.131,
+   0.209,
+   0.166
   ]
  }
 }
