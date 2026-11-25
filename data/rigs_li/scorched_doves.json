@@ -1,0 +1,214 @@
+{
+"key": "scorched_doves",
+"source": "worlds/world_XV_b_scorched_doves",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+40,
+118,
+302,
+480
+],
+"bones": {
+"flock": {
+"pivot": [
+168.0,
+210.0
+],
+"parent": null
+},
+"dove_1": {
+"pivot": [
+275.1,
+185.04
+],
+"parent": "flock"
+},
+"dove_2": {
+"pivot": [
+220.92,
+130.44
+],
+"parent": "flock"
+},
+"dove_3": {
+"pivot": [
+161.7,
+185.04
+],
+"parent": "flock"
+},
+"dove_4": {
+"pivot": [
+93.66,
+142.92
+],
+"parent": "flock"
+},
+"dove_5": {
+"pivot": [
+239.82,
+255.24
+],
+"parent": "flock"
+},
+"dove_6": {
+"pivot": [
+173.04,
+289.56
+],
+"parent": "flock"
+},
+"dove_7": {
+"pivot": [
+105.0,
+249.0
+],
+"parent": "flock"
+},
+"dove_8": {
+"pivot": [
+54.6,
+194.4
+],
+"parent": "flock"
+}
+},
+"layers": [
+{
+"name": "00_flock",
+"bone": "flock",
+"z": 0,
+"pos": [
+181.2,
+251.4
+],
+"size": [
+121,
+146
+]
+},
+{
+"name": "01_dove_8",
+"bone": "dove_8",
+"z": 1,
+"pos": [
+39.6,
+171.0
+],
+"size": [
+43,
+54
+]
+},
+{
+"name": "02_dove_6",
+"bone": "dove_6",
+"z": 2,
+"pos": [
+155.4,
+247.8
+],
+"size": [
+44,
+60
+]
+},
+{
+"name": "03_dove_5",
+"bone": "dove_5",
+"z": 3,
+"pos": [
+203.4,
+222.0
+],
+"size": [
+64,
+47
+]
+},
+{
+"name": "04_dove_7",
+"bone": "dove_7",
+"z": 4,
+"pos": [
+82.2,
+214.2
+],
+"size": [
+46,
+52
+]
+},
+{
+"name": "05_dove_1",
+"bone": "dove_1",
+"z": 5,
+"pos": [
+245.4,
+135.0
+],
+"size": [
+57,
+64
+]
+},
+{
+"name": "06_dove_4",
+"bone": "dove_4",
+"z": 6,
+"pos": [
+68.4,
+127.2
+],
+"size": [
+52,
+61
+]
+},
+{
+"name": "07_dove_2",
+"bone": "dove_2",
+"z": 7,
+"pos": [
+187.2,
+117.6
+],
+"size": [
+65,
+59
+]
+},
+{
+"name": "08_dove_3",
+"bone": "dove_3",
+"z": 8,
+"pos": [
+100.2,
+146.4
+],
+"size": [
+176,
+230
+]
+},
+{
+"name": "09_root",
+"bone": "root",
+"z": 9,
+"pos": [
+82.8,
+470.4
+],
+"size": [
+182,
+10
+]
+}
+]
+}

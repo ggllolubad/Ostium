@@ -1,0 +1,459 @@
+{
+"key": "scold",
+"source": "worlds/world_XIII_b_scold",
+"scale": 0.6,
+"canvas": [
+420,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+108,
+80,
+333,
+481
+],
+"bones": {
+"pelvis": {
+"pivot": [
+272.4,
+295.2
+],
+"parent": null
+},
+"torso": {
+"pivot": [
+270.96,
+273.3
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+221.76,
+200.28
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+242.46,
+198.66
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+187.2,
+236.4
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+156.0,
+181.2
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+220.38,
+216.96
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+174.0,
+230.4
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+141.6,
+178.8
+],
+"parent": "forearm_f"
+},
+"thigh_n": {
+"pivot": [
+261.12,
+295.38
+],
+"parent": "pelvis"
+},
+"shin_n": {
+"pivot": [
+222.0,
+381.6
+],
+"parent": "thigh_n"
+},
+"foot_n": {
+"pivot": [
+224.4,
+451.2
+],
+"parent": "shin_n"
+},
+"thigh_f": {
+"pivot": [
+285.96,
+294.96
+],
+"parent": "pelvis"
+},
+"shin_f": {
+"pivot": [
+291.6,
+384.0
+],
+"parent": "thigh_f"
+},
+"foot_f": {
+"pivot": [
+319.2,
+450.0
+],
+"parent": "shin_f"
+},
+"fiddle": {
+"pivot": [
+215.76,
+188.28
+],
+"parent": "head"
+},
+"bell": {
+"pivot": [
+135.6,
+174.6
+],
+"parent": "head"
+},
+"skirt": {
+"pivot": [
+270.96,
+273.3
+],
+"parent": "pelvis"
+}
+},
+"layers": [
+{
+"name": "00_upperarm_f",
+"bone": "upperarm_f",
+"z": 0,
+"pos": [
+164.4,
+207.0
+],
+"size": [
+69,
+38
+]
+},
+{
+"name": "01_forearm_f",
+"bone": "forearm_f",
+"z": 1,
+"pos": [
+136.2,
+175.2
+],
+"size": [
+50,
+69
+]
+},
+{
+"name": "02_forearm_f",
+"bone": "forearm_f",
+"z": 2,
+"pos": [
+132.6,
+171.0
+],
+"size": [
+52,
+70
+]
+},
+{
+"name": "03_thigh_f",
+"bone": "thigh_f",
+"z": 3,
+"pos": [
+264.0,
+287.4
+],
+"size": [
+48,
+110
+]
+},
+{
+"name": "04_shin_f",
+"bone": "shin_f",
+"z": 4,
+"pos": [
+275.4,
+371.4
+],
+"size": [
+56,
+91
+]
+},
+{
+"name": "05_foot_f",
+"bone": "foot_f",
+"z": 5,
+"pos": [
+285.6,
+438.0
+],
+"size": [
+48,
+43
+]
+},
+{
+"name": "06_torso",
+"bone": "torso",
+"z": 6,
+"pos": [
+211.8,
+175.2
+],
+"size": [
+95,
+136
+]
+},
+{
+"name": "07_thigh_n",
+"bone": "thigh_n",
+"z": 7,
+"pos": [
+206.4,
+285.6
+],
+"size": [
+76,
+110
+]
+},
+{
+"name": "08_shin_n",
+"bone": "shin_n",
+"z": 8,
+"pos": [
+205.2,
+368.4
+],
+"size": [
+38,
+95
+]
+},
+{
+"name": "09_foot_n",
+"bone": "foot_n",
+"z": 9,
+"pos": [
+190.2,
+439.2
+],
+"size": [
+49,
+42
+]
+},
+{
+"name": "10_foot_n",
+"bone": "foot_n",
+"z": 10,
+"pos": [
+196.2,
+460.2
+],
+"size": [
+35,
+10
+]
+},
+{
+"name": "11_skirt",
+"bone": "skirt",
+"z": 11,
+"pos": [
+193.2,
+260.4
+],
+"size": [
+126,
+104
+]
+},
+{
+"name": "12_pelvis",
+"bone": "pelvis",
+"z": 12,
+"pos": [
+232.2,
+259.2
+],
+"size": [
+76,
+64
+]
+},
+{
+"name": "13_head",
+"bone": "head",
+"z": 13,
+"pos": [
+171.6,
+78.6
+],
+"size": [
+82,
+137
+]
+},
+{
+"name": "14_head",
+"bone": "head",
+"z": 14,
+"pos": [
+130.2,
+109.8
+],
+"size": [
+113,
+80
+]
+},
+{
+"name": "15_upperarm_n",
+"bone": "upperarm_n",
+"z": 15,
+"pos": [
+177.0,
+188.4
+],
+"size": [
+79,
+63
+]
+},
+{
+"name": "16_forearm_n",
+"bone": "forearm_n",
+"z": 16,
+"pos": [
+150.0,
+177.6
+],
+"size": [
+50,
+73
+]
+},
+{
+"name": "17_upperarm_n",
+"bone": "upperarm_n",
+"z": 17,
+"pos": [
+207.0,
+198.0
+],
+"size": [
+35,
+29
+]
+},
+{
+"name": "18_forearm_n",
+"bone": "forearm_n",
+"z": 18,
+"pos": [
+146.4,
+165.0
+],
+"size": [
+53,
+82
+]
+},
+{
+"name": "19_fiddle",
+"bone": "fiddle",
+"z": 19,
+"pos": [
+108.0,
+168.0
+],
+"size": [
+148,
+63
+]
+},
+{
+"name": "20_hand_f",
+"bone": "hand_f",
+"z": 20,
+"pos": [
+122.4,
+142.2
+],
+"size": [
+35,
+45
+]
+},
+{
+"name": "21_hand_n",
+"bone": "hand_n",
+"z": 21,
+"pos": [
+135.0,
+112.2
+],
+"size": [
+38,
+99
+]
+},
+{
+"name": "22_bell",
+"bone": "bell",
+"z": 22,
+"pos": [
+124.2,
+172.2
+],
+"size": [
+25,
+31
+]
+},
+{
+"name": "23_root",
+"bone": "root",
+"z": 23,
+"pos": [
+184.8,
+471.6
+],
+"size": [
+127,
+9
+]
+}
+]
+}

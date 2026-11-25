@@ -1,0 +1,314 @@
+{
+"key": "sexton_beetles",
+"source": "worlds/world_IX_b_sexton_beetles",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+17,
+279,
+326,
+486
+],
+"bones": {
+"mound": {
+"pivot": [
+174.0,
+420.0
+],
+"parent": null
+},
+"hand": {
+"pivot": [
+169.2,
+384.0
+],
+"parent": "mound"
+},
+"beetle_1": {
+"pivot": [
+254.4,
+422.4
+],
+"parent": "mound"
+},
+"beetle_2": {
+"pivot": [
+211.2,
+398.4
+],
+"parent": "mound"
+},
+"beetle_3": {
+"pivot": [
+117.6,
+398.4
+],
+"parent": "mound"
+},
+"beetle_4": {
+"pivot": [
+90.0,
+433.2
+],
+"parent": "mound"
+},
+"beetle_5": {
+"pivot": [
+231.6,
+448.8
+],
+"parent": "mound"
+},
+"beetle_6": {
+"pivot": [
+148.8,
+421.2
+],
+"parent": "mound"
+},
+"beetle_7": {
+"pivot": [
+188.4,
+441.6
+],
+"parent": "mound"
+},
+"beetle_8": {
+"pivot": [
+280.8,
+456.0
+],
+"parent": "mound"
+},
+"beetle_9": {
+"pivot": [
+60.0,
+459.6
+],
+"parent": "mound"
+},
+"beetle_10": {
+"pivot": [
+127.2,
+452.4
+],
+"parent": "mound"
+},
+"beetle_11": {
+"pivot": [
+180.0,
+367.2
+],
+"parent": "mound"
+},
+"beetle_12": {
+"pivot": [
+136.8,
+360.0
+],
+"parent": "mound"
+}
+},
+"layers": [
+{
+"name": "00_mound",
+"bone": "mound",
+"z": 0,
+"pos": [
+17.4,
+372.0
+],
+"size": [
+310,
+114
+]
+},
+{
+"name": "01_hand",
+"bone": "hand",
+"z": 1,
+"pos": [
+131.4,
+279.0
+],
+"size": [
+70,
+166
+]
+},
+{
+"name": "02_beetle_1",
+"bone": "beetle_1",
+"z": 2,
+"pos": [
+211.8,
+403.8
+],
+"size": [
+67,
+49
+]
+},
+{
+"name": "03_beetle_2",
+"bone": "beetle_2",
+"z": 3,
+"pos": [
+169.2,
+370.2
+],
+"size": [
+65,
+59
+]
+},
+{
+"name": "04_beetle_3",
+"bone": "beetle_3",
+"z": 4,
+"pos": [
+73.8,
+375.6
+],
+"size": [
+69,
+52
+]
+},
+{
+"name": "05_beetle_4",
+"bone": "beetle_4",
+"z": 5,
+"pos": [
+49.2,
+413.4
+],
+"size": [
+65,
+47
+]
+},
+{
+"name": "06_beetle_5",
+"bone": "beetle_5",
+"z": 6,
+"pos": [
+192.0,
+429.6
+],
+"size": [
+64,
+46
+]
+},
+{
+"name": "07_beetle_6",
+"bone": "beetle_6",
+"z": 7,
+"pos": [
+102.0,
+400.2
+],
+"size": [
+74,
+54
+]
+},
+{
+"name": "08_beetle_7",
+"bone": "beetle_7",
+"z": 8,
+"pos": [
+172.8,
+419.4
+],
+"size": [
+31,
+47
+]
+},
+{
+"name": "09_beetle_8",
+"bone": "beetle_8",
+"z": 9,
+"pos": [
+243.0,
+439.2
+],
+"size": [
+60,
+43
+]
+},
+{
+"name": "10_beetle_9",
+"bone": "beetle_9",
+"z": 10,
+"pos": [
+21.6,
+412.2
+],
+"size": [
+61,
+74
+]
+},
+{
+"name": "11_beetle_10",
+"bone": "beetle_10",
+"z": 11,
+"pos": [
+85.2,
+430.8
+],
+"size": [
+65,
+51
+]
+},
+{
+"name": "12_beetle_11",
+"bone": "beetle_11",
+"z": 12,
+"pos": [
+151.8,
+335.4
+],
+"size": [
+47,
+55
+]
+},
+{
+"name": "13_beetle_12",
+"bone": "beetle_12",
+"z": 13,
+"pos": [
+107.4,
+343.2
+],
+"size": [
+49,
+43
+]
+},
+{
+"name": "14_mound",
+"bone": "mound",
+"z": 14,
+"pos": [
+28.8,
+450.6
+],
+"size": [
+290,
+30
+]
+}
+]
+}

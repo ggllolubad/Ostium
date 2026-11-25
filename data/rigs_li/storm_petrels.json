@@ -1,0 +1,327 @@
+{
+"key": "storm_petrels",
+"source": "worlds/world_VI_b_storm_petrels",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+0,
+230,
+360,
+492
+],
+"bones": {
+"water": {
+"pivot": [
+180.0,
+444.0
+],
+"parent": null
+},
+"bird_1": {
+"pivot": [
+270.0,
+300.0
+],
+"parent": "water"
+},
+"bird_2": {
+"pivot": [
+102.0,
+282.0
+],
+"parent": "water"
+},
+"bird_3": {
+"pivot": [
+180.0,
+271.2
+],
+"parent": "water"
+},
+"bird_4": {
+"pivot": [
+231.6,
+354.0
+],
+"parent": "water"
+},
+"bird_5": {
+"pivot": [
+144.0,
+336.0
+],
+"parent": "water"
+},
+"bird_6": {
+"pivot": [
+60.0,
+360.0
+],
+"parent": "water"
+},
+"bird_7": {
+"pivot": [
+294.0,
+384.0
+],
+"parent": "water"
+},
+"bird_8": {
+"pivot": [
+186.0,
+390.0
+],
+"parent": "water"
+},
+"bird_9": {
+"pivot": [
+96.0,
+405.6
+],
+"parent": "water"
+},
+"bird_10": {
+"pivot": [
+252.0,
+420.0
+],
+"parent": "water"
+},
+"bird_11": {
+"pivot": [
+144.0,
+427.2
+],
+"parent": "water"
+},
+"dead": {
+"pivot": [
+210.0,
+448.8
+],
+"parent": "water"
+},
+"sail": {
+"pivot": [
+132.0,
+456.0
+],
+"parent": "bird_11"
+}
+},
+"layers": [
+{
+"name": "00_water",
+"bone": "water",
+"z": 0,
+"pos": [
+0.0,
+432.6
+],
+"size": [
+360,
+59
+]
+},
+{
+"name": "01_dead",
+"bone": "dead",
+"z": 1,
+"pos": [
+144.6,
+432.6
+],
+"size": [
+109,
+51
+]
+},
+{
+"name": "02_bird_1",
+"bone": "bird_1",
+"z": 2,
+"pos": [
+243.6,
+250.2
+],
+"size": [
+58,
+78
+]
+},
+{
+"name": "03_bird_2",
+"bone": "bird_2",
+"z": 3,
+"pos": [
+75.6,
+228.6
+],
+"size": [
+55,
+81
+]
+},
+{
+"name": "04_bird_3",
+"bone": "bird_3",
+"z": 4,
+"pos": [
+155.4,
+231.0
+],
+"size": [
+57,
+65
+]
+},
+{
+"name": "05_bird_4",
+"bone": "bird_4",
+"z": 5,
+"pos": [
+199.8,
+289.8
+],
+"size": [
+68,
+98
+]
+},
+{
+"name": "06_bird_5",
+"bone": "bird_5",
+"z": 6,
+"pos": [
+111.0,
+280.8
+],
+"size": [
+73,
+87
+]
+},
+{
+"name": "07_bird_6",
+"bone": "bird_6",
+"z": 7,
+"pos": [
+30.0,
+296.4
+],
+"size": [
+64,
+97
+]
+},
+{
+"name": "08_bird_7",
+"bone": "bird_7",
+"z": 8,
+"pos": [
+260.4,
+331.8
+],
+"size": [
+80,
+87
+]
+},
+{
+"name": "09_bird_8",
+"bone": "bird_8",
+"z": 9,
+"pos": [
+150.6,
+314.4
+],
+"size": [
+76,
+112
+]
+},
+{
+"name": "10_bird_9",
+"bone": "bird_9",
+"z": 10,
+"pos": [
+60.6,
+346.8
+],
+"size": [
+76,
+95
+]
+},
+{
+"name": "11_bird_10",
+"bone": "bird_10",
+"z": 11,
+"pos": [
+215.4,
+351.0
+],
+"size": [
+84,
+106
+]
+},
+{
+"name": "12_bird_11",
+"bone": "bird_11",
+"z": 12,
+"pos": [
+106.2,
+350.4
+],
+"size": [
+80,
+116
+]
+},
+{
+"name": "13_bird_4",
+"bone": "bird_4",
+"z": 13,
+"pos": [
+187.8,
+346.8
+],
+"size": [
+62,
+72
+]
+},
+{
+"name": "14_sail",
+"bone": "sail",
+"z": 14,
+"pos": [
+118.8,
+449.4
+],
+"size": [
+51,
+34
+]
+},
+{
+"name": "15_water",
+"bone": "water",
+"z": 15,
+"pos": [
+63.6,
+269.4
+],
+"size": [
+250,
+152
+]
+}
+]
+}

@@ -1,0 +1,193 @@
+{
+"key": "wheel_of_thrones",
+"source": "worlds/world_XV_b_wheel_of_thrones",
+"scale": 0.6,
+"canvas": [
+1200,
+1440
+],
+"ground": 1422.0,
+"flip": true,
+"ink": [
+0,
+0,
+1200,
+1440
+],
+"bones": {
+"wheel": {
+"pivot": [
+594.0,
+647.1
+],
+"parent": null
+},
+"outer": {
+"pivot": [
+594.0,
+647.1
+],
+"parent": "wheel"
+},
+"inner": {
+"pivot": [
+594.0,
+647.1
+],
+"parent": "wheel"
+},
+"hub_eye": {
+"pivot": [
+594.0,
+647.1
+],
+"parent": "inner"
+},
+"traces": {
+"pivot": [
+594.0,
+647.1
+],
+"parent": "wheel"
+},
+"floor": {
+"pivot": [
+600.0,
+1398.0
+],
+"parent": null
+}
+},
+"layers": [
+{
+"name": "00_floor",
+"bone": "floor",
+"z": 0,
+"pos": [
+0.0,
+1363.8
+],
+"size": [
+1200,
+76
+]
+},
+{
+"name": "01_outer",
+"bone": "outer",
+"z": 1,
+"pos": [
+597.6,
+0.0
+],
+"size": [
+560,
+1323
+]
+},
+{
+"name": "02_inner",
+"bone": "inner",
+"z": 2,
+"pos": [
+191.4,
+93.0
+],
+"size": [
+460,
+1111
+]
+},
+{
+"name": "03_outer",
+"bone": "outer",
+"z": 3,
+"pos": [
+7.2,
+0.0
+],
+"size": [
+1193,
+1396
+]
+},
+{
+"name": "04_inner",
+"bone": "inner",
+"z": 4,
+"pos": [
+412.8,
+498.0
+],
+"size": [
+365,
+326
+]
+},
+{
+"name": "05_hub_eye",
+"bone": "hub_eye",
+"z": 5,
+"pos": [
+414.6,
+534.6
+],
+"size": [
+359,
+262
+]
+},
+{
+"name": "06_inner",
+"bone": "inner",
+"z": 6,
+"pos": [
+423.0,
+66.6
+],
+"size": [
+573,
+1135
+]
+},
+{
+"name": "07_outer",
+"bone": "outer",
+"z": 7,
+"pos": [
+0.0,
+0.0
+],
+"size": [
+1200,
+1440
+]
+},
+{
+"name": "08_traces",
+"bone": "traces",
+"z": 8,
+"pos": [
+565.8,
+672.6
+],
+"size": [
+522,
+763
+]
+},
+{
+"name": "09_root",
+"bone": "root",
+"z": 9,
+"pos": [
+100.2,
+432.0
+],
+"size": [
+1027,
+1006
+]
+}
+]
+}

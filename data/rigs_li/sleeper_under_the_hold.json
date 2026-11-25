@@ -1,0 +1,167 @@
+{
+"key": "sleeper_under_the_hold",
+"source": "worlds/world_VIII_b_sleeper_under_the_hold",
+"scale": 0.6,
+"canvas": [
+1440,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+1440,
+960
+],
+"bones": {
+"body": {
+"pivot": [
+1260.0,
+900.0
+],
+"parent": null
+},
+"head": {
+"pivot": [
+264.0,
+576.0
+],
+"parent": "body"
+},
+"upperarm": {
+"pivot": [
+642.0,
+456.0
+],
+"parent": "body"
+},
+"forearm": {
+"pivot": [
+504.0,
+-96.0
+],
+"parent": "upperarm"
+},
+"hand": {
+"pivot": [
+384.0,
+198.0
+],
+"parent": "forearm"
+},
+"bucket": {
+"pivot": [
+360.0,
+384.0
+],
+"parent": "hand"
+}
+},
+"layers": [
+{
+"name": "00_body",
+"bone": "body",
+"z": 0,
+"pos": [
+155.4,
+48.6
+],
+"size": [
+1285,
+911
+]
+},
+{
+"name": "01_upperarm",
+"bone": "upperarm",
+"z": 1,
+"pos": [
+429.6,
+0.0
+],
+"size": [
+283,
+485
+]
+},
+{
+"name": "02_body",
+"bone": "body",
+"z": 2,
+"pos": [
+463.2,
+271.8
+],
+"size": [
+374,
+347
+]
+},
+{
+"name": "03_head",
+"bone": "head",
+"z": 3,
+"pos": [
+0.0,
+242.4
+],
+"size": [
+278,
+718
+]
+},
+{
+"name": "04_forearm",
+"bone": "forearm",
+"z": 4,
+"pos": [
+321.6,
+0.0
+],
+"size": [
+262,
+254
+]
+},
+{
+"name": "05_hand",
+"bone": "hand",
+"z": 5,
+"pos": [
+263.4,
+161.4
+],
+"size": [
+197,
+305
+]
+},
+{
+"name": "06_bucket",
+"bone": "bucket",
+"z": 6,
+"pos": [
+265.8,
+424.8
+],
+"size": [
+73,
+140
+]
+},
+{
+"name": "07_root",
+"bone": "root",
+"z": 7,
+"pos": [
+0.0,
+851.4
+],
+"size": [
+1440,
+109
+]
+}
+]
+}

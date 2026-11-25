@@ -1,0 +1,207 @@
+{
+"key": "spire_termites",
+"source": "worlds/world_X_b_spire_termites",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+25,
+223,
+348,
+484
+],
+"bones": {
+"cone": {
+"pivot": [
+180.0,
+474.0
+],
+"parent": null
+},
+"hilt": {
+"pivot": [
+180.0,
+282.0
+],
+"parent": "cone"
+},
+"swarm": {
+"pivot": [
+180.0,
+384.0
+],
+"parent": "cone"
+},
+"column": {
+"pivot": [
+288.0,
+468.0
+],
+"parent": "cone"
+},
+"alate": {
+"pivot": [
+210.0,
+336.0
+],
+"parent": "cone"
+},
+"soldier_1": {
+"pivot": [
+218.4,
+420.0
+],
+"parent": "cone"
+},
+"soldier_2": {
+"pivot": [
+148.8,
+367.2
+],
+"parent": "cone"
+},
+"soldier_3": {
+"pivot": [
+181.2,
+312.0
+],
+"parent": "cone"
+}
+},
+"layers": [
+{
+"name": "00_cone",
+"bone": "cone",
+"z": 0,
+"pos": [
+25.2,
+277.2
+],
+"size": [
+300,
+208
+]
+},
+{
+"name": "01_hilt",
+"bone": "hilt",
+"z": 1,
+"pos": [
+140.4,
+223.2
+],
+"size": [
+80,
+96
+]
+},
+{
+"name": "02_swarm",
+"bone": "swarm",
+"z": 2,
+"pos": [
+94.8,
+293.4
+],
+"size": [
+164,
+182
+]
+},
+{
+"name": "03_column",
+"bone": "column",
+"z": 3,
+"pos": [
+235.8,
+453.0
+],
+"size": [
+112,
+25
+]
+},
+{
+"name": "04_alate",
+"bone": "alate",
+"z": 4,
+"pos": [
+197.4,
+337.8
+],
+"size": [
+35,
+25
+]
+},
+{
+"name": "05_soldier_1",
+"bone": "soldier_1",
+"z": 5,
+"pos": [
+196.8,
+399.0
+],
+"size": [
+56,
+42
+]
+},
+{
+"name": "06_soldier_2",
+"bone": "soldier_2",
+"z": 6,
+"pos": [
+122.4,
+345.0
+],
+"size": [
+44,
+38
+]
+},
+{
+"name": "07_soldier_3",
+"bone": "soldier_3",
+"z": 7,
+"pos": [
+166.8,
+283.8
+],
+"size": [
+28,
+49
+]
+},
+{
+"name": "08_cone",
+"bone": "cone",
+"z": 8,
+"pos": [
+150.6,
+383.4
+],
+"size": [
+70,
+49
+]
+},
+{
+"name": "09_root",
+"bone": "root",
+"z": 9,
+"pos": [
+58.8,
+469.8
+],
+"size": [
+242,
+11
+]
+}
+]
+}

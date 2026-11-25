@@ -1,0 +1,498 @@
+{
+"key": "procession",
+"source": "worlds/world_X_b_procession",
+"scale": 0.6,
+"canvas": [
+1440,
+1440
+],
+"ground": 1422.0,
+"flip": true,
+"ink": [
+89,
+0,
+1364,
+1433
+],
+"bones": {
+"mass": {
+"pivot": [
+750.0,
+1422.0
+],
+"parent": null
+},
+"bearer_1": {
+"pivot": [
+1170.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_2": {
+"pivot": [
+1026.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_3": {
+"pivot": [
+852.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_4": {
+"pivot": [
+726.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_5": {
+"pivot": [
+558.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_6": {
+"pivot": [
+396.0,
+1422.0
+],
+"parent": "mass"
+},
+"bearer_7": {
+"pivot": [
+1080.0,
+1410.0
+],
+"parent": "mass"
+},
+"bearer_8": {
+"pivot": [
+942.0,
+1410.0
+],
+"parent": "mass"
+},
+"bearer_9": {
+"pivot": [
+792.0,
+1410.0
+],
+"parent": "mass"
+},
+"bearer_10": {
+"pivot": [
+642.0,
+1410.0
+],
+"parent": "mass"
+},
+"bearer_11": {
+"pivot": [
+492.0,
+1410.0
+],
+"parent": "mass"
+},
+"bearer_12": {
+"pivot": [
+324.0,
+1410.0
+],
+"parent": "mass"
+},
+"float": {
+"pivot": [
+708.0,
+1160.4
+],
+"parent": "mass"
+},
+"saint": {
+"pivot": [
+708.0,
+852.0
+],
+"parent": "float"
+},
+"saint_head": {
+"pivot": [
+708.0,
+198.0
+],
+"parent": "saint"
+},
+"banner": {
+"pivot": [
+210.0,
+1116.0
+],
+"parent": "float"
+},
+"votives": {
+"pivot": [
+708.0,
+1128.0
+],
+"parent": "float"
+}
+},
+"layers": [
+{
+"name": "00_float",
+"bone": "float",
+"z": 0,
+"pos": [
+166.2,
+1128.0
+],
+"size": [
+1085,
+31
+]
+},
+{
+"name": "01_bearer_7",
+"bone": "bearer_7",
+"z": 1,
+"pos": [
+927.6,
+1117.2
+],
+"size": [
+216,
+312
+]
+},
+{
+"name": "02_bearer_8",
+"bone": "bearer_8",
+"z": 2,
+"pos": [
+877.2,
+1127.4
+],
+"size": [
+131,
+302
+]
+},
+{
+"name": "03_bearer_9",
+"bone": "bearer_9",
+"z": 3,
+"pos": [
+610.2,
+1114.2
+],
+"size": [
+260,
+315
+]
+},
+{
+"name": "04_bearer_10",
+"bone": "bearer_10",
+"z": 4,
+"pos": [
+558.0,
+1126.2
+],
+"size": [
+149,
+303
+]
+},
+{
+"name": "05_bearer_11",
+"bone": "bearer_11",
+"z": 5,
+"pos": [
+411.6,
+1125.0
+],
+"size": [
+143,
+304
+]
+},
+{
+"name": "06_bearer_12",
+"bone": "bearer_12",
+"z": 6,
+"pos": [
+156.0,
+1117.2
+],
+"size": [
+229,
+312
+]
+},
+{
+"name": "07_float",
+"bone": "float",
+"z": 7,
+"pos": [
+174.0,
+827.4
+],
+"size": [
+1056,
+353
+]
+},
+{
+"name": "08_saint",
+"bone": "saint",
+"z": 8,
+"pos": [
+538.2,
+28.8
+],
+"size": [
+290,
+838
+]
+},
+{
+"name": "09_saint_head",
+"bone": "saint_head",
+"z": 9,
+"pos": [
+491.4,
+0.0
+],
+"size": [
+469,
+345
+]
+},
+{
+"name": "10_float",
+"bone": "float",
+"z": 10,
+"pos": [
+433.2,
+844.2
+],
+"size": [
+392,
+364
+]
+},
+{
+"name": "11_bearer_1",
+"bone": "bearer_1",
+"z": 11,
+"pos": [
+1057.2,
+1143.0
+],
+"size": [
+181,
+286
+]
+},
+{
+"name": "12_bearer_2",
+"bone": "bearer_2",
+"z": 12,
+"pos": [
+820.8,
+1128.6
+],
+"size": [
+283,
+301
+]
+},
+{
+"name": "13_bearer_3",
+"bone": "bearer_3",
+"z": 13,
+"pos": [
+762.0,
+1146.0
+],
+"size": [
+145,
+283
+]
+},
+{
+"name": "14_bearer_4",
+"bone": "bearer_4",
+"z": 14,
+"pos": [
+546.6,
+1128.0
+],
+"size": [
+261,
+301
+]
+},
+{
+"name": "15_bearer_5",
+"bone": "bearer_5",
+"z": 15,
+"pos": [
+420.0,
+1129.2
+],
+"size": [
+188,
+300
+]
+},
+{
+"name": "16_bearer_6",
+"bone": "bearer_6",
+"z": 16,
+"pos": [
+261.0,
+1129.2
+],
+"size": [
+199,
+300
+]
+},
+{
+"name": "17_float",
+"bone": "float",
+"z": 17,
+"pos": [
+154.2,
+1143.0
+],
+"size": [
+1116,
+55
+]
+},
+{
+"name": "18_bearer_1",
+"bone": "bearer_1",
+"z": 18,
+"pos": [
+1095.6,
+1139.4
+],
+"size": [
+45,
+35
+]
+},
+{
+"name": "19_bearer_2",
+"bone": "bearer_2",
+"z": 19,
+"pos": [
+859.8,
+1134.6
+],
+"size": [
+52,
+41
+]
+},
+{
+"name": "20_bearer_3",
+"bone": "bearer_3",
+"z": 20,
+"pos": [
+825.6,
+1138.2
+],
+"size": [
+44,
+34
+]
+},
+{
+"name": "21_bearer_4",
+"bone": "bearer_4",
+"z": 21,
+"pos": [
+592.8,
+1134.6
+],
+"size": [
+47,
+40
+]
+},
+{
+"name": "22_bearer_5",
+"bone": "bearer_5",
+"z": 22,
+"pos": [
+449.4,
+1135.2
+],
+"size": [
+45,
+36
+]
+},
+{
+"name": "23_bearer_6",
+"bone": "bearer_6",
+"z": 23,
+"pos": [
+304.8,
+1134.0
+],
+"size": [
+47,
+38
+]
+},
+{
+"name": "24_votives",
+"bone": "votives",
+"z": 24,
+"pos": [
+194.4,
+1138.8
+],
+"size": [
+1000,
+56
+]
+},
+{
+"name": "25_banner",
+"bone": "banner",
+"z": 25,
+"pos": [
+138.6,
+533.4
+],
+"size": [
+110,
+617
+]
+},
+{
+"name": "26_mass",
+"bone": "mass",
+"z": 26,
+"pos": [
+88.2,
+1398.6
+],
+"size": [
+1277,
+34
+]
+}
+]
+}

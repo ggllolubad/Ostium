@@ -1,0 +1,153 @@
+{
+"key": "sea_lice",
+"source": "worlds/world_VII_b_sea_lice",
+"scale": 0.6,
+"canvas": [
+480,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+0,
+276,
+448,
+490
+],
+"bones": {
+"hammock": {
+"pivot": [
+240.0,
+438.0
+],
+"parent": null
+},
+"swarm_1": {
+"pivot": [
+216.0,
+360.0
+],
+"parent": "hammock"
+},
+"swarm_2": {
+"pivot": [
+198.0,
+420.0
+],
+"parent": "swarm_1"
+},
+"swarm_3": {
+"pivot": [
+96.0,
+462.0
+],
+"parent": "swarm_2"
+}
+},
+"layers": [
+{
+"name": "00_hammock",
+"bone": "hammock",
+"z": 0,
+"pos": [
+42.6,
+372.6
+],
+"size": [
+406,
+112
+]
+},
+{
+"name": "01_swarm_1",
+"bone": "swarm_1",
+"z": 1,
+"pos": [
+89.4,
+285.0
+],
+"size": [
+230,
+150
+]
+},
+{
+"name": "02_swarm_1",
+"bone": "swarm_1",
+"z": 2,
+"pos": [
+88.2,
+274.8
+],
+"size": [
+227,
+161
+]
+},
+{
+"name": "03_swarm_2",
+"bone": "swarm_2",
+"z": 3,
+"pos": [
+43.2,
+394.8
+],
+"size": [
+197,
+93
+]
+},
+{
+"name": "04_swarm_2",
+"bone": "swarm_2",
+"z": 4,
+"pos": [
+74.4,
+391.8
+],
+"size": [
+156,
+94
+]
+},
+{
+"name": "05_swarm_3",
+"bone": "swarm_3",
+"z": 5,
+"pos": [
+0.0,
+442.8
+],
+"size": [
+97,
+44
+]
+},
+{
+"name": "06_swarm_3",
+"bone": "swarm_3",
+"z": 6,
+"pos": [
+0.0,
+433.8
+],
+"size": [
+106,
+56
+]
+},
+{
+"name": "07_swarm_1",
+"bone": "swarm_1",
+"z": 7,
+"pos": [
+97.2,
+288.0
+],
+"size": [
+92,
+132
+]
+}
+]
+}
