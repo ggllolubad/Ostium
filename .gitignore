@@ -9,3 +9,4 @@ __pycache__/
 node_modules/
 # Art pipeline outputs (regenerate from the scripts)
 art/party/out/
+build/
