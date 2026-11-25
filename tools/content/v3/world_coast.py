@@ -45,7 +45,7 @@ creature("wrecker", "Wrecker", "foe", 34, ranks=[2, 3], role="afflicter",
                   "cosh": I("Cosh", "attack", "front", [D(9)]),
                   "hook": I("Wrecking Hook", "attack", "rank2", [D(5), A("water", 1, attr="stable")])},
          ai=[{"use": "lamp", "every": 3}, {"use": "hook", "every": 3, "offset": 1}, {"use": "cosh"}],
-         personality="cunning", lore="It lights a lamp on the cliff and waits for the ships to come in.", world=W)
+         lore="It lights a lamp on the cliff and waits for the ships to come in.", world=W)
 
 creature("shock_eel", "Shock Eel", "foe", 32, ranks=[3, 4], role="attacker", charge_name="Glow",
          resist={"lightning": "immune", "water": "resist", "toxin": "weak"},
@@ -62,7 +62,7 @@ creature("storm_harpy", "Storm Harpy", "foe", 30, ranks=[1, 2], role="attacker",
                   "shriek": I("Storm Shriek", "debuff", "all_heroes", [STRESS(5)]),
                   "dive": I("Dive", "attack", "back", [D(6), A("lightning", 1, attr="stable")])},
          ai=[{"use": "shriek", "every": 3, "offset": 1}, {"use": "dive", "every": 3}, {"use": "rake"}],
-         personality="cunning", lore="It rides the storm down onto the wrecks.", world=W)
+         lore="It rides the storm down onto the wrecks.", world=W)
 
 creature("tide_crab", "Tide Crab", "foe", 40, armor=2, ranks=[1], role="defender",
          resist={"water": "resist", "physical": "resist", "lightning": "weak"},
@@ -121,9 +121,8 @@ creature("drowned_drummer", "Drowned Drummer", "foe", 34, ranks=[3, 4], role="su
          intents={"roll": I("Beat to Quarters", "debuff", "all_heroes", [STRESS(6), A("lightning", 1, attr="stable")]),
                   "crew": I("The Crew Still Come", "summon", "self", [SUMMON("wrecker", max=2)]),
                   "rap": I("Stick Rap", "attack", "back", [D(6)])},
-         ai=[{"use": "crew", "if": "allies<3", "not_twice": True}, {"use": "roll", "every": 2}, {"use": "rap"}],
-         personality="cruel",
-         lore="He beat to quarters as she struck. He is beating still, and the crew still come.", world=W)
+         ai=[{"use": "crew", "if": "allies<3", "once": True}, {"use": "roll", "every": 2}, {"use": "rap"}],
+                  lore="He beat to quarters as she struck. He is beating still, and the crew still come.", world=W)
 
 creature("cragsman", "Cragsman", "foe", 36, ranks=[3, 4], role="attacker", flags=["immovable"],
          resist={"water": "resist", "fire": "weak"},
@@ -160,7 +159,7 @@ creature("harpy_matron", "Harpy Matron", "elite", 100, armor=2, ranks=[2], role=
                   "dive": I("Dive from the Storm", "attack", "back", [D(10), A("lightning", 2, attr="stable")]),
                   "screech": I("Screech", "debuff", "all_heroes", [STRESS(7)]),
                   "talons": I("Talons", "attack", "front", [D(6, times=2)])},
-         ai=[{"use": "brood", "if": "allies<3", "not_twice": True}, {"use": "dive", "every": 2},
+         ai=[{"use": "brood", "if": "allies<3", "once": True}, {"use": "dive", "every": 2},
              {"use": "screech", "every": 4, "offset": 1}, {"use": "talons"}],
          traits=[T("ally_death", "Brood Mother", "When a foe dies she gains 2 Might.", [SELF("might", 2)])],
          lore="The mother of the storm harpies, crowned with a drowned queen's circlet.", world=W)
@@ -196,7 +195,7 @@ creature("strand_wife", "The Strand-Wife", "elite", 106, armor=2, ranks=[1, 2], 
 
 # ================================================================== rulers
 creature("thunder_whale", "The Thunder Whale", "ruler", 310, armor=3, span=2, ranks=[3, 4], role="attacker",
-         resist={"lightning": "immune", "water": "resist", "toxin": "weak"},
+         resist={"lightning": "resist", "water": "resist", "toxin": "weak"},
          intents={"breach": I("Breach", "attack", "all_heroes", [D(6), A("water", 2, attr="stable")]),
                   "spout": I("Spout", "debuff", "rank3", [A("water", 3, attr="stable"), PUSH(1)]),
                   "ram": I("Ram the Cliff", "attack", "front", [D(16)]),
@@ -209,7 +208,7 @@ creature("thunder_whale", "The Thunder Whale", "ruler", 310, armor=3, span=2, ra
                  P(25, "It sounds, and rises blind in both eyes.",
                    ai=[{"use": "sound", "once": True}, {"use": "song", "every": 2}, {"use": "tail", "every": 3},
                        {"use": "breach"}], might=2)],
-         traits=[T("course", "Harpoon Rods", "Static laid on it does no harm and loads its next blow: Empower 4.",
+         traits=[T("course", "Harpoon Rods", "Static laid on it runs into the harpoons and loads its next blow: Empower 4.",
                    [SELF("empower", 4)], e="lightning"),
                  T("hit", "Storm in the Ropes", "The storm runs back up the harpoons: whoever strikes it gains 1 Static.",
                    [A("lightning", 1, attr="stable")])],
@@ -223,15 +222,15 @@ creature("last_prize", "The Last Prize", "ruler", 300, armor=4, span=2, ranks=[3
                   "surf": I("Surf Over the Rail", "attack", "front2", [D(4), A("water", 2, attr="stable")]),
                   "bell": I("The Cracked Bell", "debuff", "all_heroes", [STRESS(8)]),
                   "aboard": I("Aboard at Last", "attack", "front", [D(18)])},
-         ai=[{"use": "broadside", "every": 3}, {"use": "quarters", "if": "allies<3", "not_twice": True},
+         ai=[{"use": "broadside", "every": 3}, {"use": "quarters", "if": "allies<3", "once": True},
              {"use": "drag", "every": 3, "offset": 1}, {"use": "surf"}],
          phases=[P(66, "She lists. The hold stoves in and the sea comes over the rail.",
-                   ai=[{"use": "quarters", "if": "allies<3", "not_twice": True}, {"use": "broadside", "every": 3},
+                   ai=[{"use": "quarters", "if": "allies<3", "once": True}, {"use": "broadside", "every": 3},
                        {"use": "surf"}], might=1),
                  P(25, "She is going down. The bell rings, and the drowned drag the living down with her.",
                    ai=[{"use": "drag", "every": 2}, {"use": "aboard", "every": 2, "offset": 1}, {"use": "bell"}], might=2)],
-         traits=[T("phase", "Taking Water", "Each time she lists further the sea floods in: she gains 3 Soak, and the "
-                   "company's lightning finds her.", [A("water", 3, attr="stable", to="self")])],
+         traits=[T("phase", "Taking Water", "Each time she lists further the sea floods in: she gains 6 Soak (3 after her resistance), and the "
+                   "company's lightning finds her.", [A("water", 6, attr="stable", to="self")])],
          lore="The richest ship the coast ever took. It has been going down for a hundred years and has not finished.",
          world=W)
 
@@ -243,7 +242,7 @@ creature("wind_seller", "The Wind-Seller", "ruler", 270, armor=2, span=2, ranks=
                   "lash": I("Knotted Cord", "attack", "front", [D(12)]),
                   "bolt": I("A Bolt on the Rank", "attack", "random", [D(9), A("lightning", 2, attr="volatile")]),
                   "storm": I("The Third Knot", "attack", "all_heroes", [D(5), A("lightning", 1, attr="volatile")])},
-         ai=[{"use": "whistle", "if": "allies<3", "not_twice": True}, {"use": "push", "every": 3},
+         ai=[{"use": "whistle", "if": "allies<3", "once": True}, {"use": "push", "every": 3},
              {"use": "pull", "every": 3, "offset": 1}, {"use": "lash"}],
          phases=[P(66, "The second knot comes undone. A gale.",
                    ai=[{"use": "bolt", "every": 2}, {"use": "push", "every": 4}, {"use": "pull"}], might=1),
@@ -280,13 +279,13 @@ E(W, "coast_f8", "Salvage", "The merchant hugs his box over the eel's pool.",
   ["drowned_merchant", "shock_eel", "cragsman"], "coast_cove", "foe",
   "The Merchant guards the eel; break the guard or Ward the company before the discharge.")
 E(W, "coast_e1", "The Lighthouse", "The keeper tends the false light.",
-  ["tide_crab", "wrecker", "lighthouse_keeper"], "coast_light", "elite",
+  ["lighthouse_keeper", "tide_crab", "wrecker"], "coast_light", "elite",
   "The beam empties the front hero's hand and the fog strips Ward: play cards early and keep the lit hero dry.")
 E(W, "coast_e2", "The Matron's Roost", "The crowned harpy and her brood.",
-  ["storm_harpy", "harpy_matron"], "coast_cliffs", "elite",
+  ["harpy_matron", "storm_harpy"], "coast_cliffs", "elite",
   "Every harpy that dies feeds her Might; clear the brood with one area hit or go through it to her.")
 E(W, "coast_e3", "The Gibbet", "A cage on the headland, swinging in the storm.",
-  ["wrecker", "shock_eel", "gibbeted_wrecker"], "coast_cliffs", "elite",
+  ["gibbeted_wrecker", "wrecker", "shock_eel"], "coast_cliffs", "elite",
   "The irons count to the strike: kill the eel, stay dry, and Soak him, since rust eats the irons.")
 E(W, "coast_e4", "The Tideline", "She walks the strand after the wreck.",
   ["strand_wife", "drowned_merchant", "rock_octopus"], "coast_cove", "elite",

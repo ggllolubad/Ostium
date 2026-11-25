@@ -21,7 +21,7 @@ card("dread", "Dread", 0, "Curse", "none", [], "Unplayable. When drawn: lose 1 v
      note="A hero frozen on a chapel threshold, one hand gripping the doorframe, unable to step through.")
 card("festering", "Festering Wound", 0, "Curse", "none", [],
      "Unplayable. When drawn: lose 2 HP and draw a replacement. Cured at the infirmary.",
-     use=[], kw=["Curse", "Unplayable"], on_draw=[SELFDMG(2)],
+     use=[], kw=["Curse", "Unplayable"], on_draw=[LOSE_HP(2)],
      flavour='"I\'ve had worse in my bed than you. Most of them died."',
      note="A bandaged forearm laid on Sister Wenna's table, the linen stained through and spreading.")
 
@@ -37,63 +37,64 @@ def affliction(world, name, text, fx, flavour, note):
 
 
 affliction("drowned", "Drowning", "gain 2 Soak, then draw a replacement.",
-           [A("water", 2, attr="stable", to="self")],
+           [A("water", 2, attr="stable")],
            "The water rises up the nave, pew by pew.",
            "A hero coughing brine into cupped hands, water to the knees in the drowned nave.")
 affliction("mire", "Fen Rot", "gain 2 Toxin, then draw a replacement.",
-           [A("toxin", 2, attr="stable", to="self")],
+           [A("toxin", 2, attr="stable")],
            "The fen swells, and the stilts sink.",
            "A hero peeling back a boot to find the skin beneath gone soft and bile green.")
 affliction("baths", "Fever", "lose 2 HP and gain 1 Burn, then draw a replacement.",
-           [SELFDMG(2), A("fire", 1, attr="stable", to="self")],
+           [LOSE_HP(2), A("fire", 1, attr="stable")],
            "The steam thickens, and the floors begin to scald.",
            "A hero slumped against a tiled bath wall, skin flushed pink and blistering in the steam.")
 affliction("pits", "Black Lung", "gain 1 Toxin and 1 Burn, then draw a replacement.",
-           [A("toxin", 1, attr="stable", to="self"), A("fire", 1, attr="stable", to="self")],
+           [A("toxin", 1, attr="stable"), A("fire", 1, attr="stable")],
            "Gas gathers in the drifts, and the lamps burn green.",
            "A hero doubled over coughing yellow smoke in a mine gallery, a green lamp guttering above.")
 affliction("foundry", "Ringing", "gain 2 Static, then draw a replacement.",
-           [A("lightning", 2, attr="stable", to="self")],
+           [A("lightning", 2, attr="stable")],
            "The storm sinks lower, and the anvils strike on their own.",
            "A hero with hands clamped over the ears, hair standing on end, beside a ringing anvil.")
 affliction("coast", "False Light", "discard a random card from this hand, then draw a replacement for this card.",
-           [DISCARD_RANDOM(to="self")],
+           [DISCARD_RANDOM()],
            "More false lights burn on the rocks every hour.",
            "A hero turning toward a lantern on the rocks while the company's real light falls behind.")
 affliction("fleet", "Frostbite", "gain 2 Weaken, then draw a replacement.",
-           [A("frost", 2, attr="stable", to="self")],
+           [A("frost", 2, attr="stable")],
            "The ice closes in, hull by hull.",
            "A hero staring at fingertips gone white and grey, breath freezing on a ship's rail.")
-affliction("rime", "The Split", "lose 1 Armor for the rest of the fight, then draw a replacement.",
-           [LOSE_ARMOR(1, to="self")],
+affliction("rime", "The Split", "become Vulnerable this round if you have no Armor; otherwise lose 1 Armor for "
+           "the rest of the fight. Then draw a replacement.",
+           [ST("vulnerable", 1, if_="!t.armor"), LOSE_ARMOR(1, if_="t.armor")],
            "The cracks widen, and seams of fire run uphill.",
            "A hero's breastplate cracking down the middle, one half rimed, the other glowing at the seam.")
 affliction("barrow", "Barrow Sickness", "gain 1 Toxin; this hero cannot be healed this round. Then draw a replacement.",
-           [A("toxin", 1, attr="stable", to="self"), SELF("blight", 1)],
+           [A("toxin", 1, attr="stable"), ST("blight", 1)],
            "The barrow doors unseal, one by one.",
            "A hero pulling up a sleeve to find a grey-green plague sore spreading in the cold.")
 affliction("hive", "Venom Tremor", "this hero's next card keeps only its first effect. Then draw a replacement.",
-           [SELF("neuro", 1)],
+           [ST("neuro", 1)],
            "The hive wakes, and the spires hum louder.",
            "A hero's sword hand shaking around a swollen sting, the weapon slipping from the fingers.")
 affliction("spire", "Stillness", "this hero acts last this round. Then draw a replacement.",
-           [SELF("lockdown", 1)],
+           [ST("lockdown", 1)],
            "The great clock's hand moves closer to twelve.",
            "A hero caught mid-stride, rime creeping up one leg, while the company moves on around them.")
 affliction("silence", "The Hush", "gain 2 Erode, then draw a replacement.",
-           [A("void", 2, attr="stable", to="self")],
+           [A("void", 2, attr="stable")],
            "The sound leaves: footsteps first, then voices, then heartbeats.",
            "A hero shouting at a comrade across the snow with no sound coming out at all.")
 affliction("pyre", "Ash-Mark", "lose 2 HP, ignoring Block and Armor, then draw a replacement.",
-           [SELFDMG(2)],
+           [LOSE_HP(2)],
            "The black flame climbs the walls, and the candles stop giving light.",
            "A hero's palm branded with a black, lightless burn, smoke rising from it without a glow.")
 affliction("garden", "The Bloom", "gain 1 Toxin and 1 Erode, then draw a replacement.",
-           [A("toxin", 1, attr="stable", to="self"), A("void", 1, attr="stable", to="self")],
+           [A("toxin", 1, attr="stable"), A("void", 1, attr="stable")],
            "The blooms open, and the eyes in the leaves turn toward you.",
            "A hero brushing spores from a wrist where a small pale flower has taken root in the skin.")
 affliction("sky", "Seen", "become Vulnerable this round, then draw a replacement.",
-           [SELF("vulnerable", 1)],
+           [ST("vulnerable", 1)],
            "The tears in the sky widen, and something leans closer.",
            "A hero looking up into a rent in the clouds, lit by a gaze too large to be seen whole.")
 
@@ -122,10 +123,10 @@ card("shoulder_aside", "Shoulder Aside", 1, "N", "enemy", [PUSH(1), D(2), D(3, i
          "fx": [PUSH(1), D(3), D(4, if_="t.mark")]},
      flavour="The marked one goes down first. Everyone in the company knows it.",
      note="A hero driving a shoulder into a marked foe's chest, knocking it into the rank behind.")
-card("vinegar_cloth", "Vinegar Cloth", 0, "N", "self", [STRESS(-2, per="ailments", k=-1)],
-     "Shed 2 stress, plus 1 per ailment on you.",
-     arch=NC + "+foe_ailments", up={"text": "Shed 3 stress, plus 1 per ailment on you.",
-                                    "fx": [STRESS(-3, per="ailments", k=-1)]},
+card("vinegar_cloth", "Vinegar Cloth", 1, "N", "self", [STRESS(-5, per="ailments", k=-2)],
+     "Shed 5 stress, plus 2 per ailment on you.",
+     arch=NC + "+foe_ailments", up={"text": "Shed 7 stress, plus 2 per ailment on you.",
+                                    "fx": [STRESS(-7, per="ailments", k=-2)]},
      flavour="Sister Wenna's remedy for the smell, and for most other things.",
      note="A course-stained hero pressing a vinegar-soaked cloth to the face between blows.")
 card("off_key_hymn", "Off-Key Hymn", 1, "N", "ally", [STRESS(-6, per="played", k=-3)],
@@ -145,7 +146,7 @@ card("candle_bundle", "Candle Bundle", 1, "N", "self", [DRAW(1), DRAW(1, if_="pl
          "fx": [B(3), DRAW(1), DRAW(1, if_="played>=2")]},
      flavour='"Twelve candles. I counted. I\'ll count again when you\'re back."',
      note="A hero lighting a cellar candle from another, the rest tied in a bundle at the belt.")
-card("follow_through", "Follow Through", 1, "N", "enemy", [D(3), D(3, if_="same_target"), PUSH(1, if_="same_target")],
+card("into_the_gap", "Into the Gap", 1, "N", "enemy", [D(3), D(3, if_="same_target"), PUSH(1, if_="same_target")],
      "Deal 3. If the action before this hit the same foe, deal 3 more and push it back 1.",
      arch=NC + "+ordo_follow_up",
      up={"text": "Deal 4. If the action before this hit the same foe, deal 4 more and push it back 1.",
@@ -194,18 +195,19 @@ card("codex_page", "Codex Page", 1, "N", "enemy", [DRAW(1, to="self"), DRAW(1, t
          "fx": [DRAW(1, to="self"), DRAW(1, to="self", if_="m.spectrum>=1")]},
      flavour='"I have written you down. Try to stay legible."',
      note="A hero reading a torn Codex page mid-fight, the course-stained foe ahead inked on it.")
-card("herb_bundle", "Herb Bundle", 1, "N", "ally", [H(0, per="t.ailments", k=1, max=5), CLEANSE(3)],
-     "A hero heals 1 per ailment they carry (up to 5), then is cleansed of 3 ailments.",
+card("wennas_herbs", "Wenna's Herbs", 1, "N", "ally", [H(0, per="t.ailments", k=1, max=5), CLEANSE(3)],
+     "A hero heals 1 per ailment they carry (up to 5; Toxin cuts it as usual), then is cleansed of 3 ailments.",
      arch=NU + "+foe_ailments",
-     up={"text": "A hero heals 1, plus 1 per ailment they carry (up to 6), then is cleansed of 4 ailments.",
+     up={"text": "A hero heals 1, plus 1 per ailment they carry (up to 6; Toxin cuts it as usual), then is cleansed of "
+                 "4 ailments.",
          "fx": [H(1, per="t.ailments", k=1, max=6), CLEANSE(4)]},
      flavour="Herbs from the Infirmarium, bound in twine and smelling of vinegar.",
      note="A hero pressing a crushed herb bundle to a comrade's course-stained wound.")
-card("touch_the_relic", "Touch the Relic", 1, "N", "ally", [W(2), B(0, per="t.ward", k=2, max=12)],
-     "A hero gains 2 Ward, then 2 Block per Ward they have (up to 12).",
+card("touch_the_relic", "Touch the Relic", 1, "N", "ally", [W(2), B(0, per="t.ward", k=2, max=8)],
+     "A hero gains 2 Ward, then 2 Block per Ward they have (up to 8).",
      arch=NU + "+elementalist_ward",
-     up={"text": "A hero gains 3 Ward, then 2 Block per Ward they have (up to 14).",
-         "fx": [W(3), B(0, per="t.ward", k=2, max=14)]},
+     up={"text": "A hero gains 3 Ward, then 2 Block per Ward they have (up to 10).",
+         "fx": [W(3), B(0, per="t.ward", k=2, max=10)]},
      flavour='"This one is still cold. It has not forgiven you."',
      note="A hero's bare fingertips on a small cold reliquary, frost spreading into a raised shield.")
 
@@ -230,11 +232,13 @@ card("fenns_alms", "Fenn's Alms", 1, "N", "self", [STRESS(4), EN(2)], "Gain 4 st
      kw=["Exhaust"], arch=NR + "+converter_stress_vigour", up={"text": "Next round, +2 vigour. Exhaust.", "fx": [EN(2)]},
      flavour='"Alms are free, friend. The handling is extra."',
      note="A fat purse pressed into a hero's gauntlet, a red entry blotting in a ledger behind.")
-card("red_rubric", "Red Rubric", 1, "N", "ally", [GRIT(1), H(6, if_="t.dd")],
+card("red_strip", "The Red Strip", 1, "N", "ally", [GRIT(1), H(6, if_="t.dd")],
      "A hero gains 1 Grit. If they are at Death's Door, they also heal 6.",
      arch=NR + "+deaths_door", up={"text": "A hero gains 1 Grit. If they are at Death's Door, they also heal 8.",
                                    "fx": [GRIT(1), H(8, if_="t.dd")]},
      flavour="A strip of red rubric cloth, tied where it shows: the company's only uniform.",
      note="A hero knotting a red rubric strip round the arm of a comrade at Death's Door.")
 
-NEEDS = []
+NEEDS = [
+    "aff_coast (False Light): on_draw should run after the round's draw finishes; drawn first it finds an empty hand.",
+]

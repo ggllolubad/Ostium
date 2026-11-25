@@ -9,7 +9,7 @@ F, WA = "frost", "water"
 
 # ================================================================== cards foes put in a hand
 card("t_fleet_broth", "Ship's Broth", 0, "Curse", "none", [A(F, 1, attr="stable"), STRESS(3)],
-     "Unplayable. When drawn: gain 1 Frost and 3 stress, and draw a replacement. Removed at fight end.",
+     "Unplayable. On arrival and each time it is drawn: gain 1 Frost and 3 stress. When drawn, draw a replacement. Removed at fight end.",
      use=[], kw=["Temporary", "Unplayable", "Curse"], on_draw=[A(F, 1, attr="stable"), STRESS(3)],
      flavour="The stores ran out in the second month. The pot did not.",
      note="The Galley Cook ladles frozen broth into a hero's bowl; something in it has a knuckle.")
@@ -73,7 +73,7 @@ creature("deck_hand", "Drowned Deckhand", "foe", 36, ranks=[1], world=W, role="a
          lore="Still ready to board. Still singing.")
 creature("walrus_brute", "Walrus Brute", "foe", 50, armor=2, ranks=[1], world=W, role="defender",
          resist={F: "resist", "physical": "resist", "fire": "weak"},
-         intents={"blubber": I("Wall of Blubber", "defend", "self", [B(10), me("taunt", 1)]),
+         intents={"blubber": I("Wall of Blubber", "defend", "self", [B(10), me("fortify", 1), {"t": "guard_weakest"}]),
                   "tusk": I("Cutlass Tusk", "attack", "front", [D(10)]),
                   "crush": I("Belly Crush", "attack", "front", [D(6), ST("stun", 1)])},
          ai=[{"use": "blubber", "every": 3}, {"use": "crush", "every": 4, "offset": 2}, {"use": "tusk"}],
@@ -128,9 +128,7 @@ creature("galley_cook", "The Galley Cook", "foe", 42, ranks=[2, 3], world=W, rol
                   "broth": I("What Is in the Broth", "debuff", "all_heroes", [STRESS(6)]),
                   "ladle": I("Ladle Out", "debuff", "random", [ADD("t_fleet_broth")]),
                   "cleaver": I("Cleaver", "attack", "front", [D(8)])},
-         # a company that drinks from its flasks is shown what is in his pot
-         ai=[{"use": "feed", "if": "ally_hurt", "not_twice": True}, {"use": "broth", "if": "flasks_used>0", "not_twice": True},
-             {"use": "broth", "every": 3}, {"use": "ladle", "every": 4, "offset": 2}, {"use": "cleaver"}],
+         ai=[{"use": "feed", "if": "ally_hurt", "not_twice": True}, {"use": "broth", "every": 3}, {"use": "ladle", "every": 4, "offset": 2}, {"use": "cleaver"}],
          lore="The stores ran out in the second month. The pot did not.")
 creature("ice_edge_orca", "Ice-Edge Orca", "foe", 48, armor=1, ranks=[1, 2], world=W, role="attacker",
          resist={F: "resist", WA: "resist", "lightning": "weak"},
@@ -141,7 +139,7 @@ creature("ice_edge_orca", "Ice-Edge Orca", "foe", 48, armor=1, ranks=[1, 2], wor
          lore="It learned to slide onto the ice for seals. Sailors stand closer to the edge.")
 
 # ================================================================== elites
-creature("icewed_captain", "The Ice-Wed Captain", "elite", 105, armor=3, ranks=[2, 3], world=W, role="support",
+creature("icewed_captain", "The Ice-Wed Captain", "elite", 105, armor=3, ranks=[1, 2, 3], world=W, role="support",
          resist={F: "resist", WA: "resist", "lightning": "weak"},
          intents={"sabre": I("Icicle Sabre", "attack", "front", [D(12), A(F, 2, attr="stable")]),
                   "hands": I("All Hands", "buff", "all_allies", [ST("might", 1), B(5)]),
@@ -178,7 +176,7 @@ creature("white_bear", "The White Bear", "elite", 125, armor=3, span=2, ranks=[1
          traits=[T("lost_action", "Climbed Out Anyway", "When it is Stunned or Frozen, it climbs out angrier: it gains 2 Might.",
                    [SELF("might", 2)])],
          lore="It crossed the ice to eat the frozen crews. It fell through where the ice was thin, and climbed out anyway.")
-creature("ships_surgeon", "The Ship's Surgeon", "elite", 95, armor=2, ranks=[2, 3], world=W, role="afflicter",
+creature("ships_surgeon", "The Ship's Surgeon", "elite", 95, armor=2, ranks=[1, 2, 3], world=W, role="afflicter",
          resist={F: "resist", WA: "resist", "toxin": "weak"},
          intents={"saw": I("Bow Saw", "attack", "front", [D(9), ST("bleed", 3), A(F, 1, attr="volatile")]),
                   "tourniquet": I("Screw Tourniquet", "heal", "ally_lowest", [H(14), B(6)]),
@@ -196,17 +194,18 @@ creature("leviathan_ice", "The Leviathan in the Ice", "ruler", 290, armor=3, spa
          role="attacker", flags=["immovable"], charge_name="Breath", personality="mindless",
          resist={F: "immune", WA: "resist", "lightning": "weak"},
          intents={"breath": I("White Breath", "debuff", "all_heroes", [A(WA, 2, attr="stable"), A(F, 1, attr="stable")]),
-                  "jaw": I("The Jaw Breaks Through", "attack", "weakest", [D(15), A(F, 2, attr="volatile")]),
+                  "jaw": I("The Jaw Breaks Through", "attack", "marked", [D(15), A(F, 2, attr="volatile")]),
                   "sound": I("Sound the Depths", "defend", "self", [B(20), me("regen", 5), CLEANSE(3, to="self")]),
                   "breach": I("Breach", "attack", "all_heroes", [D(7), A(WA, 2, attr="stable")]),
-                  "swallow": I("Swallow Whole", "attack", "weakest", [D(22), STRESS(10)]),
+                  "swallow": I("Swallow Whole", "attack", "marked", [D(22), STRESS(10)]),
                   "draw": I("Draw Breath", "charge", "self", [SELF("charge", 1)]),
                   "freeze": I("The Sea Freezes", "attack", "all_heroes",
                               [D(5), A(WA, 1, attr="stable"), A(F, 2, attr="volatile"), CLR("charge")])},
          # Hex stacked on it is shaken off when it sounds
          ai=[{"use": "breath", "if": "round==1"}, {"use": "sound", "if": "hex>=4", "not_twice": True},
              {"use": "sound", "if": "hp_pct<70", "once": True}, {"use": "breath", "every": 3}, {"use": "jaw"}],
-         traits=[T("round_start", "The Eye Follows", "The eye under the ice follows the most wounded hero: its single blows go there.", [])],
+         traits=[T("hit", "The Eye Follows", "A hero who hits it is Marked: the eye under the ice follows them, and its single blows go there.",
+                   [ST("mark", 1)])],
          phases=[P(50, "The ice cracks. The Leviathan rises out of the sea.",
                    ai=[{"use": "freeze", "if": "charge>=1"}, {"use": "draw", "every": 4},
                        {"use": "breach", "every": 2}, {"use": "swallow"}], might=1),
@@ -266,7 +265,7 @@ E("fleet_f2", "Gull Rookery", "The gulls have the rigging. A marine keeps order 
   "The Marine punishes heroes who move in on him while the gulls stress the rear; area damage beats both flocks, and Thorns bite every peck.")
 E("fleet_f3", "The Ice Holes", "Holes in the floe, and things in the holes.",
   ["walrus_brute", "ice_eel", "ice_edge_orca"], "fleet_ice", "foe",
-  "The walrus taunts, the eel and orca Soak and drag; Freeze the walrus and shatter it, or ignore it for the biters.")
+  "The walrus guards the weakest, the eel and orca Soak and drag; Freeze the walrus and shatter it, or ignore it for the biters.")
 E("fleet_f4", "The Gun Deck", "A boy runs between the guns with a cartridge case.",
   ["fleet_marine", "frozen_whaler", "powder_monkey"], "fleet_hold", "foe",
   "The boy loads the front man's next blow. Kill him first, or Freeze what he loads.")
@@ -275,7 +274,7 @@ E("fleet_f5", "Weighing Anchor", "The capstan turns. The fiddler keeps time.",
   "The capstan grows every round and the boy loads it; kill it fast or keep the front two behind Block.")
 E("fleet_f6", "The Galley", "The pot is still on. Something is in it.",
   ["deck_hand", "fleet_marine", "galley_cook"], "fleet_hold", "foe",
-  "The cook heals and stresses behind two bodies, more when the company drinks; reach him or the fight drags.")
+  "The cook heals and stresses behind two bodies and ladles broth into hands; reach him or the fight drags.")
 E("fleet_f7", "Burial Detail", "Hammocks sewn shut, laid in rows. One is moving.",
   ["sea_lice", "sailmaker", "frozen_whaler"], "fleet_hold", "foe",
   "The Sailmaker stitches heroes in place and drops more lice; kill lice when the front hero can take the Bleed.")
@@ -283,7 +282,7 @@ E("fleet_f8", "The Lead", "A channel of black water between the floes.",
   ["ice_edge_orca", "ice_eel", "ice_eel"], "fleet_ice", "foe",
   "Three Soakers and chillers, and the orca drags a fresh hero into them; Ward or rotate the front, and do not Mark an eel you cannot kill.")
 E("fleet_e1", "The Captain's Cabin", "The captain at his frozen wheel, his crew at his flanks.",
-  ["deck_hand", "fleet_marine", "icewed_captain"], "fleet_hold", "elite",
+  ["icewed_captain", "deck_hand", "fleet_marine"], "fleet_hold", "elite",
   "His flank keeps its Block and he takes yours; kill the crew from the side he cannot cover, or burst him.")
 E("fleet_e2", "The Selkie's Floe", "She is singing on the ice. The gulls are listening.",
   ["frost_selkie", "rime_gulls", "ice_eel"], "fleet_ice", "elite",
@@ -292,11 +291,11 @@ E("fleet_e3", "The White Bear", "It came across the ice for the crews.",
   ["white_bear", "rime_gulls"], "fleet_ice", "elite",
   "It sheds courses every round and turns on the rear once it carries Frost; Freeze it in one round or hit it plainly.")
 E("fleet_e4", "The Cockpit", "The surgeon's table, and the lice under it.",
-  ["sea_lice", "fleet_marine", "ships_surgeon"], "fleet_hold", "elite",
+  ["ships_surgeon", "fleet_marine", "sea_lice"], "fleet_hold", "elite",
   "He saws the weakest hero and heals on every death; kill him before the crew, or stop leaving one hero low.")
 E("fleet_r_leviathan_ice", "The Leviathan in the Ice", "The sea itself is frozen around it. The eye is open.",
   ["frozen_whaler", "ice_eel", "leviathan_ice"], "fleet_boss", "ruler",
-  "White Breath soaks the company, then the jaw finds the weakest; once it rises, Ward before every Sea Freezes.")
+  "White Breath soaks the company, then the jaw finds whoever struck it; once it rises, Ward before every Sea Freezes.")
 E("fleet_r_the_broadside", "The Broadside", "A wall of black hull, every port open.",
   ["fleet_marine", "powder_monkey", "the_broadside"], "fleet_boss", "ruler",
   "Her broadside Freezes every Soaked hero; stay dry when she is loaded, then outlast her ripple or race it.",
@@ -307,7 +306,6 @@ E("fleet_r_the_shrouds", "The Shrouds", "The rigging hangs over the ice, full of
   props="the_shrouds")
 
 NEEDS = [
-    "leviathan_ice: The Eye Follows should fix one shown hero at round start for its single-target moves; written as targeting the most wounded hero (the trait has no effect of its own).",
-    "leviathan_ice: Swallow Whole should swallow a Frozen hero (postponed, row 14); written as a heavy hit and stress on the most wounded hero.",
+    "leviathan_ice: Swallow Whole should swallow a Frozen hero (postponed, row 14); written as a heavy hit and stress on the Marked hero.",
     "white_bear: Climbed Out Anyway should also break its first Freeze at once (self-unfreeze); written as 2 Might each time it loses an action.",
 ]

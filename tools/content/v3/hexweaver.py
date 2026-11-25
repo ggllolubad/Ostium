@@ -13,18 +13,18 @@ PB, DS, MH = "pactbound", "doomsayer", "mirrorhex"
 
 # ------------------------------------------------------------------ kit
 card("pass_it_on", "Pass It On", 1, "K", "enemy", [TRANSFER("ally_most", n=1), ST("hex", 1)],
-     "Move the largest ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as "
+     "Move the largest ailment (every stack of it) off the other hero carrying the most onto the target. A course arrives as "
      "Stable stacks. Apply 1 Hex.",
      cat=V, arch="core",
      flavour="Say the rhyme, tie the knot, and the fever is someone else's.",
      note="The Hexweaver draws a sick hero's rot into a cloth poppet and flings it at a foe.",
-     up={"text": "Move the largest ailment, all its stacks, off the hero carrying the most onto the target. A course arrives as "
+     up={"text": "Move the largest ailment (every stack of it) off the other hero carrying the most onto the target. A course arrives as "
                  "Stable stacks. Apply 2 Hex.", "fx": [TRANSFER("ally_most", n=1), ST("hex", 2)]})
-card("bloodletting", "Bloodletting", 1, "K", "enemy", [SELFDMG(2), ST("hex", 5), STRESS(-2, to="self")],
-     "Lose 2 HP. Apply 5 Hex. Shed 2 stress.", cat=V, sub=PB, arch=PB,
+card("bloodletting", "Bloodletting", 1, "K", "enemy", [SELFDMG(1), ST("hex", 3), STRESS(-2, to="self")],
+     "Lose 1 HP. Apply 3 Hex. Shed 2 stress.", cat=V, sub=PB, arch=PB,
      flavour="The cut is always fresh. The bandage is never clean.",
      note="The Pactbound draws the bone knife along the bandaged forearm over a poppet.",
-     up={"text": "Lose 1 HP. Apply 5 Hex. Shed 2 stress.", "fx": [SELFDMG(1), ST("hex", 5), STRESS(-2, to="self")]})
+     up={"text": "Lose 1 HP. Apply 4 Hex. Shed 2 stress.", "fx": [SELFDMG(1), ST("hex", 4), STRESS(-2, to="self")]})
 card("ring_the_bell", "Ring the Bell", 1, "K", "all_enemies", [ST("doom", 2, if_="t.hex>0")],
      "Every foe with Hex gains 2 Doom.", cat=V, sub=DS, arch=DS,
      flavour="One stroke for each of you. Count them.",
@@ -57,11 +57,11 @@ card("graveyard_dirt", "Graveyard Dirt", 1, "S", "enemy", [A(T, 3), A(V, 1)],
      flavour="Taken from a fresh grave at midnight. It remembers.",
      note="The Hexweaver flings a fistful of graveyard dirt from the belt pouch.",
      up={"text": "Apply 4 Toxin and 1 Void.", "fx": [A(T, 4), A(V, 1)]})
-card("blood_price", "Blood Price", 0, "S", "self", [SELFDMG(2), PRIME(5)],
-     "Lose 2 HP. Prime 5.", cat=V, arch="pactbound",
+card("blood_price", "Pricked Thumb", 0, "S", "enemy", [SELFDMG(1), ST("hex", 1), PRIME(3)],
+     "Lose 1 HP. Apply 1 Hex. Prime 3.", cat=V, arch="pactbound",
      flavour="A drop for the poppet, and the next blow lands true.",
      note="The Hexweaver pricks a thumb and smears blood on a poppet's face.",
-     up={"text": "Lose 2 HP. Prime 7.", "fx": [SELFDMG(2), PRIME(7)]})
+     up={"text": "Lose 1 HP. Apply 1 Hex. Prime 4.", "fx": [SELFDMG(1), ST("hex", 1), PRIME(4)]})
 
 # ------------------------------------------------------------------ common: core
 card("twist_the_pin", "Twist the Pin", 2, "C", "enemy",
@@ -101,11 +101,11 @@ card("salt_the_threshold", "Salt the Threshold", 1, "C", "all_allies", [W(1), ST
      up={"text": "Every hero gains 1 Ward and sheds 2 stress.", "fx": [W(1), STRESS(-2)]})
 
 # ------------------------------------------------------------------ common: pactbound
-card("tithe_of_blood", "Tithe of Blood", 0, "C", "self", [SELFDMG(3), SELF("might", 1)],
-     "Lose 3 HP. Gain 1 Might.", cat=V, arch=PB,
+card("tithe_of_blood", "Tithe of Blood", 0, "C", "self", [SELFDMG(2), SELF("might", 1)],
+     "Lose 2 HP. Gain 1 Might. Exhaust.", cat=V, kw=["Exhaust"], arch=PB,
      flavour="The poppets drink first. Then they work.",
      note="The Pactbound lets blood run down the bone knife onto the poppets at the belt.",
-     up={"text": "Lose 2 HP. Gain 1 Might.", "fx": [SELFDMG(2), SELF("might", 1)]})
+     up={"text": "Lose 1 HP. Gain 1 Might. Exhaust.", "fx": [SELFDMG(1), SELF("might", 1)]})
 card("spite", "Spite", 1, "C", "enemy", [D(3, per="ailments", k=1)],
      "Deal 3, plus 1 per ailment you carry.", cat=V, arch=PB,
      flavour="Every sore on me is a pin in you.",
@@ -123,16 +123,16 @@ card("blood_offering", "Blood Offering", 0, "C", "self", [SELFDMG(3), EN(1)],
      note="The Pactbound holds a bleeding palm over a black tallow candle until it flares.",
      up={"text": "Lose 1 HP. Next round, +1 vigour. Exhaust.", "fx": [SELFDMG(1), EN(1)]})
 card("take_the_rot", "Take the Rot", 1, "C", "enemy", [TRANSFER("ally_most", to="self"), ST("hex", 3)],
-     "Move every ailment off the hero carrying the most onto yourself. Apply 3 Hex.", cat=V, arch="pactbound+mirrorhex",
+     "Move every ailment off the other hero carrying the most onto yourself. Apply 3 Hex.", cat=V, arch="pactbound+mirrorhex",
      flavour="Give it here. I have carried worse.",
      note="The Hexweaver lays a palm on a sick hero's chest and the green creeps up their own arm.",
-     up={"text": "Move every ailment off the hero carrying the most onto yourself. Apply 4 Hex.",
+     up={"text": "Move every ailment off the other hero carrying the most onto yourself. Apply 4 Hex.",
          "fx": [TRANSFER("ally_most", to="self"), ST("hex", 4)]})
-card("martyrs_pin", "Martyr's Pin", 1, "C", "enemy", [SELFDMG(3), ST("hex", 7)],
-     "Lose 3 HP. Apply 7 Hex.", cat=V, arch="pactbound+doomsayer",
+card("martyrs_pin", "Martyr's Pin", 1, "C", "enemy", [SELFDMG(2), ST("hex", 6)],
+     "Lose 2 HP. Apply 6 Hex.", cat=V, arch="pactbound+doomsayer",
      flavour="Pins go in deeper when they are wet.",
      note="The Pactbound pushes a pin through their own palm and into the poppet beneath.",
-     up={"text": "Lose 3 HP. Apply 9 Hex.", "fx": [SELFDMG(3), ST("hex", 9)]})
+     up={"text": "Lose 2 HP. Apply 8 Hex.", "fx": [SELFDMG(2), ST("hex", 8)]})
 
 # ------------------------------------------------------------------ common: doomsayer
 card("handbell", "Handbell", 1, "C", "all_enemies", [ST("hex", 2)],
@@ -195,17 +195,17 @@ card("mirror_mirror", "Mirror, Mirror", 1, "C", "enemy", [TURN(), ST("hex", 1)],
      note="The Mirrorhex flashes the glass and a foe's blow lands on its neighbour.",
      up={"text": "If the target attacks this round, its attack strikes a foe beside it instead. Apply 3 Hex.",
          "fx": [TURN(), ST("hex", 3)]})
-card("echoing_hex", "Echoing Hex", 1, "C", "enemy", [ST("hex", 4), W(1, to="self")],
-     "Apply 4 Hex. Gain 1 Ward. Echo.", cat=V, kw=["Echo"], arch=MH,
+card("echoing_hex", "Echoing Hex", 1, "C", "enemy", [ST("hex", 2), W(2, to="self")],
+     "Echo. Apply 2 Hex. Gain 2 Ward.", cat=V, kw=["Echo"], arch=MH,
      flavour="Say it once to the foe, once to the glass.",
      note="A curse spoken into the mirror comes back out of it, twice as loud.",
-     up={"text": "Apply 5 Hex. Gain 1 Ward. Echo.", "fx": [ST("hex", 5), W(1, to="self")]})
+     up={"text": "Echo. Apply 3 Hex. Gain 2 Ward.", "fx": [ST("hex", 3), W(2, to="self")]})
 card("hand_it_back", "Hand It Back", 1, "C", "enemy", [TRANSFER("ally_most"), ST("hex", 2)],
-     "Move every ailment off the hero carrying the most onto the target. Apply 2 Hex.", cat=V,
+     "Move every ailment off the other hero carrying the most onto the target. Apply 2 Hex.", cat=V,
      arch="mirrorhex+pactbound",
      flavour="You dropped this.",
      note="The Mirrorhex wipes a hero's sores onto the glass and turns it toward a foe.",
-     up={"text": "Move every ailment off the hero carrying the most onto the target. Apply 3 Hex.",
+     up={"text": "Move every ailment off the other hero carrying the most onto the target. Apply 3 Hex.",
          "fx": [TRANSFER("ally_most"), ST("hex", 3)]})
 
 # ------------------------------------------------------------------ uncommon: core
@@ -217,11 +217,12 @@ card("bind_the_fear", "Bind the Fear", 1, "U", "enemy", [UNBIND(3), STRESS(-3, t
      up={"text": "Unbind: take one affliction card out of the company's decks for this fight. The target suffers its "
                  "when-drawn effect and gains 4 Hex. Every hero sheds 4 stress.",
          "fx": [UNBIND(4), STRESS(-4, to="all_allies")]})
-card("twofold_curse", "Twofold Curse", 1, "U", "enemy", [ST("hex", 2), DBL(s="hex")],
-     "Apply 2 Hex, then double the target's Hex.", cat=V, arch="doomsayer+mirrorhex",
+card("twofold_curse", "Twofold Curse", 1, "U", "enemy", [ST("hex", 2), ST("hex", 0, per="t.hex", k=1, max=5)],
+     "Apply 2 Hex. Then the target gains Hex equal to its Hex, at most 5.", cat=V, arch="doomsayer+mirrorhex",
      flavour="Tie the knot. Tie it again. Now it is two knots.",
      note="The Hexweaver loops a second cord over the first round a poppet's neck.",
-     up={"text": "Apply 3 Hex, then double the target's Hex.", "fx": [ST("hex", 3), DBL(s="hex")]})
+     up={"text": "Apply 3 Hex. Then the target gains Hex equal to its Hex, at most 6.",
+         "fx": [ST("hex", 3), ST("hex", 0, per="t.hex", k=1, max=6)]})
 card("contagion", "Contagion", 1, "U", "enemy", [ST("hex", 1), ST("hex", 0, per="m.hex", k=1, to="adjacent")],
      "Apply 1 Hex. Each foe beside the target gains Hex equal to the target's Hex.", cat=V, arch=DS,
      flavour="Curses are like coughs. They want company.",
@@ -313,7 +314,7 @@ card("borrowed_strength", "Borrowed Strength", 1, "U", "enemy",
      note="The Mirrorhex catches a foe's strength in the glass and pours it into a hero.",
      up={"text": "If the target has Might, the hero lowest on health gains 2 Might. The target loses all its Might. "
                  "Apply 2 Hex.", "fx": [ST("might", 2, to="lowest_ally", if_="m.might>0"), CLR("might"), ST("hex", 2)]})
-card("turn_the_glass", "Turn the Glass", 1, "U", "enemy", [TURN(), ST("vulnerable", 1, if_="t.hex>0")],
+card("turn_the_glass", "Face in the Glass", 1, "U", "enemy", [TURN(), ST("vulnerable", 1, if_="t.hex>0")],
      "If the target attacks this round, its attack strikes a foe beside it instead. If the target has Hex, it is "
      "Vulnerable this round.", cat=V, arch="mirrorhex+duelist_strike",
      flavour="Show it its own face. Watch it flinch.",
@@ -321,7 +322,7 @@ card("turn_the_glass", "Turn the Glass", 1, "U", "enemy", [TURN(), ST("vulnerabl
      up={"text": "If the target attacks this round, its attack strikes a foe beside it instead. If the target has Hex, "
                  "it is Vulnerable for 2 rounds.", "fx": [TURN(), ST("vulnerable", 2, if_="t.hex>0")]})
 card("glass_splinters", "Glass Splinters", 1, "U", "enemy", [D(2, per="thorns", k=2)],
-     "Deal 2, plus 2 per Thorns you have.", cat=V, arch="mirrorhex+bulwark_thorns",
+     "Deal 2, plus 2 per Thorns you have.", cat=V, arch=MH,
      flavour="Every shard stitched in the hood has a twin.",
      note="The Mirrorhex shakes the hood and the mirror shards fly loose at a foe.",
      up={"text": "Deal 4, plus 2 per Thorns you have.", "fx": [D(4, per="thorns", k=2)]})
@@ -345,11 +346,11 @@ card("drink_deep", "Drink Deep", 2, "R", "enemy", [CONS(e=T), D(8, per="consumed
      up={"text": "Remove all Toxin from the target. Deal 10, plus 2 per Toxin removed. Heal the damage dealt.",
          "fx": [CONS(e=T), D(10, per="consumed", k=2, lifesteal=100)]})
 card("sin_eater", "Sin-Eater", 1, "R", "self", [TAKESTRESS(8), TRANSFER("ally_most")],
-     "Take up to 8 stress from every other hero. Move every ailment off the hero carrying the most onto you.",
+     "Take up to 8 stress from every other hero. Move every ailment off the other hero carrying the most onto you.",
      cat=V, arch="pactbound+mirrorhex",
      flavour="Bread and salt on the breast of the dead. I eat it all.",
      note="The Hexweaver eats bread from a hero's chest while the company's shadows drain into them.",
-     up={"text": "Take up to 10 stress from every other hero. Move every ailment off the hero carrying the most onto "
+     up={"text": "Take up to 10 stress from every other hero. Move every ailment off the other hero carrying the most onto "
                  "you.", "fx": [TAKESTRESS(10), TRANSFER("ally_most")]})
 card("blood_debt", "Blood Debt", 1, "R", "enemy", [ST("doom", 0, per="scars", k=0.5)],
      "The target gains 1 Doom per 2 Scars you carry.", cat=V, arch="pactbound+doomsayer",
@@ -363,24 +364,24 @@ card("deaths_ledger", "Death's Ledger", 2, "R", "enemy", [ST("doom", 0, per="t.m
      note="The Doomsayer reads a foe's wounds aloud from a cord of knots.",
      up={"text": "Apply 3 Doom. The target gains Doom equal to the HP it is missing. Exhaust.",
          "fx": [ST("doom", 3), ST("doom", 0, per="t.missing_hp", k=1)]})
-card("witching_hour", "Witching Hour", 1, "R", "all_enemies", [DBL(s="hex")],
-     "Double the Hex on every foe. Exhaust.", cat=V, kw=["Exhaust"], arch="doomsayer+mirrorhex",
+card("witching_hour", "Witching Hour", 1, "R", "all_enemies", [ST("hex", 0, per="t.hex", k=1, max=3)],
+     "Every foe gains Hex equal to its Hex, at most 3. Exhaust.", cat=V, kw=["Exhaust"], arch="doomsayer+mirrorhex",
      flavour="At this hour every knot pulls twice as tight.",
      note="Every black candle on the shoulder plate flares at once.",
-     up={"text": "Apply 1 Hex to every foe, then double the Hex on every foe. Exhaust.",
-         "fx": [ST("hex", 1), DBL(s="hex")]})
-card("bell_book_candle", "Bell, Book and Candle", 2, "R", "enemy", [ST("hex", 2), ST("doom", 0, per="t.hex", k=2)],
-     "Apply 2 Hex. The target gains 2 Doom per Hex on it.", cat=V, arch="doomsayer+core",
+     up={"text": "Every foe gains Hex equal to its Hex, at most 4. Exhaust.",
+         "fx": [ST("hex", 0, per="t.hex", k=1, max=4)]})
+card("bell_book_candle", "Bell, Book and Candle", 2, "R", "enemy", [ST("hex", 2), ST("doom", 0, per="t.hex", k=2, max=16)],
+     "Apply 2 Hex. The target gains 2 Doom per Hex on it, at most 16.", cat=V, arch="doomsayer+core",
      flavour="Ring it out, shut it out, snuff it out.",
      note="The Doomsayer rings the bell, slams a cord-bound book and pinches a candle out.",
-     up={"text": "Apply 3 Hex. The target gains 2 Doom per Hex on it.",
-         "fx": [ST("hex", 3), ST("doom", 0, per="t.hex", k=2)]})
+     up={"text": "Apply 3 Hex. The target gains 2 Doom per Hex on it, at most 20.",
+         "fx": [ST("hex", 3), ST("doom", 0, per="t.hex", k=2, max=20)]})
 card("scapegoat", "Scapegoat", 2, "R", "enemy", [TRANSFER("ally_most"), ST("hex", 5), TURN()],
-     "Move every ailment off the hero carrying the most onto the target. Apply 5 Hex. If it attacks this round, its "
+     "Move every ailment off the other hero carrying the most onto the target. Apply 5 Hex. If it attacks this round, its "
      "attack strikes a foe beside it instead.", cat=V, arch="mirrorhex+pactbound",
      flavour="Lay it all on the goat and drive it out among its own.",
      note="A foe, smeared with the company's sickness, turns snarling on its kin.",
-     up={"text": "Move every ailment off the hero carrying the most onto the target. Apply 7 Hex. If it attacks this "
+     up={"text": "Move every ailment off the other hero carrying the most onto the target. Apply 7 Hex. If it attacks this "
                  "round, its attack strikes a foe beside it instead.",
          "fx": [TRANSFER("ally_most"), ST("hex", 7), TURN()]})
 card("silver_tongue", "Silver Tongue", 2, "R", "all_enemies", [STEAL(), CLR("might"), ST("hex", 1)],
@@ -390,11 +391,11 @@ card("silver_tongue", "Silver Tongue", 2, "R", "all_enemies", [STEAL(), CLR("mig
      up={"text": "Take every foe's Block. Every foe loses all its Might. Apply 2 Hex to every foe.",
          "fx": [STEAL(), CLR("might"), ST("hex", 2)]})
 card("buried_bottle", "Buried Bottle", 1, "R", "self", [],
-     "Rite. Whenever a foe hits another hero, it gains 1 Hex.", cat=V, kw=["Rite"],
+     "Rite: whenever a foe hits another hero, it gains 1 Hex. Exhaust.", cat=V, kw=["Rite", "Exhaust"],
      rite={"on": "ally_hit", "fx": [ST("hex", 1)]}, arch="mirrorhex+bulwark_taunt",
      flavour="Pins, nails and hair in a stoppered bottle, buried under the door.",
      note="The Mirrorhex buries a stoppered bottle of pins under the company's threshold.",
-     up={"text": "Rite. Whenever a foe hits another hero, it gains 1 Hex and takes 2 damage.",
+     up={"text": "Rite: whenever a foe hits another hero, it gains 1 Hex and takes 2 damage. Exhaust.",
          "rite": {"on": "ally_hit", "fx": [ST("hex", 1), D(2)]}})
 card("malediction", "Malediction", 2, "R", "all_enemies", [ST("hex", 3), A(T, 2)],
      "Apply 3 Hex and 2 Toxin to every foe.", cat=V, attr="stable", arch="core+doomsayer",
@@ -430,10 +431,10 @@ card("take_the_curse_in", "Take the Curse In", 1, "X", "enemy", [UNBIND(4), D(3)
      up={"text": "Unbind: take one affliction card out of the company's decks for this fight. The target suffers its "
                  "when-drawn effect and gains 5 Hex. Deal 5.", "fx": [UNBIND(5), D(5)]})
 card("bear_the_burden", "Bear the Burden", 1, "X", "self", [TRANSFER("ally_most"), SELF("might", 1)],
-     "Move every ailment off the hero carrying the most onto you. Gain 1 Might.", cat=V, sub=PB, arch=PB,
+     "Move every ailment off the other hero carrying the most onto you. Gain 1 Might.", cat=V, sub=PB, arch=PB,
      flavour="The heavier the load, the harder I hit.",
      note="The Pactbound shoulders a hero's sickness like a sack and squares up.",
-     up={"text": "Move every ailment off the hero carrying the most onto you. Gain 2 Might.",
+     up={"text": "Move every ailment off the other hero carrying the most onto you. Gain 2 Might.",
          "fx": [TRANSFER("ally_most"), SELF("might", 2)]})
 card("blood_for_blood", "Blood for Blood", 2, "X", "enemy", [D(8, per="ailments", k=2)],
      "Deal 8, plus 2 per ailment you carry.", cat=P, use=KNIFE, hit=TOUCH, sub=PB, arch=PB,
@@ -465,11 +466,11 @@ card("the_final_hour", "The Final Hour", 2, "X", "enemy", [D(5), EXEC(12), ST("d
      up={"text": "Deal 6. Execute 15. If this kills, every foe gains 3 Doom.",
          "fx": [D(6), EXEC(15), ST("doom", 3, to="all_enemies", if_="killed")]})
 card("death_watch", "Death Watch", 1, "X", "self", [],
-     "Rite. Whenever a foe dies, every foe gains 3 Doom.", cat=V, kw=["Rite"], sub=DS,
+     "Rite: whenever a foe dies, every foe gains 3 Doom. Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=DS,
      rite={"on": "kill", "fx": [ST("doom", 3, to="all_enemies")]}, arch=DS,
      flavour="The beetle in the beam ticks for the next of you.",
      note="The Doomsayer kneels by a fallen foe and listens to the walls.",
-     up={"text": "Rite. Whenever a foe dies, every foe gains 3 Doom and 1 Hex.",
+     up={"text": "Rite: whenever a foe dies, every foe gains 3 Doom and 1 Hex. Exhaust.",
          "rite": {"on": "kill", "fx": [ST("doom", 3, to="all_enemies"), ST("hex", 1, to="all_enemies")]}})
 card("nine_tailors", "Nine Tailors", 2, "X", "all_enemies", [ST("doom", 0, per="t.hex", k=1)],
      "Every foe gains 1 Doom per Hex on it.", cat=V, sub=DS, arch=DS,
@@ -523,53 +524,61 @@ card("doubled_image", "Doubled Image", 1, "X", "ally", [ST("dodge", 1), W(2)],
 
 # ------------------------------------------------------------------ legendary
 card("signed_in_blood", "Signed in Blood", 1, "L", "self", [],
-     "Rite. Whenever you play a card, lose 1 HP and deal 5 to the front foe, ignoring Block.",
-     cat=V, kw=["Rite"], sub=PB, arch="pactbound+core",
-     rite={"on": "play", "fx": [SELFDMG(1), D(5, pierce=True, to="front_enemy")]},
+     "Rite: whenever you play a card on a foe, lose 1 HP and deal 5 to that foe, ignoring Block. Exhaust.",
+     cat=V, kw=["Rite", "Exhaust"], sub=PB, arch="pactbound+core",
+     rite={"on": "play", "fx": [SELFDMG(1), D(5, pierce=True)]},
      flavour="My name, in my blood, on your contract. Every line costs us both.",
      note="The Pactbound signs a long scroll with the bone knife, and a foe bleeds at every stroke.",
-     up={"text": "Gain 2 Might. Rite. Whenever you play a card, lose 1 HP and deal 5 to the front foe, ignoring Block.",
+     up={"text": "Gain 2 Might. Rite: whenever you play a card on a foe, lose 1 HP and deal 5 to that foe, ignoring "
+                 "Block. Exhaust.",
          "fx": [SELF("might", 2)]})
 card("the_open_door", "The Open Door", 1, "L", "self", [GRIT(1, to="self")],
-     "Gain 1 Grit. Rite. While you are at Death's Door, every card you play Primes 5 and gives you 1 Grit.",
-     cat=V, kw=["Rite"], sub=PB, arch="pactbound+oracle_prime",
-     rite={"on": "play", "if": "dd", "fx": [PRIME(5), GRIT(1, to="self")]},
+     "Gain 1 Grit. Rite: while you are at Death's Door, the first card you play each round Primes 5 and gives you "
+     "1 Grit. Exhaust.",
+     cat=V, kw=["Rite", "Exhaust"], sub=PB, arch="pactbound+oracle_prime",
+     rite={"on": "play", "if": "dd", "per_round": 1, "allies": True, "fx": [PRIME(5), GRIT(1, to="self")]},
      flavour="I have one foot over the step. The other is kicking.",
      note="The Pactbound stands in a doorway of black light, poppets ablaze.",
-     up={"text": "Gain 1 Grit. Next round, +1 vigour. Rite. While you are at Death's Door, every card you play Primes "
-                 "5 and gives you 1 Grit.", "fx": [GRIT(1, to="self"), EN(1)]})
+     up={"text": "Gain 1 Grit. Next round, +1 vigour. Rite: while you are at Death's Door, the first card you play "
+                 "each round Primes 5 and gives you 1 Grit. Exhaust.", "fx": [GRIT(1, to="self"), EN(1)]})
 card("the_great_bell", "The Great Bell", 2, "L", "self", [],
-     "Rite. At round end, every foe gains Doom equal to its Hex.", cat=V, kw=["Rite"], sub=DS,
+     "Rite: at round end, every foe gains Doom equal to its Hex. Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=DS,
      arch="doomsayer+core", rite={"on": "round_end", "fx": [ST("doom", 0, per="t.hex", k=1, to="all_enemies")]},
      flavour="The great bell has not rung since the flood. It rings for you.",
      note="A drowned tower's great bell swings behind the Doomsayer as the foes fall still.",
-     up={"text": "Apply 2 Hex to every foe. Rite. At round end, every foe gains Doom equal to its Hex.",
+     up={"text": "Apply 2 Hex to every foe. Rite: at round end, every foe gains Doom equal to its Hex. Exhaust.",
          "fx": [ST("hex", 2, to="all_enemies")]})
 card("death_knell", "Death Knell", 2, "L", "self", [],
-     "Rite. When a foe dies, every other foe gains its Hex and Doom.", cat=V, kw=["Rite"], sub=DS, arch=DS,
+     "Rite: when a foe dies, every other foe gains its Hex and Doom. Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=DS, arch=DS,
      rite={"on": "kill", "fx": [ST("hex", 0, per="m.hex", k=1, to="all_enemies"),
                                 ST("doom", 0, per="m.doom", k=1, to="all_enemies")]},
      flavour="When one goes, the bell tolls for the rest of the house.",
      note="A foe falls, and black threads leap from its body to every foe still standing.",
-     up={"text": "Apply 3 Doom to every foe. Rite. When a foe dies, every other foe gains its Hex and Doom.",
+     up={"text": "Apply 3 Doom to every foe. Rite: when a foe dies, every other foe gains its Hex and Doom. Exhaust.",
          "fx": [ST("doom", 3, to="all_enemies")]})
 card("hall_of_mirrors", "Hall of Mirrors", 2, "L", "self", [TURN(to="all_enemies")],
-     "Rite. This round and next round, every foe's attack strikes its neighbour instead.",
-     cat=V, kw=["Rite"], sub=MH, arch="mirrorhex+core",
+     "Rite: this round and next round, every foe's attack strikes its neighbour instead. Exhaust.",
+     cat=V, kw=["Rite", "Exhaust"], sub=MH, arch="mirrorhex+core",
      rite={"on": "round_start", "fx": [TURN(to="all_enemies")], "rounds": 1},
      flavour="A hundred glasses, and in every one, the face you hate.",
      note="The room fills with cracked mirrors and the foes turn on their own reflections.",
-     up={"text": "Every hero gains 2 Ward. Rite. This round and next round, every foe's attack strikes "
-                 "its neighbour instead.", "fx": [W(2, to="all_allies"), TURN(to="all_enemies")]})
+     up={"text": "Every hero gains 2 Ward. Rite: this round and next round, every foe's attack strikes "
+                 "its neighbour instead. Exhaust.", "fx": [W(2, to="all_allies"), TURN(to="all_enemies")]})
 card("the_witchs_glass", "The Witch's Glass", 2, "L", "self", [],
-     "Rite. Whenever a foe hits another hero, every ailment on the hero carrying the most moves onto that foe, and it "
-     "gains 1 Hex per ailment moved.", cat=V, kw=["Rite"], sub=MH, arch="mirrorhex+pactbound",
+     "Rite: whenever a foe hits another hero, every ailment on the other hero carrying the most moves onto that foe, and it "
+     "gains 1 Hex per ailment moved. Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=MH, arch="mirrorhex+pactbound",
      rite={"on": "ally_hit", "fx": [TRANSFER("ally_most"), ST("hex", 0, per="consumed", k=1)]},
      flavour="Whatever you lay on mine comes home to you, and brings a friend.",
      note="A great cracked mirror stands behind the company; every curse thrown at it flies back.",
-     up={"text": "Every hero gains 2 Ward. Rite. Whenever a foe hits another hero, every ailment on the hero carrying "
-                 "the most moves onto that foe, and it gains 1 Hex per ailment moved.",
+     up={"text": "Every hero gains 2 Ward. Rite: whenever a foe hits another hero, every ailment on the other hero "
+                 "carrying the most moves onto that foe, and it gains 1 Hex per ailment moved. Exhaust.",
          "fx": [W(2, to="all_allies")]})
+
+ARCHETYPES = {
+    PB: ["tithe_of_blood", "spite", "drain", "blood_offering", "take_the_rot", "martyrs_pin"],
+    DS: ["handbell", "bad_tidings", "corpse_candle", "knell", "dirge", "hasten_the_end"],
+    MH: ["mirror_shard", "silver_lie", "cracked_glass", "mirror_mirror", "echoing_hex", "borrowed_strength"],
+}
 
 HERO = {"name": "Hexweaver", "hp": 30, "armor": 0, "grit": 2, "color": "62804f", "kit": ["pass_it_on"],
         "deck": ["pin_the_poppet", "pin_the_poppet", "pin_the_poppet", "knotted_cord", "knotted_cord", "knotted_cord",
@@ -579,6 +588,8 @@ HERO = {"name": "Hexweaver", "hp": 30, "armor": 0, "grit": 2, "color": "62804f",
                  "the company's ailments to the foes."}
 
 NEEDS = [
+    "Hex floor (brief risk 'Hex lock'): no foe hit should drop below half its damage from Hex; Hex quantities were cut "
+    "and doubling capped, but the floor belongs in _attack.",
     "pass_it_on: the brief lets the player choose which hero to take the ailment from (a hero picker); written as the "
     "hero carrying the most.",
     "bloodletting: the brief's 'the next Hex you apply this round is doubled' needs a Hex focus status; written as "
@@ -588,9 +599,9 @@ NEEDS = [
     "hall_of_mirrors: the brief limits it to single-target attacks; TURN has no filter for attacks on every hero, so "
     "the text says every foe's attack.",
     "signed_in_blood: the brief wants 'HP you lose to your own cards is also dealt to a foe as true damage', which needs "
-    "a self-damage Rite trigger carrying the HP lost; written on the play trigger against the front foe.",
-    "the_open_door: the brief's 'cards cost less at Death's Door' and 'your own cards cannot kill you' need a cost "
-    "cut and a self-damage floor; written as Prime and Grit per card.",
+    "a self-damage Rite trigger carrying the HP lost; written on the play trigger against the card's target.",
+    "the_open_door: the brief's 'cards cost less at Death's Door' needs a cost cut; written as Prime and Grit once a "
+    "round.",
     "the_witchs_glass: the brief redirects every ailment a foe lays on a hero, doubled; that needs an 'ailment laid' "
     "trigger. Written on ally_hit; 'consumed' must reset for each trigger.",
 ]

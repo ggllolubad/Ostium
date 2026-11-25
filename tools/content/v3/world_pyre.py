@@ -20,7 +20,7 @@ creature("saint_unending", "The Saint Unending", "ruler", 285, armor=2, span=2, 
              "pyre": I("Pyre of the Faithful", "attack", "all_heroes", [D(4), A("fire", 1, attr="stable")]),
              "gaze": I("Martyr's Gaze", "debuff", "all_heroes", [STRESS(10)]),
              "hollow": I("Hollow Flame", "attack", "front", [D(10)] + HF(1)),
-             "chains": I("Chains of Devotion", "attack", "back", [D(8), PULL(2), ST("anchor", 1)]),
+             "chains": I("Chains of Devotion", "attack", "back", [D(8), PULL(2), ST("anchor", 2)]),
              "prayer": I("Unending Prayer", "buff", "self", [B(16), SELF("might", 1)]),
              "black": I("The Black Pyre", "attack", "all_heroes", [D(3)] + HF(1)),
          },
@@ -88,11 +88,11 @@ creature("confessor", "The Confessor", "ruler", 270, armor=3, span=2, ranks=[3, 
              "burn": I("Then Burn", "attack", "all_heroes", [STRESS(5)] + HF(1)),
              "whisper": I("The Penitents Whisper", "debuff", "all_heroes", [STRESS(10)]),
          },
-         ai=[{"use": "call", "every": 3}, {"use": "absolve", "if": "ally_hurt75", "not_twice": True},
+         ai=[{"use": "call", "every": 3, "if": "allies<3"}, {"use": "absolve", "if": "ally_hurt75", "not_twice": True},
              {"use": "grille", "every": 2}, {"use": "hand"}],
          phases=[
              P(50, "Then burn, to be certain.", might=1,
-               ai=[{"use": "burn", "every": 2}, {"use": "call", "every": 3, "offset": 1},
+               ai=[{"use": "burn", "every": 2}, {"use": "call", "every": 3, "offset": 1, "if": "allies<3"},
                    {"use": "whisper", "every": 4, "offset": 3}, {"use": "penance"}]),
              P(20, "The curtain burns away. There is no more absolution.", might=1,
                ai=[{"use": "burn", "every": 2}, {"use": "grille", "every": 3, "offset": 1}, {"use": "hand"}]),
@@ -104,10 +104,10 @@ creature("confessor", "The Confessor", "ruler", 270, armor=3, span=2, ranks=[3, 
 
 # ================================================================== elites
 creature("unburnt_inquisitor", "The Unburnt Inquisitor", "elite", 105, armor=2, ranks=[2, 3], role="afflicter",
-         personality="cruel", resist={"fire": "immune", "void": "weak"},
+         resist={"fire": "immune", "void": "weak"},
          intents={
-             "accuse": I("Accuse", "debuff", "most_stress", [STRESS(8), ST("mark", 1)]),
-             "sentence": I("The Sentence", "attack", "most_stress", [D(10), A("fire", 2, attr="stable")]),
+             "accuse": I("Accuse", "debuff", "most_stress", [STRESS(8), ST("mark", 2)]),
+             "sentence": I("The Sentence", "attack", "marked", [D(10), A("fire", 2, attr="stable")]),
              "verdict": I("Verdict", "attack", "front", [D(13, pierce=True)]),
              "absolve": I("Absolve", "heal", "all_allies", [H(8)]),
          },
@@ -254,7 +254,7 @@ creature("faggot_bearer", "Faggot-Bearer", "foe", 48, armor=2, ranks=[1, 2], rol
          lore="Every pyre needs wood. He has carried enough for nine hundred years of them.",
          world=W)
 
-creature("scold", "The Scold", "foe", 32, ranks=[2], role="afflicter", personality="cruel",
+creature("scold", "The Scold", "foe", 32, ranks=[2], role="afflicter",
          resist={"fire": "resist", "void": "resist", "water": "weak"},
          intents={
              "cry": I("Choked Cry", "attack", "most_stress", [STRESS(6)] + HF(1)),
@@ -310,13 +310,13 @@ E("pyre_f7", "Four Small Fires", "The spared and the silenced.", ["scold", "reca
   "pyre_nave", "foe", "Four small fires; cleanse or race.")
 E("pyre_f8", "The Woodpile", "He has brought enough for another pyre.", ["faggot_bearer", "cinder_hound", "belfry_bats"],
   "pyre_stake", "foe", "The bearer guards the hound; striking him costs a Burn.")
-E("pyre_e1", "The Tribunal", "The inquisitor reads your names aloud.", ["pyre_knight", "unburnt_inquisitor", "scold"],
+E("pyre_e1", "The Tribunal", "The inquisitor reads your names aloud.", ["unburnt_inquisitor", "pyre_knight", "scold"],
   "pyre_crypt", "elite", "The tribunal: the accused is Marked and burned; fire does nothing to him.")
 E("pyre_e2", "The Fallen Seraph", "It came to put out the fire.", ["pyre_seraph", "candle_wraith"],
   "pyre_stake", "elite", "Kill it with Ward up: its death scatters Hollow Flame.")
 E("pyre_e3", "Put to the Question", "The irons are hot. He has time.", ["questioner", "recanter", "ash_pardoner"],
   "pyre_crypt", "elite", "Every round adds an iron; burst him early, and spend your Hex before the pardoner sells it off.")
-E("pyre_e4", "The Bellows", "She has not let the fire burn low once.", ["ash_penitent", "bellows_sister", "censer_deacon"],
+E("pyre_e4", "The Bellows", "She has not let the fire burn low once.", ["bellows_sister", "ash_penitent", "censer_deacon"],
   "pyre_nave", "elite", "She feeds every flame on the company; kill her and the fire burns low.")
 E("pyre_r_saint_unending", "The Saint Unending", "She is still burning, and still praying.",
   ["faggot_bearer", "censer_deacon", "saint_unending"], "pyre_boss", "ruler",
@@ -337,15 +337,15 @@ card("w_pyre_penitent_lash", "Penitent's Lash", 1, "W", "enemy",
      up={"text": "Lose 3 HP. Deal 1 per Scar you carry, up to 14, ignoring Block.",
          "fx": [SELFDMG(3), D(0, per="scars", k=1, max=14, pierce=True)]})
 card("w_pyre_saints_ash", "Saint's Ash", 1, "W", "ally", [CONS(e="fire"), WARD(1, per="consumed", k=1)],
-     "Remove all Burn from a hero. They gain 1 Ward, plus 1 per Burn removed.", world=W, arch="world",
+     "Remove all Fire from a hero. They gain 1 Ward, plus 1 per Fire removed.", world=W, arch="world",
      flavour="A pinch of her, sealed in lead. Genuine, this time.",
      note="A hero breaks a lead vial over a burning companion; grey ash settles and the black flame gutters out.",
-     up={"text": "Remove all Burn from a hero. They gain 2 Ward, plus 1 per Burn removed.",
+     up={"text": "Remove all Fire from a hero. They gain 2 Ward, plus 1 per Fire removed.",
          "fx": [CONS(e="fire"), WARD(2, per="consumed", k=1)]})
 card("w_pyre_fire_unending", "The Fire Unending", 2, "W", "none", [],
-     "Rite. At the end of each round, every foe takes 1 per course on it, ignoring Block, and every hero loses 1 HP. Exhaust.",
+     "Rite. At the end of each round, every foe takes 1 per course on it, ignoring Block, and you lose 2 HP. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",
-     rite={"on": "round_end", "fx": [D(0, per="t.spectrum", k=1, pierce=True, to="all_enemies"), SELFDMG(1, to="all_allies")]},
+     rite={"on": "round_end", "fx": [D(0, per="t.spectrum", k=1, pierce=True, to="all_enemies"), SELFDMG(2)]},
      flavour="It gives no light, and it does not go out. It does not care whose it is.",
      note="A hero touches a black taper to the floor; violet-edged flame runs under foes and company alike.",
      up={"text": "Rite. At the end of each round, every foe takes 1 per course on it, ignoring Block. Exhaust.",

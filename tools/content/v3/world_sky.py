@@ -288,11 +288,11 @@ E("sky_f8", "Things From Outside", "They came in through the tears, all of them.
   "sky_gate", "foe", "All three resist or ignore one course; switch damage types.")
 E("sky_e1", "The Seraph's Watch", "It is holding the sky together.", ["thunder_seraph", "fallen_angel", "choir_of_eyes"],
   "sky_choir", "elite", "Below half it lets the hounds in; burst it through the last half.")
-E("sky_e2", "Between the Stars", "Something swims through the tear.", ["rift_hound", "rift_crawler", "rift_leviathan"],
+E("sky_e2", "Between the Stars", "Something swims through the tear.", ["rift_leviathan", "rift_hound", "rift_crawler"],
   "sky_gate", "elite", "The first hit each round misses it; open with a small blow, then the big one.")
-E("sky_e3", "The Book of Names", "It has started crossing them out.", ["porter_of_heaven", "recording_angel", "putto"],
+E("sky_e3", "The Book of Names", "It has started crossing them out.", ["recording_angel", "porter_of_heaven", "putto"],
   "sky_choir", "elite", "Healing is struck out; kill the Angel to restore it.")
-E("sky_e4", "The Scales", "It has lost the feather.", ["skywreck_knight", "weigher_of_souls", "scorched_doves"],
+E("sky_e4", "The Scales", "It has lost the feather.", ["weigher_of_souls", "skywreck_knight", "scorched_doves"],
   "sky_gate", "elite", "Keep HP even across the company and Ward the front; the needle points at the healthiest.")
 E("sky_r_shattered_god", "The Shattered God", "The last Tooth floats where the Mother's heart was.",
   ["skywreck_knight", "rift_hound", "shattered_god"], "sky_boss", "ruler",
@@ -322,13 +322,13 @@ card("w_sky_through_the_tear", "Through the Tear", 1, "W", "enemy", [D(2), A("vo
      note="A hero pulls a foe through a rent in the sky; violet burns branch across it as it passes.",
      up={"text": "Deal 3. Apply 3 Void, then Conjoin.", "fx": [D(3), A("void", 3), REACT(1)]})
 card("w_sky_something_leans_closer", "Something Leans Closer", 1, "W", "none", [],
-     "Rite. Whenever the company sets off a Conjunction, deal 2 to that foe, plus 1 per Conjunction already set off this round, ignoring Block. Exhaust.",
+     "Rite. Up to 3 times a round, when the company sets off a Conjunction, deal 1 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",
-     rite={"on": "conjunction", "fx": [D(2, per="reactions", k=1, pierce=True)]},
+     rite={"on": "conjunction", "fx": [D(1, per="reactions", k=1, pierce=True)], "per_round": 3},
      flavour="The tears in the sky widen, and something leans closer. It likes what it sees.",
      note="The company under a widening tear; an eye the size of a cathedral window looks down on the foes.",
-     up={"text": "Rite. Whenever the company sets off a Conjunction, deal 3 to that foe, plus 1 per Conjunction already set off this round, ignoring Block. Exhaust.",
-         "rite": {"on": "conjunction", "fx": [D(3, per="reactions", k=1, pierce=True)]}})
+     up={"text": "Rite. Up to 3 times a round, when the company sets off a Conjunction, deal 2 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
+         "rite": {"on": "conjunction", "fx": [D(2, per="reactions", k=1, pierce=True)], "per_round": 3}})
 
 NEEDS = [
     "rift_leviathan: should surface at a new pair of ranks each round, swapping with the foes there (self-movement for a two-rank foe); written as a Dodge each round. Swallow is postponed (row 14): written as a heavy lunge.",

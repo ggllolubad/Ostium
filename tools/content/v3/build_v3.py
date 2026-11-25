@@ -86,7 +86,7 @@ FX = {"dmg", "coup", "dmg_per_element", "block", "self_block", "block_target", "
       "retreat", "to_front", "swap", "guard", "guard_weakest", "prime", "bash_stun", "heal", "stress", "self_stress", "self_dmg",
       "draw", "energy", "add", "consume", "double", "spread", "convert", "cleanse", "transfer", "execute", "delay", "turn",
       "steal_block", "omen", "cap", "grit", "kill_self_hp", "stress_take",
-      "brew", "refill", "improve", "unbind", "discard_random", "lose_armor", "summon", "take", "give", "even"}
+      "brew", "refill", "improve", "unbind", "discard_random", "lose_armor", "summon", "take", "give", "even", "lose_hp"}
 QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies", "allies", "allies_dd", "same_target", "round",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used"}

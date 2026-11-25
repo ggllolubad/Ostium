@@ -19,10 +19,9 @@ card("w_rime_fire_setting", "Fire-Setting", 1, "W", "enemy", [D(2), A(FI, 2, att
      flavour="Stack the fire against the stone, then the cold water. The rock does the rest.",
      note="A hero drives a burning bundle into a rimed Thrall; the ice on its back cracks orange.")
 card("w_rime_wedge_and_feather", "Wedge and Feather", 1, "W", "enemy",
-     [D(3, per="t.armor", k=1), A(F, 1, attr="stable")],
-     "Deal 3, plus 1 per Armor the target has. Apply 1 Frost.", world=W, arch="world",
-     up={"text": "Deal 4, plus 2 per Armor the target has. Apply 1 Frost.",
-         "fx": [D(4, per="t.armor", k=2), A(F, 1, attr="stable")]},
+     [D(1, per="t.armor", k=2)],
+     "Deal 1, plus 2 per Armor the target has.", world=W, arch="world",
+     up={"text": "Deal 3, plus 2 per Armor the target has.", "fx": [D(3, per="t.armor", k=2)]},
      flavour="Iron wedges, iron feathers, and a mallet. Every plate has a seam.",
      note="A hero hammers an iron wedge into the seam of a Shieldmaiden's obsidian plate.")
 card("w_rime_shield_wall", "Shield Wall", 1, "W", "ally_other", [GUARD(), B(1, per="t.ailments", k=1)],
@@ -32,11 +31,9 @@ card("w_rime_shield_wall", "Shield Wall", 1, "W", "ally_other", [GUARD(), B(1, p
      flavour="The hold's shieldmaidens stood rim to rim. The glass cut them as well.",
      note="A hero steps in front of a burning companion, shield up against the steam.")
 card("w_rime_the_glacier_splits", "The Glacier Splits", 2, "W", "all_enemies",
-     [D(1, per="t.armor", k=1), A(F, 1, attr="volatile")],
-     "Deal 1 to every foe, plus 1 per Armor it has. Apply 1 Volatile Frost to every foe.", cat=F, world=W,
-     arch="world",
-     up={"text": "Deal 2 to every foe, plus 1 per Armor it has. Apply 1 Volatile Frost to every foe.",
-         "fx": [D(2, per="t.armor", k=1), A(F, 1, attr="volatile")]},
+     [A(F, 1, attr="volatile"), D(3)],
+     "Apply 1 Volatile Frost to every foe. Deal 3 to every foe.", cat=F, world=W, arch="world",
+     up={"text": "Apply 1 Volatile Frost to every foe. Deal 5 to every foe.", "fx": [A(F, 1, attr="volatile"), D(5)]},
      flavour="The miners dug down and met the fire coming up. The glacier split between.",
      note="A crack runs the length of the glacier floor under the foes, steam bursting through.")
 
@@ -150,7 +147,7 @@ creature("jotun_thane", "Jötun Thane", "elite", 125, armor=3, span=2, ranks=[1,
          traits=[T("round_start", "Melting", "At round start he loses 4 HP and gains 1 Might.",
                    [SELFDMG(4), SELF("might", 1)])],
          lore="A giant of the old ice. The fire in the deep has driven him mad with heat.")
-creature("twin_seeress", "Twinflame Seeress", "elite", 90, armor=2, ranks=[3, 4], world=W, role="afflicter",
+creature("twin_seeress", "Twinflame Seeress", "elite", 90, armor=2, ranks=[1, 3, 4], world=W, role="afflicter",
          resist=dict(BOTH, void="weak"),
          intents={"flame": I("Flame Face", "attack", "back", [D(6), A(FI, 3, attr="stable")]),
                   "rime": I("Rime Face", "attack", "front", [D(6), A(F, 3, attr="stable")]),
@@ -202,8 +199,8 @@ creature("riven_jarl", "The Riven Jarl", "ruler", 280, armor=3, span=2, ranks=[2
                              [D(12), A(FI, 2, attr="volatile"), A(F, 1, attr="volatile"), SELFDMG(6)])},
          ai=[{"use": "cleave", "if": "round==1"}, {"use": "temper", "if": "hp_pct<75", "once": True},
              {"use": "hoar", "every": 3}, {"use": "fissure", "every": 3, "offset": 1}, {"use": "cleave"}],
-         traits=[T("round_start", "Two Halves", "Each round one half leads and turns the first course laid on him: he gains 1 Ward.",
-                   [WARD(1, to="self")])],
+         traits=[T("round_start", "Two Halves", "At round start, if he has no Ward, the leading half gains 1 Ward.",
+                   [WARD(1, to="self", if_="ward<1")])],
          phases=[P(66, "The frozen half cracks away. Fire pours out.",
                    ai=[{"use": "split", "every": 4}, {"use": "fissure", "every": 2}, {"use": "shatter"}], might=1),
                  P(25, "He burns and freezes at once.",
@@ -277,10 +274,10 @@ E("rime_f8", "Steam and Stone", "Rising heat, falling ice.",
   ["rime_thrall", "steam_wraith", "fissure_worm"], "rime_glacier", "foe",
   "Stress from the wraith, burst from the worm; a balanced test of front and back cover.")
 E("rime_e1", "The Thane's Hall", "A giant at the hearth, and his shieldmaiden.",
-  ["obsidian_maiden", "jotun_thane"], "rime_hall", "elite",
-  "He melts but grows stronger every round, and braces if left alone; burst him through the wall, not halfway.")
+  ["jotun_thane", "obsidian_maiden"], "rime_hall", "elite",
+  "He melts but grows stronger every round, and braces if left alone; the maiden walls him from behind, so burst him, not halfway.")
 E("rime_e2", "Two-Faced Oracle", "She speaks in fire and frost.",
-  ["magma_hound", "rime_thrall", "twin_seeress"], "rime_glacier", "elite",
+  ["twin_seeress", "magma_hound", "rime_thrall"], "rime_glacier", "elite",
   "She answers a burning hitter with frost and a frozen one with fire; hit her clean, with physical, void or water.")
 E("rime_e3", "The Berserker", "Mead, a saga, and a man who walked into the fire.",
   ["berserker", "mead_bearer", "skald"], "rime_hall", "elite",

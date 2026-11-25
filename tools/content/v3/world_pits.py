@@ -10,13 +10,14 @@ W = "pits"
 set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 
 # ================================================================== cards foes put in a hand
-card("t_pits_lamp", "Lit Lamp", 1, "Curse", "enemy", [A("fire", 2, attr="stable"), A("fire", 1, attr="stable", to="self")],
-     "Throw it: apply 2 Burn to a foe and 1 Burn to yourself. Exhaust.", kw=["Temporary", "Curse", "Exhaust"], cat="fire",
+card("t_pits_lamp", "Lit Lamp", 0, "Curse", "none", [A("fire", 2, attr="stable")],
+     "Unplayable. When drawn: gain 2 Burn.", use=[], kw=["Temporary", "Unplayable", "Curse"],
+     on_draw=[A("fire", 2, attr="stable")], cat="fire",
      flavour="She hands every miner his lamp at the start of the shift. Everyone takes one.",
      note="The Lamp-Room Girl holds out one more lit lamp from her yoke toward the hero.")
 
 # ================================================================== world cards (Combust)
-card("w_pits_firedamp", "Firedamp", 1, "W", "enemy",
+card("w_pits_gas_pocket", "Gas Pocket", 1, "W", "enemy",
      [D(0, per="t.el_total", k=1, max=12), A("fire", 1, attr="volatile")],
      "Deal 1 for each course stack on the target (max 12). Apply 1 Volatile Burn.", cat="fire", world=W, arch="world",
      flavour="The air itself became fuel, and every poison is a fuse.",
@@ -33,13 +34,13 @@ card("w_pits_blasting_charge", "Blasting Charge", 2, "W", "enemy",
                  "1 per Toxin removed (max 8).",
          "fx": [CONS(e="toxin"), D(4, per="consumed", k=2, max=16), D(0, per="consumed", k=1, max=8, to="adjacent")]})
 card("w_pits_throw_it_back", "Throw It Back", 1, "W", "enemy",
-     [TRANSFER(frm="ally_most"), D(2), A("fire", 1, attr="volatile")],
-     "Move every ailment from the most afflicted hero onto the target. Deal 2. Apply 1 Volatile Burn.", cat="fire",
+     [TRANSFER(frm="ally_most", n=1), D(2), A("fire", 1, attr="volatile")],
+     "Move the largest ailment of the most afflicted hero onto the target. Deal 2. Apply 1 Volatile Burn.", cat="fire",
      world=W, arch="world",
      flavour="Its lungs are full of yellow gas. Keep it away from the lamp.",
      note="A coughing hero spits the yellow gas back into a Gas-Lung Miner's face as the lamp swings in.",
-     up={"text": "Move every ailment from the most afflicted hero onto the target. Deal 4. Apply 1 Volatile Burn.",
-         "fx": [TRANSFER(frm="ally_most"), D(4), A("fire", 1, attr="volatile")]})
+     up={"text": "Move the largest ailment of the most afflicted hero onto the target. Deal 4. Apply 1 Volatile Burn.",
+         "fx": [TRANSFER(frm="ally_most", n=1), D(4), A("fire", 1, attr="volatile")]})
 card("w_pits_wet_hood", "Wet Hood", 1, "W", "ally",
      [CONS(e="fire"), dsl.W(1), B(2, per="consumed", k=1, max=8)],
      "Remove all Burn from a hero. They gain 1 Ward and 2 Block, plus 1 per Burn removed (max 8).", world=W, arch="world",
@@ -74,13 +75,13 @@ creature("brimstone_toad", "Brimstone Toad", "foe", 36, ranks=[2, 3], role="affl
 creature("fuse_imp", "Fuse Imp", "foe", 28, ranks=[3, 4], role="afflicter", charge_name="Fuse",
          resist={"fire": "immune", "water": "weak"},
          intents={"torch": I("Throw the Torch", "attack", "back", [D(3), A("fire", 1, attr="volatile")]),
-                  "blow": I("Blow Up", "attack", "all_heroes", [D(9), A("fire", 2, attr="stable"), SELFDMG(999)]),
+                  "blow": I("Blow Up", "attack", "all_heroes", [D(6), A("fire", 2, attr="stable"), SELFDMG(999)]),
                   "scamper": I("Scamper", "defend", "self", [SELF("dodge", 1)])},
          ai=[{"use": "blow", "if": "charge>=3"}, {"use": "scamper", "if": "hp_pct<50", "not_twice": True}, {"use": "torch"}],
          traits=[T("round_start", "Burning Fuse", "Its tail fuse burns down each round; at 3 it blows up. Soak or "
                    "Weaken on it puts the fuse out for that round.",
                    [SELF("charge", 1, if_="!water&!frost")])],
-         personality="cunning", lore="It carries a lit torch into a gas mine. On purpose.", world=W)
+         lore="It carries a lit torch into a gas mine. On purpose.", world=W)
 
 creature("pit_crawler", "Pit Crawler", "foe", 46, armor=2, ranks=[1], role="attacker",
          resist={"physical": "resist", "toxin": "resist"},
@@ -98,7 +99,7 @@ creature("canary_priest", "Canary Priest", "foe", 32, ranks=[3, 4], role="afflic
                   "bless": I("Bless the Flock", "heal", "all_allies", [CLEANSE(2)])},
          ai=[{"use": "bless", "if": "total_hex>=4", "not_twice": True}, {"use": "hymn", "every": 3, "offset": 2},
              {"use": "censer", "every": 3}, {"use": "cage"}],
-         personality="cruel", lore="They sing to the gas the way miners once listened to canaries. The gas listens.",
+         lore="They sing to the gas the way miners once listened to canaries. The gas listens.",
          world=W)
 
 creature("gas_burner", "Gas-Burner", "foe", 36, ranks=[2], role="afflicter",
@@ -141,8 +142,7 @@ creature("weighman", "Weighman", "foe", 34, ranks=[3, 4], role="support",
                   "weigh": I("Weigh the Load", "buff", "all_allies", [B(4)])},
          ai=[{"use": "dock", "every": 3, "offset": 1}, {"use": "short", "every": 2}, {"use": "weigh", "if": "ally_hurt", "not_twice": True},
              {"use": "swing"}],
-         personality="cruel",
-         lore="He weighed every load that came up and found it short. He has never once been wrong.", world=W)
+                  lore="He weighed every load that came up and found it short. He has never once been wrong.", world=W)
 
 creature("lamp_room_girl", "Lamp-Room Girl", "foe", 30, ranks=[3, 4], role="support",
          resist={"fire": "resist", "water": "weak"},
@@ -188,7 +188,7 @@ creature("miasma_matriarch", "Miasma Matriarch", "elite", 96, armor=2, ranks=[3,
          traits=[T("hit", "Swollen with Gas", "Struck while she Burns, she bursts in a cloud: she takes 12 and every "
                    "hero gains 2 Toxin.",
                    [D(12, to="self", if_="fire>0"), A("toxin", 2, attr="stable", to="all_enemies", if_="fire>0")])],
-         personality="cruel", lore="A head swollen with gas, drifting through the galleries.", world=W)
+         lore="A head swollen with gas, drifting through the galleries.", world=W)
 
 creature("mounted_overseer", "The Mounted Overseer", "elite", 110, armor=3, ranks=[1], role="support",
          resist={"fire": "resist", "toxin": "resist", "frost": "weak"},
@@ -210,7 +210,7 @@ creature("shrine_bearer", "The Shrine-Bearer", "elite", 106, armor=3, ranks=[2],
                   "smoke": I("Holy Smoke", "heal", "all_allies", [CLEANSE(2)]),
                   "staff": I("Cross-Lamp Staff", "attack", "front", [D(9)]),
                   "pray": I("Mumbled Blessing", "debuff", "all_heroes", [STRESS(5)])},
-         ai=[{"use": "bless_gas", "if": "charge>=4"}, {"use": "smoke", "if": "elements_all>=6", "not_twice": True},
+         ai=[{"use": "bless_gas", "if": "charge>=4"}, {"use": "smoke", "if": "el_total>=4", "not_twice": True},
              {"use": "bless_powder", "if": "charge>=2&ally_hurt"}, {"use": "pray", "every": 3}, {"use": "staff"}],
          traits=[T("round_start", "Votive Lamps", "Lights one more lamp each round; a blessing spends them all.",
                    [SELF("charge", 1)])],
@@ -238,8 +238,8 @@ creature("burning_lung", "The Burning Lung", "ruler", 300, armor=2, span=2, rank
          traits=[T("hit", "Gas Sac", "While the sac holds gas, a hit while it Burns sets the sac off: it takes 14 and the "
                    "sac empties.",
                    [D(14, to="self", if_="charge>=1&fire>0"), CLR("charge", to="self", if_="charge>=1&fire>0")]),
-                 T("round_start", "Split Skin", "Below about half HP its skin is split, and it gains 2 Burn every round.",
-                   [A("fire", 2, attr="stable", if_="hp_pct<55")])],
+                 T("round_start", "Split Skin", "Below about half HP its skin is split, and it gains 4 Burn every round (2 after its resistance).",
+                   [A("fire", 4, attr="stable", if_="hp_pct<55")])],
          lore="The mine's first breath, grown into a toad the size of a chapel. Every breath it takes is fire.", world=W)
 
 creature("owner", "The Owner", "ruler", 280, armor=3, span=2, ranks=[3, 4], role="summoner", flags=["immovable"],
@@ -250,10 +250,10 @@ creature("owner", "The Owner", "ruler", 280, armor=3, span=2, ranks=[3, 4], role
                   "ledger": I("The Owner's Due", "debuff", "all_heroes", [STRESS(6), A("toxin", 1, attr="stable")]),
                   "reach": I("Both Hands Down", "attack", "front2", [D(9), A("fire", 1, attr="stable")]),
                   "lamp": I("The Lamp Drops", "attack", "all_heroes", [D(4), A("fire", 2, attr="volatile")])},
-         ai=[{"use": "shift", "if": "allies<3", "not_twice": True}, {"use": "grab", "every": 3},
+         ai=[{"use": "shift", "if": "allies<3", "once": True}, {"use": "grab", "every": 3},
              {"use": "ledger", "every": 4, "offset": 2}, {"use": "swat"}],
          phases=[P(55, "The timbers creak. He slips lower, and his hands reach the front two ranks at once.",
-                   ai=[{"use": "shift", "if": "allies<3", "not_twice": True}, {"use": "grab", "every": 3},
+                   ai=[{"use": "shift", "if": "allies<3", "once": True}, {"use": "grab", "every": 3},
                        {"use": "reach"}], might=2),
                  P(20, "He drops the lamp into the gas.",
                    ai=[{"use": "grab", "every": 3}, {"use": "lamp"}], might=1)],
@@ -316,14 +316,14 @@ E(W, "pits_e1", "The Powder Store", "An ogre among the kegs, the weighman counti
   ["powder_ogre", "weighman", "fuse_imp"], "pits_shaft", "elite",
   "Two fuses on the count: Soak the keg, then the imp, or kill fast; the weighman takes the Block you hide behind.")
 E(W, "pits_e2", "The Choking Chapel", "The matriarch drifts over the altar.",
-  ["gas_miner", "canary_priest", "miasma_matriarch"], "pits_chapel", "elite",
+  ["miasma_matriarch", "gas_miner", "canary_priest"], "pits_chapel", "elite",
   "All fuel and one hymn: Burning the Matriarch is a gamble on the gas cloud.")
 E(W, "pits_e3", "The Count", "The overseer rides the gallery, counting heads.",
   ["mounted_overseer", "tub_hurrier", "pit_boy"], "pits_vent", "elite",
   "The whip Marks the back hero and the pony follows it; every death drives the rest harder: Guard the Mark.")
 E(W, "pits_e4", "The Feast-Day Procession", "The shrine comes down the shaft behind its timberman.",
-  ["timberman", "shrine_bearer", "canary_priest"], "pits_chapel", "elite",
-  "The lamps count up behind a propped wall: break through before the blessing.")
+  ["shrine_bearer", "timberman", "canary_priest"], "pits_chapel", "elite",
+  "The lamps count up while the timberman props whoever is hurt: break the shrine before the blessing.")
 # rulers
 E(W, "pits_r_burning_lung", "The Burning Lung", "The mine breathes.",
   ["gas_miner", "gas_miner", "burning_lung"], "pits_boss", "ruler",
@@ -337,8 +337,8 @@ E(W, "pits_r_powder_mill", "The Powder Mill", "The horse leans into the collar a
   props="powder_mill")
 
 NEEDS = [
-    "lamp_room_girl / t_pits_lamp: the Lit Lamp should Burn its holder at round end if still in hand (no held-card "
-    "round-end trigger); written as a throwable card that also Burns the thrower.",
+    "t_pits_lamp: the Lit Lamp should be throwable at a foe, Burning its holder only if still held at round end (no "
+    "held-card round-end trigger); written as an Unplayable card that Burns whoever draws it.",
     "lamp_room_girl Lamp for the Shift: the lamp should make the foe's next attack add Burn; written as Empower 4.",
     "weighman Dock the Pay and Purse of Fines (gold theft, postponed by row 14): stress only, no death trait.",
     "burning_lung The Tongue: swallows the rearmost hero (postponed by row 14); written as a pull to the front plus stress.",

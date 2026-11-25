@@ -37,11 +37,11 @@ card("du_quickstep", "Quickstep", 1, "K", "adjacent_ally", [SWAP(), SELF("moment
      note="The Bladedancer spins past the Bulwark's door-shield, both blades trailing.",
      up={"text": "Swap with an adjacent hero. Gain 1 Momentum. Dodge the next hit this round.",
          "fx": [SWAP(), SELF("momentum", 1), SELF("dodge", 1)]})
-card("du_drag_to_the_block", "Drag to the Block", 1, "K", "enemy", [PULL(1)],
-     "Pull the target forward 1.", hit=[3, 4], sub=EX, arch=EX,
+card("du_drag_to_the_block", "Drag to the Block", 1, "K", "enemy", [PULL(1), ST("mark")],
+     "Pull the target forward 1. Mark it.", hit=[3, 4], sub=EX, arch=EX,
      flavour="The condemned do not walk to the block. They are brought.",
      note="The hooded Executioner hooks a back-rank foe by the collar and hauls it up the nave.",
-     up={"text": "Pull the target forward 1. Mark it.", "fx": [PULL(1), ST("mark")]})
+     up={"text": "Pull the target forward 1. Mark it for 2 rounds.", "fx": [PULL(1), ST("mark", 2)]})
 card("du_staunch", "Staunch", 1, "K", "enemy", [H(0, per="m.bleed", k=1, max=6, to="lowest_ally")],
      "The most wounded hero heals 1 per Bleed on the target (not spent), up to 6.", hit=ALL, sub=BL, arch=BL,
      flavour="What runs out of them can be put back into us. Barber's arithmetic.",
@@ -72,11 +72,11 @@ card("du_parry", "Parry", 1, "S", "self", [SELF("riposte", 2), SELF("dodge", 1)]
      up={"text": "Gain Riposte 3. Dodge the next hit this round.", "fx": [SELF("riposte", 3), SELF("dodge", 1)]})
 card("du_close_the_measure", "Close the Measure", 2, "S", "enemy",
      [FIN(), D(4, per="consumed", k=1), D(4, per="consumed", k=1, if_="t.mark>0")],
-     "Finisher. Deal 4, plus 1 per Momentum spent. Deal it again if the target is Marked.",
+     "Finisher. Deal 4, plus 1 per Momentum spent. If the target is Marked, hit it again for the same.",
      hit=THRUST, kw=["Finisher"], arch="core",
      flavour="Distance is the whole art. Close it once, and finish.",
      note="The Duelist steps inside a foe's reach and drives the rapier home to the swept hilt.",
-     up={"text": "Finisher. Deal 4, plus 1 per Momentum spent. Deal it again if the target is Marked.", "cost": 1})
+     up={"text": "Finisher. Deal 4, plus 1 per Momentum spent. If the target is Marked, hit it again for the same.", "cost": 1})
 
 # ------------------------------------------------------------------ common: Bladedancer
 card("du_feather_cut", "Feather Cut", 0, "C", "enemy", [D(1), SELF("momentum", 1)],
@@ -96,18 +96,18 @@ card("du_light_feet", "Light Feet", 1, "C", "self", [SELF("dodge", 1), SELF("mom
      note="The Duelist skips back from a falling boat hook on the balls of the feet.",
      up={"text": "Dodge the next 2 hits this round. Gain 2 Momentum.",
          "fx": [SELF("dodge", 2), SELF("momentum", 2)]})
-card("du_turn_of_the_wrist", "Turn of the Wrist", 1, "C", "enemy", [D(1, per="momentum", k=2)],
-     "Deal 1, plus 2 per Momentum (not spent).", arch=BD,
+card("du_turn_of_the_wrist", "Turn of the Wrist", 1, "C", "enemy", [D(1, per="momentum", k=2, max=13)],
+     "Deal 1, plus 2 per Momentum (not spent), up to 13.", arch=BD,
      flavour="The cut is in the wrist. The wrist is in the rhythm.",
      note="A small circle of the rapier's tip, and a foe's guard comes apart.",
-     up={"text": "Deal 3, plus 2 per Momentum (not spent).", "fx": [D(3, per="momentum", k=2)]})
+     up={"text": "Deal 3, plus 2 per Momentum (not spent), up to 15.", "fx": [D(3, per="momentum", k=2, max=15)]})
 card("du_sweep", "Sweep", 1, "C", "all_enemies", [D(4, if_="t.rank<=2")],
      "Deal 4 to each foe in ranks 1 and 2.", hit=ALL, arch=BD,
      flavour="Two foes in reach is one foe too many. For them.",
      note="The Duelist's blade cuts a flat arc across the front of the nave.",
      up={"text": "Deal 5 to each foe in ranks 1 and 2.", "fx": [D(5, if_="t.rank<=2")]})
 card("du_arc_cut", "Arc Cut", 1, "C", "enemy", [D(5), A(L, 1)],
-     "Deal 5. Apply 1 Lightning.", cat=L, attr="stable", arch=BD,
+     "Deal 5. Apply 1 Lightning.", attr="stable", arch=BD,
      flavour="The lightning-touched schools leave the spark in the steel.",
      note="A white-gold spark runs down the scorched blade into the foe it cuts.",
      up={"text": "Deal 6. Apply 2 Lightning.", "fx": [D(6), A(L, 2)]})
@@ -119,22 +119,23 @@ card("du_pronounce_sentence", "Pronounce Sentence", 0, "C", "enemy", [ST("mark")
      note="The Executioner points the square-tipped sword down the nave at one foe.",
      up={"text": "Mark the target for 2 rounds.", "fx": [ST("mark", 2)]})
 card("du_measure_the_neck", "Measure the Neck", 1, "C", "enemy",
-     [D(3), D(3, if_="t.mark>0"), D(3, if_="t.moved")],
-     "Deal 3. Deal 3 more if the target is Marked, and 3 more if it was moved this round.", arch=EX + "+bulwark_hook",
+     [D(2, per="t.mark", k=3, max=5), D(3, if_="t.moved")],
+     "Deal 2, or 5 if the target is Marked. If it was moved this round, hit it again for 3.",
+     arch=EX + "+bulwark_hook",
      flavour="Dragged in, stumbling, neck bare. The headsman has waited for exactly this.",
      note="The Bulwark's hook drags a foe forward and the Executioner's blade is already falling.",
-     up={"text": "Deal 4. Deal 4 more if the target is Marked, and 4 more if it was moved this round.",
-         "fx": [D(4), D(4, if_="t.mark>0"), D(4, if_="t.moved")]})
+     up={"text": "Deal 3, or 6 if the target is Marked. If it was moved this round, hit it again for 4.",
+         "fx": [D(3, per="t.mark", k=3, max=6), D(4, if_="t.moved")]})
 card("du_haul_forward", "Haul Forward", 1, "C", "enemy", [D(2), PULL(1), ST("mark")],
      "Deal 2. Pull the target forward 1 and Mark it.", hit=FAR, arch=EX,
      flavour="No one hides at the back of a queue for the block.",
      note="The Executioner reaches past the front rank and drags a caster out by its robe.",
      up={"text": "Deal 2. Pull the target forward 2 and Mark it.", "fx": [D(2), PULL(2), ST("mark")]})
-card("du_heading_stroke", "Heading Stroke", 2, "C", "enemy", [D(11), D(3, if_="t.hp_pct<50")],
-     "Deal 11. Deal 3 more if the target is below half HP.", use=[1, 2], arch=EX,
+card("du_heading_stroke", "Heading Stroke", 2, "C", "enemy", [D(13)],
+     "Deal 13.", use=[1, 2], arch=EX,
      flavour="Both hands, full swing. The old way.",
      note="The broad heading sword comes down two-handed in the ossuary's gloom.",
-     up={"text": "Deal 14. Deal 4 more if the target is below half HP.", "fx": [D(14), D(4, if_="t.hp_pct<50")]})
+     up={"text": "Deal 17.", "fx": [D(17)]})
 card("du_the_crowd_watches", "The Crowd Watches", 1, "C", "enemy",
      [D(4), STRESS(-3, to="all_allies", if_="killed")],
      "Deal 4. If it kills, every hero sheds 3 stress.", arch=EX,
@@ -142,11 +143,12 @@ card("du_the_crowd_watches", "The Crowd Watches", 1, "C", "enemy",
      note="A foe falls under the black hood's stroke; behind it the company breathes out.",
      up={"text": "Deal 6. If it kills, every hero sheds 4 stress.",
          "fx": [D(6), STRESS(-4, to="all_allies", if_="killed")]})
-card("du_weigh_the_wound", "Weigh the Wound", 1, "C", "enemy", [D(3, per="t.missing_hp", k=0.25)],
-     "Deal 3, plus 1 per 4 HP the target is missing.", arch=EX,
+card("du_weigh_the_wound", "Weigh the Wound", 1, "C", "enemy", [D(3, per="t.missing_hp", k=0.25, max=12)],
+     "Deal 3, plus 1 per 4 HP the target is missing, up to 12.", arch=EX,
      flavour="The worse the wound, the lighter the work.",
      note="The Executioner sizes up a staggering foe before the stroke.",
-     up={"text": "Deal 5, plus 1 per 4 HP the target is missing.", "fx": [D(5, per="t.missing_hp", k=0.25)]})
+     up={"text": "Deal 5, plus 1 per 4 HP the target is missing, up to 15.",
+         "fx": [D(5, per="t.missing_hp", k=0.25, max=15)]})
 
 # ------------------------------------------------------------------ common: Bloodletter
 card("du_lancet", "Lancet", 1, "C", "enemy", [D(3), ST("bleed", 2)],
@@ -183,11 +185,11 @@ card("du_deep_cut", "Deep Cut", 1, "C", "enemy", [ST("bleed", 2), ST("vulnerable
          "fx": [ST("bleed", 3), ST("vulnerable", 1, if_="t.bleed>=6")]})
 
 # ------------------------------------------------------------------ common: core (Mark, Follow-up, Riposte, rank)
-card("du_follow_through", "Follow Through", 1, "C", "enemy", [D(3), D(4, if_="same_target")],
-     "Deal 3. Follow-up: deal 4 more.", arch="core",
+card("du_follow_through", "Press the Opening", 1, "C", "enemy", [D(3), D(4, if_="same_target")],
+     "Deal 3. Follow-up: hit it again for 4.", arch="core",
      flavour="Strike where the last blow landed. It is still open.",
      note="The Duelist's rapier enters the gap the Elementalist's frost just cracked open.",
-     up={"text": "Deal 4. Follow-up: deal 5 more.", "fx": [D(4), D(5, if_="same_target")]})
+     up={"text": "Deal 4. Follow-up: hit it again for 5.", "fx": [D(4), D(5, if_="same_target")]})
 card("du_en_garde", "En Garde", 1, "C", "self", [SELF("riposte", 3), B(3)],
      "Gain Riposte 3. Gain 3 Block.", use=ALL, arch="core",
      flavour="Come, then. The blade is waiting for you.",
@@ -200,13 +202,13 @@ card("du_give_ground", "Give Ground", 1, "C", "self", [RET(1), B(6)],
      up={"text": "Retreat 1. Gain 8 Block.", "fx": [RET(1), B(8)]})
 card("du_slip_and_cut", "Slip and Cut", 1, "C", "enemy",
      [SELF("dodge", 1), D(2), D(3, if_="t.targeting_me")],
-     "Dodge the next hit this round. Deal 2. Deal 3 more if the target means to attack you.", arch="core",
+     "Dodge the next hit this round. Deal 2. If the target means to attack you, hit it again for 3.", arch="core",
      flavour="Let it come. Be somewhere else. Cut what is left reaching.",
      note="A drowned thrall's swing passes through the space the Duelist just left.",
-     up={"text": "Dodge the next hit this round. Deal 3. Deal 4 more if the target means to attack you.",
+     up={"text": "Dodge the next hit this round. Deal 3. If the target means to attack you, hit it again for 4.",
          "fx": [SELF("dodge", 1), D(3), D(4, if_="t.targeting_me")]})
 card("du_thunder_lunge", "Thunder Lunge", 1, "C", "enemy", [ADV(1), D(3), A(L, 2)],
-     "Advance 1. Deal 3. Apply 2 Lightning.", use=[2, 3], hit=THRUST, cat=L, attr="stable", arch=BD,
+     "Advance 1. Deal 3. Apply 2 Lightning.", use=[2, 3], hit=THRUST, attr="stable", arch=BD,
      flavour="The schools teach the lunge and the strike as one thing.",
      note="The Duelist crosses two ranks in one lunge, sparks branching up the blade.",
      up={"text": "Advance 1. Deal 4. Apply 3 Lightning.", "fx": [ADV(1), D(4), A(L, 3)]})
@@ -224,11 +226,11 @@ card("du_closing_whirl", "Closing Whirl", 2, "U", "all_enemies", [FIN(), D(2, pe
      flavour="Every step of the dance was the windup. This is the swing.",
      note="The Bladedancer turns a full circle at the front of the nave, both blades out.",
      up={"text": "Finisher. Deal 2, plus 2 per Momentum spent, to each foe in ranks 1 and 2.", "cost": 1})
-card("du_quick_hands", "Quick Hands", 1, "U", "enemy", [D(1, per="momentum", k=1, times=2)],
-     "Twice: deal 1, plus 1 per Momentum (not spent).", arch=BD + "+alchemist_might",
+card("du_quick_hands", "Quick Hands", 1, "U", "enemy", [D(1, per="momentum", k=1, times=2, max=7)],
+     "Twice: deal 1, plus 1 per Momentum (not spent), up to 7.", arch=BD + "+alchemist_might",
      flavour="Two cuts in the time of one. Three, when the blood is up.",
      note="The Duelist's sword hand blurs; two red lines appear on a foe's guard.",
-     up={"text": "Twice: deal 2, plus 1 per Momentum (not spent).", "fx": [D(2, per="momentum", k=1, times=2)]})
+     up={"text": "Twice: deal 2, plus 1 per Momentum (not spent), up to 8.", "fx": [D(2, per="momentum", k=1, times=2, max=8)]})
 card("du_catch_the_rhythm", "Catch the Rhythm", 0, "U", "self",
      [SELF("momentum", 1), SELF("momentum", 1, if_="played>=2")],
      "Gain 1 Momentum. If you have played 2 or more cards this round, gain 1 more.", use=ALL, arch=BD,
@@ -240,18 +242,17 @@ card("du_serrated_rhythm", "Serrated Rhythm", 1, "U", "self", [ST("bleed", 1, to
      "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play on a foe also "
      "applies 1 Bleed to it, up to 3 times a round. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], arch=BD + "+" + BL,
-     rite={"on": "play", "cat": "physical", "if": "!t.played", "per_round": 3, "fx": [ST("bleed", 1)]},
+     rite={"on": "play", "cat": "physical", "per_round": 3, "fx": [ST("bleed", 1)]},
      flavour="Notch the edge. Every touch after that leaves something behind.",
      note="The Bladedancer draws a file along the second blade; its edge comes up toothed.",
      up={"text": "Apply 1 Bleed to the foe in rank 1. Rite: for the rest of the fight, each physical card you play on "
                  "a foe also applies 1 Bleed to it, up to 5 times a round. Exhaust.",
-         "rite": {"on": "play", "cat": "physical", "if": "!t.played", "per_round": 5, "fx": [ST("bleed", 1)]}})
-card("du_shatter_point", "Shatter Point", 1, "U", "enemy", [D(4), D(4, if_="t.frost>0")],
-     "Deal 4. Deal 4 more if the target has Weaken.", arch=BD + "+elementalist_frost",
+         "rite": {"on": "play", "cat": "physical", "per_round": 5, "fx": [ST("bleed", 1)]}})
+card("du_shatter_point", "Shatter Point", 1, "U", "enemy", [D(4, per="t.frost", k=1, max=8)],
+     "Deal 4, plus 1 per Weaken on the target, up to 8.", arch=BD + "+elementalist_frost",
      flavour="Cold steel, colder foe. Strike the frost and it breaks.",
      note="The rapier's point cracks the rime on a frozen foe and the ice falls away in plates.",
-     up={"text": "Deal 5. Deal 5 more if the target has Weaken.", "fx": [D(5), D(5, if_="t.frost>0")]})
-
+     up={"text": "Deal 5, plus 2 per Weaken on the target, up to 11.", "fx": [D(5, per="t.frost", k=2, max=11)]})
 # ------------------------------------------------------------------ uncommon: Executioner
 card("du_carry_out_the_sentence", "Carry Out the Sentence", 1, "U", "enemy",
      [FIN(), D(3), EXEC(4, per="consumed", k=3, if_="t.mark>0")],
@@ -267,11 +268,11 @@ card("du_condemned", "Condemned", 1, "U", "all_enemies", [ST("mark", 2, if_="t.h
      note="The Executioner walks the line and taps each bleeding foe with the flat of the blade.",
      up={"text": "Mark every foe below half HP for 2 rounds. Gain 1 Momentum.",
          "fx": [ST("mark", 2, if_="t.hp_pct<50"), SELF("momentum", 1)]})
-card("du_second_stroke", "Second Stroke", 2, "U", "enemy", [D(6, per="t.missing_hp", k=0.5)],
-     "Deal 6, plus 1 per 2 HP the target is missing.", arch=EX,
+card("du_second_stroke", "Second Stroke", 2, "U", "enemy", [D(6, per="t.missing_hp", k=0.5, max=20)],
+     "Deal 6, plus 1 per 2 HP the target is missing, up to 20.", arch=EX,
      flavour="A bad headsman needs a second stroke. A good one plans for it.",
      note="The heading sword falls again on a foe the company has already broken.",
-     up={"text": "Deal 6, plus 1 per 2 HP the target is missing.", "cost": 1})
+     up={"text": "Deal 6, plus 1 per 2 HP the target is missing, up to 20.", "cost": 1})
 card("du_next_in_line", "Next in Line", 1, "U", "enemy", [D(4), EN(1, if_="killed")],
      "Deal 4. If it kills, +1 vigour next round.", arch=EX,
      flavour="One down. The block is cleaned. Next.",
@@ -292,11 +293,11 @@ card("du_drain_the_bowl", "Drain the Bowl", 2, "U", "enemy",
      note="The Bloodletter tips the full bowl; the red runs from the foe to a wounded hero.",
      up={"text": "Consume the target's Bleed. Deal 3 per stack. The most wounded hero heals 1 per stack.",
          "fx": [CONS(s="bleed"), D(0, per="consumed", k=3), H(0, per="consumed", k=1, to="lowest_ally")]})
-card("du_haemorrhage", "Haemorrhage", 1, "U", "enemy", [ST("bleed", 1), DBL(s="bleed")],
-     "Apply 1 Bleed, then double the target's Bleed.", hit=ALL, arch=BL,
+card("du_haemorrhage", "Haemorrhage", 1, "U", "enemy", [ST("bleed", 2), DBL(s="bleed")],
+     "Apply 2 Bleed, then double the target's Bleed. Exhaust.", hit=ALL, kw=["Exhaust"], arch=BL,
      flavour="There is a vessel in the thigh no barber touches. This barber does.",
      note="A foe looks down at the dark spreading flood under its legs.",
-     up={"text": "Apply 2 Bleed, then double the target's Bleed.", "fx": [ST("bleed", 2), DBL(s="bleed")]})
+     up={"text": "Apply 3 Bleed, then double the target's Bleed. Exhaust.", "fx": [ST("bleed", 3), DBL(s="bleed")]})
 card("du_foul_blood", "Foul Blood", 1, "U", "enemy", [D(3), ST("bleed", 0, per="t.toxin", k=1)],
      "Deal 3. Apply Bleed equal to the target's Toxin.", hit=THRUST, arch=BL + "+alchemist_toxin",
      flavour="Poisoned blood wants out. The barber obliges.",
@@ -316,22 +317,22 @@ card("du_barbers_trade", "Barber's Trade", 1, "U", "enemy", [ST("bleed", 2), H(4
 
 # ------------------------------------------------------------------ uncommon: core
 card("du_charged_point", "Charged Point", 1, "U", "enemy", [D(2, per="t.lightning", k=2)],
-     "Deal 2, plus 2 per Lightning on the target (not spent).", hit=THRUST, cat=L, arch=BD + "+elementalist_static",
+     "Deal 2, plus 2 per Lightning on the target (not spent).", hit=THRUST, arch=BD + "+elementalist_static",
      flavour="Where the storm has already been, the blade finds the way.",
      note="Branching scorch marks on a foe flare white as the rapier's point touches them.",
      up={"text": "Deal 4, plus 2 per Lightning on the target (not spent).", "fx": [D(4, per="t.lightning", k=2)]})
 card("du_forked_blade", "Forked Blade", 1, "U", "enemy", [D(3), A(L, 2), A(L, 1, to="adjacent")],
-     "Deal 3. Apply 2 Lightning to the target and 1 to each foe beside it.", cat=L, attr="stable", arch=BD,
+     "Deal 3. Apply 2 Lightning to the target and 1 to each foe beside it.", attr="stable", arch=BD,
      flavour="The spark does not stop at one. It never has.",
      note="Lightning forks from the Duelist's blade into the foes on either side.",
      up={"text": "Deal 4. Apply 2 Lightning to the target and 2 to each foe beside it.",
          "fx": [D(4), A(L, 2), A(L, 2, to="adjacent")]})
-card("du_answering_steel", "Answering Steel", 1, "U", "enemy", [SELF("riposte", 1), D(0, per="riposte", k=3)],
-     "Gain Riposte 1. Deal 3 per Riposte you hold (not spent).", arch="core",
+card("du_answering_steel", "Answering Steel", 1, "U", "enemy", [SELF("riposte", 1), D(0, per="riposte", k=3, max=15)],
+     "Gain Riposte 1. Deal 3 per Riposte you hold (not spent), up to 15.", arch="core",
      flavour="A parry held long enough becomes an attack.",
      note="The Duelist uncoils from a deep guard, the rapier striking from where it parried.",
-     up={"text": "Gain Riposte 2. Deal 3 per Riposte you hold (not spent).",
-         "fx": [SELF("riposte", 2), D(0, per="riposte", k=3)]})
+     up={"text": "Gain Riposte 2. Deal 3 per Riposte you hold (not spent), up to 18.",
+         "fx": [SELF("riposte", 2), D(0, per="riposte", k=3, max=18)]})
 card("du_open_guard", "Open Guard", 1, "U", "self", [SELF("taunt"), SELF("riposte", 4)],
      "Taunt. Gain Riposte 4.", use=[1, 2], arch="core",
      flavour="Here. Right here. Aim for it.",
@@ -339,12 +340,11 @@ card("du_open_guard", "Open Guard", 1, "U", "self", [SELF("taunt"), SELF("ripost
      up={"text": "Taunt. Gain Riposte 6.", "fx": [SELF("taunt"), SELF("riposte", 6)]})
 card("du_in_the_wake", "In the Wake", 1, "U", "enemy",
      [D(4), D(4, if_="same_target"), SELF("momentum", 1, if_="same_target")],
-     "Deal 4. Follow-up: deal 4 more and gain 1 Momentum.", arch="core",
+     "Deal 4. Follow-up: hit it again for 4 and gain 1 Momentum.", arch="core",
      flavour="The Bulwark knocks the guard aside. The point is already there.",
      note="The Duelist's lunge lands in the dent the Bulwark's mace has just left.",
-     up={"text": "Deal 5. Follow-up: deal 5 more and gain 1 Momentum.",
+     up={"text": "Deal 5. Follow-up: hit it again for 5 and gain 1 Momentum.",
          "fx": [D(5), D(5, if_="same_target"), SELF("momentum", 1, if_="same_target")]})
-
 # ------------------------------------------------------------------ rare
 card("du_hundred_touches", "A Hundred Touches", 2, "R", "enemy", [FIN(), D(3, times=1, times_per="consumed")],
      "Finisher. Deal 3, once plus once per Momentum spent.", kw=["Finisher"], arch=BD + "+alchemist_might",
@@ -367,7 +367,7 @@ card("du_counter_time", "Counter-Time", 1, "R", "self",
      note="Three foes swing at once; the Duelist is already behind the first of them.",
      up={"text": "Dodge the next hit this round. Gain Riposte 3, plus 2 per foe that means to attack you.",
          "fx": [SELF("dodge", 1), SELF("riposte", 3, per="attackers", k=2)]})
-card("du_duellists_eye", "The Duellist's Eye", 2, "R", "all_enemies",
+card("du_duellists_eye", "The Duelist's Eye", 2, "R", "all_enemies",
      [ST("mark"), ST("vulnerable", 1, if_="t.bleed>0"), SELF("momentum", 2)],
      "Mark every foe. Each foe with Bleed also becomes Vulnerable. Gain 2 Momentum.", hit=ALL,
      arch=EX + "+" + BL,
@@ -377,7 +377,7 @@ card("du_duellists_eye", "The Duellist's Eye", 2, "R", "all_enemies",
 card("du_final_judgment", "Final Judgment", 1, "R", "enemy", [FIN(), EXEC(5, per="consumed", k=4)],
      "Finisher. Execute 5, plus 4 per Momentum spent.", hit=THRUST, kw=["Finisher", "Execute"],
      arch=EX + "+hexweaver_doom",
-     flavour="No appeal. No reprieve. The bell has already rung for it.",
+     flavour="No appeal is heard on this side of the door.",
      note="The Doomsayer's bell tolls and the Executioner's sword falls on the same beat.",
      up={"text": "Finisher. Execute 7, plus 4 per Momentum spent.", "fx": [FIN(), EXEC(7, per="consumed", k=4)]})
 card("du_make_an_example", "Make an Example", 1, "R", "enemy", [D(5), ST("mark", 1, to="all_enemies", if_="killed")],
@@ -397,7 +397,7 @@ card("du_bowl_passed_round", "The Bowl Passed Round", 1, "R", "all_allies", [H(0
      "Every hero heals 1 per 2 Bleed on all foes. Exhaust.", use=ALL, kw=["Exhaust"], arch=BL,
      flavour="Drink. It was theirs. Now it is ours.",
      note="The bloodied bowl goes hand to hand around the company in the brine grotto.",
-     up={"text": "Every hero heals 1 per 2 Bleed on all foes.", "kw": []})
+     up={"text": "Every hero heals 3, plus 1 per 2 Bleed on all foes. Exhaust.", "fx": [H(3, per="total_bleed", k=0.5)]})
 card("du_echo_of_steel", "Echo of Steel", 1, "R", "enemy", [D(3, times=2), ST("bleed", 2, if_="same_target")],
      "Echo. Deal 3 twice. Follow-up: apply 2 Bleed.", kw=["Echo"], arch=BD + "+" + BL,
      flavour="Strike, and strike, and the stone walls strike back with the sound of it.",
@@ -458,11 +458,11 @@ card("du_cut_between_beats", "Cut Between Beats", 0, "X", "enemy", [D(1, per="pl
      up={"text": "Deal 2, plus 1 per card you played before it this round.", "fx": [D(2, per="played", k=1)]})
 
 # ------------------------------------------------------------------ path: Executioner
-card("du_square_tip", "The Square Tip", 2, "X", "enemy", [D(14), D(4, if_="t.mark>0")],
-     "Deal 14. Deal 4 more if the target is Marked.", use=[1, 2], sub=EX, arch=EX,
+card("du_square_tip", "The Square Tip", 2, "X", "enemy", [D(13, per="t.mark", k=4, max=17)],
+     "Deal 13, or 17 if the target is Marked.", use=[1, 2], sub=EX, arch=EX,
      flavour="A heading sword has no point. It was never made to fight. Only to finish.",
      note="The broad square-tipped blade comes down two-handed on a Marked foe.",
-     up={"text": "Deal 18. Deal 5 more if the target is Marked.", "fx": [D(18), D(5, if_="t.mark>0")]})
+     up={"text": "Deal 17, or 22 if the target is Marked.", "fx": [D(17, per="t.mark", k=5, max=22)]})
 card("du_drag_them_up", "Drag Them Up", 1, "X", "enemy", [PULL(2), ST("mark", 2)],
      "Pull the target forward 2. Mark it for 2 rounds.", hit=FAR, sub=EX, arch=EX,
      flavour="Up the steps. Kneel. Hood or no hood, they all kneel.",
@@ -532,12 +532,12 @@ card("du_the_endless_measure", "The Endless Measure", 1, "L", "self", [SELF("mom
      "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play on a foe after your second card "
      "in a round also deals 3 to it. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], sub=BD, arch=BD,
-     rite={"on": "play", "cat": "physical", "if": "played>=3&!t.played", "fx": [D(3)]},
+     rite={"on": "play", "cat": "physical", "if": "played>=3", "fx": [D(3)]},
      flavour="The music never stops. The dancer stopped counting long ago.",
      note="The Bladedancer moves through the whole throne room in one unbroken phrase of cuts.",
      up={"text": "Gain 1 Momentum. Rite: for the rest of the fight, each physical card you play on a foe after your "
                  "second card in a round also deals 3 to it and applies 1 Bleed to it. Exhaust.",
-         "rite": {"on": "play", "cat": "physical", "if": "played>=3&!t.played", "fx": [D(3), ST("bleed", 1)]}})
+         "rite": {"on": "play", "cat": "physical", "if": "played>=3", "fx": [D(3), ST("bleed", 1)]}})
 card("du_two_blades_one_heart", "Two Blades, One Heart", 1, "L", "self", [SELF("momentum", 2)],
      "Gain 2 Momentum. Rite: for the rest of the fight, each Finisher you play also deals 5 to each foe in ranks 1 "
      "and 2, and you Dodge the next hit this round. Exhaust.",
@@ -562,17 +562,17 @@ card("du_the_headsmans_round", "The Headsman's Round", 1, "L", "enemy", [ST("mar
                  "Exhaust.",
          "rite": {"on": "execute", "per_round": 2,
                   "fx": [EN(1), D(6, to="all_enemies", if_="t.mark>0"), ST("mark", 1, to="front_enemy")]}})
-card("du_the_long_sentence", "The Long Sentence", 1, "L", "enemy", [ST("mark", 20)],
+card("du_the_long_sentence", "The Long Sentence", 1, "L", "enemy", [ST("mark", 99)],
      "Mark the target for the rest of the fight. Rite: for the rest of the fight, each card you play gives that foe "
      "2 Doom. Exhaust.",
      hit=ALL, kw=["Rite", "Exhaust"], sub=EX, arch=EX + "+hexweaver_doom",
-     rite={"on": "play", "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=10")]},
+     rite={"on": "play", "allies": True, "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=50")]},
      flavour="Some sentences take a single stroke. This one takes the whole fight.",
      note="The Executioner names a ruler from across the throne room and begins the count.",
      up={"text": "Mark the target for the rest of the fight. Rite: for the rest of the fight, each card you play "
                  "gives that foe 2 Doom and deals 2 to it. Exhaust.",
-         "rite": {"on": "play", "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=10"),
-                                       D(2, to="all_enemies", if_="t.mark>=10")]}})
+         "rite": {"on": "play", "allies": True, "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=50"),
+                                                       D(2, to="all_enemies", if_="t.mark>=50")]}})
 card("du_red_tide", "Red Tide", 1, "L", "self", [ST("bleed", 2, to="all_enemies")],
      "Apply 2 Bleed to every foe. Rite: for the rest of the fight, when a foe dies, every foe gains Bleed equal to "
      "the Bleed it had. Exhaust.",
@@ -613,9 +613,6 @@ ARCHETYPES = {
 }
 
 NEEDS = [
-    "du_serrated_rhythm and du_the_endless_measure: a play-rite filter for cards aimed at a foe. Written as "
-    "'!t.played' (foes never play cards; the owner always has), which still lets a physical card played on an ally "
-    "who has not acted yet (Quickstep, Let the Fever Out) trigger the rite on that ally.",
     "du_the_endless_measure: wanted each cut after the second to repeat at half power (an Echo per card). Written as "
     "a flat 3 damage to the card's target.",
     "du_two_blades_one_heart: the brief's 'while holding 3+ Momentum, Dodge the first blow each round' is a second "
@@ -623,7 +620,7 @@ NEEDS = [
     "du_the_headsmans_round: wanted the Execute to refund its vigour this round and strike only the next Marked foe. "
     "Written as +1 vigour next round and 6 to every Marked foe, twice a round at most.",
     "du_the_long_sentence: wanted its own Sentence counter fed by every hero's hits on one foe. Written as Doom (the "
-    "Hexweaver's status) from this hero's plays, with Mark 20 tagging the sentenced foe (rite reads t.mark>=10). "
+    "Hexweaver's status) from this hero's plays, with Mark 99 tagging the sentenced foe (rite reads t.mark>=50). "
     "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
     "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
     "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",

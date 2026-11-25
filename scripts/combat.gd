@@ -1365,6 +1365,8 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 					tot += actor.held[el]
 			for i in kinds.size():
 				actor.held[kinds[i]] = int(tot / kinds.size()) + (1 if i < tot % kinds.size() else 0)
+		"lose_hp":
+			_hurt(s, null, t, n, {"true": true})   # the target loses HP through Block and Armor (afflictions, curses)
 		"brew":
 			for i in max(1, n):
 				s.belt_next.append(fx.card)

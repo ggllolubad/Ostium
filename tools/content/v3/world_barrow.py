@@ -13,7 +13,7 @@ BOTH = {F: "resist", TX: "resist"}
 
 # ================================================================== cards foes put in a hand
 card("t_barrow_fleas", "Plague Fleas", 0, "Curse", "none", [A(TX, 1, attr="stable"), ST("blight", 1)],
-     "Unplayable. When drawn: gain 1 Toxin and Blight (no healing this round), and draw a replacement. Removed at fight end.",
+     "Unplayable. On arrival and each time it is drawn: gain 1 Toxin and Blight (no healing this round). When drawn, draw a replacement. Removed at fight end.",
      use=[], kw=["Temporary", "Unplayable", "Curse"], on_draw=[A(TX, 1, attr="stable"), ST("blight", 1)],
      flavour="He was paid by the tail. The fleas came free.",
      note="The Rat-Catcher's pole swings over a hero, and a dark dust of fleas falls from the rats.")
@@ -25,9 +25,9 @@ card("w_barrow_grave_cold", "Grave Cold", 1, "W", "enemy", [D(2, per="t.ailments
          "fx": [D(3, per="t.ailments", k=1), A(TX, 2, attr="stable")]},
      flavour="The cold kept everything in the barrow fresh. The plague too.",
      note="A hero's blade comes away from a Draugr furred with grey-green mould.")
-card("w_barrow_burial_axe", "Burial Axe", 1, "W", "enemy", [D(4), EXEC(4, per="t.doom", k=1)],
-     "Deal 4. Execute 4, plus 1 per Doom on the target.", kw=["Execute"], world=W, arch="world",
-     up={"text": "Deal 5. Execute 6, plus 1 per Doom on the target.", "fx": [D(5), EXEC(6, per="t.doom", k=1)]},
+card("w_barrow_burial_axe", "Burial Axe", 1, "W", "enemy", [D(4), EXEC(6)],
+     "Deal 4. Execute 6.", kw=["Execute"], world=W, arch="world",
+     up={"text": "Deal 5. Execute 8.", "fx": [D(5), EXEC(8)]},
      flavour="Buried with its axe so it could keep fighting. Borrow it, and end that.",
      note="A hero wrenches a bearded axe from a grave niche and swings it at a rising Draugr.")
 card("w_barrow_vinegar_rag", "Vinegar Rag", 1, "W", "ally",
@@ -117,7 +117,7 @@ creature("kings_hawk", "The King's Hawk", "foe", 30, ranks=[3, 4], world=W, role
          lore="It was buried hooded on its block at the king's right hand, so he would not ride out alone. It is still waiting for the hood to come off.")
 creature("sexton_beetles", "Sexton Beetles", "foe", 32, ranks=[1, 2], world=W, role="afflicter", flags=["swarm"],
          resist={TX: "resist", F: "weak"},
-         intents={"pour": I("Pour Over the Feet", "attack", "front", [D(3), A(TX, 2, attr="stable"), DELAY()]),
+         intents={"pour": I("Pour Over the Feet", "attack", "front", [D(3), A(TX, 2, attr="stable"), ST("lockdown", 1)]),
                   "bury": I("Bury", "attack", "front2", [D(3), A(TX, 1, attr="stable")])},
          ai=[{"use": "bury", "every": 3}, {"use": "pour"}],
          lore="They bury what they eat. In the barrow they never run short of either.")
@@ -134,7 +134,7 @@ creature("rat_catcher", "Rat-Catcher", "foe", 34, ranks=[2, 3], world=W, role="a
          intents={"pole": I("Rat Pole", "attack", "front", [D(5), A(TX, 2, attr="stable"), ADD("t_barrow_fleas")]),
                   "pot": I("Poison Pot", "debuff", "back", [A(TX, 3, attr="stable")]),
                   "trap": I("Cage-Trap", "attack", "front", [D(8)])},
-         ai=[{"use": "pole", "every": 2}, {"use": "pot", "every": 3}, {"use": "trap"}],
+         ai=[{"use": "pole", "every": 3}, {"use": "pot", "every": 3, "offset": 1}, {"use": "trap"}],
          lore="He was paid by the tail. There is no one left to pay him, and he has not stopped.")
 
 # ================================================================== elites
@@ -150,7 +150,7 @@ creature("barrow_thane", "Barrow Thane", "elite", 110, armor=4, ranks=[1, 2], wo
          traits=[T("round_start", "Keeps Them in Line", "At round start his household is Anchored: no hero can move them.",
                    [ST("anchor", 1, to="all_allies")])],
          lore="A lord buried with his household. He still keeps them in line.")
-creature("rot_witch", "Rot Witch", "elite", 90, armor=2, ranks=[3, 4], world=W, role="support",
+creature("rot_witch", "Rot Witch", "elite", 90, armor=2, ranks=[1, 3, 4], world=W, role="support",
          resist={TX: "resist", F: "resist", FI: "weak"},
          intents={"salts": I("Plague Salts", "debuff", "back", [A(TX, 3, attr="stable"), ST("hex", 2)]),
                   "raise": I("Raise the Dead", "heal", "all_allies", [H(8)]),
@@ -163,7 +163,7 @@ creature("rot_witch", "Rot Witch", "elite", 90, armor=2, ranks=[3, 4], world=W, 
          traits=[T("round_start", "Embalmer", "At round start each of her allies sheds 1 ailment stack.",
                    [CLEANSE(1, to="all_allies")])],
          lore="She keeps the barrow's dead from rotting, and their plague from dying.")
-creature("barrow_chaplain", "Barrow Chaplain", "elite", 105, armor=3, ranks=[2, 3], world=W, role="defender",
+creature("barrow_chaplain", "Barrow Chaplain", "elite", 105, armor=3, ranks=[1, 2, 3], world=W, role="defender",
          resist=dict(BOTH, void="weak"),
          intents={"asperges": I("Asperges", "defend", "all_allies", [B(7)]),
                   "water": I("Frozen Holy Water", "debuff", "all_heroes", [A(TX, 2, attr="stable")]),
@@ -220,7 +220,7 @@ creature("rat_king", "The Rat King", "ruler", 280, armor=2, span=2, ranks=[3, 4]
          ai=[{"use": "roll", "if": "hp_pct<70", "once": True}, {"use": "rot", "every": 4},
              {"use": "seethe", "every": 3}, {"use": "bury"}],
          traits=[T("ally_death", "Always Hungry", "Whenever another foe falls, it eats: it heals 12.", [H(12, to="self")]),
-                 T("hit", "Plague Fleas", "A hero who hits it gains 1 Toxin.", [A(TX, 1, attr="stable")])],
+                 T("hit", "Flea-Ridden", "A hero who hits it gains 1 Toxin.", [A(TX, 1, attr="stable")])],
          phases=[P(50, "The frozen dead rats fall away. The living pour out.",
                    ai=[{"use": "pour", "every": 2}, {"use": "rot", "every": 4}, {"use": "bury"}]),
                  P(20, "Only the knot of tails is left.",
@@ -274,13 +274,13 @@ E("barrow_f8", "The Dais", "The king's empty dais, his hawk on its block.",
   ["barrow_mason", "court_fool", "kings_hawk"], "barrow_hall", "foe",
   "The Mason walls in the front while the Fool's joke builds and the hawk rakes anyone; reach the back rank or heckle the Fool.")
 E("barrow_e1", "The Thane's Barrow", "A lord with his household, and his fool.",
-  ["barrow_draugr", "barrow_thane", "court_fool"], "barrow_hall", "elite",
+  ["barrow_thane", "barrow_draugr", "court_fool"], "barrow_hall", "elite",
   "His household cannot be moved, so push and pull plans fail; killing one of them triggers his Oath.")
 E("barrow_e2", "The Witch's Tomb", "She is tending the dead on her slab.",
-  ["barrow_draugr", "grave_worm", "rot_witch"], "barrow_tomb", "elite",
+  ["rot_witch", "barrow_draugr", "grave_worm"], "barrow_tomb", "elite",
   "She strips courses from her allies every round and heals them all; she is the target.")
 E("barrow_e3", "The Chaplain's Rites", "A procession of one, his cross held high.",
-  ["the_swollen", "gravedigger", "barrow_chaplain"], "barrow_tomb", "elite",
+  ["barrow_chaplain", "the_swollen", "gravedigger"], "barrow_tomb", "elite",
   "Every death costs the company stress and his holy water shields his flock; kill him before the rest, with void if you have it.")
 E("barrow_e4", "The Pest-House", "The sick nailed in, and the man who nailed them.",
   ["pest_house_watchman", "frostbit_leper", "rat_catcher"], "barrow_mound", "elite",
@@ -300,5 +300,5 @@ E("barrow_r_dead_cart", "The Dead-Cart", "A cart under a heap of the dead, comin
 NEEDS = [
     "rot_witch: Embalmer should stop her allies' max HP being cut (no Cryo-rot on them); written as shedding 1 ailment stack each round.",
     "dead_cart: Raise from the Heap should return a fallen foe of this fight at low HP; written as a Barrow Draugr called into rank 1.",
-    "rat_king: Always Hungry should also heal when a hero falls; Plague Fleas should end in phase 2.",
+    "rat_king: Always Hungry should also heal when a hero falls; Flea-Ridden should end in phase 2.",
 ]

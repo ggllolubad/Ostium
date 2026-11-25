@@ -56,19 +56,20 @@ card("bw_hold_the_line", "Hold the Line", 1, "S", "self", [SELF("taunt"), B(4)],
      flavour="He stood in the gate once. He is standing in it still.",
      note="The Bulwark plants the door in the nave aisle; every drowned head turns toward him.",
      up={"text": "Taunt. Gain 6 Block.", "fx": [SELF("taunt"), B(6)]})
-card("bw_over_the_rim", "Over the Rim", 2, "S", "enemy", [D(7, per="block", k=0.5)], "Deal 7, plus half your Block.",
+card("bw_over_the_rim", "Over the Rim", 2, "S", "enemy", [D(7, per="block", k=0.5, max=15)],
+     "Deal 7, plus half your Block, up to 15.",
      arch="core",
      flavour="The door takes the blow. The mace gives it back.",
      note="Braced behind the door, the Bulwark brings the mace down over the rim in a full overhead blow.",
-     up={"text": "Deal 10, plus half your Block.", "fx": [D(10, per="block", k=0.5)]})
+     up={"text": "Deal 10, plus half your Block, up to 18.", "fx": [D(10, per="block", k=0.5, max=18)]})
 
 # ------------------------------------------------------------------ common: Last Bastion (The Wound Holds)
 card("bw_draw_their_eyes", "Draw Their Eyes", 0, "C", "self", [SELF("taunt"), STRESS(2)], "Taunt. Gain 2 stress.",
      arch=SB + "+" + TG,
-     flavour="Look at me. Not at them. At me.",
+     flavour="Look at me. Not at them.",
      note="The Bulwark raps the mace on the door's ring handle; the belfry's foes turn from the back rank.",
-     up={"text": "Taunt.", "fx": [SELF("taunt")]})
-card("bw_old_wound", "Old Wound", 1, "C", "self", [B(3, per="scars", k=0.34)], "Gain 3 Block, plus 1 for every 3 Scars.",
+     up={"text": "Taunt. Gain 2 stress and 3 Block.", "fx": [SELF("taunt"), STRESS(2), B(3)]})
+card("bw_scar_tissue", "Scar Tissue", 1, "C", "self", [B(3, per="scars", k=0.34)], "Gain 3 Block, plus 1 for every 3 Scars.",
      use=ALL, arch=SB,
      flavour="Every scar on him is a place where something failed to finish the job.",
      note="Blood runs from under the Bulwark's helm as he sets his shoulder harder into the door.",
@@ -80,18 +81,18 @@ card("bw_toll_of_the_tower", "Toll of the Tower", 2, "C", "enemy",
      note="A bloodied Bulwark swings the mace two-handed, the door hanging from his forearm, in the ossuary.",
      up={"text": "Deal 9, plus 1 for every 2 Scars. If this kills the target, shed 6 stress.",
          "fx": [D(9, per="scars", k=0.5), STRESS(-6, to="self", if_="killed")]})
-card("bw_blood_for_iron", "Blood for Iron", 1, "C", "self", [SELFDMG(5), AR(2)],
-     "Lose 5 HP. Gain 2 Armor for the fight. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
+card("bw_blood_for_iron", "Blood for Iron", 1, "C", "self", [SELFDMG(2), AR(1), B(3)],
+     "Lose 2 HP. Gain 1 Armor for the fight and 3 Block. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
      flavour="The garrison oath: my blood for the wall, the wall for the ones behind it.",
      note="The Bulwark draws his palm across the breastplate's lead patch, leaving a red smear.",
-     up={"text": "Lose 3 HP. Gain 2 Armor for the fight. Exhaust.", "fx": [SELFDMG(3), AR(2)]})
+     up={"text": "Lose 2 HP. Gain 1 Armor for the fight and 6 Block. Exhaust.", "fx": [SELFDMG(2), AR(1), B(6)]})
 card("bw_still_standing", "Still Standing", 1, "C", "self", [B(3), B(7, if_="dd")],
      "Retain. Gain 3 Block. At Death's Door, gain 7 more.", use=ALL, kw=["Retain"], arch=SB,
      flavour="He should be dead. He has been told so, by better men than you.",
      note="On one knee behind the door, the Bulwark pushes himself back up on the mace haft.",
      up={"text": "Retain. Gain 4 Block. At Death's Door, gain 10 more.", "fx": [B(4), B(10, if_="dd")]})
 card("bw_grit_your_teeth", "Grit Your Teeth", 1, "C", "self", [STRESS(-6), B(2), B(4, if_="flasks_used")],
-     "Shed 6 stress. Gain 2 Block. Dosed: gain 4 more Block.", use=ALL, arch=SB + "+alchemist_flask",
+     "Shed 6 stress. Gain 2 Block. Dosed: gain 4 more Block.", use=ALL, kw=["Dosed"], arch=SB + "+alchemist_flask",
      flavour="Breathe. Count the hinges. Three. Still three.",
      note="Behind the door, the Bulwark lays his gauntlet on the iron hinges and breathes.",
      up={"text": "Shed 8 stress. Gain 3 Block. Dosed: gain 5 more Block.",
@@ -123,18 +124,20 @@ card("bw_windward_shield", "Windward Shield", 1, "C", "ally_other", [B(5), A("fr
      note="The Ironwarden turns the pine door into the wind so the Duelist stands in its lee.",
      up={"text": "Another hero gains 7 Block. Apply 1 Frost to the front foe.",
          "fx": [B(7), A("frost", 1, attr="stable", to="front_enemy")]})
-card("bw_cold_iron", "Cold Iron", 1, "C", "self", [B(4, per="total_frost", k=1)],
-     "Gain 4 Block, plus 1 for each Frost on all foes.", use=ALL, cat="frost", arch=IW,
+card("bw_cold_iron", "Cold Iron", 1, "C", "self", [B(4, per="total_frost", k=1, max=14)],
+     "Gain 4 Block, plus 1 for each Frost on all foes, up to 14.", use=ALL, cat="frost", arch=IW,
      flavour="Iron in the cold does not bend. It waits.",
      note="Frost climbs the door's iron straps while the foes beyond it slow and stiffen.",
-     up={"text": "Gain 6 Block, plus 1 for each Frost on all foes.", "fx": [B(6, per="total_frost", k=1)]})
-card("bw_break_the_ice", "Break the Ice", 1, "C", "enemy", [D(0, per="block", k=0.5), D(3, if_="reactions")],
-     "Deal half your Block. If a Conjunction has gone off this round, deal 3 more.",
+     up={"text": "Gain 6 Block, plus 1 for each Frost on all foes, up to 16.", "fx": [B(6, per="total_frost", k=1, max=16)]})
+card("bw_break_the_ice", "Break the Ice", 1, "C", "enemy", [D(0, per="block", k=1, max=12), D(3, if_="reactions"), CONS(s="block", to="self")],
+     "Deal damage equal to your Block, up to 12. If a Conjunction has gone off this round, deal 3 more. Lose all "
+     "your Block.",
      arch=IW + "+elementalist_conjunction",
      flavour="The door is the weight. The mace only tells it where to go.",
      note="The Ironwarden drives the rimed door's edge into a frozen foe and the ice cracks.",
-     up={"text": "Deal 2, plus half your Block. If a Conjunction has gone off this round, deal 4 more.",
-         "fx": [D(2, per="block", k=0.5), D(4, if_="reactions")]})
+     up={"text": "Deal damage equal to your Block, up to 16. If a Conjunction has gone off this round, deal 4 more. "
+                 "Lose all your Block.",
+         "fx": [D(0, per="block", k=1, max=16), D(4, if_="reactions"), CONS(s="block", to="self")]})
 
 # ------------------------------------------------------------------ common: Thornguard (Penance)
 card("bw_barbed_plate", "Barbed Plate", 1, "C", "self", [SELF("thorns", 3), B(3)], "Gain 3 Thorns and 3 Block.",
@@ -211,7 +214,7 @@ card("bw_unbowed", "Unbowed", 1, "U", "self", [B(5), SELF("might", 1, if_="dd")]
      note="At the foot of the throne, the Bulwark rises from a kneel with the door before him.",
      up={"text": "Gain 7 Block. At Death's Door, gain 1 Might.", "fx": [B(7), SELF("might", 1, if_="dd")]})
 card("bw_bleed_for_them", "Bleed for Them", 1, "U", "ally_other", [SELFDMG(4), H(5), B(4), H(3, if_="flasks_used")],
-     "Lose 4 HP. Another hero heals 5 and gains 4 Block. Dosed: they heal 3 more.", use=ALL,
+     "Lose 4 HP. Another hero heals 5 and gains 4 Block. Dosed: they heal 3 more.", use=ALL, kw=["Dosed"],
      arch=SB + "+alchemist_flask",
      flavour="He has more blood than the scholar. He has done the sums.",
      note="The Bulwark presses his own bandage to the Duelist's wound and takes the cut meant for her.",
@@ -562,7 +565,7 @@ HERO = {"name": "Bulwark", "hp": 48, "armor": 2, "grit": 3, "color": "7f9cc6", "
 
 # Each archetype's six key cards for the build-aware simulator (all common or uncommon).
 ARCHETYPES = {
-    SB: ["bw_draw_their_eyes", "bw_old_wound", "bw_toll_of_the_tower", "bw_blood_for_iron", "bw_still_standing", "bw_unbowed"],
+    SB: ["bw_draw_their_eyes", "bw_scar_tissue", "bw_toll_of_the_tower", "bw_blood_for_iron", "bw_still_standing", "bw_unbowed"],
     IW: ["bw_rime_coat", "bw_hold_through_the_night", "bw_hoarfrost_blow", "bw_cold_iron", "bw_break_the_ice", "bw_rimeshield_blow"],
     TG: ["bw_barbed_plate", "bw_hair_shirt", "bw_come_and_take_it", "bw_penitents_blow", "bw_spiked_boss", "bw_rake_of_thorns"],
 }

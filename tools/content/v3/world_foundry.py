@@ -92,7 +92,7 @@ creature("salamander", "Salamander", "foe", 32, ranks=[1, 2], role="attacker",
          ai=[{"use": "dart", "if": "hp_pct<50", "not_twice": True}, {"use": "flare", "every": 3}, {"use": "bite"}],
          lore="The smiths swore it lived in the fire. Now it does.", world=W)
 
-creature("mould_sitter", "Mould-Sitter", "foe", 38, armor=4, ranks=[1], role="defender",
+creature("mould_sitter", "Mould-Sitter", "foe", 38, armor=3, ranks=[1], role="defender",
          resist={"fire": "resist", "physical": "resist", "frost": "weak"},
          intents={"blow": I("Stiff-Armed Blow", "attack", "front", [D(8), A("fire", 1, attr="stable")]),
                   "scream": I("Silent Scream", "debuff", "all_heroes", [STRESS(7)]),
@@ -131,7 +131,7 @@ creature("automaton_tender", "Automaton Tender", "foe", 34, ranks=[3, 4], role="
                   "rewind": I("Wind It Back Up", "summon", "self", [SUMMON("bronze_automaton", max=1)]),
                   "oil": I("Oil the Joints", "heal", "ally_lowest", [H(8)]),
                   "crank": I("Crank Key", "attack", "rank2", [D(7)])},
-         ai=[{"use": "rewind", "if": "allies<3", "not_twice": True}, {"use": "oil", "if": "ally_hurt", "not_twice": True},
+         ai=[{"use": "rewind", "if": "allies<3", "once": True}, {"use": "oil", "if": "ally_hurt", "not_twice": True},
              {"use": "wind", "every": 3}, {"use": "crank"}],
          lore="She wound the automata every morning and oiled them every night. They have stopped needing either, and "
               "she has not noticed.", world=W)
@@ -142,7 +142,7 @@ creature("hearth_cat", "Hearth Cat", "foe", 28, ranks=[1, 2], role="attacker", r
                   "arch": I("Arch the Back", "defend", "self", [SELF("dodge", 1)])},
          ai=[{"use": "arch", "if": "hp_pct<50", "not_twice": True}, {"use": "leap", "every": 2}, {"use": "scratch"}],
          traits=[T("hit", "Static Coat", "Whoever strikes it gains 1 Static.", [A("lightning", 1, attr="stable")])],
-         personality="cunning", lore="It slept on the warm anvil every night. Every night is warm now.", world=W)
+         lore="It slept on the warm anvil every night. Every night is warm now.", world=W)
 
 # ================================================================== elites
 creature("cyclops_smith", "The Sparkblind Smith", "elite", 116, armor=3, ranks=[1, 2], role="attacker", resist=FORGE,
@@ -151,7 +151,7 @@ creature("cyclops_smith", "The Sparkblind Smith", "elite", 116, armor=3, ranks=[
                   "bellow": I("Bellow", "debuff", "all_heroes", [STRESS(8)]),
                   "hammer": I("Hammer Blow", "attack", "marked", [D(15)]),
                   "quench": I("Quench", "defend", "self", [B(14), CLEANSE(3)])},
-         ai=[{"use": "quench", "if": "elements_all>=6", "not_twice": True}, {"use": "brand", "every": 3},
+         ai=[{"use": "quench", "if": "el_total>=4", "not_twice": True}, {"use": "brand", "every": 3},
              {"use": "bar", "every": 3, "offset": 1}, {"use": "bellow", "every": 4, "offset": 2}, {"use": "hammer"}],
          traits=[T("hit", "By Ear", "He hears whoever strikes him: the attacker is Marked, and his hammer follows the Mark.",
                    [ST("mark", 1)])],
@@ -168,7 +168,7 @@ creature("talos_sentinel", "Talos Sentinel", "elite", 112, armor=4, ranks=[1], r
          ai=[{"use": "plug", "if": "total_bleed>=4", "not_twice": True}, {"use": "shield", "if": "hp_pct<50", "not_twice": True},
              {"use": "stomp", "every": 3}, {"use": "ichor", "every": 3, "offset": 1}, {"use": "thrust"}],
          traits=[T("round_start", "One Vein", "A single nail plugs the heel: at round start it loses HP equal to its "
-                   "Bleed, so Bleed hurts it twice.", [D(0, per="bleed", k=1, to="self")])],
+                   "Bleed, so Bleed hurts it twice.", [SELFDMG(0, per="bleed", k=1)])],
          lore="A guardian of hollow bronze, filled with molten ichor. One vein in the heel holds it all.", world=W)
 
 creature("wire_drawer", "The Wire-Drawer", "elite", 102, armor=2, ranks=[2], role="attacker", resist=FORGE,
@@ -229,7 +229,7 @@ creature("crucible", "The Crucible", "ruler", 290, armor=3, span=2, ranks=[3, 4]
                   "plasma": I("Sparks Down the Stream", "attack", "front2",
                               [D(5), A("fire", 2, attr="stable"), A("lightning", 1, attr="volatile")]),
                   "chains": I("The Fused Chains Spark", "debuff", "all_heroes", [A("lightning", 1, attr="stable")]),
-                  "bell": I("The Bell Rings", "debuff", "all_heroes", [D(3), STRESS(9)])},
+                  "bell": I("The Bell Rings", "debuff", "all_heroes", [D(3), STRESS(9), CLR("charge")])},
          ai=[{"use": "bell", "if": "charge>=6", "not_twice": True}, {"use": "skim", "every": 3, "offset": 1},
              {"use": "swing", "every": 4, "offset": 3}, {"use": "wave"}],
          phases=[P(55, "It tips further. The wave reaches deeper, and the fused chains spark.",
@@ -295,7 +295,7 @@ E(W, "foundry_e2", "Talos at the Gate", "A bronze giant, with its heel to the wa
   ["talos_sentinel", "guild_warden", "bellows_imp"], "foundry_roof", "elite",
   "Bleed the heel: the vein takes Bleed twice, until it plugs the vein; the warden keeps its Armor up.")
 E(W, "foundry_e3", "The Wire Walk", "Live wire strung across the roof.",
-  ["nail_wife", "wire_drawer", "spark_swarm"], "foundry_roof", "elite",
+  ["wire_drawer", "nail_wife", "spark_swarm"], "foundry_roof", "elite",
   "The wire reaches further each round and drags the back forward: kill him before it reaches the back rank.")
 E(W, "foundry_e4", "The Sledge Road", "The dray horse rears in its broken traces.",
   ["dray_horse", "slag_slave", "arc_smith"], "foundry_floor", "elite",

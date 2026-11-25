@@ -15,8 +15,8 @@ ROT = {"toxin": "resist", "fire": "weak"}
 
 # ================================================================== the Fool's card
 card("t_garden_fools_spore", "Fool's Spore", 0, "Curse", "none", [],
-     "Unplayable. When drawn, deal 5 to each hero beside you. Temporary.",
-     kw=["Unplayable", "Temporary"], on_draw=[D(5, to="adjacent")],
+     "Unplayable. Each time it is drawn, deal 5 to each hero beside you. Temporary.",
+     kw=["Curse", "Unplayable", "Temporary"], on_draw=[D(5, to="adjacent")],
      flavour="The rot thinks he is very funny.",
      note="A hero's arm swings wide in a puff of pale-yellow spore and strikes the companion beside them.")
 
@@ -46,7 +46,7 @@ creature("antlered_mother", "The Antlered Mother", "ruler", 300, armor=2, span=2
              {"use": "exhale", "every": 4, "offset": 2}, {"use": "gore"}],
          phases=[
              P(55, "All her eyes open.", might=1,
-               ai=[{"use": "roots", "every": 4, "offset": 1}, {"use": "bloom", "every": 3},
+               ai=[{"use": "roots", "every": 4, "offset": 1, "if": "allies<3"}, {"use": "bloom", "every": 3},
                    {"use": "gore", "every": 3, "offset": 1}, {"use": "gaze"}]),
              P(20, "The fungus takes her whole. She stops healing herself.", might=2,
                ai=[{"use": "rot", "every": 2}, {"use": "gore"}]),
@@ -81,13 +81,14 @@ creature("lady_of_the_bower", "The Lady of the Bower", "ruler", 270, armor=2, sp
          ai=[{"use": "sleep", "every": 3}, {"use": "sigh", "every": 3, "offset": 1}, {"use": "canes"}],
          phases=[
              P(50, "She rises on her elbow. Spring keeps coming.", might=1,
-               ai=[{"use": "strewer", "every": 4}, {"use": "spring", "every": 3, "offset": 1},
+               ai=[{"use": "strewer", "every": 4, "if": "allies<3"}, {"use": "spring", "every": 3, "offset": 1},
                    {"use": "sleep", "every": 3, "offset": 2}, {"use": "palm"}]),
              P(20, "She sits up in the bower, wide awake.", might=1,
                ai=[{"use": "sleep", "every": 2}, {"use": "palm"}]),
          ],
-         traits=[T("round_start", "The Bed Blooms", "Round start: a bloom opens on the bed unless she is Burning; fire burns every open bloom away. She gains 1 Regen per open bloom.",
-                   [CLR("charge", if_="fire>0"), SELF("charge", 1, if_="!fire"), SELF("regen", 0, per="charge", k=1)])],
+         traits=[T("round_start", "The Bed Blooms", "Round start: a bloom opens on the bed unless she is Burning; fire burns every open bloom away. Her Regen becomes 1 per open bloom.",
+                   [CLR("charge", if_="fire>0"), SELF("charge", 1, if_="!fire"), CLR("regen", to="self"),
+                    SELF("regen", 0, per="charge", k=1)])],
          lore="She lay down in her bower to wait for spring. It came, and it has not stopped coming.",
          world=W)
 
@@ -298,11 +299,11 @@ E("garden_f7", "The Rotting Bed", "A slow place. Nothing heals here.", ["thorn_k
   "garden_heart", "foe", "A slow grind with no healing; burst through it.")
 E("garden_f8", "The Lady's Walk", "Her household is still at work.", ["pond_swan", "mole_catcher", "orchard_picker", "flower_strewer"],
   "garden_walk", "foe", "Rank chaos: heroes knocked back, dropped a rank and hooked forward.")
-E("garden_e1", "The Gardener's Shed", "He is pruning.", ["fungal_husk", "the_gardener", "flower_strewer"],
+E("garden_e1", "The Gardener's Shed", "He is pruning.", ["the_gardener", "fungal_husk", "flower_strewer"],
   "garden_hedge", "elite", "Every fallen ally sprouts a husk; kill the Gardener first.")
-E("garden_e2", "The Dead Oak", "Her oak is dead. She is not.", ["spore_deer", "blight_dryad", "moth_witch"],
+E("garden_e2", "The Dead Oak", "Her oak is dead. She is not.", ["blight_dryad", "spore_deer", "moth_witch"],
   "garden_grove", "elite", "Keep Blight or fire on the Dryad or she regrows.")
-E("garden_e3", "The Fool's Caper", "He has a joke for you.", ["thorn_knight", "ladys_fool", "flower_strewer"],
+E("garden_e3", "The Fool's Caper", "He has a joke for you.", ["ladys_fool", "thorn_knight", "flower_strewer"],
   "garden_walk", "elite", "His slap puts a spore in your hand that strikes a friend; spread out and plan small.")
 E("garden_e4", "The Truffle Oaks", "Something has been rooting here.", ["truffle_boar", "mole_catcher", "beekeeper"],
   "garden_heart", "elite", "The boar ploughs through Block, the ground gives way; strike it and catch spore.")
@@ -341,8 +342,8 @@ card("w_garden_nothing_regrows", "Nothing Regrows", 1, "W", "none", [],
      rite={"on": "conjunction", "fx": [CONS(s="block"), CONS(s="regen")]},
      flavour="The blooms open, and the eyes turn toward you. Close them.",
      note="The company stands in a ring of grey, dead loam; the hedge around them has stopped growing.",
-     up={"text": "Retain. Rite. Whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
-         "kw": ["Rite", "Exhaust", "Retain"]})
+     up={"text": "Rite. Whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
+         "cost": 0})
 
 NEEDS = [
     "ladys_fool: the slapped hero's next action should strike an ally (TURN on a hero); written as a Temporary curse that hits the heroes beside the drawer.",
