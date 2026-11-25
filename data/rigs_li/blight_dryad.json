@@ -1,0 +1,254 @@
+{
+"key": "blight_dryad",
+"source": "worlds/world_XIV_blight_dryad",
+"scale": 0.6,
+"canvas": [
+660,
+900
+],
+"ground": 882.0,
+"flip": true,
+"ink": [
+26,
+0,
+638,
+900
+],
+"bones": {
+"trunk": {
+"pivot": [
+356.4,
+870.0
+],
+"parent": null
+},
+"pelvis": {
+"pivot": [
+348.0,
+468.0
+],
+"parent": "trunk"
+},
+"torso": {
+"pivot": [
+352.14,
+414.96
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+312.54,
+184.08
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+368.4,
+217.38
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+402.0,
+150.0
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+420.0,
+72.0
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+289.98,
+230.1
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+252.0,
+312.0
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+188.4,
+366.0
+],
+"parent": "forearm_f"
+},
+"roots": {
+"pivot": [
+356.4,
+882.0
+],
+"parent": null
+}
+},
+"layers": [
+{
+"name": "00_upperarm_f",
+"bone": "upperarm_f",
+"z": 0,
+"pos": [
+203.4,
+221.4
+],
+"size": [
+108,
+139
+]
+},
+{
+"name": "01_forearm_f",
+"bone": "forearm_f",
+"z": 1,
+"pos": [
+175.2,
+246.0
+],
+"size": [
+111,
+135
+]
+},
+{
+"name": "02_hand_f",
+"bone": "hand_f",
+"z": 2,
+"pos": [
+26.4,
+314.4
+],
+"size": [
+181,
+210
+]
+},
+{
+"name": "03_trunk",
+"bone": "trunk",
+"z": 3,
+"pos": [
+128.4,
+432.6
+],
+"size": [
+417,
+460
+]
+},
+{
+"name": "04_roots",
+"bone": "roots",
+"z": 4,
+"pos": [
+90.0,
+810.0
+],
+"size": [
+505,
+90
+]
+},
+{
+"name": "05_torso",
+"bone": "torso",
+"z": 5,
+"pos": [
+270.6,
+174.6
+],
+"size": [
+153,
+314
+]
+},
+{
+"name": "06_pelvis",
+"bone": "pelvis",
+"z": 6,
+"pos": [
+281.4,
+420.0
+],
+"size": [
+142,
+182
+]
+},
+{
+"name": "07_torso",
+"bone": "torso",
+"z": 7,
+"pos": [
+246.6,
+175.2
+],
+"size": [
+190,
+77
+]
+},
+{
+"name": "08_head",
+"bone": "head",
+"z": 8,
+"pos": [
+260.4,
+0.0
+],
+"size": [
+321,
+309
+]
+},
+{
+"name": "09_upperarm_n",
+"bone": "upperarm_n",
+"z": 9,
+"pos": [
+345.6,
+107.4
+],
+"size": [
+83,
+127
+]
+},
+{
+"name": "10_forearm_n",
+"bone": "forearm_n",
+"z": 10,
+"pos": [
+385.8,
+56.4
+],
+"size": [
+49,
+111
+]
+},
+{
+"name": "11_hand_n",
+"bone": "hand_n",
+"z": 11,
+"pos": [
+307.2,
+0.0
+],
+"size": [
+332,
+108
+]
+}
+]
+}

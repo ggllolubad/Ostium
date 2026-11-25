@@ -1,0 +1,465 @@
+{
+"key": "mire_toad",
+"source": "worlds/world_II_mire_toad",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+8,
+266,
+343,
+492
+],
+"bones": {
+"body": {
+"pivot": [
+204.0,
+408.0
+],
+"parent": null
+},
+"head": {
+"pivot": [
+124.8,
+348.0
+],
+"parent": "body"
+},
+"jaw": {
+"pivot": [
+111.6,
+363.6
+],
+"parent": "head"
+},
+"throat": {
+"pivot": [
+66.0,
+369.6
+],
+"parent": "head"
+},
+"tongue": {
+"pivot": [
+31.2,
+350.4
+],
+"parent": "jaw"
+},
+"leg_ff_1": {
+"pivot": [
+88.8,
+378.0
+],
+"parent": "body"
+},
+"leg_ff_2": {
+"pivot": [
+97.2,
+423.6
+],
+"parent": "leg_ff_1"
+},
+"leg_ff_3": {
+"pivot": [
+60.0,
+458.4
+],
+"parent": "leg_ff_2"
+},
+"leg_fn_1": {
+"pivot": [
+104.4,
+384.0
+],
+"parent": "body"
+},
+"leg_fn_2": {
+"pivot": [
+121.2,
+429.6
+],
+"parent": "leg_fn_1"
+},
+"leg_fn_3": {
+"pivot": [
+87.6,
+460.8
+],
+"parent": "leg_fn_2"
+},
+"leg_bf_1": {
+"pivot": [
+285.6,
+384.0
+],
+"parent": "body"
+},
+"leg_bf_2": {
+"pivot": [
+207.6,
+394.8
+],
+"parent": "leg_bf_1"
+},
+"leg_bf_3": {
+"pivot": [
+290.4,
+458.4
+],
+"parent": "leg_bf_2"
+},
+"leg_bn_1": {
+"pivot": [
+270.0,
+390.0
+],
+"parent": "body"
+},
+"leg_bn_2": {
+"pivot": [
+184.8,
+405.6
+],
+"parent": "leg_bn_1"
+},
+"leg_bn_3": {
+"pivot": [
+266.4,
+462.0
+],
+"parent": "leg_bn_2"
+}
+},
+"layers": [
+{
+"name": "00_leg_bf_2",
+"bone": "leg_bf_2",
+"z": 0,
+"pos": [
+189.6,
+378.0
+],
+"size": [
+115,
+97
+]
+},
+{
+"name": "01_leg_bf_3",
+"bone": "leg_bf_3",
+"z": 1,
+"pos": [
+216.0,
+444.0
+],
+"size": [
+78,
+36
+]
+},
+{
+"name": "02_leg_bf_1",
+"bone": "leg_bf_1",
+"z": 2,
+"pos": [
+189.0,
+357.0
+],
+"size": [
+127,
+64
+]
+},
+{
+"name": "03_leg_ff_2",
+"bone": "leg_ff_2",
+"z": 3,
+"pos": [
+50.4,
+411.6
+],
+"size": [
+62,
+61
+]
+},
+{
+"name": "04_leg_ff_3",
+"bone": "leg_ff_3",
+"z": 4,
+"pos": [
+30.0,
+459.0
+],
+"size": [
+33,
+33
+]
+},
+{
+"name": "05_leg_ff_1",
+"bone": "leg_ff_1",
+"z": 5,
+"pos": [
+73.2,
+364.8
+],
+"size": [
+40,
+76
+]
+},
+{
+"name": "06_body",
+"bone": "body",
+"z": 6,
+"pos": [
+85.2,
+326.4
+],
+"size": [
+254,
+146
+]
+},
+{
+"name": "07_leg_bn_2",
+"bone": "leg_bn_2",
+"z": 7,
+"pos": [
+164.4,
+386.4
+],
+"size": [
+118,
+94
+]
+},
+{
+"name": "08_leg_bn_3",
+"bone": "leg_bn_3",
+"z": 8,
+"pos": [
+183.6,
+447.6
+],
+"size": [
+86,
+38
+]
+},
+{
+"name": "09_leg_bn_1",
+"bone": "leg_bn_1",
+"z": 9,
+"pos": [
+163.8,
+359.4
+],
+"size": [
+139,
+75
+]
+},
+{
+"name": "10_leg_bn_1",
+"bone": "leg_bn_1",
+"z": 10,
+"pos": [
+180.0,
+372.0
+],
+"size": [
+83,
+60
+]
+},
+{
+"name": "11_leg_bn_2",
+"bone": "leg_bn_2",
+"z": 11,
+"pos": [
+202.2,
+407.4
+],
+"size": [
+53,
+54
+]
+},
+{
+"name": "12_leg_bn_3",
+"bone": "leg_bn_3",
+"z": 12,
+"pos": [
+194.4,
+471.6
+],
+"size": [
+68,
+18
+]
+},
+{
+"name": "13_head",
+"bone": "head",
+"z": 13,
+"pos": [
+15.6,
+339.0
+],
+"size": [
+100,
+40
+]
+},
+{
+"name": "14_jaw",
+"bone": "jaw",
+"z": 14,
+"pos": [
+12.0,
+340.8
+],
+"size": [
+111,
+43
+]
+},
+{
+"name": "15_throat",
+"bone": "throat",
+"z": 15,
+"pos": [
+19.2,
+358.8
+],
+"size": [
+94,
+47
+]
+},
+{
+"name": "16_tongue",
+"bone": "tongue",
+"z": 16,
+"pos": [
+25.2,
+347.4
+],
+"size": [
+77,
+20
+]
+},
+{
+"name": "17_head",
+"bone": "head",
+"z": 17,
+"pos": [
+8.4,
+266.4
+],
+"size": [
+122,
+131
+]
+},
+{
+"name": "18_leg_fn_2",
+"bone": "leg_fn_2",
+"z": 18,
+"pos": [
+77.4,
+417.6
+],
+"size": [
+60,
+58
+]
+},
+{
+"name": "19_leg_fn_3",
+"bone": "leg_fn_3",
+"z": 19,
+"pos": [
+53.4,
+456.0
+],
+"size": [
+37,
+35
+]
+},
+{
+"name": "20_leg_fn_1",
+"bone": "leg_fn_1",
+"z": 20,
+"pos": [
+87.0,
+369.0
+],
+"size": [
+51,
+79
+]
+},
+{
+"name": "21_leg_fn_1",
+"bone": "leg_fn_1",
+"z": 21,
+"pos": [
+100.2,
+391.8
+],
+"size": [
+26,
+26
+]
+},
+{
+"name": "22_leg_fn_2",
+"bone": "leg_fn_2",
+"z": 22,
+"pos": [
+117.6,
+420.0
+],
+"size": [
+18,
+22
+]
+},
+{
+"name": "23_leg_fn_3",
+"bone": "leg_fn_3",
+"z": 23,
+"pos": [
+63.0,
+465.0
+],
+"size": [
+33,
+19
+]
+},
+{
+"name": "24_root",
+"bone": "root",
+"z": 24,
+"pos": [
+16.2,
+468.6
+],
+"size": [
+327,
+14
+]
+}
+]
+}

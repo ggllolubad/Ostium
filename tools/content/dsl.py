@@ -74,7 +74,11 @@ def BASHSTUN(**kw): return _fx("bash_stun", **kw)
 def SWAPFX(**kw): return _fx("swap", **kw)
 
 
-def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical", attr=None, kw=None, sub=None, art=None, flask=False):
+def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical", attr=None, kw=None, sub=None, art=None, flask=False,
+         up=None, flavour=None, note=None, arch=None):
+    """up: the upgrade, a dict of overriding fields (text is required; cost, fx, kw ... as needed).
+    flavour: one line in the lore's voice. note: the art note (the chronicle moment the card art shows).
+    arch: the archetype the card serves (for the sheets and the build-aware simulator)."""
     assert id not in CARDS, id
     c = {"name": name, "cost": cost, "rarity": rar, "target": tgt, "fx": fx, "text": text, "cls": CLS["name"],
          "use": use or CLS["use"], "cat": cat}
@@ -89,6 +93,15 @@ def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical",
     c["art"] = art or id
     if flask:
         c["flask"] = True
+    if up:
+        assert "text" in up, (id, "upgrade needs its text")
+        c["up"] = up
+    if flavour:
+        c["flavour"] = flavour
+    if note:
+        c["note"] = note
+    if arch:
+        c["arch"] = arch
     CARDS[id] = c
     ORDER.append(id)
     return id

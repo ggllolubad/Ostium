@@ -1,0 +1,187 @@
+{
+"key": "bell_below",
+"source": "worlds/world_I_a_bell_below",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"floor": {
+"pivot": [
+480.0,
+942.0
+],
+"parent": null
+},
+"chain": {
+"pivot": [
+462.0,
+-360.0
+],
+"parent": "floor"
+},
+"bell": {
+"pivot": [
+480.0,
+55.2
+],
+"parent": "chain"
+},
+"clapper": {
+"pivot": [
+480.0,
+156.0
+],
+"parent": "bell"
+},
+"chain_loose": {
+"pivot": [
+390.0,
+90.0
+],
+"parent": "bell"
+},
+"reacher": {
+"pivot": [
+262.86,
+573.48
+],
+"parent": "bell"
+},
+"rings": {
+"pivot": [
+480.0,
+942.0
+],
+"parent": "floor"
+}
+},
+"layers": [
+{
+"name": "00_floor",
+"bone": "floor",
+"z": 0,
+"pos": [
+0.0,
+889.8
+],
+"size": [
+960,
+70
+]
+},
+{
+"name": "01_chain",
+"bone": "chain",
+"z": 1,
+"pos": [
+444.6,
+0.0
+],
+"size": [
+55,
+135
+]
+},
+{
+"name": "02_bell",
+"bone": "bell",
+"z": 2,
+"pos": [
+75.0,
+57.0
+],
+"size": [
+809,
+888
+]
+},
+{
+"name": "03_clapper",
+"bone": "clapper",
+"z": 3,
+"pos": [
+417.0,
+145.8
+],
+"size": [
+121,
+759
+]
+},
+{
+"name": "04_bell",
+"bone": "bell",
+"z": 4,
+"pos": [
+16.2,
+19.2
+],
+"size": [
+915,
+931
+]
+},
+{
+"name": "05_chain_loose",
+"bone": "chain_loose",
+"z": 5,
+"pos": [
+261.0,
+72.0
+],
+"size": [
+134,
+255
+]
+},
+{
+"name": "06_reacher",
+"bone": "reacher",
+"z": 6,
+"pos": [
+75.0,
+526.8
+],
+"size": [
+224,
+109
+]
+},
+{
+"name": "07_floor",
+"bone": "floor",
+"z": 7,
+"pos": [
+0.0,
+857.4
+],
+"size": [
+960,
+103
+]
+},
+{
+"name": "08_rings",
+"bone": "rings",
+"z": 8,
+"pos": [
+0.0,
+923.4
+],
+"size": [
+960,
+37
+]
+}
+]
+}

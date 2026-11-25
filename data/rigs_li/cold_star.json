@@ -1,0 +1,214 @@
+{
+"key": "cold_star",
+"source": "worlds/world_XII_cold_star",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"disc": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": null
+},
+"corona": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"ring_1": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"ring_2": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"ring_3": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"tooth": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"eye": {
+"pivot": [
+480.0,
+282.0
+],
+"parent": "disc"
+},
+"lid_u": {
+"pivot": [
+-1920.0,
+282.0
+],
+"parent": "eye"
+},
+"lid_l": {
+"pivot": [
+-1920.0,
+282.0
+],
+"parent": "eye"
+}
+},
+"layers": [
+{
+"name": "00_root",
+"bone": "root",
+"z": 0,
+"pos": [
+0.0,
+694.2
+],
+"size": [
+960,
+266
+]
+},
+{
+"name": "01_ring_3",
+"bone": "ring_3",
+"z": 1,
+"pos": [
+0.0,
+0.0
+],
+"size": [
+960,
+801
+]
+},
+{
+"name": "02_ring_2",
+"bone": "ring_2",
+"z": 2,
+"pos": [
+49.2,
+0.0
+],
+"size": [
+863,
+717
+]
+},
+{
+"name": "03_ring_1",
+"bone": "ring_1",
+"z": 3,
+"pos": [
+118.8,
+0.0
+],
+"size": [
+718,
+642
+]
+},
+{
+"name": "04_tooth",
+"bone": "tooth",
+"z": 4,
+"pos": [
+94.8,
+307.2
+],
+"size": [
+217,
+321
+]
+},
+{
+"name": "05_disc",
+"bone": "disc",
+"z": 5,
+"pos": [
+177.0,
+0.0
+],
+"size": [
+605,
+585
+]
+},
+{
+"name": "06_corona",
+"bone": "corona",
+"z": 6,
+"pos": [
+123.0,
+0.0
+],
+"size": [
+715,
+637
+]
+},
+{
+"name": "07_eye",
+"bone": "eye",
+"z": 7,
+"pos": [
+297.0,
+177.6
+],
+"size": [
+365,
+194
+]
+},
+{
+"name": "08_lid_u",
+"bone": "lid_u",
+"z": 8,
+"pos": [
+244.8,
+125.4
+],
+"size": [
+470,
+169
+]
+},
+{
+"name": "09_lid_l",
+"bone": "lid_l",
+"z": 9,
+"pos": [
+244.8,
+271.2
+],
+"size": [
+470,
+168
+]
+}
+]
+}

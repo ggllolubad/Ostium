@@ -1,0 +1,180 @@
+{
+"key": "thunder_whale",
+"source": "worlds/world_VI_thunder_whale",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"water": {
+"pivot": [
+480.0,
+798.0
+],
+"parent": null
+},
+"body": {
+"pivot": [
+781.62,
+720.18
+],
+"parent": "water"
+},
+"jaw": {
+"pivot": [
+517.2,
+726.84
+],
+"parent": "body"
+},
+"fin": {
+"pivot": [
+540.0,
+834.0
+],
+"parent": "body"
+},
+"ropes": {
+"pivot": [
+624.42,
+324.12
+],
+"parent": "body"
+},
+"arcs": {
+"pivot": [
+660.48,
+172.38
+],
+"parent": "body"
+}
+},
+"layers": [
+{
+"name": "00_water",
+"bone": "water",
+"z": 0,
+"pos": [
+0.0,
+762.0
+],
+"size": [
+960,
+198
+]
+},
+{
+"name": "01_jaw",
+"bone": "jaw",
+"z": 1,
+"pos": [
+64.2,
+390.6
+],
+"size": [
+474,
+342
+]
+},
+{
+"name": "02_body",
+"bone": "body",
+"z": 2,
+"pos": [
+129.6,
+391.2
+],
+"size": [
+365,
+316
+]
+},
+{
+"name": "03_jaw",
+"bone": "jaw",
+"z": 3,
+"pos": [
+46.8,
+499.8
+],
+"size": [
+500,
+331
+]
+},
+{
+"name": "04_body",
+"bone": "body",
+"z": 4,
+"pos": [
+0.0,
+0.0
+],
+"size": [
+960,
+960
+]
+},
+{
+"name": "05_fin",
+"bone": "fin",
+"z": 5,
+"pos": [
+523.8,
+715.8
+],
+"size": [
+176,
+126
+]
+},
+{
+"name": "06_ropes",
+"bone": "ropes",
+"z": 6,
+"pos": [
+80.4,
+100.2
+],
+"size": [
+880,
+628
+]
+},
+{
+"name": "07_arcs",
+"bone": "arcs",
+"z": 7,
+"pos": [
+528.6,
+493.8
+],
+"size": [
+226,
+73
+]
+},
+{
+"name": "08_water",
+"bone": "water",
+"z": 8,
+"pos": [
+0.0,
+405.0
+],
+"size": [
+960,
+555
+]
+}
+]
+}

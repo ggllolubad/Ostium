@@ -1,0 +1,134 @@
+{
+"key": "candle_wraith",
+"source": "worlds/world_XIII_candle_wraith",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+131,
+35,
+314,
+481
+],
+"bones": {
+"skull": {
+"pivot": [
+186.0,
+246.0
+],
+"parent": null
+},
+"jaw": {
+"pivot": [
+194.46,
+257.16
+],
+"parent": "skull"
+},
+"crown": {
+"pivot": [
+181.2,
+205.98
+],
+"parent": "skull"
+},
+"flame_back": {
+"pivot": [
+202.38,
+213.54
+],
+"parent": "skull"
+},
+"flame_front": {
+"pivot": [
+167.22,
+258.42
+],
+"parent": "skull"
+}
+},
+"layers": [
+{
+"name": "00_flame_back",
+"bone": "flame_back",
+"z": 0,
+"pos": [
+132.6,
+34.2
+],
+"size": [
+182,
+262
+]
+},
+{
+"name": "01_jaw",
+"bone": "jaw",
+"z": 1,
+"pos": [
+147.0,
+251.4
+],
+"size": [
+64,
+139
+]
+},
+{
+"name": "02_skull",
+"bone": "skull",
+"z": 2,
+"pos": [
+135.0,
+187.8
+],
+"size": [
+110,
+103
+]
+},
+{
+"name": "03_crown",
+"bone": "crown",
+"z": 3,
+"pos": [
+135.0,
+116.4
+],
+"size": [
+100,
+107
+]
+},
+{
+"name": "04_flame_front",
+"bone": "flame_front",
+"z": 4,
+"pos": [
+154.8,
+58.2
+],
+"size": [
+144,
+202
+]
+},
+{
+"name": "05_root",
+"bone": "root",
+"z": 5,
+"pos": [
+130.2,
+468.0
+],
+"size": [
+111,
+13
+]
+}
+]
+}

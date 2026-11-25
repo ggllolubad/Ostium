@@ -1,0 +1,268 @@
+{
+"key": "rime_gulls",
+"source": "worlds/world_VII_rime_gulls",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+53,
+151,
+306,
+434
+],
+"bones": {
+"flock": {
+"pivot": [
+180.0,
+282.0
+],
+"parent": null
+},
+"gull_4": {
+"pivot": [
+244.5,
+369.36
+],
+"parent": "flock"
+},
+"gull_4_wing_f": {
+"pivot": [
+238.74,
+366.3
+],
+"parent": "gull_4"
+},
+"gull_4_wing_n": {
+"pivot": [
+240.66,
+367.32
+],
+"parent": "gull_4"
+},
+"gull_3": {
+"pivot": [
+115.5,
+213.48
+],
+"parent": "flock"
+},
+"gull_3_wing_f": {
+"pivot": [
+109.98,
+207.96
+],
+"parent": "gull_3"
+},
+"gull_3_wing_n": {
+"pivot": [
+111.84,
+209.76
+],
+"parent": "gull_3"
+},
+"gull_2": {
+"pivot": [
+223.02,
+265.86
+],
+"parent": "flock"
+},
+"gull_2_wing_f": {
+"pivot": [
+215.82,
+260.4
+],
+"parent": "gull_2"
+},
+"gull_2_wing_n": {
+"pivot": [
+218.22,
+262.26
+],
+"parent": "gull_2"
+},
+"gull_1": {
+"pivot": [
+115.5,
+346.5
+],
+"parent": "flock"
+},
+"gull_1_wing_f": {
+"pivot": [
+106.14,
+346.44
+],
+"parent": "gull_1"
+},
+"gull_1_wing_n": {
+"pivot": [
+109.26,
+346.44
+],
+"parent": "gull_1"
+}
+},
+"layers": [
+{
+"name": "00_gull_4_wing_f",
+"bone": "gull_4_wing_f",
+"z": 0,
+"pos": [
+238.2,
+317.4
+],
+"size": [
+43,
+48
+]
+},
+{
+"name": "01_gull_4",
+"bone": "gull_4",
+"z": 1,
+"pos": [
+195.0,
+352.8
+],
+"size": [
+88,
+35
+]
+},
+{
+"name": "02_gull_4_wing_n",
+"bone": "gull_4_wing_n",
+"z": 2,
+"pos": [
+231.6,
+362.4
+],
+"size": [
+42,
+73
+]
+},
+{
+"name": "03_gull_3_wing_f",
+"bone": "gull_3_wing_f",
+"z": 3,
+"pos": [
+111.0,
+151.2
+],
+"size": [
+47,
+70
+]
+},
+{
+"name": "04_gull_3",
+"bone": "gull_3",
+"z": 4,
+"pos": [
+60.0,
+187.2
+],
+"size": [
+100,
+50
+]
+},
+{
+"name": "05_gull_3_wing_n",
+"bone": "gull_3_wing_n",
+"z": 5,
+"pos": [
+91.2,
+205.2
+],
+"size": [
+51,
+98
+]
+},
+{
+"name": "06_gull_2_wing_f",
+"bone": "gull_2_wing_f",
+"z": 6,
+"pos": [
+224.4,
+187.2
+],
+"size": [
+82,
+80
+]
+},
+{
+"name": "07_gull_2",
+"bone": "gull_2",
+"z": 7,
+"pos": [
+157.2,
+240.0
+],
+"size": [
+116,
+50
+]
+},
+{
+"name": "08_gull_2_wing_n",
+"bone": "gull_2_wing_n",
+"z": 8,
+"pos": [
+206.4,
+154.8
+],
+"size": [
+56,
+114
+]
+},
+{
+"name": "09_gull_1_wing_f",
+"bone": "gull_1_wing_f",
+"z": 9,
+"pos": [
+102.6,
+253.8
+],
+"size": [
+64,
+107
+]
+},
+{
+"name": "10_gull_1",
+"bone": "gull_1",
+"z": 10,
+"pos": [
+52.8,
+315.6
+],
+"size": [
+107,
+78
+]
+},
+{
+"name": "11_gull_1_wing_n",
+"bone": "gull_1_wing_n",
+"z": 11,
+"pos": [
+97.2,
+269.4
+],
+"size": [
+68,
+98
+]
+}
+]
+}

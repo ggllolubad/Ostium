@@ -1,0 +1,267 @@
+{
+"key": "anvil_titan",
+"source": "worlds/world_V_anvil_titan",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 1728.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"torso": {
+"pivot": [
+471.72,
+789.18
+],
+"parent": null
+},
+"head": {
+"pivot": [
+402.0,
+462.0
+],
+"parent": "torso"
+},
+"spike": {
+"pivot": [
+491.16,
+451.68
+],
+"parent": "torso"
+},
+"arcs": {
+"pivot": [
+491.16,
+451.68
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+480.0,
+480.0
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+720.0,
+372.0
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+642.0,
+157.2
+],
+"parent": "forearm_n"
+},
+"hammer": {
+"pivot": [
+642.0,
+157.2
+],
+"parent": "hand_n"
+},
+"upperarm_f": {
+"pivot": [
+252.0,
+540.0
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+186.0,
+690.0
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+122.4,
+798.0
+],
+"parent": "forearm_f"
+}
+},
+"layers": [
+{
+"name": "00_spike",
+"bone": "spike",
+"z": 0,
+"pos": [
+456.6,
+15.6
+],
+"size": [
+72,
+458
+]
+},
+{
+"name": "01_hammer",
+"bone": "hammer",
+"z": 1,
+"pos": [
+526.2,
+13.2
+],
+"size": [
+434,
+293
+]
+},
+{
+"name": "02_upperarm_f",
+"bone": "upperarm_f",
+"z": 2,
+"pos": [
+124.8,
+510.0
+],
+"size": [
+200,
+211
+]
+},
+{
+"name": "03_forearm_f",
+"bone": "forearm_f",
+"z": 3,
+"pos": [
+73.2,
+628.2
+],
+"size": [
+189,
+203
+]
+},
+{
+"name": "04_torso",
+"bone": "torso",
+"z": 4,
+"pos": [
+142.2,
+387.6
+],
+"size": [
+549,
+572
+]
+},
+{
+"name": "05_head",
+"bone": "head",
+"z": 5,
+"pos": [
+231.0,
+139.8
+],
+"size": [
+290,
+416
+]
+},
+{
+"name": "06_upperarm_n",
+"bone": "upperarm_n",
+"z": 6,
+"pos": [
+445.2,
+306.0
+],
+"size": [
+307,
+257
+]
+},
+{
+"name": "07_forearm_n",
+"bone": "forearm_n",
+"z": 7,
+"pos": [
+585.0,
+136.8
+],
+"size": [
+221,
+302
+]
+},
+{
+"name": "08_torso",
+"bone": "torso",
+"z": 8,
+"pos": [
+361.2,
+300.6
+],
+"size": [
+262,
+268
+]
+},
+{
+"name": "09_hand_n",
+"bone": "hand_n",
+"z": 9,
+"pos": [
+546.0,
+58.8
+],
+"size": [
+179,
+232
+]
+},
+{
+"name": "10_arcs",
+"bone": "arcs",
+"z": 10,
+"pos": [
+812.4,
+0.0
+],
+"size": [
+56,
+34
+]
+},
+{
+"name": "11_root",
+"bone": "root",
+"z": 11,
+"pos": [
+0.0,
+762.0
+],
+"size": [
+293,
+198
+]
+},
+{
+"name": "12_hand_f",
+"bone": "hand_f",
+"z": 12,
+"pos": [
+36.6,
+651.0
+],
+"size": [
+218,
+241
+]
+}
+]
+}

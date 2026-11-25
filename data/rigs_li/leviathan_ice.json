@@ -1,0 +1,154 @@
+{
+"key": "leviathan_ice",
+"source": "worlds/world_VII_leviathan_in_the_ice",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"ice": {
+"pivot": [
+480.0,
+942.0
+],
+"parent": null
+},
+"back": {
+"pivot": [
+840.0,
+600.0
+],
+"parent": "ice"
+},
+"skull": {
+"pivot": [
+624.0,
+780.0
+],
+"parent": "ice"
+},
+"jaw": {
+"pivot": [
+504.0,
+648.0
+],
+"parent": "skull"
+},
+"eye": {
+"pivot": [
+606.0,
+582.0
+],
+"parent": "skull"
+},
+"plates": {
+"pivot": [
+540.0,
+900.0
+],
+"parent": "ice"
+}
+},
+"layers": [
+{
+"name": "00_ice",
+"bone": "ice",
+"z": 0,
+"pos": [
+0.0,
+378.0
+],
+"size": [
+960,
+582
+]
+},
+{
+"name": "01_back",
+"bone": "back",
+"z": 1,
+"pos": [
+644.4,
+0.0
+],
+"size": [
+316,
+688
+]
+},
+{
+"name": "02_skull",
+"bone": "skull",
+"z": 2,
+"pos": [
+51.6,
+192.6
+],
+"size": [
+233,
+141
+]
+},
+{
+"name": "03_jaw",
+"bone": "jaw",
+"z": 3,
+"pos": [
+26.4,
+283.2
+],
+"size": [
+500,
+525
+]
+},
+{
+"name": "04_skull",
+"bone": "skull",
+"z": 4,
+"pos": [
+0.0,
+58.2
+],
+"size": [
+809,
+767
+]
+},
+{
+"name": "05_eye",
+"bone": "eye",
+"z": 5,
+"pos": [
+520.8,
+529.2
+],
+"size": [
+160,
+116
+]
+},
+{
+"name": "06_plates",
+"bone": "plates",
+"z": 6,
+"pos": [
+0.0,
+579.6
+],
+"size": [
+960,
+380
+]
+}
+]
+}

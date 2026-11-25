@@ -1,0 +1,201 @@
+{
+"key": "shattered_god",
+"source": "worlds/world_XV_shattered_god",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"lap": {
+"pivot": [
+420.0,
+852.0
+],
+"parent": null
+},
+"chest": {
+"pivot": [
+456.0,
+600.0
+],
+"parent": null
+},
+"tooth": {
+"pivot": [
+420.0,
+594.0
+],
+"parent": "chest"
+},
+"head": {
+"pivot": [
+504.0,
+456.0
+],
+"parent": null
+},
+"nimbus": {
+"pivot": [
+468.0,
+150.0
+],
+"parent": "head"
+},
+"arm_n": {
+"pivot": [
+648.0,
+708.0
+],
+"parent": null
+},
+"hand_f": {
+"pivot": [
+108.0,
+600.0
+],
+"parent": null
+},
+"mantle": {
+"pivot": [
+708.0,
+540.0
+],
+"parent": null
+},
+"chips": {
+"pivot": [
+480.0,
+480.0
+],
+"parent": null
+}
+},
+"layers": [
+{
+"name": "00_nimbus",
+"bone": "nimbus",
+"z": 0,
+"pos": [
+0.0,
+0.0
+],
+"size": [
+928,
+523
+]
+},
+{
+"name": "01_mantle",
+"bone": "mantle",
+"z": 1,
+"pos": [
+612.6,
+502.8
+],
+"size": [
+347,
+457
+]
+},
+{
+"name": "02_lap",
+"bone": "lap",
+"z": 2,
+"pos": [
+0.0,
+754.2
+],
+"size": [
+811,
+206
+]
+},
+{
+"name": "03_hand_f",
+"bone": "hand_f",
+"z": 3,
+"pos": [
+0.0,
+331.8
+],
+"size": [
+170,
+393
+]
+},
+{
+"name": "04_chest",
+"bone": "chest",
+"z": 4,
+"pos": [
+200.4,
+466.2
+],
+"size": [
+525,
+369
+]
+},
+{
+"name": "05_tooth",
+"bone": "tooth",
+"z": 5,
+"pos": [
+393.6,
+553.8
+],
+"size": [
+67,
+88
+]
+},
+{
+"name": "06_arm_n",
+"bone": "arm_n",
+"z": 6,
+"pos": [
+240.0,
+663.0
+],
+"size": [
+448,
+185
+]
+},
+{
+"name": "07_head",
+"bone": "head",
+"z": 7,
+"pos": [
+291.0,
+0.0
+],
+"size": [
+407,
+464
+]
+},
+{
+"name": "08_chips",
+"bone": "chips",
+"z": 8,
+"pos": [
+22.2,
+52.2
+],
+"size": [
+911,
+792
+]
+}
+]
+}

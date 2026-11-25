@@ -1,0 +1,234 @@
+{
+"key": "fen_lurker",
+"source": "worlds/world_II_fen_lurker",
+"scale": 0.6,
+"canvas": [
+540,
+660
+],
+"ground": 642.0,
+"flip": true,
+"ink": [
+0,
+492,
+540,
+660
+],
+"bones": {
+"water": {
+"pivot": [
+270.0,
+627.6
+],
+"parent": null
+},
+"body": {
+"pivot": [
+300.0,
+600.0
+],
+"parent": "water"
+},
+"tail_1": {
+"pivot": [
+432.0,
+606.0
+],
+"parent": "body"
+},
+"tail_2": {
+"pivot": [
+482.4,
+621.6
+],
+"parent": "tail_1"
+},
+"neck": {
+"pivot": [
+180.0,
+576.0
+],
+"parent": "body"
+},
+"head": {
+"pivot": [
+150.0,
+576.0
+],
+"parent": "neck"
+},
+"jaw": {
+"pivot": [
+151.2,
+620.4
+],
+"parent": "head"
+},
+"eye": {
+"pivot": [
+120.0,
+548.4
+],
+"parent": "head"
+},
+"leg_fn_1": {
+"pivot": [
+204.0,
+624.0
+],
+"parent": "body"
+},
+"leg_fn_2": {
+"pivot": [
+177.6,
+645.6
+],
+"parent": "leg_fn_1"
+}
+},
+"layers": [
+{
+"name": "00_leg_fn_2",
+"bone": "leg_fn_2",
+"z": 0,
+"pos": [
+129.6,
+633.6
+],
+"size": [
+61,
+26
+]
+},
+{
+"name": "01_leg_fn_1",
+"bone": "leg_fn_1",
+"z": 1,
+"pos": [
+166.2,
+603.0
+],
+"size": [
+59,
+57
+]
+},
+{
+"name": "02_tail_2",
+"bone": "tail_2",
+"z": 2,
+"pos": [
+469.2,
+612.0
+],
+"size": [
+71,
+32
+]
+},
+{
+"name": "03_tail_1",
+"bone": "tail_1",
+"z": 3,
+"pos": [
+401.4,
+576.0
+],
+"size": [
+90,
+71
+]
+},
+{
+"name": "04_body",
+"bone": "body",
+"z": 4,
+"pos": [
+130.2,
+491.4
+],
+"size": [
+326,
+157
+]
+},
+{
+"name": "05_neck",
+"bone": "neck",
+"z": 5,
+"pos": [
+128.4,
+549.0
+],
+"size": [
+86,
+103
+]
+},
+{
+"name": "06_head",
+"bone": "head",
+"z": 6,
+"pos": [
+12.6,
+612.0
+],
+"size": [
+144,
+31
+]
+},
+{
+"name": "07_jaw",
+"bone": "jaw",
+"z": 7,
+"pos": [
+12.0,
+609.6
+],
+"size": [
+152,
+41
+]
+},
+{
+"name": "08_head",
+"bone": "head",
+"z": 8,
+"pos": [
+2.4,
+534.0
+],
+"size": [
+173,
+102
+]
+},
+{
+"name": "09_eye",
+"bone": "eye",
+"z": 9,
+"pos": [
+109.2,
+540.0
+],
+"size": [
+19,
+16
+]
+},
+{
+"name": "10_water",
+"bone": "water",
+"z": 10,
+"pos": [
+0.0,
+509.4
+],
+"size": [
+540,
+151
+]
+}
+]
+}

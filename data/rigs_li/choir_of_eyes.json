@@ -1,0 +1,254 @@
+{
+"key": "choir_of_eyes",
+"source": "worlds/world_XV_choir_of_eyes",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+23,
+82,
+318,
+480
+],
+"bones": {
+"cluster": {
+"pivot": [
+180.0,
+252.0
+],
+"parent": null
+},
+"eye_1": {
+"pivot": [
+210.0,
+120.0
+],
+"parent": "cluster"
+},
+"eye_2": {
+"pivot": [
+120.0,
+108.0
+],
+"parent": "cluster"
+},
+"eye_3": {
+"pivot": [
+270.0,
+198.0
+],
+"parent": "cluster"
+},
+"eye_4": {
+"pivot": [
+78.0,
+198.0
+],
+"parent": "cluster"
+},
+"eye_5": {
+"pivot": [
+228.0,
+312.0
+],
+"parent": "cluster"
+},
+"eye_6": {
+"pivot": [
+108.0,
+312.0
+],
+"parent": "cluster"
+},
+"eye_7": {
+"pivot": [
+168.0,
+384.0
+],
+"parent": "cluster"
+},
+"eye_8": {
+"pivot": [
+42.0,
+270.0
+],
+"parent": "cluster"
+},
+"eye_9": {
+"pivot": [
+168.0,
+228.0
+],
+"parent": "cluster"
+},
+"eye_10": {
+"pivot": [
+294.0,
+276.0
+],
+"parent": "cluster"
+}
+},
+"layers": [
+{
+"name": "00_eye_2",
+"bone": "eye_2",
+"z": 0,
+"pos": [
+97.2,
+88.2
+],
+"size": [
+65,
+77
+]
+},
+{
+"name": "01_eye_8",
+"bone": "eye_8",
+"z": 1,
+"pos": [
+24.0,
+253.2
+],
+"size": [
+52,
+51
+]
+},
+{
+"name": "02_eye_1",
+"bone": "eye_1",
+"z": 2,
+"pos": [
+180.0,
+94.8
+],
+"size": [
+72,
+116
+]
+},
+{
+"name": "03_eye_10",
+"bone": "eye_10",
+"z": 3,
+"pos": [
+272.4,
+258.0
+],
+"size": [
+46,
+85
+]
+},
+{
+"name": "04_eye_4",
+"bone": "eye_4",
+"z": 4,
+"pos": [
+52.2,
+173.4
+],
+"size": [
+80,
+85
+]
+},
+{
+"name": "05_eye_3",
+"bone": "eye_3",
+"z": 5,
+"pos": [
+238.2,
+170.4
+],
+"size": [
+74,
+137
+]
+},
+{
+"name": "06_eye_7",
+"bone": "eye_7",
+"z": 6,
+"pos": [
+144.6,
+366.6
+],
+"size": [
+62,
+79
+]
+},
+{
+"name": "07_eye_5",
+"bone": "eye_5",
+"z": 7,
+"pos": [
+205.2,
+292.2
+],
+"size": [
+63,
+90
+]
+},
+{
+"name": "08_eye_6",
+"bone": "eye_6",
+"z": 8,
+"pos": [
+78.0,
+282.0
+],
+"size": [
+92,
+109
+]
+},
+{
+"name": "09_eye_9",
+"bone": "eye_9",
+"z": 9,
+"pos": [
+122.4,
+186.0
+],
+"size": [
+137,
+179
+]
+},
+{
+"name": "10_cluster",
+"bone": "cluster",
+"z": 10,
+"pos": [
+22.8,
+82.2
+],
+"size": [
+287,
+338
+]
+},
+{
+"name": "11_root",
+"bone": "root",
+"z": 11,
+"pos": [
+82.8,
+470.4
+],
+"size": [
+182,
+10
+]
+}
+]
+}

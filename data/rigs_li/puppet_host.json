@@ -1,0 +1,511 @@
+{
+"key": "puppet_host",
+"source": "worlds/world_X_puppet_host",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+49,
+77,
+295,
+481
+],
+"bones": {
+"pelvis": {
+"pivot": [
+190.8,
+291.6
+],
+"parent": null
+},
+"torso": {
+"pivot": [
+189.6,
+279.6
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+169.2,
+169.2
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+182.4,
+180.0
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+126.0,
+230.4
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+79.2,
+238.8
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+152.4,
+180.0
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+136.8,
+238.8
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+123.6,
+282.0
+],
+"parent": "forearm_f"
+},
+"thigh_n": {
+"pivot": [
+182.4,
+296.4
+],
+"parent": "pelvis"
+},
+"shin_n": {
+"pivot": [
+152.4,
+366.0
+],
+"parent": "thigh_n"
+},
+"foot_n": {
+"pivot": [
+180.0,
+446.4
+],
+"parent": "shin_n"
+},
+"thigh_f": {
+"pivot": [
+205.2,
+294.0
+],
+"parent": "pelvis"
+},
+"shin_f": {
+"pivot": [
+212.4,
+372.0
+],
+"parent": "thigh_f"
+},
+"foot_f": {
+"pivot": [
+236.4,
+448.8
+],
+"parent": "shin_f"
+},
+"staff": {
+"pivot": [
+79.2,
+238.8
+],
+"parent": "hand_n"
+},
+"cape": {
+"pivot": [
+180.0,
+180.0
+],
+"parent": "torso"
+},
+"pack": {
+"pivot": [
+206.4,
+198.0
+],
+"parent": "torso"
+}
+},
+"layers": [
+{
+"name": "00_cape",
+"bone": "cape",
+"z": 0,
+"pos": [
+163.8,
+169.2
+],
+"size": [
+113,
+268
+]
+},
+{
+"name": "01_pack",
+"bone": "pack",
+"z": 1,
+"pos": [
+185.4,
+144.6
+],
+"size": [
+66,
+122
+]
+},
+{
+"name": "02_upperarm_f",
+"bone": "upperarm_f",
+"z": 2,
+"pos": [
+123.0,
+174.6
+],
+"size": [
+50,
+79
+]
+},
+{
+"name": "03_forearm_f",
+"bone": "forearm_f",
+"z": 3,
+"pos": [
+111.0,
+225.0
+],
+"size": [
+43,
+67
+]
+},
+{
+"name": "04_hand_f",
+"bone": "hand_f",
+"z": 4,
+"pos": [
+101.4,
+277.2
+],
+"size": [
+37,
+34
+]
+},
+{
+"name": "05_thigh_f",
+"bone": "thigh_f",
+"z": 5,
+"pos": [
+177.6,
+289.2
+],
+"size": [
+58,
+106
+]
+},
+{
+"name": "06_shin_f",
+"bone": "shin_f",
+"z": 6,
+"pos": [
+190.2,
+349.8
+],
+"size": [
+50,
+56
+]
+},
+{
+"name": "07_shin_f",
+"bone": "shin_f",
+"z": 7,
+"pos": [
+200.4,
+380.4
+],
+"size": [
+53,
+84
+]
+},
+{
+"name": "08_shin_f",
+"bone": "shin_f",
+"z": 8,
+"pos": [
+222.0,
+433.2
+],
+"size": [
+32,
+28
+]
+},
+{
+"name": "09_foot_f",
+"bone": "foot_f",
+"z": 9,
+"pos": [
+195.6,
+436.8
+],
+"size": [
+60,
+41
+]
+},
+{
+"name": "10_torso",
+"bone": "torso",
+"z": 10,
+"pos": [
+118.8,
+167.4
+],
+"size": [
+110,
+145
+]
+},
+{
+"name": "11_pelvis",
+"bone": "pelvis",
+"z": 11,
+"pos": [
+132.6,
+281.4
+],
+"size": [
+89,
+62
+]
+},
+{
+"name": "12_thigh_n",
+"bone": "thigh_n",
+"z": 12,
+"pos": [
+131.4,
+285.0
+],
+"size": [
+80,
+104
+]
+},
+{
+"name": "13_shin_n",
+"bone": "shin_n",
+"z": 13,
+"pos": [
+131.4,
+343.2
+],
+"size": [
+50,
+59
+]
+},
+{
+"name": "14_shin_n",
+"bone": "shin_n",
+"z": 14,
+"pos": [
+141.0,
+375.0
+],
+"size": [
+60,
+88
+]
+},
+{
+"name": "15_shin_n",
+"bone": "shin_n",
+"z": 15,
+"pos": [
+166.2,
+430.8
+],
+"size": [
+32,
+29
+]
+},
+{
+"name": "16_foot_n",
+"bone": "foot_n",
+"z": 16,
+"pos": [
+139.2,
+433.8
+],
+"size": [
+61,
+44
+]
+},
+{
+"name": "17_thigh_n",
+"bone": "thigh_n",
+"z": 17,
+"pos": [
+147.0,
+325.2
+],
+"size": [
+29,
+26
+]
+},
+{
+"name": "18_cape",
+"bone": "cape",
+"z": 18,
+"pos": [
+174.0,
+389.4
+],
+"size": [
+21,
+19
+]
+},
+{
+"name": "19_torso",
+"bone": "torso",
+"z": 19,
+"pos": [
+118.2,
+149.4
+],
+"size": [
+104,
+101
+]
+},
+{
+"name": "20_upperarm_n",
+"bone": "upperarm_n",
+"z": 20,
+"pos": [
+110.4,
+166.2
+],
+"size": [
+88,
+82
+]
+},
+{
+"name": "21_forearm_n",
+"bone": "forearm_n",
+"z": 21,
+"pos": [
+74.4,
+215.4
+],
+"size": [
+67,
+41
+]
+},
+{
+"name": "22_upperarm_n",
+"bone": "upperarm_n",
+"z": 22,
+"pos": [
+133.8,
+157.2
+],
+"size": [
+73,
+73
+]
+},
+{
+"name": "23_forearm_n",
+"bone": "forearm_n",
+"z": 23,
+"pos": [
+69.0,
+222.6
+],
+"size": [
+47,
+32
+]
+},
+{
+"name": "24_staff",
+"bone": "staff",
+"z": 24,
+"pos": [
+48.6,
+76.8
+],
+"size": [
+56,
+404
+]
+},
+{
+"name": "25_hand_n",
+"bone": "hand_n",
+"z": 25,
+"pos": [
+61.2,
+222.0
+],
+"size": [
+38,
+35
+]
+},
+{
+"name": "26_head",
+"bone": "head",
+"z": 26,
+"pos": [
+114.6,
+86.4
+],
+"size": [
+109,
+140
+]
+},
+{
+"name": "27_root",
+"bone": "root",
+"z": 27,
+"pos": [
+64.8,
+469.8
+],
+"size": [
+230,
+11
+]
+}
+]
+}

@@ -1,0 +1,384 @@
+{
+"key": "saint_unending",
+"source": "worlds/world_XIII_saint_unending",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+57,
+0,
+927,
+953
+],
+"bones": {
+"stake": {
+"pivot": [
+532.8,
+798.0
+],
+"parent": null
+},
+"body": {
+"pivot": [
+469.92,
+415.92
+],
+"parent": null
+},
+"head": {
+"pivot": [
+465.48,
+184.56
+],
+"parent": "body"
+},
+"jaw": {
+"pivot": [
+446.04,
+121.26
+],
+"parent": "head"
+},
+"hair_smoke": {
+"pivot": [
+482.34,
+59.58
+],
+"parent": "head"
+},
+"halo": {
+"pivot": [
+440.64,
+95.28
+],
+"parent": "head"
+},
+"arms": {
+"pivot": [
+493.32,
+199.2
+],
+"parent": "body"
+},
+"tooth": {
+"pivot": [
+436.2,
+196.32
+],
+"parent": "body"
+},
+"flames_back": {
+"pivot": [
+504.0,
+798.0
+],
+"parent": null
+},
+"flames_front": {
+"pivot": [
+480.0,
+798.0
+],
+"parent": null
+},
+"flame_reach": {
+"pivot": [
+360.0,
+774.0
+],
+"parent": null
+}
+},
+"layers": [
+{
+"name": "00_stake",
+"bone": "stake",
+"z": 0,
+"pos": [
+475.8,
+0.0
+],
+"size": [
+116,
+829
+]
+},
+{
+"name": "01_root",
+"bone": "root",
+"z": 1,
+"pos": [
+87.0,
+784.8
+],
+"size": [
+787,
+166
+]
+},
+{
+"name": "02_flames_back",
+"bone": "flames_back",
+"z": 2,
+"pos": [
+286.2,
+769.2
+],
+"size": [
+392,
+100
+]
+},
+{
+"name": "03_root",
+"bone": "root",
+"z": 3,
+"pos": [
+141.0,
+783.6
+],
+"size": [
+682,
+170
+]
+},
+{
+"name": "04_flames_back",
+"bone": "flames_back",
+"z": 4,
+"pos": [
+294.6,
+156.0
+],
+"size": [
+365,
+665
+]
+},
+{
+"name": "05_halo",
+"bone": "halo",
+"z": 5,
+"pos": [
+342.6,
+0.0
+],
+"size": [
+225,
+201
+]
+},
+{
+"name": "06_body",
+"bone": "body",
+"z": 6,
+"pos": [
+379.2,
+153.0
+],
+"size": [
+152,
+654
+]
+},
+{
+"name": "07_arms",
+"bone": "arms",
+"z": 7,
+"pos": [
+408.6,
+179.4
+],
+"size": [
+43,
+179
+]
+},
+{
+"name": "08_arms",
+"bone": "arms",
+"z": 8,
+"pos": [
+394.8,
+226.8
+],
+"size": [
+47,
+132
+]
+},
+{
+"name": "09_arms",
+"bone": "arms",
+"z": 9,
+"pos": [
+403.8,
+169.8
+],
+"size": [
+52,
+95
+]
+},
+{
+"name": "10_hair_smoke",
+"bone": "hair_smoke",
+"z": 10,
+"pos": [
+419.4,
+0.0
+],
+"size": [
+162,
+132
+]
+},
+{
+"name": "11_head",
+"bone": "head",
+"z": 11,
+"pos": [
+394.8,
+28.8
+],
+"size": [
+116,
+172
+]
+},
+{
+"name": "12_jaw",
+"bone": "jaw",
+"z": 12,
+"pos": [
+398.4,
+117.0
+],
+"size": [
+17,
+11
+]
+},
+{
+"name": "13_head",
+"bone": "head",
+"z": 13,
+"pos": [
+415.2,
+48.0
+],
+"size": [
+61,
+103
+]
+},
+{
+"name": "14_tooth",
+"bone": "tooth",
+"z": 14,
+"pos": [
+420.0,
+182.4
+],
+"size": [
+52,
+92
+]
+},
+{
+"name": "15_arms",
+"bone": "arms",
+"z": 15,
+"pos": [
+469.8,
+186.6
+],
+"size": [
+46,
+177
+]
+},
+{
+"name": "16_arms",
+"bone": "arms",
+"z": 16,
+"pos": [
+409.2,
+231.0
+],
+"size": [
+93,
+133
+]
+},
+{
+"name": "17_arms",
+"bone": "arms",
+"z": 17,
+"pos": [
+384.0,
+46.8
+],
+"size": [
+147,
+311
+]
+},
+{
+"name": "18_root",
+"bone": "root",
+"z": 18,
+"pos": [
+492.6,
+787.2
+],
+"size": [
+108,
+20
+]
+},
+{
+"name": "19_flames_front",
+"bone": "flames_front",
+"z": 19,
+"pos": [
+103.8,
+597.0
+],
+"size": [
+764,
+332
+]
+},
+{
+"name": "20_flame_reach",
+"bone": "flame_reach",
+"z": 20,
+"pos": [
+219.6,
+584.4
+],
+"size": [
+173,
+225
+]
+},
+{
+"name": "21_root",
+"bone": "root",
+"z": 21,
+"pos": [
+57.0,
+228.0
+],
+"size": [
+870,
+718
+]
+}
+]
+}

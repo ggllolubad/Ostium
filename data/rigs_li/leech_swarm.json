@@ -1,0 +1,201 @@
+{
+"key": "leech_swarm",
+"source": "worlds/world_II_leech_swarm",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+11,
+268,
+342,
+488
+],
+"bones": {
+"ground": {
+"pivot": [
+168.0,
+474.0
+],
+"parent": null
+},
+"jar": {
+"pivot": [
+278.7,
+479.46
+],
+"parent": "ground"
+},
+"heap": {
+"pivot": [
+102.0,
+468.0
+],
+"parent": "ground"
+},
+"spill": {
+"pivot": [
+173.82,
+388.14
+],
+"parent": "jar"
+},
+"leech_1": {
+"pivot": [
+121.2,
+372.0
+],
+"parent": "heap"
+},
+"leech_2": {
+"pivot": [
+85.2,
+367.2
+],
+"parent": "heap"
+},
+"leech_3": {
+"pivot": [
+52.8,
+390.0
+],
+"parent": "heap"
+},
+"leech_4": {
+"pivot": [
+150.0,
+403.2
+],
+"parent": "heap"
+},
+"crawler": {
+"pivot": [
+74.4,
+462.0
+],
+"parent": "ground"
+}
+},
+"layers": [
+{
+"name": "00_heap",
+"bone": "heap",
+"z": 0,
+"pos": [
+10.8,
+352.2
+],
+"size": [
+199,
+130
+]
+},
+{
+"name": "01_jar",
+"bone": "jar",
+"z": 1,
+"pos": [
+161.4,
+339.0
+],
+"size": [
+169,
+150
+]
+},
+{
+"name": "02_spill",
+"bone": "spill",
+"z": 2,
+"pos": [
+125.4,
+360.0
+],
+"size": [
+56,
+85
+]
+},
+{
+"name": "03_leech_1",
+"bone": "leech_1",
+"z": 3,
+"pos": [
+98.4,
+275.4
+],
+"size": [
+46,
+106
+]
+},
+{
+"name": "04_leech_2",
+"bone": "leech_2",
+"z": 4,
+"pos": [
+62.4,
+268.2
+],
+"size": [
+35,
+107
+]
+},
+{
+"name": "05_leech_3",
+"bone": "leech_3",
+"z": 5,
+"pos": [
+26.4,
+307.2
+],
+"size": [
+37,
+92
+]
+},
+{
+"name": "06_leech_4",
+"bone": "leech_4",
+"z": 6,
+"pos": [
+142.2,
+339.0
+],
+"size": [
+47,
+73
+]
+},
+{
+"name": "07_crawler",
+"bone": "crawler",
+"z": 7,
+"pos": [
+31.2,
+454.8
+],
+"size": [
+58,
+21
+]
+},
+{
+"name": "08_ground",
+"bone": "ground",
+"z": 8,
+"pos": [
+16.8,
+451.2
+],
+"size": [
+326,
+31
+]
+}
+]
+}

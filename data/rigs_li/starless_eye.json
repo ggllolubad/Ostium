@@ -1,0 +1,239 @@
+{
+"key": "starless_eye",
+"source": "worlds/world_XII_starless_eye",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+18,
+182,
+353,
+489
+],
+"bones": {
+"body": {
+"pivot": [
+124.8,
+271.2
+],
+"parent": null
+},
+"iris": {
+"pivot": [
+85.2,
+268.8
+],
+"parent": "body"
+},
+"lid_u": {
+"pivot": [
+136.8,
+211.2
+],
+"parent": "body"
+},
+"lid_l": {
+"pivot": [
+88.8,
+326.4
+],
+"parent": "body"
+},
+"trail_1": {
+"pivot": [
+196.8,
+277.2
+],
+"parent": "body"
+},
+"trail_2": {
+"pivot": [
+250.8,
+295.2
+],
+"parent": "trail_1"
+},
+"trail_3": {
+"pivot": [
+298.8,
+321.6
+],
+"parent": "trail_2"
+}
+},
+"layers": [
+{
+"name": "00_trail_1",
+"bone": "trail_1",
+"z": 0,
+"pos": [
+147.0,
+186.6
+],
+"size": [
+147,
+169
+]
+},
+{
+"name": "01_trail_2",
+"bone": "trail_2",
+"z": 1,
+"pos": [
+207.0,
+213.6
+],
+"size": [
+123,
+147
+]
+},
+{
+"name": "02_trail_3",
+"bone": "trail_3",
+"z": 2,
+"pos": [
+258.0,
+243.0
+],
+"size": [
+95,
+116
+]
+},
+{
+"name": "03_trail_1",
+"bone": "trail_1",
+"z": 3,
+"pos": [
+103.2,
+319.8
+],
+"size": [
+150,
+31
+]
+},
+{
+"name": "04_trail_2",
+"bone": "trail_2",
+"z": 4,
+"pos": [
+177.6,
+268.2
+],
+"size": [
+107,
+77
+]
+},
+{
+"name": "05_body",
+"bone": "body",
+"z": 5,
+"pos": [
+45.0,
+202.8
+],
+"size": [
+153,
+142
+]
+},
+{
+"name": "06_trail_1",
+"bone": "trail_1",
+"z": 6,
+"pos": [
+106.2,
+193.2
+],
+"size": [
+137,
+46
+]
+},
+{
+"name": "07_trail_1",
+"bone": "trail_1",
+"z": 7,
+"pos": [
+121.8,
+277.8
+],
+"size": [
+122,
+50
+]
+},
+{
+"name": "08_trail_1",
+"bone": "trail_1",
+"z": 8,
+"pos": [
+145.8,
+198.6
+],
+"size": [
+83,
+157
+]
+},
+{
+"name": "09_iris",
+"bone": "iris",
+"z": 9,
+"pos": [
+54.0,
+223.2
+],
+"size": [
+61,
+92
+]
+},
+{
+"name": "10_lid_u",
+"bone": "lid_u",
+"z": 10,
+"pos": [
+37.8,
+182.4
+],
+"size": [
+160,
+67
+]
+},
+{
+"name": "11_lid_l",
+"bone": "lid_l",
+"z": 11,
+"pos": [
+45.6,
+292.2
+],
+"size": [
+91,
+69
+]
+},
+{
+"name": "12_root",
+"bone": "root",
+"z": 12,
+"pos": [
+18.0,
+468.6
+],
+"size": [
+263,
+20
+]
+}
+]
+}

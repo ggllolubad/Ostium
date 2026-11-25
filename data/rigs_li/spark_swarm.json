@@ -1,0 +1,247 @@
+{
+"key": "spark_swarm",
+"source": "worlds/world_V_spark_swarm",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+28,
+124,
+338,
+492
+],
+"bones": {
+"core": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": null
+},
+"arcs": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_1": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_2": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_3": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_4": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_5": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_6": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_7": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+},
+"spark_8": {
+"pivot": [
+180.0,
+300.0
+],
+"parent": "core"
+}
+},
+"layers": [
+{
+"name": "00_root",
+"bone": "root",
+"z": 0,
+"pos": [
+106.8,
+443.4
+],
+"size": [
+146,
+49
+]
+},
+{
+"name": "01_core",
+"bone": "core",
+"z": 1,
+"pos": [
+67.2,
+181.2
+],
+"size": [
+218,
+202
+]
+},
+{
+"name": "02_spark_2",
+"bone": "spark_2",
+"z": 2,
+"pos": [
+233.4,
+200.4
+],
+"size": [
+48,
+65
+]
+},
+{
+"name": "03_spark_4",
+"bone": "spark_4",
+"z": 3,
+"pos": [
+100.8,
+204.0
+],
+"size": [
+74,
+28
+]
+},
+{
+"name": "04_spark_6",
+"bone": "spark_6",
+"z": 4,
+"pos": [
+64.2,
+284.4
+],
+"size": [
+55,
+57
+]
+},
+{
+"name": "05_spark_8",
+"bone": "spark_8",
+"z": 5,
+"pos": [
+138.0,
+204.6
+],
+"size": [
+29,
+59
+]
+},
+{
+"name": "06_core",
+"bone": "core",
+"z": 6,
+"pos": [
+114.0,
+148.2
+],
+"size": [
+133,
+230
+]
+},
+{
+"name": "07_core",
+"bone": "core",
+"z": 7,
+"pos": [
+78.0,
+184.2
+],
+"size": [
+206,
+195
+]
+},
+{
+"name": "08_spark_1",
+"bone": "spark_1",
+"z": 8,
+"pos": [
+231.0,
+267.6
+],
+"size": [
+107,
+41
+]
+},
+{
+"name": "09_spark_3",
+"bone": "spark_3",
+"z": 9,
+"pos": [
+168.0,
+124.2
+],
+"size": [
+100,
+119
+]
+},
+{
+"name": "10_spark_5",
+"bone": "spark_5",
+"z": 10,
+"pos": [
+27.6,
+196.2
+],
+"size": [
+100,
+95
+]
+},
+{
+"name": "11_spark_7",
+"bone": "spark_7",
+"z": 11,
+"pos": [
+216.6,
+315.6
+],
+"size": [
+56,
+69
+]
+}
+]
+}

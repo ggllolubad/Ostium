@@ -1,0 +1,194 @@
+{
+"key": "aurora_moth",
+"source": "worlds/world_XI_aurora_moth",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+95,
+115,
+318,
+483
+],
+"bones": {
+"body": {
+"pivot": [
+180.0,
+255.6
+],
+"parent": null
+},
+"head": {
+"pivot": [
+161.76,
+244.08
+],
+"parent": "body"
+},
+"abdomen": {
+"pivot": [
+195.24,
+265.2
+],
+"parent": "body"
+},
+"legs": {
+"pivot": [
+170.94,
+265.5
+],
+"parent": "body"
+},
+"wing_fn": {
+"pivot": [
+170.94,
+265.5
+],
+"parent": "body"
+},
+"wing_hn": {
+"pivot": [
+180.06,
+271.26
+],
+"parent": "body"
+},
+"wing_ff": {
+"pivot": [
+182.34,
+242.88
+],
+"parent": "body"
+},
+"wing_hf": {
+"pivot": [
+191.88,
+250.32
+],
+"parent": "body"
+}
+},
+"layers": [
+{
+"name": "00_wing_hf",
+"bone": "wing_hf",
+"z": 0,
+"pos": [
+187.8,
+205.2
+],
+"size": [
+100,
+70
+]
+},
+{
+"name": "01_wing_ff",
+"bone": "wing_ff",
+"z": 1,
+"pos": [
+178.2,
+114.6
+],
+"size": [
+115,
+141
+]
+},
+{
+"name": "02_wing_hn",
+"bone": "wing_hn",
+"z": 2,
+"pos": [
+176.4,
+261.0
+],
+"size": [
+130,
+76
+]
+},
+{
+"name": "03_wing_fn",
+"bone": "wing_fn",
+"z": 3,
+"pos": [
+166.2,
+257.4
+],
+"size": [
+152,
+152
+]
+},
+{
+"name": "04_abdomen",
+"bone": "abdomen",
+"z": 4,
+"pos": [
+180.6,
+246.6
+],
+"size": [
+94,
+83
+]
+},
+{
+"name": "05_legs",
+"bone": "legs",
+"z": 5,
+"pos": [
+126.6,
+252.6
+],
+"size": [
+60,
+53
+]
+},
+{
+"name": "06_body",
+"bone": "body",
+"z": 6,
+"pos": [
+141.0,
+218.4
+],
+"size": [
+77,
+78
+]
+},
+{
+"name": "07_head",
+"bone": "head",
+"z": 7,
+"pos": [
+130.8,
+168.0
+],
+"size": [
+56,
+89
+]
+},
+{
+"name": "08_root",
+"bone": "root",
+"z": 8,
+"pos": [
+94.2,
+468.0
+],
+"size": [
+183,
+15
+]
+}
+]
+}

@@ -1,0 +1,453 @@
+{
+"key": "pyre_knight",
+"source": "worlds/world_XIII_pyre_knight",
+"scale": 0.6,
+"canvas": [
+540,
+660
+],
+"ground": 642.0,
+"flip": true,
+"ink": [
+47,
+0,
+507,
+660
+],
+"bones": {
+"pelvis": {
+"pivot": [
+297.6,
+367.2
+],
+"parent": null
+},
+"torso": {
+"pivot": [
+294.96,
+343.62
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+270.78,
+206.52
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+306.18,
+225.96
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+360.0,
+240.0
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+349.2,
+174.0
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+249.18,
+228.9
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+204.0,
+282.0
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+172.8,
+336.0
+],
+"parent": "forearm_f"
+},
+"thigh_n": {
+"pivot": [
+321.24,
+364.56
+],
+"parent": "pelvis"
+},
+"shin_n": {
+"pivot": [
+342.0,
+496.8
+],
+"parent": "thigh_n"
+},
+"foot_n": {
+"pivot": [
+366.0,
+600.0
+],
+"parent": "shin_n"
+},
+"thigh_f": {
+"pivot": [
+273.96,
+369.84
+],
+"parent": "pelvis"
+},
+"shin_f": {
+"pivot": [
+248.4,
+492.0
+],
+"parent": "thigh_f"
+},
+"foot_f": {
+"pivot": [
+240.0,
+600.0
+],
+"parent": "shin_f"
+},
+"shield": {
+"pivot": [
+172.8,
+336.0
+],
+"parent": "hand_f"
+},
+"torch": {
+"pivot": [
+144.0,
+282.0
+],
+"parent": "shield"
+},
+"mace": {
+"pivot": [
+349.2,
+174.0
+],
+"parent": "hand_n"
+},
+"surcoat": {
+"pivot": [
+294.6,
+340.32
+],
+"parent": "pelvis"
+}
+},
+"layers": [
+{
+"name": "00_mace",
+"bone": "mace",
+"z": 0,
+"pos": [
+310.2,
+127.8
+],
+"size": [
+198,
+62
+]
+},
+{
+"name": "01_thigh_f",
+"bone": "thigh_f",
+"z": 1,
+"pos": [
+226.2,
+348.0
+],
+"size": [
+81,
+165
+]
+},
+{
+"name": "02_shin_f",
+"bone": "shin_f",
+"z": 2,
+"pos": [
+220.8,
+458.4
+],
+"size": [
+65,
+158
+]
+},
+{
+"name": "03_shin_f",
+"bone": "shin_f",
+"z": 3,
+"pos": [
+222.6,
+584.4
+],
+"size": [
+39,
+31
+]
+},
+{
+"name": "04_foot_f",
+"bone": "foot_f",
+"z": 4,
+"pos": [
+180.6,
+585.6
+],
+"size": [
+84,
+59
+]
+},
+{
+"name": "05_upperarm_f",
+"bone": "upperarm_f",
+"z": 5,
+"pos": [
+187.8,
+211.8
+],
+"size": [
+83,
+90
+]
+},
+{
+"name": "06_forearm_f",
+"bone": "forearm_f",
+"z": 6,
+"pos": [
+157.8,
+257.4
+],
+"size": [
+75,
+96
+]
+},
+{
+"name": "07_hand_f",
+"bone": "hand_f",
+"z": 7,
+"pos": [
+150.0,
+309.0
+],
+"size": [
+58,
+49
+]
+},
+{
+"name": "08_thigh_n",
+"bone": "thigh_n",
+"z": 8,
+"pos": [
+289.2,
+343.2
+],
+"size": [
+79,
+175
+]
+},
+{
+"name": "09_shin_n",
+"bone": "shin_n",
+"z": 9,
+"pos": [
+315.6,
+462.0
+],
+"size": [
+70,
+155
+]
+},
+{
+"name": "10_shin_n",
+"bone": "shin_n",
+"z": 10,
+"pos": [
+347.4,
+583.8
+],
+"size": [
+41,
+31
+]
+},
+{
+"name": "11_foot_n",
+"bone": "foot_n",
+"z": 11,
+"pos": [
+306.0,
+585.6
+],
+"size": [
+85,
+59
+]
+},
+{
+"name": "12_torso",
+"bone": "torso",
+"z": 12,
+"pos": [
+214.2,
+194.4
+],
+"size": [
+152,
+180
+]
+},
+{
+"name": "13_surcoat",
+"bone": "surcoat",
+"z": 13,
+"pos": [
+178.2,
+318.0
+],
+"size": [
+223,
+220
+]
+},
+{
+"name": "14_torso",
+"bone": "torso",
+"z": 14,
+"pos": [
+214.8,
+205.8
+],
+"size": [
+143,
+167
+]
+},
+{
+"name": "15_head",
+"bone": "head",
+"z": 15,
+"pos": [
+213.6,
+45.0
+],
+"size": [
+133,
+198
+]
+},
+{
+"name": "16_upperarm_n",
+"bone": "upperarm_n",
+"z": 16,
+"pos": [
+288.6,
+204.6
+],
+"size": [
+89,
+59
+]
+},
+{
+"name": "17_forearm_n",
+"bone": "forearm_n",
+"z": 17,
+"pos": [
+331.8,
+162.6
+],
+"size": [
+51,
+98
+]
+},
+{
+"name": "18_torso",
+"bone": "torso",
+"z": 18,
+"pos": [
+261.6,
+196.8
+],
+"size": [
+74,
+82
+]
+},
+{
+"name": "19_hand_n",
+"bone": "hand_n",
+"z": 19,
+"pos": [
+330.0,
+151.8
+],
+"size": [
+48,
+59
+]
+},
+{
+"name": "20_shield",
+"bone": "shield",
+"z": 20,
+"pos": [
+57.6,
+266.4
+],
+"size": [
+151,
+394
+]
+},
+{
+"name": "21_torch",
+"bone": "torch",
+"z": 21,
+"pos": [
+88.8,
+0.0
+],
+"size": [
+127,
+294
+]
+},
+{
+"name": "22_root",
+"bone": "root",
+"z": 22,
+"pos": [
+46.2,
+637.2
+],
+"size": [
+363,
+13
+]
+}
+]
+}

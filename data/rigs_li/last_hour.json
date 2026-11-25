@@ -1,0 +1,572 @@
+{
+"key": "last_hour",
+"source": "worlds/world_XI_the_last_hour",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": false,
+"ink": [
+34,
+0,
+960,
+951
+],
+"bones": {
+"case": {
+"pivot": [
+480.0,
+942.0
+],
+"parent": null
+},
+"dial": {
+"pivot": [
+480.0,
+360.0
+],
+"parent": "case"
+},
+"sunmoon": {
+"pivot": [
+480.0,
+360.0
+],
+"parent": "dial"
+},
+"hand_hour": {
+"pivot": [
+480.0,
+360.0
+],
+"parent": "dial"
+},
+"hand_min": {
+"pivot": [
+480.0,
+360.0
+],
+"parent": "dial"
+},
+"hand_sec": {
+"pivot": [
+480.0,
+360.0
+],
+"parent": "dial"
+},
+"gear_1": {
+"pivot": [
+462.0,
+720.0
+],
+"parent": "case"
+},
+"gear_2": {
+"pivot": [
+619.8,
+588.36
+],
+"parent": "case"
+},
+"gear_3": {
+"pivot": [
+306.3,
+529.74
+],
+"parent": "case"
+},
+"pendulum": {
+"pivot": [
+492.0,
+716.4
+],
+"parent": "case"
+},
+"hammer": {
+"pivot": [
+798.0,
+198.0
+],
+"parent": "case"
+},
+"bell": {
+"pivot": [
+882.0,
+72.0
+],
+"parent": "case"
+},
+"chain_l": {
+"pivot": [
+141.78,
+452.52
+],
+"parent": "case"
+},
+"chain_r": {
+"pivot": [
+882.0,
+384.0
+],
+"parent": "case"
+},
+"astronomer": {
+"pivot": [
+384.0,
+690.0
+],
+"parent": "gear_1"
+},
+"astrolabe": {
+"pivot": [
+222.0,
+636.0
+],
+"parent": "hand_na"
+},
+"astro_head": {
+"pivot": [
+349.44,
+546.54
+],
+"parent": "astronomer"
+},
+"upperarm_na": {
+"pivot": [
+317.58,
+567.48
+],
+"parent": "astronomer"
+},
+"forearm_na": {
+"pivot": [
+282.0,
+636.0
+],
+"parent": "upperarm_na"
+},
+"hand_na": {
+"pivot": [
+223.2,
+627.6
+],
+"parent": "forearm_na"
+},
+"upperarm_fa": {
+"pivot": [
+358.62,
+564.0
+],
+"parent": "astronomer"
+},
+"forearm_fa": {
+"pivot": [
+400.8,
+528.0
+],
+"parent": "upperarm_fa"
+},
+"hand_fa": {
+"pivot": [
+420.0,
+480.0
+],
+"parent": "forearm_fa"
+}
+},
+"layers": [
+{
+"name": "00_case",
+"bone": "case",
+"z": 0,
+"pos": [
+33.6,
+0.0
+],
+"size": [
+920,
+949
+]
+},
+{
+"name": "01_chain_r",
+"bone": "chain_r",
+"z": 1,
+"pos": [
+849.0,
+378.6
+],
+"size": [
+72,
+504
+]
+},
+{
+"name": "02_pendulum",
+"bone": "pendulum",
+"z": 2,
+"pos": [
+423.0,
+712.8
+],
+"size": [
+134,
+239
+]
+},
+{
+"name": "03_dial",
+"bone": "dial",
+"z": 3,
+"pos": [
+48.6,
+0.0
+],
+"size": [
+818,
+824
+]
+},
+{
+"name": "04_gear_2",
+"bone": "gear_2",
+"z": 4,
+"pos": [
+527.4,
+496.8
+],
+"size": [
+188,
+188
+]
+},
+{
+"name": "05_gear_3",
+"bone": "gear_3",
+"z": 5,
+"pos": [
+238.2,
+462.0
+],
+"size": [
+140,
+163
+]
+},
+{
+"name": "06_upperarm_fa",
+"bone": "upperarm_fa",
+"z": 6,
+"pos": [
+345.6,
+513.0
+],
+"size": [
+71,
+70
+]
+},
+{
+"name": "07_forearm_fa",
+"bone": "forearm_fa",
+"z": 7,
+"pos": [
+385.8,
+474.0
+],
+"size": [
+50,
+70
+]
+},
+{
+"name": "08_forearm_fa",
+"bone": "forearm_fa",
+"z": 8,
+"pos": [
+409.8,
+498.0
+],
+"size": [
+16,
+32
+]
+},
+{
+"name": "09_hand_fa",
+"bone": "hand_fa",
+"z": 9,
+"pos": [
+398.4,
+457.2
+],
+"size": [
+44,
+51
+]
+},
+{
+"name": "10_astronomer",
+"bone": "astronomer",
+"z": 10,
+"pos": [
+288.0,
+519.6
+],
+"size": [
+173,
+254
+]
+},
+{
+"name": "11_gear_1",
+"bone": "gear_1",
+"z": 11,
+"pos": [
+357.6,
+616.2
+],
+"size": [
+212,
+213
+]
+},
+{
+"name": "12_astronomer",
+"bone": "astronomer",
+"z": 12,
+"pos": [
+348.6,
+628.2
+],
+"size": [
+208,
+118
+]
+},
+{
+"name": "13_astro_head",
+"bone": "astro_head",
+"z": 13,
+"pos": [
+311.4,
+469.8
+],
+"size": [
+94,
+95
+]
+},
+{
+"name": "14_upperarm_na",
+"bone": "upperarm_na",
+"z": 14,
+"pos": [
+265.8,
+558.0
+],
+"size": [
+73,
+97
+]
+},
+{
+"name": "15_forearm_na",
+"bone": "forearm_na",
+"z": 15,
+"pos": [
+218.4,
+614.4
+],
+"size": [
+80,
+42
+]
+},
+{
+"name": "16_upperarm_na",
+"bone": "upperarm_na",
+"z": 16,
+"pos": [
+293.4,
+586.8
+],
+"size": [
+5,
+35
+]
+},
+{
+"name": "17_forearm_na",
+"bone": "forearm_na",
+"z": 17,
+"pos": [
+229.2,
+612.0
+],
+"size": [
+50,
+55
+]
+},
+{
+"name": "18_hand_na",
+"bone": "hand_na",
+"z": 18,
+"pos": [
+183.6,
+601.8
+],
+"size": [
+86,
+55
+]
+},
+{
+"name": "19_astrolabe",
+"bone": "astrolabe",
+"z": 19,
+"pos": [
+174.6,
+617.4
+],
+"size": [
+32,
+106
+]
+},
+{
+"name": "20_sunmoon",
+"bone": "sunmoon",
+"z": 20,
+"pos": [
+357.0,
+203.4
+],
+"size": [
+248,
+318
+]
+},
+{
+"name": "21_dial",
+"bone": "dial",
+"z": 21,
+"pos": [
+44.4,
+0.0
+],
+"size": [
+801,
+808
+]
+},
+{
+"name": "22_hand_sec",
+"bone": "hand_sec",
+"z": 22,
+"pos": [
+129.0,
+283.8
+],
+"size": [
+460,
+106
+]
+},
+{
+"name": "23_hand_hour",
+"bone": "hand_hour",
+"z": 23,
+"pos": [
+451.8,
+135.6
+],
+"size": [
+58,
+280
+]
+},
+{
+"name": "24_hand_min",
+"bone": "hand_min",
+"z": 24,
+"pos": [
+433.8,
+18.6
+],
+"size": [
+70,
+422
+]
+},
+{
+"name": "25_dial",
+"bone": "dial",
+"z": 25,
+"pos": [
+114.0,
+0.0
+],
+"size": [
+610,
+592
+]
+},
+{
+"name": "26_dial",
+"bone": "dial",
+"z": 26,
+"pos": [
+400.8,
+330.6
+],
+"size": [
+107,
+69
+]
+},
+{
+"name": "27_bell",
+"bone": "bell",
+"z": 27,
+"pos": [
+792.0,
+0.0
+],
+"size": [
+168,
+164
+]
+},
+{
+"name": "28_hammer",
+"bone": "hammer",
+"z": 28,
+"pos": [
+783.6,
+81.6
+],
+"size": [
+90,
+135
+]
+},
+{
+"name": "29_case",
+"bone": "case",
+"z": 29,
+"pos": [
+69.6,
+926.4
+],
+"size": [
+833,
+20
+]
+}
+]
+}

@@ -1,0 +1,30 @@
+{
+ "w": 1480,
+ "h": 480,
+ "shown_at": 2,
+ "camera": {
+  "horizon": 300,
+  "eye_m": 1.2,
+  "focal_px": 652,
+  "cx": 740
+ },
+ "fighters": {
+  "z_m": 6,
+  "feet_y": 430,
+  "human_px": 190,
+  "figure_scale": 0.2971
+ },
+ "boss_stage": {
+  "x": [
+   814,
+   1480
+  ],
+  "star_centre_1x": [
+   1165,
+   103
+  ],
+  "star_radius_1x": 148,
+  "note": "the lake mirrors the rings about the horizon round the star placed at 2x x 2330; the figure's own root bone (tundra and camp) is dropped in the preview, the room supplies the ground"
+ },
+ "world_dir": "XII"
+}
