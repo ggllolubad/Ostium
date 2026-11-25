@@ -486,7 +486,7 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	var ctx := {"x": a.get("x", 0), "half": a.get("echo", false), "prime": 0 if a.get("echo", false) else s.prime,
 		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target}
 	if not a.get("echo", false):
-		s.prime = 0
+		s.prime = 0   # this action's own Prime effects build the next action's Prime
 	var targets := _targets_for(s, h, c, a)
 	var neuro: bool = h.st.neuro > 0
 	if neuro:
@@ -499,6 +499,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		if fi >= 0:
 			s.fresh_on_belt.remove_at(fi)
 	_exec(s, h, c, targets, ctx, neuro)
+	if not a.get("echo", false) and int(ctx.get("prime", 0)) > 0:
+		s.prime += int(ctx.prime)   # Prime this action could not use carries to the next one (Gate 3)
 	s.last_target = a.get("target", -1)
 	h.played += 1
 	if a.get("source", "") == "belt":
@@ -947,7 +949,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			ctx.dealt += _attack(s, actor, t, n * elements_on(t) + ctx.prime, false, {})
 			ctx.prime = 0
 		"block", "self_block", "block_target":
-			_gain_block(s, t, n)
+			_gain_block(s, t, n + _take_prime(s, ctx, false))
 		"armor":
 			t.armor = max(0, t.armor + n)
 			_ev(s, {"t": "status", "unit": t.id, "text": ("%+d Armor" % n)})
@@ -962,7 +964,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 		"clear":
 			t.st[fx.s] = 0
 		"apply":
-			_apply_element(s, actor, t, fx.e, n, fx.get("attr", c.get("attr", "stable")))
+			_apply_element(s, actor, t, fx.e, n + _take_prime(s, ctx, true), fx.get("attr", c.get("attr", "stable")))
 		"apply_x":
 			if ctx.x > 0:
 				_apply_element(s, actor, t, fx.e, ctx.x if not ctx.half else int(ceil(ctx.x / 2.0)), fx.get("attr", "volatile"))
@@ -1032,7 +1034,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			if t.st.mark > 0 or t.moved:
 				_add_status(s, actor, t, "stun", 1, false)
 		"heal":
-			_heal(s, t, n)
+			_heal(s, t, n + _take_prime(s, ctx, false))
 		"stress":
 			if t.side == "hero":
 				if n > 0:
@@ -1267,6 +1269,15 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 				_add_status(s, actor, t, "hex", n, false)
 		_:
 			push_error("unknown fx type: " + str(fx.t))
+
+## Prime spent by a non-damage effect: full on Block and healing, half (rounded up) on course stacks.
+static func _take_prime(s: Dictionary, ctx: Dictionary, half: bool) -> int:
+	var p: int = int(ctx.get("prime", 0))
+	if p <= 0:
+		return 0
+	ctx.prime = 0
+	s.primes_consumed = s.get("primes_consumed", 0) + 1
+	return int(ceil(p / 2.0)) if half else p
 
 static func _delay(s: Dictionary, t: Dictionary) -> void:
 	if t.side != "enemy" or t.dead:
@@ -1771,6 +1782,7 @@ static func end_round(s: Dictionary) -> void:
 				u.hp = _next_threshold_hp(u)
 				_ev(s, {"t": "reaction", "unit": u.id, "text": "Doom breaks"})
 				_log(s, "Doom breaks %s." % u.name)
+				u.st.doom = 0   # the Doom is spent breaking the phase
 				_check_phase(s, u)
 			else:
 				_ev(s, {"t": "reaction", "unit": u.id, "text": "Doom"})

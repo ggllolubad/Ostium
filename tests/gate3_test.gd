@@ -45,6 +45,23 @@ func _init() -> void:
 	card("t_unbind", {"target": "enemy", "fx": [{"t": "unbind", "n": 3}]})
 	card("t_aff", {"rarity": "A", "target": "none", "use": [], "kw": ["Affliction", "Unplayable"], "fx": [], "on_draw": [{"t": "apply", "e": "water", "n": 2, "attr": "stable"}]})
 
+	# --- Prime carries past actions that cannot use it, and boosts Block
+	card("t_prime", {"fx": [{"t": "prime", "n": 3}]})
+	var sp := fresh()
+	var o: Dictionary = sp.heroes[2]
+	play(sp, o, "t_prime")
+	play(sp, o, "t_prime")
+	ok(sp.prime == 6, "two Prime cards stack (prime %d)" % sp.prime)
+	var ep: Dictionary = sp.enemies[0]
+	var hpp: int = ep.hp
+	play(sp, sp.heroes[1], "t_hit", ep.id)
+	ok(sp.prime == 0, "a hit spends the Prime")
+	card("t_blk", {"fx": [{"t": "block", "n": 2}]})
+	play(sp, o, "t_prime")
+	o.block = 0
+	play(sp, o, "t_blk")
+	ok(o.block == 5, "Prime adds to Block (block %d)" % o.block)
+
 	# --- rites
 	var s := fresh()
 	var b: Dictionary = s.heroes[0]
