@@ -38,6 +38,7 @@ Statuses (`ST(name, n)` on the target, `SELF(name, n)` on yourself, `CLR(name)` 
 | `blight` | No healing (and, on a foe, no Block) while it lasts. Rounds |
 | `neuro` | The unit's next action keeps only its first effect |
 | `lockdown` | Acts last this round (a hero's cards resolve after the others') while it lasts. Rounds |
+| `empower` | One-shot: the unit's next hit deals this much more, then it is spent (a loaded blow, a horn of mead) |
 | `charge` | An enemy's visible counter (pressure, a boiling pool, a tolling bell). Raised by `SELF("charge", n)`, read by AI rules (`"if": "charge>=3"`), cleared by `CLR("charge")`. Shown with the creature's `charge_name` |
 
 Words (hover text, no new syntax):
@@ -107,7 +108,8 @@ Every effect takes these optional keys:
 | `UNBIND(n)` | Take one affliction card out of the company's decks for this fight; the target foe suffers its when-drawn effect and gains n Hex |
 | `DISCARD_RANDOM()` | The target hero discards a random card (enemy use) |
 | `LOSE_ARMOR(n)` | The target loses n Armor (enemy use) |
-| `SUMMON(key, max=2)` | Enemy only: call a creature into the rearmost empty rank (at most `max` per fight) |
+| `SUMMON(key, max=2, front=True)` | Enemy only: call a creature into the rearmost empty rank, or the front with `front=True` (at most `max` per fight) |
+| `TRANSFER(frm=, n=1)` | With `n`, moves only the n largest ailments (each with all its stacks) |
 
 ## 3. Quantities and conditions
 
@@ -117,7 +119,8 @@ target.
 
 Unit quantities: `hp`, `max_hp`, `missing_hp`, `hp_pct`, `block`, `armor`, `ward`, `stress`, `grit`, `omen`, `played`
 (cards this hero played this round), `resolve`, `dd` (at Death's Door), `rank`, `spectrum`, `el_total`, `el_max`,
-`attuned`, `attacking`, `targeting_me`, `moved`, `hand`, `draw`, `discard`, `exhaust`, `ailments`, `scars`, every course
+`attuned`, `attacking`, `targeting_me`, `moved`, `hand`, `draw`, `discard`, `exhaust`, `ailments`, `scars`, `delayed` (was Delayed this round), `incoming_to` (attack damage
+aimed at the unit), `targeted` (foes aiming an attack at the unit), every course
 key (`fire` ... `void`) and every status name.
 
 Fight quantities: `x`, `consumed`, `dealt`, `killed`, `prime_count`, `reactions` (Conjunctions this round), `enemies`,
@@ -151,7 +154,9 @@ card(id, name, cost, rarity, target, fx, text,
   `"cat": "fire"`), `flask` (any hero uses a flask; the drinker is the target), `conjunction` (the company sets off a
   Conjunction; the foe is the target), `kill` (a foe dies), `hit` (a foe's attack hits this hero; the attacker is the
   target), `ally_hit` (a foe hits another hero; the attacker is the target), `execute` (an execute kills or breaks).
-  Effects without `to` land on the trigger's target, or on the hero who owns the rite if there is none.
+  Effects without `to` land on the trigger's target, or on the hero who owns the rite if there is none. For `play`,
+  the target is the played card's target; for `kill`, `m.` reads the foe that died. `"rounds": n` ends the rite n
+  rounds after it was played.
 
 ## 5. Creature fields (`tools/content/v3/creatures.py`)
 
@@ -165,12 +170,15 @@ creature(key, name, tier, hp, armor=0, span=1, ranks=[preferred ranks], resist={
 - Tiers: `foe`, `elite`, `ruler`. `span`: 1, or 2 for rulers and at most one elite per world (DECISIONS row 13).
 - Intent kinds: `attack`, `defend`, `buff`, `debuff`, `heal`, `summon`, `charge` (a wind-up that shows what comes).
 - Intent targets: `front`, `back`, `rank2`, `rank3`, `front2` (ranks 1 and 2), `back2` (ranks 3 and 4), `random`,
-  `weakest` (lowest HP%), `most_stress`, `all_heroes`, `self`, `ally_lowest`, `all_allies`, `ally_front`.
+  `weakest` (lowest HP%), `most_stress`, `all_heroes`, `self`, `ally_lowest`, `all_allies`, `ally_front`, `marked`,
+  `most_cards`, `heaviest` (most Block plus Armor), `healthiest`, `most_burn`, `most_played` (cards last round),
+  `acted_last` (the hero who acted last), `first_actor` (the hero who led the last Ordo).
   Intent text is generated from the effects; do not write it.
 - AI rules, first match wins: `{"use": id, "if": cond, "every": n, "offset": k, "not_twice": True, "once": True}`.
   Conditions use section 3 from the creature's side (`hp_pct`, `round`, `charge`, `ally_hurt`, `hero_dd`,
   `enemies` (heroes standing), `allies` ...). The last rule should have no condition.
-- Trait triggers: `round_start`, `round_end`, `hit`, `death`, `ally_death`, `phase`. Foes 0 or 1 trait, elites 1,
+- Trait triggers: `round_start`, `round_end`, `hit`, `death`, `ally_death`, `phase`, `moved` (it was pushed or pulled),
+  `course` (a hero laid a course on it; `T(..., e="lightning")` filters by course), `lost_action` (Stunned or Frozen). Foes 0 or 1 trait, elites 1,
   rulers 1 or 2.
 - Phases (rulers): `P(at, text, ai=[...], might=n, fx=[...])`, entered when HP falls to `at` percent. 2 or 3 phases.
 - Personality: `mindless` (finishes heroes at Death's Door), `cruel` (targets the most stressed), `cunning` (targets

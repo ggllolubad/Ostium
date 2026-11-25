@@ -13,7 +13,7 @@ const REF = {1: [1, ["C"], 0, 0], 2: [2, ["C"], 0, 0], 3: [3, ["C"], 0, 1], 4: [
 
 ## Build plans (Cole, 2026-11-25): a hero with a plan drafts toward it. weight 3 = core, 2 = support, 1 = filler.
 ## Each plan names its calling and the path it takes at level 4.
-const BUILDS = {
+var BUILDS = {
 	"thorn_wall": {"cls": "bulwark", "sub": "thornguard", "cards": {"briar_mail": 3, "barbed_plates": 3, "iron_maiden": 3, "crown_of_thorns": 2, "rose_of_iron": 3, "hedge_of_spikes": 2, "bramble_bash": 3, "blood_thorns": 2, "harvest_of_barbs": 2, "punishing_wall": 3, "rampart": 2, "iron_skin": 1, "spiked_boss": 1, "spiteful_guard": 2, "jeer": 1}},
 	"iron_juggernaut": {"cls": "bulwark", "sub": "ironwarden", "cards": {"tower_of_iron": 3, "glacier_wall": 3, "body_slam": 3, "juggernaut": 3, "punish": 2, "bastions_oath": 2, "oathkeeper": 2, "rivet_strike": 2, "gatekeeper": 2, "shatterguard": 3, "stand_fast": 1, "dig_in": 1, "unbreakable": 2}},
 	"tempo_blade": {"cls": "duelist", "sub": "bladedancer", "cards": {"tempo": 3, "graceful": 3, "pirouette": 3, "momentum_shift": 2, "storm_of_steel": 3, "crescendo": 3, "last_dance": 3, "dance_of_knives": 2, "tempest_feint": 2, "probe": 1, "flick": 1, "crossguard": 1, "adrenaline": 2, "killing_tempo": 1}},
@@ -40,6 +40,9 @@ func arg(name: String, dflt: String) -> String:
 	return dflt
 
 func _init() -> void:
+	# Gate 3: archetype plans come from the content build (data/archetypes.json) when it exists
+	if FileAccess.file_exists("res://data/archetypes.json"):
+		BUILDS = JSON.parse_string(FileAccess.get_file_as_string("res://data/archetypes.json"))
 	var party: Array = arg("party", "bulwark,duelist,elementalist").split(",")
 	var bl = arg("builds", "")
 	if bl != "":
@@ -278,6 +281,18 @@ func take_rewards() -> void:
 				var pick = draft(h, ch)
 				if pick != "":
 					h.deck.append(pick)
+			"legendary":
+				var ch = Run.legendary_choices(h)
+				var plan: Dictionary = BUILDS.get(h.get("build", ""), {}).get("cards", {})
+				var pick := ""
+				for id in ch:
+					if plan.has(id):
+						pick = id
+				if pick == "" and not ch.is_empty():
+					pick = ch[0]
+				if pick != "":
+					h.deck.append(pick)
+					stats["legendaries"] = stats.get("legendaries", 0) + 1
 			"subclass":
 				h.subclass = Data.HEROES[h.key].subclasses.keys()[int(Run.r.seed) % 3]
 				if h.get("build", "") != "":

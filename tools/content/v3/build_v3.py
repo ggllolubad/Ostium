@@ -91,19 +91,19 @@ QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used"}
 STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "taunt", "thorns", "dodge", "regen",
-          "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown"}
+          "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown", "empower"}
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}
 QU = {"hp", "max_hp", "block", "armor", "ward", "stress", "grit", "omen", "played", "resolve", "missing_hp", "hp_pct", "dd", "rank",
       "elements", "spectrum", "el_total", "el_max", "attuned", "attacking", "targeting_me", "moved", "exhaust", "discard", "hand",
-      "draw", "debuffs", "ailments", "scars", "cap"} | ELS | STATUS
+      "draw", "debuffs", "ailments", "scars", "cap", "delayed", "incoming_to", "targeted"} | ELS | STATUS
 KW = {"Exhaust", "Retain", "Echo", "Rite", "Finisher", "Execute", "Fresh", "Dosed", "Curse", "Affliction", "Flask",
       "Unplayable", "Temporary"}
 RAR = {"S", "C", "U", "R", "X", "L", "K", "F", "N", "W", "A", "Curse"}
 TGT = {"enemy", "all_enemies", "self", "ally", "ally_other", "adjacent_ally", "all_allies", "none"}
 TO = {"self", "target", "all_enemies", "all_allies", "allies_other", "adjacent", "behind", "in_front", "front_enemy",
-      "lowest_ally", "attackers"}
+      "lowest_ally", "attackers", "front2", "self_adjacent", "killer"}
 RITE_ON = {"round_start", "round_end", "play", "flask", "conjunction", "kill", "hit", "ally_hit", "execute"}
-CATS = {"physical"} | ELS
+CATS = {"physical", "attuned"} | ELS
 DASH = re.compile("—|–|--")
 
 bad = []
@@ -414,6 +414,28 @@ if "--install" in args and not only:
                     continue
                 coms.setdefault(w, []).append({"ruler": k, "name": it["name"], "text": it["text"]})
         json.dump(coms, open(os.path.join(data, "commissions.json"), "w"), indent=1)
+        # archetype plans for the build-aware simulator: each path's cards (and hybrids of two paths of one calling)
+        RW = {"S": 0, "C": 2, "U": 2.5, "R": 3, "X": 3, "L": 3}
+        builds = {}
+        for h, H in heroes.items():
+            subs = list(H.get("subclasses", {}))
+            keyc = getattr(sys.modules.get(h), "ARCHETYPES", {}) or {}
+            def plan(tags):
+                cards = {}
+                for cid, c in dsl.CARDS.items():
+                    if c["cls"] != h or c["rarity"] not in RW or not RW[c["rarity"]]:
+                        continue
+                    tag = set(c.get("arch", "").split("+"))
+                    if tag & tags:
+                        cards[cid] = RW[c["rarity"]] + (1 if any(cid in keyc.get(t, []) for t in tags) else 0)
+                return cards
+            for sub in subs:
+                builds[f"{h}:{sub}"] = {"cls": h, "sub": sub, "cards": plan({sub}), "key": keyc.get(sub, [])}
+            for i in range(len(subs)):
+                for j in range(i + 1, len(subs)):
+                    builds[f"{h}:{subs[i]}+{subs[j]}"] = {"cls": h, "sub": subs[i], "cards": plan({subs[i], subs[j]}),
+                                                         "key": keyc.get(subs[i], []) + keyc.get(subs[j], [])}
+        json.dump(builds, open(os.path.join(data, "archetypes.json"), "w"), indent=1)
         if missing:
             print("commissions with no matching ruler:", missing)
         print(f"installed into data/: {len(dsl.CARDS)} cards, {len(hs)} callings, {len(en)} creatures, {len(rooms)} encounters")

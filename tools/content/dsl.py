@@ -79,7 +79,7 @@ def IMPROVE(n=1, **kw): return _fx("improve", n, **kw)
 def UNBIND(n=1, **kw): return _fx("unbind", n, **kw)
 def DISCARD_RANDOM(**kw): return _fx("discard_random", **kw)
 def LOSE_ARMOR(n=1, **kw): return _fx("lose_armor", n, **kw)
-def SUMMON(key, max=2, **kw): return _fx("summon", e=key, max=max, **kw)
+def SUMMON(key, max=2, front=None, **kw): return _fx("summon", e=key, max=max, front=front, **kw)
 
 
 def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical", attr=None, kw=None, sub=None, art=None, flask=False,
