@@ -363,7 +363,7 @@ func _header(parent: Control) -> void:
 		"escort": extra = " · pilgrim heart %d" % r.pilgrim
 	var I := func(k: String) -> String: return UiStyle.icon_tag(k, 26)
 	_rich("[b]%s[/b] · %s%s\n%s gold [b]%d[/b]   %s food [b]%d[/b]   %s light [b]%d[/b]   %s medicine [b]%d[/b]   %s tools [b]%d[/b]   ·   doom [b]%d[/b] (level %d)%s" %
-		[obj.name, Run.world_name(), extra, I.call("gold"), r.gold, I.call("food"), sup.food, I.call("light"), sup.light, I.call("medicine"), sup.medicine, I.call("tools"), sup.tools, r.doom, Run.doom_level(), "   ·   [color=#9c3d2b]darkness: foes +1 Might[/color]" if sup.light <= 0 else ""],
+		[("Commission: " + Data.ENEMIES[r.commission].name) if String(r.get("commission", "")) != "" and Data.ENEMIES.has(r.commission) else obj.name, Run.world_name(), extra, I.call("gold"), r.gold, I.call("food"), sup.food, I.call("light"), sup.light, I.call("medicine"), sup.medicine, I.call("tools"), sup.tools, r.doom, Run.doom_level(), "   ·   [color=#9c3d2b]darkness: foes +1 Might[/color]" if sup.light <= 0 else ""],
 		Vector2(60, 20), Vector2(1100, 60), 17, parent)
 	var rl := []
 	for id in r.relics:

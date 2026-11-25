@@ -21,8 +21,18 @@ func _initialize() -> void:
 		await process_frame
 		await process_frame
 		SaveIO.remove(Run.meta_path())
-	elif mode == "map" or mode == "camp" or mode == "sub":
-		m.run_ui._begin_run()
+	elif mode == "map" or mode == "camp" or mode == "sub" or mode == "prepare":
+		m.hub.visible = false
+		m.run_ui.visible = true
+		m.run_ui.hub_world = OS.get_environment("WORLD") if OS.get_environment("WORLD") != "" else "drowned"
+		SaveIO.remove(Run.meta_path())   # a fresh abbey: the starting company
+		Run.meta_load()
+		if mode == "prepare":
+			m.run_ui.show_prepare()
+		else:
+			m.run_ui._begin_run()
+		for k in 6:
+			await process_frame
 		if mode == "camp":
 			m.run_ui.show_waypoint()
 		if mode == "sub":

@@ -18,7 +18,8 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 RS = 0.6          # rig storage scale: the battle draws rigs at 0.2971 of rig px, so this keeps about 2x detail
 Q = 90            # WebP quality
 HEROES = {"bulwark": "dirAC_bulwark", "duelist": "dirAC_duelist", "elementalist": "dirAC_elementalist",
-          "alchemist": "dirAC2_alchemist", "hexweaver": "dirAC2_hexweaver", "oracle": "dirAC2_oracle"}
+          "alchemist": "dirAC2_alchemist", "hexweaver": "dirAC2_hexweaver", "oracle": "dirAC2_oracle",
+          "vessel": "worlds/hero_vessel_vessel"}
 ALIAS = {"thrall": "dirAC2_thrall", "cyclops_smith": "worlds/world_V_sparkblind_smith",
          "hive_queen": "worlds/world_X_hive_queen"}
 ELEMENTS = ["fire", "frost", "lightning", "water", "toxin", "void"]

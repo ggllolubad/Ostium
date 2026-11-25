@@ -79,6 +79,9 @@ def IMPROVE(n=1, **kw): return _fx("improve", n, **kw)
 def UNBIND(n=1, **kw): return _fx("unbind", n, **kw)
 def DISCARD_RANDOM(**kw): return _fx("discard_random", **kw)
 def LOSE_ARMOR(n=1, **kw): return _fx("lose_armor", n, **kw)
+def TAKE(e="largest", n=0, **kw): return _fx("take", n, e=e, **kw)
+def GIVE(e="largest", n=0, attr="stable", **kw): return _fx("give", n, e=e, attr=attr, **kw)
+def EVEN(**kw): return _fx("even", **kw)
 def SUMMON(key, max=2, front=None, **kw): return _fx("summon", e=key, max=max, front=front, **kw)
 
 

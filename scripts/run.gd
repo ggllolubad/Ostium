@@ -122,6 +122,10 @@ static func world_name() -> String:
 const THREAT_HP := [1.5, 1.63, 1.75, 1.89, 2.02, 2.2, 2.38, 2.56, 2.75, 2.92, 3.08, 3.26, 3.43, 3.58, 3.73]
 const THREAT_DMG := [1.32, 1.51, 1.73, 1.94, 2.17, 2.47, 2.8, 3.15, 3.51, 3.89, 4.3, 4.73, 5.17, 5.63, 6.12]
 
+## Gate 3 creature HP against Gate 3 cards: the Threat curve was calibrated on the old cards, which hit harder.
+## The simulator sets this (rules hp_scale) until it is folded into THREAT_HP.
+const CONTENT_HP := 0.6
+
 ## Foe HP and damage by company size (index = heroes in the fight), so every size is equally hard.
 const PARTY_HP := [1.0, 0.5, 0.68, 1.0, 1.3]
 const PARTY_DMG := [1.0, 0.7, 0.82, 1.0, 1.15]
@@ -267,6 +271,7 @@ static func combat_setup() -> Dictionary:
 	# company size (Rules v2 variants, 2026-11-25: 2 heroes cleared 2%, 3 heroes 40%, 4 heroes 93% at equal Threat)
 	var n_alive: int = clampi(r.heroes.size(), 1, 4)   # the company that set out: a death does not make foes weaker
 	foe_hp *= float(Combat.RULES.get("party_hp_%d" % n_alive, PARTY_HP[n_alive]))
+	foe_hp *= float(Combat.RULES.get("hp_scale", CONTENT_HP))   # Gate 3 content scale (see CONTENT_HP)
 	var foe_dmg: float = THREAT_DMG[tl] * float(Combat.RULES.get("party_dmg_%d" % n_alive, PARTY_DMG[n_alive]))
 	return {"heroes": hs, "world": r.get("world", ""), "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "foe_might": foe_might, "foe_dmg": foe_dmg,
 		"boss_hp": 1.15 if has_asc("a_boss") else 1.0}

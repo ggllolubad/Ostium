@@ -1,0 +1,212 @@
+<title>Ostium Card Sheets</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&family=UnifrakturMaguntia&display=swap">
+<style>
+/* Layout: a rubricated sheet. Sticky tab rail of callings, filters, then a grid of cards drawn like the game's own. */
+:root {
+  --bg: #e9e1cf; --sheet: #f4eedf; --ink: #2a211a; --ink-2: #5b4c3d; --rule: #c9b99a;
+  --rubric: #9c3d2b; --gilt: #a7812f; --chip: #e2d6bc; --shadow: rgba(42, 33, 26, .12);
+  --c-fire: #b8461c; --c-frost: #5c8fae; --c-lightning: #a88a1e; --c-water: #2e5f93; --c-toxin: #5f7d27; --c-void: #6a3d86; --c-physical: #5b4c3d;
+  --display: "UnifrakturMaguntia", "Old English Text MT", serif;
+  --body: "EB Garamond", Garamond, "Times New Roman", serif;
+  --sc: "IM Fell English SC", "EB Garamond", serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #17130f; --sheet: #221c16; --ink: #eadfc8; --ink-2: #b9a98e; --rule: #44382b; --rubric: #d2735d; --gilt: #d2ad5b;
+  --chip: #2e261e; --shadow: rgba(0, 0, 0, .4); --c-physical: #b9a98e; --c-water: #6d9ad0; --c-void: #a57cc2; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #17130f; --sheet: #221c16; --ink: #eadfc8; --ink-2: #b9a98e; --rule: #44382b; --rubric: #d2735d; --gilt: #d2ad5b;
+  --chip: #2e261e; --shadow: rgba(0, 0, 0, .4); --c-physical: #b9a98e; --c-water: #6d9ad0; --c-void: #a57cc2; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.4; }
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; max-width: 1500px; margin: 0 auto; }
+header.top { padding-block: 20px 6px; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); margin: 0; color: var(--rubric); line-height: 1; }
+.lede { color: var(--ink-2); font-style: italic; margin: 6px 0 0; max-width: 70ch; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; flex-wrap: wrap; gap: 6px; padding-block: 10px; border-bottom: 1px solid var(--rule); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav.tabs a { font-family: var(--sc); font-size: 15px; text-decoration: none; color: var(--ink); padding: 5px 11px; border: 1px solid var(--rule); border-radius: 3px; background: var(--sheet); }
+nav.tabs a[aria-current="page"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+nav.tabs a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--rubric); outline-offset: 2px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end; padding-block: 18px 10px; }
+.hero h2 { font-family: var(--display); font-weight: 400; font-size: 2.1rem; margin: 0; }
+.hero p { margin: 4px 0 0; color: var(--ink-2); max-width: 75ch; }
+.stats { font-family: var(--sc); color: var(--ink-2); font-size: 15px; text-align: right; font-variant-numeric: tabular-nums; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-block: 8px 14px; }
+.chip { font-family: var(--sc); font-size: 14px; border: 1px solid var(--rule); background: var(--chip); color: var(--ink); padding: 4px 10px; border-radius: 99px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--rubric); border-color: var(--rubric); color: var(--sheet); }
+.filters input[type=search] { font-family: var(--body); font-size: 15px; padding: 5px 10px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); border-radius: 3px; min-width: 0; width: 220px; max-width: 100%; }
+.count { color: var(--ink-2); font-style: italic; margin-left: auto; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.card { background: var(--sheet); border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow); display: flex; flex-direction: column; min-width: 0; }
+.card.R, .card.X { border-color: var(--gilt); }
+.card.L { border: 2px solid var(--gilt); }
+.art { aspect-ratio: 240 / 131; width: 100%; background: var(--chip); display: block; object-fit: cover; }
+.art.none { display: grid; place-items: center; color: var(--ink-2); font-style: italic; font-size: 13px; }
+.cb { padding: 9px 12px 11px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.nm { display: flex; gap: 8px; align-items: baseline; }
+.cost { font-family: var(--sc); background: var(--ink); color: var(--sheet); min-width: 1.6em; text-align: center; border-radius: 50%; font-size: 14px; line-height: 1.6em; flex: none; }
+.nm b { font-family: var(--sc); font-weight: 400; font-size: 18px; line-height: 1.15; }
+.meta { font-family: var(--sc); font-size: 12.5px; color: var(--ink-2); letter-spacing: .02em; }
+.meta .crs { font-weight: 600; }
+.tx { font-size: 15.5px; }
+.tx .kw { font-weight: 600; }
+.up { font-size: 14px; color: var(--ink-2); border-top: 1px dotted var(--rule); padding-top: 4px; }
+.up i { font-family: var(--sc); font-style: normal; color: var(--gilt); }
+.fl { font-style: italic; color: var(--ink-2); font-size: 14px; }
+.note { font-size: 12.5px; color: var(--ink-2); }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-family: var(--sc); font-size: 11.5px; border: 1px solid var(--rule); padding: 0 6px; border-radius: 99px; color: var(--ink-2); }
+h3.sec { font-family: var(--sc); font-weight: 400; font-size: 20px; color: var(--rubric); border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin: 26px 0 12px; letter-spacing: .03em; }
+.beast { background: var(--sheet); border: 1px solid var(--rule); padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.beast.boss { border: 2px solid var(--gilt); }
+.beast h4 { margin: 0; font-family: var(--sc); font-weight: 400; font-size: 19px; }
+.beast .nums { font-family: var(--sc); font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.beast ul { margin: 0; padding-left: 18px; font-size: 14.5px; }
+.beast li { margin-block: 2px; }
+.beast .k { font-family: var(--sc); color: var(--rubric); }
+.res span { font-family: var(--sc); font-size: 12px; margin-right: 6px; }
+.res .weak { color: var(--rubric); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--sc); font-weight: 400; color: var(--ink-2); }
+.com { background: var(--sheet); border-left: 3px solid var(--rubric); padding: 8px 12px; margin-block: 6px; }
+.com b { font-family: var(--sc); font-weight: 400; }
+.needs li { margin-block: 4px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+@media (max-width: 560px) { .hero { grid-template-columns: 1fr; } .stats { text-align: left; } .count { margin-left: 0; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Ostium</h1>
+    <p class="lede">Gate 3 card and creature sheets: every card a calling can draw, the neutral and world pools, and every creature, encounter and commission of the fifteen worlds. Numbers are first drafts, before the simulator's corrections.</p>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="Sheets"></nav>
+  <main id="view"></main>
+</div>
+
+<script>
+/*DATA*/
+const RAR = {S: "Starter", C: "Common", U: "Uncommon", R: "Rare", X: "Path", L: "Legendary", K: "Kit", F: "Flask", N: "Neutral", W: "World", A: "Affliction", Curse: "Curse"};
+const RORDER = ["S", "K", "C", "U", "R", "X", "L", "F", "N", "W", "A", "Curse"];
+const CALLINGS = ["bulwark", "duelist", "elementalist", "alchemist", "oracle", "hexweaver"];
+const EL = {fire: "Fire", frost: "Frost", lightning: "Lightning", water: "Water", toxin: "Toxin", void: "Void", physical: "Physical", attuned: "Attuned"};
+const KW = ["Exhaust", "Retain", "Echo", "Rite", "Finisher", "Execute", "Fresh", "Dosed", "Unplayable", "Temporary", "Conjoin", "Prime", "Taunt", "Guard", "Doom", "Hex", "Mark", "Momentum", "Riposte", "Thorns", "Ward", "Armor", "Block", "Focus", "Omen", "Stable", "Volatile", "Scars", "Spectrum", "Bleed", "Stun", "Vulnerable", "Might", "Dodge", "Regen", "Fortify", "Anchor", "Burn", "Soak", "Static", "Weaken", "Erode", "Delay", "Empower"];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const kwRe = new RegExp("\\b(" + KW.join("|") + ")\\b", "g");
+const rich = s => esc(s).replace(kwRe, '<span class="kw">$1</span>');
+const ranks = a => (a && a.length) ? (a.length === 4 ? "any rank" : "rank " + a.join("-")) : "";
+const TGT = {enemy: "a foe", all_enemies: "every foe", self: "self", ally: "a hero", ally_other: "another hero", adjacent_ally: "an adjacent hero", all_allies: "the company", none: "unplayable"};
+
+function cardHTML(id) {
+  const c = DATA.cards[id];
+  const art = DATA.art[id] ? `<img class="art" alt="" loading="lazy" src="data:image/jpeg;base64,${DATA.art[id]}">` : `<div class="art none">art pending</div>`;
+  const cat = c.cat || "physical";
+  const sub = c.sub ? (DATA.heroes[c.cls]?.subs?.[c.sub] || c.sub) : "";
+  const meta = [RAR[c.rarity] || c.rarity, sub, `<span class="crs" style="color:var(--c-${cat === "attuned" ? "void" : cat})">${EL[cat] || cat}</span>`,
+    TGT[c.target] || c.target, c.use && c.use.length ? "from " + ranks(c.use) : "", c.hit && c.target === "enemy" ? "hits " + ranks(c.hit) : ""].filter(Boolean).join(" · ");
+  const up = c.up ? `<div class="up"><i>Upgraded${c.up.cost !== undefined && c.up.cost !== c.cost ? " · cost " + c.up.cost : ""}:</i> ${rich(c.up.text)}</div>` : "";
+  const tags = (c.arch || "").split("+").filter(Boolean).map(t => `<span class="tag">${esc(t.replace(/_/g, " "))}</span>`).join("");
+  return `<article class="card ${c.rarity}">${art}<div class="cb">
+    <div class="nm"><span class="cost">${c.cost === -1 ? "X" : esc(c.cost)}</span><b>${esc(c.name)}</b></div>
+    <div class="meta">${meta}</div>
+    <div class="tx">${rich(c.text)}</div>${up}
+    ${c.flavour ? `<div class="fl">${esc(c.flavour)}</div>` : ""}
+    ${c.note ? `<div class="note">Art: ${esc(c.note)}</div>` : ""}
+    ${tags ? `<div class="tags">${tags}</div>` : ""}</div></article>`;
+}
+
+let state = {rar: "", arch: "", q: ""};
+function callingView(cls) {
+  const h = DATA.heroes[cls];
+  const ids = Object.keys(DATA.cards).filter(k => DATA.cards[k].cls === cls && !k.endsWith("+"));
+  ids.sort((a, b) => RORDER.indexOf(DATA.cards[a].rarity) - RORDER.indexOf(DATA.cards[b].rarity) || (DATA.cards[a].sub || "").localeCompare(DATA.cards[b].sub || "") || DATA.cards[a].name.localeCompare(DATA.cards[b].name));
+  const archs = [...new Set(ids.flatMap(k => (DATA.cards[k].arch || "").split("+")).filter(Boolean))].sort();
+  const rars = RORDER.filter(r => ids.some(k => DATA.cards[k].rarity === r));
+  const deck = {};
+  h.deck.forEach(d => deck[d] = (deck[d] || 0) + 1);
+  const deckTxt = Object.entries(deck).map(([k, n]) => `${n}× ${esc(DATA.cards[k]?.name || k)}`).join(", ");
+  return `<section class="hero"><div><h2>The ${esc(h.name)}</h2><p>${esc(h.blurb)}</p>
+      <p><b>Paths:</b> ${Object.values(h.subs).map(esc).join(", ")}. <b>Starting deck:</b> ${deckTxt}.</p></div>
+    <div class="stats">HP ${h.hp} · Armor ${h.armor} · Grit ${h.grit}<br>${ids.length} cards</div></section>
+    <div class="filters" role="group" aria-label="Filters">
+      <button class="chip" data-rar="" aria-pressed="${!state.rar}">All</button>
+      ${rars.map(r => `<button class="chip" data-rar="${r}" aria-pressed="${state.rar === r}">${RAR[r]}</button>`).join("")}
+      <select id="arch" aria-label="Archetype" class="chip"><option value="">Every archetype</option>${archs.map(a => `<option value="${a}" ${state.arch === a ? "selected" : ""}>${esc(a.replace(/_/g, " "))}</option>`).join("")}</select>
+      <input type="search" id="q" placeholder="Search names and text" value="${esc(state.q)}" aria-label="Search">
+      <span class="count" id="count"></span></div>
+    <div class="grid" id="grid" data-ids='${JSON.stringify(ids)}'></div>`;
+}
+function poolView() {
+  const sec = (title, ids) => ids.length ? `<h3 class="sec">${title}</h3><div class="grid">${ids.map(cardHTML).join("")}</div>` : "";
+  const all = Object.keys(DATA.cards).filter(k => !k.endsWith("+"));
+  const by = r => all.filter(k => DATA.cards[k].rarity === r);
+  let html = `<section class="hero"><div><h2>Shared cards</h2><p>The neutral pool (offered rarely to any calling), the belt's flasks, afflictions, curses, and each world's four cards (offered only inside that world).</p></div></section>`;
+  html += sec("Neutral pool", by("N")) + sec("Flasks", by("F")) + sec("Afflictions", by("A")) + sec("Curses and cards foes deal", by("Curse"));
+  for (const w of Object.keys(DATA.worlds)) html += sec("World cards · " + esc(DATA.worlds[w].name), all.filter(k => DATA.cards[k].rarity === "W" && DATA.cards[k].world === w));
+  return html;
+}
+function beastHTML(k) {
+  const c = DATA.creatures[k];
+  const res = Object.entries(c.resist).map(([e, v]) => `<span class="${v}">${v} ${EL[e] || e}</span>`).join("");
+  return `<article class="beast ${c.tier === "ruler" ? "boss" : ""}"><h4>${esc(c.name)}</h4>
+    <div class="nums">${c.tier} · ${esc(c.role)} · HP ${c.hp} · Armor ${c.armor}${c.span > 1 ? " · 2 ranks" : ""}${c.flags.length ? " · " + c.flags.join(", ") : ""}</div>
+    ${res ? `<div class="res">${res}</div>` : ""}
+    <ul>${c.intents.map(i => `<li><span class="k">${esc(i[0])}</span> (${i[1]}): ${rich(i[2])}</li>`).join("")}</ul>
+    ${c.traits.length ? `<ul>${c.traits.map(t => `<li><span class="k">${esc(t[0])}</span> [${esc(t[1].replace("_", " "))}]: ${rich(t[2])}</li>`).join("")}</ul>` : ""}
+    ${c.phases.length ? `<ul>${c.phases.map(p => `<li><span class="k">At ${p[0]}%</span>: ${esc(p[1])}</li>`).join("")}</ul>` : ""}
+    <div class="fl">${esc(c.lore)}</div></article>`;
+}
+let world = "drowned";
+function bestiaryView() {
+  const W = DATA.worlds[world];
+  const ks = Object.keys(DATA.creatures).filter(k => DATA.creatures[k].world === world);
+  const tier = t => ks.filter(k => DATA.creatures[k].tier === t);
+  const coms = (DATA.commissions[world] || []).map(c => `<div class="com"><b>${esc(c.name)}</b>: “${esc(c.text)}”</div>`).join("");
+  const encs = DATA.encounters.filter(e => e.world === world);
+  const nm = k => esc(DATA.creatures[k]?.name || k);
+  return `<section class="hero"><div><h2>${esc(W.name)}</h2><p>Courses ${W.pair.map(e => EL[e]).join(" and ")}; their Conjunction here is ${esc(W.conj)}.</p></div>
+      <div class="stats">${ks.length} creatures · ${encs.length} encounters</div></section>
+    <div class="filters"><label class="meta" for="world">World</label><select id="world" class="chip">${Object.keys(DATA.worlds).map(w => `<option value="${w}" ${w === world ? "selected" : ""}>${esc(DATA.worlds[w].name)}</option>`).join("")}</select></div>
+    <h3 class="sec">Commissions</h3>${coms}
+    <h3 class="sec">Rulers</h3><div class="cols">${tier("ruler").map(beastHTML).join("")}</div>
+    <h3 class="sec">Elites</h3><div class="cols">${tier("elite").map(beastHTML).join("")}</div>
+    <h3 class="sec">Foes</h3><div class="cols">${tier("foe").map(beastHTML).join("")}</div>
+    <h3 class="sec">Encounters</h3><div class="tbl"><table><thead><tr><th>Encounter</th><th>Tier</th><th>Ranks 1 to 4</th><th>Room</th><th>Idea</th></tr></thead>
+    <tbody>${encs.map(e => `<tr><td>${esc(e.name)}</td><td>${e.tier}</td><td>${e.enemies.map(nm).join(", ")}</td><td>${esc(e.room)}</td><td>${esc(e.idea)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function needsView() {
+  return `<section class="hero"><div><h2>Open questions</h2><p>Mechanics the drafts wanted that the engine does not have yet. Each card or creature is written as its nearest working version until these are decided.</p></div></section>
+    ${Object.entries(DATA.needs).map(([m, ls]) => `<h3 class="sec">${esc(m.replace("world_", "world: "))}</h3><ul class="needs">${ls.map(l => `<li>${esc(l)}</li>`).join("")}</ul>`).join("")}`;
+}
+const TABS = [...CALLINGS.map(c => [c, DATA.heroes[c]?.name || c]), ["shared", "Shared cards"], ["bestiary", "Bestiary"], ["questions", "Open questions"]];
+function render() {
+  let cur = (location.hash || "#bulwark").slice(1);
+  if (!TABS.some(t => t[0] === cur)) cur = "bulwark";
+  document.getElementById("tabs").innerHTML = TABS.map(([k, n]) => `<a href="#${k}" ${k === cur ? 'aria-current="page"' : ""}>${esc(n)}</a>`).join("");
+  const v = document.getElementById("view");
+  v.innerHTML = CALLINGS.includes(cur) ? callingView(cur) : cur === "shared" ? poolView() : cur === "bestiary" ? bestiaryView() : needsView();
+  if (CALLINGS.includes(cur)) fillGrid();
+  v.querySelectorAll(".chip[data-rar]").forEach(b => b.onclick = () => { state.rar = b.dataset.rar; render(); });
+  const a = document.getElementById("arch"); if (a) a.onchange = () => { state.arch = a.value; fillGrid(); };
+  const q = document.getElementById("q"); if (q) q.oninput = () => { state.q = q.value; fillGrid(); };
+  const w = document.getElementById("world"); if (w) w.onchange = () => { world = w.value; render(); };
+}
+function fillGrid() {
+  const g = document.getElementById("grid");
+  const ids = JSON.parse(g.dataset.ids).filter(k => {
+    const c = DATA.cards[k];
+    if (state.rar && c.rarity !== state.rar) return false;
+    if (state.arch && !(c.arch || "").split("+").includes(state.arch)) return false;
+    if (state.q && !(c.name + " " + c.text + " " + (c.up?.text || "")).toLowerCase().includes(state.q.toLowerCase())) return false;
+    return true;
+  });
+  g.innerHTML = ids.map(cardHTML).join("");
+  document.getElementById("count").textContent = ids.length + " shown";
+}
+window.addEventListener("hashchange", () => { state = {rar: "", arch: "", q: ""}; render(); });
+render();
+</script>

@@ -216,3 +216,20 @@ reference company. The build-aware simulator corrects all of these.
 
 Each content file ends with `NEEDS = [...]`: one string per mechanic you wanted and could not express, naming the card
 or creature. Keep it short; most designs fit the list above.
+
+## 8. The Vessel (seventh calling)
+
+Body rule: every course laid on the Vessel (by anyone, foe or hero) is **held** on its skin instead: it never harms the
+Vessel, never sets off a Conjunction on it, and Ward does not stop it. Each course holds at most 6 stacks (overflow is
+lost). Held stacks fall by 1 at round end like any course (not those laid this round), and all clear when the fight
+ends (DECISIONS rows 10 and 11).
+
+| Helper | Effect |
+|---|---|
+| `TAKE(e="largest", n=0)` | Move stacks of course `e` (or `"largest"`, or `"all"`) from the target onto the Vessel: all of them, or at most `n`. A Take from a hero cleanses it; Ward does not stop a Take. The amount moved becomes `consumed` |
+| `GIVE(e="largest", n=0, attr="stable")` | Move held stacks of `e` (or `"largest"`, or `"all"`) onto the target, Stable or Volatile. The amount becomes `consumed` |
+| `EVEN()` | Even out the held stacks across the courses the Vessel holds |
+| Course effects aimed at the Vessel itself (`A(e, n, to="self")`) | Simply hold that course |
+
+Quantities: `held_total`, `held_kinds` (Whole is `held_kinds>=6`), `held_max`, `held_min`, and `held_<course>`
+(`held_fire` ...).

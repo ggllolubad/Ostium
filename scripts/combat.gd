@@ -40,7 +40,8 @@ static func _blank_unit(s: Dictionary) -> Dictionary:
 		"st": {"bleed": 0, "stun": 0, "mark": 0, "vulnerable": 0, "might": 0, "focus": 0, "momentum": 0, "riposte": 0,
 			"taunt": 0, "tenacity": 0, "freeze": 0, "freeze_bonus": 0, "neuro": 0, "silence": 0, "blight": 0, "lockdown": 0,
 			"thorns": 0, "dodge": 0, "regen": 0, "hex": 0, "doom": 0, "fortify": 0, "anchor": 0, "cap": 0, "charge": 0, "empower": 0},
-		"hollow": false, "moved": false, "guarded_by": -1, "postponed": false, "turned": -1, "omen": 0, "scars": 0}
+		"hollow": false, "moved": false, "guarded_by": -1, "postponed": false, "turned": -1, "omen": 0, "scars": 0,
+		"held": {"fire": 0, "frost": 0, "lightning": 0, "water": 0, "toxin": 0, "void": 0}}
 
 static func _make_hero(s: Dictionary, key: String) -> Dictionary:
 	var d: Dictionary = Data.HEROES[key]
@@ -789,6 +790,23 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 					n += 1
 			return n
 		"scars": return u.get("scars", 0)
+		"held_total", "held_kinds", "held_max", "held_min":
+			var tot := 0
+			var kinds := 0
+			var mx := 0
+			var mn := 99
+			for el in Data.ELEMENTS:
+				var v: int = u.get("held", {}).get(el, 0)
+				tot += v
+				if v > 0:
+					kinds += 1
+					mn = min(mn, v)
+				mx = max(mx, v)
+			match key:
+				"held_total": return tot
+				"held_kinds": return kinds
+				"held_max": return mx
+			return mn if kinds > 0 else 0
 		"el_total":
 			var n := 0
 			for el in Data.ELEMENTS:
@@ -812,6 +830,8 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"debuffs": return _debuff_count(u)
 	if Data.ELEMENTS.has(key):
 		return u.elements[key]
+	if key.begins_with("held_") and Data.ELEMENTS.has(key.substr(5)):
+		return u.get("held", {}).get(key.substr(5), 0)
 	if u.st.has(key):
 		return u.st[key]
 	return 0
@@ -1281,6 +1301,40 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			actor.stress = min(200, actor.stress + total)
 			if total > 0:
 				_ev(s, {"t": "stress", "unit": actor.id, "n": total})
+		"take":
+			# move course stacks from the target onto the Vessel (Ward does not stop a Take)
+			var els: Array = Data.ELEMENTS if fx.get("e", "") == "all" else [fx.get("e", "") if fx.get("e", "") not in ["", "largest"] else _largest(t, false)]
+			var took := 0
+			for el in els:
+				if el == "" or t.elements[el] <= 0:
+					continue
+				var amt: int = t.elements[el] if n <= 0 else min(n, t.elements[el])
+				t.elements[el] -= amt
+				took += amt
+				_hold(s, actor, el, amt)
+			ctx.consumed += took
+		"give":
+			# move held stacks onto the target, Stable unless the card says Volatile
+			var els: Array = Data.ELEMENTS if fx.get("e", "") == "all" else [fx.get("e", "") if fx.get("e", "") not in ["", "largest"] else _largest(actor, true)]
+			var gave := 0
+			for el in els:
+				if el == "" or actor.held[el] <= 0:
+					continue
+				var amt: int = actor.held[el] if n <= 0 else min(n, actor.held[el])
+				actor.held[el] -= amt
+				gave += amt
+				_apply_element(s, actor, t, el, amt, fx.get("attr", "stable"))
+			ctx.consumed += gave
+		"even":
+			# even out held stacks across the courses held (The Weighing)
+			var kinds := []
+			var tot := 0
+			for el in Data.ELEMENTS:
+				if actor.held[el] > 0:
+					kinds.append(el)
+					tot += actor.held[el]
+			for i in kinds.size():
+				actor.held[kinds[i]] = int(tot / kinds.size()) + (1 if i < tot % kinds.size() else 0)
 		"brew":
 			for i in max(1, n):
 				s.belt_next.append(fx.card)
@@ -1599,6 +1653,9 @@ static func _move(s: Dictionary, u: Dictionary, delta: int) -> void:
 static func _apply_element(s: Dictionary, src: Dictionary, t: Dictionary, e: String, n: int, attr: String) -> void:
 	if t.dead or n <= 0:
 		return
+	if t.get("key", "") == "vessel":
+		_hold(s, t, e, n)   # the body rule: courses settle on the Vessel's skin and wait
+		return
 	if src.side == "hero" and src.st.focus > 0:
 		n += src.st.focus
 		src.st.focus = 0
@@ -1639,6 +1696,26 @@ static func _apply_element(s: Dictionary, src: Dictionary, t: Dictionary, e: Str
 	_log(s, "%s gains %d %s." % [t.name, n, Data.ELEMENT_STATUS[e]])
 	if RULES.traits and t.side == "enemy" and src.get("side", "") == "hero" and _trigger(s, "trait_course_%d" % t.id):
 		_trait(s, t, "course", [t], e)
+
+## The Vessel holds up to HOLD_CAP stacks of each course (Gate 2 decision 10); overflow is lost.
+const HOLD_CAP := 6
+
+static func _hold(s: Dictionary, v: Dictionary, e: String, n: int) -> void:
+	var before: int = v.held[e]
+	v.held[e] = min(HOLD_CAP, before + n)
+	v.held_fresh = v.get("held_fresh", {})
+	v.held_fresh[e] = true
+	_ev(s, {"t": "element", "unit": v.id, "e": e, "n": v.held[e] - before})
+	_log(s, "%s holds %d %s." % [v.name, v.held[e], Data.ELEMENT_STATUS[e]])
+
+## The largest course a unit carries (held stacks for the Vessel), or "".
+static func _largest(u: Dictionary, held: bool) -> String:
+	var src: Dictionary = u.held if held else u.elements
+	var best := ""
+	for el in Data.ELEMENTS:
+		if src[el] > 0 and (best == "" or src[el] > src[best]):
+			best = el
+	return best
 
 static func reaction_key(a: String, b: String) -> String:
 	var p := [a, b]
@@ -1890,6 +1967,13 @@ static func end_round(s: Dictionary) -> void:
 				u.elements[e] -= 1
 		if u.elements.fire == 0:
 			u.hollow = false
+		if u.get("key", "") == "vessel":
+			var hf: Dictionary = u.get("held_fresh", {})
+			for e in Data.ELEMENTS:
+				if hf.get(e, false):
+					hf[e] = false
+				elif u.held[e] > 0:
+					u.held[e] -= 1
 		u.st.vulnerable = max(0, u.st.vulnerable - 1)
 		u.st.taunt = 0
 		u.st.tenacity = 0

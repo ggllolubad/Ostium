@@ -14,7 +14,7 @@ func card(id: String, d: Dictionary) -> void:
 	base.merge(d, true)
 	Data.CARDS[id] = base
 
-func fresh(enemies := ["thrall", "warden", "siren"]) -> Dictionary:
+func fresh(enemies := ["t_dummy", "t_dummy", "t_dummy"]) -> Dictionary:
 	var s := Combat.new_state(["bulwark", "duelist", "elementalist"], enemies, 11)
 	Combat.start_round(s)
 	return s
@@ -26,6 +26,14 @@ func play(s: Dictionary, h: Dictionary, id: String, target := -1, source := "han
 	return Combat.resolve_player_action(s, a)
 
 func _init() -> void:
+	# fixed test data, so the checks do not move when the game's content changes
+	Data.ENEMIES["t_dummy"] = {"name": "Dummy", "hp": 40, "armor": 0, "tier": "foe", "art": "", "resist": {},
+		"intents": {"hit": {"name": "Hit", "kind": "attack", "target": "front", "fx": [{"t": "dmg", "n": 3}], "text": ""}},
+		"ai": [{"use": "hit"}]}
+	for f in ["fl_heal", "fl_iron", "fl_fire"]:
+		card(f, {"rarity": "F", "cost": 0, "target": "ally" if f != "fl_fire" else "enemy", "kw": ["Flask", "Exhaust"], "flask": true,
+			"fx": [{"t": "heal", "n": 5}] if f == "fl_heal" else ([{"t": "block", "n": 6}] if f == "fl_iron" else [{"t": "apply", "e": "fire", "n": 3}])})
+		card(f + "+", {"rarity": "F", "cost": 0, "target": "ally", "kw": ["Flask"], "fx": [{"t": "heal", "n": 7}]})
 	card("t_rite_rs", {"kw": ["Rite", "Exhaust"], "rite": {"on": "round_start", "fx": [{"t": "block", "n": 5}]}})
 	card("t_rite_hit", {"kw": ["Rite"], "rite": {"on": "hit", "fx": [{"t": "dmg", "n": 4}]}})
 	card("t_rite_play", {"kw": ["Rite"], "rite": {"on": "play", "kw": "Finisher", "fx": [{"t": "block", "n": 3}], "per_round": 1}})
@@ -100,7 +108,7 @@ func _init() -> void:
 	Combat._apply_element(s, el, e, "lightning", 2, "volatile")
 	ok(e.hp < hp0 - 3 or e.dead, "conjunction rite adds 3 damage on the Conjunction")
 
-	s = fresh(["thrall", "thrall", "thrall"])
+	s = fresh(["t_dummy", "t_dummy", "t_dummy"])
 	b = s.heroes[0]
 	play(s, b, "t_rite_kill")
 	var m0: int = b.st.might
@@ -181,8 +189,8 @@ func _init() -> void:
 	ok(b.scars == 20 and b.block == 20, "Scars count HP lost and ignore healing (scars %d, block %d)" % [b.scars, b.block])
 
 	# --- swarm
-	Data.ENEMIES["thrall"]["flags"] = ["swarm"]
-	s = fresh(["thrall"])
+	Data.ENEMIES["t_dummy"]["flags"] = ["swarm"]
+	s = fresh(["t_dummy"])
 	e = s.enemies[0]
 	hp0 = e.hp
 	play(s, s.heroes[1], "t_hit", e.id)
@@ -191,7 +199,7 @@ func _init() -> void:
 	play(s, s.heroes[1], "t_all")
 	var wide: int = hp0 - e.hp
 	ok(wide > single * 2, "Swarm: a hit on every foe deals far more than a single-target hit (%d vs %d)" % [wide, single])
-	Data.ENEMIES["thrall"].erase("flags")
+	Data.ENEMIES["t_dummy"].erase("flags")
 
 	# --- unbind
 	s = fresh()
@@ -208,7 +216,7 @@ func _init() -> void:
 		"ai": [{"use": "a", "once": true}, {"use": "b"}],
 		"traits": [{"on": "round_end", "fx": [{"t": "status", "s": "charge", "n": 1, "to": "self"}]},
 			{"on": "ally_death", "fx": [{"t": "status", "s": "might", "n": 2, "to": "self"}]}]}
-	s = Combat.new_state(["bulwark", "duelist", "elementalist"], ["test_foe", "thrall"], 3)
+	s = Combat.new_state(["bulwark", "duelist", "elementalist"], ["test_foe", "t_dummy"], 3)
 	Combat.start_round(s)
 	e = s.enemies[0]
 	ok(e.intent == "a", "once-only rule picked first")
@@ -223,6 +231,30 @@ func _init() -> void:
 	ok(e.intent == "b", "once-only rule is not picked again")
 	Combat._kill(s, s.enemies[1])
 	ok(e.st.might >= 2, "ally_death trait fires")
+
+	# --- the Vessel: held courses, Take, Give
+	if not Data.HEROES.has("vessel"):
+		Data.HEROES["vessel"] = {"name": "Vessel", "hp": 32, "armor": 0, "grit": 2, "deck": [], "kit": [], "art": "", "color": "8a7fb0"}
+	card("t_take", {"target": "enemy", "fx": [{"t": "take", "e": "largest", "n": 0}]})
+	card("t_give", {"target": "enemy", "fx": [{"t": "give", "e": "water", "n": 2, "attr": "stable"}]})
+	var sv := Combat.new_state(["bulwark", "vessel", "elementalist"], ["t_dummy"], 5)
+	Combat.start_round(sv)
+	var ves: Dictionary = sv.heroes[1]
+	var foe: Dictionary = sv.enemies[0]
+	Combat._apply_element(sv, foe, ves, "fire", 4, "stable")
+	ok(ves.held.fire == 4 and ves.elements.fire == 0, "courses laid on the Vessel are held, not suffered")
+	Combat._apply_element(sv, foe, ves, "water", 9, "volatile")
+	ok(ves.held.water == 6 and ves.hp == ves.max_hp, "held courses cap at 6 and never react on the Vessel")
+	foe.elements.frost = 3
+	play(sv, ves, "t_take", foe.id)
+	ok(foe.elements.frost == 0 and ves.held.frost == 3, "Take moves the foe's largest course onto the Vessel")
+	play(sv, ves, "t_give", foe.id)
+	ok(foe.elements.water == 2 and ves.held.water == 4, "Give moves held stacks onto a foe")
+	Combat.end_round(sv)
+	var f1: int = ves.held.fire
+	Combat.start_round(sv)
+	Combat.end_round(sv)
+	ok(f1 == 4 and ves.held.fire == 3, "held stacks laid this round stay, then fall by 1 a round (fire %d then %d)" % [f1, ves.held.fire])
 
 	print("FAILS: %d" % fails)
 	quit()

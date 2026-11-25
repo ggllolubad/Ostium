@@ -7,7 +7,7 @@ extends RefCounted
 static var W = {
 	"enemy_hp": 1.0, "kill": 14.0, "threat": 0.6,
 	"hero_hp": 1.3, "dd": 45.0, "death": 260.0, "stress": 0.35, "low_hp": 0.6,
-	"bleed": 1.4, "doom": 0.7, "burn": 1.3, "el": 0.5, "vuln": 4.0, "mark": 1.5, "hex": 0.8, "stun": 6.0,
+	"bleed": 1.4, "doom": 1.2, "burn": 1.3, "el": 0.5, "vuln": 4.0, "mark": 1.5, "hex": 0.8, "stun": 6.0,
 	"might": 3.0, "focus": 1.2, "momentum": 1.8, "thorns": 0.8, "riposte": 1.0, "regen": 1.4, "ward": 0.8,
 	"armor": 5.0, "e_armor": 3.0, "energy": 3.5, "next_hand": 3.0, "draw": 2.0, "prime": 1.5, "block_left": 0.15,
 }
@@ -64,6 +64,11 @@ static func evaluate(s0: Dictionary, s: Dictionary) -> float:
 			hels += h.elements[k]
 		v -= W.el * 1.5 * hels
 	v += W.energy * s.bonus_energy + W.prime * s.prime
+	# Gate 3: lasting rites, brewed flasks and the Augur's Omen are worth something now, not only when they fire
+	v += 10.0 * (s.get("rites", []).size() - s0.get("rites", []).size())
+	v += 4.0 * (s.get("belt_next", []).size() - s0.get("belt_next", []).size())
+	for h in s.heroes:
+		v += 1.5 * h.get("omen", 0) + 1.0 * h.st.get("empower", 0)
 	return v
 
 static func _tri(n: int) -> float:

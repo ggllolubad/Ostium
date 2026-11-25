@@ -86,7 +86,7 @@ FX = {"dmg", "coup", "dmg_per_element", "block", "self_block", "block_target", "
       "retreat", "to_front", "swap", "guard", "guard_weakest", "prime", "bash_stun", "heal", "stress", "self_stress", "self_dmg",
       "draw", "energy", "add", "consume", "double", "spread", "convert", "cleanse", "transfer", "execute", "delay", "turn",
       "steal_block", "omen", "cap", "grit", "kill_self_hp", "stress_take",
-      "brew", "refill", "improve", "unbind", "discard_random", "lose_armor", "summon"}
+      "brew", "refill", "improve", "unbind", "discard_random", "lose_armor", "summon", "take", "give", "even"}
 QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies", "allies", "allies_dd", "same_target", "round",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used"}
@@ -95,7 +95,8 @@ STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}
 QU = {"hp", "max_hp", "block", "armor", "ward", "stress", "grit", "omen", "played", "resolve", "missing_hp", "hp_pct", "dd", "rank",
       "elements", "spectrum", "el_total", "el_max", "attuned", "attacking", "targeting_me", "moved", "exhaust", "discard", "hand",
-      "draw", "debuffs", "ailments", "scars", "cap", "delayed", "incoming_to", "targeted"} | ELS | STATUS
+      "draw", "debuffs", "ailments", "scars", "cap", "delayed", "incoming_to", "targeted", "held_total", "held_kinds", "held_max",
+      "held_min"} | ELS | STATUS | {"held_" + e for e in ELS}
 KW = {"Exhaust", "Retain", "Echo", "Rite", "Finisher", "Execute", "Fresh", "Dosed", "Curse", "Affliction", "Flask",
       "Unplayable", "Temporary"}
 RAR = {"S", "C", "U", "R", "X", "L", "K", "F", "N", "W", "A", "Curse"}
@@ -143,7 +144,7 @@ def check_fx(where, fxs, enemy=False):
             err(where, f"unknown quantity '{f['times_per']}'")
         if t in ("status", "self_status", "clear") and f.get("s") not in STATUS:
             err(where, f"unknown status '{f.get('s')}'")
-        if t in ("apply", "consume", "double", "spread", "convert") and f.get("e") and f["e"] not in ELS | {"all"}:
+        if t in ("apply", "consume", "double", "spread", "convert", "take", "give") and f.get("e") and f["e"] not in ELS | {"all", "largest"}:
             err(where, f"unknown course '{f['e']}'")
         if "to" in f and f["to"] not in TO:
             err(where, f"unknown 'to' target '{f['to']}'")
