@@ -370,6 +370,63 @@ func _header(parent: Control) -> void:
 		rl.append(UiStyle.icon_tag(id, 24) + " " + Run.C.relics[id].name)
 	_rich("[i]relics (%d/%d):[/i] %s" % [r.relics.size(), Run.relic_cap(), ", ".join(rl) if rl.size() > 0 else "none"], Vector2(60, 72), Vector2(1100, 26), 15, parent)
 
+const MAP_INK := Color("2b1d12")
+const MAP_RUB := Color("9c3d2b")
+const LEGEND := [["start", "Threshold"], ["combat", "Fight"], ["elite", "Elite"], ["event", "Event"], ["merchant", "Merchant"], ["shrine", "Shrine"],
+	["camp", "Field camp"], ["hidden", "Cache"], ["waypoint", "Waypoint"], ["boss", "The ruler"], ["unknown", "Unscouted"]]
+
+func _ink(id: String) -> Texture2D:
+	var p := "res://assets/art/map/ink_%s.png" % id
+	return load(p) if ResourceLoader.exists(p) else null
+
+## A road drawn by hand: a gentle bow between two rooms, a little tremor in the pen, stopping short of each icon.
+func _road(a: Vector2, b: Vector2, seed_s: String) -> PackedVector2Array:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(seed_s)
+	var d := b - a
+	var nrm := Vector2(-d.y, d.x).normalized()
+	var c := (a + b) / 2 + nrm * rng.randf_range(-0.12, 0.12) * d.length()
+	var pts := PackedVector2Array()
+	var t0 := 34.0 / d.length()
+	var steps := 22
+	for i in steps + 1:
+		var t: float = lerp(t0, 1.0 - t0, float(i) / steps)
+		var q: Vector2 = a.lerp(c, t).lerp(c.lerp(b, t), t)
+		pts.append(q + Vector2(rng.randf_range(-1.1, 1.1), rng.randf_range(-1.1, 1.1)))
+	return pts
+
+func _dashes(cv: Control, pts: PackedVector2Array, col: Color, w: float, on: float, off: float) -> void:
+	var acc := 0.0
+	var drawing := true
+	for i in pts.size() - 1:
+		var p: Vector2 = pts[i]
+		var q: Vector2 = pts[i + 1]
+		var seg := p.distance_to(q)
+		var s0 := 0.0
+		while s0 < seg:
+			var left := (on if drawing else off) - acc
+			var s1: float = min(seg, s0 + left)
+			if drawing:
+				cv.draw_line(p.lerp(q, s0 / seg), p.lerp(q, s1 / seg), col, w, true)
+			acc += s1 - s0
+			s0 = s1
+			if acc >= (on if drawing else off) - 0.01:
+				acc = 0.0
+				drawing = not drawing
+
+## The rubric ring a scribe draws round the rooms the company may enter next: a loop that overshoots its start.
+func _ring(cv: Control, c: Vector2, r: float, col: Color, seed_s: String) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(seed_s)
+	var a0 := rng.randf() * TAU
+	var ph := rng.randf() * TAU
+	var pts := PackedVector2Array()
+	for i in 49:
+		var a := a0 + float(i) / 48.0 * TAU * 1.12
+		var rr := r + sin(a * 3.0 + ph) * 2.2 + float(i) / 48.0 * 3.0
+		pts.append(c + Vector2(cos(a), sin(a) * 0.92) * rr)
+	cv.draw_polyline(pts, col, 3.0, true)
+
 func show_map() -> void:
 	if Run.r.outcome != "":
 		show_end()
@@ -378,67 +435,145 @@ func show_map() -> void:
 		show_reward()
 		return
 	_screen()
+	var top := _panel(Vector2(16, 8), Vector2(1568, 92))
+	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_header(screen)
-	_btn("The company", Vector2(1180, 20), Vector2(170, 44), show_roster)
-	_btn("Scout (1 light)", Vector2(1360, 20), Vector2(180, 44), func(): _toast("" if Run.scout() else "No light left."); show_map())
-	_btn("Save and leave", Vector2(1360, 70), Vector2(180, 36), func(): Run.save(); main._show_menu())
-	var mapc := Control.new()
-	mapc.position = Vector2(0, 110)
-	mapc.size = Vector2(1600, 780)
-	screen.add_child(mapc)
+	_btn("The company", Vector2(1180, 16), Vector2(170, 40), show_roster)
+	_btn("Scout (1 light)", Vector2(1360, 16), Vector2(200, 40), func(): _toast("" if Run.scout() else "No light left."); show_map())
+	_btn("Save and leave", Vector2(1360, 60), Vector2(200, 32), func(): Run.save(); main._show_menu())
+	# the chart: one sheet of the kingdom, inked as the company walks it
+	var chart := Control.new()
+	chart.size = size
+	chart.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if UiStyle.dark:
+		chart.modulate = Color(0.8, 0.76, 0.7)
+	screen.add_child(chart)
+	var sheet := TextureRect.new()
+	sheet.texture = load("res://assets/art/map/sheet.png")
+	sheet.position = Vector2(20, 104)
+	sheet.size = Vector2(1560, 812)
+	sheet.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	sheet.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chart.add_child(sheet)
+	var cart := TextureRect.new()
+	cart.texture = load("res://assets/art/map/cartouche.png")
+	cart.position = Vector2(540, 120)
+	cart.size = Vector2(520, 74)
+	cart.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chart.add_child(cart)
+	var ttl := _lbl(Run.world_name(), Vector2(560, 128), Vector2(480, 56), 34, UiStyle.font_bl, MAP_RUB, chart)
+	ttl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ttl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ttl.autowrap_mode = TextServer.AUTOWRAP_OFF
+	var rose := TextureRect.new()
+	rose.texture = _ink("compass")
+	rose.position = Vector2(62, 730)
+	rose.size = Vector2(128, 128)
+	rose.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rose.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rose.modulate = Color(1, 1, 1, 0.85)
+	chart.add_child(rose)
 	var nodes: Dictionary = Run.r.map.nodes
-	var pos := func(n: Dictionary) -> Vector2: return Vector2(90 + n.layer * (1420.0 / (Run.LAYERS - 1)), 30 + n.x * 700)
-	mapc.draw.connect(func():
+	var pos := func(n: Dictionary) -> Vector2: return Vector2(104 + n.layer * (1392.0 / (Run.LAYERS - 1)), 116 + n.x * 790)
+	var nexts := Run.next_nodes()
+	var roads := Control.new()
+	roads.size = size
+	roads.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chart.add_child(roads)
+	roads.draw.connect(func():
 		for id in nodes:
 			var n: Dictionary = nodes[id]
+			var seen: bool = n.revealed or n.visited
 			for l in n.links:
 				var m: Dictionary = nodes[l]
-				var col := UiStyle.INK if (n.visited and (m.visited or Run.r.at == n.id)) else Color(UiStyle.INK, 0.35)
-				mapc.draw_line(pos.call(n), pos.call(m), col, 2.0 if n.visited else 1.2)
+				var pts := _road(pos.call(n), pos.call(m), String(id) + String(l))
+				if n.visited and m.visited:
+					roads.draw_polyline(pts, MAP_INK, 3.4, true)
+				elif id == Run.r.at:
+					_dashes(roads, pts, MAP_RUB, 3.0, 11.0, 7.0)
+				elif seen and (m.revealed or m.visited):
+					_dashes(roads, pts, Color(MAP_INK, 0.62), 2.0, 6.0, 7.0)
+				else:
+					_dashes(roads, pts, Color(MAP_INK, 0.28), 1.6, 3.0, 9.0)
+		for id in nexts:
+			_ring(roads, pos.call(nodes[id]), 38.0, MAP_RUB, String(id))
 	)
-	var nexts := Run.next_nodes()
+	var ruler: String = String(Run.r.get("commission", ""))
 	for id in nodes:
 		var n: Dictionary = nodes[id]
 		var info: Array = TYPE_INFO.get(n.type, ["?", "?", "6f5036"])
 		var shown: bool = n.revealed or n.visited
-		var b := Button.new()
-		b.text = "" if shown and UiStyle.icon("n_" + n.type) != null else (info[1] if shown else "·")
-		var ruler: String = String(Run.r.get("commission", ""))
-		if n.type == "boss" and ruler != "" and ResourceLoader.exists("res://assets/art/rigs_li/%s/full.webp" % ruler):
-			# the commission's ruler waits at the end of the road
-			b.icon = load("res://assets/art/rigs_li/%s/full.webp" % ruler)
-			b.expand_icon = true
-			b.add_theme_constant_override("icon_max_width", 40)
-			b.text = ""
-		elif shown:
-			b.icon = UiStyle.icon("n_" + n.type)
-			b.expand_icon = true
-			b.add_theme_constant_override("icon_max_width", 34)
-		b.size = Vector2(44, 44)
-		b.position = pos.call(n) - b.size / 2
+		var c: Vector2 = pos.call(n)
+		if shown and n.get("corrupted", false):
+			var st := TextureRect.new()
+			st.texture = _ink("stain")
+			st.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			st.size = Vector2(96, 96)
+			st.position = c - st.size / 2
+			st.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			chart.add_child(st)
+		var big: bool = n.type in ["boss", "waypoint", "start"]
+		var b := TextureButton.new()
+		b.texture_normal = _ink(n.type if shown else "unknown")
+		if b.texture_normal == null:
+			b.texture_normal = _ink("unknown")
+		b.ignore_texture_size = true
+		b.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		b.size = Vector2(86, 86) if big and shown else (Vector2(70, 70) if shown else Vector2(56, 56))
+		b.position = c - b.size / 2
+		b.pivot_offset = b.size / 2
 		b.focus_mode = Control.FOCUS_NONE
-		b.add_theme_font_override("font", UiStyle.font_bl)
-		b.add_theme_font_size_override("font_size", 24)
-		var sb := UiStyle.box(Color(info[2]) if shown else UiStyle.PARCH_D, UiStyle.INK, 2)
-		sb.set_corner_radius_all(22)
-		if id == Run.r.at:
-			sb.border_color = UiStyle.GOLD
-			sb.set_border_width_all(5)
-		elif nexts.has(id):
-			sb.border_color = UiStyle.RED
-			sb.set_border_width_all(4)
-		for st in ["normal", "hover", "disabled", "pressed"]:
-			b.add_theme_stylebox_override(st, sb)
-		b.add_theme_color_override("font_color", UiStyle.CREAM)
-		b.add_theme_color_override("font_disabled_color", UiStyle.CREAM)
 		b.disabled = not nexts.has(id)
 		if n.visited and id != Run.r.at:
-			b.modulate = Color(1, 1, 1, 0.45)
+			b.modulate = Color(1, 1, 1, 0.42)
+		elif not shown:
+			b.modulate = Color(1, 1, 1, 0.7)
 		b.tooltip_text = (("The ruler: " + Data.ENEMIES[ruler].name) if n.type == "boss" and ruler != "" and Data.ENEMIES.has(ruler) else "") + ("%s%s%s" % [info[0] if not (n.type == "boss" and ruler != "") else "", " (the Pearl's keeper)" if n.get("keeper", false) else "", " · corrupted by the rising water" if n.get("corrupted", false) else ""]) if shown else "Unscouted"
+		if not b.disabled:
+			b.mouse_entered.connect(func(): b.scale = Vector2(1.14, 1.14))
+			b.mouse_exited.connect(func(): b.scale = Vector2.ONE)
+			b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		var nid: String = id
 		b.pressed.connect(func(): _enter(Run.move_to(nid)))
-		mapc.add_child(b)
-	_lbl("Choose the next room (outlined in red). Each step costs food and advances the doom clock; light burns every second step. Scouting reveals three more columns.", Vector2(60, 900), Vector2(1480, 40), 16, UiStyle.font_it, UiStyle.BROWN).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		chart.add_child(b)
+		if shown and n.get("keeper", false):
+			var pearl := _lbl("the Pearl", c + Vector2(-50, 34), Vector2(100, 22), 15, UiStyle.font_it, MAP_RUB, chart)
+			pearl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if n.type == "boss" and shown:
+			# the commission's ruler waits at the end of the road, drawn standing beside the throne
+			if ruler != "" and ResourceLoader.exists("res://assets/art/rigs_li/%s/full.webp" % ruler):
+				var fig := TextureRect.new()
+				fig.texture = load("res://assets/art/rigs_li/%s/full.webp" % ruler)
+				fig.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				fig.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				fig.size = Vector2(150, 150)
+				fig.position = c + Vector2(-75, -196)
+				fig.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				chart.add_child(fig)
+			var nm := _lbl(Data.ENEMIES[ruler].name if ruler != "" and Data.ENEMIES.has(ruler) else "The ruler", c + Vector2(-90, 44), Vector2(180, 44), 17, UiStyle.font_sc, MAP_RUB, chart)
+			nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if id == Run.r.at:
+			var pen := TextureRect.new()
+			pen.texture = _ink("pennant")
+			pen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			pen.size = Vector2(54, 54)
+			pen.position = c + Vector2(10, -66)
+			pen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			chart.add_child(pen)
+	# the key, lettered along the foot of the sheet
+	var lx := 230.0
+	for it in LEGEND:
+		var ic := TextureRect.new()
+		ic.texture = _ink(it[0])
+		ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		ic.size = Vector2(30, 30)
+		ic.position = Vector2(lx, 852)
+		ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		chart.add_child(ic)
+		var t := _lbl(it[1], Vector2(lx + 32, 856), Vector2(110, 24), 16, UiStyle.font_sc, MAP_INK, chart)
+		t.autowrap_mode = TextServer.AUTOWRAP_OFF
+		lx += 34 + t.get_minimum_size().x + 26
+	_lbl("Choose the next room (ringed in red). Each step costs food and advances the doom clock; light burns every second step. Scouting reveals three more columns.", Vector2(60, 928), Vector2(1480, 40), 16, UiStyle.font_it, UiStyle.BROWN).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_toast(msg)
 	msg = ""
 
