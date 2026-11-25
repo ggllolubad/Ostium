@@ -965,7 +965,7 @@ func show_end() -> void:
 	var won: bool = Run.r.outcome == "victory"
 	var depth := Run.current_layer()
 	var o := Run.end_run()
-	_screen("The Door Closes Behind You" if won else "The Deep Keeps Them", "%s · depth %d of %d · %d fights won" % [Run.C.objectives[Run.r.objective].name, depth, Run.LAYERS - 1, Run.r.fights_won])
+	_screen("The Door Closes Behind You" if won else "The Deep Keeps Them", "%s · depth %d of %d · %d fights won" % [("Commission: " + Data.ENEMIES[Run.r.commission].name) if String(Run.r.get("commission", "")) != "" and Data.ENEMIES.has(Run.r.commission) else Run.C.objectives[Run.r.objective].name, depth, Run.LAYERS - 1, Run.r.fights_won])
 	var lines := ["+%d ostia (now %d)" % [o, Run.meta.ostia]]
 	for wk in Run.r.get("opened", []):
 		lines.append("[color=#a9822f]A door unseals: %s.[/color]" % Data.WORLDS[wk].name)
@@ -973,6 +973,8 @@ func show_end() -> void:
 	if Run.r.get("road_done", false):
 		lines.append("[color=#a9822f]The road is walked. Every door now stands open, and you may cast lots.[/color]")
 		lines.append("[i]%s[/i]" % Data.STORY.finale)
+	if Run.r.get("vessel_unlocked", false):
+		lines.append("[color=#8a7fb0]At the edge of the torn sky the Prismatic stops, and the six inks run up the skin and do not fuse. Something comes home that is not quite the one who left. The Vessel joins the order.[/color]")
 	lines += Run.r.get("home_lines", [])
 	lines += Run.r.log.slice(max(0, Run.r.log.size() - 6))
 	_rich("[center]" + "\n".join(lines) + "[/center]", Vector2(300, 200), Vector2(1000, 400), 19)

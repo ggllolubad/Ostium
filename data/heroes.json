@@ -209,5 +209,40 @@
    0.209,
    0.166
   ]
+ },
+ "vessel": {
+  "name": "Vessel",
+  "hp": 32,
+  "armor": 0,
+  "grit": 2,
+  "color": "8a7fb0",
+  "kit": [
+   "ve_draw_breath"
+  ],
+  "deck": [
+   "ve_open_hand",
+   "ve_open_hand",
+   "ve_open_hand",
+   "ve_bear_it",
+   "ve_bear_it",
+   "ve_take_into_me",
+   "ve_take_into_me",
+   "ve_give_back",
+   "ve_give_back",
+   "ve_six_breaths"
+  ],
+  "subclasses": {
+   "hearth": "Hearth",
+   "mouth": "Mouth",
+   "whole": "Whole"
+  },
+  "blurb": "The Prismatic who took the Mother's place, come back to the gate. Courses settle on its skin and wait: it takes them off the company and from foes, and gives them back where they hurt most.",
+  "art": "res://assets/art/vessel.png",
+  "face": [
+   0.448,
+   0.157,
+   0.226,
+   0.177
+  ]
  }
 }

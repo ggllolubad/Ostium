@@ -112,7 +112,7 @@ static func _make_upgrades() -> bool:
 		u.base = id
 		CARDS[id + "+"] = u
 	return true
-const CLASS_ORDER := ["bulwark", "duelist", "elementalist", "alchemist", "oracle", "hexweaver"]
+const CLASS_ORDER := ["bulwark", "duelist", "elementalist", "alchemist", "oracle", "hexweaver", "vessel"]
 
 static func _load_json(path: String) -> Dictionary:
 	var f := FileAccess.open(path, FileAccess.READ)

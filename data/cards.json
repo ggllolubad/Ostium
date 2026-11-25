@@ -29085,6 +29085,5022 @@
 "note": "Three red threads pulled taut from three heroes meet at one foe's throat.",
 "arch": "fatebinder"
 },
+"ve_draw_breath": {
+"name": "Draw Breath",
+"cost": 1,
+"rarity": "K",
+"target": "ally",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "largest"
+},
+{
+"t": "take",
+"n": 1,
+"e": "largest",
+"to": "front_enemy",
+"if": "!consumed"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self"
+}
+],
+"text": "Take 1 stack of a hero's largest course. If it carried none, take 1 stack of the front foe's largest course instead. Gain 2 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_draw_breath",
+"up": {
+"text": "Take up to 2 stacks of a hero's largest course. If it carried none, take up to 2 stacks of the front foe's largest course instead. Gain 2 Block.",
+"fx": [
+{
+"t": "take",
+"n": 2,
+"e": "largest"
+},
+{
+"t": "take",
+"n": 2,
+"e": "largest",
+"to": "front_enemy",
+"if": "!consumed"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self"
+}
+]
+},
+"flavour": "In through the open hand. Whatever burns them settles here.",
+"note": "The Vessel breathes in, palm turned to a hero, and a bead of fire crosses onto the vermilion band.",
+"arch": "core"
+},
+"ve_shelter": {
+"name": "Shelter",
+"cost": 1,
+"rarity": "K",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "guard"
+}
+],
+"text": "Guard an adjacent hero this round.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "hearth",
+"art": "ve_shelter",
+"up": {
+"text": "Guard an adjacent hero this round. Gain 2 Block.",
+"fx": [
+{
+"t": "guard"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self"
+}
+]
+},
+"flavour": "Stand behind me. It cannot hurt me the way it hurts you.",
+"note": "The Hearth Vessel steps half a pace aside, long sleeve raised before a hunched hero.",
+"arch": "hearth"
+},
+"ve_breathe_out": {
+"name": "Breathe Out",
+"cost": 1,
+"rarity": "K",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 3
+}
+],
+"text": "Give 1 stack of your largest held course to the target. Deal 3.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_breathe_out",
+"up": {
+"text": "Give 1 stack of your largest held course to the target. Deal 5.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 5
+}
+]
+},
+"flavour": "The breath goes out, and what it carried goes with it.",
+"note": "The Mouth Vessel exhales toward a foe; a bead of deep blue leaves the band and crosses.",
+"arch": "mouth"
+},
+"ve_weigh": {
+"name": "Weigh",
+"cost": 1,
+"rarity": "K",
+"target": "self",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 3
+}
+],
+"text": "Even out your held stacks across the courses you hold. Gain 3 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "whole",
+"art": "ve_weigh",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Gain 5 Block.",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 5
+}
+]
+},
+"flavour": "Six pans on one beam. None of them may sink.",
+"note": "The Whole Vessel holds both palms level; the seals on the bands slide until they match.",
+"arch": "whole"
+},
+"ve_open_hand": {
+"name": "Open Hand",
+"cost": 1,
+"rarity": "S",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 5
+},
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+}
+],
+"text": "Deal 5. Give 1 stack of your largest held course to the target.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_open_hand",
+"up": {
+"text": "Deal 7. Give 1 stack of your largest held course to the target.",
+"fx": [
+{
+"t": "dmg",
+"n": 7
+},
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+}
+]
+},
+"flavour": "An open hand, lifted. What it held crosses over.",
+"note": "The Vessel lifts an open inked palm toward a foe and a bead of vermilion leaves the skin.",
+"arch": "core"
+},
+"ve_bear_it": {
+"name": "Bear It",
+"cost": 1,
+"rarity": "S",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 4,
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Gain 4 Block, plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_bear_it",
+"up": {
+"text": "Gain 6 Block, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "block",
+"n": 6,
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "It settles on the skin and waits. So do I.",
+"note": "A blow lands on the upright Vessel; the seals on the bands do not stir.",
+"arch": "hearth"
+},
+"ve_take_into_me": {
+"name": "Take Into Me",
+"cost": 1,
+"rarity": "S",
+"target": "ally",
+"fx": [
+{
+"t": "take",
+"n": 4,
+"e": "largest"
+},
+{
+"t": "heal",
+"n": 2
+}
+],
+"text": "Take up to 4 stacks of a hero's largest course. That hero heals 2.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_take_into_me",
+"up": {
+"text": "Take up to 5 stacks of a hero's largest course. That hero heals 3.",
+"fx": [
+{
+"t": "take",
+"n": 5,
+"e": "largest"
+},
+{
+"t": "heal",
+"n": 3
+}
+]
+},
+"flavour": "What would burn you only settles on me.",
+"note": "The Vessel lays a palm on a scorched hero's shoulder; the burn climbs into the vermilion band.",
+"arch": "hearth"
+},
+"ve_give_back": {
+"name": "Give Back",
+"cost": 1,
+"rarity": "S",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 4,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self"
+}
+],
+"text": "Give up to 4 stacks of your largest held course to the target. Gain 2 Block.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_give_back",
+"up": {
+"text": "Give up to 5 stacks of your largest held course to the target. Gain 3 Block.",
+"fx": [
+{
+"t": "give",
+"n": 5,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "block",
+"n": 3,
+"to": "self"
+}
+]
+},
+"flavour": "It was yours before it was mine. Take it home.",
+"note": "The Vessel turns a palm outward and the deep blue band empties onto a foe as a skin of water.",
+"arch": "mouth"
+},
+"ve_six_breaths": {
+"name": "Six Breaths",
+"cost": 1,
+"rarity": "S",
+"target": "self",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+},
+{
+"t": "block",
+"n": 2
+}
+],
+"text": "Hold 1 stack of each course you do not hold. Gain 2 Block. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Exhaust"
+],
+"art": "ve_six_breaths",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Gain 2 Block.",
+"kw": []
+},
+"flavour": "Six breaths, one for each ink. On the sixth the body is whole.",
+"note": "The Vessel breathes in slowly and all six bands brighten, from the fingertips to the jaw.",
+"arch": "whole"
+},
+"ve_lift": {
+"name": "Lift",
+"cost": 1,
+"rarity": "C",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 2,
+"per": "consumed",
+"k": 1
+}
+],
+"text": "Take all of an adjacent hero's largest course. That hero gains 2 Block, plus 1 per stack taken.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_lift",
+"up": {
+"text": "Take all of an adjacent hero's largest course. That hero gains 4 Block, plus 1 per stack taken.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 4,
+"per": "consumed",
+"k": 1
+}
+]
+},
+"flavour": "Lean on me. Give me the heavy part.",
+"note": "The Vessel slips an arm under a stooped hero; rime lifts from their mail onto the pale blue band.",
+"arch": "hearth"
+},
+"ve_stand_near": {
+"name": "Stand Near",
+"cost": 1,
+"rarity": "C",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "guard"
+},
+{
+"t": "block",
+"n": 3,
+"to": "self"
+}
+],
+"text": "Guard an adjacent hero this round. Gain 3 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_stand_near",
+"up": {
+"text": "Guard an adjacent hero this round. Gain 5 Block.",
+"fx": [
+{
+"t": "guard"
+},
+{
+"t": "block",
+"n": 5,
+"to": "self"
+}
+]
+},
+"flavour": "Whatever is thrown at you, throw it at me.",
+"note": "The Vessel stands at a hero's shoulder as a foe's spit of fire bends toward the inked arm.",
+"arch": "hearth"
+},
+"ve_banked_coals": {
+"name": "Banked Coals",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 3,
+"per": "held_total",
+"k": 1,
+"max": 10
+}
+],
+"text": "Gain 3 Block, plus 1 per stack you hold, at most 10 in all.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_banked_coals",
+"up": {
+"text": "Gain 4 Block, plus 1 per stack you hold, at most 14 in all.",
+"fx": [
+{
+"t": "block",
+"n": 4,
+"per": "held_total",
+"k": 1,
+"max": 14
+}
+]
+},
+"flavour": "Banked coals keep the house warm all night.",
+"note": "The Vessel stands still while the held seals glow under the robe like coals under ash.",
+"arch": "hearth+whole"
+},
+"ve_weight_of_it": {
+"name": "The Weight of It",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 2,
+"per": "held_total",
+"k": 1,
+"max": 12
+}
+],
+"text": "Deal 2, plus 1 per stack you hold, at most 12 in all.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_weight_of_it",
+"up": {
+"text": "Deal 3, plus 1 per stack you hold, at most 16 in all.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_total",
+"k": 1,
+"max": 16
+}
+]
+},
+"flavour": "You laid all of this on them. Feel what it weighs.",
+"note": "The Vessel lowers one open palm onto a foe and the foe sags as if under a millstone.",
+"arch": "hearth"
+},
+"ve_hearthstone": {
+"name": "Hearthstone",
+"cost": 1,
+"rarity": "C",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "block",
+"n": 3
+},
+{
+"t": "status",
+"n": 1,
+"s": "regen",
+"per": "held_kinds",
+"k": 0.5
+}
+],
+"text": "An adjacent hero gains 3 Block and Regen 1, plus 1 Regen per 2 different courses you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_hearthstone",
+"up": {
+"text": "An adjacent hero gains 4 Block and Regen 2, plus 1 Regen per 2 different courses you hold.",
+"fx": [
+{
+"t": "block",
+"n": 4
+},
+{
+"t": "status",
+"n": 2,
+"s": "regen",
+"per": "held_kinds",
+"k": 0.5
+}
+]
+},
+"flavour": "Sit by me. The stone keeps the heat long after the fire.",
+"note": "A hero warms raw hands at the Vessel's banded forearm as at a hearthstone.",
+"arch": "hearth+whole"
+},
+"ve_warm_hands": {
+"name": "Warm Hands",
+"cost": 1,
+"rarity": "C",
+"target": "ally",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "heal",
+"n": 1,
+"per": "consumed",
+"k": 1
+}
+],
+"text": "Take 1 stack of every course on a hero. That hero heals 1, plus 1 per stack taken.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_warm_hands",
+"up": {
+"text": "Take 1 stack of every course on a hero. That hero heals 3, plus 1 per stack taken.",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "heal",
+"n": 3,
+"per": "consumed",
+"k": 1
+}
+]
+},
+"flavour": "Every sickness has a colour. I take a little of each.",
+"note": "The Vessel cups a hero's face in both hands; thin threads of six inks run up the wrists.",
+"arch": "hearth"
+},
+"ve_shoulder_it": {
+"name": "Shoulder It",
+"cost": 1,
+"rarity": "C",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 3,
+"to": "self"
+},
+{
+"t": "block",
+"n": 4,
+"if": "t.taunt>0"
+}
+],
+"text": "Take all of an adjacent hero's largest course. Gain 3 Block. If that hero has Taunt, it gains 4 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_shoulder_it",
+"up": {
+"text": "Take all of an adjacent hero's largest course. Gain 4 Block. If that hero has Taunt, it gains 6 Block.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 4,
+"to": "self"
+},
+{
+"t": "block",
+"n": 6,
+"if": "t.taunt>0"
+}
+]
+},
+"flavour": "You hold the door. I will hold what comes through it.",
+"note": "The Vessel stands at the Bulwark's back, drawing a green rot off the door-shield into the skin.",
+"arch": "hearth+bulwark_taunt"
+},
+"ve_come_to_me": {
+"name": "Come to Me",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "block",
+"n": 4
+}
+],
+"text": "Gain Taunt and 4 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_come_to_me",
+"up": {
+"text": "Gain Taunt and 6 Block.",
+"fx": [
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "block",
+"n": 6
+}
+]
+},
+"flavour": "Here. Lay it on me. I am the only one it cannot hurt.",
+"note": "The Vessel opens both arms in the orans pose and every foe turns toward the inked palms.",
+"arch": "hearth"
+},
+"ve_spit": {
+"name": "Spit",
+"cost": 0,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 2
+}
+],
+"text": "Give 1 Volatile stack of your largest held course to the target. Deal 2.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_spit",
+"up": {
+"text": "Give 1 Volatile stack of your largest held course to the target. Deal 3.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 3
+}
+]
+},
+"flavour": "A drop is enough, if it lands on the right ink.",
+"note": "The Vessel flicks two fingers and one bright bead flies from the band into a foe's settled ink.",
+"arch": "mouth"
+},
+"ve_swallow": {
+"name": "Swallow",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 2,
+"per": "consumed",
+"k": 1,
+"to": "self"
+}
+],
+"text": "Take all of the target's largest course. Gain 2 Block, plus 1 per stack taken.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_swallow",
+"up": {
+"text": "Take all of the target's largest course. Gain 4 Block, plus 1 per stack taken.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "block",
+"n": 4,
+"per": "consumed",
+"k": 1,
+"to": "self"
+}
+]
+},
+"flavour": "Courses settle on me and wait. Yours will wait too.",
+"note": "A foe's steam drains off its hide and settles as seals along the Vessel's forearm.",
+"arch": "mouth+hearth"
+},
+"ve_mouthful": {
+"name": "Mouthful",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "dmg",
+"n": 2,
+"per": "consumed",
+"k": 1
+}
+],
+"text": "Take 1 stack of every course on the target. Deal 2, plus 1 per stack taken.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_mouthful",
+"up": {
+"text": "Take 1 stack of every course on the target. Deal 4, plus 1 per stack taken.",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "dmg",
+"n": 4,
+"per": "consumed",
+"k": 1
+}
+]
+},
+"flavour": "A taste of each. The body remembers every one.",
+"note": "The Vessel touches a many-coloured foe and a thread of each colour follows the hand back.",
+"arch": "mouth+whole"
+},
+"ve_retch": {
+"name": "Retch",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "stable",
+"to": "adjacent"
+}
+],
+"text": "Give up to 3 stacks of your largest held course to the target, then up to 2 stacks of your largest held course to each foe beside it.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_retch",
+"up": {
+"text": "Give up to 4 stacks of your largest held course to the target, then up to 3 stacks of your largest held course to each foe beside it.",
+"fx": [
+{
+"t": "give",
+"n": 4,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable",
+"to": "adjacent"
+}
+]
+},
+"flavour": "Too much at once. It goes back where it came from, and further.",
+"note": "The Vessel's open hand sweeps along the foes' line and green rot spatters across three of them.",
+"arch": "mouth"
+},
+"ve_taste": {
+"name": "Taste",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "draw",
+"n": 1,
+"to": "self",
+"if": "m.spectrum>=2"
+},
+{
+"t": "take",
+"n": 2,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 2
+}
+],
+"text": "If the target carries 2 or more different courses, draw 1 more card next round. Take up to 2 stacks of its largest course. Deal 2.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_taste",
+"up": {
+"text": "If the target carries 2 or more different courses, draw 1 more card next round. Take up to 2 stacks of its largest course. Deal 4.",
+"fx": [
+{
+"t": "draw",
+"n": 1,
+"to": "self",
+"if": "m.spectrum>=2"
+},
+{
+"t": "take",
+"n": 2,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 4
+}
+]
+},
+"flavour": "Salt, smoke, copper. I know what you are made of now.",
+"note": "The Vessel touches a fingertip to a foe's stained hide, then to its own unclenched lips.",
+"arch": "mouth+elementalist_courses"
+},
+"ve_other_half": {
+"name": "The Other Half",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 5,
+"if": "reactions>0"
+}
+],
+"text": "Give up to 2 Volatile stacks of your largest held course to the target. If the company has set off a Conjunction this round, deal 5.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_other_half",
+"up": {
+"text": "Give up to 3 Volatile stacks of your largest held course to the target. If the company has set off a Conjunction this round, deal 6.",
+"fx": [
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 6,
+"if": "reactions>0"
+}
+]
+},
+"flavour": "Every course is half of something. I carry the missing half.",
+"note": "A foe wears a skin of water; the Vessel's gold band empties onto it and the water lights.",
+"arch": "mouth"
+},
+"ve_soak_the_mark": {
+"name": "Soak the Mark",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 3
+},
+{
+"t": "give",
+"n": 2,
+"e": "water",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 2,
+"e": "water",
+"attr": "volatile",
+"if": "t.mark>0"
+}
+],
+"text": "Deal 3. Give up to 2 Water to the target. If it is Marked, also give it up to 2 Volatile Water.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_soak_the_mark",
+"up": {
+"text": "Deal 4. Give up to 3 Water to the target. If it is Marked, also give it up to 3 Volatile Water.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "give",
+"n": 3,
+"e": "water",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 3,
+"e": "water",
+"attr": "volatile",
+"if": "t.mark>0"
+}
+]
+},
+"flavour": "Wet the place the blade will find. Lightning loves water.",
+"note": "The Vessel lays a wet palm on the spot the Duelist marked; the deep blue band runs dry.",
+"arch": "mouth+duelist_mark"
+},
+"ve_second_mouthful": {
+"name": "Second Mouthful",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 3
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile",
+"if": "same_target"
+}
+],
+"text": "Deal 3. Give up to 2 stacks of your largest held course to the target. If the action before this one struck the same foe, also give it up to 2 Volatile stacks of your largest held course.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_second_mouthful",
+"up": {
+"text": "Deal 4. Give up to 3 stacks of your largest held course to the target. If the action before this one struck the same foe, also give it up to 2 Volatile stacks of your largest held course.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile",
+"if": "same_target"
+}
+]
+},
+"flavour": "The first lays the table. The second lights it.",
+"note": "The Vessel's second palm follows the first onto the same foe, and the inks meet.",
+"arch": "mouth"
+},
+"ve_bitter_gift": {
+"name": "Bitter Gift",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "toxin",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 2,
+"e": "void",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 0,
+"per": "t.hex",
+"k": 0.5
+}
+],
+"text": "Give up to 2 Toxin and up to 2 Void to the target. Deal 1 per 2 Hex on it.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "toxin",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_bitter_gift",
+"up": {
+"text": "Give up to 3 Toxin and up to 3 Void to the target. Deal 1 per 2 Hex on it.",
+"fx": [
+{
+"t": "give",
+"n": 3,
+"e": "toxin",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 3,
+"e": "void",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 0,
+"per": "t.hex",
+"k": 0.5
+}
+]
+},
+"flavour": "Rot and hollow, laid on a cursed thing. It will not mend.",
+"note": "Green and violet-black drip from the Vessel's palm onto a foe already bound in the Hexweaver's knots.",
+"arch": "mouth+hexweaver_hex"
+},
+"ve_ink_band": {
+"name": "Ink Band",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+}
+],
+"text": "Hold 1 stack of each course you do not hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_ink_band",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Gain 3 Block.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+},
+{
+"t": "block",
+"n": 3
+}
+]
+},
+"flavour": "Vermilion, pale blue, gold, deep blue, green, violet-black. In that order.",
+"note": "A bare band on the Vessel's arm fills with ink, edged in a hairline of gold.",
+"arch": "whole"
+},
+"ve_rule_line": {
+"name": "Rule Line",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 1,
+"per": "held_kinds",
+"k": 2
+}
+],
+"text": "Deal 1, plus 2 per different course you hold.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_rule_line",
+"up": {
+"text": "Deal 3, plus 2 per different course you hold.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_kinds",
+"k": 2
+}
+]
+},
+"flavour": "Straight as a scribe's rule. Each line a colour, each colour a cut.",
+"note": "The Vessel draws a level hand across a foe and six thin lines of ink open on its hide.",
+"arch": "whole"
+},
+"ve_balance_the_scale": {
+"name": "Balance the Scale",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "draw",
+"n": 1
+}
+],
+"text": "Even out your held stacks across the courses you hold. Draw 1 more card next round.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_balance_the_scale",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Gain 3 Block. Draw 1 more card next round.",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 3
+},
+{
+"t": "draw",
+"n": 1
+}
+]
+},
+"flavour": "Too much of one, too little of another. She kept them level.",
+"note": "The Vessel holds both palms out, level, and the seals drift along the bands to match.",
+"arch": "whole"
+},
+"ve_nimbus": {
+"name": "Nimbus",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 4
+},
+{
+"t": "ward",
+"n": 1,
+"to": "allies_other",
+"if": "held_kinds>=2&held_max<=held_min"
+}
+],
+"text": "Gain 4 Block. If you hold 2 or more courses, all in equal stacks, every other hero gains 1 Ward.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_nimbus",
+"up": {
+"text": "Gain 5 Block. If you hold 2 or more courses, all in equal stacks, every other hero gains 2 Ward.",
+"fx": [
+{
+"t": "block",
+"n": 5
+},
+{
+"t": "ward",
+"n": 2,
+"to": "allies_other",
+"if": "held_kinds>=2&held_max<=held_min"
+}
+]
+},
+"flavour": "A broken ring of six arcs. When they are equal, it closes.",
+"note": "The six-part ink ring behind the Vessel's head brightens arc by arc over the company.",
+"arch": "whole"
+},
+"ve_illumination": {
+"name": "Illumination",
+"cost": 0,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "prime",
+"n": 0,
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Prime 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_illumination",
+"up": {
+"text": "Prime 1, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "prime",
+"n": 1,
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "Gold on the margin, so the eye goes where it must.",
+"note": "Faint script in the Vessel's bands lights up, and a hero's blade catches the colours.",
+"arch": "whole"
+},
+"ve_copy_the_page": {
+"name": "Copy the Page",
+"cost": 1,
+"rarity": "C",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 2
+},
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "m.fire>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "m.frost>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "m.lightning>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "m.water>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "m.toxin>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "m.void>0"
+}
+],
+"text": "Deal 2. Hold 1 stack of each course the target carries.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_copy_the_page",
+"up": {
+"text": "Deal 4. Hold 1 stack of each course the target carries.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "m.fire>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "m.frost>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "m.lightning>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "m.water>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "m.toxin>0"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "m.void>0"
+}
+]
+},
+"flavour": "A scholar's habit. Read it once and it is written in you.",
+"note": "The Vessel studies a foe's stained hide; the same colours write themselves onto the bands.",
+"arch": "whole+elementalist_courses"
+},
+"ve_drink_the_dregs": {
+"name": "Drink the Dregs",
+"cost": 1,
+"rarity": "C",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 2
+},
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void&flasks_used"
+}
+],
+"text": "Gain 2 Block. Dosed: hold 1 stack of each course you do not hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Dosed"
+],
+"art": "ve_drink_the_dregs",
+"up": {
+"text": "Gain 4 Block. Dosed: hold 1 stack of each course you do not hold.",
+"fx": [
+{
+"t": "block",
+"n": 4
+},
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin&flasks_used"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void&flasks_used"
+}
+]
+},
+"flavour": "Whatever the healer left in the cup, I will hold.",
+"note": "The Vessel drains the last of an Alchemist's flask and the empty bands fill with colour.",
+"arch": "whole+alchemist_flask"
+},
+"ve_sponge": {
+"name": "Sponge",
+"cost": 1,
+"rarity": "U",
+"target": "all_allies",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 0,
+"per": "consumed",
+"k": 1,
+"max": 10,
+"to": "self"
+}
+],
+"text": "Take every course stack from every hero. Gain 1 Block per stack taken, at most 10.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_sponge",
+"up": {
+"text": "Take every course stack from every hero. Gain 2 Block, plus 1 per stack taken, at most 14 in all.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 2,
+"per": "consumed",
+"k": 1,
+"max": 14,
+"to": "self"
+}
+]
+},
+"flavour": "Wring it out of them. Let it soak into me.",
+"note": "Colour drains off every hero at once and runs up the Vessel's bands like water up a cloth.",
+"arch": "hearth"
+},
+"ve_unclench": {
+"name": "Unclench",
+"cost": 2,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 0,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "heal",
+"n": 0,
+"per": "consumed",
+"k": 0.5,
+"max": 5,
+"to": "all_allies"
+},
+{
+"t": "stress",
+"n": -4,
+"to": "all_allies"
+}
+],
+"text": "Give everything you hold to the target. Every hero heals 1 per 2 stacks given, at most 5, and sheds 4 stress.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_unclench",
+"up": {
+"text": "Give everything you hold to the target. Every hero heals 1 per 2 stacks given, at most 5, and sheds 4 stress.",
+"cost": 1
+},
+"flavour": "Let go. It was never mine to keep.",
+"note": "The Vessel opens a clenched fist for the first time; every seal flies off the skin toward a foe.",
+"arch": "hearth+mouth"
+},
+"ve_warm_room": {
+"name": "The Warm Room",
+"cost": 1,
+"rarity": "U",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 1,
+"per": "held_kinds",
+"k": 1,
+"to": "self_adjacent"
+},
+{
+"t": "block",
+"n": 3
+}
+],
+"text": "Each hero beside you gains 1 Block, plus 1 per different course you hold. Gain 3 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_warm_room",
+"up": {
+"text": "Each hero beside you gains 2 Block, plus 1 per different course you hold. Gain 4 Block.",
+"fx": [
+{
+"t": "block",
+"n": 2,
+"per": "held_kinds",
+"k": 1,
+"to": "self_adjacent"
+},
+{
+"t": "block",
+"n": 4
+}
+]
+},
+"flavour": "One room in the Guesthouse is always warm. The Vessel stands in it.",
+"note": "The heroes on either side lean in toward the Vessel as toward a stove in a cold room.",
+"arch": "hearth+whole"
+},
+"ve_heavy_air": {
+"name": "Heavy Air",
+"cost": 1,
+"rarity": "U",
+"target": "all_enemies",
+"fx": [
+{
+"t": "dmg",
+"n": 2,
+"per": "held_total",
+"k": 0.5,
+"max": 6
+}
+],
+"text": "Deal 2, plus 1 per 2 stacks you hold, to every foe, at most 6 each.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_heavy_air",
+"up": {
+"text": "Deal 3, plus 1 per 2 stacks you hold, to every foe, at most 8 each.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_total",
+"k": 0.5,
+"max": 8
+}
+]
+},
+"flavour": "The room grows heavy with everything I carry.",
+"note": "The air around the still Vessel thickens with colour and the foes' line bows under it.",
+"arch": "hearth"
+},
+"ve_keep_watch": {
+"name": "Keep Watch",
+"cost": 1,
+"rarity": "U",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "guard"
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self"
+}
+],
+"text": "Guard an adjacent hero this round and take every course stack on it. Gain 2 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_keep_watch",
+"up": {
+"text": "Guard an adjacent hero this round and take every course stack on it. Gain 5 Block.",
+"fx": [
+{
+"t": "guard"
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 5,
+"to": "self"
+}
+]
+},
+"flavour": "Sleep. I sleep standing, and I will stand here.",
+"note": "The Vessel stands asleep beside a resting hero, drawing the fever off them in thin threads.",
+"arch": "hearth"
+},
+"ve_bare_skin": {
+"name": "Bare Skin",
+"cost": 1,
+"rarity": "U",
+"target": "self",
+"fx": [
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "status",
+"n": 1,
+"s": "thorns",
+"to": "self",
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Gain Taunt, and 1 Thorns plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_bare_skin",
+"up": {
+"text": "Gain Taunt and 4 Block, and 1 Thorns plus 1 per different course you hold.",
+"fx": [
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "block",
+"n": 4
+},
+{
+"t": "status",
+"n": 1,
+"s": "thorns",
+"to": "self",
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "Strike the inked skin if you like. Every band bites back.",
+"note": "A foe's claw rakes the Vessel's sleeve and comes away stained in six colours.",
+"arch": "hearth+whole"
+},
+"ve_pass_through": {
+"name": "Pass Through",
+"cost": 1,
+"rarity": "U",
+"target": "ally",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "heal",
+"n": 2
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable",
+"to": "front_enemy"
+}
+],
+"text": "Take all of a hero's largest course. That hero heals 2. Give up to 3 stacks of your largest held course to the front foe.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_pass_through",
+"up": {
+"text": "Take all of a hero's largest course. That hero heals 3. Give up to 3 Volatile stacks of your largest held course to the front foe.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "heal",
+"n": 3
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "volatile",
+"to": "front_enemy"
+}
+]
+},
+"flavour": "In through one hand, out through the other. I am only the door.",
+"note": "One palm rests on a hero, the other opens at the front foe; the colour runs between them.",
+"arch": "hearth+mouth"
+},
+"ve_exhale": {
+"name": "Exhale",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 3,
+"per": "reactions",
+"k": 2
+}
+],
+"text": "Give 1 Volatile stack of every course you hold to the target, one course after another. Then deal 3, plus 2 per Conjunction the company has set off this round.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_exhale",
+"up": {
+"text": "Give 1 Volatile stack of every course you hold to the target, one course after another. Then deal 4, plus 2 per Conjunction the company has set off this round.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 4,
+"per": "reactions",
+"k": 2
+}
+]
+},
+"flavour": "One long breath, and every colour in it.",
+"note": "The Vessel breathes out and a ribbon of six inks crosses to a foe, flaring where they meet.",
+"arch": "mouth+whole"
+},
+"ve_open_palm": {
+"name": "Open Palm",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 5
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile",
+"if": "prime_count>0"
+}
+],
+"text": "Deal 5. If a Primed action has resolved this round, this one included, give up to 2 Volatile stacks of your largest held course to the target.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_open_palm",
+"up": {
+"text": "Deal 6. If a Primed action has resolved this round, this one included, give up to 3 Volatile stacks of your largest held course to the target.",
+"fx": [
+{
+"t": "dmg",
+"n": 6
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "volatile",
+"if": "prime_count>0"
+}
+]
+},
+"flavour": "Told where to strike, the hand does not hesitate.",
+"note": "The Vessel's palm strikes where the Oracle's thread points, and the held ink bursts on contact.",
+"arch": "mouth+oracle_prime"
+},
+"ve_conduit": {
+"name": "Conduit",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 3
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable",
+"to": "adjacent"
+}
+],
+"text": "Deal 3. Take every course stack on the target, then give up to 3 stacks of your largest held course to each foe beside it.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_conduit",
+"up": {
+"text": "Deal 4. Take every course stack on the target, then give up to 4 stacks of your largest held course to each foe beside it.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "give",
+"n": 4,
+"e": "largest",
+"attr": "stable",
+"to": "adjacent"
+}
+]
+},
+"flavour": "From one to another, through me. I keep nothing.",
+"note": "Colour drains from one foe up the Vessel's arm and pours out of the other palm onto its neighbours.",
+"arch": "mouth"
+},
+"ve_draw_it_out": {
+"name": "Draw It Out",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "pull",
+"n": 1
+},
+{
+"t": "take",
+"n": 3,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 3
+}
+],
+"text": "Pull the target 1 rank forward. Take up to 3 stacks of its largest course. Deal 3.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3,
+4
+],
+"art": "ve_draw_it_out",
+"up": {
+"text": "Pull the target 1 rank forward. Take up to 3 stacks of its largest course. Deal 5.",
+"fx": [
+{
+"t": "pull",
+"n": 1
+},
+{
+"t": "take",
+"n": 3,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 5
+}
+]
+},
+"flavour": "Come closer. What you carry is too heavy for the back of the line.",
+"note": "The Vessel beckons and a rear foe stumbles forward, its colour trailing toward the open hand.",
+"arch": "mouth"
+},
+"ve_spit_through": {
+"name": "Spit Through",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "consume",
+"s": "ward"
+},
+{
+"t": "dmg",
+"n": 3
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "stable"
+}
+],
+"text": "Strip the target's Ward. Deal 3. Give up to 3 stacks of your largest held course to the target.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_spit_through",
+"up": {
+"text": "Strip the target's Ward. Deal 4. Give up to 4 stacks of your largest held course to the target.",
+"fx": [
+{
+"t": "consume",
+"s": "ward"
+},
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "give",
+"n": 4,
+"e": "largest",
+"attr": "stable"
+}
+]
+},
+"flavour": "A ward keeps out what is thrown. This is poured.",
+"note": "A foe's glimmering ward cracks under the Vessel's palm and the held ink runs through.",
+"arch": "mouth"
+},
+"ve_split_tongue": {
+"name": "Split Tongue",
+"cost": 1,
+"rarity": "U",
+"target": "all_enemies",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 2
+}
+],
+"text": "Give 1 stack of your largest held course to each foe. Deal 2 to every foe.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_split_tongue",
+"up": {
+"text": "Give 1 stack of your largest held course to each foe. Deal 3 to every foe.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 3
+}
+]
+},
+"flavour": "One word, said to all of them at once.",
+"note": "The Vessel speaks a single syllable and a bead of colour lands on every foe in the line.",
+"arch": "mouth"
+},
+"ve_bite": {
+"name": "Bite",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "react",
+"n": 1
+},
+{
+"t": "take",
+"n": 2,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 2
+}
+],
+"text": "Conjoin the target. Take up to 2 stacks of its largest course. Deal 2.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_bite",
+"up": {
+"text": "Conjoin the target. Take up to 2 stacks of its largest course. Deal 4.",
+"fx": [
+{
+"t": "react",
+"n": 1
+},
+{
+"t": "take",
+"n": 2,
+"e": "largest"
+},
+{
+"t": "dmg",
+"n": 4
+}
+]
+},
+"flavour": "Two inks laid side by side. One touch, and they wake.",
+"note": "The Vessel pinches the seam where two of a foe's colours meet and they flare together.",
+"arch": "mouth+elementalist_courses"
+},
+"ve_open_page": {
+"name": "The Open Page",
+"cost": 1,
+"rarity": "U",
+"target": "self",
+"fx": [
+{
+"t": "draw",
+"n": 1
+},
+{
+"t": "energy",
+"n": 1,
+"if": "held_kinds>=6"
+}
+],
+"text": "Draw 1 more card next round. If you are Whole, also gain 1 vigour next round.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_open_page",
+"up": {
+"text": "Draw 2 more cards next round. If you are Whole, also gain 1 vigour next round.",
+"fx": [
+{
+"t": "draw",
+"n": 2
+},
+{
+"t": "energy",
+"n": 1,
+"if": "held_kinds>=6"
+}
+]
+},
+"flavour": "The page lies open. Every colour is on it, and none has run.",
+"note": "The Vessel stands with one palm turned up like a lectern, six inks bright on the wrist.",
+"arch": "whole"
+},
+"ve_balanced_hands": {
+"name": "Balanced Hands",
+"cost": 1,
+"rarity": "U",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "dmg",
+"n": 6,
+"if": "held_kinds>=2&held_max<=held_min"
+}
+],
+"text": "Deal 4. If you hold 2 or more courses, all in equal stacks, deal 6 more.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_balanced_hands",
+"up": {
+"text": "Deal 5. If you hold 2 or more courses, all in equal stacks, deal 8 more.",
+"fx": [
+{
+"t": "dmg",
+"n": 5
+},
+{
+"t": "dmg",
+"n": 8,
+"if": "held_kinds>=2&held_max<=held_min"
+}
+]
+},
+"flavour": "Neither hand heavier. Neither hand slower.",
+"note": "Both of the Vessel's palms meet a foe at once, the bands on each arm exactly matched.",
+"arch": "whole"
+},
+"ve_even_breath": {
+"name": "Even Breath",
+"cost": 1,
+"rarity": "U",
+"target": "self",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 3,
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Even out your held stacks across the courses you hold. Gain 3 Block, plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_even_breath",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Gain 5 Block, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 5,
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "In for six. Hold for six. Out for six.",
+"note": "The Vessel's breath slows and the seals on every band settle to the same size.",
+"arch": "whole"
+},
+"ve_gather_the_inks": {
+"name": "Gather the Inks",
+"cost": 1,
+"rarity": "U",
+"target": "all_enemies",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "block",
+"n": 0,
+"per": "consumed",
+"k": 1,
+"max": 8,
+"to": "self"
+}
+],
+"text": "Take 1 stack of every course on every foe. Gain 1 Block per stack taken, at most 8.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_gather_the_inks",
+"up": {
+"text": "Take 1 stack of every course on every foe. Gain 2 Block, plus 1 per stack taken, at most 12 in all.",
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+},
+{
+"t": "block",
+"n": 2,
+"per": "consumed",
+"k": 1,
+"max": 12,
+"to": "self"
+}
+]
+},
+"flavour": "A drop from every pot on the scribe's table.",
+"note": "Thin threads of colour rise from every foe and gather into the Vessel's open hands.",
+"arch": "whole+mouth"
+},
+"ve_gilt_edge": {
+"name": "Gilt Edge",
+"cost": 1,
+"rarity": "U",
+"target": "ally_other",
+"fx": [
+{
+"t": "status",
+"n": 1,
+"s": "focus",
+"per": "held_kinds",
+"k": 0.5
+},
+{
+"t": "draw",
+"n": 1
+}
+],
+"text": "Another hero gains 1 Focus, plus 1 per 2 different courses you hold, and draws 1 more card next round.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_gilt_edge",
+"up": {
+"text": "Another hero gains 2 Focus, plus 1 per 2 different courses you hold, and draws 1 more card next round.",
+"fx": [
+{
+"t": "status",
+"n": 2,
+"s": "focus",
+"per": "held_kinds",
+"k": 0.5
+},
+{
+"t": "draw",
+"n": 1
+}
+]
+},
+"flavour": "Gild the edge of their page, and their next word lands true.",
+"note": "The Vessel traces a gold hairline along a hero's sigil and it brightens.",
+"arch": "whole"
+},
+"ve_upright": {
+"name": "Upright",
+"cost": 1,
+"rarity": "U",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 4
+},
+{
+"t": "status",
+"n": 1,
+"s": "anchor",
+"to": "self"
+},
+{
+"t": "prime",
+"n": 1,
+"per": "held_kinds",
+"k": 1,
+"if": "!moved"
+}
+],
+"text": "Gain 4 Block and 1 Anchor. If you have not moved this round, Prime 1, plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_upright",
+"up": {
+"text": "Gain 6 Block and 1 Anchor. If you have not moved this round, Prime 1, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "block",
+"n": 6
+},
+{
+"t": "status",
+"n": 1,
+"s": "anchor",
+"to": "self"
+},
+{
+"t": "prime",
+"n": 1,
+"per": "held_kinds",
+"k": 1,
+"if": "!moved"
+}
+]
+},
+"flavour": "The only one in the company who does not stoop.",
+"note": "The Vessel stands straight as a column among hunched heroes, feet bare and planted.",
+"arch": "whole"
+},
+"ve_the_weighing": {
+"name": "The Weighing",
+"cost": 2,
+"rarity": "R",
+"target": "enemy",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "dmg",
+"n": 0,
+"per": "held_kinds",
+"k": 3
+},
+{
+"t": "dmg",
+"n": 0,
+"per": "held_kinds",
+"k": 3,
+"if": "held_kinds>=6"
+}
+],
+"text": "Even out your held stacks across the courses you hold. Deal 3 per different course you hold. If you are Whole, deal 18 more.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_the_weighing",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Deal 3 per different course you hold. If you are Whole, deal 18 more.",
+"cost": 1
+},
+"flavour": "She weighed every course against the others. None was found wanting.",
+"note": "The Vessel holds a level palm over a foe and six inks press down on it with equal weight.",
+"arch": "whole"
+},
+"ve_mantle": {
+"name": "Mantle",
+"cost": 1,
+"rarity": "R",
+"target": "self",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+},
+{
+"t": "block",
+"n": 4
+}
+],
+"text": "Take every course stack from every other hero. Gain 4 Block. Rite: at the end of this round and the next, take every course stack from every other hero. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"art": "ve_mantle",
+"up": {
+"text": "Take every course stack from every other hero. Gain 7 Block. Rite: at the end of this round and the next, take every course stack from every other hero. Exhaust.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+},
+{
+"t": "block",
+"n": 7
+}
+]
+},
+"flavour": "Under the robe there is room for all of it.",
+"note": "The Vessel's undyed robe spreads like a mantle over the company and their colours run onto it.",
+"arch": "hearth",
+"rite": {
+"on": "round_end",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+}
+],
+"rounds": 1
+}
+},
+"ve_lay_it_down": {
+"name": "Lay It Down",
+"cost": 1,
+"rarity": "R",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 2,
+"per": "held_total",
+"k": 1,
+"max": 15
+},
+{
+"t": "give",
+"n": 2,
+"e": "all",
+"attr": "stable"
+}
+],
+"text": "Deal 2, plus 1 per stack you hold, at most 15 in all. Then give up to 2 stacks of every course you hold to the target.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_lay_it_down",
+"up": {
+"text": "Deal 3, plus 1 per stack you hold, at most 18 in all. Then give up to 2 stacks of every course you hold to the target.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_total",
+"k": 1,
+"max": 18
+},
+{
+"t": "give",
+"n": 2,
+"e": "all",
+"attr": "stable"
+}
+]
+},
+"flavour": "I carried it this far. Here is where I set it down.",
+"note": "The Vessel kneels for the first time and presses both palms to a fallen foe; the bands pale.",
+"arch": "hearth+mouth"
+},
+"ve_six_seals": {
+"name": "Six Seals",
+"cost": 2,
+"rarity": "R",
+"target": "all_allies",
+"fx": [
+{
+"t": "block",
+"n": 2,
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Every hero gains 2 Block, plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_six_seals",
+"up": {
+"text": "Every hero gains 3 Block, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "block",
+"n": 3,
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "A seal for each course, pressed over each of them.",
+"note": "Six coloured seals lift off the Vessel's bands and settle on the company's armour.",
+"arch": "hearth+whole"
+},
+"ve_drink_the_spill": {
+"name": "Drink the Spill",
+"cost": 1,
+"rarity": "R",
+"target": "self",
+"fx": [],
+"text": "Rite: the first two times each round the company sets off a Conjunction on a foe, take 1 stack of every course left on it. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"art": "ve_drink_the_spill",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Rite: the first two times each round the company sets off a Conjunction on a foe, take 1 stack of every course left on it. Exhaust.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+}
+]
+},
+"flavour": "When the inks meet and burst, something always spills. I drink it.",
+"note": "A Conjunction flares on a foe, and the leftover colour streams off it into the Vessel's palm.",
+"arch": "mouth+elementalist_conjunction",
+"rite": {
+"on": "conjunction",
+"per_round": 2,
+"fx": [
+{
+"t": "take",
+"n": 1,
+"e": "all"
+}
+]
+}
+},
+"ve_return_it": {
+"name": "Return It",
+"cost": 1,
+"rarity": "R",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 4
+}
+],
+"text": "Gain 4 Block. Rite: the first two times each round a foe hits you, give it 1 Volatile stack of your largest held course. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"art": "ve_return_it",
+"up": {
+"text": "Gain 4 Block. Rite: the first two times each round a foe hits you, give it 2 Volatile stacks of your largest held course. Exhaust.",
+"rite": {
+"on": "hit",
+"per_round": 2,
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+}
+]
+}
+},
+"flavour": "Strike me and you touch every course I hold.",
+"note": "A foe's blow lands on the inked forearm and a bright seal leaps back along its arm.",
+"arch": "hearth+mouth",
+"rite": {
+"on": "hit",
+"per_round": 2,
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+}
+]
+}
+},
+"ve_illuminated_initial": {
+"name": "Illuminated Initial",
+"cost": 1,
+"rarity": "R",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 2,
+"per": "held_kinds",
+"k": 1
+},
+{
+"t": "prime",
+"n": 0,
+"per": "dealt",
+"k": 0.5
+}
+],
+"text": "Deal 2, plus 1 per different course you hold. Prime half the damage dealt.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_illuminated_initial",
+"up": {
+"text": "Deal 3, plus 1 per different course you hold. Prime half the damage dealt.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_kinds",
+"k": 1
+},
+{
+"t": "prime",
+"n": 0,
+"per": "dealt",
+"k": 0.5
+}
+]
+},
+"flavour": "The first letter of the page, in every colour. The rest follows from it.",
+"note": "The Vessel's strike leaves a great illuminated letter on a foe, and a hero reads the gap.",
+"arch": "whole"
+},
+"ve_take_their_place": {
+"name": "Take Their Place",
+"cost": 1,
+"rarity": "R",
+"target": "adjacent_ally",
+"fx": [
+{
+"t": "swap"
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "block",
+"n": 4,
+"to": "self"
+}
+],
+"text": "Swap places with an adjacent hero and take every course stack on it. Gain Taunt and 4 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_take_their_place",
+"up": {
+"text": "Swap places with an adjacent hero and take every course stack on it. Gain Taunt and 7 Block.",
+"fx": [
+{
+"t": "swap"
+},
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "status",
+"n": 1,
+"s": "taunt",
+"to": "self"
+},
+{
+"t": "block",
+"n": 7,
+"to": "self"
+}
+]
+},
+"flavour": "Step back. This place is mine now.",
+"note": "The Vessel steps into a wounded hero's place in the line, arms open, as the foes turn.",
+"arch": "hearth"
+},
+"ve_speak_to_all": {
+"name": "Speak to All",
+"cost": 1,
+"rarity": "R",
+"target": "all_enemies",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 2
+}
+],
+"text": "Give 1 stack of every course you hold to each foe. Deal 2 to every foe.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"art": "ve_speak_to_all",
+"up": {
+"text": "Give 1 stack of every course you hold to each foe. Deal 4 to every foe.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 4
+}
+]
+},
+"flavour": "She spoke once, and every course in the world answered.",
+"note": "The Vessel speaks with both palms out and each foe takes a different set of colours.",
+"arch": "mouth+whole"
+},
+"ve_sealed_skin": {
+"name": "Sealed Skin",
+"cost": 1,
+"rarity": "R",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 2,
+"per": "held_total",
+"k": 1,
+"max": 14
+},
+{
+"t": "status",
+"n": 0,
+"s": "thorns",
+"to": "self",
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Gain 2 Block, plus 1 per stack you hold, at most 14 in all. Gain 1 Thorns per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"art": "ve_sealed_skin",
+"up": {
+"text": "Gain 3 Block, plus 1 per stack you hold, at most 18 in all. Gain 1 Thorns per different course you hold.",
+"fx": [
+{
+"t": "block",
+"n": 3,
+"per": "held_total",
+"k": 1,
+"max": 18
+},
+{
+"t": "status",
+"n": 0,
+"s": "thorns",
+"to": "self",
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "Every seal on the skin is a ward and a warning.",
+"note": "The held seals on the Vessel's bands stand up like rivets as a foe closes.",
+"arch": "hearth+whole"
+},
+"ve_swallow_whole": {
+"name": "Swallow Whole",
+"cost": 1,
+"rarity": "R",
+"target": "enemy",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "execute",
+"n": 0,
+"per": "consumed",
+"k": 2
+}
+],
+"text": "Take every course stack on the target. Deal 4. Execute 2 per stack taken.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"kw": [
+"Execute"
+],
+"art": "ve_swallow_whole",
+"up": {
+"text": "Take every course stack on the target. Deal 6. Execute 2 per stack taken.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "dmg",
+"n": 6
+},
+{
+"t": "execute",
+"n": 0,
+"per": "consumed",
+"k": 2
+}
+]
+},
+"flavour": "Take every course out of it, and nothing is left to hold it up.",
+"note": "Every colour drains out of a doomed foe into the Vessel, and the grey husk folds.",
+"arch": "mouth+hexweaver_doom"
+},
+"ve_keep_the_hours": {
+"name": "Keep the Hours",
+"cost": 1,
+"rarity": "R",
+"target": "self",
+"fx": [
+{
+"t": "even"
+}
+],
+"text": "Even out your held stacks across the courses you hold. Rite: at the start of each round, even out your held stacks, then gain 1 Block plus 1 per different course you hold. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"art": "ve_keep_the_hours",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Rite: at the start of each round, even out your held stacks, then gain 2 Block plus 1 per different course you hold. Exhaust.",
+"rite": {
+"on": "round_start",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 2,
+"per": "held_kinds",
+"k": 1
+}
+]
+}
+},
+"flavour": "Every hour of the night, the same six breaths, the same six inks.",
+"note": "The Vessel sleeps standing through the night watch while the bands brighten in turn, hour by hour.",
+"arch": "whole+hearth",
+"rite": {
+"on": "round_start",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "block",
+"n": 1,
+"per": "held_kinds",
+"k": 1
+}
+]
+}
+},
+"ve_carry_them": {
+"name": "Carry Them",
+"cost": 2,
+"rarity": "X",
+"target": "all_allies",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 0,
+"per": "consumed",
+"k": 1,
+"max": 6
+}
+],
+"text": "Take every course stack from every hero. Every hero gains 1 Block per stack taken, at most 6.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "hearth",
+"art": "ve_carry_them",
+"up": {
+"text": "Take every course stack from every hero. Every hero gains 1 Block per stack taken, at most 6.",
+"cost": 1
+},
+"flavour": "All of you. Every colour you wear, I will carry home.",
+"note": "The Hearth Vessel draws the whole company's colours up the bands in one long breath.",
+"arch": "hearth"
+},
+"ve_stoke": {
+"name": "Stoke",
+"cost": 0,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self"
+},
+{
+"t": "block",
+"n": 2,
+"to": "self_adjacent"
+}
+],
+"text": "Hold 1 Fire. Each hero beside you gains 2 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "fire",
+"sub": "hearth",
+"art": "ve_stoke",
+"up": {
+"text": "Hold 1 Fire. Each hero beside you gains 3 Block.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self"
+},
+{
+"t": "block",
+"n": 3,
+"to": "self_adjacent"
+}
+]
+},
+"flavour": "A hearth needs a coal. I keep one lit.",
+"note": "A single bead of fire wakes on the vermilion band and the heroes beside it lean closer.",
+"arch": "hearth+whole"
+},
+"ve_lend_weight": {
+"name": "Lend Weight",
+"cost": 0,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "prime",
+"n": 1,
+"per": "held_total",
+"k": 0.5,
+"max": 8
+}
+],
+"text": "Prime 1, plus 1 per 2 stacks you hold, at most 8 in all.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "hearth",
+"art": "ve_lend_weight",
+"up": {
+"text": "Prime 2, plus 1 per 2 stacks you hold, at most 10 in all.",
+"fx": [
+{
+"t": "prime",
+"n": 2,
+"per": "held_total",
+"k": 0.5,
+"max": 10
+}
+]
+},
+"flavour": "Lean your blow on me. I am heavier than I look.",
+"note": "The Hearth Vessel sets a palm on a hero's back as the hero swings, the bands dimming as they lend.",
+"arch": "hearth"
+},
+"ve_spread_arms": {
+"name": "Spread Arms",
+"cost": 1,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "guard",
+"to": "self_adjacent"
+},
+{
+"t": "block",
+"n": 3
+}
+],
+"text": "Guard both heroes beside you this round. Gain 3 Block.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "hearth",
+"art": "ve_spread_arms",
+"up": {
+"text": "Guard both heroes beside you this round. Gain 5 Block.",
+"fx": [
+{
+"t": "guard",
+"to": "self_adjacent"
+},
+{
+"t": "block",
+"n": 5
+}
+]
+},
+"flavour": "Arms open, palms out. Everything aimed at them comes to me.",
+"note": "The Hearth Vessel stands in the orans pose between two heroes, the long sleeves over both.",
+"arch": "hearth"
+},
+"ve_warm_breath": {
+"name": "Warm Breath",
+"cost": 1,
+"rarity": "X",
+"target": "all_allies",
+"fx": [
+{
+"t": "heal",
+"n": 0,
+"per": "held_kinds",
+"k": 0.5
+},
+{
+"t": "stress",
+"n": -2
+}
+],
+"text": "Every hero heals 1 per 2 different courses you hold and sheds 2 stress.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "hearth",
+"art": "ve_warm_breath",
+"up": {
+"text": "Every hero heals 1, plus 1 per 2 different courses you hold, and sheds 3 stress.",
+"fx": [
+{
+"t": "heal",
+"n": 1,
+"per": "held_kinds",
+"k": 0.5
+},
+{
+"t": "stress",
+"n": -3
+}
+]
+},
+"flavour": "A slow breath, warm as a kitchen. Even the frightened ones sleep.",
+"note": "The Hearth Vessel breathes out over the company and faint colour warms their faces.",
+"arch": "hearth+whole"
+},
+"ve_full_weight": {
+"name": "Full Weight",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 4,
+"per": "held_total",
+"k": 1,
+"max": 16
+}
+],
+"text": "Deal 4, plus 1 per stack you hold, at most 16 in all.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "hearth",
+"art": "ve_full_weight",
+"up": {
+"text": "Deal 6, plus 1 per stack you hold, at most 20 in all.",
+"fx": [
+{
+"t": "dmg",
+"n": 6,
+"per": "held_total",
+"k": 1,
+"max": 20
+}
+]
+},
+"flavour": "Everything you laid on them, all at once.",
+"note": "The Hearth Vessel presses a palm to a foe and every seal on the bands bears down with it.",
+"arch": "hearth"
+},
+"ve_chew": {
+"name": "Chew",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 3
+},
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "volatile"
+}
+],
+"text": "Deal 3. Take all of the target's largest course, then give it up to 3 Volatile stacks of your largest held course.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_chew",
+"up": {
+"text": "Deal 4. Take all of the target's largest course, then give it up to 4 Volatile stacks of your largest held course.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "take",
+"n": 0,
+"e": "largest"
+},
+{
+"t": "give",
+"n": 4,
+"e": "largest",
+"attr": "volatile"
+}
+]
+},
+"flavour": "Taken in, turned over, given back. It never tastes the same twice.",
+"note": "The Mouth Vessel draws a foe's colour into the palm and pushes it straight back, flaring.",
+"arch": "mouth"
+},
+"ve_double_spit": {
+"name": "Double Spit",
+"cost": 0,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+}
+],
+"text": "Give 1 Volatile stack of your largest held course to the target, twice.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_double_spit",
+"up": {
+"text": "Give 1 Volatile stack of your largest held course to the target, twice. Deal 2.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 2
+}
+]
+},
+"flavour": "Once to wake it. Once to finish it.",
+"note": "Two bright beads leave the Mouth Vessel's fingertips one after the other.",
+"arch": "mouth"
+},
+"ve_far_spit": {
+"name": "Far Spit",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 4
+}
+],
+"text": "Give up to 2 Volatile stacks of your largest held course to the target. Deal 4.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+2,
+3,
+4
+],
+"sub": "mouth",
+"art": "ve_far_spit",
+"up": {
+"text": "Give up to 2 Volatile stacks of your largest held course to the target. Deal 6.",
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "dmg",
+"n": 6
+}
+]
+},
+"flavour": "The back of the line is not far enough.",
+"note": "A bead of colour arcs over the front foes and bursts on the one hiding at the back.",
+"arch": "mouth"
+},
+"ve_chain_word": {
+"name": "Chain Word",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 2
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "draw",
+"n": 1,
+"to": "self",
+"if": "reactions>=2"
+}
+],
+"text": "Deal 2. Give up to 2 Volatile stacks of your largest held course to the target. If the company has set off 2 or more Conjunctions this round, draw 1 more card next round.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_chain_word",
+"up": {
+"text": "Deal 4. Give up to 2 Volatile stacks of your largest held course to the target. If the company has set off 2 or more Conjunctions this round, draw 1 more card next round.",
+"fx": [
+{
+"t": "dmg",
+"n": 4
+},
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "volatile"
+},
+{
+"t": "draw",
+"n": 1,
+"to": "self",
+"if": "reactions>=2"
+}
+]
+},
+"flavour": "One word sets off the next, and the next, down the line.",
+"note": "The Mouth Vessel speaks, and flare after flare runs across the foes like a lit fuse.",
+"arch": "mouth"
+},
+"ve_flood_the_line": {
+"name": "Flood the Line",
+"cost": 2,
+"rarity": "X",
+"target": "all_enemies",
+"fx": [
+{
+"t": "give",
+"n": 2,
+"e": "largest",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 3
+}
+],
+"text": "Give up to 2 stacks of your largest held course to each foe. Deal 3 to every foe.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_flood_the_line",
+"up": {
+"text": "Give up to 2 stacks of your largest held course to each foe. Deal 3 to every foe.",
+"cost": 1
+},
+"flavour": "What I held for one, I pour out for all.",
+"note": "The Mouth Vessel tips both open palms and one colour floods the whole line of foes.",
+"arch": "mouth"
+},
+"ve_gorge": {
+"name": "Gorge",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 0,
+"per": "consumed",
+"k": 1,
+"max": 10,
+"to": "self"
+},
+{
+"t": "draw",
+"n": 1,
+"to": "self"
+}
+],
+"text": "Take every course stack on the target. Gain 1 Block per stack taken, at most 10. Draw 1 more card next round.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "mouth",
+"art": "ve_gorge",
+"up": {
+"text": "Take every course stack on the target. Gain 2 Block, plus 1 per stack taken, at most 14 in all. Draw 1 more card next round.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all"
+},
+{
+"t": "block",
+"n": 2,
+"per": "consumed",
+"k": 1,
+"max": 14,
+"to": "self"
+},
+{
+"t": "draw",
+"n": 1,
+"to": "self"
+}
+]
+},
+"flavour": "Every course it carried, swallowed. It stands there grey.",
+"note": "A foe's colours pour off it into the Mouth Vessel, leaving it the grey of old ash.",
+"arch": "mouth+whole"
+},
+"ve_keep_her_quiet": {
+"name": "Keep Her Quiet",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "water",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 6,
+"e": "void",
+"attr": "volatile"
+},
+{
+"t": "status",
+"n": 1,
+"s": "neuro",
+"if": "consumed>=3"
+}
+],
+"text": "Give 1 Water to the target, then all your held Void, Volatile. If you gave 3 or more stacks in all, its next action keeps only its first effect.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "void",
+"hit": [
+1,
+2,
+3
+],
+"sub": "whole",
+"art": "ve_keep_her_quiet",
+"up": {
+"text": "Give 1 Water to the target, then all your held Void, Volatile. Its next action keeps only its first effect.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "water",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 6,
+"e": "void",
+"attr": "volatile"
+},
+{
+"t": "status",
+"n": 1,
+"s": "neuro"
+}
+]
+},
+"flavour": "She was loud once. The whole world heard her. Keep her quiet.",
+"note": "The Whole Vessel lays a violet-black palm over a foe's mouth and the hollow spreads.",
+"arch": "whole+mouth"
+},
+"ve_six_bands": {
+"name": "Six Bands",
+"cost": 1,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+},
+{
+"t": "draw",
+"n": 1,
+"if": "held_kinds>=6"
+}
+],
+"text": "Hold 1 stack of each course you do not hold. Then, if you are Whole, draw 1 more card next round.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "whole",
+"art": "ve_six_bands",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Gain 3 Block. Then, if you are Whole, draw 1 more card next round.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+},
+{
+"t": "block",
+"n": 3
+},
+{
+"t": "draw",
+"n": 1,
+"if": "held_kinds>=6"
+}
+]
+},
+"flavour": "Fingertip to jaw, six bands, and every one of them full.",
+"note": "The Whole Vessel's six bands fill one after another, from the fingertips to the jaw.",
+"arch": "whole"
+},
+"ve_level_hands": {
+"name": "Level Hands",
+"cost": 1,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "prime",
+"n": 3,
+"per": "held_kinds",
+"k": 1
+}
+],
+"text": "Even out your held stacks across the courses you hold. Prime 3, plus 1 per different course you hold.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "whole",
+"art": "ve_level_hands",
+"up": {
+"text": "Even out your held stacks across the courses you hold. Prime 5, plus 1 per different course you hold.",
+"fx": [
+{
+"t": "even"
+},
+{
+"t": "prime",
+"n": 5,
+"per": "held_kinds",
+"k": 1
+}
+]
+},
+"flavour": "A level hand gives a level blow.",
+"note": "The Whole Vessel holds both palms level and a hero's weapon catches all six colours.",
+"arch": "whole"
+},
+"ve_six_rays": {
+"name": "Six Rays",
+"cost": 2,
+"rarity": "X",
+"target": "all_enemies",
+"fx": [
+{
+"t": "dmg",
+"n": 2,
+"per": "held_kinds",
+"k": 1
+},
+{
+"t": "dmg",
+"n": 4,
+"if": "held_kinds>=6"
+}
+],
+"text": "Deal 2, plus 1 per different course you hold, to every foe. If you are Whole, deal 4 more to every foe.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "whole",
+"art": "ve_six_rays",
+"up": {
+"text": "Deal 3, plus 1 per different course you hold, to every foe. If you are Whole, deal 6 more to every foe.",
+"fx": [
+{
+"t": "dmg",
+"n": 3,
+"per": "held_kinds",
+"k": 1
+},
+{
+"t": "dmg",
+"n": 6,
+"if": "held_kinds>=6"
+}
+]
+},
+"flavour": "Six rays from a broken ring. The god had them. So does the Vessel.",
+"note": "The broken nimbus behind the Whole Vessel's head throws six thin rays of ink across the foes.",
+"arch": "whole"
+},
+"ve_gilded_page": {
+"name": "Gilded Page",
+"cost": 1,
+"rarity": "X",
+"target": "enemy",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 3,
+"per": "t.spectrum",
+"k": 1
+}
+],
+"text": "Give 1 stack of every course you hold to the target. Deal 3, plus 1 per different course on it.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "whole",
+"art": "ve_gilded_page",
+"up": {
+"text": "Give 1 stack of every course you hold to the target. Deal 4, plus 2 per different course on it.",
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "dmg",
+"n": 4,
+"per": "t.spectrum",
+"k": 2
+}
+]
+},
+"flavour": "Write every colour on it, then read it aloud.",
+"note": "The Whole Vessel presses an inked palm to a foe and leaves a print in all six colours.",
+"arch": "whole+mouth"
+},
+"ve_still_centre": {
+"name": "Still Centre",
+"cost": 1,
+"rarity": "X",
+"target": "self",
+"fx": [
+{
+"t": "block",
+"n": 3,
+"per": "held_min",
+"k": 2
+}
+],
+"text": "Gain 3 Block, plus 2 per stack of the course you hold least.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"sub": "whole",
+"art": "ve_still_centre",
+"up": {
+"text": "Gain 5 Block, plus 2 per stack of the course you hold least.",
+"fx": [
+{
+"t": "block",
+"n": 5,
+"per": "held_min",
+"k": 2
+}
+]
+},
+"flavour": "The scale is still when every pan is full.",
+"note": "The Whole Vessel stands at the still centre of the fight, every band filled to the same line.",
+"arch": "whole"
+},
+"ve_hearth_kept": {
+"name": "The Hearth Kept",
+"cost": 2,
+"rarity": "L",
+"target": "self",
+"fx": [],
+"text": "Rite: at the start of each round, take every course stack from every other hero, then every other hero gains 2 Block per stack taken, at most 10. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"sub": "hearth",
+"art": "ve_hearth_kept",
+"up": {
+"text": "Every other hero gains 1 Ward. Rite: at the start of each round, take every course stack from every other hero, then every other hero gains 2 Block per stack taken, at most 10. Exhaust.",
+"fx": [
+{
+"t": "ward",
+"n": 1,
+"to": "allies_other"
+}
+]
+},
+"flavour": "The fire is banked, the door is barred, and nothing burns in this house but me.",
+"note": "The Hearth Vessel stands at the Guesthouse hearth at dawn, drawing the night's ills off the sleepers.",
+"arch": "hearth+core",
+"rite": {
+"on": "round_start",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+},
+{
+"t": "block",
+"n": 0,
+"per": "consumed",
+"k": 2,
+"max": 10,
+"to": "allies_other"
+}
+]
+}
+},
+"ve_weight_of_the_world": {
+"name": "The Weight of the World",
+"cost": 1,
+"rarity": "L",
+"target": "self",
+"fx": [],
+"text": "Rite: the first time you play a card each round, deal 1 per stack you hold to the front foe. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"sub": "hearth",
+"art": "ve_weight_of_the_world",
+"up": {
+"text": "Gain 6 Block. Rite: the first time you play a card each round, deal 1 per stack you hold to the front foe. Exhaust.",
+"fx": [
+{
+"t": "block",
+"n": 6
+}
+]
+},
+"flavour": "She carried the world's courses once. Now I do, and it is heavy.",
+"note": "The Hearth Vessel lifts one palm and the front foe is crushed flat under six colours of weight.",
+"arch": "hearth+whole",
+"rite": {
+"on": "play",
+"per_round": 1,
+"fx": [
+{
+"t": "dmg",
+"n": 0,
+"per": "held_total",
+"k": 1,
+"to": "front_enemy"
+}
+]
+}
+},
+"ve_unstopped_mouth": {
+"name": "The Unstopped Mouth",
+"cost": 2,
+"rarity": "L",
+"target": "self",
+"fx": [],
+"text": "Rite: at the end of each round, take every course stack from every other hero, then give up to 3 Volatile stacks of your largest held course to the front foe. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"sub": "mouth",
+"art": "ve_unstopped_mouth",
+"up": {
+"text": "Take every course stack from every other hero. Rite: at the end of each round, take every course stack from every other hero, then give up to 3 Volatile stacks of your largest held course to the front foe. Exhaust.",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+}
+]
+},
+"flavour": "Whatever they spit at you, I swallow, and spit back hotter.",
+"note": "The Mouth Vessel stands behind the company as every course on them streams through it at the foes.",
+"arch": "mouth+hearth",
+"rite": {
+"on": "round_end",
+"fx": [
+{
+"t": "take",
+"n": 0,
+"e": "all",
+"to": "allies_other"
+},
+{
+"t": "give",
+"n": 3,
+"e": "largest",
+"attr": "volatile",
+"to": "front_enemy"
+}
+]
+}
+},
+"ve_mothers_tongue": {
+"name": "The Mother's Tongue",
+"cost": 1,
+"rarity": "L",
+"target": "self",
+"fx": [],
+"text": "Rite: three times a round, when the company sets off a Conjunction on a foe, give 1 Volatile stack of your largest held course to each foe beside it. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"sub": "mouth",
+"art": "ve_mothers_tongue",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Rite: three times a round, when the company sets off a Conjunction on a foe, give 1 Volatile stack of your largest held course to each foe beside it. Exhaust.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+}
+]
+},
+"flavour": "She spoke the first word, and the courses answered in every mouth at once.",
+"note": "A Conjunction flares on one foe and the Mouth Vessel's speech carries it to the foes on either side.",
+"arch": "mouth+elementalist_conjunction",
+"rite": {
+"on": "conjunction",
+"per_round": 3,
+"fx": [
+{
+"t": "give",
+"n": 1,
+"e": "largest",
+"attr": "volatile",
+"to": "adjacent"
+}
+]
+}
+},
+"ve_whole_conjunction": {
+"name": "The Whole Conjunction",
+"cost": 2,
+"rarity": "L",
+"target": "enemy",
+"fx": [
+{
+"t": "dmg",
+"n": 8,
+"if": "held_kinds>=6"
+},
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 0,
+"e": "all",
+"attr": "volatile"
+}
+],
+"text": "If you are Whole, deal 8. Give 1 stack of every course you hold to the target, then everything else you hold, Volatile.",
+"cls": "vessel",
+"use": [
+2,
+3
+],
+"cat": "physical",
+"hit": [
+1,
+2,
+3
+],
+"sub": "whole",
+"art": "ve_whole_conjunction",
+"up": {
+"text": "If you are Whole, deal 8. Give 1 stack of every course you hold to the target, then everything else you hold, Volatile. Then hold 1 stack of each course you do not hold.",
+"fx": [
+{
+"t": "dmg",
+"n": 8,
+"if": "held_kinds>=6"
+},
+{
+"t": "give",
+"n": 1,
+"e": "all",
+"attr": "stable"
+},
+{
+"t": "give",
+"n": 0,
+"e": "all",
+"attr": "volatile"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+}
+]
+},
+"flavour": "All six in one body, without letting them fuse. Until now.",
+"note": "The Whole Vessel opens both palms and all six bands pour into one foe in a single blinding knot.",
+"arch": "whole+mouth"
+},
+"ve_mothers_place": {
+"name": "The Mother's Place",
+"cost": 2,
+"rarity": "L",
+"target": "self",
+"fx": [],
+"text": "Rite: three times a round, when the company sets off a Conjunction on a foe, hold 1 stack of each course you do not hold, then, if you are Whole, deal 5 to that foe. Exhaust.",
+"cls": "vessel",
+"use": [
+1,
+2,
+3,
+4
+],
+"cat": "physical",
+"kw": [
+"Rite",
+"Exhaust"
+],
+"sub": "whole",
+"art": "ve_mothers_place",
+"up": {
+"text": "Hold 1 stack of each course you do not hold. Rite: three times a round, when the company sets off a Conjunction on a foe, hold 1 stack of each course you do not hold, then, if you are Whole, deal 5 to that foe. Exhaust.",
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+}
+]
+},
+"flavour": "She held every course apart and let none of them fuse. The seat is taken again.",
+"note": "The Whole Vessel stands where the Mother of Courses stood, the broken nimbus closing behind its head.",
+"arch": "whole+elementalist_conjunction",
+"rite": {
+"on": "conjunction",
+"per_round": 3,
+"fx": [
+{
+"t": "apply",
+"n": 1,
+"e": "fire",
+"to": "self",
+"if": "!held_fire"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "frost",
+"to": "self",
+"if": "!held_frost"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "lightning",
+"to": "self",
+"if": "!held_lightning"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "water",
+"to": "self",
+"if": "!held_water"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "toxin",
+"to": "self",
+"if": "!held_toxin"
+},
+{
+"t": "apply",
+"n": 1,
+"e": "void",
+"to": "self",
+"if": "!held_void"
+},
+{
+"t": "dmg",
+"n": 5,
+"if": "held_kinds>=6"
+}
+]
+}
+},
 "t_barrow_fleas": {
 "name": "Plague Fleas",
 "cost": 0,

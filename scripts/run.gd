@@ -926,6 +926,14 @@ static func end_run() -> int:
 			o += 40
 		r["opened"] = open_doors_from(w)
 		r["road_done"] = all_cleared() and meta.cleared.size() == Data.STORY.order.size() and not meta.get("road_announced", false)
+		# the Prismatic's secret ending (Gate 2 decision 11): the Torn Sky cleared with a living Prismatic Elementalist
+		# unlocks the Vessel, a seventh calling
+		if w == "sky" and not meta.unlocked.has("vessel") and Data.HEROES.has("vessel"):
+			for h in r.heroes:
+				if h.key == "elementalist" and h.get("subclass", "") == "prismatic" and not h.get("dead", false):
+					meta.unlocked.append("vessel")
+					r["vessel_unlocked"] = true
+					break
 		if r.road_done:
 			meta.road_announced = true
 	if not r.heroes.is_empty() and r.heroes[0].has("id"):

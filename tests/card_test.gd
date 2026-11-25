@@ -12,6 +12,8 @@ func _init() -> void:
 		var cls: String = c.cls if Data.HEROES.has(c.cls) else "oracle"   # neutral, world and flask cards: any calling
 		var party: Array = others.get(cls, ["bulwark", "duelist"]).duplicate()
 		var rank: int = c.use[0] if c.use.size() > 0 else 1
+		if rank >= party.size() + 1 and party.size() < 3:
+			party.append("oracle" if cls != "oracle" else "alchemist")
 		party.insert(min(rank - 1, party.size()), cls)
 		var s := Combat.new_state(party, ["thrall", "warden", "siren"], 7)
 		Combat.start_round(s)
