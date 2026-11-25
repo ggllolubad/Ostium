@@ -11,9 +11,26 @@ const REF = {1: [1, ["C"], 0, 0], 2: [2, ["C"], 0, 0], 3: [3, ["C"], 0, 1], 4: [
 	6: [5, ["C", "U"], 1, 1], 7: [6, ["U"], 2, 1], 8: [6, ["U"], 2, 2], 9: [7, ["U"], 2, 2], 10: [8, ["U", "R"], 3, 2],
 	11: [8, ["U", "R"], 3, 2], 12: [9, ["U", "R"], 3, 2], 13: [9, ["R"], 3, 2], 14: [10, ["R"], 4, 3], 15: [10, ["R"], 4, 3]}
 
+## Build plans (Cole, 2026-11-25): a hero with a plan drafts toward it. weight 3 = core, 2 = support, 1 = filler.
+## Each plan names its calling and the path it takes at level 4.
+const BUILDS = {
+	"thorn_wall": {"cls": "bulwark", "sub": "thornguard", "cards": {"briar_mail": 3, "barbed_plates": 3, "iron_maiden": 3, "crown_of_thorns": 2, "rose_of_iron": 3, "hedge_of_spikes": 2, "bramble_bash": 3, "blood_thorns": 2, "harvest_of_barbs": 2, "punishing_wall": 3, "rampart": 2, "iron_skin": 1, "spiked_boss": 1, "spiteful_guard": 2, "jeer": 1}},
+	"iron_juggernaut": {"cls": "bulwark", "sub": "ironwarden", "cards": {"tower_of_iron": 3, "glacier_wall": 3, "body_slam": 3, "juggernaut": 3, "punish": 2, "bastions_oath": 2, "oathkeeper": 2, "rivet_strike": 2, "gatekeeper": 2, "shatterguard": 3, "stand_fast": 1, "dig_in": 1, "unbreakable": 2}},
+	"tempo_blade": {"cls": "duelist", "sub": "bladedancer", "cards": {"tempo": 3, "graceful": 3, "pirouette": 3, "momentum_shift": 2, "storm_of_steel": 3, "crescendo": 3, "last_dance": 3, "dance_of_knives": 2, "tempest_feint": 2, "probe": 1, "flick": 1, "crossguard": 1, "adrenaline": 2, "killing_tempo": 1}},
+	"bloodletter": {"cls": "duelist", "sub": "bloodletter", "cards": {"open_vein": 3, "bloodmist": 3, "crimson_tide": 3, "haemorrhage": 3, "death_by_cuts": 3, "exsanguinate": 3, "crimson_flourish": 2, "sanguine_frenzy": 2, "low_slice": 1, "lacerate": 2, "blood_price": 2, "leech_cut": 1, "open_arteries": 2}},
+	"storm_soaker": {"cls": "alchemist", "sub": "transmuter", "cards": {"brine_tide": 3, "wet_the_wick": 3, "splash_zone": 2, "white_work": 2, "double_brew": 1, "distill": 1, "boiling_flood": 2}},
+	"storm_caller": {"cls": "elementalist", "sub": "catalyst", "cards": {"storm_caller": 3, "arc_conduit": 3, "chain_lightning": 3, "feedback": 3, "reactive_shield": 2, "spark": 1, "forked_bolt": 2, "chain_reaction": 2, "catalyst_spark": 1, "downpour": 1}},
+	"death_ledger": {"cls": "oracle", "sub": "augur", "cards": {"crack_of_doom": 2, "certain_doom": 3, "mass_omen": 3, "cassandra": 3, "fated_end": 3, "closed_eye": 3, "bad_tidings": 2, "doomsday_clock": 2, "stay_the_hand": 1, "apocalypse": 2}},
+	"grand_curse": {"cls": "hexweaver", "sub": "doomsayer", "cards": {"plague_of_hexes": 3, "double_hex": 3, "witching_hour": 3, "death_curse": 3, "lich_mark": 2, "bitter_tongue": 2, "whispered_name": 2, "hex_bolt": 1, "unleash_all": 2, "grand_malediction": 3, "misfortune": 1, "harbinger": 2, "final_hour": 2}},
+}
+
 var level_name = "look"
+var plan_of = {}   # hero key index -> build name
 var foe_mult = 1.0
 var foe_might = 0
+var foe_dmg = 1.0
+var random_world = false
+var threat_off = false
 var stats = {}
 
 func arg(name: String, dflt: String) -> String:
@@ -24,12 +41,21 @@ func arg(name: String, dflt: String) -> String:
 
 func _init() -> void:
 	var party: Array = arg("party", "bulwark,duelist,elementalist").split(",")
+	var bl = arg("builds", "")
+	if bl != "":
+		party = []
+		for bn in bl.split(","):
+			plan_of[party.size()] = bn
+			party.append(BUILDS[bn].cls)
 	var door = int(arg("door", "1"))
 	var runs = int(arg("runs", "10"))
 	var seed0 = int(arg("seed", "100"))
 	level_name = arg("planner", "look")
 	foe_mult = float(arg("foe", "1.0"))
 	foe_might = int(arg("might", "0"))
+	foe_dmg = float(arg("dmg", "1.0"))
+	random_world = arg("world", "") == "random"
+	threat_off = arg("threat", "on") == "off"   # off: the old sweeps (no Threat scaling)
 	var rules = JSON.parse_string(arg("rules", "{}"))
 	if typeof(rules) == TYPE_DICTIONARY:
 		for k in rules:
@@ -53,6 +79,9 @@ func make_company(party: Array, door: int, seed: int) -> void:
 	Run.meta_load()
 	seed(seed)
 	var ref: Array = REF[door]
+	var ro = JSON.parse_string(arg("ref", "")) if arg("ref", "") != "" else null
+	if typeof(ro) == TYPE_ARRAY:
+		ref = ro   # ablation: [level, gear rarities, runes per hero, relics]
 	var m: Dictionary = Run.meta
 	m.roster = []
 	m.party = []
@@ -62,6 +91,10 @@ func make_company(party: Array, door: int, seed: int) -> void:
 		var subs: Array = Data.HEROES[key].subclasses.keys()
 		if h.level >= 4:
 			h.subclass = subs[seed % subs.size()]
+		if plan_of.has(m.roster.size()):
+			h.build = plan_of[m.roster.size()]
+			if h.level >= 4:
+				h.subclass = BUILDS[h.build].sub
 		for lv in range(2, h.level + 1):
 			if lv != 4:
 				h.talents.append(TALENTS[(lv + seed) % TALENTS.size()])
@@ -82,6 +115,7 @@ func make_company(party: Array, door: int, seed: int) -> void:
 			h.gear[slot] = it
 		m.roster.append(h)
 		m.party.append(h.id)
+	m.wins = door - 1   # progress tier: Threat follows descents cleared
 	m.carried = []
 	var rl: Array = Run.C.relics.keys()
 	for k in int(ref[3]):
@@ -91,6 +125,8 @@ func make_company(party: Array, door: int, seed: int) -> void:
 func descent(party: Array, door: int, seed: int) -> Dictionary:
 	make_company(party, door, seed)
 	var world: String = Data.STORY.order[door - 1]
+	if random_world:
+		world = Data.STORY.order[(seed / 7) % 15]
 	var err = Abbey.start_descent("boss", world, seed)
 	stats = {"door": door, "world": world, "party": party, "seed": seed, "fights": [], "camps": [], "upgrades": 0, "picked": [],
 		"conj": {}, "virtues": [], "afflictions": 0, "err": err}
@@ -135,7 +171,7 @@ func descent(party: Array, door: int, seed: int) -> Dictionary:
 	stats.heroes = []
 	for h in Run.r.heroes:
 		stats.heroes.append({"key": h.key, "level": h.level, "hp": h.hp, "max": Run.max_hp(h), "stress": h.stress, "dead": h.dead,
-			"deck": h.deck.size(), "aff": h.deck.filter(func(c): return String(c).begins_with("aff_") or c == "dread").size()})
+			"deck": h.deck.size(), "build": h.get("build", ""), "plan_cards": _plan_count(h, 1), "core_cards": _plan_count(h, 3), "aff": h.deck.filter(func(c): return String(c).begins_with("aff_") or c == "dread").size()})
 	return stats
 
 func _bad_option(o: Dictionary) -> bool:
@@ -169,6 +205,9 @@ func fight(n: Dictionary, idx: int, kind: String, hp_mult = 1.0) -> void:
 	var setup = Run.combat_setup()
 	setup.foe_hp = float(setup.foe_hp) * hp_mult * foe_mult
 	setup.foe_might = int(setup.foe_might) + foe_might
+	setup.foe_dmg = (1.0 if threat_off else float(setup.get("foe_dmg", 1.0))) * foe_dmg
+	if threat_off:
+		setup.foe_hp = float(setup.foe_hp) / Run.THREAT_HP[clamp(int(Run.r.get("threat", 0)), 0, 14)]
 	var s = Combat.new_state_run(setup, enc.enemies, int(Run.r.seed) + int(Run.r.step) * 31)
 	s.sim = false
 	var rounds = 0
@@ -241,6 +280,8 @@ func take_rewards() -> void:
 					h.deck.append(pick)
 			"subclass":
 				h.subclass = Data.HEROES[h.key].subclasses.keys()[int(Run.r.seed) % 3]
+				if h.get("build", "") != "":
+					h.subclass = BUILDS[h.build].sub
 			"talent":
 				h.talents.append(TALENTS[(int(p.get("level", 2)) + int(Run.r.seed)) % TALENTS.size()])
 			"relic":
@@ -264,11 +305,15 @@ func _rank(r: String) -> int:
 func draft(h: Dictionary, offers: Array) -> String:
 	var best = ""
 	var best_v = 0.0
+	var plan: Dictionary = BUILDS.get(h.get("build", ""), {}).get("cards", {})
 	for id in offers:
 		var c: Dictionary = Data.CARDS[id]
 		var v: float = {"C": 1.0, "U": 2.0, "R": 3.0, "X": 2.6}.get(c.rarity, 1.0) - 0.3 * max(0, int(c.cost) - 1)
 		if c.rarity == "C" and h.deck.size() > 16:
 			v -= 2.0
+		if not plan.is_empty():
+			# a hero with a plan takes plan cards first; off-plan cards only while the deck is thin
+			v = 2.0 * float(plan[id]) if plan.has(id) else (v * 0.5 if h.deck.size() < 13 else -1.0)
 		if v > best_v:
 			best_v = v
 			best = id
@@ -310,3 +355,12 @@ func merchant() -> void:
 	for h in Run.living():
 		if Run.r.gold >= 60 and upgrade_one(h):
 			Run.r.gold -= 60
+
+## Cards from the hero's plan in its deck at the end: weight >= w (3 = core only).
+func _plan_count(h: Dictionary, w: int) -> int:
+	var plan: Dictionary = BUILDS.get(h.get("build", ""), {}).get("cards", {})
+	var n := 0
+	for c in h.deck:
+		if int(plan.get(String(c).trim_suffix("+"), 0)) >= w:
+			n += 1
+	return n

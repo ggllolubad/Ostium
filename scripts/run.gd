@@ -116,6 +116,15 @@ static func cast_lots() -> String:
 static func world_name() -> String:
 	return Data.WORLDS.get(r.get("world", "drowned"), Data.WORLDS.drowned).name
 
+## Threat (Cole, 2026-11-25): every world's foes scale with the descents the abbey has cleared, never with which
+## world is rolled, so a random late door on a young save is no harder than the first. Fixed when a descent starts.
+## Index = descents cleared (capped at 14). Calibrated in balance/ to about a 35-40% simulated clear rate per tier.
+const THREAT_HP := [1.5, 1.63, 1.75, 1.89, 2.02, 2.2, 2.38, 2.56, 2.75, 2.92, 3.08, 3.26, 3.43, 3.58, 3.73]
+const THREAT_DMG := [1.32, 1.51, 1.73, 1.94, 2.17, 2.47, 2.8, 3.15, 3.51, 3.89, 4.3, 4.73, 5.17, 5.63, 6.12]
+
+static func threat() -> int:
+	return clamp(int(meta.get("wins", 0)), 0, THREAT_HP.size() - 1)
+
 static func asc_max() -> int:
 	return min(15, int(meta.get("wins", 0)) + 1)
 
@@ -135,7 +144,7 @@ static func new_run_roster(party: Array, objective: String, asc: Array, seed: in
 	var belt: Array = prov.belt.duplicate()
 	if belt.is_empty():
 		belt = ["fl_heal"]
-	r = {"seed": seed, "step": 0, "objective": objective, "world": world, "asc": asc, "heroes": [], "gold": 60, "relics": meta.carried.duplicate(), "runes": [],
+	r = {"seed": seed, "step": 0, "objective": objective, "world": world, "threat": threat(), "asc": asc, "heroes": [], "gold": 60, "relics": meta.carried.duplicate(), "runes": [],
 		"belt": belt, "belt_max": int(meta.belt_max), "stash": [],
 		"supplies": {"food": 8 + int(prov.food), "light": 6 + int(prov.light), "medicine": 2 + int(prov.medicine), "tools": 2 + int(prov.tools)}, "doom": 0, "nodes_moved": 0,
 		"map": {}, "at": "", "fights_won": 0, "elites_won": 0, "pilgrim": 20 if objective == "escort" else 0,
@@ -248,9 +257,10 @@ static func combat_setup() -> Dictionary:
 		hs.append({"index": i, "key": h.key, "max_hp": max_hp(h), "hp": min(h.hp, max_hp(h)), "stress": h.stress, "resolve": h.resolve,
 			"deck": full_deck(h), "grit": grit(h), "armor": int(Data.HEROES[h.key].armor) + int(st.get("armor", 0)), "stats": st, "passives": passives(h)})
 	var lvl := doom_level()
-	var foe_hp := 1.0 + 0.08 * lvl * (2 if has_asc("a_scaling") else 1) + (0.1 if has_asc("a_hp") else 0.0)
+	var tl: int = clamp(int(r.get("threat", 0)), 0, THREAT_HP.size() - 1)
+	var foe_hp: float = THREAT_HP[tl] + 0.08 * lvl * (2 if has_asc("a_scaling") else 1) + (0.1 if has_asc("a_hp") else 0.0)
 	var foe_might := (1 if has_asc("a_might") else 0) + (1 if r.supplies.light <= 0 else 0) + (lvl / 3)
-	return {"heroes": hs, "world": r.get("world", ""), "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "foe_might": foe_might,
+	return {"heroes": hs, "world": r.get("world", ""), "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "foe_might": foe_might, "foe_dmg": THREAT_DMG[tl],
 		"boss_hp": 1.15 if has_asc("a_boss") else 1.0}
 
 ## Writes the fight's outcome back into the run. Returns a summary for the reward screen.

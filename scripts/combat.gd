@@ -90,6 +90,7 @@ static func new_state_run(setup: Dictionary, enemy_keys: Array, seed: int) -> Di
 		e.st.might += int(setup.get("foe_might", 0))
 	s.setup = setup
 	s.world = setup.get("world", "")
+	s.foe_dmg = float(setup.get("foe_dmg", 1.0))
 	s.belt = setup.get("belt", []).duplicate()
 	return s
 
@@ -1162,6 +1163,8 @@ static func _attack(s: Dictionary, src: Dictionary, t: Dictionary, base: int, ph
 		_log(s, "%s dodges." % t.name)
 		return 0
 	var d: int = base + src.st.might - src.elements.frost
+	if src.get("side", "") == "enemy" and float(s.get("foe_dmg", 1.0)) != 1.0:
+		d = int(round(d * float(s.foe_dmg)))   # Threat (Rules v2): foes hit harder with every descent cleared
 	if RULES.hex:
 		d -= int(src.st.get("hex", 0) / 2)   # Hex: 1 less damage per 2 stacks (Rules v2, rule 9)
 	d = max(0, d)

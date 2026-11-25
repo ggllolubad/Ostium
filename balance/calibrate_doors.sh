@@ -1,15 +1,13 @@
 #!/bin/bash
 # Per-door calibration: a single foe multiplier cannot hit ~50% everywhere (door 1 collapses while doors 9 and 13
-# stay at 100%), so each door gets its own sweep. 3-hero company, Rules v2 defaults.
+# stay at 100%), so each door gets its own points. POINTS="door:hp_mult:might ..." run two at a time.
 cd "$(dirname "$0")/.."
 G=${GODOT:-/home/claude/godot/Godot_v4.3-stable_linux.x86_64}
 N=${N:-12}
-O=balance/runs_door; mkdir -p $O
+O=${OUTDIR:-balance/runs_door}; mkdir -p $O
 P3=bulwark,duelist,elementalist
-one() { # door foe might
-  $G --headless --path . --script res://balance/descent.gd -- door=$1 runs=$N seed=$(($1*1000+11)) party=$P3 rules='{}' foe=$2 might=$3 out=$O/D${1}_f${2}_m${3}_d$1.jsonl >/dev/null 2>&1; echo "door $1 foe $2 might $3 done"; }
-one 1 1.25 0 & one 5 1.75 1 & wait
-one 9 2.75 2 & one 13 2.75 2 & wait
-one 9 3.5 3 & one 13 3.5 3 & wait
-one 9 4.5 4 & one 13 4.5 4 & wait
+one() { IFS=: read d f m <<< "$1"
+  $G --headless --path . --script res://balance/descent.gd -- door=$d runs=$N seed=$((d*1000+11)) party=$P3 rules='{}' foe=$f might=$m out=$O/D${d}_f${f}_m${m}_d$d.jsonl >/dev/null 2>&1; echo "$1 done"; }
+set -- ${POINTS:-1:1.25:0 5:1.75:1 9:2.75:2 13:2.75:2 9:3.5:3 13:3.5:3 9:4.5:4 13:4.5:4}
+while [ $# -gt 0 ]; do one $1 & [ -n "$2" ] && one $2 & wait; shift 2; done
 echo ALL DONE
