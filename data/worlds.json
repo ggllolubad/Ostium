@@ -1,0 +1,495 @@
+{
+ "drowned": {
+  "name": "The Drowned Kingdom",
+  "pair": [
+   "void",
+   "water"
+  ],
+  "conjunction": "Drown",
+  "blurb": "A cathedral kingdom at the bottom of the sea. The bells still ring for the drowned.",
+  "rooms": [
+   "stair",
+   "nave",
+   "belfry",
+   "ossuary",
+   "throne"
+  ],
+  "foes": [
+   "thrall",
+   "siren",
+   "eelkin",
+   "bellringer",
+   "barnacle_knight",
+   "lamprey",
+   "bloated",
+   "hookline",
+   "weeping_nun",
+   "anchor_brute",
+   "crab",
+   "choirboy"
+  ],
+  "elites": [
+   "warden",
+   "abbess",
+   "kraken_arm",
+   "pearl_diver"
+  ],
+  "bosses": [
+   "drowned_king",
+   "bell_below",
+   "mother_of_brine"
+  ],
+  "story": 0,
+  "act": 1,
+  "act_name": "The Waters Below",
+  "lead": "Water seeps under the first door, and bells ring in the crypt at night. The Prior sends the first company down."
+ },
+ "rime": {
+  "name": "The Sundered Rime",
+  "pair": [
+   "fire",
+   "frost"
+  ],
+  "conjunction": "Thermal Shock",
+  "blurb": "A glacier split open by the fire beneath. Everything here is half frozen and half burning, and it cracks.",
+  "rooms": [
+   "rime_glacier",
+   "rime_hall",
+   "rime_crevasse"
+  ],
+  "foes": [
+   "rime_thrall",
+   "magma_hound",
+   "obsidian_maiden",
+   "steam_wraith",
+   "fissure_worm"
+  ],
+  "elites": [
+   "jotun_thane",
+   "twin_seeress"
+  ],
+  "bosses": [
+   "riven_jarl"
+  ],
+  "story": 7,
+  "act": 3,
+  "act_name": "The Long Cold",
+  "lead": "The fleet's charts end at a white sea and a glacier with fire beneath it. The leviathan was fleeing that heat."
+ },
+ "foundry": {
+  "name": "The Storm Foundry",
+  "pair": [
+   "fire",
+   "lightning"
+  ],
+  "conjunction": "Plasma",
+  "blurb": "A forge built inside a thunderhead. The smiths hammer lightning into bronze and do not stop to eat or sleep.",
+  "rooms": [
+   "foundry_floor",
+   "foundry_roof",
+   "foundry_mould"
+  ],
+  "foes": [
+   "slag_slave",
+   "bronze_automaton",
+   "arc_smith",
+   "bellows_imp",
+   "spark_swarm"
+  ],
+  "elites": [
+   "cyclops_smith",
+   "talos_sentinel"
+  ],
+  "bosses": [
+   "anvil_titan"
+  ],
+  "story": 4,
+  "act": 2,
+  "act_name": "The Fires Beneath",
+  "lead": "Every powder cart went to one buyer: a foundry in the clouds. The Canary Priests sang its name to the gas."
+ },
+ "baths": {
+  "name": "The Boiling Baths",
+  "pair": [
+   "fire",
+   "water"
+  ],
+  "conjunction": "Scald",
+  "blurb": "A temple of baths where the nobility came to be cleansed. The water never stopped heating.",
+  "rooms": [
+   "baths_pool",
+   "baths_furnace",
+   "baths_cistern"
+  ],
+  "foes": [
+   "scalded_attendant",
+   "kettle_crab",
+   "boiled_brute",
+   "steam_nymph",
+   "bath_leech"
+  ],
+  "elites": [
+   "bath_mistress",
+   "cauldron_bearer"
+  ],
+  "bosses": [
+   "simmering_matron"
+  ],
+  "story": 2,
+  "act": 1,
+  "act_name": "The Waters Below",
+  "lead": "The fen hags sold their black mud to a temple of baths as a cure. The Mire Mother's head is still warm. Something upstream is boiling."
+ },
+ "pits": {
+  "name": "The Sulphur Pits",
+  "pair": [
+   "fire",
+   "toxin"
+  ],
+  "conjunction": "Combust",
+  "blurb": "Brimstone mines where the air itself will burn. The miners stopped breathing long ago.",
+  "rooms": [
+   "pits_shaft",
+   "pits_vent",
+   "pits_chapel"
+  ],
+  "foes": [
+   "gas_miner",
+   "brimstone_toad",
+   "fuse_imp",
+   "pit_crawler",
+   "canary_priest"
+  ],
+  "elites": [
+   "powder_ogre",
+   "miasma_matriarch"
+  ],
+  "bosses": [
+   "burning_lung"
+  ],
+  "story": 3,
+  "act": 2,
+  "act_name": "The Fires Beneath",
+  "lead": "The baths were never heated with wood. Their furnaces burned brimstone, carted up from the pits below."
+ },
+ "pyre": {
+  "name": "The Black Pyre",
+  "pair": [
+   "fire",
+   "void"
+  ],
+  "conjunction": "Hollow Flame",
+  "blurb": "A cathedral where the saints were burned and refused to finish. The fire here is black and gives no light.",
+  "rooms": [
+   "pyre_nave",
+   "pyre_stake",
+   "pyre_crypt"
+  ],
+  "foes": [
+   "ash_penitent",
+   "cinder_hound",
+   "censer_deacon",
+   "candle_wraith",
+   "pyre_knight"
+  ],
+  "elites": [
+   "unburnt_inquisitor",
+   "pyre_seraph"
+  ],
+  "bosses": [
+   "saint_unending"
+  ],
+  "story": 12,
+  "act": 5,
+  "act_name": "The Hollow Heaven",
+  "lead": "The Frozen Saints died praying toward a black flame. They were pilgrims, fleeing a cathedral where saints were burned."
+ },
+ "spire": {
+  "name": "The Stilled Spire",
+  "pair": [
+   "frost",
+   "lightning"
+  ],
+  "conjunction": "Lockdown",
+  "blurb": "An observatory where the astronomers tried to stop time. They succeeded, mostly. The clocks still tick inside the ice.",
+  "rooms": [
+   "spire_orrery",
+   "spire_stair",
+   "spire_top"
+  ],
+  "foes": [
+   "stopped_pilgrim",
+   "clock_sentry",
+   "gear_spider",
+   "aurora_moth",
+   "frozen_halberdier"
+  ],
+  "elites": [
+   "horologist",
+   "rime_colossus"
+  ],
+  "bosses": [
+   "last_hour"
+  ],
+  "story": 10,
+  "act": 4,
+  "act_name": "The Stilling",
+  "lead": "Pilgrims crossed the hive plain to an observatory, to watch the stars stop. Some of them are still walking."
+ },
+ "fleet": {
+  "name": "The Icebound Fleet",
+  "pair": [
+   "frost",
+   "water"
+  ],
+  "conjunction": "Freeze",
+  "blurb": "A war fleet frozen into a white sea, mid-battle. The crews are still at their posts.",
+  "rooms": [
+   "fleet_deck",
+   "fleet_hold",
+   "fleet_ice"
+  ],
+  "foes": [
+   "frozen_whaler",
+   "rime_gulls",
+   "ice_eel",
+   "deck_hand",
+   "walrus_brute"
+  ],
+  "elites": [
+   "icewed_captain",
+   "frost_selkie"
+  ],
+  "bosses": [
+   "leviathan_ice"
+  ],
+  "story": 6,
+  "act": 3,
+  "act_name": "The Long Cold",
+  "lead": "The wreckers' ledger lists every ship they took, and the one fleet they let pass: a war fleet sailing north to kill a leviathan."
+ },
+ "barrow": {
+  "name": "The Hollow Barrow",
+  "pair": [
+   "frost",
+   "toxin"
+  ],
+  "conjunction": "Cryo-rot",
+  "blurb": "Burial mounds of a plague-struck kingdom, kept fresh by the cold. The dead are not rotten. They are preserved, plague and all.",
+  "rooms": [
+   "barrow_mound",
+   "barrow_tomb",
+   "barrow_hall"
+  ],
+  "foes": [
+   "barrow_draugr",
+   "plague_wolf",
+   "frostbit_leper",
+   "mold_wight",
+   "grave_worm"
+  ],
+  "elites": [
+   "barrow_thane",
+   "rot_witch"
+  ],
+  "bosses": [
+   "barrow_king"
+  ],
+  "story": 8,
+  "act": 3,
+  "act_name": "The Long Cold",
+  "lead": "The Jarl's hold buried its plague dead in barrows beyond the ice. The Riven Jarl wore a barrow-lord's ring."
+ },
+ "silence": {
+  "name": "The White Silence",
+  "pair": [
+   "frost",
+   "void"
+  ],
+  "conjunction": "Absolute Zero",
+  "blurb": "A tundra under a black star. Nothing makes a sound here. Nothing warm has ever lived.",
+  "rooms": [
+   "silence_tundra",
+   "silence_shrine",
+   "silence_rift"
+  ],
+  "foes": [
+   "hollow_wanderer",
+   "silence_stag",
+   "starless_eye",
+   "frozen_saint",
+   "rime_shade"
+  ],
+  "elites": [
+   "pale_hunter",
+   "void_mammoth"
+  ],
+  "bosses": [
+   "cold_star"
+  ],
+  "story": 11,
+  "act": 4,
+  "act_name": "The Stilling",
+  "lead": "The Last Hour's hand points at one star: the one the astronomers stopped time to keep from falling. It fell."
+ },
+ "coast": {
+  "name": "The Stormwrack Coast",
+  "pair": [
+   "lightning",
+   "water"
+  ],
+  "conjunction": "Electrocute",
+  "blurb": "Cliffs where the storm never ends, and the wreckers light false lights to bring the ships in.",
+  "rooms": [
+   "coast_cliffs",
+   "coast_cove",
+   "coast_light"
+  ],
+  "foes": [
+   "wrecker",
+   "shock_eel",
+   "storm_harpy",
+   "tide_crab",
+   "drowned_bosun"
+  ],
+  "elites": [
+   "lighthouse_keeper",
+   "harpy_matron"
+  ],
+  "bosses": [
+   "thunder_whale"
+  ],
+  "story": 5,
+  "act": 2,
+  "act_name": "The Fires Beneath",
+  "lead": "The foundry cast bells for the sea-kingdoms. Its storm broke loose and drifted out over the coast, and it has not stopped since."
+ },
+ "hive": {
+  "name": "The Venom Spires",
+  "pair": [
+   "lightning",
+   "toxin"
+  ],
+  "conjunction": "Neurotoxin",
+  "blurb": "Hive towers on a lightning-struck plain. The insects that build them sting with venom that stops the heart.",
+  "rooms": [
+   "hive_spires",
+   "hive_comb",
+   "hive_brood"
+  ],
+  "foes": [
+   "spire_wasps",
+   "venom_spider",
+   "puppet_host",
+   "galvanic_beetle",
+   "hive_drone"
+  ],
+  "elites": [
+   "mantis_duelist",
+   "brood_mother"
+  ],
+  "bosses": [
+   "hive_queen"
+  ],
+  "story": 9,
+  "act": 4,
+  "act_name": "The Stilling",
+  "lead": "The Barrow King's plague came up the trade road from the south, inside a traveller who moved when the larvae did."
+ },
+ "sky": {
+  "name": "The Torn Sky",
+  "pair": [
+   "lightning",
+   "void"
+  ],
+  "conjunction": "Discharge",
+  "blurb": "A heaven torn open by a war of gods. The ruins float in the storm, and through the tears something looks in.",
+  "rooms": [
+   "sky_ruins",
+   "sky_gate",
+   "sky_choir"
+  ],
+  "foes": [
+   "fallen_angel",
+   "rift_hound",
+   "storm_shade",
+   "choir_of_eyes",
+   "skywreck_knight"
+  ],
+  "elites": [
+   "thunder_seraph",
+   "rift_leviathan"
+  ],
+  "bosses": [
+   "shattered_god"
+  ],
+  "story": 14,
+  "act": 5,
+  "act_name": "The Hollow Heaven",
+  "lead": "Every eye in the garden looks up. The Antlered Mother's roots grow toward a tear in the sky."
+ },
+ "mire": {
+  "name": "The Rotmire",
+  "pair": [
+   "toxin",
+   "water"
+  ],
+  "conjunction": "Toxic Pool",
+  "blurb": "A drowned fen where the water is poison and the bodies in it do not rot. The hags keep house on stilts.",
+  "rooms": [
+   "mire_bog",
+   "mire_hut",
+   "mire_drown"
+  ],
+  "foes": [
+   "bog_body",
+   "fen_hag",
+   "mire_toad",
+   "leech_swarm",
+   "fen_lurker"
+  ],
+  "elites": [
+   "bog_troll",
+   "coven_mother"
+  ],
+  "bosses": [
+   "mire_mother"
+  ],
+  "story": 1,
+  "act": 1,
+  "act_name": "The Waters Below",
+  "lead": "The Drowned King's crown is packed with fen peat. The tide that took his kingdom still runs inland, to a poison fen."
+ },
+ "garden": {
+  "name": "The Blighted Garden",
+  "pair": [
+   "toxin",
+   "void"
+  ],
+  "conjunction": "Blight",
+  "blurb": "A fey garden gone to rot. The spores grow minds, and the minds grow wrong.",
+  "rooms": [
+   "garden_grove",
+   "garden_hedge",
+   "garden_heart"
+  ],
+  "foes": [
+   "fungal_husk",
+   "spore_deer",
+   "thorn_knight",
+   "moth_witch",
+   "root_horror"
+  ],
+  "elites": [
+   "the_gardener",
+   "blight_dryad"
+  ],
+  "bosses": [
+   "antlered_mother"
+  ],
+  "story": 13,
+  "act": 5,
+  "act_name": "The Hollow Heaven",
+  "lead": "The Saint Unending was burned for one sermon: that heaven was a garden, and a woman kept it. Her ash still drifts toward it."
+ }
+}

@@ -1,0 +1,1 @@
+{"w":460,"h":700,"layers":[{"name":"shadow"},{"name":"back","pivot":[240,120]},{"name":"legs","pivot":[240,440]},{"name":"body","pivot":[240,330]},{"name":"arm","pivot":[266,220]},{"name":"near","pivot":[222,222]},{"name":"head","pivot":[246,200]}],"anim":{"idle":"float","attack":"cast","hand":[340,186]}}

@@ -1,0 +1,1 @@
+{"w": 460, "h": 700, "layers": [{"name": "shadow", "empty": false}, {"name": "back", "pivot": [230, 400], "empty": false}, {"name": "body", "pivot": [230, 330], "empty": false}, {"name": "head", "pivot": [220, 220], "empty": true}, {"name": "arm", "pivot": [270, 250], "empty": false}], "anim": {"idle": "float", "attack": "wail", "hand": [170, 300]}}

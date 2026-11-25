@@ -1,0 +1,37 @@
+materials_v2 READY, v2.1 (2026-11-24): weathered stone and organic trees. Full API in the header of scenes/materials_v2.js.
+
+  const MV = require('./materials_v2')(S);        // S = your lik.js scene; one shared instance per scene
+
+Stone (automatic, no opt-in): lik.js masonry/ashlar, battle_kit_b.flags, battle_li.rock, battle_kit_g1 flags/rubble/ring/rockMass,
+battle_kit_g2 stoneCells/rockMass/smoothRock now weather themselves: per-stone tone, pits, spalls, chipped arrises, broken corners,
+hairline and through cracks, worn edges, damp toward the base, lichen/moss, runs under ledges, mortar loss, and world variants
+(salt, soot, frost, algae, weed). The world is guessed from the script name (bg_<world>_*.js, int_* = abbey_in, garth = abbey_out).
+Per call: o.wx = false (off) | 'sea' | { world: 'rime', decay: 1.3, lichen: 0 }. Env MV2_OFF=1 turns it all off.
+Marks use their own random stream: room geometry and every S.R placement stay identical. Detail thins with depth and is capped
+per plane and per scene, so layers stay under ~5 MB.
+
+New stone helpers:
+  MV.hewnRock(at, Ls, Lt, col, { bed, dip, joint, tool, wx })   natural/rock-cut face: strata, fractures, no mortar
+  MV.rockSkin(pts, Z, col, { wx, strata })                      the same weathering inside a screen outline
+  MV.weatherWall / MV.weatherFloor (at, Ls, Lt, wx)             plane-level runs, damp band, cracks / worn path, puddles, frost
+  MV.stoneMarks(ps, Z, fill, { wy0, wx })                       marks for one loose stone polygon
+
+Trees and strands (screen space, (x, y) = ground point):
+  MV.tree(x, y, h, Z, { kind: oak|dead|yew|alder|birch|fungal|frozen|pollard|windswept|snag, col, lean, leaves, seed })
+      -> { svg, limbs, trunk, tw, wAt, tips }  (root flare into a ground lip; never floats)
+  MV.renderTree({ trunk, trunkW: [w0, w1], limbs: [[pts, w0, w1]] }, Z, { kind, col })   draw your own skeleton organically
+  MV.strand(pts, w0, w1, Z), MV.vine(A, B, Z), MV.hangRoots(x0, x1, y, Z), MV.surfaceRoots(x, y, w, Z), MV.kelp(x, y, h, Z)
+battle_kit_g5.tree and battle_kit_g4.roots already draw through it (same skeleton, same return value, same random stream).
+
+Test sheet: out/scenes/materials_v2_sheet.png. Before/after rooms: out/scenes/materials_v2/{before,after}/.
+
+v2.1 (reads at 1x): per-stone tone and hue (darker / warmer / cooler / bleached; a lighter palette on dark stone), weathering
+zones that run across courses, the odd fallen-out stone, larger chipped arrises and broken corners with a dark recess and lit
+lip, dark lost-mortar joints with grime and moss in them, a damp/grime gradient over the bottom third of every wall, soot
+climbing above the room's lights (filled in at write time), runs under ledges, floor slabs with worn dips, cracks, missing
+corners and dirt in the joints; fewer pin pits, more mid-size pocks. Yew: dense dark merged masses, trunk mostly hidden.
+Big single shapes (rockSkin outlines, frame-tall stoneMarks shapes) get local marks only: no whole-shape washes, no pale ovals,
+lit lips relative to the base tone (dark earth stays dark); runs tinted from the plane's own stone colour. The g2 size guard on
+smoothRock is removed. Weight: marks are capped per plane (by depth and by the plane's own stone bytes) and per scene, and thin
+out on layers already over ~3.4 MB; wall stones now write texture, hatch and heavy ink once per plane, so most layers end close
+to their old size. MV2_DEBUG=1 prints per-plane mark bytes.

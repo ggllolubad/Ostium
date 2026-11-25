@@ -1,0 +1,203 @@
+{
+ "date": "22 November 2026",
+ "lead": "Direction A's bodies, proportions and personalities, rendered in direction C's Living Ink crosshatch. The Bulwark stands taller, and the style now covers all six callings, the first Drowned Kingdom foe and the first abbey keeper. Every figure went through the art director's review and fixes before this page.",
+ "bulwark_note": "His spine is more upright and the helm sits well above the door's top edge, so he reads as a proud tank rather than a man cowering. He is still braced behind the door with the mace resting on its rim. Raising the helm also cleared the mace haft, which used to cross its lower edge.",
+ "cast": [
+  {
+   "file": "dirAC_bulwark",
+   "kind": "hero",
+   "role": "Bulwark",
+   "name": "The Wall That Stayed",
+   "alt": "Bulwark braced behind his church-door shield",
+   "pitch": "Braced behind the church door, mace resting on the rim, eye slit catching the light.",
+   "details": [
+    "Bedroll strapped high on the back",
+    "Kill tally scratched into the planks, broken arrow in the oak",
+    "Lead patch riveted over a breach in the breastplate",
+    "Rubric strip tied to the ring handle"
+   ]
+  },
+  {
+   "file": "dirAC_duelist",
+   "kind": "hero",
+   "role": "Duelist",
+   "name": "The Old Bravo",
+   "alt": "Duelist in a low line with a dagger cocked behind",
+   "pitch": "A fencing master past his prime: weight back, blade low and forward, parrying dagger cocked behind.",
+   "details": [
+    "Grey-streaked queue tied with rubric",
+    "Slashed sleeves, stitched old cut across the chest",
+    "Iron earring and horn buttons",
+    "Cavalier boots, empty scabbard swung back"
+   ]
+  },
+  {
+   "file": "dirAC_elementalist",
+   "kind": "hero",
+   "role": "Elementalist",
+   "name": "The Burnt-Out Scholar",
+   "alt": "Elementalist hunched over an open book with a flame above it",
+   "pitch": "Gaunt and sleepless, hunched over his book, coaxing a guttering flame with six-ink fingers.",
+   "details": [
+    "Six course sigils inked round the hem",
+    "Satchel of scrolls with rubric knotted on the strap",
+    "Six-sign ring at the rope belt",
+    "Linen coif tied under the chin"
+   ]
+  },
+  {
+   "file": "dirAC2_alchemist",
+   "kind": "hero",
+   "role": "Alchemist",
+   "name": "The Brewer",
+   "alt": "Alchemist holding a green flask up by the neck, fist on hip",
+   "pitch": "A stocky distiller holding a flask up by the neck and squinting at the colour, fist on hip.",
+   "details": [
+    "Bandolier of six flasks, each a different glass",
+    "Copper still on the back: boiler, pipe and coil",
+    "Stiff waxed apron, burned and stained",
+    "Spectacles pushed up on a felt cap"
+   ]
+  },
+  {
+   "file": "dirAC2_oracle",
+   "kind": "hero",
+   "role": "Oracle",
+   "name": "The Anchorite",
+   "alt": "Blindfolded Oracle listening to an hourglass held before her face",
+   "pitch": "Blindfolded and bowed, listening to the sand fall in the hourglass she holds before her face.",
+   "details": [
+    "Robe drawn open on star charts sewn into the lining",
+    "One painted eye on the blindfold, the cast's only eye motif",
+    "Wax tablet and stylus at the belt",
+    "Bare feet under the hem"
+   ]
+  },
+  {
+   "file": "dirAC2_hexweaver",
+   "kind": "hero",
+   "role": "Hexweaver",
+   "name": "The Cunning Woman",
+   "alt": "Crouched Hexweaver with a straw poppet and an iron pin",
+   "pitch": "Crouched and grinning through a gap in her teeth, iron pin poised over the poppet in her other hand.",
+   "details": [
+    "Black tallow candles burning on a wax shoulder plate",
+    "Charm belt: herbs, a bird skull, a bottle",
+    "Bone pin and a rubric rag in matted hair",
+    "Rag-bound shins, bare feet"
+   ]
+  },
+  {
+   "file": "dirAC2_thrall",
+   "kind": "foe",
+   "role": "Foe \u00b7 Drowned Kingdom",
+   "name": "Drowned Thrall",
+   "alt": "Bloated drowned sailor facing left with a boat hook across his body",
+   "pitch": "A sailor who went down with the fleet, still hauling at anything that floats.",
+   "details": [
+    "Rusted boat hook held across the body",
+    "Clean void hole through the forearm",
+    "Barnacles on the back, mussels in the folds",
+    "Kelp hair hanging over white eyes, blue lips"
+   ]
+  },
+  {
+   "file": "dirAC2_smith",
+   "kind": "keeper",
+   "role": "Keeper \u00b7 Undercroft smithy",
+   "name": "Mother Hild",
+   "alt": "Mother Hild the Smith with hammer on her shoulder and tongs holding a glowing bar",
+   "pitch": "Short and powerful, hammer on her shoulder, tongs closed on a bar still glowing from the forge.",
+   "details": [
+    "Habit, black scapular and leather bib apron",
+    "Iron key ring of the Ostiarii on the rope belt",
+    "Burn-scarred forearms, sleeves pushed up",
+    "Grey hair lifting with Storm Foundry static"
+   ]
+  }
+ ],
+ "ad_intro": "The art director agent reviewed all eight figures against the design bible, ranked the problems, and rebuilt the five new entities rather than patching them. Its full notes are in REVIEW.md in the source zip.",
+ "ad_fixed": [
+  [
+   "Drowned Thrall",
+   "shins read as greaves, feet as shoes, skin as steel. Now a pear-shaped body with violet-grey dead flesh, bare swollen feet, and both fists over the pole."
+  ],
+  [
+   "Mother Hild",
+   "read as a pill shape and as a man. Now three distinct layers, a cinched waist, pushed-up sleeves, working tongs and a softer face."
+  ],
+  [
+   "Oracle",
+   "the lining read as a scimitar and the hood as a helmet. Now a real hood, a three-piece robe, and the hourglass breaking the silhouette."
+  ],
+  [
+   "Alchemist",
+   "the fist sat under the flask like a stand. Now gloved fingers wrap the neck and the bandolier is fully visible."
+  ],
+  [
+   "Hexweaver",
+   "stood upright with the pin pointing backwards. Now crouched with her shoulders ahead of her hips and the pin aimed at the poppet."
+  ],
+  [
+   "Bulwark",
+   "the elbow armour read as a second gauntlet; now smaller and turned to read as an elbow."
+  ],
+  [
+   "Duelist",
+   "his gold earring and brass buttons broke the gold-only-for-holy rule; now iron and horn."
+  ]
+ ],
+ "ad_open": [
+  "Thrall: physically sound, but he stands evenly rather than sunk on his back foot as the bible describes.",
+  "Alchemist: a slight forward lean would sell the weight of the still on his back.",
+  "Bulwark: the mace crosses his palm at a steep angle, like a sword grip. Plausible, but worth your eye.",
+  "Hexweaver: the poppet faces the camera so its face reads at game size. She is stabbing it, not reading it, so it passed.",
+  "Mother Hild's static hair still reads a little like a close cap at game size.",
+  "Duelist: the red cape lining is red that is not blood, doom or rubric; kept because you approved it in direction A."
+ ],
+ "questions": [
+  "Lock this as the cast style: A bodies, C rendering, 6.4 heads? If yes, the design bible's 7.5-head rule changes to match.",
+  "Is the Bulwark's new height right, or should he come up further?",
+  "Duelist's red cape lining: keep it, or move it to the abbey rubric rule (red only for blood, doom and rubric)?",
+  "Next batch: the rest of the Drowned Kingdom foes, the other eight keepers, or the hero path variants?"
+ ],
+ "logic_intro": "After you caught three posture and grip errors, every figure went through a separate logic audit against a written checklist: head over neck and spine, objects facing their user, grips that match the direction the forearm comes from, weight over the feet, contacts that touch. It found 14 more errors. All are fixed.",
+ "logic": [
+  [
+   "Your three catches",
+   "Bulwark's head now sits over his neck. The Elementalist holds the book toward himself, so we see the back cover and spine. The Thrall's hands now close over the pole from above."
+  ],
+  [
+   "Bulwark",
+   "the door hung 40 px above the ground from one hidden hand; it now stands on the ground. The elbow plate read as a second fist at the belt; now a plain elbow cap."
+  ],
+  [
+   "Duelist",
+   "the dagger hand was bent 90 degrees on a vertical forearm; the arm is re-posed so the blade leaves the thumb side. The rapier fist pointed 102 degrees away from its forearm; now in line, thumb on top."
+  ],
+  [
+   "Elementalist",
+   "the cupping hand held nothing, 100 px below the flame; it now cups the flame's base. The far hand had no forearm; now one carries the book from below. His eyes now look at the flame, not over it."
+  ],
+  [
+   "Alchemist",
+   "the hip fist was turned backwards into the forearm. The flask hand was bent 90 degrees while his eyes looked above the flask; now he reaches up and squints at it at eye level."
+  ],
+  [
+   "Hexweaver",
+   "the pin ran down her own forearm toward her elbow; now raised in a stabbing grip over the poppet. Her eyes now look at the poppet, and her hair hangs straight down."
+  ],
+  [
+   "Thrall",
+   "the far hand seemed to grow out of his belly; the forearm now comes down onto the pole from behind it."
+  ],
+  [
+   "Smith",
+   "the hammer fist was turned backwards; the tongs left the little-finger side of her hand. Both fixed."
+  ],
+  [
+   "The cause",
+   "the fist helper could only move the thumb by spinning the whole hand 180 degrees, which put the knuckles into the forearm. It now mirrors the hand instead, works the angle out from the elbow, and warns when a grip is impossible."
+  ]
+ ]
+}

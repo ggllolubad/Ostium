@@ -1,0 +1,1277 @@
+{
+ "rooms": [
+  {
+   "name": "The Flooded Stair",
+   "desc": "Two drowned thralls shamble up from the nave.",
+   "enemies": [
+    "thrall",
+    "thrall"
+   ],
+   "room": "stair",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Eel Pools",
+   "desc": "Things that bite, and keep biting.",
+   "enemies": [
+    "eelkin",
+    "lamprey",
+    "eelkin"
+   ],
+   "room": "stair",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Drowned Belfry",
+   "desc": "A boy still singing, a ringer still ringing.",
+   "enemies": [
+    "bellringer",
+    "choirboy",
+    "thrall"
+   ],
+   "room": "belfry",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Sunken Nave",
+   "desc": "The Tidewarden keeps the Siren's song.",
+   "enemies": [
+    "warden",
+    "siren"
+   ],
+   "room": "nave",
+   "tier": "elite",
+   "world": "drowned"
+  },
+  {
+   "name": "The Barnacle Gate",
+   "desc": "A knight of the drowned order and what lives in his shadow.",
+   "enemies": [
+    "barnacle_knight",
+    "crab"
+   ],
+   "room": "nave",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Ossuary Tide",
+   "desc": "Bones, a swollen body, and a fisherman.",
+   "enemies": [
+    "bloated",
+    "thrall",
+    "hookline"
+   ],
+   "room": "ossuary",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Weeping Cloister",
+   "desc": "The sisters mourn. The brute keeps the door.",
+   "enemies": [
+    "anchor_brute",
+    "weeping_nun",
+    "choirboy"
+   ],
+   "room": "ossuary",
+   "tier": "foe",
+   "world": "drowned"
+  },
+  {
+   "name": "The Abbess Holds Court",
+   "desc": "Salt sermon in a drowned chapter house.",
+   "enemies": [
+    "abbess",
+    "weeping_nun"
+   ],
+   "room": "nave",
+   "tier": "elite",
+   "world": "drowned"
+  },
+  {
+   "name": "The Grasping Deep",
+   "desc": "The floor gives way to something enormous.",
+   "enemies": [
+    "kraken_arm",
+    "eelkin"
+   ],
+   "room": "stair",
+   "tier": "elite",
+   "world": "drowned"
+  },
+  {
+   "name": "The Pearl Diver",
+   "desc": "It goes for the ones at the back.",
+   "enemies": [
+    "hookline",
+    "pearl_diver"
+   ],
+   "room": "ossuary",
+   "tier": "elite",
+   "world": "drowned"
+  },
+  {
+   "name": "The Bell Below",
+   "desc": "Boss. The bell that rings for the drowned.",
+   "enemies": [
+    "bell_below"
+   ],
+   "room": "belfry",
+   "tier": "boss",
+   "world": "drowned"
+  },
+  {
+   "name": "Mother of Brine",
+   "desc": "Boss. The siren-matriarch and her daughter.",
+   "enemies": [
+    "siren",
+    "mother_of_brine"
+   ],
+   "room": "throne",
+   "tier": "boss",
+   "world": "drowned"
+  },
+  {
+   "name": "The Drowned King",
+   "desc": "Boss. The king, and his last loyal knight.",
+   "enemies": [
+    "barnacle_knight",
+    "drowned_king"
+   ],
+   "room": "throne",
+   "tier": "boss",
+   "world": "drowned"
+  },
+  {
+   "name": "The Cracked Floe",
+   "desc": "Thralls hacking at the ice. Something moves beneath it.",
+   "enemies": [
+    "rime_thrall",
+    "fissure_worm"
+   ],
+   "room": "rime_glacier",
+   "tier": "foe",
+   "world": "rime"
+  },
+  {
+   "name": "Vent Hounds",
+   "desc": "The hounds nest where the magma breathes.",
+   "enemies": [
+    "magma_hound",
+    "magma_hound",
+    "rime_thrall"
+   ],
+   "room": "rime_crevasse",
+   "tier": "foe",
+   "world": "rime"
+  },
+  {
+   "name": "The Glass Gate",
+   "desc": "A shieldmaiden holds the hall. The steam behind her is watching.",
+   "enemies": [
+    "obsidian_maiden",
+    "steam_wraith"
+   ],
+   "room": "rime_hall",
+   "tier": "foe",
+   "world": "rime"
+  },
+  {
+   "name": "Steam and Stone",
+   "desc": "Rising heat, falling ice.",
+   "enemies": [
+    "steam_wraith",
+    "rime_thrall",
+    "fissure_worm"
+   ],
+   "room": "rime_crevasse",
+   "tier": "foe",
+   "world": "rime"
+  },
+  {
+   "name": "The Thane's Hall",
+   "desc": "A giant at the hearth, and his shieldmaiden.",
+   "enemies": [
+    "obsidian_maiden",
+    "jotun_thane"
+   ],
+   "room": "rime_hall",
+   "tier": "elite",
+   "world": "rime"
+  },
+  {
+   "name": "Two-Faced Oracle",
+   "desc": "She speaks in fire and frost.",
+   "enemies": [
+    "magma_hound",
+    "twin_seeress"
+   ],
+   "room": "rime_glacier",
+   "tier": "elite",
+   "world": "rime"
+  },
+  {
+   "name": "The Riven Jarl",
+   "desc": "Boss. The lord of the split glacier.",
+   "enemies": [
+    "obsidian_maiden",
+    "riven_jarl"
+   ],
+   "room": "rime_hall",
+   "tier": "boss",
+   "world": "rime"
+  },
+  {
+   "name": "The Anvil Line",
+   "desc": "Slaves at the hammers, sparks everywhere.",
+   "enemies": [
+    "slag_slave",
+    "spark_swarm",
+    "slag_slave"
+   ],
+   "room": "foundry_floor",
+   "tier": "foe",
+   "world": "foundry"
+  },
+  {
+   "name": "Bronze Watch",
+   "desc": "An automaton and the smith who keeps it running.",
+   "enemies": [
+    "bronze_automaton",
+    "arc_smith"
+   ],
+   "room": "foundry_floor",
+   "tier": "foe",
+   "world": "foundry"
+  },
+  {
+   "name": "The Bellows Roof",
+   "desc": "Imps working the great bellows under the storm.",
+   "enemies": [
+    "bellows_imp",
+    "bellows_imp",
+    "arc_smith"
+   ],
+   "room": "foundry_roof",
+   "tier": "foe",
+   "world": "foundry"
+  },
+  {
+   "name": "The Casting Pit",
+   "desc": "Molten bronze and the things that tend it.",
+   "enemies": [
+    "spark_swarm",
+    "bronze_automaton",
+    "slag_slave"
+   ],
+   "room": "foundry_mould",
+   "tier": "foe",
+   "world": "foundry"
+  },
+  {
+   "name": "The Master Smith",
+   "desc": "The cyclops at its great anvil.",
+   "enemies": [
+    "arc_smith",
+    "cyclops_smith"
+   ],
+   "room": "foundry_mould",
+   "tier": "elite",
+   "world": "foundry"
+  },
+  {
+   "name": "Talos at the Gate",
+   "desc": "A bronze giant, with its heel to the wall.",
+   "enemies": [
+    "bellows_imp",
+    "talos_sentinel"
+   ],
+   "room": "foundry_roof",
+   "tier": "elite",
+   "world": "foundry"
+  },
+  {
+   "name": "The Anvil Titan",
+   "desc": "Boss. The foundry's first and worst work.",
+   "enemies": [
+    "bronze_automaton",
+    "anvil_titan"
+   ],
+   "room": "foundry_floor",
+   "tier": "boss",
+   "world": "foundry"
+  },
+  {
+   "name": "The Tepidarium",
+   "desc": "Attendants still tending guests who will not leave.",
+   "enemies": [
+    "scalded_attendant",
+    "scalded_attendant",
+    "bath_leech"
+   ],
+   "room": "baths_pool",
+   "tier": "foe",
+   "world": "baths"
+  },
+  {
+   "name": "The Hot Pools",
+   "desc": "Crabs boiling in the shallows, a brute in the deep end.",
+   "enemies": [
+    "kettle_crab",
+    "boiled_brute"
+   ],
+   "room": "baths_pool",
+   "tier": "foe",
+   "world": "baths"
+  },
+  {
+   "name": "The Steam Rooms",
+   "desc": "Nymphs in the steam. You hear them before you see them.",
+   "enemies": [
+    "steam_nymph",
+    "scalded_attendant",
+    "steam_nymph"
+   ],
+   "room": "baths_furnace",
+   "tier": "foe",
+   "world": "baths"
+  },
+  {
+   "name": "The Drained Cistern",
+   "desc": "Leeches in the sludge, and the brute who fed them.",
+   "enemies": [
+    "bath_leech",
+    "boiled_brute",
+    "bath_leech"
+   ],
+   "room": "baths_cistern",
+   "tier": "foe",
+   "world": "baths"
+  },
+  {
+   "name": "The Mistress Receives",
+   "desc": "The Bath-Mistress and her attendant.",
+   "enemies": [
+    "scalded_attendant",
+    "bath_mistress"
+   ],
+   "room": "baths_pool",
+   "tier": "elite",
+   "world": "baths"
+  },
+  {
+   "name": "The Furnace Stair",
+   "desc": "The bearer comes up from the furnace.",
+   "enemies": [
+    "kettle_crab",
+    "cauldron_bearer"
+   ],
+   "room": "baths_furnace",
+   "tier": "elite",
+   "world": "baths"
+  },
+  {
+   "name": "The Simmering Matron",
+   "desc": "Boss. The matron in her great pool.",
+   "enemies": [
+    "steam_nymph",
+    "simmering_matron"
+   ],
+   "room": "baths_pool",
+   "tier": "boss",
+   "world": "baths"
+  },
+  {
+   "name": "The Upper Gallery",
+   "desc": "Miners still working the seam.",
+   "enemies": [
+    "gas_miner",
+    "gas_miner",
+    "pit_crawler"
+   ],
+   "room": "pits_shaft",
+   "tier": "foe",
+   "world": "pits"
+  },
+  {
+   "name": "Toad Pool",
+   "desc": "Toads in the sulphur, and an imp with a torch.",
+   "enemies": [
+    "brimstone_toad",
+    "fuse_imp"
+   ],
+   "room": "pits_vent",
+   "tier": "foe",
+   "world": "pits"
+  },
+  {
+   "name": "The Canary Chapel",
+   "desc": "The priests sing to the gas.",
+   "enemies": [
+    "canary_priest",
+    "gas_miner",
+    "fuse_imp"
+   ],
+   "room": "pits_chapel",
+   "tier": "foe",
+   "world": "pits"
+  },
+  {
+   "name": "The Deep Seam",
+   "desc": "Crawlers in the dark, toads in the vents.",
+   "enemies": [
+    "pit_crawler",
+    "brimstone_toad",
+    "pit_crawler"
+   ],
+   "room": "pits_vent",
+   "tier": "foe",
+   "world": "pits"
+  },
+  {
+   "name": "The Powder Store",
+   "desc": "An ogre among the kegs.",
+   "enemies": [
+    "fuse_imp",
+    "powder_ogre"
+   ],
+   "room": "pits_shaft",
+   "tier": "elite",
+   "world": "pits"
+  },
+  {
+   "name": "The Choking Chapel",
+   "desc": "The matriarch hangs over the altar.",
+   "enemies": [
+    "canary_priest",
+    "miasma_matriarch"
+   ],
+   "room": "pits_chapel",
+   "tier": "elite",
+   "world": "pits"
+  },
+  {
+   "name": "The Burning Lung",
+   "desc": "Boss. The mine breathes.",
+   "enemies": [
+    "gas_miner",
+    "burning_lung"
+   ],
+   "room": "pits_vent",
+   "tier": "boss",
+   "world": "pits"
+  },
+  {
+   "name": "The Penitents' Walk",
+   "desc": "They flog themselves down the nave.",
+   "enemies": [
+    "ash_penitent",
+    "ash_penitent",
+    "censer_deacon"
+   ],
+   "room": "pyre_nave",
+   "tier": "foe",
+   "world": "pyre"
+  },
+  {
+   "name": "The Stake Field",
+   "desc": "Hounds sniff the ashes of the burned.",
+   "enemies": [
+    "cinder_hound",
+    "cinder_hound",
+    "ash_penitent"
+   ],
+   "room": "pyre_stake",
+   "tier": "foe",
+   "world": "pyre"
+  },
+  {
+   "name": "Candle Crypt",
+   "desc": "A knight keeps the candles burning.",
+   "enemies": [
+    "candle_wraith",
+    "pyre_knight",
+    "candle_wraith"
+   ],
+   "room": "pyre_crypt",
+   "tier": "foe",
+   "world": "pyre"
+  },
+  {
+   "name": "The Black Choir",
+   "desc": "The deacon swings its censer; the knight keeps time.",
+   "enemies": [
+    "pyre_knight",
+    "censer_deacon"
+   ],
+   "room": "pyre_nave",
+   "tier": "foe",
+   "world": "pyre"
+  },
+  {
+   "name": "The Tribunal",
+   "desc": "The inquisitor reads your names aloud.",
+   "enemies": [
+    "pyre_knight",
+    "unburnt_inquisitor"
+   ],
+   "room": "pyre_crypt",
+   "tier": "elite",
+   "world": "pyre"
+  },
+  {
+   "name": "The Fallen Seraph",
+   "desc": "It came to put out the fire.",
+   "enemies": [
+    "candle_wraith",
+    "pyre_seraph"
+   ],
+   "room": "pyre_stake",
+   "tier": "elite",
+   "world": "pyre"
+  },
+  {
+   "name": "The Saint Unending",
+   "desc": "Boss. She is still burning.",
+   "enemies": [
+    "censer_deacon",
+    "saint_unending"
+   ],
+   "room": "pyre_nave",
+   "tier": "boss",
+   "world": "pyre"
+  },
+  {
+   "name": "The Observatory Floor",
+   "desc": "Pilgrims stand frozen before the orrery.",
+   "enemies": [
+    "stopped_pilgrim",
+    "stopped_pilgrim",
+    "gear_spider"
+   ],
+   "room": "spire_orrery",
+   "tier": "foe",
+   "world": "spire"
+  },
+  {
+   "name": "The Clockwork Stair",
+   "desc": "Sentries mark time on every landing.",
+   "enemies": [
+    "clock_sentry",
+    "frozen_halberdier"
+   ],
+   "room": "spire_stair",
+   "tier": "foe",
+   "world": "spire"
+  },
+  {
+   "name": "Aurora Gallery",
+   "desc": "Moths drawn to the frozen stars.",
+   "enemies": [
+    "aurora_moth",
+    "aurora_moth",
+    "stopped_pilgrim"
+   ],
+   "room": "spire_top",
+   "tier": "foe",
+   "world": "spire"
+  },
+  {
+   "name": "The Gear Loft",
+   "desc": "Spiders mending the works.",
+   "enemies": [
+    "gear_spider",
+    "clock_sentry",
+    "gear_spider"
+   ],
+   "room": "spire_orrery",
+   "tier": "foe",
+   "world": "spire"
+  },
+  {
+   "name": "The Horologist's Study",
+   "desc": "He has been waiting for you, for ever.",
+   "enemies": [
+    "frozen_halberdier",
+    "horologist"
+   ],
+   "room": "spire_stair",
+   "tier": "elite",
+   "world": "spire"
+  },
+  {
+   "name": "The Founder Stands",
+   "desc": "Someone wound up the statue.",
+   "enemies": [
+    "aurora_moth",
+    "rime_colossus"
+   ],
+   "room": "spire_top",
+   "tier": "elite",
+   "world": "spire"
+  },
+  {
+   "name": "The Last Hour",
+   "desc": "Boss. One minute to midnight.",
+   "enemies": [
+    "clock_sentry",
+    "last_hour"
+   ],
+   "room": "spire_top",
+   "tier": "boss",
+   "world": "spire"
+  },
+  {
+   "name": "The Frozen Deck",
+   "desc": "Whalers at their stations, frozen to the rails.",
+   "enemies": [
+    "frozen_whaler",
+    "deck_hand",
+    "frozen_whaler"
+   ],
+   "room": "fleet_deck",
+   "tier": "foe",
+   "world": "fleet"
+  },
+  {
+   "name": "Gull Rookery",
+   "desc": "The gulls have the rigging.",
+   "enemies": [
+    "rime_gulls",
+    "rime_gulls",
+    "deck_hand"
+   ],
+   "room": "fleet_deck",
+   "tier": "foe",
+   "world": "fleet"
+  },
+  {
+   "name": "The Ice Holes",
+   "desc": "Eels under the ice, a walrus on top.",
+   "enemies": [
+    "ice_eel",
+    "walrus_brute"
+   ],
+   "room": "fleet_ice",
+   "tier": "foe",
+   "world": "fleet"
+  },
+  {
+   "name": "The Orlop Deck",
+   "desc": "Down in the hold, the crew is still at work.",
+   "enemies": [
+    "deck_hand",
+    "ice_eel",
+    "frozen_whaler"
+   ],
+   "room": "fleet_hold",
+   "tier": "foe",
+   "world": "fleet"
+  },
+  {
+   "name": "The Captain's Cabin",
+   "desc": "The captain and his wife, the sea.",
+   "enemies": [
+    "deck_hand",
+    "icewed_captain"
+   ],
+   "room": "fleet_hold",
+   "tier": "elite",
+   "world": "fleet"
+  },
+  {
+   "name": "The Selkie's Floe",
+   "desc": "She is singing on the ice.",
+   "enemies": [
+    "rime_gulls",
+    "frost_selkie"
+   ],
+   "room": "fleet_ice",
+   "tier": "elite",
+   "world": "fleet"
+  },
+  {
+   "name": "The Leviathan in the Ice",
+   "desc": "Boss. The sea itself is frozen around it.",
+   "enemies": [
+    "frozen_whaler",
+    "leviathan_ice"
+   ],
+   "room": "fleet_ice",
+   "tier": "boss",
+   "world": "fleet"
+  },
+  {
+   "name": "The Mound Road",
+   "desc": "Wolves among the grave mounds.",
+   "enemies": [
+    "plague_wolf",
+    "plague_wolf",
+    "barrow_draugr"
+   ],
+   "room": "barrow_mound",
+   "tier": "foe",
+   "world": "barrow"
+  },
+  {
+   "name": "The Leper Path",
+   "desc": "Bells in the snow.",
+   "enemies": [
+    "frostbit_leper",
+    "barrow_draugr",
+    "frostbit_leper"
+   ],
+   "room": "barrow_mound",
+   "tier": "foe",
+   "world": "barrow"
+  },
+  {
+   "name": "The Mould Vault",
+   "desc": "Wights and worms in the grave-rot.",
+   "enemies": [
+    "mold_wight",
+    "grave_worm"
+   ],
+   "room": "barrow_tomb",
+   "tier": "foe",
+   "world": "barrow"
+  },
+  {
+   "name": "The Burial Hall",
+   "desc": "The household, still at the table.",
+   "enemies": [
+    "barrow_draugr",
+    "mold_wight",
+    "frostbit_leper"
+   ],
+   "room": "barrow_hall",
+   "tier": "foe",
+   "world": "barrow"
+  },
+  {
+   "name": "The Thane's Barrow",
+   "desc": "A lord with his household.",
+   "enemies": [
+    "barrow_draugr",
+    "barrow_thane"
+   ],
+   "room": "barrow_hall",
+   "tier": "elite",
+   "world": "barrow"
+  },
+  {
+   "name": "The Witch's Tomb",
+   "desc": "She is tending the dead.",
+   "enemies": [
+    "grave_worm",
+    "rot_witch"
+   ],
+   "room": "barrow_tomb",
+   "tier": "elite",
+   "world": "barrow"
+  },
+  {
+   "name": "The Barrow King",
+   "desc": "Boss. The king of the sealed kingdom.",
+   "enemies": [
+    "barrow_draugr",
+    "barrow_king"
+   ],
+   "room": "barrow_hall",
+   "tier": "boss",
+   "world": "barrow"
+  },
+  {
+   "name": "The Open Tundra",
+   "desc": "Wanderers in the snow.",
+   "enemies": [
+    "hollow_wanderer",
+    "hollow_wanderer",
+    "rime_shade"
+   ],
+   "room": "silence_tundra",
+   "tier": "foe",
+   "world": "silence"
+  },
+  {
+   "name": "The Stag's Path",
+   "desc": "It makes no sound.",
+   "enemies": [
+    "silence_stag",
+    "hollow_wanderer"
+   ],
+   "room": "silence_tundra",
+   "tier": "foe",
+   "world": "silence"
+  },
+  {
+   "name": "The Frozen Shrine",
+   "desc": "Saints and the eyes that watch them.",
+   "enemies": [
+    "frozen_saint",
+    "starless_eye",
+    "frozen_saint"
+   ],
+   "room": "silence_shrine",
+   "tier": "foe",
+   "world": "silence"
+  },
+  {
+   "name": "The Rift Edge",
+   "desc": "Shades at the edge of the rift.",
+   "enemies": [
+    "rime_shade",
+    "starless_eye",
+    "rime_shade"
+   ],
+   "room": "silence_rift",
+   "tier": "foe",
+   "world": "silence"
+  },
+  {
+   "name": "The Hunt",
+   "desc": "It found you first.",
+   "enemies": [
+    "silence_stag",
+    "pale_hunter"
+   ],
+   "room": "silence_tundra",
+   "tier": "elite",
+   "world": "silence"
+  },
+  {
+   "name": "The Last Herd",
+   "desc": "The mammoth and its shade.",
+   "enemies": [
+    "rime_shade",
+    "void_mammoth"
+   ],
+   "room": "silence_rift",
+   "tier": "elite",
+   "world": "silence"
+  },
+  {
+   "name": "The Cold Star",
+   "desc": "Boss. The black star comes down.",
+   "enemies": [
+    "frozen_saint",
+    "cold_star"
+   ],
+   "room": "silence_shrine",
+   "tier": "boss",
+   "world": "silence"
+  },
+  {
+   "name": "The Wreckers' Cliff",
+   "desc": "The lamps are lit.",
+   "enemies": [
+    "wrecker",
+    "wrecker",
+    "drowned_bosun"
+   ],
+   "room": "coast_cliffs",
+   "tier": "foe",
+   "world": "coast"
+  },
+  {
+   "name": "The Eel Shallows",
+   "desc": "Things that bite and things that shock.",
+   "enemies": [
+    "shock_eel",
+    "tide_crab",
+    "shock_eel"
+   ],
+   "room": "coast_cove",
+   "tier": "foe",
+   "world": "coast"
+  },
+  {
+   "name": "The Harpy Rocks",
+   "desc": "They ride the storm down.",
+   "enemies": [
+    "storm_harpy",
+    "storm_harpy",
+    "wrecker"
+   ],
+   "room": "coast_cliffs",
+   "tier": "foe",
+   "world": "coast"
+  },
+  {
+   "name": "The Wreck",
+   "desc": "The bosun and his new crew.",
+   "enemies": [
+    "drowned_bosun",
+    "tide_crab"
+   ],
+   "room": "coast_cove",
+   "tier": "foe",
+   "world": "coast"
+  },
+  {
+   "name": "The Lighthouse",
+   "desc": "The keeper tends the false light.",
+   "enemies": [
+    "wrecker",
+    "lighthouse_keeper"
+   ],
+   "room": "coast_light",
+   "tier": "elite",
+   "world": "coast"
+  },
+  {
+   "name": "The Matron's Roost",
+   "desc": "The crowned harpy and her brood.",
+   "enemies": [
+    "storm_harpy",
+    "harpy_matron"
+   ],
+   "room": "coast_cliffs",
+   "tier": "elite",
+   "world": "coast"
+  },
+  {
+   "name": "The Thunder Whale",
+   "desc": "Boss. The storm sings.",
+   "enemies": [
+    "shock_eel",
+    "thunder_whale"
+   ],
+   "room": "coast_cove",
+   "tier": "boss",
+   "world": "coast"
+  },
+  {
+   "name": "The Outer Spires",
+   "desc": "Wasps drifting between the towers.",
+   "enemies": [
+    "spire_wasps",
+    "puppet_host",
+    "spire_wasps"
+   ],
+   "room": "hive_spires",
+   "tier": "foe",
+   "world": "hive"
+  },
+  {
+   "name": "The Web Fields",
+   "desc": "Spiders wait where the lightning falls.",
+   "enemies": [
+    "venom_spider",
+    "venom_spider",
+    "galvanic_beetle"
+   ],
+   "room": "hive_spires",
+   "tier": "foe",
+   "world": "hive"
+  },
+  {
+   "name": "The Comb",
+   "desc": "Drones and the hosts they feed.",
+   "enemies": [
+    "hive_drone",
+    "puppet_host",
+    "hive_drone"
+   ],
+   "room": "hive_comb",
+   "tier": "foe",
+   "world": "hive"
+  },
+  {
+   "name": "The Beetle Gallery",
+   "desc": "Beetles crackling in the comb.",
+   "enemies": [
+    "galvanic_beetle",
+    "venom_spider"
+   ],
+   "room": "hive_comb",
+   "tier": "foe",
+   "world": "hive"
+  },
+  {
+   "name": "The Duelling Ground",
+   "desc": "The mantis bows.",
+   "enemies": [
+    "hive_drone",
+    "mantis_duelist"
+   ],
+   "room": "hive_spires",
+   "tier": "elite",
+   "world": "hive"
+  },
+  {
+   "name": "The Brood Chamber",
+   "desc": "Something enormous with something small on its back.",
+   "enemies": [
+    "venom_spider",
+    "brood_mother"
+   ],
+   "room": "hive_brood",
+   "tier": "elite",
+   "world": "hive"
+  },
+  {
+   "name": "The Hive Queen",
+   "desc": "Boss. The heart of the hive.",
+   "enemies": [
+    "spire_wasps",
+    "hive_queen"
+   ],
+   "room": "hive_brood",
+   "tier": "boss",
+   "world": "hive"
+  },
+  {
+   "name": "The Floating Steps",
+   "desc": "Angels guard what is left of the stair.",
+   "enemies": [
+    "fallen_angel",
+    "storm_shade",
+    "fallen_angel"
+   ],
+   "room": "sky_ruins",
+   "tier": "foe",
+   "world": "sky"
+  },
+  {
+   "name": "The Tear",
+   "desc": "Hounds come through the rift.",
+   "enemies": [
+    "rift_hound",
+    "rift_hound",
+    "choir_of_eyes"
+   ],
+   "room": "sky_gate",
+   "tier": "foe",
+   "world": "sky"
+  },
+  {
+   "name": "The Broken Choir",
+   "desc": "The eyes are singing.",
+   "enemies": [
+    "choir_of_eyes",
+    "skywreck_knight"
+   ],
+   "room": "sky_choir",
+   "tier": "foe",
+   "world": "sky"
+  },
+  {
+   "name": "The Host's Last Stand",
+   "desc": "A knight and the lightning he serves.",
+   "enemies": [
+    "skywreck_knight",
+    "storm_shade",
+    "fallen_angel"
+   ],
+   "room": "sky_ruins",
+   "tier": "foe",
+   "world": "sky"
+  },
+  {
+   "name": "The Seraph's Watch",
+   "desc": "It is holding the sky together.",
+   "enemies": [
+    "fallen_angel",
+    "thunder_seraph"
+   ],
+   "room": "sky_choir",
+   "tier": "elite",
+   "world": "sky"
+  },
+  {
+   "name": "Between the Stars",
+   "desc": "Something swims through the tear.",
+   "enemies": [
+    "rift_hound",
+    "rift_leviathan"
+   ],
+   "room": "sky_gate",
+   "tier": "elite",
+   "world": "sky"
+  },
+  {
+   "name": "The Shattered God",
+   "desc": "Boss. A god, broken.",
+   "enemies": [
+    "skywreck_knight",
+    "shattered_god"
+   ],
+   "room": "sky_ruins",
+   "tier": "boss",
+   "world": "sky"
+  },
+  {
+   "name": "The Sunken Path",
+   "desc": "Bodies in the peat.",
+   "enemies": [
+    "bog_body",
+    "bog_body",
+    "leech_swarm"
+   ],
+   "room": "mire_bog",
+   "tier": "foe",
+   "world": "mire"
+  },
+  {
+   "name": "The Hag's Porch",
+   "desc": "A hag and her pets.",
+   "enemies": [
+    "mire_toad",
+    "fen_hag"
+   ],
+   "room": "mire_hut",
+   "tier": "foe",
+   "world": "mire"
+  },
+  {
+   "name": "The Still Water",
+   "desc": "A log in the water.",
+   "enemies": [
+    "fen_lurker",
+    "leech_swarm"
+   ],
+   "room": "mire_drown",
+   "tier": "foe",
+   "world": "mire"
+  },
+  {
+   "name": "The Peat Cutting",
+   "desc": "The hags put their dead to work.",
+   "enemies": [
+    "bog_body",
+    "fen_hag",
+    "mire_toad"
+   ],
+   "room": "mire_bog",
+   "tier": "foe",
+   "world": "mire"
+  },
+  {
+   "name": "Under the Bridge",
+   "desc": "Something heavy in the mud.",
+   "enemies": [
+    "leech_swarm",
+    "bog_troll"
+   ],
+   "room": "mire_bog",
+   "tier": "elite",
+   "world": "mire"
+  },
+  {
+   "name": "The Coven",
+   "desc": "The hags gather.",
+   "enemies": [
+    "fen_hag",
+    "coven_mother"
+   ],
+   "room": "mire_hut",
+   "tier": "elite",
+   "world": "mire"
+  },
+  {
+   "name": "The Mire Mother",
+   "desc": "Boss. The fen's mother.",
+   "enemies": [
+    "bog_body",
+    "mire_mother"
+   ],
+   "room": "mire_drown",
+   "tier": "boss",
+   "world": "mire"
+  },
+  {
+   "name": "The Overgrown Path",
+   "desc": "Husks among the mushrooms.",
+   "enemies": [
+    "fungal_husk",
+    "fungal_husk",
+    "root_horror"
+   ],
+   "room": "garden_grove",
+   "tier": "foe",
+   "world": "garden"
+  },
+  {
+   "name": "The Deer Glade",
+   "desc": "They graze on the spores.",
+   "enemies": [
+    "spore_deer",
+    "spore_deer",
+    "moth_witch"
+   ],
+   "room": "garden_grove",
+   "tier": "foe",
+   "world": "garden"
+  },
+  {
+   "name": "The Hedge Maze",
+   "desc": "A knight guards the turning.",
+   "enemies": [
+    "thorn_knight",
+    "moth_witch"
+   ],
+   "room": "garden_hedge",
+   "tier": "foe",
+   "world": "garden"
+  },
+  {
+   "name": "The Root Cellar",
+   "desc": "The roots have mouths.",
+   "enemies": [
+    "root_horror",
+    "fungal_husk",
+    "thorn_knight"
+   ],
+   "room": "garden_heart",
+   "tier": "foe",
+   "world": "garden"
+  },
+  {
+   "name": "The Gardener's Shed",
+   "desc": "He is pruning.",
+   "enemies": [
+    "fungal_husk",
+    "the_gardener"
+   ],
+   "room": "garden_hedge",
+   "tier": "elite",
+   "world": "garden"
+  },
+  {
+   "name": "The Dead Oak",
+   "desc": "Her oak is dead. She is not.",
+   "enemies": [
+    "spore_deer",
+    "blight_dryad"
+   ],
+   "room": "garden_grove",
+   "tier": "elite",
+   "world": "garden"
+  },
+  {
+   "name": "The Antlered Mother",
+   "desc": "Boss. The garden's heart.",
+   "enemies": [
+    "thorn_knight",
+    "antlered_mother"
+   ],
+   "room": "garden_heart",
+   "tier": "boss",
+   "world": "garden"
+  }
+ ],
+ "gauntlet": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  7,
+  12
+ ]
+}

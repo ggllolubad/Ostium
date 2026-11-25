@@ -1,0 +1,54 @@
+{
+ "date": "22 November 2026",
+ "lead": "The starter party (Bulwark, Duelist, Elementalist) rebuilt from nothing, three ways. Each direction changes body proportions, posture, costume and rendering together, so every hero reads as a working adventurer with a history rather than a jointed figure. All nine went through the art director's review and fixes before this page.",
+ "directions": [
+  {"key": "dirA", "letter": "A", "name": "Grave-Light", "line": "Painterly chiaroscuro and tired veterans. The closest to Darkest Dungeon 2, and the strongest read at game size.",
+   "specs": [["Proportion", "6.4 heads, heavy and grounded"], ["Light", "Warm key from the upper left, cool fill, soft terminator"], ["Character", "Worn-out professionals: hunched, wary, economical"], ["Best fit", "Your single dark lighting shader"]],
+   "heroes": [
+    {"key": "bulwark", "role": "Bulwark", "name": "The Wall That Stayed", "alt": "Direction A Bulwark hunched behind his church-door shield", "pitch": "Hunched behind the church door, helm tucked against its edge so only the eye slit shows, mace resting on the rim.", "details": ["Bedroll strapped high on the back", "Kill tally scratched into the planks, a broken arrow in the oak", "Lead patch riveted over a breach in the breastplate", "Rubric strip tied to the ring handle"]},
+    {"key": "duelist", "role": "Duelist", "name": "The Old Bravo", "alt": "Direction A Duelist in a low line with a dagger cocked behind", "pitch": "A fencing master past his prime: weight back, blade low and forward, parrying dagger cocked behind. Smirking.", "details": ["Grey-streaked queue tied with rubric", "Slashed sleeves, stitched old cut across the chest", "Half cape with a red lining", "Empty scabbard swung back on the hip"]},
+    {"key": "elementalist", "role": "Elementalist", "name": "The Burnt-Out Scholar", "alt": "Direction A Elementalist hunched over an open book with a guttering flame", "pitch": "Gaunt and sleepless, hunched over his book, coaxing a guttering flame with six-ink fingers.", "details": ["Six course sigils inked round the hem", "Satchel of scrolls on a shoulder strap", "Six-sign ring at the rope belt", "Linen coif tied under the chin"]}
+   ]},
+  {"key": "dirB", "letter": "B", "name": "Woodcut Brutes", "line": "Hard black shadow masses and squat, aggressive bodies. The boldest silhouettes; the furthest from realism.",
+   "specs": [["Proportion", "5.8 heads, huge hands and shoulders"], ["Light", "Hard shadow shapes, almost no mid-tone"], ["Character", "Coiled for violence; every pose is mid-action"], ["Best fit", "Attack frames for any direction"]],
+   "heroes": [
+    {"key": "bulwark", "role": "Bulwark", "name": "The Wall", "alt": "Direction B Bulwark behind his raised door with the mace cocked back", "pitch": "Squared up behind the raised door, mace cocked back over the shoulder, ready to fall.", "details": ["Filthy linen surcoat with an inked key", "Rubric strip knotted round the helm", "Nail-studded door face, two arrows in it", "Gauntlet fingers hooked round the door edge"]},
+    {"key": "duelist", "role": "Duelist", "name": "The Wolf in the Hat", "alt": "Direction B Duelist low in a hanging guard under a wide hat", "pitch": "Left-handed, low and coiled in a hanging guard, cape wrapped on the off arm as a buckler, grinning under the brim.", "details": ["Wide brim with a crow feather and red band", "Bandolier of throwing knives", "Coat tails flying back", "Lightning scorch on the blade"]},
+    {"key": "elementalist", "role": "Elementalist", "name": "The Mad Conjoiner", "alt": "Direction B Elementalist with arms flung wide and six ink threads between his hands", "pitch": "Arms flung wide, coat whipping, shouting the six signs into being between his hands.", "details": ["Six jagged ink threads, one per course", "Sigils inked down the lapel", "Satchel swinging out on its strap", "Wrapped shins and sandals"]}
+   ]},
+  {"key": "dirC", "letter": "C", "name": "Living Ink", "line": "The locked manuscript crosshatch, carried onto heavier natural bodies in calm, dignified poses.",
+   "specs": [["Proportion", "7 heads, broad and naturalistic"], ["Light", "Cel shadow band with crosshatching"], ["Character", "Composed and deliberate; menace at rest"], ["Best fit", "The Living Manuscript style and the Codex fiction"]],
+   "heroes": [
+    {"key": "bulwark", "role": "Bulwark", "name": "The Sentinel", "alt": "Direction C Bulwark at rest beside his planted door, hand on the mace pommel", "pitch": "At rest and listening, helm bowed, gauntlet on the pommel of the planted mace, the door leaning on his shoulder.", "details": ["Heavy wool mantle with a fur collar", "A prayer cut into the door planks", "Brass cross riveted to the helm brow", "Darned surcoat, dirt rising from the hem"]},
+    {"key": "duelist", "role": "Duelist", "name": "The Widow's Blade", "alt": "Direction C Duelist, a woman with arm and blade in one straight line", "pitch": "Arm and blade in one straight bar at the enemy's throat, chin up, off hand balancing behind.", "details": ["Mail sleeve on the sword arm only", "Braid tied with a rubric strip", "Bandaged forearm, knife strapped to the thigh", "Capelet and flared jerkin skirt"]},
+    {"key": "elementalist", "role": "Elementalist", "name": "The Lector", "alt": "Direction C Elementalist, a heavy old reader with a scroll unrolling to the ground", "pitch": "A heavy old reader walking with a scroll that unrolls to the ground, plucking a sign out of the air.", "details": ["Spectacles and a long white beard", "Ink pots hanging from the belt", "Worn blue tabard of the six signs", "Ink tendrils drifting from pinched fingers"]}
+   ]}
+ ],
+ "ad_intro": "An independent art director agent reviewed all nine figures against the design bible, ranked every problem by severity, then fixed them in the drawing code and re-rendered. Its full critique and fix log are kept with the art source.",
+ "ad_fixed": [
+  ["Boots", "read as socks; rebuilt with heel, arched sole and toe cap, plus knee-high, cavalier and armoured versions."],
+  ["Hands", "too small to read; fists now have curled fingers and a wrapping thumb, about 20 percent larger."],
+  ["Knee and elbow cops", "read as balls; now plates with a ridge and side wing."],
+  ["Ears", "read as headphones; now narrow and set behind the jaw, with shadow under the jaw and brow."],
+  ["C Bulwark", "had three hands and stood like a mannequin; now one hand on the pommel, weight on one leg."],
+  ["C Duelist", "the most puppet-like; rebuilt lower with limbs about 35 percent thicker and five costume layers."],
+  ["B Bulwark", "a flat red tabard broke the red-only-for-blood-and-rubric rule; now filthy undyed linen."],
+  ["B Duelist", "the sword arm cut across his face; re-posed so the hilt clears the brim."],
+  ["Badges", "the ostium badge is now a lead door token on every hero."]
+ ],
+ "ad_open": [
+  "Faces are better but still simpler than the Darkest Dungeon 2 portraits.",
+  "Torsos are built from smooth curves, so chests read soft and robes read as bell shapes.",
+  "A Bulwark: the mace haft still passes in front of the bottom edge of the helm.",
+  "B Duelist: the block style turns his lower body mostly black.",
+  "C Elementalist: the back of the robe below the belt is the plainest area on the roster.",
+  "Reaching Darkest Dungeon 2 faces and anatomy would need a painter working over the chosen direction; code-built shapes stop short of it."
+ ],
+ "questions": [
+  "Pick a direction for the whole cast, or mix: the recommendation is C's ink rendering on A's proportions and poses, with B's poses kept for attack frames.",
+  "Per hero, which version's personality is right? Each can move to another direction's rendering.",
+  "Proportion: 6.4 heads (A), 5.8 (B) or 7 (C)? The bible currently says 7.5, which is what made the old cast lanky.",
+  "Keep or drop the abbey surcoats on the B and C Bulwarks? The bible says the company's only uniform is the badge and the rubric strip.",
+  "C Duelist is a woman, B Duelist is left-handed: keep either as a default or as roster variety?"
+ ]
+}

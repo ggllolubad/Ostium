@@ -1,0 +1,11403 @@
+{
+ "thrall": {
+  "name": "Drowned Thrall",
+  "hp": 34,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/thrall/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "grasp": {
+    "name": "Grasp",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the front hero"
+   },
+   "hook": {
+    "name": "Boat Hook",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "7 to the rearmost hero and drag them forward"
+   },
+   "gurgle": {
+    "name": "Gurgle",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 stress and 1 Water to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "grasp",
+    "if": "hero_dd"
+   },
+   {
+    "use": "grasp",
+    "every": 3
+   },
+   {
+    "use": "hook",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "gurgle"
+   }
+  ],
+  "lore": "Sailors who went down with the fleet. They still haul at anything that floats.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist"
+  }
+ },
+ "siren": {
+  "name": "Brine Siren",
+  "hp": 44,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/siren/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "mend": {
+    "name": "Mirror Mend",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 14
+     }
+    ],
+    "text": "heals the most wounded foe 14"
+   },
+   "song": {
+    "name": "Drowning Song",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 12
+     }
+    ],
+    "text": "12 stress to every hero"
+   },
+   "lure": {
+    "name": "Lure",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "volatile"
+     }
+    ],
+    "text": "10 and 1 Volatile Void to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "mend",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "song",
+    "every": 2,
+    "offset": 1
+   },
+   {
+    "use": "lure"
+   }
+  ],
+  "lore": "Its song is the last thing the drowned remember. It wants you to remember it too.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "eelkin": {
+  "name": "Eel-kin Biter",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/eelkin/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Rasping Bite",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "6 and 3 Bleed to the front hero"
+   },
+   "lash": {
+    "name": "Tail Lash",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "5 and 2 Bleed to the rearmost hero"
+   },
+   "slither": {
+    "name": "Slither",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "6 Block; dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "slither",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "bite",
+    "every": 2
+   },
+   {
+    "use": "lash"
+   }
+  ],
+  "lore": "They feed by latching on and not letting go.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "bellringer": {
+  "name": "Drowned Bell-Ringer",
+  "hp": 32,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bellringer/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "toll": {
+    "name": "Toll",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "10 stress to every hero"
+   },
+   "dirge": {
+    "name": "Dirge",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 2,
+      "s": "might"
+     }
+    ],
+    "text": "every foe gains 2 Might"
+   },
+   "knell": {
+    "name": "Knell",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "5 and 6 stress to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "dirge",
+    "every": 3
+   },
+   {
+    "use": "toll",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "knell"
+   }
+  ],
+  "lore": "The bell is rung for the dead. Down here, that is everyone.",
+  "world": "drowned",
+  "resist": {
+   "void": "resist"
+  }
+ },
+ "barnacle_knight": {
+  "name": "Barnacle Knight",
+  "hp": 52,
+  "armor": 5,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/barnacle_knight/full.png",
+  "size": [
+   226,
+   339
+  ],
+  "feet": 0.9667,
+  "intents": {
+   "cleave": {
+    "name": "Cleave",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "encrust": {
+    "name": "Encrust",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     },
+     {
+      "t": "guard_weakest"
+     }
+    ],
+    "text": "12 Block; guards the weakest foe"
+   },
+   "crush": {
+    "name": "Crush",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "8 and Vulnerable to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "encrust",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "crush",
+    "every": 3
+   },
+   {
+    "use": "cleave"
+   }
+  ],
+  "lore": "Oathbound to a drowned order. The sea has kept his armour on for him.",
+  "world": "drowned",
+  "resist": {
+   "physical": "resist",
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "lamprey": {
+  "name": "Lamprey Swarm",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/lamprey/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "latch": {
+    "name": "Latch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 3,
+      "lifesteal": 100
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "3, healing itself, and 3 Bleed to the front hero"
+   },
+   "feed": {
+    "name": "Frenzied Feeding",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 2,
+      "times": 3
+     }
+    ],
+    "text": "2 three times to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "feed",
+    "every": 2
+   },
+   {
+    "use": "latch"
+   }
+  ],
+  "lore": "A knot of mouths. Where one is, the rest follow.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist",
+   "physical": "resist"
+  }
+ },
+ "bloated": {
+  "name": "Bloated Corpse",
+  "hp": 40,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bloated/full.png",
+  "size": [
+   226,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "ooze": {
+    "name": "Ooze",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Toxin to every hero"
+   },
+   "heave": {
+    "name": "Heave",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to the front hero"
+   },
+   "burst": {
+    "name": "Burst",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "self_dmg",
+      "n": 999
+     }
+    ],
+    "text": "bursts: 10 and 3 Toxin to every hero, and dies"
+   }
+  },
+  "ai": [
+   {
+    "use": "burst",
+    "if": "hp_pct<50"
+   },
+   {
+    "use": "burst",
+    "if": "round>=4"
+   },
+   {
+    "use": "ooze",
+    "every": 2
+   },
+   {
+    "use": "heave"
+   }
+  ],
+  "lore": "Gas swells the dead until the skin will not hold. Do not be close when it fails.",
+  "world": "drowned",
+  "resist": {
+   "toxin": "immune",
+   "water": "resist",
+   "fire": "weak"
+  }
+ },
+ "hookline": {
+  "name": "Hookline Fisher",
+  "hp": 34,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/hookline/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "reel": {
+    "name": "Reel In",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "6 to the rearmost hero; drags them forward 2"
+   },
+   "gaff": {
+    "name": "Gaff",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "9 and 2 Bleed to the front hero"
+   },
+   "net": {
+    "name": "Cast Net",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "every hero is held in place this round and gains 4 stress"
+   }
+  },
+  "ai": [
+   {
+    "use": "reel",
+    "every": 3
+   },
+   {
+    "use": "net",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "gaff"
+   }
+  ],
+  "lore": "Still fishing. The catch has changed.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist"
+  }
+ },
+ "weeping_nun": {
+  "name": "Weeping Nun",
+  "hp": 36,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/weeping_nun/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "weep": {
+    "name": "Salt Tears",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 6
+     }
+    ],
+    "text": "every foe heals 6"
+   },
+   "lament": {
+    "name": "Lament",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 9
+     }
+    ],
+    "text": "9 stress to every hero"
+   },
+   "kiss": {
+    "name": "Brine Kiss",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 2 Water to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "weep",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "lament",
+    "every": 2
+   },
+   {
+    "use": "kiss"
+   }
+  ],
+  "lore": "She weeps for the drowned. Her tears close their wounds.",
+  "world": "drowned"
+ },
+ "anchor_brute": {
+  "name": "Anchor Brute",
+  "hp": 64,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/anchor_brute/full.png",
+  "size": [
+   245,
+   358
+  ],
+  "feet": 0.9684,
+  "intents": {
+   "swing": {
+    "name": "Anchor Swing",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "14 to the front hero; knocks them back 1"
+   },
+   "drag": {
+    "name": "Drag Under",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "pull",
+      "n": 3
+     }
+    ],
+    "text": "8 to the rearmost hero; drags them to the front"
+   },
+   "brace": {
+    "name": "Set the Anchor",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 14
+     }
+    ],
+    "text": "14 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "brace",
+    "if": "hp_pct<35",
+    "not_twice": true
+   },
+   {
+    "use": "drag",
+    "every": 3
+   },
+   {
+    "use": "swing"
+   }
+  ],
+  "lore": "The anchor chain runs through his arm. He has stopped noticing.",
+  "world": "drowned"
+ },
+ "crab": {
+  "name": "Wreck Crab",
+  "hp": 38,
+  "armor": 6,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/crab/full.png",
+  "size": [
+   226,
+   264
+  ],
+  "feet": 0.9571,
+  "intents": {
+   "pinch": {
+    "name": "Pinch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "8 and 2 Bleed to the front hero"
+   },
+   "shell": {
+    "name": "Shell Up",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     }
+    ],
+    "text": "10 Block"
+   },
+   "scuttle": {
+    "name": "Scuttle",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     }
+    ],
+    "text": "7 to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "shell",
+    "every": 3
+   },
+   {
+    "use": "scuttle",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "pinch"
+   }
+  ],
+  "lore": "It wears what it ate.",
+  "world": "drowned",
+  "resist": {
+   "physical": "resist",
+   "water": "immune",
+   "lightning": "weak"
+  }
+ },
+ "choirboy": {
+  "name": "Drowned Choirboy",
+  "hp": 24,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/choirboy/full.png",
+  "size": [
+   188,
+   283
+  ],
+  "feet": 0.96,
+  "intents": {
+   "hymn": {
+    "name": "Hymn",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 5
+     }
+    ],
+    "text": "every foe gains 5 Block"
+   },
+   "wail": {
+    "name": "Endless Wail",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 11
+     }
+    ],
+    "text": "11 stress to every hero"
+   },
+   "pray": {
+    "name": "Pray",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 6
+     }
+    ],
+    "text": "heals itself 6"
+   }
+  },
+  "ai": [
+   {
+    "use": "pray",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "wail",
+    "every": 2
+   },
+   {
+    "use": "hymn"
+   }
+  ],
+  "lore": "He has been singing since the water came in. He does not need to breathe to sing.",
+  "world": "drowned"
+ },
+ "warden": {
+  "name": "Hollow Tidewarden",
+  "hp": 104,
+  "armor": 4,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/warden/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.97,
+  "intents": {
+   "trident": {
+    "name": "Trident",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "sweep": {
+    "name": "Tidal Sweep",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Water to every hero"
+   },
+   "bulwark": {
+    "name": "Barnacle Wall",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 14
+     },
+     {
+      "t": "guard_weakest"
+     }
+    ],
+    "text": "14 Block; guards a wounded foe"
+   }
+  },
+  "ai": [
+   {
+    "use": "bulwark",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "sweep",
+    "every": 3
+   },
+   {
+    "use": "trident"
+   }
+  ],
+  "lore": "A temple guard grown into the sea. Something lives in the hole in its chest.",
+  "world": "drowned"
+ },
+ "abbess": {
+  "name": "Abbess of Salt",
+  "hp": 96,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/abbess/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.97,
+  "intents": {
+   "sermon": {
+    "name": "Brine Sermon",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "14 stress and 1 Water to every hero"
+   },
+   "salt": {
+    "name": "Salt the Wound",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "12 and Vulnerable to the front hero"
+   },
+   "rites": {
+    "name": "Last Rites",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 20
+     }
+    ],
+    "text": "heals the most wounded foe 20"
+   }
+  },
+  "ai": [
+   {
+    "use": "rites",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "sermon",
+    "every": 2,
+    "offset": 1
+   },
+   {
+    "use": "salt"
+   }
+  ],
+  "lore": "Her mouth is sewn shut. She preaches anyway.",
+  "world": "drowned"
+ },
+ "kraken_arm": {
+  "name": "The Grasping Deep",
+  "hp": 120,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/kraken_arm/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.97,
+  "intents": {
+   "slam": {
+    "name": "Slam",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16
+     }
+    ],
+    "text": "16 to the front hero"
+   },
+   "constrict": {
+    "name": "Constrict",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 and 8 stress to the rearmost hero; holds them in place"
+   },
+   "drag": {
+    "name": "Drag Below",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 3
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Void to the rearmost hero; drags them to the front"
+   }
+  },
+  "ai": [
+   {
+    "use": "drag",
+    "every": 3
+   },
+   {
+    "use": "constrict",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "slam"
+   }
+  ],
+  "lore": "Only one arm reaches up through the floor. Pray it is only one.",
+  "span": 2,
+  "world": "drowned",
+  "resist": {
+   "water": "immune",
+   "lightning": "weak"
+  }
+ },
+ "pearl_diver": {
+  "name": "Pearl Diver",
+  "hp": 70,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/pearl_diver/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.97,
+  "intents": {
+   "knife": {
+    "name": "Shucking Knife",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7,
+      "times": 2
+     }
+    ],
+    "text": "7 twice to the rearmost hero"
+   },
+   "pearl": {
+    "name": "Black Pearl",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 4,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     }
+    ],
+    "text": "4 Toxin to the rearmost hero and Marks them"
+   },
+   "vanish": {
+    "name": "Sink from Sight",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "8 Block; dodges the next two hits"
+   }
+  },
+  "ai": [
+   {
+    "use": "vanish",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "pearl",
+    "every": 3
+   },
+   {
+    "use": "knife"
+   }
+  ],
+  "lore": "It goes for the soft ones at the back. It always has.",
+  "world": "drowned",
+  "resist": {
+   "water": "resist",
+   "void": "resist"
+  }
+ },
+ "drowned_king": {
+  "name": "The Drowned King",
+  "hp": 240,
+  "armor": 4,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/drowned_king/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9733,
+  "intents": {
+   "decree": {
+    "name": "Tidal Decree",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to every hero"
+   },
+   "regal": {
+    "name": "Regal Strike",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 22
+     }
+    ],
+    "text": "22 to the front hero"
+   },
+   "crown": {
+    "name": "Crown of Tides",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 16
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "16 stress and 2 Water to every hero"
+   },
+   "drown": {
+    "name": "Drown the Court",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "volatile"
+     },
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "2 Volatile Void and 6 stress to every hero"
+   },
+   "feast": {
+    "name": "Royal Feast",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 24
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "heals 24 and gains 2 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "feast",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "drown",
+    "if": "hp_pct<60",
+    "every": 2
+   },
+   {
+    "use": "crown",
+    "every": 3
+   },
+   {
+    "use": "decree",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "regal"
+   }
+  ],
+  "lore": "He kept his crown. The sea grew it into him.",
+  "phases": [
+   {
+    "at": 60,
+    "text": "The King rises from the throne.",
+    "ai": [
+     {
+      "use": "drown",
+      "every": 2
+     },
+     {
+      "use": "decree",
+      "every": 3
+     },
+     {
+      "use": "regal"
+     }
+    ]
+   },
+   {
+    "at": 30,
+    "text": "The King gorges on his court.",
+    "ai": [
+     {
+      "use": "feast",
+      "not_twice": true,
+      "every": 3
+     },
+     {
+      "use": "drown",
+      "every": 2
+     },
+     {
+      "use": "regal"
+     }
+    ],
+    "might": 2
+   }
+  ],
+  "span": 2,
+  "world": "drowned",
+  "resist": {
+   "water": "immune",
+   "void": "resist",
+   "lightning": "weak"
+  }
+ },
+ "mother_of_brine": {
+  "name": "Mother of Brine",
+  "hp": 210,
+  "armor": 0,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/mother_of_brine/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9733,
+  "intents": {
+   "lullaby": {
+    "name": "Lullaby",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 18
+     }
+    ],
+    "text": "18 stress to every hero"
+   },
+   "embrace": {
+    "name": "Embrace",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14,
+      "lifesteal": 100
+     }
+    ],
+    "text": "14 to the front hero, healing herself"
+   },
+   "flood": {
+    "name": "Brine Flood",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Water to every hero"
+   },
+   "devour": {
+    "name": "Devour the Weak",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 20
+     }
+    ],
+    "text": "20 to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "devour",
+    "if": "hero_dd"
+   },
+   {
+    "use": "lullaby",
+    "every": 3
+   },
+   {
+    "use": "flood",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "embrace"
+   }
+  ],
+  "lore": "Every siren is her daughter. Every drowned child is hers.",
+  "phases": [
+   {
+    "at": 55,
+    "text": "The Mother's song turns to a scream.",
+    "ai": [
+     {
+      "use": "lullaby",
+      "every": 2
+     },
+     {
+      "use": "devour",
+      "if": "hero_dd"
+     },
+     {
+      "use": "embrace"
+     }
+    ],
+    "might": 1
+   },
+   {
+    "at": 25,
+    "text": "She devours her own.",
+    "ai": [
+     {
+      "use": "devour"
+     }
+    ],
+    "heal": 20
+   }
+  ],
+  "span": 2,
+  "world": "drowned",
+  "resist": {
+   "water": "immune",
+   "lightning": "weak"
+  }
+ },
+ "bell_below": {
+  "name": "The Bell Below",
+  "hp": 280,
+  "armor": 6,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/bell_below/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9733,
+  "intents": {
+   "toll": {
+    "name": "Toll for the Living",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 20
+     }
+    ],
+    "text": "20 stress to every hero"
+   },
+   "resonance": {
+    "name": "Resonance",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to every hero"
+   },
+   "crack": {
+    "name": "Crack of the Bell",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 26
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "26 and 8 stress to the front hero"
+   },
+   "reach": {
+    "name": "Reaching Dead",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "10 to the rearmost hero; drags them forward 2"
+   }
+  },
+  "ai": [
+   {
+    "use": "toll",
+    "every": 4
+   },
+   {
+    "use": "resonance",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "reach",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "crack"
+   }
+  ],
+  "lore": "Rung once for every soul that drowned. It has not stopped ringing.",
+  "phases": [
+   {
+    "at": 50,
+    "text": "The bell cracks. Something inside wakes.",
+    "ai": [
+     {
+      "use": "resonance",
+      "every": 2
+     },
+     {
+      "use": "reach",
+      "every": 3
+     },
+     {
+      "use": "crack"
+     }
+    ],
+    "might": 2
+   }
+  ],
+  "span": 2,
+  "world": "drowned",
+  "resist": {
+   "void": "immune",
+   "physical": "resist",
+   "lightning": "weak"
+  }
+ },
+ "rime_thrall": {
+  "name": "Rimeburnt Thrall",
+  "hp": 32,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/rime_thrall/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pick": {
+    "name": "Ice Pick",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "chip": {
+    "name": "Chip Away",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "5 and Vulnerable to the front hero"
+   },
+   "shiver": {
+    "name": "Shiver",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Weaken to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "chip",
+    "every": 3
+   },
+   {
+    "use": "shiver",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "pick"
+   }
+  ],
+  "lore": "Miners who dug too deep and met the fire coming up. The ice kept what the fire left.",
+  "world": "rime",
+  "resist": {
+   "frost": "resist",
+   "fire": "weak"
+  }
+ },
+ "magma_hound": {
+  "name": "Magma Hound",
+  "hp": 30,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/magma_hound/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "maul": {
+    "name": "Molten Maul",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Burn to the front hero"
+   },
+   "lunge": {
+    "name": "Lunge",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to the rearmost hero"
+   },
+   "howl": {
+    "name": "Steam Howl",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "6 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "lunge",
+    "if": "round==1"
+   },
+   {
+    "use": "howl",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "maul"
+   }
+  ],
+  "lore": "Its skin is cooling rock. Its insides are not.",
+  "world": "rime",
+  "resist": {
+   "fire": "immune",
+   "frost": "weak"
+  }
+ },
+ "obsidian_maiden": {
+  "name": "Obsidian Shieldmaiden",
+  "hp": 46,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/obsidian_maiden/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "cut": {
+    "name": "Glass Edge",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "10 and 2 Bleed to the front hero"
+   },
+   "wall": {
+    "name": "Shield Wall",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 8
+     }
+    ],
+    "text": "Every foe: 8 Block"
+   },
+   "bash": {
+    "name": "Shield Bash",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "6 to the front hero; shoves them back 1"
+   }
+  },
+  "ai": [
+   {
+    "use": "wall",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "bash",
+    "every": 3
+   },
+   {
+    "use": "cut"
+   }
+  ],
+  "lore": "Her armour is the volcano's glass. It cuts her as often as it cuts you.",
+  "world": "rime",
+  "resist": {
+   "physical": "resist",
+   "fire": "resist"
+  }
+ },
+ "steam_wraith": {
+  "name": "Steam Wraith",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/steam_wraith/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "scald": {
+    "name": "Scalding Touch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Burn to the front hero"
+   },
+   "chill": {
+    "name": "Breath of the Deep Ice",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "1 Weaken and 4 stress to every hero"
+   },
+   "fade": {
+    "name": "Dissipate",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next 2 hits"
+   }
+  },
+  "ai": [
+   {
+    "use": "fade",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "chill",
+    "every": 2
+   },
+   {
+    "use": "scald"
+   }
+  ],
+  "lore": "What rises when fire meets ice. It remembers being a man.",
+  "world": "rime",
+  "resist": {
+   "physical": "resist",
+   "fire": "resist",
+   "frost": "resist",
+   "lightning": "weak"
+  }
+ },
+ "fissure_worm": {
+  "name": "Fissure Worm",
+  "hp": 40,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fissure_worm/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "burst": {
+    "name": "Burst from the Ice",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the rearmost hero"
+   },
+   "gnaw": {
+    "name": "Gnaw",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4,
+      "times": 2
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "bleed"
+     }
+    ],
+    "text": "4 twice and 1 Bleed to the front hero"
+   },
+   "burrow": {
+    "name": "Burrow",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 10 Block, dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "burst",
+    "if": "round==1"
+   },
+   {
+    "use": "burrow",
+    "every": 3,
+    "offset": 2
+   },
+   {
+    "use": "gnaw"
+   }
+  ],
+  "lore": "It swims through glacier like water. The ice closes behind it.",
+  "world": "rime",
+  "resist": {
+   "frost": "resist"
+  }
+ },
+ "jotun_thane": {
+  "name": "J\u00f6tun Thane",
+  "hp": 110,
+  "armor": 3,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/jotun_thane/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "maul": {
+    "name": "Glacier Maul",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "quake": {
+    "name": "Quake",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Weaken to every hero"
+   },
+   "roar": {
+    "name": "Roar of the Thane",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "10 stress to every hero"
+   },
+   "brace": {
+    "name": "Brace",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 14
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 14 Block, gains 1 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "brace",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "quake",
+    "every": 3
+   },
+   {
+    "use": "roar",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "maul"
+   }
+  ],
+  "lore": "A giant of the old ice. The fire in the deep has driven him mad with heat.",
+  "world": "rime",
+  "resist": {
+   "frost": "immune",
+   "fire": "weak",
+   "physical": "resist"
+  }
+ },
+ "twin_seeress": {
+  "name": "Twinflame Seeress",
+  "hp": 76,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/twin_seeress/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "flame": {
+    "name": "Flame Half",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 3 Burn to the rearmost hero"
+   },
+   "rime": {
+    "name": "Rime Half",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 3 Weaken to the front hero"
+   },
+   "shock": {
+    "name": "Thermal Prophecy",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "volatile"
+     }
+    ],
+    "text": "1 Volatile Burn and 1 Volatile Weaken to every hero"
+   },
+   "ward": {
+    "name": "Two Faces",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 14
+     }
+    ],
+    "text": "The most wounded foe: heals 14"
+   }
+  },
+  "ai": [
+   {
+    "use": "ward",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "shock",
+    "every": 3
+   },
+   {
+    "use": "rime",
+    "every": 2
+   },
+   {
+    "use": "flame"
+   }
+  ],
+  "lore": "One face burns. The other has frozen solid. Both speak at once.",
+  "world": "rime",
+  "resist": {
+   "fire": "resist",
+   "frost": "resist",
+   "void": "weak"
+  }
+ },
+ "riven_jarl": {
+  "name": "The Riven Jarl",
+  "hp": 215,
+  "armor": 4,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/riven_jarl/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "cleave": {
+    "name": "Riven Cleave",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "fissure": {
+    "name": "Open the Fissure",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "9 and 2 Burn to every hero"
+   },
+   "hoarfrost": {
+    "name": "Hoarfrost Crown",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "2 Weaken and 10 stress to every hero"
+   },
+   "shatter": {
+    "name": "Shatter",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "14 and Vulnerable to the rearmost hero"
+   },
+   "temper": {
+    "name": "Temper",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 20
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "gains 20 Block, gains 2 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "temper",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "hoarfrost",
+    "every": 3
+   },
+   {
+    "use": "fissure",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "cleave"
+   }
+  ],
+  "lore": "Half his body froze in the fall, half burned. He rules the split between.",
+  "world": "rime",
+  "resist": {
+   "fire": "resist",
+   "frost": "resist",
+   "physical": "resist"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 60,
+    "text": "The Jarl's frozen half cracks away. Fire pours out.",
+    "ai": [
+     {
+      "use": "fissure",
+      "every": 2
+     },
+     {
+      "use": "shatter",
+      "every": 3
+     },
+     {
+      "use": "cleave"
+     }
+    ],
+    "might": 1
+   },
+   {
+    "at": 25,
+    "text": "The Jarl burns and freezes at once.",
+    "ai": [
+     {
+      "use": "hoarfrost",
+      "every": 2
+     },
+     {
+      "use": "fissure"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "slag_slave": {
+  "name": "Slag Slave",
+  "hp": 34,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/slag_slave/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "hammer": {
+    "name": "Forge Hammer",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the front hero"
+   },
+   "slag": {
+    "name": "Throw Slag",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 2 Burn to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "slag",
+    "every": 3
+   },
+   {
+    "use": "hammer"
+   }
+  ],
+  "lore": "Chained at the neck to the anvil line. The cage on its head is for its own protection, they say.",
+  "world": "foundry",
+  "resist": {
+   "fire": "resist"
+  }
+ },
+ "bronze_automaton": {
+  "name": "Bronze Automaton",
+  "hp": 44,
+  "armor": 5,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bronze_automaton/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "piston": {
+    "name": "Piston Fist",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the front hero"
+   },
+   "discharge": {
+    "name": "Discharge Core",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "4 and 1 Static to every hero"
+   },
+   "reset": {
+    "name": "Reset",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     }
+    ],
+    "text": "gains 12 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "reset",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "discharge",
+    "every": 3
+   },
+   {
+    "use": "piston"
+   }
+  ],
+  "lore": "Wound by hand, powered by storm. It does not tire, and it does not stop.",
+  "world": "foundry",
+  "resist": {
+   "physical": "resist",
+   "lightning": "immune",
+   "water": "weak"
+  }
+ },
+ "arc_smith": {
+  "name": "Arc-Smith",
+  "hp": 38,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/arc_smith/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "strike": {
+    "name": "Charged Strike",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Static to the front hero"
+   },
+   "temper": {
+    "name": "Temper the Line",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     }
+    ],
+    "text": "1 Might to every foe"
+   },
+   "arc": {
+    "name": "Arc Weld",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     }
+    ],
+    "text": "6 and 1 Volatile Burn to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "temper",
+    "every": 3
+   },
+   {
+    "use": "arc",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "strike"
+   }
+  ],
+  "lore": "It welds with its hammer. It welds with you, too.",
+  "world": "foundry",
+  "resist": {
+   "lightning": "resist",
+   "fire": "resist"
+  }
+ },
+ "bellows_imp": {
+  "name": "Bellows Imp",
+  "hp": 24,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bellows_imp/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "peck": {
+    "name": "Peck",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5,
+      "times": 2
+     }
+    ],
+    "text": "5 twice to the rearmost hero"
+   },
+   "fan": {
+    "name": "Fan the Flames",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Burn to every hero"
+   },
+   "flit": {
+    "name": "Flit",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "flit",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "fan",
+    "every": 2
+   },
+   {
+    "use": "peck"
+   }
+  ],
+  "lore": "Small, winged and full of hot air. They keep the forges breathing.",
+  "world": "foundry",
+  "resist": {
+   "fire": "immune",
+   "physical": "weak"
+  }
+ },
+ "spark_swarm": {
+  "name": "Spark Swarm",
+  "hp": 22,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/spark_swarm/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "sting": {
+    "name": "Sting of Sparks",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 2,
+      "times": 3
+     }
+    ],
+    "text": "2 three times to the front hero"
+   },
+   "storm": {
+    "name": "Spark Storm",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Static and 1 Burn to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "storm",
+    "every": 2
+   },
+   {
+    "use": "sting"
+   }
+  ],
+  "lore": "Struck from the anvil and never cooled.",
+  "world": "foundry",
+  "resist": {
+   "physical": "resist",
+   "water": "weak"
+  }
+ },
+ "cyclops_smith": {
+  "name": "Cyclops Smith",
+  "hp": 120,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/cyclops_smith/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "hammer": {
+    "name": "Anvil Blow",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 20
+     }
+    ],
+    "text": "20 to the front hero"
+   },
+   "brand": {
+    "name": "Brand",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "fire",
+      "attr": "stable"
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     }
+    ],
+    "text": "8, 3 Burn and Mark to the rearmost hero"
+   },
+   "bellow": {
+    "name": "Bellow",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "10 stress to every hero"
+   },
+   "quench": {
+    "name": "Quench",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 16
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 16 Block, gains 1 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "quench",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "brand",
+    "every": 3
+   },
+   {
+    "use": "bellow",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "hammer"
+   }
+  ],
+  "lore": "The master smith. It has one eye and it is never off the work.",
+  "world": "foundry",
+  "resist": {
+   "fire": "resist",
+   "physical": "resist"
+  }
+ },
+ "talos_sentinel": {
+  "name": "Talos Sentinel",
+  "hp": 96,
+  "armor": 6,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/talos_sentinel/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "stomp": {
+    "name": "Stomp",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to every hero"
+   },
+   "grip": {
+    "name": "Bronze Grip",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "12 and Anchored to the front hero"
+   },
+   "ichor": {
+    "name": "Ichor Vein",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, 2 Burn and 2 Static to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "ichor",
+    "every": 3
+   },
+   {
+    "use": "stomp",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "grip"
+   }
+  ],
+  "lore": "A guardian of hollow bronze, filled with molten ichor. One vein in the heel holds it all.",
+  "world": "foundry",
+  "resist": {
+   "physical": "resist",
+   "lightning": "resist",
+   "water": "weak"
+  }
+ },
+ "anvil_titan": {
+  "name": "The Anvil Titan",
+  "hp": 230,
+  "armor": 6,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/anvil_titan/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "forge": {
+    "name": "Forge Blow",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 21
+     }
+    ],
+    "text": "21 to the front hero"
+   },
+   "plasma": {
+    "name": "Plasma Furnace",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "8, 1 Volatile Burn and 1 Static to every hero"
+   },
+   "thunder": {
+    "name": "Thunderclap",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "14 stress and 1 Static to every hero"
+   },
+   "anvil": {
+    "name": "Become the Anvil",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 24
+     },
+     {
+      "t": "status",
+      "s": "fortify",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 24 Block, keeps its Block"
+   },
+   "rivet": {
+    "name": "Rivet",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "12 and Anchored to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "anvil",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "plasma",
+    "every": 3
+   },
+   {
+    "use": "thunder",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "forge"
+   }
+  ],
+  "lore": "The foundry's first work. Its makers built it to strike the anvil forever. It found something softer.",
+  "world": "foundry",
+  "resist": {
+   "physical": "resist",
+   "fire": "resist",
+   "lightning": "resist",
+   "water": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 50,
+    "text": "The Titan's core splits. Lightning spills from the seams.",
+    "ai": [
+     {
+      "use": "plasma",
+      "every": 2
+     },
+     {
+      "use": "rivet",
+      "every": 3
+     },
+     {
+      "use": "forge"
+     }
+    ],
+    "might": 2
+   }
+  ]
+ },
+ "scalded_attendant": {
+  "name": "Scalded Attendant",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/scalded_attendant/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "hook": {
+    "name": "Towel Hook",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "6 to the rearmost hero; drags them forward 1"
+   },
+   "pour": {
+    "name": "Pour",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "5, 1 Soak and 1 Burn to the front hero"
+   },
+   "scrub": {
+    "name": "Scrub",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "hook",
+    "every": 3
+   },
+   {
+    "use": "pour",
+    "every": 2
+   },
+   {
+    "use": "scrub"
+   }
+  ],
+  "lore": "It still brings towels. Its skin comes away on them.",
+  "world": "baths",
+  "resist": {
+   "fire": "resist",
+   "water": "resist"
+  }
+ },
+ "kettle_crab": {
+  "name": "Kettle Crab",
+  "hp": 36,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/kettle_crab/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pinch": {
+    "name": "Boiled Pinch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "vent": {
+    "name": "Vent Steam",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Burn and 1 Soak to every hero"
+   },
+   "shell": {
+    "name": "Hard Shell",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     }
+    ],
+    "text": "gains 10 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "shell",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "vent",
+    "every": 3
+   },
+   {
+    "use": "pinch"
+   }
+  ],
+  "lore": "Cooked alive in the pools and somehow still walking.",
+  "world": "baths",
+  "resist": {
+   "physical": "resist",
+   "fire": "immune",
+   "frost": "weak"
+  }
+ },
+ "boiled_brute": {
+  "name": "Boiled Brute",
+  "hp": 48,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/boiled_brute/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "grab": {
+    "name": "Grab",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "dunk": {
+    "name": "Dunk",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "7, 3 Soak and 4 stress to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "dunk",
+    "every": 3
+   },
+   {
+    "use": "grab"
+   }
+  ],
+  "lore": "A bath guard who stayed in the water too long. He is very soft now, and very strong.",
+  "world": "baths",
+  "resist": {
+   "water": "resist",
+   "physical": "weak"
+  }
+ },
+ "steam_nymph": {
+  "name": "Steam Nymph",
+  "hp": 28,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/steam_nymph/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "veil": {
+    "name": "Veil of Steam",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "dodge"
+     }
+    ],
+    "text": "Dodge to every foe"
+   },
+   "kiss": {
+    "name": "Scalding Kiss",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Burn to the rearmost hero"
+   },
+   "sigh": {
+    "name": "Sigh",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "veil",
+    "every": 3
+   },
+   {
+    "use": "sigh",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "kiss"
+   }
+  ],
+  "lore": "It drifts over the pools and sings to the drowned.",
+  "world": "baths",
+  "resist": {
+   "physical": "resist",
+   "fire": "resist",
+   "lightning": "weak"
+  }
+ },
+ "bath_leech": {
+  "name": "Bath Leech",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bath_leech/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "latch": {
+    "name": "Latch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4,
+      "lifesteal": 100
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "4 and 2 Bleed to the front hero; healing itself"
+   },
+   "drain": {
+    "name": "Drain",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 3,
+      "times": 2,
+      "lifesteal": 100
+     }
+    ],
+    "text": "3 twice to the rearmost hero; healing itself"
+   }
+  },
+  "ai": [
+   {
+    "use": "drain",
+    "every": 2
+   },
+   {
+    "use": "latch"
+   }
+  ],
+  "lore": "Grown fat on the bathers.",
+  "world": "baths",
+  "resist": {
+   "water": "resist",
+   "fire": "weak"
+  }
+ },
+ "bath_mistress": {
+  "name": "The Bath-Mistress",
+  "hp": 82,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/bath_mistress/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "censer": {
+    "name": "Scalding Censer",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 2 Burn to every hero"
+   },
+   "baptism": {
+    "name": "Baptism",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "volatile"
+     }
+    ],
+    "text": "8 and 2 Volatile Soak to the front hero"
+   },
+   "attend": {
+    "name": "Attend",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 16
+     }
+    ],
+    "text": "The most wounded foe: heals 16"
+   },
+   "scold": {
+    "name": "Scold",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 12
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     }
+    ],
+    "text": "12 stress and Mark to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "attend",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "censer",
+    "every": 3
+   },
+   {
+    "use": "scold",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "baptism"
+   }
+  ],
+  "lore": "She keeps the water hot and the guests clean.",
+  "world": "baths",
+  "resist": {
+   "fire": "resist",
+   "water": "resist",
+   "toxin": "weak"
+  }
+ },
+ "cauldron_bearer": {
+  "name": "Cauldron Bearer",
+  "hp": 118,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/cauldron_bearer/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "tip": {
+    "name": "Tip the Cauldron",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "8, 1 Soak and 1 Burn to every hero"
+   },
+   "mace": {
+    "name": "Ladle",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "stoke": {
+    "name": "Stoke",
+    "kind": "buff",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "might",
+      "n": 2,
+      "to": "self"
+     },
+     {
+      "t": "block",
+      "n": 8
+     }
+    ],
+    "text": "gains 2 Might, gains 8 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "stoke",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "tip",
+    "every": 3
+   },
+   {
+    "use": "mace"
+   }
+  ],
+  "lore": "It carries the boiling water from the furnace to the pools. It carries other things, too.",
+  "world": "baths",
+  "resist": {
+   "fire": "resist",
+   "physical": "resist"
+  }
+ },
+ "simmering_matron": {
+  "name": "The Simmering Matron",
+  "hp": 205,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/simmering_matron/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "boil": {
+    "name": "Bring to the Boil",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Burn to every hero"
+   },
+   "reap": {
+    "name": "Reaping Ladle",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 17
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "17 and 3 Bleed to the front hero"
+   },
+   "steep": {
+    "name": "Steep",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 12
+     }
+    ],
+    "text": "2 Soak and 12 stress to every hero"
+   },
+   "feast": {
+    "name": "Taste the Broth",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 26
+     }
+    ],
+    "text": "heals 26"
+   },
+   "scald": {
+    "name": "Scald",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "10, 1 Volatile Soak and 1 Burn to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "feast",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "steep",
+    "every": 3
+   },
+   {
+    "use": "boil",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "reap"
+   }
+  ],
+  "lore": "The matron of the baths. She has been simmering for a hundred years and is nearly ready.",
+  "world": "baths",
+  "resist": {
+   "fire": "resist",
+   "water": "resist",
+   "frost": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 55,
+    "text": "The Matron rises from the pool, skin sloughing in sheets.",
+    "ai": [
+     {
+      "use": "scald",
+      "every": 2
+     },
+     {
+      "use": "boil",
+      "every": 3
+     },
+     {
+      "use": "reap"
+     }
+    ],
+    "might": 1
+   },
+   {
+    "at": 20,
+    "text": "She boils over.",
+    "ai": [
+     {
+      "use": "boil",
+      "every": 2
+     },
+     {
+      "use": "reap"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "gas_miner": {
+  "name": "Gas-Lung Miner",
+  "hp": 34,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/gas_miner/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pick": {
+    "name": "Pick",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "cough": {
+    "name": "Cough",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Toxin to every hero"
+   },
+   "lamp": {
+    "name": "Swing the Lamp",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 2 Burn to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "cough",
+    "every": 3
+   },
+   {
+    "use": "lamp",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "pick"
+   }
+  ],
+  "lore": "Its lungs are full of yellow gas. Keep it away from the lamp.",
+  "world": "pits",
+  "resist": {
+   "toxin": "resist"
+  }
+ },
+ "brimstone_toad": {
+  "name": "Brimstone Toad",
+  "hp": 38,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/brimstone_toad/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spit": {
+    "name": "Sulphur Spit",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "4 and 3 Toxin to the rearmost hero"
+   },
+   "tongue": {
+    "name": "Tongue",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "6 to the rearmost hero; drags them forward 2"
+   },
+   "swell": {
+    "name": "Swell",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "s": "thorns",
+      "n": 3,
+      "to": "self"
+     }
+    ],
+    "text": "gains 10 Block, gains 3 Thorns"
+   }
+  },
+  "ai": [
+   {
+    "use": "swell",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "tongue",
+    "every": 3
+   },
+   {
+    "use": "spit"
+   }
+  ],
+  "lore": "Its skin sweats brimstone. Do not lick it.",
+  "world": "pits",
+  "resist": {
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "fuse_imp": {
+  "name": "Fuse Imp",
+  "hp": 20,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fuse_imp/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "light": {
+    "name": "Light the Fuse",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     }
+    ],
+    "text": "4 and 1 Volatile Burn to the rearmost hero"
+   },
+   "blow": {
+    "name": "Blow Up",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     },
+     {
+      "t": "self_dmg",
+      "n": 999
+     }
+    ],
+    "text": "12 and 2 Burn to every hero; dies"
+   },
+   "scamper": {
+    "name": "Scamper",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "blow",
+    "if": "round>=3"
+   },
+   {
+    "use": "blow",
+    "if": "hp_pct<40"
+   },
+   {
+    "use": "scamper",
+    "every": 2,
+    "offset": 1
+   },
+   {
+    "use": "light"
+   }
+  ],
+  "lore": "It carries a lit torch into a gas mine. On purpose.",
+  "world": "pits",
+  "resist": {
+   "fire": "immune",
+   "physical": "weak"
+  }
+ },
+ "pit_crawler": {
+  "name": "Pit Crawler",
+  "hp": 36,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/pit_crawler/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Venom Bite",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Toxin to the front hero"
+   },
+   "coil": {
+    "name": "Coil",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "8 and Anchored to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "coil",
+    "every": 3
+   },
+   {
+    "use": "bite"
+   }
+  ],
+  "lore": "A centipede as long as a mine cart, and much hungrier.",
+  "world": "pits",
+  "resist": {
+   "toxin": "resist"
+  }
+ },
+ "canary_priest": {
+  "name": "Canary Priest",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/canary_priest/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "censer": {
+    "name": "Yellow Censer",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Toxin to every hero"
+   },
+   "hymn": {
+    "name": "Hymn of the Shaft",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     }
+    ],
+    "text": "1 Might to every foe"
+   },
+   "bless": {
+    "name": "Bless the Gas",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "The most wounded foe: heals 10"
+   }
+  },
+  "ai": [
+   {
+    "use": "bless",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "hymn",
+    "every": 3
+   },
+   {
+    "use": "censer"
+   }
+  ],
+  "lore": "They sing to the gas the way miners once listened to canaries. The gas listens.",
+  "world": "pits",
+  "resist": {
+   "toxin": "resist",
+   "fire": "weak"
+  }
+ },
+ "powder_ogre": {
+  "name": "Powder Ogre",
+  "hp": 126,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/powder_ogre/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "smash": {
+    "name": "Smash",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 20
+     }
+    ],
+    "text": "20 to the front hero"
+   },
+   "keg": {
+    "name": "Hurl the Keg",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Burn to every hero"
+   },
+   "gorge": {
+    "name": "Gorge on Sulphur",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 18
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "heals 18, gains 1 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "gorge",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "keg",
+    "every": 3
+   },
+   {
+    "use": "smash"
+   }
+  ],
+  "lore": "It eats blasting powder. It burps fire.",
+  "world": "pits",
+  "resist": {
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "miasma_matriarch": {
+  "name": "Miasma Matriarch",
+  "hp": 90,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/miasma_matriarch/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "breath": {
+    "name": "Choking Breath",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "4 and 2 Toxin to every hero"
+   },
+   "gaze": {
+    "name": "Swollen Gaze",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "14 stress and Vulnerable to the rearmost hero"
+   },
+   "spores": {
+    "name": "Spore Bloom",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 3,
+      "s": "regen"
+     }
+    ],
+    "text": "3 Regen to every foe"
+   }
+  },
+  "ai": [
+   {
+    "use": "spores",
+    "every": 3
+   },
+   {
+    "use": "gaze",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "breath"
+   }
+  ],
+  "lore": "A head swollen with gas, drifting through the galleries.",
+  "world": "pits",
+  "resist": {
+   "toxin": "immune",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "burning_lung": {
+  "name": "The Burning Lung",
+  "hp": 225,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/burning_lung/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "exhale": {
+    "name": "Exhale",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 2 Toxin to every hero"
+   },
+   "ignite": {
+    "name": "Ignite",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "volatile"
+     }
+    ],
+    "text": "2 Volatile Burn to every hero"
+   },
+   "crush": {
+    "name": "Crushing Bulk",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "swallow": {
+    "name": "Swallow",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "pull",
+      "n": 3
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "14 and 8 stress to the rearmost hero; drags them forward 3"
+   },
+   "inhale": {
+    "name": "Inhale",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 18
+     },
+     {
+      "t": "heal",
+      "n": 12
+     }
+    ],
+    "text": "gains 18 Block, heals 12"
+   }
+  },
+  "ai": [
+   {
+    "use": "inhale",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "ignite",
+    "every": 3,
+    "offset": 2
+   },
+   {
+    "use": "exhale",
+    "every": 3
+   },
+   {
+    "use": "crush"
+   }
+  ],
+  "lore": "The mine's first breath, grown into a toad the size of a chapel. Every breath it takes is fire.",
+  "world": "pits",
+  "resist": {
+   "toxin": "immune",
+   "fire": "resist",
+   "frost": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 50,
+    "text": "The Lung's skin splits. The gas inside catches.",
+    "ai": [
+     {
+      "use": "ignite",
+      "every": 2
+     },
+     {
+      "use": "swallow",
+      "every": 3
+     },
+     {
+      "use": "crush"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "ash_penitent": {
+  "name": "Ash Penitent",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/ash_penitent/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "flail": {
+    "name": "Chain Flail",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4,
+      "times": 2
+     }
+    ],
+    "text": "4 twice to the front hero"
+   },
+   "penance": {
+    "name": "Penance",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 stress and 1 Erode to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "penance",
+    "every": 3
+   },
+   {
+    "use": "flail"
+   }
+  ],
+  "lore": "It whips itself with the chain between swings at you. It does not notice the difference.",
+  "world": "pyre",
+  "resist": {
+   "fire": "resist"
+  }
+ },
+ "cinder_hound": {
+  "name": "Cinder Hound",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/cinder_hound/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "maul": {
+    "name": "Black Maul",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Burn to the front hero"
+   },
+   "hunt": {
+    "name": "Hunt the Weak",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "hunt",
+    "if": "hero_dd"
+   },
+   {
+    "use": "hunt",
+    "every": 3
+   },
+   {
+    "use": "maul"
+   }
+  ],
+  "lore": "It runs on ash and smells the dying.",
+  "world": "pyre",
+  "resist": {
+   "fire": "resist",
+   "void": "resist",
+   "water": "weak"
+  }
+ },
+ "censer_deacon": {
+  "name": "Censer Deacon",
+  "hp": 34,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/censer_deacon/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "smoke": {
+    "name": "Black Smoke",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "1 Erode and 4 stress to every hero"
+   },
+   "swing": {
+    "name": "Censer Swing",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Burn to the front hero"
+   },
+   "rite": {
+    "name": "Last Rite",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 12
+     }
+    ],
+    "text": "The most wounded foe: heals 12"
+   }
+  },
+  "ai": [
+   {
+    "use": "rite",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "smoke",
+    "every": 2
+   },
+   {
+    "use": "swing"
+   }
+  ],
+  "lore": "Its censer burns something that was once a saint.",
+  "world": "pyre",
+  "resist": {
+   "void": "resist",
+   "fire": "resist",
+   "lightning": "weak"
+  }
+ },
+ "candle_wraith": {
+  "name": "Candle Wraith",
+  "hp": 22,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/candle_wraith/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "gutter": {
+    "name": "Gutter",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     }
+    ],
+    "text": "4 and 1 Volatile Burn to the rearmost hero"
+   },
+   "hollow": {
+    "name": "Hollow Glow",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Erode to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "hollow",
+    "every": 2
+   },
+   {
+    "use": "gutter"
+   }
+  ],
+  "lore": "A skull in a black flame. Blow it out and it lights again.",
+  "world": "pyre",
+  "resist": {
+   "physical": "resist",
+   "fire": "immune",
+   "water": "weak"
+  }
+ },
+ "pyre_knight": {
+  "name": "Pyre Knight",
+  "hp": 50,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/pyre_knight/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "axe": {
+    "name": "Executioner's Axe",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 13
+     }
+    ],
+    "text": "13 to the front hero"
+   },
+   "brand": {
+    "name": "Brand the Heretic",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, Mark and 2 Burn to the front hero"
+   },
+   "guard": {
+    "name": "Guard the Pyre",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "Every foe: 6 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "guard",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "brand",
+    "every": 3
+   },
+   {
+    "use": "axe"
+   }
+  ],
+  "lore": "He lit the pyre. He stands guard so it is never put out.",
+  "world": "pyre",
+  "resist": {
+   "physical": "resist",
+   "fire": "resist"
+  }
+ },
+ "unburnt_inquisitor": {
+  "name": "The Unburnt Inquisitor",
+  "hp": 88,
+  "armor": 1,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/unburnt_inquisitor/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "accuse": {
+    "name": "Accuse",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     }
+    ],
+    "text": "14 stress and Mark to the rearmost hero"
+   },
+   "torch": {
+    "name": "To the Stake",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 3 Burn to the rearmost hero"
+   },
+   "verdict": {
+    "name": "Verdict",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "volatile"
+     }
+    ],
+    "text": "16 and 1 Volatile Erode to the front hero"
+   },
+   "absolve": {
+    "name": "Absolve",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 8
+     }
+    ],
+    "text": "Every foe: heals 8"
+   }
+  },
+  "ai": [
+   {
+    "use": "absolve",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "accuse",
+    "every": 3
+   },
+   {
+    "use": "torch",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "verdict"
+   }
+  ],
+  "lore": "He burned a thousand saints and never caught alight himself. He wonders why.",
+  "world": "pyre",
+  "resist": {
+   "fire": "immune",
+   "void": "weak"
+  }
+ },
+ "pyre_seraph": {
+  "name": "Pyre Seraph",
+  "hp": 84,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/pyre_seraph/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spear": {
+    "name": "Spear of Black Flame",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "12 and 2 Erode to the front hero"
+   },
+   "wings": {
+    "name": "Ash Wings",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 1 Burn to every hero"
+   },
+   "rise": {
+    "name": "Rise",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 2,
+      "to": "self"
+     },
+     {
+      "t": "block",
+      "n": 8
+     }
+    ],
+    "text": "dodges the next 2 hits, gains 8 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "rise",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "wings",
+    "every": 3
+   },
+   {
+    "use": "spear"
+   }
+  ],
+  "lore": "An angel sent to put out the pyre. It went in to look.",
+  "world": "pyre",
+  "resist": {
+   "fire": "resist",
+   "void": "resist",
+   "physical": "resist",
+   "lightning": "weak"
+  }
+ },
+ "saint_unending": {
+  "name": "The Saint Unending",
+  "hp": 215,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/saint_unending/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pyre": {
+    "name": "Pyre of the Faithful",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "fire",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Burn to every hero"
+   },
+   "hollow": {
+    "name": "Hollow Flame",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "fire",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "14, 1 Volatile Burn and 1 Erode to the front hero"
+   },
+   "martyr": {
+    "name": "Martyr's Gaze",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 16
+     }
+    ],
+    "text": "16 stress to every hero"
+   },
+   "chains": {
+    "name": "Chains of Devotion",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "10 and Anchored to the rearmost hero; drags them forward 2"
+   },
+   "burn": {
+    "name": "Burn Brighter",
+    "kind": "buff",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "might",
+      "n": 2,
+      "to": "self"
+     },
+     {
+      "t": "heal",
+      "n": 16
+     }
+    ],
+    "text": "gains 2 Might, heals 16"
+   }
+  },
+  "ai": [
+   {
+    "use": "burn",
+    "if": "hp_pct<45",
+    "not_twice": true
+   },
+   {
+    "use": "martyr",
+    "every": 3
+   },
+   {
+    "use": "pyre",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "hollow"
+   }
+  ],
+  "lore": "She was burned for heresy. She has been burning for nine hundred years, and she has not stopped praying.",
+  "world": "pyre",
+  "resist": {
+   "fire": "immune",
+   "void": "resist",
+   "water": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 60,
+    "text": "The Saint's flame turns black.",
+    "ai": [
+     {
+      "use": "hollow",
+      "every": 2
+     },
+     {
+      "use": "chains",
+      "every": 3
+     },
+     {
+      "use": "pyre"
+     }
+    ],
+    "might": 0
+   },
+   {
+    "at": 25,
+    "text": "Nothing is left of her but the fire.",
+    "ai": [
+     {
+      "use": "pyre",
+      "every": 2
+     },
+     {
+      "use": "hollow"
+     }
+    ],
+    "might": 2
+   }
+  ]
+ },
+ "stopped_pilgrim": {
+  "name": "Stopped Pilgrim",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/stopped_pilgrim/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "staff": {
+    "name": "Frozen Staff",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to the front hero"
+   },
+   "stillness": {
+    "name": "Stillness",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "2 Weaken and 4 stress to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "stillness",
+    "every": 2
+   },
+   {
+    "use": "staff"
+   }
+  ],
+  "lore": "It came to see the stars stop. It has not blinked since.",
+  "world": "spire",
+  "resist": {
+   "frost": "resist",
+   "fire": "weak"
+  }
+ },
+ "clock_sentry": {
+  "name": "Clock Sentry",
+  "hp": 42,
+  "armor": 5,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/clock_sentry/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "tick": {
+    "name": "Tick",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     }
+    ],
+    "text": "6 to the front hero"
+   },
+   "tock": {
+    "name": "Tock",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "wind": {
+    "name": "Wind Down",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     }
+    ],
+    "text": "gains 12 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "wind",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "tock",
+    "every": 2,
+    "offset": 1
+   },
+   {
+    "use": "tick"
+   }
+  ],
+  "lore": "Tick, then tock. Always in that order. Plan for it.",
+  "world": "spire",
+  "resist": {
+   "physical": "resist",
+   "lightning": "resist",
+   "water": "weak"
+  }
+ },
+ "gear_spider": {
+  "name": "Gear Spider",
+  "hp": 28,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/gear_spider/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Static Bite",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 2 Static to the rearmost hero"
+   },
+   "web": {
+    "name": "Copper Web",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 3
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "3 and Anchored to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "web",
+    "every": 3
+   },
+   {
+    "use": "bite"
+   }
+  ],
+  "lore": "It repairs the orrery. It considers you a fault.",
+  "world": "spire",
+  "resist": {
+   "lightning": "immune",
+   "water": "weak"
+  }
+ },
+ "aurora_moth": {
+  "name": "Aurora Moth",
+  "hp": 24,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/aurora_moth/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "dust": {
+    "name": "Aurora Dust",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Static and 1 Weaken to every hero"
+   },
+   "flutter": {
+    "name": "Flutter",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   },
+   "dazzle": {
+    "name": "Dazzle",
+    "kind": "debuff",
+    "target": "front",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "flutter",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "dust",
+    "every": 2
+   },
+   {
+    "use": "dazzle"
+   }
+  ],
+  "lore": "Drawn to the frozen stars. Its wings carry the northern lights.",
+  "world": "spire",
+  "resist": {
+   "physical": "weak",
+   "frost": "resist"
+  }
+ },
+ "frozen_halberdier": {
+  "name": "Frozen Halberdier",
+  "hp": 44,
+  "armor": 3,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/frozen_halberdier/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "thrust": {
+    "name": "Halberd Thrust",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the rearmost hero"
+   },
+   "hook": {
+    "name": "Hook and Haul",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "5 to the rearmost hero; drags them forward 1"
+   },
+   "brace": {
+    "name": "Brace",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "Every foe: 6 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "brace",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "hook",
+    "every": 3
+   },
+   {
+    "use": "thrust"
+   }
+  ],
+  "lore": "A guard frozen mid-patrol. It finishes the patrol now.",
+  "world": "spire",
+  "resist": {
+   "frost": "resist",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "horologist": {
+  "name": "The Horologist",
+  "hp": 80,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/horologist/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "stop": {
+    "name": "Stop the Hour",
+    "kind": "debuff",
+    "target": "front",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     }
+    ],
+    "text": "2 Weaken and 1 Volatile Static to the front hero"
+   },
+   "rewind": {
+    "name": "Rewind",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "Every foe: heals 10"
+   },
+   "spark": {
+    "name": "Escapement Spark",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 2 Static to the rearmost hero"
+   },
+   "chime": {
+    "name": "Chime",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "10 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "rewind",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "stop",
+    "every": 3
+   },
+   {
+    "use": "chime",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "spark"
+   }
+  ],
+  "lore": "The last astronomer. He keeps the hours from moving.",
+  "world": "spire",
+  "resist": {
+   "lightning": "resist",
+   "frost": "resist",
+   "toxin": "weak"
+  }
+ },
+ "rime_colossus": {
+  "name": "Rime Colossus",
+  "hp": 124,
+  "armor": 5,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/rime_colossus/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "slam": {
+    "name": "Glacial Slam",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "freeze": {
+    "name": "Freezing Grip",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 3 Weaken to the front hero"
+   },
+   "shards": {
+    "name": "Shard Storm",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     }
+    ],
+    "text": "6 to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "freeze",
+    "every": 3
+   },
+   {
+    "use": "shards",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "slam"
+   }
+  ],
+  "lore": "An ice statue of the founder. Someone wound it up.",
+  "world": "spire",
+  "resist": {
+   "frost": "immune",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "last_hour": {
+  "name": "The Last Hour",
+  "hp": 225,
+  "armor": 5,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/last_hour/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "strike": {
+    "name": "Strike the Hour",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "stop": {
+    "name": "Stop All Clocks",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "2 Weaken, 1 Static and 8 stress to every hero"
+   },
+   "toll": {
+    "name": "Midnight",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to every hero"
+   },
+   "wind": {
+    "name": "Wind the Spring",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 20
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "gains 20 Block, gains 2 Might"
+   },
+   "pendulum": {
+    "name": "Pendulum",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "14 to the rearmost hero; shoves them back 1"
+   }
+  },
+  "ai": [
+   {
+    "use": "wind",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "stop",
+    "every": 3
+   },
+   {
+    "use": "toll",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "strike"
+   }
+  ],
+  "lore": "The great clock at the top of the spire. When it strikes twelve, the world stops. It is one minute to.",
+  "world": "spire",
+  "resist": {
+   "lightning": "resist",
+   "frost": "resist",
+   "physical": "resist",
+   "water": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 50,
+    "text": "The Last Hour's hands begin to spin backwards.",
+    "ai": [
+     {
+      "use": "toll",
+      "every": 2
+     },
+     {
+      "use": "pendulum",
+      "every": 3
+     },
+     {
+      "use": "strike"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "frozen_whaler": {
+  "name": "Frozen Whaler",
+  "hp": 34,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/frozen_whaler/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "harpoon": {
+    "name": "Harpoon",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "8 to the rearmost hero; drags them forward 1"
+   },
+   "flense": {
+    "name": "Flense",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "6 and 3 Bleed to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "harpoon",
+    "every": 2
+   },
+   {
+    "use": "flense"
+   }
+  ],
+  "lore": "It still hunts whales. Anything large and slow will do.",
+  "world": "fleet",
+  "resist": {
+   "frost": "resist",
+   "fire": "weak"
+  }
+ },
+ "rime_gulls": {
+  "name": "Rime Gulls",
+  "hp": 22,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/rime_gulls/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "peck": {
+    "name": "Peck the Eyes",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 2,
+      "times": 3
+     }
+    ],
+    "text": "2 three times to the rearmost hero"
+   },
+   "mob": {
+    "name": "Mob",
+    "kind": "debuff",
+    "target": "front",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "6 stress and Vulnerable to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "mob",
+    "every": 3
+   },
+   {
+    "use": "peck"
+   }
+  ],
+  "lore": "They followed the fleet out and froze with it. They thawed first.",
+  "world": "fleet",
+  "resist": {
+   "physical": "weak",
+   "frost": "resist"
+  }
+ },
+ "ice_eel": {
+  "name": "Ice Eel",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/ice_eel/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Frostbite",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Weaken to the front hero"
+   },
+   "dive": {
+    "name": "Dive Under the Ice",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next 2 hits"
+   },
+   "wrap": {
+    "name": "Wrap",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "4 and 2 Soak to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "dive",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "wrap",
+    "every": 2
+   },
+   {
+    "use": "bite"
+   }
+  ],
+  "lore": "It hunts through holes in the ice.",
+  "world": "fleet",
+  "resist": {
+   "frost": "resist",
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "deck_hand": {
+  "name": "Drowned Deckhand",
+  "hp": 36,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/deck_hand/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "axe": {
+    "name": "Boarding Axe",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the front hero"
+   },
+   "shanty": {
+    "name": "Shanty",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     }
+    ],
+    "text": "1 Might to every foe"
+   }
+  },
+  "ai": [
+   {
+    "use": "shanty",
+    "every": 3
+   },
+   {
+    "use": "axe"
+   }
+  ],
+  "lore": "Still ready to board. Still singing.",
+  "world": "fleet",
+  "resist": {
+   "water": "resist"
+  }
+ },
+ "walrus_brute": {
+  "name": "Walrus Brute",
+  "hp": 52,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/walrus_brute/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "tusk": {
+    "name": "Tusk",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "crush": {
+    "name": "Belly Crush",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "stun"
+     }
+    ],
+    "text": "7 and Stun to the front hero"
+   },
+   "blubber": {
+    "name": "Blubber",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 14
+     }
+    ],
+    "text": "gains 14 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "blubber",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "crush",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "tusk"
+   }
+  ],
+  "lore": "It hauled out on the ice beside the ships and never left.",
+  "world": "fleet",
+  "resist": {
+   "frost": "immune",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "icewed_captain": {
+  "name": "The Ice-Wed Captain",
+  "hp": 100,
+  "armor": 3,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/icewed_captain/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "sabre": {
+    "name": "Sabre",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     }
+    ],
+    "text": "14 to the front hero"
+   },
+   "order": {
+    "name": "All Hands",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 2,
+      "s": "might"
+     }
+    ],
+    "text": "2 Might to every foe"
+   },
+   "lantern": {
+    "name": "Drowned Lantern",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "2 Soak and 6 stress to every hero"
+   },
+   "keelhaul": {
+    "name": "Keelhaul",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "pull",
+      "n": 2
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Weaken to the rearmost hero; drags them forward 2"
+   }
+  },
+  "ai": [
+   {
+    "use": "order",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "keelhaul",
+    "every": 3
+   },
+   {
+    "use": "lantern",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "sabre"
+   }
+  ],
+  "lore": "Married to the sea, and the sea froze at the wedding.",
+  "world": "fleet",
+  "resist": {
+   "frost": "resist",
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "frost_selkie": {
+  "name": "Frost Selkie",
+  "hp": 78,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/frost_selkie/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "claw": {
+    "name": "Raking Claws",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6,
+      "times": 2
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "6 twice and 2 Bleed to the front hero"
+   },
+   "song": {
+    "name": "Sealskin Song",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 12
+     }
+    ],
+    "text": "12 stress to every hero"
+   },
+   "slip": {
+    "name": "Slip the Skin",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 2,
+      "to": "self"
+     },
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "dodges the next 2 hits, heals 10"
+   }
+  },
+  "ai": [
+   {
+    "use": "slip",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "song",
+    "every": 3
+   },
+   {
+    "use": "claw"
+   }
+  ],
+  "lore": "She lost her skin to a sailor. She took his in return.",
+  "world": "fleet",
+  "resist": {
+   "water": "immune",
+   "frost": "resist",
+   "lightning": "weak"
+  }
+ },
+ "leviathan_ice": {
+  "name": "The Leviathan in the Ice",
+  "hp": 240,
+  "armor": 3,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/leviathan_ice/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "breach": {
+    "name": "Breach",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 2 Soak to every hero"
+   },
+   "swallow": {
+    "name": "Swallow Whole",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 21
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "21 and 8 stress to the front hero"
+   },
+   "freeze": {
+    "name": "White Breath",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "volatile"
+     }
+    ],
+    "text": "2 Weaken and 1 Volatile Soak to every hero"
+   },
+   "thrash": {
+    "name": "Thrash",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "12 to the rearmost hero; shoves them back 1"
+   },
+   "sound": {
+    "name": "Sound the Depths",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 22
+     },
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 6,
+      "to": "self"
+     }
+    ],
+    "text": "gains 22 Block, regenerates 6"
+   }
+  },
+  "ai": [
+   {
+    "use": "sound",
+    "if": "hp_pct<45",
+    "not_twice": true
+   },
+   {
+    "use": "freeze",
+    "every": 3
+   },
+   {
+    "use": "breach",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "swallow"
+   }
+  ],
+  "lore": "The fleet sailed to kill it. It froze the sea around them all.",
+  "world": "fleet",
+  "resist": {
+   "frost": "immune",
+   "water": "resist",
+   "lightning": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 55,
+    "text": "The ice cracks. The Leviathan rises out of the sea.",
+    "ai": [
+     {
+      "use": "breach",
+      "every": 2
+     },
+     {
+      "use": "thrash",
+      "every": 3
+     },
+     {
+      "use": "swallow"
+     }
+    ],
+    "might": 1
+   },
+   {
+    "at": 20,
+    "text": "It drags the whole fleet down with it.",
+    "ai": [
+     {
+      "use": "freeze",
+      "every": 2
+     },
+     {
+      "use": "swallow"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "barrow_draugr": {
+  "name": "Barrow Draugr",
+  "hp": 40,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/barrow_draugr/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "axe": {
+    "name": "Grave Axe",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the front hero"
+   },
+   "grip": {
+    "name": "Cold Grip",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Weaken to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "grip",
+    "every": 3
+   },
+   {
+    "use": "axe"
+   }
+  ],
+  "lore": "Buried with its axe so it could keep fighting. It does.",
+  "world": "barrow",
+  "resist": {
+   "frost": "resist",
+   "toxin": "resist",
+   "fire": "weak"
+  }
+ },
+ "plague_wolf": {
+  "name": "Plague Wolf",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/plague_wolf/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Plague Bite",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Toxin to the front hero"
+   },
+   "pack": {
+    "name": "Pack Hunt",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     }
+    ],
+    "text": "8 to the rearmost hero"
+   },
+   "howl": {
+    "name": "Howl",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "6 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "howl",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "pack",
+    "every": 2
+   },
+   {
+    "use": "bite"
+   }
+  ],
+  "lore": "The barrow wolves carry the old plague in their teeth.",
+  "world": "barrow",
+  "resist": {
+   "toxin": "resist",
+   "frost": "resist",
+   "fire": "weak"
+  }
+ },
+ "frostbit_leper": {
+  "name": "Frostbitten Leper",
+  "hp": 28,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/frostbit_leper/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bell": {
+    "name": "Leper's Bell",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to every hero"
+   },
+   "touch": {
+    "name": "Unclean Touch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "5, 2 Toxin and 1 Weaken to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "bell",
+    "every": 2
+   },
+   {
+    "use": "touch"
+   }
+  ],
+  "lore": "It rings its bell to warn you. You should have listened.",
+  "world": "barrow",
+  "resist": {
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "mold_wight": {
+  "name": "Mould Wight",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/mold_wight/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "claw": {
+    "name": "Mouldy Claw",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Toxin to the rearmost hero"
+   },
+   "spores": {
+    "name": "Spore Shroud",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 2,
+      "s": "regen"
+     }
+    ],
+    "text": "2 Regen to every foe"
+   },
+   "chill": {
+    "name": "Grave Chill",
+    "kind": "debuff",
+    "target": "front",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "3 Weaken to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "spores",
+    "every": 3
+   },
+   {
+    "use": "chill",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "claw"
+   }
+  ],
+  "lore": "The mould grew a shape in the dark, and the shape grew hungry.",
+  "world": "barrow",
+  "resist": {
+   "physical": "resist",
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "grave_worm": {
+  "name": "Grave Worm",
+  "hp": 36,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/grave_worm/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "burrow": {
+    "name": "Burrow Up",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the rearmost hero"
+   },
+   "feed": {
+    "name": "Feed",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5,
+      "lifesteal": 100
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "5 and 1 Toxin to the front hero; healing itself"
+   }
+  },
+  "ai": [
+   {
+    "use": "burrow",
+    "if": "round==1"
+   },
+   {
+    "use": "burrow",
+    "every": 4
+   },
+   {
+    "use": "feed"
+   }
+  ],
+  "lore": "It eats the dead. It has eaten so many that it has started to look like them.",
+  "world": "barrow",
+  "resist": {
+   "toxin": "resist"
+  }
+ },
+ "barrow_thane": {
+  "name": "Barrow Thane",
+  "hp": 110,
+  "armor": 4,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/barrow_thane/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "blade": {
+    "name": "Grave Blade",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16
+     }
+    ],
+    "text": "16 to the front hero"
+   },
+   "oath": {
+    "name": "Oath of the Barrow",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     },
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "1 Might to every foe; 6 Block"
+   },
+   "rot": {
+    "name": "Rotting Cut",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "8, 2 Toxin and 2 Weaken to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "oath",
+    "every": 3
+   },
+   {
+    "use": "rot",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "blade"
+   }
+  ],
+  "lore": "A lord buried with his household. He still keeps them in line.",
+  "world": "barrow",
+  "resist": {
+   "frost": "resist",
+   "toxin": "resist",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "rot_witch": {
+  "name": "Rot Witch",
+  "hp": 74,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/rot_witch/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "hex": {
+    "name": "Rot Hex",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "hex"
+     }
+    ],
+    "text": "3 Toxin and 2 Hex to the rearmost hero"
+   },
+   "frost": {
+    "name": "Frost Nail",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Weaken to the front hero"
+   },
+   "raise": {
+    "name": "Raise the Dead",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "Every foe: heals 10"
+   },
+   "curse": {
+    "name": "Wasting Curse",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "volatile"
+     }
+    ],
+    "text": "10 stress and 1 Volatile Toxin to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "raise",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "curse",
+    "every": 3
+   },
+   {
+    "use": "hex",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "frost"
+   }
+  ],
+  "lore": "She keeps the barrow's dead from rotting, and their plague from dying.",
+  "world": "barrow",
+  "resist": {
+   "toxin": "immune",
+   "frost": "resist",
+   "fire": "weak"
+  }
+ },
+ "barrow_king": {
+  "name": "The Barrow King",
+  "hp": 225,
+  "armor": 4,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/barrow_king/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "axe": {
+    "name": "Royal Axe",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "plague": {
+    "name": "Plague of Kings",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Toxin to every hero"
+   },
+   "winter": {
+    "name": "Long Winter",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 12
+     }
+    ],
+    "text": "2 Weaken and 12 stress to every hero"
+   },
+   "shield": {
+    "name": "Barrow Shield",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 20
+     },
+     {
+      "t": "status",
+      "s": "thorns",
+      "n": 4,
+      "to": "self"
+     }
+    ],
+    "text": "gains 20 Block, gains 4 Thorns"
+   },
+   "court": {
+    "name": "Summon the Court",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 2,
+      "s": "might"
+     },
+     {
+      "t": "status",
+      "n": 4,
+      "s": "regen"
+     }
+    ],
+    "text": "2 Might and 4 Regen to every foe"
+   }
+  },
+  "ai": [
+   {
+    "use": "shield",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "winter",
+    "every": 3
+   },
+   {
+    "use": "plague",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "axe"
+   }
+  ],
+  "lore": "He sealed his kingdom in the barrow to stop the plague. The plague was already inside.",
+  "world": "barrow",
+  "resist": {
+   "frost": "immune",
+   "toxin": "resist",
+   "physical": "resist",
+   "fire": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 60,
+    "text": "The King's court wakes in their graves.",
+    "ai": [
+     {
+      "use": "court",
+      "every": 4
+     },
+     {
+      "use": "plague",
+      "every": 2
+     },
+     {
+      "use": "axe"
+     }
+    ],
+    "might": 0
+   },
+   {
+    "at": 25,
+    "text": "The King's flesh splits. The plague pours out.",
+    "ai": [
+     {
+      "use": "plague",
+      "every": 2
+     },
+     {
+      "use": "axe"
+     }
+    ],
+    "might": 2
+   }
+  ]
+ },
+ "hollow_wanderer": {
+  "name": "Hollow Wanderer",
+  "hp": 32,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/hollow_wanderer/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spear": {
+    "name": "Bone Spear",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the rearmost hero"
+   },
+   "empty": {
+    "name": "Emptiness",
+    "kind": "debuff",
+    "target": "front",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "2 Erode and 4 stress to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "empty",
+    "every": 3
+   },
+   {
+    "use": "spear"
+   }
+  ],
+  "lore": "It walks the tundra looking for its face.",
+  "world": "silence",
+  "resist": {
+   "void": "resist",
+   "frost": "resist",
+   "lightning": "weak"
+  }
+ },
+ "silence_stag": {
+  "name": "Silence Stag",
+  "hp": 40,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/silence_stag/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "gore": {
+    "name": "Gore",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "stamp": {
+    "name": "Stamp",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "stun"
+     }
+    ],
+    "text": "6 and Stun to the front hero"
+   },
+   "bell": {
+    "name": "Antler Bell",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "stamp",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "bell",
+    "every": 3
+   },
+   {
+    "use": "gore"
+   }
+  ],
+  "lore": "It makes no sound when it runs. It makes no sound when it kills.",
+  "world": "silence",
+  "resist": {
+   "frost": "immune",
+   "fire": "weak"
+  }
+ },
+ "starless_eye": {
+  "name": "Starless Eye",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/starless_eye/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "stare": {
+    "name": "Starless Stare",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 stress and 1 Erode to the rearmost hero"
+   },
+   "blink": {
+    "name": "Blink",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   },
+   "ray": {
+    "name": "Cold Ray",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Weaken to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "blink",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "stare",
+    "every": 2
+   },
+   {
+    "use": "ray"
+   }
+  ],
+  "lore": "An eye that fell from the black star. It is still looking for the rest of the face.",
+  "world": "silence",
+  "resist": {
+   "void": "immune",
+   "lightning": "weak"
+  }
+ },
+ "frozen_saint": {
+  "name": "Frozen Saint",
+  "hp": 38,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/frozen_saint/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "prayer": {
+    "name": "Silent Prayer",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 6
+     }
+    ],
+    "text": "Every foe: heals 6"
+   },
+   "litany": {
+    "name": "Frozen Litany",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Weaken to the front hero"
+   },
+   "halo": {
+    "name": "Cold Halo",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "Every foe: 6 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "prayer",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "halo",
+    "every": 3
+   },
+   {
+    "use": "litany"
+   }
+  ],
+  "lore": "It prayed for warmth. The black star answered.",
+  "world": "silence",
+  "resist": {
+   "frost": "resist"
+  }
+ },
+ "rime_shade": {
+  "name": "Rime Shade",
+  "hp": 28,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/rime_shade/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "reap": {
+    "name": "Reap",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "9 and 2 Bleed to the front hero"
+   },
+   "cold": {
+    "name": "Absolute Cold",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "frost",
+      "attr": "volatile"
+     }
+    ],
+    "text": "4 and 1 Volatile Weaken to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "cold",
+    "every": 3
+   },
+   {
+    "use": "reap"
+   }
+  ],
+  "lore": "A shadow cast by nothing.",
+  "world": "silence",
+  "resist": {
+   "physical": "resist",
+   "void": "resist",
+   "fire": "weak"
+  }
+ },
+ "pale_hunter": {
+  "name": "The Pale Hunter",
+  "hp": 86,
+  "armor": 1,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/pale_hunter/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spear": {
+    "name": "Hunting Spear",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     }
+    ],
+    "text": "14 to the rearmost hero"
+   },
+   "mark": {
+    "name": "Mark the Prey",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "mark"
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "vulnerable"
+     }
+    ],
+    "text": "Mark and Vulnerable to the rearmost hero"
+   },
+   "claws": {
+    "name": "Rend",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6,
+      "times": 2
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "6 twice and 2 Bleed to the front hero"
+   },
+   "track": {
+    "name": "Track",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit, gains 1 Might"
+   }
+  },
+  "ai": [
+   {
+    "use": "mark",
+    "every": 3
+   },
+   {
+    "use": "track",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "spear",
+    "every": 2
+   },
+   {
+    "use": "claws"
+   }
+  ],
+  "lore": "It hunts the warm. There are not many left.",
+  "world": "silence",
+  "resist": {
+   "frost": "resist",
+   "void": "resist",
+   "fire": "weak"
+  }
+ },
+ "void_mammoth": {
+  "name": "Void Mammoth",
+  "hp": 130,
+  "armor": 3,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/void_mammoth/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "trample": {
+    "name": "Trample",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to every hero"
+   },
+   "tusk": {
+    "name": "Tusk",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "trumpet": {
+    "name": "Trumpet of the Void",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 12
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "12 stress and 1 Erode to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "trumpet",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "trample",
+    "every": 3
+   },
+   {
+    "use": "tusk"
+   }
+  ],
+  "lore": "Its herd died out an age ago. It did not notice.",
+  "world": "silence",
+  "resist": {
+   "frost": "immune",
+   "physical": "resist",
+   "lightning": "weak"
+  }
+ },
+ "cold_star": {
+  "name": "The Cold Star",
+  "hp": 215,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/cold_star/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "zero": {
+    "name": "Absolute Zero",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "frost",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "volatile"
+     }
+    ],
+    "text": "2 Weaken and 1 Volatile Erode to every hero"
+   },
+   "gaze": {
+    "name": "Black Gaze",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 16
+     }
+    ],
+    "text": "16 stress to every hero"
+   },
+   "lance": {
+    "name": "Star Lance",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "18 and 2 Erode to the rearmost hero"
+   },
+   "collapse": {
+    "name": "Collapse",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 21
+     }
+    ],
+    "text": "21 to the front hero"
+   },
+   "dim": {
+    "name": "Dim",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 18
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 18 Block, dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "dim",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "zero",
+    "every": 3
+   },
+   {
+    "use": "gaze",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "collapse"
+   }
+  ],
+  "lore": "The black star came down to see what was making all the noise.",
+  "world": "silence",
+  "resist": {
+   "void": "immune",
+   "frost": "resist",
+   "lightning": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 50,
+    "text": "The Cold Star opens wider.",
+    "ai": [
+     {
+      "use": "zero",
+      "every": 2
+     },
+     {
+      "use": "lance",
+      "every": 3
+     },
+     {
+      "use": "collapse"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "wrecker": {
+  "name": "Wrecker",
+  "hp": 32,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/wrecker/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "hook": {
+    "name": "Wrecking Hook",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "7 to the rearmost hero; drags them forward 1"
+   },
+   "cosh": {
+    "name": "Cosh",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "lure": {
+    "name": "False Light",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "6 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "lure",
+    "every": 3,
+    "offset": 2
+   },
+   {
+    "use": "hook",
+    "every": 2
+   },
+   {
+    "use": "cosh"
+   }
+  ],
+  "lore": "It lights a lamp on the cliff and waits for the ships to come in.",
+  "world": "coast",
+  "resist": {
+   "water": "resist"
+  }
+ },
+ "shock_eel": {
+  "name": "Shock Eel",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/shock_eel/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "jolt": {
+    "name": "Jolt",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Static to the front hero"
+   },
+   "discharge": {
+    "name": "Discharge",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     }
+    ],
+    "text": "1 Volatile Static to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "discharge",
+    "every": 3
+   },
+   {
+    "use": "jolt"
+   }
+  ],
+  "lore": "It lives in the shallows where the wrecks are. It is why there are no survivors.",
+  "world": "coast",
+  "resist": {
+   "lightning": "immune",
+   "water": "resist",
+   "toxin": "weak"
+  }
+ },
+ "storm_harpy": {
+  "name": "Storm Harpy",
+  "hp": 28,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/storm_harpy/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "rake": {
+    "name": "Rake",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 5,
+      "times": 2
+     }
+    ],
+    "text": "5 twice to the rearmost hero"
+   },
+   "shriek": {
+    "name": "Storm Shriek",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to every hero"
+   },
+   "snatch": {
+    "name": "Snatch",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "6 to the rearmost hero; drags them forward 2"
+   }
+  },
+  "ai": [
+   {
+    "use": "snatch",
+    "every": 3
+   },
+   {
+    "use": "shriek",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "rake"
+   }
+  ],
+  "lore": "It rides the storm down onto the wrecks.",
+  "world": "coast",
+  "resist": {
+   "lightning": "resist",
+   "physical": "weak"
+  }
+ },
+ "tide_crab": {
+  "name": "Tide Crab",
+  "hp": 38,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/tide_crab/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pinch": {
+    "name": "Pinch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "shell": {
+    "name": "Shell Up",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     }
+    ],
+    "text": "gains 12 Block"
+   },
+   "spray": {
+    "name": "Brine Spray",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Soak to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "shell",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "spray",
+    "every": 3
+   },
+   {
+    "use": "pinch"
+   }
+  ],
+  "lore": "It picks the wrecks clean. You are a wreck.",
+  "world": "coast",
+  "resist": {
+   "physical": "resist",
+   "water": "immune",
+   "lightning": "weak"
+  }
+ },
+ "drowned_bosun": {
+  "name": "Drowned Bosun",
+  "hp": 46,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/drowned_bosun/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "chain": {
+    "name": "Anchor Chain",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "lash": {
+    "name": "Lash",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "6 and 2 Bleed to the rearmost hero"
+   },
+   "haul": {
+    "name": "Haul Away",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "4 to the rearmost hero; drags them forward 2"
+   }
+  },
+  "ai": [
+   {
+    "use": "haul",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "lash",
+    "every": 3
+   },
+   {
+    "use": "chain"
+   }
+  ],
+  "lore": "The wreckers' last catch. He signed on.",
+  "world": "coast",
+  "resist": {
+   "water": "resist",
+   "lightning": "weak"
+  }
+ },
+ "lighthouse_keeper": {
+  "name": "The Lighthouse Keeper",
+  "hp": 80,
+  "armor": 1,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/lighthouse_keeper/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "beam": {
+    "name": "False Beam",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 2 Static to the rearmost hero"
+   },
+   "fog": {
+    "name": "Sea Fog",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Soak to every hero"
+   },
+   "log": {
+    "name": "Ship's Log",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "dodge"
+     }
+    ],
+    "text": "1 Might and Dodge to every foe"
+   },
+   "storm": {
+    "name": "Call the Storm",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     }
+    ],
+    "text": "4 and 1 Volatile Static to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "log",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "fog",
+    "every": 3
+   },
+   {
+    "use": "storm",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "beam"
+   }
+  ],
+  "lore": "He keeps the light burning in the wrong place.",
+  "world": "coast",
+  "resist": {
+   "lightning": "resist",
+   "water": "resist",
+   "toxin": "weak"
+  }
+ },
+ "harpy_matron": {
+  "name": "Harpy Matron",
+  "hp": 92,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/harpy_matron/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "talons": {
+    "name": "Talons",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8,
+      "times": 2
+     }
+    ],
+    "text": "8 twice to the front hero"
+   },
+   "dive": {
+    "name": "Dive from the Storm",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "14 and 2 Static to the rearmost hero"
+   },
+   "brood": {
+    "name": "Call the Brood",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 2,
+      "s": "might"
+     }
+    ],
+    "text": "2 Might to every foe"
+   },
+   "screech": {
+    "name": "Screech",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 12
+     }
+    ],
+    "text": "12 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "brood",
+    "every": 4,
+    "offset": 1
+   },
+   {
+    "use": "screech",
+    "every": 3,
+    "offset": 2
+   },
+   {
+    "use": "dive",
+    "every": 2
+   },
+   {
+    "use": "talons"
+   }
+  ],
+  "lore": "The mother of the storm harpies, crowned with a drowned queen's circlet.",
+  "world": "coast",
+  "resist": {
+   "lightning": "resist",
+   "physical": "resist",
+   "frost": "weak"
+  }
+ },
+ "thunder_whale": {
+  "name": "The Thunder Whale",
+  "hp": 240,
+  "armor": 3,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/thunder_whale/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "breach": {
+    "name": "Breach",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 2 Soak to every hero"
+   },
+   "thunder": {
+    "name": "Thunder Song",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "volatile"
+     }
+    ],
+    "text": "2 Volatile Static to every hero"
+   },
+   "ram": {
+    "name": "Ram the Cliff",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 21
+     }
+    ],
+    "text": "21 to the front hero"
+   },
+   "spout": {
+    "name": "Spout",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "water",
+      "attr": "stable"
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "3 Soak to the rearmost hero; shoves them back 1"
+   },
+   "dive": {
+    "name": "Sound",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 20
+     },
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 6,
+      "to": "self"
+     }
+    ],
+    "text": "gains 20 Block, regenerates 6"
+   }
+  },
+  "ai": [
+   {
+    "use": "dive",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "thunder",
+    "every": 3,
+    "offset": 2
+   },
+   {
+    "use": "breach",
+    "every": 3
+   },
+   {
+    "use": "ram"
+   }
+  ],
+  "lore": "The storm on the coast is its song.",
+  "world": "coast",
+  "resist": {
+   "lightning": "immune",
+   "water": "resist",
+   "toxin": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 50,
+    "text": "The Whale sings. The storm answers.",
+    "ai": [
+     {
+      "use": "thunder",
+      "every": 2
+     },
+     {
+      "use": "spout",
+      "every": 3
+     },
+     {
+      "use": "ram"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "spire_wasps": {
+  "name": "Spire Wasps",
+  "hp": 24,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/spire_wasps/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "sting": {
+    "name": "Sting",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 2,
+      "times": 3
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 three times and 1 Toxin to the front hero"
+   },
+   "swarm": {
+    "name": "Swarm",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "6 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "swarm",
+    "every": 3
+   },
+   {
+    "use": "sting"
+   }
+  ],
+  "lore": "A cloud of stings.",
+  "world": "hive",
+  "resist": {
+   "physical": "resist",
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "venom_spider": {
+  "name": "Venom Spider",
+  "hp": 32,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/venom_spider/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "fang": {
+    "name": "Venom Fang",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 3 Toxin to the front hero"
+   },
+   "web": {
+    "name": "Web",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 3
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "3 and Anchored to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "web",
+    "every": 3
+   },
+   {
+    "use": "fang"
+   }
+  ],
+  "lore": "It weaves between the spires and waits for the lightning to bring it food.",
+  "world": "hive",
+  "resist": {
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "puppet_host": {
+  "name": "Puppet Host",
+  "hp": 36,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/puppet_host/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "flail": {
+    "name": "Jerk and Flail",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the front hero"
+   },
+   "spores": {
+    "name": "Release Spores",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "1 Toxin and 4 stress to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "spores",
+    "every": 2
+   },
+   {
+    "use": "flail"
+   }
+  ],
+  "lore": "A traveller the hive has hollowed out and filled with larvae. It moves when they do.",
+  "world": "hive",
+  "resist": {
+   "toxin": "resist",
+   "fire": "weak"
+  },
+  "personality": "mindless"
+ },
+ "galvanic_beetle": {
+  "name": "Galvanic Beetle",
+  "hp": 40,
+  "armor": 5,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/galvanic_beetle/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "charge": {
+    "name": "Galvanic Charge",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "9 and 2 Static to the front hero"
+   },
+   "carapace": {
+    "name": "Carapace",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     }
+    ],
+    "text": "gains 12 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "carapace",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "carapace",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "charge"
+   }
+  ],
+  "lore": "It stores lightning in its shell.",
+  "world": "hive",
+  "resist": {
+   "lightning": "immune",
+   "physical": "resist",
+   "water": "weak"
+  }
+ },
+ "hive_drone": {
+  "name": "Hive Drone",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/hive_drone/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "nectar": {
+    "name": "Nectar",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "The most wounded foe: heals 10"
+   },
+   "dust": {
+    "name": "Venom Dust",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Toxin to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "nectar",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "dust"
+   }
+  ],
+  "lore": "It feeds the hive. Everything feeds the hive.",
+  "world": "hive",
+  "resist": {
+   "toxin": "resist",
+   "physical": "weak"
+  }
+ },
+ "mantis_duelist": {
+  "name": "Mantis Duelist",
+  "hp": 84,
+  "armor": 1,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/mantis_duelist/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "scythe": {
+    "name": "Scythe Arms",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7,
+      "times": 2
+     }
+    ],
+    "text": "7 twice to the front hero"
+   },
+   "lunge": {
+    "name": "Lunge",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "12 and 2 Toxin to the rearmost hero"
+   },
+   "stance": {
+    "name": "Praying Stance",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "riposte",
+      "n": 8,
+      "to": "self"
+     },
+     {
+      "t": "block",
+      "n": 8
+     }
+    ],
+    "text": "ripostes for 8, gains 8 Block"
+   },
+   "paralyse": {
+    "name": "Paralysing Strike",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, 1 Volatile Static and 1 Toxin to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "stance",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "paralyse",
+    "every": 3
+   },
+   {
+    "use": "lunge",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "scythe"
+   }
+  ],
+  "lore": "It bows before every duel. It eats the loser.",
+  "world": "hive",
+  "resist": {
+   "toxin": "resist",
+   "lightning": "resist",
+   "fire": "weak"
+  }
+ },
+ "brood_mother": {
+  "name": "Brood Mother",
+  "hp": 118,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/brood_mother/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "bite": {
+    "name": "Brood Bite",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "14 and 2 Toxin to the front hero"
+   },
+   "hatch": {
+    "name": "Hatch",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "regen"
+     }
+    ],
+    "text": "1 Might and 3 Regen to every foe"
+   },
+   "web": {
+    "name": "Web the Rear",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     },
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "6, Anchored and 6 stress to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "hatch",
+    "every": 3
+   },
+   {
+    "use": "web",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "bite"
+   }
+  ],
+  "lore": "The spiders' queen. Her back crawls with young.",
+  "world": "hive",
+  "resist": {
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "hive_queen": {
+  "name": "The Hive Queen",
+  "hp": 225,
+  "armor": 4,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/hive_queen/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "sting": {
+    "name": "Royal Sting",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16
+     },
+     {
+      "t": "apply",
+      "n": 3,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "16 and 3 Toxin to the front hero"
+   },
+   "neuro": {
+    "name": "Neurotoxin",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Volatile Static and 1 Toxin to every hero"
+   },
+   "drone": {
+    "name": "Drone of the Hive",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     }
+    ],
+    "text": "14 stress to every hero"
+   },
+   "royal": {
+    "name": "Royal Jelly",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 24
+     },
+     {
+      "t": "status",
+      "s": "might",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "heals 24, gains 1 Might"
+   },
+   "swarm": {
+    "name": "Swarm the Rear",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6,
+      "times": 2
+     }
+    ],
+    "text": "6 twice to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "royal",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "neuro",
+    "every": 3
+   },
+   {
+    "use": "drone",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "sting"
+   }
+  ],
+  "lore": "The heart of the spires. Every sting on the plain is hers.",
+  "world": "hive",
+  "resist": {
+   "toxin": "immune",
+   "lightning": "resist",
+   "fire": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 55,
+    "text": "The Queen takes wing.",
+    "ai": [
+     {
+      "use": "swarm",
+      "every": 2
+     },
+     {
+      "use": "neuro",
+      "every": 3
+     },
+     {
+      "use": "sting"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "fallen_angel": {
+  "name": "Fallen Angel",
+  "hp": 36,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fallen_angel/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "sword": {
+    "name": "Fallen Sword",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the front hero"
+   },
+   "smite": {
+    "name": "Smite",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Static to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "smite",
+    "every": 3
+   },
+   {
+    "use": "sword"
+   }
+  ],
+  "lore": "It fell in the war and kept fighting it.",
+  "world": "sky",
+  "resist": {
+   "lightning": "resist",
+   "void": "weak"
+  }
+ },
+ "rift_hound": {
+  "name": "Rift Hound",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/rift_hound/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "phase": {
+    "name": "Phase Bite",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 1 Erode to the rearmost hero"
+   },
+   "maul": {
+    "name": "Maul",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "blink": {
+    "name": "Blink",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "blink",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "phase",
+    "every": 2
+   },
+   {
+    "use": "maul"
+   }
+  ],
+  "lore": "It comes through the tears in the sky. Things that should not be followed it.",
+  "world": "sky",
+  "resist": {
+   "void": "immune",
+   "lightning": "weak"
+  }
+ },
+ "storm_shade": {
+  "name": "Storm Shade",
+  "hp": 24,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/storm_shade/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "arc": {
+    "name": "Arc",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     }
+    ],
+    "text": "4 and 1 Volatile Static to the rearmost hero"
+   },
+   "static": {
+    "name": "Static Shroud",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Static to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "static",
+    "every": 2
+   },
+   {
+    "use": "arc"
+   }
+  ],
+  "lore": "Lightning that forgot to stop.",
+  "world": "sky",
+  "resist": {
+   "physical": "resist",
+   "lightning": "immune",
+   "water": "weak"
+  }
+ },
+ "choir_of_eyes": {
+  "name": "Choir of Eyes",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/choir_of_eyes/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "gaze": {
+    "name": "Hundredfold Gaze",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "8 stress to every hero"
+   },
+   "weep": {
+    "name": "Weep",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "2 Erode to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "weep",
+    "every": 2
+   },
+   {
+    "use": "gaze"
+   }
+  ],
+  "lore": "The eyes of the dead god, singing its last hymn.",
+  "world": "sky",
+  "resist": {
+   "void": "resist",
+   "physical": "weak"
+  }
+ },
+ "skywreck_knight": {
+  "name": "Skywreck Knight",
+  "hp": 48,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/skywreck_knight/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "mace": {
+    "name": "Mace",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 12
+     }
+    ],
+    "text": "12 to the front hero"
+   },
+   "shield": {
+    "name": "Aegis",
+    "kind": "defend",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "Every foe: 6 Block"
+   },
+   "charge": {
+    "name": "Thunder Charge",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "stun"
+     }
+    ],
+    "text": "7 and Stun to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "shield",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "charge",
+    "every": 4,
+    "offset": 2
+   },
+   {
+    "use": "mace"
+   }
+  ],
+  "lore": "A knight of the heavenly host, his armour fused in the fall.",
+  "world": "sky",
+  "resist": {
+   "physical": "resist",
+   "lightning": "resist",
+   "water": "weak"
+  }
+ },
+ "thunder_seraph": {
+  "name": "Thunder Seraph",
+  "hp": 90,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/thunder_seraph/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spear": {
+    "name": "Spear of Heaven",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "14 and 2 Static to the rearmost hero"
+   },
+   "wings": {
+    "name": "Storm Wings",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     }
+    ],
+    "text": "6 to every hero"
+   },
+   "judgement": {
+    "name": "Judgement",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "lightning",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "8, 1 Volatile Static and 1 Erode to the front hero"
+   },
+   "hymn": {
+    "name": "Hymn",
+    "kind": "buff",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "status",
+      "n": 1,
+      "s": "might"
+     },
+     {
+      "t": "block",
+      "n": 6
+     }
+    ],
+    "text": "1 Might to every foe; 6 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "hymn",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "judgement",
+    "every": 3
+   },
+   {
+    "use": "wings",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "spear"
+   }
+  ],
+  "lore": "It holds the sky together with its spear. It is losing.",
+  "world": "sky",
+  "resist": {
+   "lightning": "immune",
+   "physical": "resist",
+   "void": "weak"
+  }
+ },
+ "rift_leviathan": {
+  "name": "Rift Leviathan",
+  "hp": 120,
+  "armor": 1,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/rift_leviathan/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "swallow": {
+    "name": "Swallow",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "tear": {
+    "name": "Tear the Sky",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "6 and 2 Erode to every hero"
+   },
+   "coil": {
+    "name": "Coil Through the Rift",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 14
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 14 Block, dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "coil",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "tear",
+    "every": 3
+   },
+   {
+    "use": "swallow"
+   }
+  ],
+  "lore": "It swims in the space between the stars.",
+  "world": "sky",
+  "resist": {
+   "void": "immune",
+   "lightning": "weak"
+  }
+ },
+ "shattered_god": {
+  "name": "The Shattered God",
+  "hp": 225,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/shattered_god/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "discharge": {
+    "name": "Discharge",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16,
+      "true": true
+     }
+    ],
+    "text": "16 true damage to the front hero"
+   },
+   "storm": {
+    "name": "Storm of Heaven",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "lightning",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Static to every hero"
+   },
+   "void": {
+    "name": "Gaze of the Void",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "void",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 14
+     }
+    ],
+    "text": "2 Erode and 14 stress to every hero"
+   },
+   "wrath": {
+    "name": "Divine Wrath",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the rearmost hero"
+   },
+   "mend": {
+    "name": "Mend the Cracks",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 26
+     }
+    ],
+    "text": "heals 26"
+   }
+  },
+  "ai": [
+   {
+    "use": "mend",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "void",
+    "every": 3
+   },
+   {
+    "use": "storm",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "discharge"
+   }
+  ],
+  "lore": "A god broken in the war of heaven. The void is leaking out through its cracks.",
+  "world": "sky",
+  "resist": {
+   "lightning": "immune",
+   "void": "resist",
+   "toxin": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 60,
+    "text": "The God's cracks open. The void looks out.",
+    "ai": [
+     {
+      "use": "void",
+      "every": 2
+     },
+     {
+      "use": "wrath",
+      "every": 3
+     },
+     {
+      "use": "discharge"
+     }
+    ],
+    "might": 0
+   },
+   {
+    "at": 25,
+    "text": "The God shatters, and keeps fighting.",
+    "ai": [
+     {
+      "use": "storm",
+      "every": 2
+     },
+     {
+      "use": "discharge"
+     }
+    ],
+    "might": 2
+   }
+  ]
+ },
+ "bog_body": {
+  "name": "Bog Body",
+  "hp": 36,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/bog_body/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "drag": {
+    "name": "Drag Under",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 8
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "8 and 2 Soak to the front hero"
+   },
+   "claw": {
+    "name": "Peat Claw",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "drag",
+    "every": 3
+   },
+   {
+    "use": "claw"
+   }
+  ],
+  "lore": "Tanned by the bog. Leather now, and hungry.",
+  "world": "mire",
+  "resist": {
+   "water": "resist",
+   "toxin": "resist",
+   "fire": "weak"
+  },
+  "personality": "mindless"
+ },
+ "fen_hag": {
+  "name": "Fen Hag",
+  "hp": 30,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fen_hag/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "curse": {
+    "name": "Fen Curse",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 6
+     }
+    ],
+    "text": "2 Toxin and 6 stress to the rearmost hero"
+   },
+   "brew": {
+    "name": "Bog Brew",
+    "kind": "heal",
+    "target": "ally_lowest",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 12
+     }
+    ],
+    "text": "The most wounded foe: heals 12"
+   },
+   "staff": {
+    "name": "Rot Staff",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     }
+    ],
+    "text": "7 to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "brew",
+    "if": "ally_hurt",
+    "not_twice": true
+   },
+   {
+    "use": "curse",
+    "every": 2
+   },
+   {
+    "use": "staff"
+   }
+  ],
+  "lore": "She knows the safe path through the fen. She does not share it.",
+  "world": "mire",
+  "resist": {
+   "toxin": "immune",
+   "fire": "weak"
+  }
+ },
+ "mire_toad": {
+  "name": "Mire Toad",
+  "hp": 34,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/mire_toad/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "spit": {
+    "name": "Toxic Spit",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 4
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "4 and 2 Toxin to the rearmost hero"
+   },
+   "tongue": {
+    "name": "Tongue",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "pull",
+      "n": 1
+     }
+    ],
+    "text": "6 to the rearmost hero; drags them forward 1"
+   },
+   "puff": {
+    "name": "Puff Up",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 8
+     },
+     {
+      "t": "status",
+      "s": "thorns",
+      "n": 2,
+      "to": "self"
+     }
+    ],
+    "text": "gains 8 Block, gains 2 Thorns"
+   }
+  },
+  "ai": [
+   {
+    "use": "puff",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "tongue",
+    "every": 3
+   },
+   {
+    "use": "spit"
+   }
+  ],
+  "lore": "Fat on the fen's poison.",
+  "world": "mire",
+  "resist": {
+   "toxin": "immune",
+   "water": "resist",
+   "fire": "weak"
+  }
+ },
+ "leech_swarm": {
+  "name": "Leech Swarm",
+  "hp": 26,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/leech_swarm/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "latch": {
+    "name": "Latch On",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 3,
+      "lifesteal": 100
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "3 and 3 Bleed to the front hero; healing itself"
+   },
+   "feed": {
+    "name": "Feed",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 2,
+      "times": 3
+     }
+    ],
+    "text": "2 three times to the rearmost hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "feed",
+    "every": 2
+   },
+   {
+    "use": "latch"
+   }
+  ],
+  "lore": "The fen's own. They wait in the warm shallows.",
+  "world": "mire",
+  "resist": {
+   "water": "resist",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "fen_lurker": {
+  "name": "Fen Lurker",
+  "hp": 44,
+  "armor": 2,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fen_lurker/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "jaws": {
+    "name": "Death Roll",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 13
+     }
+    ],
+    "text": "13 to the front hero"
+   },
+   "ambush": {
+    "name": "Ambush",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the rearmost hero"
+   },
+   "sink": {
+    "name": "Sink",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "gains 10 Block, dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "ambush",
+    "if": "round==1"
+   },
+   {
+    "use": "sink",
+    "every": 4,
+    "offset": 3
+   },
+   {
+    "use": "jaws"
+   }
+  ],
+  "lore": "A log in the water. Then not.",
+  "world": "mire",
+  "resist": {
+   "water": "immune",
+   "physical": "resist",
+   "lightning": "weak"
+  }
+ },
+ "bog_troll": {
+  "name": "Bog Troll",
+  "hp": 130,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/bog_troll/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "club": {
+    "name": "Club",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 18
+     }
+    ],
+    "text": "18 to the front hero"
+   },
+   "wade": {
+    "name": "Wade Through",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "7 and 1 Soak to every hero"
+   },
+   "regrow": {
+    "name": "Regrow",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 8,
+      "to": "self"
+     },
+     {
+      "t": "block",
+      "n": 8
+     }
+    ],
+    "text": "regenerates 8, gains 8 Block"
+   }
+  },
+  "ai": [
+   {
+    "use": "regrow",
+    "if": "hp_pct<60",
+    "not_twice": true
+   },
+   {
+    "use": "wade",
+    "every": 3
+   },
+   {
+    "use": "club"
+   }
+  ],
+  "lore": "Moss, mud and muscle. It heals faster than you can cut.",
+  "world": "mire",
+  "resist": {
+   "toxin": "immune",
+   "water": "resist",
+   "fire": "weak"
+  }
+ },
+ "coven_mother": {
+  "name": "Coven Mother",
+  "hp": 84,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/coven_mother/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "pool": {
+    "name": "Toxic Pool",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "volatile"
+     }
+    ],
+    "text": "1 Toxin and 1 Volatile Soak to every hero"
+   },
+   "hex": {
+    "name": "Mother's Hex",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "status",
+      "n": 3,
+      "s": "hex"
+     },
+     {
+      "t": "stress",
+      "n": 8
+     }
+    ],
+    "text": "3 Hex and 8 stress to the rearmost hero"
+   },
+   "brew": {
+    "name": "Coven Brew",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "Every foe: heals 10"
+   },
+   "censer": {
+    "name": "Rot Censer",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 and 2 Toxin to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "brew",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "pool",
+    "every": 3
+   },
+   {
+    "use": "hex",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "censer"
+   }
+  ],
+  "lore": "She leads the hags of the fen. Her antlers are not hers.",
+  "world": "mire",
+  "resist": {
+   "toxin": "immune",
+   "water": "resist",
+   "fire": "weak"
+  }
+ },
+ "mire_mother": {
+  "name": "The Mire Mother",
+  "hp": 225,
+  "armor": 1,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/mire_mother/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "swallow": {
+    "name": "Swallow",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "flood": {
+    "name": "Poison Flood",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "water",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, 2 Toxin and 1 Soak to every hero"
+   },
+   "lullaby": {
+    "name": "Bog Lullaby",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 16
+     }
+    ],
+    "text": "16 stress to every hero"
+   },
+   "weed": {
+    "name": "Drowning Weed",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     },
+     {
+      "t": "pull",
+      "n": 2
+     }
+    ],
+    "text": "10 and Anchored to the rearmost hero; drags them forward 2"
+   },
+   "bloat": {
+    "name": "Bloat",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 24
+     },
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 4,
+      "to": "self"
+     }
+    ],
+    "text": "heals 24, regenerates 4"
+   }
+  },
+  "ai": [
+   {
+    "use": "bloat",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "lullaby",
+    "every": 3
+   },
+   {
+    "use": "flood",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "swallow"
+   }
+  ],
+  "lore": "The fen's oldest drowned head, swollen to the size of a house. The hags call her Mother.",
+  "world": "mire",
+  "resist": {
+   "toxin": "immune",
+   "water": "immune",
+   "fire": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 55,
+    "text": "The Mother rises from the fen.",
+    "ai": [
+     {
+      "use": "weed",
+      "every": 2
+     },
+     {
+      "use": "flood",
+      "every": 3
+     },
+     {
+      "use": "swallow"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ },
+ "fungal_husk": {
+  "name": "Fungal Husk",
+  "hp": 32,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/fungal_husk/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "lurch": {
+    "name": "Lurch",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 9
+     }
+    ],
+    "text": "9 to the front hero"
+   },
+   "burst": {
+    "name": "Spore Burst",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Toxin to every hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "burst",
+    "every": 2
+   },
+   {
+    "use": "lurch"
+   }
+  ],
+  "lore": "A gardener the mushrooms grew into.",
+  "world": "garden",
+  "resist": {
+   "toxin": "resist",
+   "fire": "weak"
+  },
+  "personality": "mindless"
+ },
+ "spore_deer": {
+  "name": "Spore Deer",
+  "hp": 34,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/spore_deer/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "antler": {
+    "name": "Antler Rake",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     }
+    ],
+    "text": "10 to the front hero"
+   },
+   "shake": {
+    "name": "Shake the Spores",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "stress",
+      "n": 4
+     }
+    ],
+    "text": "1 Toxin and 4 stress to every hero"
+   },
+   "bolt": {
+    "name": "Bolt",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "bolt",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "shake",
+    "every": 3
+   },
+   {
+    "use": "antler"
+   }
+  ],
+  "lore": "The fungus grows from its antlers. It is not the deer making the decisions now.",
+  "world": "garden",
+  "resist": {
+   "toxin": "resist",
+   "fire": "weak"
+  }
+ },
+ "thorn_knight": {
+  "name": "Thorn Knight",
+  "hp": 48,
+  "armor": 4,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/thorn_knight/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "blade": {
+    "name": "Thorn Blade",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "n": 2,
+      "s": "bleed"
+     }
+    ],
+    "text": "10 and 2 Bleed to the front hero"
+   },
+   "briar": {
+    "name": "Briar Guard",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 10
+     },
+     {
+      "t": "status",
+      "s": "thorns",
+      "n": 3,
+      "to": "self"
+     }
+    ],
+    "text": "gains 10 Block, gains 3 Thorns"
+   }
+  },
+  "ai": [
+   {
+    "use": "briar",
+    "every": 3
+   },
+   {
+    "use": "blade"
+   }
+  ],
+  "lore": "Sworn to guard the garden. The garden grew through his armour.",
+  "world": "garden",
+  "resist": {
+   "physical": "resist",
+   "toxin": "resist",
+   "fire": "weak"
+  }
+ },
+ "moth_witch": {
+  "name": "Moth Witch",
+  "hp": 28,
+  "armor": 0,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/moth_witch/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "dust": {
+    "name": "Void Dust",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Erode to every hero"
+   },
+   "eyes": {
+    "name": "Wing Eyes",
+    "kind": "debuff",
+    "target": "back",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     }
+    ],
+    "text": "10 stress to the rearmost hero"
+   },
+   "flit": {
+    "name": "Flit",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "status",
+      "s": "dodge",
+      "n": 1,
+      "to": "self"
+     }
+    ],
+    "text": "dodges the next hit"
+   }
+  },
+  "ai": [
+   {
+    "use": "flit",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "eyes",
+    "every": 2
+   },
+   {
+    "use": "dust"
+   }
+  ],
+  "lore": "The eyes on her wings are real. They blink.",
+  "world": "garden",
+  "resist": {
+   "void": "resist",
+   "physical": "weak"
+  }
+ },
+ "root_horror": {
+  "name": "Root Horror",
+  "hp": 38,
+  "armor": 1,
+  "tier": "foe",
+  "art": "res://assets/art/rigs/root_horror/full.png",
+  "size": [
+   217,
+   330
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "grasp": {
+    "name": "Root Grasp",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "status",
+      "n": 1,
+      "s": "anchor"
+     }
+    ],
+    "text": "6 and Anchored to the rearmost hero"
+   },
+   "maw": {
+    "name": "Root Maw",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 11
+     }
+    ],
+    "text": "11 to the front hero"
+   }
+  },
+  "ai": [
+   {
+    "use": "grasp",
+    "every": 3
+   },
+   {
+    "use": "maw"
+   }
+  ],
+  "lore": "The garden's roots grew a mouth.",
+  "world": "garden",
+  "resist": {
+   "toxin": "resist",
+   "fire": "weak"
+  }
+ },
+ "the_gardener": {
+  "name": "The Gardener",
+  "hp": 124,
+  "armor": 2,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/the_gardener/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "scythe": {
+    "name": "Pruning Scythe",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 16
+     },
+     {
+      "t": "status",
+      "n": 3,
+      "s": "bleed"
+     }
+    ],
+    "text": "16 and 3 Bleed to the front hero"
+   },
+   "sow": {
+    "name": "Sow Blight",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "1 Toxin and 1 Erode to every hero"
+   },
+   "tend": {
+    "name": "Tend the Garden",
+    "kind": "heal",
+    "target": "all_allies",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 10
+     }
+    ],
+    "text": "Every foe: heals 10"
+   }
+  },
+  "ai": [
+   {
+    "use": "tend",
+    "if": "ally_hurt75",
+    "not_twice": true
+   },
+   {
+    "use": "sow",
+    "every": 3
+   },
+   {
+    "use": "scythe"
+   }
+  ],
+  "lore": "He keeps the garden. He prunes what grows wrong. You are growing wrong.",
+  "world": "garden",
+  "resist": {
+   "toxin": "resist",
+   "void": "resist",
+   "physical": "resist",
+   "fire": "weak"
+  }
+ },
+ "blight_dryad": {
+  "name": "Blight Dryad",
+  "hp": 82,
+  "armor": 0,
+  "tier": "elite",
+  "art": "res://assets/art/rigs/blight_dryad/full.png",
+  "size": [
+   264,
+   377
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "claws": {
+    "name": "Bark Claws",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 7,
+      "times": 2
+     }
+    ],
+    "text": "7 twice to the front hero"
+   },
+   "blight": {
+    "name": "Blight",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "volatile"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, 1 Volatile Toxin and 1 Erode to the rearmost hero"
+   },
+   "seed": {
+    "name": "Seed of Rot",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 10
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "toxin",
+      "attr": "stable"
+     }
+    ],
+    "text": "10 stress and 1 Toxin to every hero"
+   },
+   "root": {
+    "name": "Take Root",
+    "kind": "defend",
+    "target": "self",
+    "fx": [
+     {
+      "t": "block",
+      "n": 12
+     },
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 4,
+      "to": "self"
+     }
+    ],
+    "text": "gains 12 Block, regenerates 4"
+   }
+  },
+  "ai": [
+   {
+    "use": "root",
+    "if": "hp_pct<50",
+    "not_twice": true
+   },
+   {
+    "use": "seed",
+    "every": 3
+   },
+   {
+    "use": "blight",
+    "every": 2
+   },
+   {
+    "use": "claws"
+   }
+  ],
+  "lore": "She was the spirit of an oak. The oak is dead. She is not.",
+  "world": "garden",
+  "resist": {
+   "toxin": "immune",
+   "void": "resist",
+   "fire": "weak"
+  }
+ },
+ "antlered_mother": {
+  "name": "The Antlered Mother",
+  "hp": 225,
+  "armor": 2,
+  "tier": "boss",
+  "art": "res://assets/art/rigs/antlered_mother/full.png",
+  "size": [
+   330,
+   424
+  ],
+  "feet": 0.9657,
+  "intents": {
+   "gore": {
+    "name": "Gore",
+    "kind": "attack",
+    "target": "front",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 19
+     }
+    ],
+    "text": "19 to the front hero"
+   },
+   "bloom": {
+    "name": "Blight Bloom",
+    "kind": "attack",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 6
+     },
+     {
+      "t": "apply",
+      "n": 2,
+      "e": "toxin",
+      "attr": "stable"
+     },
+     {
+      "t": "apply",
+      "n": 1,
+      "e": "void",
+      "attr": "stable"
+     }
+    ],
+    "text": "6, 2 Toxin and 1 Erode to every hero"
+   },
+   "gaze": {
+    "name": "Hundred Eyes",
+    "kind": "debuff",
+    "target": "all_heroes",
+    "fx": [
+     {
+      "t": "stress",
+      "n": 14
+     }
+    ],
+    "text": "14 stress to every hero"
+   },
+   "trample": {
+    "name": "Trample",
+    "kind": "attack",
+    "target": "back",
+    "fx": [
+     {
+      "t": "dmg",
+      "n": 14
+     },
+     {
+      "t": "push",
+      "n": 1
+     }
+    ],
+    "text": "14 to the rearmost hero; shoves them back 1"
+   },
+   "renew": {
+    "name": "Renewal",
+    "kind": "heal",
+    "target": "self",
+    "fx": [
+     {
+      "t": "heal",
+      "n": 22
+     },
+     {
+      "t": "status",
+      "s": "regen",
+      "n": 4,
+      "to": "self"
+     }
+    ],
+    "text": "heals 22, regenerates 4"
+   }
+  },
+  "ai": [
+   {
+    "use": "renew",
+    "if": "hp_pct<40",
+    "not_twice": true
+   },
+   {
+    "use": "gaze",
+    "every": 3
+   },
+   {
+    "use": "bloom",
+    "every": 3,
+    "offset": 1
+   },
+   {
+    "use": "gore"
+   }
+  ],
+  "lore": "The garden's heart: a great stag grown through with fungus and eyes. She is the garden now.",
+  "world": "garden",
+  "resist": {
+   "toxin": "immune",
+   "void": "resist",
+   "fire": "weak"
+  },
+  "span": 2,
+  "phases": [
+   {
+    "at": 55,
+    "text": "The Mother's eyes open, all of them.",
+    "ai": [
+     {
+      "use": "bloom",
+      "every": 2
+     },
+     {
+      "use": "trample",
+      "every": 3
+     },
+     {
+      "use": "gore"
+     }
+    ],
+    "might": 1
+   },
+   {
+    "at": 20,
+    "text": "The fungus takes her whole.",
+    "ai": [
+     {
+      "use": "bloom",
+      "every": 2
+     },
+     {
+      "use": "gore"
+     }
+    ],
+    "might": 1
+   }
+  ]
+ }
+}

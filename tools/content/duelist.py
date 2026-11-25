@@ -1,0 +1,106 @@
+from dsl import *
+
+set_class("duelist", [1, 2, 3], [1, 2])
+ALL = [1, 2, 3, 4]
+L = "lightning"
+# ------------------------------------------------------------------ kit
+card("k_slash", "Slash", 1, "K", "enemy", [D(4), ST("bleed", 2)], "Deal 4. Apply 2 Bleed.")
+card("k_step", "Step", 1, "K", "adjacent_ally", [SWAP(), SELF("momentum", 1)], "Swap with an adjacent hero. Gain 1 Momentum.", use=ALL)
+card("k_feint", "Feint", 1, "K", "enemy", [PULL(1), ST("mark")], "Pull the target forward 1. Mark it.", hit=[1, 2, 3])
+# ------------------------------------------------------------------ starter
+card("arc_lash", "Arc Lash", 1, "S", "enemy", [D(4), A(L, 1)], "Deal 4. Apply 1 Lightning.", cat=L, attr="volatile", use=[1, 2])
+card("lunge", "Lunge", 1, "S", "enemy", [ADV(1), D(6), SELF("momentum", 1)], "Advance 1. Deal 6. Gain 1 Momentum.", use=[2, 3])
+card("bleed_out", "Bleed Out", 1, "S", "enemy", [ST("bleed", 4), PRIME(3)], "Apply 4 Bleed. Prime 3.", hit=[1, 2, 3], kw=["Prime"])
+card("riposte", "Riposte", 1, "S", "self", [SELF("riposte", 3)], "Gain Riposte 3.", use=ALL)
+card("flourish", "Flourish", 0, "S", "enemy", [D(2), SELF("momentum", 1)], "Deal 2. Gain 1 Momentum.", hit=[1, 2, 3])
+card("coup", "Coup de Grace", 2, "S", "enemy", [{"t": "coup"}], "Deal 4, plus 4 per Momentum, spending it. Double against a Marked foe.", use=[1, 2], hit=[1, 2, 3])
+# ------------------------------------------------------------------ common
+card("quick_cut", "Quick Cut", 0, "C", "enemy", [D(3)], "Deal 3.")
+card("double_cut", "Double Cut", 1, "C", "enemy", [D(3, times=2)], "Deal 3 twice.")
+card("low_slice", "Low Slice", 1, "C", "enemy", [D(3), ST("bleed", 3)], "Deal 3. Apply 3 Bleed.")
+card("sidestep", "Sidestep", 1, "C", "self", [SELF("dodge"), B(3)], "Dodge the next hit this round. Gain 3 Block.", use=ALL)
+card("probe", "Probe", 0, "C", "enemy", [ST("mark"), DRAW(1, to="self")], "Mark the target. Next round, draw 1 more card.", hit=[1, 2, 3, 4])
+card("static_edge", "Static Edge", 1, "C", "enemy", [D(4), A(L, 2)], "Deal 4. Apply 2 Lightning.", cat=L, attr="stable")
+card("thunderstep", "Thunderstep", 1, "C", "enemy", [ADV(1), A(L, 2)], "Advance 1. Apply 2 Lightning.", cat=L, attr="stable", use=[2, 3], hit=[1, 2, 3])
+card("marked_thrust", "Marked Thrust", 1, "C", "enemy", [D(5), D(5, if_="t.mark>0")], "Deal 5. Deal 5 more if the target is Marked.")
+card("flick", "Flick", 0, "C", "enemy", [D(1, per="momentum", k=2)], "Deal 1, plus 2 per Momentum (not spent).", hit=[1, 2, 3])
+card("rapid_strikes", "Rapid Strikes", 2, "C", "enemy", [D(2, times=4)], "Deal 2 four times.")
+card("en_garde", "En Garde", 1, "C", "self", [SELF("riposte", 2), B(4)], "Gain Riposte 2 and 4 Block.", use=ALL)
+card("tempo", "Tempo", 1, "C", "self", [SELF("momentum", 2)], "Gain 2 Momentum.", use=ALL)
+card("open_vein", "Open Vein", 1, "C", "enemy", [ST("bleed", 5)], "Apply 5 Bleed.", hit=[1, 2, 3])
+card("hamstring", "Hamstring", 1, "C", "enemy", [D(4), PUSH(1), ST("mark")], "Deal 4. Push the target back 1. Mark it.")
+card("disengage", "Disengage", 1, "C", "self", [RET(1), B(6)], "Retreat 1. Gain 6 Block.", use=[1, 2])
+card("chain_spark", "Chain Spark", 1, "C", "all_enemies", [A(L, 1)], "Apply 1 Lightning to every foe.", cat=L, attr="stable", hit=ALL)
+card("overextend", "Overextend", 1, "C", "enemy", [D(9), SELFDMG(3)], "Deal 9. Lose 3 HP.")
+card("precise_cut", "Precise Cut", 1, "C", "enemy", [D(5), D(5, if_="same_target")], "Deal 5. Follow-up: deal 5 more.", kw=["Follow-up"])
+card("crossguard", "Crossguard", 1, "C", "self", [B(4, per="momentum", k=2)], "Gain 4 Block, plus 2 per Momentum.", use=ALL)
+card("harry", "Harry", 1, "C", "enemy", [D(3), ST("mark"), D(3, if_="same_target")], "Deal 3 and Mark. Follow-up: deal 3 more.", kw=["Follow-up"], hit=[1, 2, 3])
+card("needle", "Needle", 0, "C", "enemy", [D(3, pierce=True)], "Deal 3, ignoring Block.", hit=[1, 2, 3])
+card("whirl", "Whirl", 2, "C", "all_enemies", [D(5, if_="t.rank<=2")], "Deal 5 to each foe in ranks 1-2.")
+# ------------------------------------------------------------------ uncommon
+card("flurry", "Flurry", -1, "U", "enemy", [D(3, times=1, times_per="x")], "Deal 3, X+1 times.")
+card("arc_flash", "Arc Flash", 1, "U", "enemy", [D(0, per="t.lightning", k=3)], "Deal 3 per Lightning on the target (not spent).", cat=L, hit=[1, 2, 3])
+card("grounding_strike", "Grounding Strike", 1, "U", "enemy", [CONS(e=L), D(2, per="consumed", k=4)], "Consume the target's Lightning. Deal 2, plus 4 per stack.", cat=L)
+card("lightning_lunge", "Lightning Lunge", 2, "U", "enemy", [ADV(2), D(8), A(L, 2)], "Advance 2. Deal 8. Apply 2 Lightning.", cat=L, attr="volatile", use=[3, 4], hit=[1, 2])
+card("crimson_flourish", "Crimson Flourish", 1, "U", "enemy", [D(0, per="t.bleed", k=2), SELF("momentum", 1)], "Deal twice the target's Bleed. Gain 1 Momentum.")
+card("exploit", "Exploit", 1, "U", "enemy", [D(6), ST("vulnerable", 1, if_="t.mark>0")], "Deal 6. If the target is Marked, it becomes Vulnerable.")
+card("mark_for_death", "Mark for Death", 1, "U", "enemy", [ST("mark", 2), ST("vulnerable", 1)], "Mark the target for 2 rounds. It becomes Vulnerable.", hit=ALL)
+card("parry", "Parry and Cut", 1, "U", "self", [SELF("riposte", 4), SELF("dodge", 1, if_="momentum>=2")], "Gain Riposte 4. With 2+ Momentum, also Dodge.", use=ALL)
+card("momentum_shift", "Momentum Shift", 0, "U", "self", [SELF("momentum", 1), DRAW(1)], "Gain 1 Momentum. Next round, draw 1 more.", use=ALL)
+card("disarm", "Disarm", 2, "U", "enemy", [D(5), CLR("might"), CONS("block")], "Deal 5. The target loses its Might and Block.")
+card("cloak_and_dagger", "Cloak and Dagger", 1, "U", "enemy", [SELF("dodge"), D(4)], "Dodge the next hit this round. Deal 4.", hit=[1, 2, 3])
+card("static_field", "Static Field", 2, "U", "all_enemies", [A(L, 2)], "Apply 2 Lightning to every foe.", cat=L, attr="stable", hit=ALL)
+card("counter_stance", "Counter Stance", 2, "U", "self", [ST("taunt"), SELF("riposte", 6)], "Taunt. Gain Riposte 6.", use=[1, 2])
+card("bloodmist", "Bloodmist", 1, "U", "all_enemies", [ST("bleed", 2)], "Apply 2 Bleed to every foe.", hit=ALL)
+card("adrenaline", "Adrenaline", 1, "U", "self", [SELF("momentum", 2), STRESS(-6)], "Gain 2 Momentum. Shed 6 stress.", use=ALL)
+card("skewer", "Skewer", 2, "U", "enemy", [D(9), D(5, to="behind")], "Deal 9 to the target and 5 to the foe behind it.")
+card("riposte_mastery", "Answering Steel", 1, "U", "enemy", [D(0, per="riposte", k=3)], "Deal 3 per Riposte you hold (not spent).")
+card("killing_tempo", "Killing Tempo", 1, "U", "enemy", [D(5), SELF("momentum", 2, if_="killed"), EN(1, if_="killed")], "Deal 5. If it kills, gain 2 Momentum and +1 vigour next round.")
+# ------------------------------------------------------------------ rare
+card("storm_of_steel", "Storm of Steel", 3, "R", "enemy", [D(4, times=3, times_per="momentum")], "Deal 4, (3 + Momentum) times.")
+card("thunderclap", "Thunderclap", 2, "R", "all_enemies", [CONS(e=L), D(0, per="consumed", k=4)], "Consume all Lightning on every foe. Each takes 4 per stack consumed so far.", cat=L, hit=ALL)
+card("death_by_cuts", "Death by a Thousand Cuts", 2, "R", "enemy", [ST("bleed", 3), DBL(s="bleed")], "Apply 3 Bleed, then double the target's Bleed.", hit=[1, 2, 3])
+card("perfect_riposte", "Perfect Riposte", 1, "R", "self", [SELF("riposte", 8)], "Retain. Gain Riposte 8.", use=ALL, kw=["Retain"])
+card("duelists_oath", "Duelist's Oath", 1, "R", "self", [SELF("might", 3)], "Gain 3 Might. Exhaust.", use=ALL, kw=["Exhaust"])
+card("lightning_reflexes", "Lightning Reflexes", 0, "R", "self", [SELF("dodge", 2)], "Dodge the next 2 hits this round. Exhaust.", use=ALL, kw=["Exhaust"])
+card("last_dance", "The Last Dance", 3, "R", "all_enemies", [D(6, per="momentum", k=2)], "Deal 6, plus 2 per Momentum, to every foe.", hit=ALL)
+card("vein_opener", "Vein Opener", 1, "R", "enemy", [D(8), ST("bleed", 0, per="dealt")], "Deal 8. Apply Bleed equal to the HP it took.")
+card("ride_the_lightning", "Ride the Lightning", 2, "R", "self", [FRONT(), SELF("momentum", 3), A(L, 1, to="all_enemies", attr="stable")], "Move to rank 1. Gain 3 Momentum. Apply 1 Lightning to every foe.", cat=L, use=ALL)
+card("bolt_through", "Bolt Through", 2, "R", "enemy", [D(8), D(4, to="behind"), A(L, 2, attr="volatile")], "Deal 8, and 4 to the foe behind. Apply 2 Volatile Lightning to the target.", cat=L, hit=[1, 2, 3])
+card("tempest_feint", "Tempest Feint", 1, "R", "all_enemies", [ST("mark")], "Mark every foe.", hit=ALL)
+card("second_wind", "Second Wind", 1, "R", "self", [H(0, per="momentum", k=3), STRESS(-10)], "Heal 3 per Momentum (not spent). Shed 10 stress. Exhaust.", use=ALL, kw=["Exhaust"])
+# ------------------------------------------------------------------ Bladedancer
+BD = "bladedancer"
+card("dance_of_knives", "Dance of Knives", 1, "X", "enemy", [D(2, times=2, times_per="momentum")], "Deal 2, (2 + Momentum) times.", sub=BD, hit=[1, 2, 3])
+card("crescendo", "Crescendo", 2, "X", "enemy", [D(0, per="momentum", k=5), CLR("momentum", to="self")], "Deal 5 per Momentum. Spend all Momentum.", sub=BD)
+card("whirling_steel", "Whirling Steel", 1, "X", "all_enemies", [D(3)], "Deal 3 to every foe.", sub=BD, hit=ALL)
+card("graceful", "Graceful", 0, "X", "self", [SELF("momentum", 1), SELF("dodge")], "Gain 1 Momentum. Dodge the next hit this round.", sub=BD, use=ALL)
+card("unending_dance", "Unending Dance", 1, "X", "enemy", [D(5)], "Retain. Echo. Deal 5.", sub=BD, kw=["Retain", "Echo"])
+card("blade_tempest", "Blade Tempest", -1, "X", "all_enemies", [D(3, times=0, times_per="x")], "Deal 3 to every foe, X times.", sub=BD, hit=ALL)
+card("pirouette", "Pirouette", 1, "X", "self", [SELF("momentum", 3), RET(1)], "Gain 3 Momentum. Retreat 1.", sub=BD, use=ALL)
+card("encore", "Encore", 1, "X", "enemy", [D(6)], "Echo. Deal 6.", sub=BD, kw=["Echo"])
+# ------------------------------------------------------------------ Executioner
+EX = "executioner"
+card("verdict", "Verdict", 2, "X", "enemy", [EXEC(15, if_="t.mark>0"), D(8)], "If the target is Marked, execute it at 15 HP or less. Deal 8.", sub=EX, hit=[1, 2, 3])
+card("headsman", "Headsman's Due", 3, "X", "enemy", [D(16), D(16, if_="t.mark>0")], "Deal 16. Deal 16 again if the target is Marked.", sub=EX)
+card("sentence", "Sentence", 0, "X", "enemy", [ST("mark", 2)], "Mark the target for 2 rounds.", sub=EX, hit=ALL)
+card("final_judgment", "Final Judgment", 1, "X", "enemy", [EXEC(6, per="momentum", k=3)], "Execute the target if its HP is 6 + 3 per Momentum or less.", sub=EX, hit=[1, 2, 3])
+card("condemn", "Condemn", 1, "X", "all_enemies", [ST("mark", if_="t.hp_pct<50")], "Mark every foe below half HP.", sub=EX, hit=ALL)
+card("chopping_block", "The Chopping Block", 1, "X", "enemy", [PULL(2), ST("mark")], "Pull the target forward 2. Mark it.", sub=EX, hit=[2, 3, 4])
+card("terror", "Terror", 1, "X", "enemy", [D(7), STRESS(-10, to="all_allies", if_="killed")], "Deal 7. If it kills, every hero sheds 10 stress.", sub=EX)
+card("guillotine", "Guillotine", 2, "X", "enemy", [D(6, per="t.missing_hp", k=0.5)], "Deal 6, plus 1 per 2 HP the target is missing.", sub=EX)
+# ------------------------------------------------------------------ Bloodletter
+BL = "bloodletter"
+card("exsanguinate", "Exsanguinate", 2, "X", "enemy", [CONS("bleed"), D(0, per="consumed", k=3, lifesteal=50)], "Consume the target's Bleed. Deal 3 per stack; heal half the damage.", sub=BL, hit=[1, 2, 3])
+card("haemorrhage", "Haemorrhage", 1, "X", "enemy", [DBL(s="bleed")], "Double the target's Bleed.", sub=BL, hit=ALL)
+card("lacerate", "Lacerate", 1, "X", "enemy", [D(2), ST("bleed", 1), D(2), ST("bleed", 1), D(2), ST("bleed", 1)], "Three times: deal 2 and apply 1 Bleed.", sub=BL)
+card("blood_price", "Blood Price", 0, "X", "enemy", [SELFDMG(3), ST("bleed", 5)], "Lose 3 HP. Apply 5 Bleed.", sub=BL, hit=[1, 2, 3])
+card("crimson_tide", "Crimson Tide", 2, "X", "all_enemies", [ST("bleed", 4)], "Apply 4 Bleed to every foe.", sub=BL, hit=ALL)
+card("leech_cut", "Leech Cut", 1, "X", "enemy", [D(5), H(0, per="t.bleed", to="self")], "Deal 5. Heal equal to the target's Bleed.", sub=BL)
+card("open_arteries", "Open Arteries", 1, "X", "enemy", [ST("bleed", 3), ST("vulnerable", 1, if_="t.bleed>=6")], "Apply 3 Bleed. At 6+ Bleed the target becomes Vulnerable.", sub=BL, hit=[1, 2, 3])
+card("sanguine_frenzy", "Sanguine Frenzy", 1, "X", "self", [SELF("might", 0, per="total_bleed", k=0.34)], "Gain 1 Might per 3 Bleed on all foes. Exhaust.", sub=BL, use=ALL, kw=["Exhaust"])
+
+HERO = {"name": "Duelist", "hp": 34, "armor": 0, "grit": 2, "color": "8aa271", "kit": ["k_slash", "k_step", "k_feint"],
+        "deck": ["arc_lash", "arc_lash", "lunge", "lunge", "bleed_out", "bleed_out", "riposte", "flourish", "flourish", "coup"],
+        "subclasses": {"bladedancer": "Bladedancer", "executioner": "Executioner", "bloodletter": "Bloodletter"},
+        "blurb": "Mobile skirmisher. Momentum, Mark, Riposte, Bleed and Lightning."}

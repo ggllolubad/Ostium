@@ -1,0 +1,13 @@
+# Final consistency pass (art phase close), 2026-11-25
+
+Fix in place, keep keys, seeds, rigs (bone names and parents), scale and silhouettes unless the item says otherwise. Re-render the figure(s), rebuild the world sheet, check at full size and at 0.3x, and note each fix in the world's REVIEW.md. Rules unchanged: no lightning arcs or bolts drawn in the air on figures (export them as a separate FX layer instead); eyes only in void worlds; gold only holy or money; red only blood/doom/rubric; no tube limbs, no round staring white eyes, no flat stickers.
+
+## A. Rule items (must fix)
+1. Lightning arcs baked into figures -> remove from the figure art and export each as its own FX SVG/PNG layer beside the render (out/worlds/<world>_<key>_fx.svg/png, same canvas and origin) so the game can animate it: Anvil Titan (spike-hammer arcs), Arc-Smith (hammer-rod arc), Spark Swarm (short arcs; keep the sparks themselves as embers), Thunder Whale (harpoon arcs). Check the Bronze Automaton head wisp: if it reads as an arc, make it smoke. Burns scarred INTO surfaces stay.
+2. Dray Horse (V_b): round white staring eye -> small, set under the brow; barrel less boxy.
+3. Mire Mother (II): hard black water rectangle at the render's base -> organic water/mud shape that fades out, no straight edges.
+4. Hive Queen (X): make the `spire` bone optional (export a variant render without it, key hive_queen, flag noted in the rig json/notes) since her boss room supplies its own stage; Cold Star (XII): same for its `root` bone.
+
+## B. Figure quality items
+- I-VII: Strand-Wife's corpse (VI_b) is a smooth striped tube -> a real drowned body in wrappings; Gin Ox (XI_b) blanket hem zigzag of identical triangles -> varied tattered hem; sailor() limbs (VII_b) tubes -> forearm and calf modelling; Broadside rail hammocks identical -> vary; Bear (VII_b) wedge head and mitten forepaw; Walrus (VII) upright sack -> weight forward on fore flippers; Leviathan (VII) big round eye -> smaller, set in bony orbit; Strigil-Master (III_b) smooth pink mass with glove-like hands; Midden Sow (II_b) smooth blocky hide.
+- VIII-XV: Fissure Worm (VIII) and Grave Worm (IX) ringed pipes -> irregular mass, folds, uneven segments; Firstbreaker (VIII_b) cartoon white open mouth; Jotun Thane pelt reads as a pack; Void Mammoth (XII) blocky flank and column legs; Hive Queen head one dark dome dominated by its eye; Galvanic Beetle elytra smooth oval; Cicada (X_b) head mouse-like, eyes read as ears; rats (IX_b) one body plan -> vary build and pose; Shattered God (XV) torso/mantle smooth blobs under the forearm -> carve drapery; Seraph (XIII) wings near-radial; Weigher (XV_b) stance vs bible 'standing very straight' (straighten the figure, do not edit the bible).

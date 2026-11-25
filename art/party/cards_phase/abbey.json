@@ -1,0 +1,101 @@
+{
+  "_doc": "Between-run systems for the Abbey of the Threshold. Prices are in ostia. Read by scripts/abbey.gd.",
+  "start_ostia": 40,
+  "beds": 6,
+  "party_max": 4,
+  "party_min": 2,
+  "roster_start": [["bulwark", "Debt"], ["duelist", "Vengeance"], ["elementalist", "Hunger"]],
+  "names": {
+    "bulwark": ["Osric", "Brand", "Hrothgar", "Wulfstan", "Edda", "Torvald", "Gunnhild", "Aelric", "Bertram", "Ingrith", "Sigeric", "Morwen"],
+    "duelist": ["Lisette", "Corvin", "Isaut", "Renaud", "Mirela", "Tancred", "Vesna", "Aubert", "Ysmay", "Cassian", "Orla", "Thibault"],
+    "elementalist": ["Anselm", "Hesper", "Quill", "Ottilie", "Bede", "Maren", "Silvan", "Wynn", "Ivo", "Clemence", "Aldous", "Petronel"],
+    "alchemist": ["Gisla", "Fulke", "Hilde", "Mabel", "Odo", "Rosamund", "Jory", "Agnes", "Wymond", "Sabeth", "Hamo", "Elfled"],
+    "oracle": ["Seraphine", "Tobit", "Ilse", "Ambrose", "Nell", "Josse", "Cyra", "Lazar", "Beatrix", "Emeric", "Una", "Dunstan"],
+    "hexweaver": ["Grizel", "Mortimer", "Hagne", "Lowri", "Crispin", "Nesta", "Ulric", "Branwen", "Silas", "Morgause", "Fennick", "Wenda"]
+  },
+  "epithets": ["the Grey", "of the Gate", "Half-Hand", "the Younger", "the Quiet", "Ninefingers", "of Saltmarsh", "the Burnt", "Crowfoot", "the Penitent", "Longshanks", "of No House"],
+  "reasons": {
+    "Debt":      {"text": "The order pays in ostia.", "rule": "+8 ostia after every descent they come home from.", "ostia": 8},
+    "Penance":   {"text": "A crime to be worked off at the door.", "rule": "Begins every descent with 20 resolve.", "resolve": 20},
+    "Vengeance": {"text": "Someone they loved was taken by a world.", "rule": "+1 Might, but begins every descent with 10 stress.", "stats": {"might": 1}, "stress": 10},
+    "Faith":     {"text": "They believe the descents are holy.", "rule": "Gains 15% less stress.", "stats": {"stress_res": 15}},
+    "Hunger":    {"text": "They want what is on the other side.", "rule": "Earns 25% more experience.", "xp": 1.25},
+    "Exile":     {"text": "Nowhere else will have them.", "rule": "+6 max HP.", "stats": {"max_hp": 6}}
+  },
+  "recruits": {"count": 3, "price": [24, 46], "veteran_chance": 0.25},
+  "rest_stress": 12,
+  "shattered_runs": 2,
+  "gold_rate": 10,
+  "infirmarium": {
+    "treat": {"name": "Set and stitch", "price": 20, "text": "Treat one injury."},
+    "ease": {"name": "Vinegar and smoke", "price": 12, "n": 35, "text": "Ease 35 stress."},
+    "dread": {"name": "Lift the Dread", "price": 18, "text": "Remove one Dread card from the deck."},
+    "mend": {"name": "Mend the Shattered", "price": 40, "text": "A Shattered hero may descend again."}
+  },
+  "smithy": {
+    "temper": {"price": [25, 45], "max": 2, "names": ["", "Tempered", "Masterwork"],
+      "stats": {"weapon": {"might": 1}, "armor": {"armor": 1}, "trinket": {"max_hp": 4}}},
+    "socket": {"price": 35, "max": 2},
+    "set": {"price": 8},
+    "rune_price": 30,
+    "rune_stock": 3
+  },
+  "almonry": {
+    "gear_price": {"C": 26, "U": 48, "R": 84},
+    "gear_stock": 5,
+    "flask_price": 9,
+    "flask_stock": 4,
+    "belt": {"base": 2, "max": 4, "price": [30, 55]},
+    "sell_rate": 0.4
+  },
+  "cellarium": {
+    "food": {"name": "Blessed bread", "price": 2, "cap": 8, "text": "One step of food. With none, every hero takes stress."},
+    "light": {"name": "Candles", "price": 3, "cap": 6, "text": "Two steps of light. In the dark, foes grow stronger."},
+    "medicine": {"name": "Wenna's tinctures", "price": 8, "cap": 3, "text": "Treats an injury on the road."},
+    "tools": {"name": "Pry-bars and keys", "price": 6, "cap": 3, "text": "Opens sealed caches at events."}
+  },
+  "sacristy": {
+    "identify": 15,
+    "relic_price": [62, 96],
+    "relic_stock": 2,
+    "carry_base": 1,
+    "carry_per_teeth": 4
+  },
+  "scriptorium": {
+    "study": 10,
+    "reveal_kills": 3
+  },
+  "hub_unlocks": {
+    "beds": {"name": "More beds", "cost": 60, "kind": "hub", "text": "The Guesthouse keeps two more heroes."},
+    "altar": {"name": "Relic altar", "cost": 100, "kind": "hub", "text": "The company may carry one more relic into a descent."},
+    "bellows": {"name": "New bellows", "cost": 70, "kind": "hub", "text": "Mother Hild's tempering costs a third less."}
+  },
+  "pages": {
+    "drowned": "Brother Lucan writes: the doors were not built. They were found, standing, in a ring around the abbey's foundations.",
+    "mire": "The oldest charter does not call the abbey a house of God. It calls it a lid.",
+    "baths": "Every world's ruler held its Tooth as if it had been given to them, never as if they had found it.",
+    "pits": "The Teeth are warm. Sister Ide says they are warmer when the company is in the church.",
+    "foundry": "The Grey around the abbey is not fog. It is the place where nothing belongs to any course.",
+    "coast": "The first Abbot wrote that the sealed door breathes on feast days. The page was cut out. Lucan found the stub.",
+    "fleet": "Six courses once ran together through one body. She was the world, before the world broke.",
+    "rime": "She did not die when she fell. She fell open, and her mouth came down on the Limen.",
+    "barrow": "The Barrow King sealed his own door to keep her out. The order called that heresy and burned his name.",
+    "hive": "Prior Aldric's ledgers count Teeth, not dead. Lucan has checked them twice.",
+    "spire": "The Abbot listens at the sealed door at night. In the morning he will not say what it asked him.",
+    "silence": "Every Tooth brought home loosens the door. The order has known this since the first descent.",
+    "pyre": "To seal the door forever, the Teeth must be given back. To open it, they must be set into it.",
+    "garden": "There is a third way written in a hand Lucan does not recognise: a living body could hold all six courses in her place.",
+    "sky": "Heaven did not abandon the world. It fell, and the abbey was built on the place where it landed."
+  },
+  "keepers": {
+    "guesthouse": {"name": "The Hosteller", "object": "The guest book", "hello": ["Sign, or be signed for.", "The beds are aired. Mostly.", "Another face. I'll remember it."]},
+    "almonry": {"name": "Brother Fenn", "object": "The ledger", "hello": ["Alms are free. Goods are not.", "Every ostium goes back to the order. I keep very good books.", "Mind the shelves. Mind the price."]},
+    "smithy": {"name": "Mother Hild", "object": "The anvil", "hello": ["The coal's from the Foundry. It doesn't go out. Neither do I.", "Put it on the anvil. Let's see what's left of it.", "Steel remembers. So do I."]},
+    "infirmarium": {"name": "Sister Wenna", "object": "The treatment table", "hello": ["On the table. Don't touch the jars.", "I kept a barrow company alive for nine days. You'll keep.", "Vinegar first. Then we'll talk."]},
+    "cellarium": {"name": "Godric", "object": "The tally board", "hello": ["Count it twice. Then count it again.", "Bread's blessed. Candles are counted. Don't waste either.", "The Fleet ran out of everything. We won't."]},
+    "sacristy": {"name": "Sister Ide", "object": "The relic case", "hello": ["Give it here. Let me feel how cold it is.", "The Teeth are warm today.", "I don't need eyes for this work."]},
+    "scriptorium": {"name": "Brother Lucan", "object": "The Codex", "hello": ["Everything is written down. Even you.", "I have a page for every one of them. Sit, if you must.", "Mind the ink. It is older than you."]},
+    "chapter": {"name": "Prior Aldric", "object": "The charter", "hello": ["The order provides. The order also keeps accounts.", "Sign the vows, and the door will treat you as you deserve.", "Every Tooth you bring home is a prayer answered."]}
+  }
+}
+

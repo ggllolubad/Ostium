@@ -1,0 +1,3302 @@
+{
+ "gear": {
+  "w_rusted_mace": {
+   "name": "Rusted Mace",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "might": 1
+   },
+   "text": "+1 Might.",
+   "cls": "bulwark",
+   "sockets": 0
+  },
+  "w_templar_hammer": {
+   "name": "Templar's Hammer",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "might": 1,
+    "armor": 1
+   },
+   "text": "+1 Might, +1 Armor.",
+   "cls": "bulwark",
+   "sockets": 1
+  },
+  "w_gatebreaker": {
+   "name": "Gatebreaker",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "might": 2,
+    "block": 6
+   },
+   "text": "+2 Might. Begin each fight with 6 Block.",
+   "cls": "bulwark",
+   "sockets": 2
+  },
+  "w_notched_rapier": {
+   "name": "Notched Rapier",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "momentum": 1
+   },
+   "text": "Begin each fight with 1 Momentum.",
+   "cls": "duelist",
+   "sockets": 0
+  },
+  "w_stormglass_blade": {
+   "name": "Stormglass Blade",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "momentum": 1,
+    "might": 1
+   },
+   "text": "+1 Might; begin with 1 Momentum.",
+   "cls": "duelist",
+   "sockets": 1
+  },
+  "w_widowmaker": {
+   "name": "Widowmaker",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "might": 2,
+    "riposte": 3
+   },
+   "text": "+2 Might; begin with Riposte 3.",
+   "cls": "duelist",
+   "sockets": 2
+  },
+  "w_ash_staff": {
+   "name": "Ash Staff",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "focus": 1
+   },
+   "text": "Begin each fight with 1 Focus.",
+   "cls": "elementalist",
+   "sockets": 0
+  },
+  "w_drowned_sceptre": {
+   "name": "Drowned Sceptre",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "focus": 2,
+    "ward": 1
+   },
+   "text": "Begin with 2 Focus and 1 Ward.",
+   "cls": "elementalist",
+   "sockets": 1
+  },
+  "w_prism_rod": {
+   "name": "Prism Rod",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "focus": 3,
+    "draw": 1
+   },
+   "text": "Begin with 3 Focus; draw 1 more on the first round.",
+   "cls": "elementalist",
+   "sockets": 2
+  },
+  "w_cracked_retort": {
+   "name": "Cracked Retort",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "regen": 2
+   },
+   "text": "Begin each fight with Regen 2.",
+   "cls": "alchemist",
+   "sockets": 0
+  },
+  "w_brass_alembic": {
+   "name": "Brass Alembic",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "focus": 1,
+    "regen": 2
+   },
+   "text": "Begin with 1 Focus and Regen 2.",
+   "cls": "alchemist",
+   "sockets": 1
+  },
+  "w_philosophers_still": {
+   "name": "Philosopher's Still",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "focus": 2,
+    "draw": 1,
+    "regen": 3
+   },
+   "text": "Begin with 2 Focus, Regen 3; draw 1 more on the first round.",
+   "cls": "alchemist",
+   "sockets": 2
+  },
+  "w_bone_dice": {
+   "name": "Bone Dice",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "ward": 2
+   },
+   "text": "Begin each fight with 2 Ward.",
+   "cls": "oracle",
+   "sockets": 0
+  },
+  "w_seers_lens": {
+   "name": "Seer's Lens",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "ward": 2,
+    "draw": 1
+   },
+   "text": "Begin with 2 Ward; draw 1 more on the first round.",
+   "cls": "oracle",
+   "sockets": 1
+  },
+  "w_astrolabe": {
+   "name": "Drowned Astrolabe",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "ward": 3,
+    "energy": 1
+   },
+   "text": "Begin with 3 Ward; the company has +1 vigour on the first round.",
+   "cls": "oracle",
+   "sockets": 2
+  },
+  "w_rag_poppet": {
+   "name": "Rag Poppet",
+   "slot": "weapon",
+   "rarity": "C",
+   "stats": {
+    "might": 1
+   },
+   "text": "+1 Might.",
+   "cls": "hexweaver",
+   "sockets": 0
+  },
+  "w_coffin_nail": {
+   "name": "Coffin Nail",
+   "slot": "weapon",
+   "rarity": "U",
+   "stats": {
+    "might": 1,
+    "thorns": 2
+   },
+   "text": "+1 Might; begin with 2 Thorns.",
+   "cls": "hexweaver",
+   "sockets": 1
+  },
+  "w_witch_skull": {
+   "name": "Witch's Skull",
+   "slot": "weapon",
+   "rarity": "R",
+   "stats": {
+    "might": 2,
+    "ward": 2,
+    "draw": 1
+   },
+   "text": "+2 Might, 2 Ward; draw 1 more on the first round.",
+   "cls": "hexweaver",
+   "sockets": 2
+  },
+  "a_padded_jack": {
+   "name": "Padded Jack",
+   "slot": "armor",
+   "rarity": "C",
+   "stats": {
+    "max_hp": 5
+   },
+   "text": "+5 max HP.",
+   "cls": null,
+   "sockets": 0
+  },
+  "a_brigandine": {
+   "name": "Brigandine",
+   "slot": "armor",
+   "rarity": "C",
+   "stats": {
+    "armor": 1
+   },
+   "text": "+1 Armor.",
+   "cls": null,
+   "sockets": 0
+  },
+  "a_oilskin": {
+   "name": "Oilskin Coat",
+   "slot": "armor",
+   "rarity": "C",
+   "stats": {
+    "max_hp": 3,
+    "stress_res": 10
+   },
+   "text": "+3 max HP; 10% less stress.",
+   "cls": null,
+   "sockets": 0
+  },
+  "a_hauberk": {
+   "name": "Drowned Hauberk",
+   "slot": "armor",
+   "rarity": "U",
+   "stats": {
+    "armor": 1,
+    "max_hp": 6
+   },
+   "text": "+1 Armor, +6 max HP.",
+   "cls": null,
+   "sockets": 1
+  },
+  "a_pilgrim_robes": {
+   "name": "Pilgrim's Robes",
+   "slot": "armor",
+   "rarity": "U",
+   "stats": {
+    "stress_res": 20,
+    "ward": 1
+   },
+   "text": "20% less stress; begin with 1 Ward.",
+   "cls": null,
+   "sockets": 1
+  },
+  "a_thorned_mail": {
+   "name": "Thorned Mail",
+   "slot": "armor",
+   "rarity": "U",
+   "stats": {
+    "thorns": 3,
+    "max_hp": 4
+   },
+   "text": "+4 max HP; begin with 3 Thorns.",
+   "cls": null,
+   "sockets": 1
+  },
+  "a_saints_plate": {
+   "name": "Saint's Plate",
+   "slot": "armor",
+   "rarity": "R",
+   "stats": {
+    "armor": 2,
+    "max_hp": 8,
+    "grit": 1
+   },
+   "text": "+2 Armor, +8 max HP, +1 Grit.",
+   "cls": null,
+   "sockets": 2
+  },
+  "a_shroud": {
+   "name": "Shroud of the Drowned",
+   "slot": "armor",
+   "rarity": "R",
+   "stats": {
+    "dodge": 1,
+    "stress_res": 25,
+    "max_hp": 4
+   },
+   "text": "+4 max HP; 25% less stress; Dodge on the first round.",
+   "cls": null,
+   "sockets": 2
+  },
+  "t_tooth_charm": {
+   "name": "Tooth Charm",
+   "slot": "trinket",
+   "rarity": "C",
+   "stats": {
+    "max_hp": 3
+   },
+   "text": "+3 max HP.",
+   "cls": null,
+   "sockets": 0
+  },
+  "t_salt_pouch": {
+   "name": "Salt Pouch",
+   "slot": "trinket",
+   "rarity": "C",
+   "stats": {
+    "stress_res": 10
+   },
+   "text": "10% less stress.",
+   "cls": null,
+   "sockets": 0
+  },
+  "t_rosary": {
+   "name": "Iron Rosary",
+   "slot": "trinket",
+   "rarity": "C",
+   "stats": {
+    "block": 4
+   },
+   "text": "Begin each fight with 4 Block.",
+   "cls": null,
+   "sockets": 0
+  },
+  "t_eel_tooth": {
+   "name": "Eel's Tooth",
+   "slot": "trinket",
+   "rarity": "U",
+   "stats": {
+    "might": 1
+   },
+   "text": "+1 Might.",
+   "cls": null,
+   "sockets": 1
+  },
+  "t_candle_stub": {
+   "name": "Candle Stub",
+   "slot": "trinket",
+   "rarity": "U",
+   "stats": {
+    "draw": 1
+   },
+   "text": "Draw 1 more on the first round.",
+   "cls": null,
+   "sockets": 1
+  },
+  "t_grave_moss": {
+   "name": "Grave Moss",
+   "slot": "trinket",
+   "rarity": "U",
+   "stats": {
+    "regen": 3
+   },
+   "text": "Begin each fight with Regen 3.",
+   "cls": null,
+   "sockets": 1
+  },
+  "t_hangmans_knot": {
+   "name": "Hangman's Knot",
+   "slot": "trinket",
+   "rarity": "U",
+   "stats": {
+    "grit": 1
+   },
+   "text": "+1 Grit.",
+   "cls": null,
+   "sockets": 1
+  },
+  "t_pearl_of_ysolde": {
+   "name": "Pearl of Saint Ysolde",
+   "slot": "trinket",
+   "rarity": "R",
+   "stats": {
+    "ward": 2,
+    "stress_res": 20,
+    "max_hp": 5
+   },
+   "text": "+5 max HP, 2 Ward, 20% less stress.",
+   "cls": null,
+   "sockets": 2
+  },
+  "t_kings_ring": {
+   "name": "Drowned King's Ring",
+   "slot": "trinket",
+   "rarity": "R",
+   "stats": {
+    "might": 2,
+    "energy": 1
+   },
+   "text": "+2 Might; the company has +1 vigour on the first round.",
+   "cls": null,
+   "sockets": 2
+  }
+ },
+ "runes": {
+  "r_iron": {
+   "name": "Rune of Iron",
+   "stats": {
+    "armor": 1
+   },
+   "text": "+1 Armor."
+  },
+  "r_blood": {
+   "name": "Rune of Blood",
+   "stats": {
+    "max_hp": 5
+   },
+   "text": "+5 max HP."
+  },
+  "r_wrath": {
+   "name": "Rune of Wrath",
+   "stats": {
+    "might": 1
+   },
+   "text": "+1 Might."
+  },
+  "r_eye": {
+   "name": "Rune of the Eye",
+   "stats": {
+    "focus": 1
+   },
+   "text": "+1 Focus at the start of each fight."
+  },
+  "r_salt": {
+   "name": "Rune of Salt",
+   "stats": {
+    "stress_res": 10
+   },
+   "text": "10% less stress."
+  },
+  "r_ward": {
+   "name": "Rune of Warding",
+   "stats": {
+    "ward": 1
+   },
+   "text": "+1 Ward at the start of each fight."
+  },
+  "r_thorn": {
+   "name": "Rune of Thorns",
+   "stats": {
+    "thorns": 2
+   },
+   "text": "+2 Thorns at the start of each fight."
+  },
+  "r_haste": {
+   "name": "Rune of Haste",
+   "stats": {
+    "momentum": 1
+   },
+   "text": "+1 Momentum at the start of each fight."
+  }
+ },
+ "relics": {
+  "rl_bell_clapper": {
+   "name": "Bell Clapper",
+   "text": "The company has +1 vigour on the first round of each fight.",
+   "energy": 1
+  },
+  "rl_saints_finger": {
+   "name": "Saint's Finger",
+   "text": "Every hero begins each fight with 5 Block.",
+   "start": [
+    {
+     "t": "block",
+     "n": 5
+    }
+   ]
+  },
+  "rl_drowned_lantern": {
+   "name": "Drowned Lantern",
+   "text": "Every hero begins each fight with 2 Ward.",
+   "start": [
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ]
+  },
+  "rl_salt_crown": {
+   "name": "Crown of Salt",
+   "text": "Every hero sheds 3 stress at the start of each round.",
+   "round": [
+    {
+     "t": "stress",
+     "n": -3
+    }
+   ]
+  },
+  "rl_hooked_heart": {
+   "name": "Hooked Heart",
+   "text": "Every hero heals 1 at the start of each round.",
+   "round": [
+    {
+     "t": "heal",
+     "n": 1
+    }
+   ]
+  },
+  "rl_kraken_beak": {
+   "name": "Kraken's Beak",
+   "text": "Every hero begins each fight with 1 Might.",
+   "start": [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "might",
+     "to": "self"
+    }
+   ]
+  },
+  "rl_tidestone": {
+   "name": "Tidestone",
+   "text": "Every hero begins each fight with 2 Focus.",
+   "start": [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "focus",
+     "to": "self"
+    }
+   ]
+  },
+  "rl_reliquary": {
+   "name": "Reliquary of Bones",
+   "text": "Every hero begins each fight with 3 Thorns.",
+   "start": [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "thorns",
+     "to": "self"
+    }
+   ]
+  },
+  "rl_hourglass": {
+   "name": "Cracked Hourglass",
+   "text": "Every hero draws 1 more card on the first round.",
+   "start": [
+    {
+     "t": "draw",
+     "n": 1
+    }
+   ]
+  },
+  "rl_pilgrim_badge": {
+   "name": "Pilgrim's Badge",
+   "text": "Gain 25% more gold.",
+   "gold_mult": 1.25
+  },
+  "rl_mourning_veil": {
+   "name": "Mourning Veil",
+   "text": "Heroes gain 15% less stress.",
+   "stress_res": 15
+  },
+  "rl_black_pearl": {
+   "name": "Black Pearl",
+   "text": "Every hero begins each fight with Regen 2.",
+   "start": [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "self"
+    }
+   ]
+  },
+  "rl_anchor_link": {
+   "name": "Anchor Link",
+   "text": "Every hero begins each fight with 1 Armor for that fight.",
+   "start": [
+    {
+     "t": "armor",
+     "n": 1
+    }
+   ]
+  },
+  "rl_eel_skin": {
+   "name": "Eel-skin Gloves",
+   "text": "Every hero begins each fight with 1 Momentum.",
+   "start": [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "momentum",
+     "to": "self"
+    }
+   ]
+  }
+ },
+ "consumables": [
+  "fl_heal",
+  "fl_fire",
+  "fl_brine",
+  "fl_salts",
+  "fl_acid",
+  "fl_blast",
+  "fl_frost",
+  "fl_iron",
+  "fl_rage",
+  "fl_steam"
+ ],
+ "injuries": {
+  "broken_ribs": {
+   "name": "Broken Ribs",
+   "text": "-6 max HP until treated.",
+   "max_hp": -6
+  },
+  "festering": {
+   "name": "Festering Wound",
+   "text": "A Festering Wound curse sits in the deck until treated.",
+   "card": "festering"
+  },
+  "shaken": {
+   "name": "Shaken",
+   "text": "Gains 25% more stress until treated.",
+   "stress_res": -25
+  },
+  "torn_tendon": {
+   "name": "Torn Tendon",
+   "text": "-1 Might until treated.",
+   "might": -1
+  }
+ },
+ "talents": {
+  "tough": {
+   "name": "Tough as Old Rope",
+   "text": "+6 max HP.",
+   "stats": {
+    "max_hp": 6
+   }
+  },
+  "grit": {
+   "name": "Hard to Kill",
+   "text": "+1 Grit.",
+   "stats": {
+    "grit": 1
+   }
+  },
+  "iron_hide": {
+   "name": "Iron Hide",
+   "text": "+1 Armor.",
+   "stats": {
+    "armor": 1
+   }
+  },
+  "steady": {
+   "name": "Steady Nerves",
+   "text": "15% less stress.",
+   "stats": {
+    "stress_res": 15
+   }
+  },
+  "sharp": {
+   "name": "Killer's Eye",
+   "text": "+1 Might.",
+   "stats": {
+    "might": 1
+   }
+  },
+  "studied": {
+   "name": "Studied",
+   "text": "+1 Focus at the start of each fight.",
+   "stats": {
+    "focus": 1
+   }
+  },
+  "quick": {
+   "name": "Quick Hands",
+   "text": "Draw 1 more card on the first round.",
+   "stats": {
+    "draw": 1
+   }
+  },
+  "cull": {
+   "name": "Cull the Deck",
+   "text": "Remove a card from this hero's deck.",
+   "remove": 1
+  }
+ },
+ "xp_levels": [
+  0,
+  20,
+  45,
+  75,
+  110,
+  150,
+  195,
+  245,
+  300,
+  360
+ ],
+ "subclass_passives": {
+  "last_bastion": [
+   [
+    {
+     "t": "block",
+     "n": 3
+    }
+   ],
+   [
+    {
+     "t": "block",
+     "n": 6
+    }
+   ],
+   [
+    {
+     "t": "grit",
+     "n": 1,
+     "to": "self"
+    }
+   ]
+  ],
+  "ironwarden": [
+   [
+    {
+     "t": "apply",
+     "n": 1,
+     "e": "frost",
+     "attr": "stable",
+     "to": "front_enemy"
+    }
+   ],
+   [
+    {
+     "t": "block",
+     "n": 4
+    },
+    {
+     "t": "apply",
+     "n": 1,
+     "e": "frost",
+     "attr": "stable",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "fortify",
+     "to": "self"
+    },
+    {
+     "t": "block",
+     "n": 8
+    }
+   ]
+  ],
+  "thornguard": [
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "thorns",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "thorns",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 4,
+     "s": "thorns",
+     "to": "self"
+    },
+    {
+     "t": "armor",
+     "n": 1
+    }
+   ]
+  ],
+  "bladedancer": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "momentum",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "momentum",
+     "to": "self"
+    },
+    {
+     "t": "status",
+     "n": 1,
+     "s": "dodge",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "momentum",
+     "to": "self"
+    }
+   ]
+  ],
+  "executioner": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "mark",
+     "to": "front_enemy"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "might",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "mark",
+     "to": "all_enemies"
+    },
+    {
+     "t": "status",
+     "n": 1,
+     "s": "might",
+     "to": "self"
+    }
+   ]
+  ],
+  "bloodletter": [
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "bleed",
+     "to": "front_enemy"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "bleed",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "bleed",
+     "to": "all_enemies"
+    },
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "self"
+    }
+   ]
+  ],
+  "accumulator": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "focus",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "cap",
+     "n": 4
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "focus",
+     "to": "self"
+    },
+    {
+     "t": "cap",
+     "n": 4
+    }
+   ]
+  ],
+  "catalyst": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "focus",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "focus",
+     "to": "self"
+    },
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ]
+  ],
+  "prismatic": [
+   [
+    {
+     "t": "ward",
+     "n": 1
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "focus",
+     "to": "self"
+    },
+    {
+     "t": "ward",
+     "n": 1
+    }
+   ],
+   [
+    {
+     "t": "apply_missing",
+     "n": 1,
+     "to": "front_enemy"
+    }
+   ]
+  ],
+  "transmuter": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "focus",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "focus",
+     "to": "self"
+    },
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ]
+  ],
+  "plaguewright": [
+   [
+    {
+     "t": "apply",
+     "n": 1,
+     "e": "toxin",
+     "attr": "stable",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "apply",
+     "n": 1,
+     "e": "toxin",
+     "attr": "stable",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "apply",
+     "n": 2,
+     "e": "toxin",
+     "attr": "stable",
+     "to": "all_enemies"
+    }
+   ]
+  ],
+  "apothecary": [
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "all_allies"
+    }
+   ],
+   [
+    {
+     "t": "heal",
+     "n": 4,
+     "to": "all_allies"
+    },
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "all_allies"
+    }
+   ]
+  ],
+  "chronomancer": [
+   [
+    {
+     "t": "draw",
+     "n": 1
+    }
+   ],
+   [
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "energy",
+     "n": 1
+    }
+   ]
+  ],
+  "augur": [
+   [
+    {
+     "t": "omen",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "omen",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "omen",
+     "n": 3
+    },
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ]
+  ],
+  "fatebinder": [
+   [
+    {
+     "t": "prime",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "prime",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "prime",
+     "n": 4
+    }
+   ]
+  ],
+  "pactbound": [
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "might",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "regen",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 1,
+     "s": "might",
+     "to": "self"
+    },
+    {
+     "t": "grit",
+     "n": 1,
+     "to": "self"
+    }
+   ]
+  ],
+  "doomsayer": [
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "doom",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "doom",
+     "to": "all_enemies"
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 6,
+     "s": "doom",
+     "to": "all_enemies"
+    }
+   ]
+  ],
+  "mirrorhex": [
+   [
+    {
+     "t": "status",
+     "n": 2,
+     "s": "thorns",
+     "to": "self"
+    }
+   ],
+   [
+    {
+     "t": "ward",
+     "n": 2
+    }
+   ],
+   [
+    {
+     "t": "status",
+     "n": 3,
+     "s": "riposte",
+     "to": "self"
+    },
+    {
+     "t": "status",
+     "n": 2,
+     "s": "thorns",
+     "to": "self"
+    }
+   ]
+  ]
+ },
+ "subclass_text": {
+  "last_bastion": [
+   "Begin each fight with 3 Block.",
+   "Begin each fight with 6 Block.",
+   "+1 Grit each fight."
+  ],
+  "ironwarden": [
+   "Apply 1 Frost to the front foe at the start of each fight.",
+   "4 Block, and 1 Frost to every foe.",
+   "Fortify and 8 Block."
+  ],
+  "thornguard": [
+   "Begin with 3 Thorns.",
+   "+3 more Thorns.",
+   "+4 more Thorns and 1 Armor."
+  ],
+  "bladedancer": [
+   "Begin with 1 Momentum.",
+   "+1 Momentum and Dodge.",
+   "+2 more Momentum."
+  ],
+  "executioner": [
+   "Mark the front foe at the start of each fight.",
+   "+1 Might.",
+   "Mark every foe; +1 Might."
+  ],
+  "bloodletter": [
+   "2 Bleed on the front foe at the start of each fight.",
+   "2 Bleed on every foe.",
+   "3 Bleed on every foe; Regen 2."
+  ],
+  "accumulator": [
+   "Begin with 1 Focus.",
+   "Conjunctions may grow 4 stronger.",
+   "+2 Focus; Conjunctions may grow 4 stronger again."
+  ],
+  "catalyst": [
+   "Begin with 1 Focus.",
+   "Begin with 2 Ward.",
+   "+2 Focus and 2 Ward."
+  ],
+  "prismatic": [
+   "Begin with 1 Ward.",
+   "+1 Focus and 1 Ward.",
+   "The front foe starts bearing one of every element."
+  ],
+  "transmuter": [
+   "Begin with 1 Focus.",
+   "Begin with Regen 2.",
+   "+2 Focus and 2 Ward."
+  ],
+  "plaguewright": [
+   "1 Toxin on every foe at the start of each fight.",
+   "+1 Toxin on every foe.",
+   "+2 Toxin on every foe."
+  ],
+  "apothecary": [
+   "Begin with Regen 2.",
+   "Every hero begins with Regen 2.",
+   "Every hero heals 4 and gains Regen 2."
+  ],
+  "chronomancer": [
+   "Draw 1 more on the first round.",
+   "Begin with 2 Ward.",
+   "+1 vigour on the first round."
+  ],
+  "augur": [
+   "Begin with 2 Omen.",
+   "+2 Omen.",
+   "+3 Omen and 2 Ward."
+  ],
+  "fatebinder": [
+   "The first action of each fight is Primed 2.",
+   "Prime 2 more.",
+   "Prime 4 more."
+  ],
+  "pactbound": [
+   "+1 Might.",
+   "Regen 2.",
+   "+1 Might and +1 Grit."
+  ],
+  "doomsayer": [
+   "3 Doom on every foe at the start of each fight.",
+   "+3 Doom on every foe.",
+   "+6 Doom on every foe."
+  ],
+  "mirrorhex": [
+   "Begin with 2 Thorns.",
+   "Begin with 2 Ward.",
+   "Riposte 3 and 2 more Thorns."
+  ]
+ },
+ "events": [
+  {
+   "id": "drowned_chapel",
+   "title": "A Drowned Chapel",
+   "text": "Candles still burn under the water in a side chapel. A saint's reliquary sits on the altar, chained shut. Something knocks from inside it.",
+   "options": [
+    {
+     "label": "Break the chains (2 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -2
+      },
+      {
+       "t": "relic"
+      }
+     ],
+     "after": "The knocking stops. Inside: a relic, and a smell you will not forget.",
+     "req": {
+      "tools": 2
+     }
+    },
+    {
+     "label": "Pray at the altar",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -15,
+       "who": "all"
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "A moment of quiet. The water outside grows darker."
+    },
+    {
+     "label": "Leave it be",
+     "outcome": [],
+     "after": "Some doors are shut for a reason."
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "pilgrim_corpse",
+   "title": "The Pilgrim's Corpse",
+   "text": "A pilgrim lies face-down in the silt, pack still on his back. His hand is closed around something.",
+   "options": [
+    {
+     "label": "Search the pack",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": 3
+      },
+      {
+       "t": "gold",
+       "n": 20
+      }
+     ],
+     "after": "Hard bread, a purse, and a letter you choose not to read."
+    },
+    {
+     "label": "Pry open his hand",
+     "outcome": [
+      {
+       "t": "gear"
+      },
+      {
+       "t": "stress",
+       "n": 8,
+       "who": "random"
+      }
+     ],
+     "after": "The fingers break as you open them. He was holding it very tightly."
+    },
+    {
+     "label": "Give him rites",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -10,
+       "who": "all"
+      }
+     ],
+     "after": "The company feels a little less alone."
+    }
+   ]
+  },
+  {
+   "id": "eel_nest",
+   "title": "An Eel Nest",
+   "text": "The passage narrows to a pool thick with eels. On the far side, a glint of gold.",
+   "options": [
+    {
+     "label": "Wade through",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -8,
+       "who": "all"
+      },
+      {
+       "t": "gold",
+       "n": 60
+      }
+     ],
+     "after": "They bite. You keep walking. The gold is real."
+    },
+    {
+     "label": "Burn them out (1 Light)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": -1
+      },
+      {
+       "t": "gold",
+       "n": 40
+      }
+     ],
+     "after": "Oil, fire, screaming water.",
+     "req": {
+      "light": 1
+     }
+    },
+    {
+     "label": "Find another way",
+     "outcome": [
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "It costs you time."
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "singing_well",
+   "title": "The Singing Well",
+   "text": "A well in the floor of the nave. Voices rise out of it, singing your names.",
+   "options": [
+    {
+     "label": "Answer them",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": 20,
+       "who": "all"
+      },
+      {
+       "t": "xp",
+       "n": 30
+      }
+     ],
+     "after": "You learn something no one should know."
+    },
+    {
+     "label": "Drop a coin in (25 gold)",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": -25
+      },
+      {
+       "t": "card"
+      }
+     ],
+     "after": "The song changes. A gift drifts up on the water.",
+     "req": {
+      "gold": 25
+     }
+    },
+    {
+     "label": "Seal it with stones (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "stress",
+       "n": -10,
+       "who": "all"
+      }
+     ],
+     "after": "The singing stops. Mostly.",
+     "req": {
+      "tools": 1
+     }
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "flooded_armory",
+   "title": "A Flooded Armoury",
+   "text": "Racks of weapons and harness, half sunk in brine. Most of it is rust. Not all of it.",
+   "options": [
+    {
+     "label": "Dive for the good pieces",
+     "outcome": [
+      {
+       "t": "gear"
+      },
+      {
+       "t": "hp",
+       "n": -6,
+       "who": "random"
+      }
+     ],
+     "after": "Cold, sharp edges in the dark. Worth it."
+    },
+    {
+     "label": "Salvage what's dry (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "gear"
+      },
+      {
+       "t": "rune"
+      }
+     ],
+     "after": "Careful work pays.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Move on",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "abbess_ghost",
+   "title": "The Abbess's Confessional",
+   "text": "A confessional booth. Behind the grille, a woman's voice offers absolution, for a price.",
+   "options": [
+    {
+     "label": "Confess (lose 6 max HP, one hero)",
+     "outcome": [
+      {
+       "t": "maxhp",
+       "n": -6,
+       "who": "highest"
+      },
+      {
+       "t": "stress",
+       "n": -40,
+       "who": "highest"
+      }
+     ],
+     "after": "Something is taken. Something heavier is lifted."
+    },
+    {
+     "label": "Buy an indulgence (40 gold)",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": -40
+      },
+      {
+       "t": "stress",
+       "n": -25,
+       "who": "all"
+      }
+     ],
+     "after": "Coins slide through the grille. The voice laughs.",
+     "req": {
+      "gold": 40
+     }
+    },
+    {
+     "label": "Curse her",
+     "outcome": [
+      {
+       "t": "curse",
+       "who": "random"
+      },
+      {
+       "t": "gold",
+       "n": 30
+      }
+     ],
+     "after": "She curses you back. She also drops her purse."
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "starving_survivor",
+   "title": "A Survivor",
+   "text": "A starving man in a dry alcove begs for food. His eyes keep going to your throats.",
+   "options": [
+    {
+     "label": "Share food (2 Food)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -2
+      },
+      {
+       "t": "relic"
+      }
+     ],
+     "after": "He presses something into your hand before you go.",
+     "req": {
+      "food": 2
+     }
+    },
+    {
+     "label": "Put him out of his misery",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": 12,
+       "who": "all"
+      },
+      {
+       "t": "gold",
+       "n": 15
+      }
+     ],
+     "after": "Mercy, of a kind."
+    },
+    {
+     "label": "Walk away",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": 5,
+       "who": "all"
+      }
+     ],
+     "after": "His begging follows you a long way."
+    }
+   ]
+  },
+  {
+   "id": "tide_shrine",
+   "title": "Tide Shrine",
+   "text": "A shrine to a sea-saint, its offering bowl brimming with black water.",
+   "options": [
+    {
+     "label": "Drink from the bowl",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": 12,
+       "who": "all"
+      },
+      {
+       "t": "curse",
+       "who": "random"
+      }
+     ],
+     "after": "It heals. It also stays with you."
+    },
+    {
+     "label": "Leave an offering (1 Medicine)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": -1
+      },
+      {
+       "t": "xp",
+       "n": 25
+      }
+     ],
+     "after": "The water stills. You feel steadier.",
+     "req": {
+      "medicine": 1
+     }
+    },
+    {
+     "label": "Pass by",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "collapsed_stair",
+   "title": "A Collapsed Stair",
+   "text": "The way down is choked with rubble. You can dig, or you can find another way in the dark.",
+   "options": [
+    {
+     "label": "Dig through (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      }
+     ],
+     "after": "Hard work, but quick.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Squeeze through the gap",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -5,
+       "who": "all"
+      },
+      {
+       "t": "stress",
+       "n": 6,
+       "who": "all"
+      }
+     ],
+     "after": "Scraped, bruised, through."
+    },
+    {
+     "label": "Take the long way",
+     "outcome": [
+      {
+       "t": "doom",
+       "n": 2
+      },
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -1
+      }
+     ],
+     "after": "Hours lost in the dark."
+    }
+   ]
+  },
+  {
+   "id": "corpse_cart",
+   "title": "The Corpse Cart",
+   "text": "An overturned cart of the drowned, bound for a burial that never came. One of them is still moving.",
+   "options": [
+    {
+     "label": "End it",
+     "outcome": [
+      {
+       "t": "fight"
+      }
+     ],
+     "after": "It was not the only one moving."
+    },
+    {
+     "label": "Loot the cart",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 35
+      },
+      {
+       "t": "stress",
+       "n": 10,
+       "who": "all"
+      }
+     ],
+     "after": "Rings, teeth, buttons. You do not look at the faces."
+    },
+    {
+     "label": "Leave quietly",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "lantern_keeper",
+   "title": "The Lantern Keeper",
+   "text": "An old woman tends lanterns on a sunken pier. She trades light for stories, or for blood.",
+   "options": [
+    {
+     "label": "Tell her a story",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": 2
+      },
+      {
+       "t": "stress",
+       "n": 6,
+       "who": "random"
+      }
+     ],
+     "after": "She likes the sad ones best."
+    },
+    {
+     "label": "Give her blood",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -10,
+       "who": "highest"
+      },
+      {
+       "t": "supply",
+       "s": "light",
+       "n": 4
+      }
+     ],
+     "after": "She drinks it from a lantern glass."
+    },
+    {
+     "label": "Buy oil (30 gold)",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": -30
+      },
+      {
+       "t": "supply",
+       "s": "light",
+       "n": 3
+      }
+     ],
+     "after": "A fair trade, for once.",
+     "req": {
+      "gold": 30
+     }
+    }
+   ],
+   "world": "drowned"
+  },
+  {
+   "id": "bone_scribe",
+   "title": "The Bone Scribe",
+   "text": "A skeleton at a writing desk, quill still in hand. The page is half written. It is about you.",
+   "options": [
+    {
+     "label": "Read it",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 40
+      },
+      {
+       "t": "stress",
+       "n": 15,
+       "who": "all"
+      }
+     ],
+     "after": "It knows how this ends."
+    },
+    {
+     "label": "Finish it yourself",
+     "outcome": [
+      {
+       "t": "remove_card"
+      }
+     ],
+     "after": "You write a better ending. Something in your deck goes quiet."
+    },
+    {
+     "label": "Burn it (1 Light)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": -1
+      },
+      {
+       "t": "doom",
+       "n": -2
+      }
+     ],
+     "after": "The water seems to recede, a little.",
+     "req": {
+      "light": 1
+     }
+    }
+   ]
+  },
+  {
+   "id": "frozen_scout",
+   "title": "The Frozen Scout",
+   "text": "A scout froze mid-stride on the ice, pack still on her back. The ice around her feet is hot to the touch.",
+   "options": [
+    {
+     "label": "Chip her free (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "gear"
+      },
+      {
+       "t": "supply",
+       "s": "food",
+       "n": 2
+      }
+     ],
+     "after": "Her gear is good. Her face does not thaw.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Take the pack and run",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 30
+      },
+      {
+       "t": "hp",
+       "n": -6,
+       "who": "all"
+      }
+     ],
+     "after": "The ice cracks behind you. Steam scalds your heels."
+    },
+    {
+     "label": "Leave her standing",
+     "outcome": [],
+     "after": "Someone has to keep watch."
+    }
+   ],
+   "world": "rime"
+  },
+  {
+   "id": "steam_vent",
+   "title": "The Steam Vent",
+   "text": "A vent breathes warm air through the glacier. The company could rest here, if the ground holds.",
+   "options": [
+    {
+     "label": "Rest by the vent",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": 10,
+       "who": "all"
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "Warm for the first time in days."
+    },
+    {
+     "label": "Cook a meal over it (2 Food)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -2
+      },
+      {
+       "t": "stress",
+       "n": -15,
+       "who": "all"
+      }
+     ],
+     "after": "Hot food. Someone laughs.",
+     "req": {
+      "food": 2
+     }
+    },
+    {
+     "label": "Press on",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "rime"
+  },
+  {
+   "id": "abandoned_anvil",
+   "title": "The Abandoned Anvil",
+   "text": "An anvil still glows on a silent line. A half-forged blade lies across it.",
+   "options": [
+    {
+     "label": "Finish the blade (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "gear"
+      },
+      {
+       "t": "rune"
+      }
+     ],
+     "after": "The hammer strikes true. The foundry answers, far away.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Quench your hands in the trough",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -10,
+       "who": "all"
+      },
+      {
+       "t": "hp",
+       "n": -4,
+       "who": "all"
+      }
+     ],
+     "after": "It hurts. It also wakes you up."
+    },
+    {
+     "label": "Leave it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "foundry"
+  },
+  {
+   "id": "storm_capacitor",
+   "title": "The Storm Jar",
+   "text": "A glass jar the height of a man holds a captured storm. It hums in your teeth.",
+   "options": [
+    {
+     "label": "Smash it",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -8,
+       "who": "all"
+      },
+      {
+       "t": "xp",
+       "n": 35
+      }
+     ],
+     "after": "Lightning goes through all of you. Some of it stays."
+    },
+    {
+     "label": "Sell the copper fittings",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 45
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "It takes time to strip it properly."
+    },
+    {
+     "label": "Back away slowly",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "foundry"
+  },
+  {
+   "id": "drowned_guest",
+   "title": "A Lingering Guest",
+   "text": "A bather still sits in a pool that has been boiling for a century. He beckons you in.",
+   "options": [
+    {
+     "label": "Join him",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -10,
+       "who": "random"
+      },
+      {
+       "t": "relic"
+      }
+     ],
+     "after": "He gives you the ring off his finger. The finger comes with it."
+    },
+    {
+     "label": "Rob his clothes on the bench",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 40
+      },
+      {
+       "t": "stress",
+       "n": 8,
+       "who": "all"
+      }
+     ],
+     "after": "He watches you do it. He does not stop smiling."
+    },
+    {
+     "label": "Decline politely",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "baths"
+  },
+  {
+   "id": "towel_cupboard",
+   "title": "The Linen Store",
+   "text": "Clean linen, folded and dry, in a cupboard the steam never reached.",
+   "options": [
+    {
+     "label": "Take bandages",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": 2
+      }
+     ],
+     "after": "Clean cloth is worth more than gold down here."
+    },
+    {
+     "label": "Rest among the linen",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -20,
+       "who": "all"
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "It smells of soap. Of before."
+    },
+    {
+     "label": "Search the back",
+     "outcome": [
+      {
+       "t": "gear"
+      },
+      {
+       "t": "stress",
+       "n": 6,
+       "who": "random"
+      }
+     ],
+     "after": "Something was hiding back there. It left this behind."
+    }
+   ],
+   "world": "baths"
+  },
+  {
+   "id": "canary_cage",
+   "title": "The Last Canary",
+   "text": "A canary in a cage, still alive, still singing. The gas has not reached it yet.",
+   "options": [
+    {
+     "label": "Carry it with you",
+     "outcome": [
+      {
+       "t": "doom",
+       "n": -2
+      },
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -1
+      }
+     ],
+     "after": "It sings when the air turns. You learn to listen."
+    },
+    {
+     "label": "Let it go",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -12,
+       "who": "all"
+      }
+     ],
+     "after": "It flies up the shaft. Someone has to get out."
+    },
+    {
+     "label": "Eat it",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": 1
+      },
+      {
+       "t": "stress",
+       "n": 10,
+       "who": "all"
+      }
+     ],
+     "after": "Nobody speaks for a while."
+    }
+   ],
+   "world": "pits"
+  },
+  {
+   "id": "powder_cache",
+   "title": "A Powder Cache",
+   "text": "Kegs of blasting powder, dry, stacked by a collapsed tunnel.",
+   "options": [
+    {
+     "label": "Blast the tunnel (1 Light)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": -1
+      },
+      {
+       "t": "gold",
+       "n": 60
+      },
+      {
+       "t": "hp",
+       "n": -5,
+       "who": "all"
+      }
+     ],
+     "after": "The seam behind it glitters.",
+     "req": {
+      "light": 1
+     }
+    },
+    {
+     "label": "Pack some for later",
+     "outcome": [
+      {
+       "t": "card"
+      }
+     ],
+     "after": "One of you learns a dangerous trick."
+    },
+    {
+     "label": "Keep the lamps well away",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "pits"
+  },
+  {
+   "id": "unburnt_relic",
+   "title": "The Unburnt Hand",
+   "text": "In a heap of ash, one hand has not burned. It still holds a rosary.",
+   "options": [
+    {
+     "label": "Take the rosary",
+     "outcome": [
+      {
+       "t": "relic"
+      },
+      {
+       "t": "stress",
+       "n": 10,
+       "who": "all"
+      }
+     ],
+     "after": "The hand lets go. It should not have been able to."
+    },
+    {
+     "label": "Bury the hand",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -15,
+       "who": "all"
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "The black fire flickers, as if insulted."
+    },
+    {
+     "label": "Walk on",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "pyre"
+  },
+  {
+   "id": "confession_fire",
+   "title": "The Confession Fire",
+   "text": "A brazier of black flame. A sign reads: SPEAK YOUR SIN AND BE LIGHTER.",
+   "options": [
+    {
+     "label": "Confess (one hero)",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -35,
+       "who": "highest"
+      },
+      {
+       "t": "maxhp",
+       "n": -4,
+       "who": "highest"
+      }
+     ],
+     "after": "The fire takes the sin, and a little of the sinner."
+    },
+    {
+     "label": "Feed it a card",
+     "outcome": [
+      {
+       "t": "remove_card"
+      }
+     ],
+     "after": "Something you knew burns away."
+    },
+    {
+     "label": "Douse it (1 Medicine)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": -1
+      },
+      {
+       "t": "xp",
+       "n": 30
+      }
+     ],
+     "after": "It hisses out. You learn what it was guarding.",
+     "req": {
+      "medicine": 1
+     }
+    }
+   ],
+   "world": "pyre"
+  },
+  {
+   "id": "stopped_clock",
+   "title": "The Stopped Clock",
+   "text": "A clock face in the wall. The hands are frozen at one minute to twelve. You could move them.",
+   "options": [
+    {
+     "label": "Wind it back",
+     "outcome": [
+      {
+       "t": "doom",
+       "n": -3
+      },
+      {
+       "t": "stress",
+       "n": 10,
+       "who": "all"
+      }
+     ],
+     "after": "Time slips. Your heads ache."
+    },
+    {
+     "label": "Wind it forward",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 40
+      },
+      {
+       "t": "doom",
+       "n": 2
+      }
+     ],
+     "after": "You see what comes next. It is worse."
+    },
+    {
+     "label": "Leave it at one minute to",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "spire"
+  },
+  {
+   "id": "star_chart",
+   "title": "The Star Chart",
+   "text": "A chart of the frozen sky, annotated in a shaking hand.",
+   "options": [
+    {
+     "label": "Study it",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 30
+      }
+     ],
+     "after": "The stars stopped here. You learn where."
+    },
+    {
+     "label": "Sell the brass frame",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 35
+      }
+     ],
+     "after": "Heavy, but worth it."
+    },
+    {
+     "label": "Burn it for warmth (1 Light)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": -1
+      },
+      {
+       "t": "hp",
+       "n": 8,
+       "who": "all"
+      }
+     ],
+     "after": "Warm hands are worth more than stars.",
+     "req": {
+      "light": 1
+     }
+    }
+   ],
+   "world": "spire"
+  },
+  {
+   "id": "ships_galley",
+   "title": "The Ship's Galley",
+   "text": "A frozen galley, the stores still sealed in ice.",
+   "options": [
+    {
+     "label": "Chip out the stores (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "supply",
+       "s": "food",
+       "n": 4
+      }
+     ],
+     "after": "Salt pork, hard tack, rum.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Drink the captain's rum",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -20,
+       "who": "all"
+      },
+      {
+       "t": "hp",
+       "n": -3,
+       "who": "all"
+      }
+     ],
+     "after": "Courage, of a kind."
+    },
+    {
+     "label": "Leave it frozen",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "fleet"
+  },
+  {
+   "id": "figurehead",
+   "title": "The Weeping Figurehead",
+   "text": "A ship's figurehead, a woman carved in oak. She is crying real tears, and they freeze.",
+   "options": [
+    {
+     "label": "Collect the tears",
+     "outcome": [
+      {
+       "t": "relic"
+      },
+      {
+       "t": "stress",
+       "n": 8,
+       "who": "random"
+      }
+     ],
+     "after": "Each tear is a frozen pearl."
+    },
+    {
+     "label": "Speak to her",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 25
+      },
+      {
+       "t": "stress",
+       "n": -8,
+       "who": "all"
+      }
+     ],
+     "after": "She tells you how the fleet died."
+    },
+    {
+     "label": "Pass by",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "fleet"
+  },
+  {
+   "id": "grave_goods",
+   "title": "Grave Goods",
+   "text": "A side tomb, unopened. The seal is old and the cold has kept everything.",
+   "options": [
+    {
+     "label": "Open it (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "gear"
+      },
+      {
+       "t": "gold",
+       "n": 30
+      }
+     ],
+     "after": "Fine things, and a smell like old meat.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Leave an offering of food (1 Food)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -1
+      },
+      {
+       "t": "doom",
+       "n": -2
+      }
+     ],
+     "after": "The barrow seems to settle.",
+     "req": {
+      "food": 1
+     }
+    },
+    {
+     "label": "Leave it sealed",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "barrow"
+  },
+  {
+   "id": "plague_doctor",
+   "title": "The Barrow Physician",
+   "text": "A dead physician in a beaked mask, still holding a bag of cures.",
+   "options": [
+    {
+     "label": "Take the bag",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": 2
+      },
+      {
+       "t": "curse",
+       "who": "random"
+      }
+     ],
+     "after": "The cures are real. So is what was on them."
+    },
+    {
+     "label": "Read his notes",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 30
+      }
+     ],
+     "after": "He understood the plague. It did not help him."
+    },
+    {
+     "label": "Leave him",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "barrow"
+  },
+  {
+   "id": "frozen_campfire",
+   "title": "A Frozen Campfire",
+   "text": "A campfire, still burning, frozen in ice. The flames do not move.",
+   "options": [
+    {
+     "label": "Thaw it (1 Light)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "light",
+       "n": -1
+      },
+      {
+       "t": "hp",
+       "n": 12,
+       "who": "all"
+      },
+      {
+       "t": "stress",
+       "n": -10,
+       "who": "all"
+      }
+     ],
+     "after": "It burns again. Nobody talks.",
+     "req": {
+      "light": 1
+     }
+    },
+    {
+     "label": "Take the frozen flame",
+     "outcome": [
+      {
+       "t": "relic"
+      },
+      {
+       "t": "stress",
+       "n": 12,
+       "who": "all"
+      }
+     ],
+     "after": "It is cold in the hand."
+    },
+    {
+     "label": "Walk on",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "silence"
+  },
+  {
+   "id": "listening_stone",
+   "title": "The Listening Stone",
+   "text": "A standing stone with an ear carved in it. The silence here is complete.",
+   "options": [
+    {
+     "label": "Whisper a secret",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -20,
+       "who": "random"
+      }
+     ],
+     "after": "The stone keeps it."
+    },
+    {
+     "label": "Shout",
+     "outcome": [
+      {
+       "t": "fight"
+      }
+     ],
+     "after": "Something heard."
+    },
+    {
+     "label": "Keep silent",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 20
+      }
+     ],
+     "after": "You learn to listen."
+    }
+   ],
+   "world": "silence"
+  },
+  {
+   "id": "wreck_hold",
+   "title": "A Wreck's Hold",
+   "text": "The hold of a ship the wreckers brought in. The cargo is still aboard.",
+   "options": [
+    {
+     "label": "Haul the cargo",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 50
+      },
+      {
+       "t": "doom",
+       "n": 1
+      }
+     ],
+     "after": "Silk, spice, a box of teeth."
+    },
+    {
+     "label": "Free the survivor in the brig",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -1
+      },
+      {
+       "t": "relic"
+      }
+     ],
+     "after": "A sailor, half drowned, grateful. She gives you her lucky charm."
+    },
+    {
+     "label": "Leave before the tide",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "coast"
+  },
+  {
+   "id": "lightning_rod",
+   "title": "The Lightning Rod",
+   "text": "An iron rod on the cliff, black with strikes. A storm is coming.",
+   "options": [
+    {
+     "label": "Stand beneath it",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": -10,
+       "who": "random"
+      },
+      {
+       "t": "card"
+      }
+     ],
+     "after": "It strikes. One of you learns something."
+    },
+    {
+     "label": "Take shelter",
+     "outcome": [
+      {
+       "t": "doom",
+       "n": 1
+      },
+      {
+       "t": "stress",
+       "n": -10,
+       "who": "all"
+      }
+     ],
+     "after": "The storm passes over."
+    },
+    {
+     "label": "Run for it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "coast"
+  },
+  {
+   "id": "honey_cell",
+   "title": "A Honey Cell",
+   "text": "A cell of dark honey, crackling with static.",
+   "options": [
+    {
+     "label": "Eat it",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": 15,
+       "who": "all"
+      },
+      {
+       "t": "curse",
+       "who": "random"
+      }
+     ],
+     "after": "Sweet. Then numb. Then sweet again."
+    },
+    {
+     "label": "Jar it (1 Tools)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "tools",
+       "n": -1
+      },
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": 2
+      }
+     ],
+     "after": "It keeps wounds clean.",
+     "req": {
+      "tools": 1
+     }
+    },
+    {
+     "label": "Leave it for the drones",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "hive"
+  },
+  {
+   "id": "cocooned_knight",
+   "title": "The Cocooned Knight",
+   "text": "A knight wrapped in silk, still breathing. His sword hangs outside the cocoon.",
+   "options": [
+    {
+     "label": "Cut him free",
+     "outcome": [
+      {
+       "t": "fight"
+      }
+     ],
+     "after": "He is not a knight any more."
+    },
+    {
+     "label": "Take the sword",
+     "outcome": [
+      {
+       "t": "gear"
+      }
+     ],
+     "after": "He sighs as you go."
+    },
+    {
+     "label": "Leave him",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": 8,
+       "who": "all"
+      }
+     ],
+     "after": "He is still breathing when you leave."
+    }
+   ],
+   "world": "hive"
+  },
+  {
+   "id": "fallen_feather",
+   "title": "A Fallen Feather",
+   "text": "An angel's feather as long as a spear, lying in the ruins.",
+   "options": [
+    {
+     "label": "Take it",
+     "outcome": [
+      {
+       "t": "relic"
+      }
+     ],
+     "after": "It is warm. It hums when lightning is near."
+    },
+    {
+     "label": "Pray over it",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -15,
+       "who": "all"
+      },
+      {
+       "t": "xp",
+       "n": 15
+      }
+     ],
+     "after": "Nobody answers. It still helps."
+    },
+    {
+     "label": "Leave it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "sky"
+  },
+  {
+   "id": "rift_edge",
+   "title": "The Edge of the Rift",
+   "text": "The ruins end at a tear in the sky. Something on the other side is looking at you.",
+   "options": [
+    {
+     "label": "Look back",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": 20,
+       "who": "all"
+      },
+      {
+       "t": "xp",
+       "n": 45
+      }
+     ],
+     "after": "You see it. It sees you. You both learn something."
+    },
+    {
+     "label": "Throw something in (25 gold)",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": -25
+      },
+      {
+       "t": "card"
+      }
+     ],
+     "after": "Something comes back out.",
+     "req": {
+      "gold": 25
+     }
+    },
+    {
+     "label": "Turn away",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "sky"
+  },
+  {
+   "id": "hag_kettle",
+   "title": "The Hag's Kettle",
+   "text": "A kettle bubbling on a stilt-hut porch. The hag is away.",
+   "options": [
+    {
+     "label": "Drink the brew",
+     "outcome": [
+      {
+       "t": "hp",
+       "n": 15,
+       "who": "all"
+      },
+      {
+       "t": "stress",
+       "n": 10,
+       "who": "all"
+      }
+     ],
+     "after": "It heals. It tastes of the bog."
+    },
+    {
+     "label": "Steal the kettle's contents",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "medicine",
+       "n": 1
+      },
+      {
+       "t": "curse",
+       "who": "random"
+      }
+     ],
+     "after": "She will know."
+    },
+    {
+     "label": "Leave it simmering",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "mire"
+  },
+  {
+   "id": "bog_offering",
+   "title": "The Bog Offering",
+   "text": "A bog body with a gold torc around its neck. It has been there a thousand years.",
+   "options": [
+    {
+     "label": "Take the torc",
+     "outcome": [
+      {
+       "t": "gold",
+       "n": 60
+      },
+      {
+       "t": "fight"
+      }
+     ],
+     "after": "It was not done being an offering."
+    },
+    {
+     "label": "Add an offering (1 Food)",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": -1
+      },
+      {
+       "t": "doom",
+       "n": -2
+      }
+     ],
+     "after": "The fen seems to sigh.",
+     "req": {
+      "food": 1
+     }
+    },
+    {
+     "label": "Leave it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "mire"
+  },
+  {
+   "id": "fairy_ring",
+   "title": "The Fairy Ring",
+   "text": "A perfect ring of pale mushrooms. The air inside is still and sweet.",
+   "options": [
+    {
+     "label": "Step inside",
+     "outcome": [
+      {
+       "t": "stress",
+       "n": -25,
+       "who": "all"
+      },
+      {
+       "t": "doom",
+       "n": 2
+      }
+     ],
+     "after": "You lose an hour. Maybe more."
+    },
+    {
+     "label": "Pick the mushrooms",
+     "outcome": [
+      {
+       "t": "supply",
+       "s": "food",
+       "n": 3
+      },
+      {
+       "t": "curse",
+       "who": "random"
+      }
+     ],
+     "after": "Edible. Mostly."
+    },
+    {
+     "label": "Walk around it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "garden"
+  },
+  {
+   "id": "gardeners_journal",
+   "title": "The Gardener's Journal",
+   "text": "A journal left on a bench. The handwriting gets worse as it goes.",
+   "options": [
+    {
+     "label": "Read it",
+     "outcome": [
+      {
+       "t": "xp",
+       "n": 35
+      },
+      {
+       "t": "stress",
+       "n": 12,
+       "who": "all"
+      }
+     ],
+     "after": "By the end it is not his handwriting."
+    },
+    {
+     "label": "Tear out the last page",
+     "outcome": [
+      {
+       "t": "remove_card"
+      }
+     ],
+     "after": "Some things should not be learned."
+    },
+    {
+     "label": "Leave it",
+     "outcome": [],
+     "after": ""
+    }
+   ],
+   "world": "garden"
+  }
+ ],
+ "objectives": {
+  "boss": {
+   "name": "Slay the Drowned King",
+   "text": "Reach the throne and kill the King.",
+   "reward": 50
+  },
+  "relic": {
+   "name": "Recover the Pearl of Saint Ysolde",
+   "text": "A relic-keeper elite guards the Pearl deep in the kingdom. Take it and survive the boss.",
+   "reward": 60
+  },
+  "purge": {
+   "name": "Purge the Belfry",
+   "text": "Win six fights before facing the boss.",
+   "reward": 50
+  },
+  "escort": {
+   "name": "Escort the Pilgrim",
+   "text": "A pilgrim walks with you. Each time a hero falls to Death's Door, the pilgrim loses heart. Reach the boss with the pilgrim alive.",
+   "reward": 70
+  }
+ },
+ "ascension": [
+  {
+   "id": "a_hp",
+   "name": "Swollen Dead",
+   "text": "Foes have 10% more HP."
+  },
+  {
+   "id": "a_might",
+   "name": "Grim Tide",
+   "text": "Foes begin fights with 1 Might."
+  },
+  {
+   "id": "a_food",
+   "name": "Short Rations",
+   "text": "Start with 3 less Food."
+  },
+  {
+   "id": "a_light",
+   "name": "Guttering Lamps",
+   "text": "Start with 2 less Light."
+  },
+  {
+   "id": "a_gold",
+   "name": "Thin Purses",
+   "text": "Gold rewards are 25% smaller."
+  },
+  {
+   "id": "a_elite",
+   "name": "Hunted",
+   "text": "Elites appear more often."
+  },
+  {
+   "id": "a_doom",
+   "name": "Rising Water",
+   "text": "The doom clock advances twice as fast."
+  },
+  {
+   "id": "a_stress",
+   "name": "Haunted Company",
+   "text": "Heroes begin the run with 25 stress."
+  },
+  {
+   "id": "a_choice",
+   "name": "Meagre Spoils",
+   "text": "Card rewards offer two choices, not three."
+  },
+  {
+   "id": "a_boss",
+   "name": "Wrathful King",
+   "text": "Bosses have 15% more HP."
+  },
+  {
+   "id": "a_heal",
+   "name": "No Rest",
+   "text": "Field camps heal half as much."
+  },
+  {
+   "id": "a_curse",
+   "name": "Marked by the Deep",
+   "text": "Every hero begins the run with a Dread curse."
+  },
+  {
+   "id": "a_prices",
+   "name": "Greedy Merchants",
+   "text": "Prices are 25% higher."
+  },
+  {
+   "id": "a_injury",
+   "name": "Brittle Bones",
+   "text": "Death's Door always leaves an injury, and Grit is 1 lower."
+  },
+  {
+   "id": "a_scaling",
+   "name": "The Deep Remembers",
+   "text": "Foes grow stronger with doom twice as fast."
+  }
+ ],
+ "unlocks": {
+  "alchemist": {
+   "name": "The Alchemist",
+   "cost": 80,
+   "kind": "class"
+  },
+  "oracle": {
+   "name": "The Oracle",
+   "cost": 120,
+   "kind": "class"
+  },
+  "hexweaver": {
+   "name": "The Hexweaver",
+   "cost": 120,
+   "kind": "class"
+  },
+  "provisioner": {
+   "name": "Provisioner",
+   "cost": 50,
+   "kind": "hub",
+   "text": "+2 Food at the start of each run."
+  },
+  "lamplighter": {
+   "name": "Lamplighter",
+   "cost": 50,
+   "kind": "hub",
+   "text": "+2 Light at the start of each run."
+  },
+  "quartermaster": {
+   "name": "Quartermaster",
+   "cost": 70,
+   "kind": "hub",
+   "text": "+40 gold at the start of each run."
+  },
+  "surgeon": {
+   "name": "Surgeon",
+   "cost": 60,
+   "kind": "hub",
+   "text": "+1 Medicine at the start of each run."
+  },
+  "armourer": {
+   "name": "Armourer",
+   "cost": 90,
+   "kind": "hub",
+   "text": "Every hero starts the run with a common armour."
+  },
+  "veterans": {
+   "name": "Veterans",
+   "cost": 160,
+   "kind": "hub",
+   "text": "Heroes start the run at level 2."
+  }
+ }
+}

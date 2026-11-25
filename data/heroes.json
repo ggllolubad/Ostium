@@ -1,0 +1,226 @@
+{
+ "bulwark": {
+  "name": "Bulwark",
+  "hp": 48,
+  "armor": 2,
+  "grit": 3,
+  "color": "7f9cc6",
+  "kit": [
+   "k_shield_up",
+   "k_challenge",
+   "k_bash"
+  ],
+  "deck": [
+   "brace",
+   "brace",
+   "brace",
+   "shield_slam",
+   "shield_slam",
+   "interpose",
+   "interpose",
+   "iron_vow",
+   "hold_the_line",
+   "warhammer"
+  ],
+  "subclasses": {
+   "last_bastion": "Last Bastion",
+   "ironwarden": "Ironwarden",
+   "thornguard": "Thornguard"
+  },
+  "blurb": "Front-rank wall. Block, Armor, Taunt and Guard; turns punishment back on the foe.",
+  "art": "res://assets/art/bulwark.png",
+  "face": [
+   0.432,
+   0.086,
+   0.182,
+   0.143
+  ]
+ },
+ "duelist": {
+  "name": "Duelist",
+  "hp": 34,
+  "armor": 0,
+  "grit": 2,
+  "color": "8aa271",
+  "kit": [
+   "k_slash",
+   "k_step",
+   "k_feint"
+  ],
+  "deck": [
+   "arc_lash",
+   "arc_lash",
+   "lunge",
+   "lunge",
+   "bleed_out",
+   "bleed_out",
+   "riposte",
+   "flourish",
+   "flourish",
+   "coup"
+  ],
+  "subclasses": {
+   "bladedancer": "Bladedancer",
+   "executioner": "Executioner",
+   "bloodletter": "Bloodletter"
+  },
+  "blurb": "Mobile skirmisher. Momentum, Mark, Riposte, Bleed and Lightning.",
+  "art": "res://assets/art/duelist.png",
+  "face": [
+   0.435,
+   0.214,
+   0.192,
+   0.171
+  ]
+ },
+ "elementalist": {
+  "name": "Elementalist",
+  "hp": 30,
+  "armor": 0,
+  "grit": 1,
+  "color": "8e7aa6",
+  "kit": [
+   "k_bolt",
+   "k_attune",
+   "k_channel"
+  ],
+  "deck": [
+   "tidebolt",
+   "tidebolt",
+   "kindle",
+   "kindle",
+   "rimeshard",
+   "arc_torrent",
+   "miasma",
+   "unmake",
+   "ward_sigil",
+   "convergence"
+  ],
+  "subclasses": {
+   "accumulator": "Accumulator",
+   "catalyst": "Catalyst",
+   "prismatic": "Prismatic"
+  },
+  "blurb": "Wields all six elements. Lays stacks, then sets them against each other.",
+  "art": "res://assets/art/elementalist.png",
+  "face": [
+   0.448,
+   0.157,
+   0.226,
+   0.177
+  ]
+ },
+ "alchemist": {
+  "name": "Alchemist",
+  "hp": 32,
+  "armor": 0,
+  "grit": 2,
+  "color": "a8653b",
+  "kit": [
+   "k_toss",
+   "k_brew",
+   "k_tonic"
+  ],
+  "deck": [
+   "firepot",
+   "firepot",
+   "brine_jar",
+   "brine_jar",
+   "field_dressing",
+   "field_dressing",
+   "quicklime",
+   "distill",
+   "smoke_bomb",
+   "scald_jar"
+  ],
+  "subclasses": {
+   "transmuter": "Transmuter",
+   "plaguewright": "Plaguewright",
+   "apothecary": "Apothecary"
+  },
+  "blurb": "Back-rank brewer. Fire and Water, flasks for next round, healing and remedies.",
+  "art": "res://assets/art/alchemist.png",
+  "face": [
+   0.465,
+   0.16,
+   0.239,
+   0.177
+  ]
+ },
+ "oracle": {
+  "name": "Oracle",
+  "hp": 28,
+  "armor": 0,
+  "grit": 2,
+  "color": "6d5a8a",
+  "kit": [
+   "k_foresee",
+   "k_hasten",
+   "k_delay"
+  ],
+  "attuned": 5,
+  "deck": [
+   "void_glimpse",
+   "void_glimpse",
+   "portent",
+   "portent",
+   "stall",
+   "ill_omen",
+   "time_shear",
+   "foreseen_blow",
+   "glimpse_ahead",
+   "crack_of_doom"
+  ],
+  "subclasses": {
+   "chronomancer": "Chronomancer",
+   "augur": "Augur",
+   "fatebinder": "Fatebinder"
+  },
+  "blurb": "Seer of the Void. Delays the foe, Primes the company, and writes Doom.",
+  "art": "res://assets/art/oracle.png",
+  "face": [
+   0.448,
+   0.131,
+   0.209,
+   0.166
+  ]
+ },
+ "hexweaver": {
+  "name": "Hexweaver",
+  "hp": 30,
+  "armor": 0,
+  "grit": 2,
+  "color": "62804f",
+  "kit": [
+   "k_hex",
+   "k_transfer",
+   "k_unleash"
+  ],
+  "attuned": 4,
+  "deck": [
+   "curse_bolt",
+   "curse_bolt",
+   "blight_touch",
+   "blight_touch",
+   "withering",
+   "dark_pact",
+   "hex_ward",
+   "malediction",
+   "evil_eye",
+   "drain"
+  ],
+  "subclasses": {
+   "pactbound": "Pactbound",
+   "doomsayer": "Doomsayer",
+   "mirrorhex": "Mirrorhex"
+  },
+  "blurb": "Curse-weaver of Toxin and Void. Lays Hex, shifts the company's afflictions onto the foe.",
+  "art": "res://assets/art/hexweaver.png",
+  "face": [
+   0.448,
+   0.16,
+   0.226,
+   0.171
+  ]
+ }
+}

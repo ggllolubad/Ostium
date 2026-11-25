@@ -1,0 +1,67 @@
+{
+ "order": [
+  "drowned",
+  "mire",
+  "baths",
+  "pits",
+  "foundry",
+  "coast",
+  "fleet",
+  "rime",
+  "barrow",
+  "hive",
+  "spire",
+  "silence",
+  "pyre",
+  "garden",
+  "sky"
+ ],
+ "acts": [
+  {
+   "n": 1,
+   "name": "The Waters Below",
+   "worlds": [
+    "drowned",
+    "mire",
+    "baths"
+   ]
+  },
+  {
+   "n": 2,
+   "name": "The Fires Beneath",
+   "worlds": [
+    "pits",
+    "foundry",
+    "coast"
+   ]
+  },
+  {
+   "n": 3,
+   "name": "The Long Cold",
+   "worlds": [
+    "fleet",
+    "rime",
+    "barrow"
+   ]
+  },
+  {
+   "n": 4,
+   "name": "The Stilling",
+   "worlds": [
+    "hive",
+    "spire",
+    "silence"
+   ]
+  },
+  {
+   "n": 5,
+   "name": "The Hollow Heaven",
+   "worlds": [
+    "pyre",
+    "garden",
+    "sky"
+   ]
+  }
+ ],
+ "finale": "The Shattered God has every part but one. The mouth is in the abbey, behind the high altar."
+}
