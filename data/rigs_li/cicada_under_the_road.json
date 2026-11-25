@@ -1,0 +1,313 @@
+{
+"key": "cicada_under_the_road",
+"source": "worlds/world_X_b_cicada_under_the_road",
+"scale": 0.6,
+"canvas": [
+1200,
+1560
+],
+"ground": 1542.0,
+"flip": true,
+"ink": [
+0,
+0,
+1200,
+1560
+],
+"bones": {
+"road": {
+"pivot": [
+600.0,
+1542.0
+],
+"parent": null
+},
+"shell": {
+"pivot": [
+600.0,
+1380.0
+],
+"parent": "road"
+},
+"shell_lip": {
+"pivot": [
+430.62,
+1057.8
+],
+"parent": "shell"
+},
+"stones": {
+"pivot": [
+300.0,
+1488.0
+],
+"parent": "road"
+},
+"foreleg_n": {
+"pivot": [
+318.36,
+1249.62
+],
+"parent": "shell"
+},
+"foreleg_f": {
+"pivot": [
+287.1,
+1222.92
+],
+"parent": "shell"
+},
+"adult": {
+"pivot": [
+443.46,
+1080.12
+],
+"parent": "shell"
+},
+"adult_head": {
+"pivot": [
+405.12,
+704.28
+],
+"parent": "adult"
+},
+"wing_n": {
+"pivot": [
+287.88,
+862.5
+],
+"parent": "adult"
+},
+"wing_f": {
+"pivot": [
+479.16,
+828.48
+],
+"parent": "adult"
+},
+"aleg_n": {
+"pivot": [
+295.5,
+756.9
+],
+"parent": "adult"
+},
+"aleg_f": {
+"pivot": [
+456.18,
+733.08
+],
+"parent": "adult"
+}
+},
+"layers": [
+{
+"name": "00_road",
+"bone": "road",
+"z": 0,
+"pos": [
+0.0,
+1112.4
+],
+"size": [
+1200,
+448
+]
+},
+{
+"name": "01_wing_f",
+"bone": "wing_f",
+"z": 1,
+"pos": [
+360.6,
+0.0
+],
+"size": [
+385,
+836
+]
+},
+{
+"name": "02_foreleg_f",
+"bone": "foreleg_f",
+"z": 2,
+"pos": [
+52.8,
+1204.2
+],
+"size": [
+286,
+202
+]
+},
+{
+"name": "03_shell",
+"bone": "shell",
+"z": 3,
+"pos": [
+114.6,
+948.6
+],
+"size": [
+650,
+554
+]
+},
+{
+"name": "04_adult",
+"bone": "adult",
+"z": 4,
+"pos": [
+301.2,
+889.8
+],
+"size": [
+220,
+197
+]
+},
+{
+"name": "05_shell_lip",
+"bone": "shell_lip",
+"z": 5,
+"pos": [
+135.6,
+1058.4
+],
+"size": [
+503,
+69
+]
+},
+{
+"name": "06_adult",
+"bone": "adult",
+"z": 6,
+"pos": [
+210.6,
+688.2
+],
+"size": [
+130,
+271
+]
+},
+{
+"name": "07_aleg_f",
+"bone": "aleg_f",
+"z": 7,
+"pos": [
+415.8,
+712.8
+],
+"size": [
+224,
+404
+]
+},
+{
+"name": "08_aleg_n",
+"bone": "aleg_n",
+"z": 8,
+"pos": [
+123.6,
+735.6
+],
+"size": [
+217,
+197
+]
+},
+{
+"name": "09_adult",
+"bone": "adult",
+"z": 9,
+"pos": [
+228.6,
+672.6
+],
+"size": [
+270,
+275
+]
+},
+{
+"name": "10_adult_head",
+"bone": "adult_head",
+"z": 10,
+"pos": [
+198.6,
+570.6
+],
+"size": [
+289,
+230
+]
+},
+{
+"name": "11_wing_n",
+"bone": "wing_n",
+"z": 11,
+"pos": [
+156.6,
+845.4
+],
+"size": [
+152,
+412
+]
+},
+{
+"name": "12_shell",
+"bone": "shell",
+"z": 12,
+"pos": [
+26.4,
+1128.6
+],
+"size": [
+512,
+355
+]
+},
+{
+"name": "13_foreleg_n",
+"bone": "foreleg_n",
+"z": 13,
+"pos": [
+10.8,
+1219.2
+],
+"size": [
+355,
+266
+]
+},
+{
+"name": "14_stones",
+"bone": "stones",
+"z": 14,
+"pos": [
+0.0,
+1342.8
+],
+"size": [
+1200,
+217
+]
+},
+{
+"name": "15_adult",
+"bone": "adult",
+"z": 15,
+"pos": [
+189.0,
+493.2
+],
+"size": [
+566,
+459
+]
+}
+]
+}

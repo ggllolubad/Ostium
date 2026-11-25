@@ -1,0 +1,274 @@
+{
+"key": "college_tortoise",
+"source": "worlds/world_XI_b_college_tortoise",
+"scale": 0.6,
+"canvas": [
+360,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+0,
+335,
+302,
+486
+],
+"bones": {
+"shell": {
+"pivot": [
+186.0,
+414.0
+],
+"parent": null
+},
+"neck": {
+"pivot": [
+102.0,
+433.2
+],
+"parent": "shell"
+},
+"head": {
+"pivot": [
+54.0,
+418.8
+],
+"parent": "neck"
+},
+"tail": {
+"pivot": [
+276.0,
+439.2
+],
+"parent": "shell"
+},
+"leg_hf_1": {
+"pivot": [
+242.4,
+429.6
+],
+"parent": "shell"
+},
+"leg_hf_2": {
+"pivot": [
+238.2,
+460.68
+],
+"parent": "leg_hf_1"
+},
+"leg_ff_1": {
+"pivot": [
+124.8,
+429.6
+],
+"parent": "shell"
+},
+"leg_ff_2": {
+"pivot": [
+113.88,
+460.68
+],
+"parent": "leg_ff_1"
+},
+"leg_hn_1": {
+"pivot": [
+253.2,
+436.8
+],
+"parent": "shell"
+},
+"leg_hn_2": {
+"pivot": [
+254.04,
+462.84
+],
+"parent": "leg_hn_1"
+},
+"leg_fn_1": {
+"pivot": [
+134.4,
+436.8
+],
+"parent": "shell"
+},
+"leg_fn_2": {
+"pivot": [
+118.8,
+457.2
+],
+"parent": "leg_fn_1"
+}
+},
+"layers": [
+{
+"name": "00_leg_hf_1",
+"bone": "leg_hf_1",
+"z": 0,
+"pos": [
+216.0,
+424.8
+],
+"size": [
+55,
+45
+]
+},
+{
+"name": "01_leg_hf_2",
+"bone": "leg_hf_2",
+"z": 1,
+"pos": [
+211.8,
+447.0
+],
+"size": [
+51,
+38
+]
+},
+{
+"name": "02_leg_ff_1",
+"bone": "leg_ff_1",
+"z": 2,
+"pos": [
+94.8,
+420.0
+],
+"size": [
+58,
+53
+]
+},
+{
+"name": "03_leg_ff_2",
+"bone": "leg_ff_2",
+"z": 3,
+"pos": [
+84.6,
+442.8
+],
+"size": [
+55,
+44
+]
+},
+{
+"name": "04_tail",
+"bone": "tail",
+"z": 4,
+"pos": [
+265.2,
+432.6
+],
+"size": [
+38,
+26
+]
+},
+{
+"name": "05_neck",
+"bone": "neck",
+"z": 5,
+"pos": [
+39.6,
+405.6
+],
+"size": [
+90,
+47
+]
+},
+{
+"name": "06_head",
+"bone": "head",
+"z": 6,
+"pos": [
+0.0,
+397.2
+],
+"size": [
+61,
+47
+]
+},
+{
+"name": "07_shell",
+"bone": "shell",
+"z": 7,
+"pos": [
+83.4,
+335.4
+],
+"size": [
+206,
+145
+]
+},
+{
+"name": "08_leg_hn_1",
+"bone": "leg_hn_1",
+"z": 8,
+"pos": [
+226.2,
+433.8
+],
+"size": [
+55,
+37
+]
+},
+{
+"name": "09_leg_hn_2",
+"bone": "leg_hn_2",
+"z": 9,
+"pos": [
+231.6,
+451.8
+],
+"size": [
+46,
+31
+]
+},
+{
+"name": "10_leg_fn_1",
+"bone": "leg_fn_1",
+"z": 10,
+"pos": [
+102.6,
+420.6
+],
+"size": [
+56,
+53
+]
+},
+{
+"name": "11_leg_fn_2",
+"bone": "leg_fn_2",
+"z": 11,
+"pos": [
+58.2,
+421.8
+],
+"size": [
+85,
+57
+]
+},
+{
+"name": "12_root",
+"bone": "root",
+"z": 12,
+"pos": [
+64.8,
+470.4
+],
+"size": [
+230,
+11
+]
+}
+]
+}

@@ -1,0 +1,240 @@
+{
+"key": "antlion",
+"source": "worlds/world_X_b_antlion",
+"scale": 0.6,
+"canvas": [
+750,
+660
+],
+"ground": 642.0,
+"flip": true,
+"ink": [
+0,
+163,
+750,
+660
+],
+"bones": {
+"crater": {
+"pivot": [
+390.0,
+642.0
+],
+"parent": null
+},
+"body": {
+"pivot": [
+390.0,
+570.0
+],
+"parent": "crater"
+},
+"head": {
+"pivot": [
+288.0,
+462.0
+],
+"parent": "body"
+},
+"jaw_n": {
+"pivot": [
+211.14,
+399.48
+],
+"parent": "head"
+},
+"jaw_f": {
+"pivot": [
+255.6,
+370.98
+],
+"parent": "head"
+},
+"leg_f1": {
+"pivot": [
+318.0,
+462.0
+],
+"parent": "body"
+},
+"leg_f2": {
+"pivot": [
+354.0,
+480.0
+],
+"parent": "body"
+},
+"leg_n1": {
+"pivot": [
+303.6,
+498.0
+],
+"parent": "body"
+},
+"leg_n2": {
+"pivot": [
+336.0,
+522.0
+],
+"parent": "body"
+}
+},
+"layers": [
+{
+"name": "00_crater",
+"bone": "crater",
+"z": 0,
+"pos": [
+0.0,
+420.6
+],
+"size": [
+750,
+239
+]
+},
+{
+"name": "01_leg_f1",
+"bone": "leg_f1",
+"z": 1,
+"pos": [
+305.4,
+426.0
+],
+"size": [
+83,
+80
+]
+},
+{
+"name": "02_leg_f2",
+"bone": "leg_f2",
+"z": 2,
+"pos": [
+341.4,
+455.4
+],
+"size": [
+95,
+87
+]
+},
+{
+"name": "03_body",
+"bone": "body",
+"z": 3,
+"pos": [
+262.2,
+379.2
+],
+"size": [
+410,
+241
+]
+},
+{
+"name": "04_jaw_f",
+"bone": "jaw_f",
+"z": 4,
+"pos": [
+237.0,
+163.2
+],
+"size": [
+55,
+223
+]
+},
+{
+"name": "05_head",
+"bone": "head",
+"z": 5,
+"pos": [
+187.2,
+355.2
+],
+"size": [
+125,
+113
+]
+},
+{
+"name": "06_jaw_n",
+"bone": "jaw_n",
+"z": 6,
+"pos": [
+74.4,
+223.2
+],
+"size": [
+151,
+197
+]
+},
+{
+"name": "07_leg_n2",
+"bone": "leg_n2",
+"z": 7,
+"pos": [
+257.4,
+508.8
+],
+"size": [
+94,
+103
+]
+},
+{
+"name": "08_leg_n1",
+"bone": "leg_n1",
+"z": 8,
+"pos": [
+209.4,
+485.4
+],
+"size": [
+110,
+96
+]
+},
+{
+"name": "09_crater",
+"bone": "crater",
+"z": 9,
+"pos": [
+382.8,
+511.8
+],
+"size": [
+302,
+112
+]
+},
+{
+"name": "10_crater",
+"bone": "crater",
+"z": 10,
+"pos": [
+0.0,
+399.6
+],
+"size": [
+750,
+256
+]
+},
+{
+"name": "11_root",
+"bone": "root",
+"z": 11,
+"pos": [
+28.2,
+636.6
+],
+"size": [
+722,
+14
+]
+}
+]
+}

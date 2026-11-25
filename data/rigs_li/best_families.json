@@ -1,0 +1,373 @@
+{
+"key": "best_families",
+"source": "worlds/world_III_b_best_families",
+"scale": 0.6,
+"canvas": [
+960,
+960
+],
+"ground": 942.0,
+"flip": true,
+"ink": [
+0,
+0,
+960,
+960
+],
+"bones": {
+"heap": {
+"pivot": [
+540.0,
+942.0
+],
+"parent": null
+},
+"patriarch": {
+"pivot": [
+552.0,
+516.0
+],
+"parent": "heap"
+},
+"p_head": {
+"pivot": [
+570.0,
+252.0
+],
+"parent": "patriarch"
+},
+"dowager": {
+"pivot": [
+786.0,
+648.0
+],
+"parent": "heap"
+},
+"matron": {
+"pivot": [
+372.0,
+600.0
+],
+"parent": "heap"
+},
+"front": {
+"pivot": [
+402.0,
+780.0
+],
+"parent": "heap"
+},
+"towel": {
+"pivot": [
+540.0,
+672.0
+],
+"parent": "heap"
+},
+"arm_4": {
+"pivot": [
+246.0,
+480.0
+],
+"parent": "heap"
+},
+"arm_8": {
+"pivot": [
+526.8,
+271.2
+],
+"parent": "patriarch"
+},
+"arm_7": {
+"pivot": [
+763.32,
+453.3
+],
+"parent": "dowager"
+},
+"arm_2": {
+"pivot": [
+306.24,
+601.38
+],
+"parent": "front"
+},
+"arm_1": {
+"pivot": [
+277.08,
+632.76
+],
+"parent": "front"
+},
+"arm_9": {
+"pivot": [
+333.54,
+474.3
+],
+"parent": "matron"
+},
+"arm_3": {
+"pivot": [
+288.0,
+780.0
+],
+"parent": "front"
+},
+"arm_6": {
+"pivot": [
+480.0,
+750.0
+],
+"parent": "front"
+}
+},
+"layers": [
+{
+"name": "00_heap",
+"bone": "heap",
+"z": 0,
+"pos": [
+0.0,
+0.0
+],
+"size": [
+960,
+960
+]
+},
+{
+"name": "01_arm_4",
+"bone": "arm_4",
+"z": 1,
+"pos": [
+45.6,
+225.6
+],
+"size": [
+233,
+292
+]
+},
+{
+"name": "02_patriarch",
+"bone": "patriarch",
+"z": 2,
+"pos": [
+387.0,
+205.8
+],
+"size": [
+304,
+380
+]
+},
+{
+"name": "03_p_head",
+"bone": "p_head",
+"z": 3,
+"pos": [
+465.6,
+50.4
+],
+"size": [
+184,
+232
+]
+},
+{
+"name": "04_patriarch",
+"bone": "patriarch",
+"z": 4,
+"pos": [
+452.4,
+216.6
+],
+"size": [
+252,
+267
+]
+},
+{
+"name": "05_arm_8",
+"bone": "arm_8",
+"z": 5,
+"pos": [
+246.6,
+61.8
+],
+"size": [
+329,
+261
+]
+},
+{
+"name": "06_dowager",
+"bone": "dowager",
+"z": 6,
+"pos": [
+543.0,
+267.0
+],
+"size": [
+356,
+623
+]
+},
+{
+"name": "07_arm_7",
+"bone": "arm_7",
+"z": 7,
+"pos": [
+529.2,
+286.8
+],
+"size": [
+263,
+275
+]
+},
+{
+"name": "08_matron",
+"bone": "matron",
+"z": 8,
+"pos": [
+257.4,
+318.0
+],
+"size": [
+225,
+328
+]
+},
+{
+"name": "09_towel",
+"bone": "towel",
+"z": 9,
+"pos": [
+355.2,
+603.6
+],
+"size": [
+202,
+89
+]
+},
+{
+"name": "10_arm_2",
+"bone": "arm_2",
+"z": 10,
+"pos": [
+11.4,
+561.6
+],
+"size": [
+331,
+204
+]
+},
+{
+"name": "11_front",
+"bone": "front",
+"z": 11,
+"pos": [
+174.0,
+455.4
+],
+"size": [
+425,
+457
+]
+},
+{
+"name": "12_arm_1",
+"bone": "arm_1",
+"z": 12,
+"pos": [
+21.6,
+589.2
+],
+"size": [
+295,
+345
+]
+},
+{
+"name": "13_arm_9",
+"bone": "arm_9",
+"z": 13,
+"pos": [
+243.0,
+436.2
+],
+"size": [
+126,
+219
+]
+},
+{
+"name": "14_front",
+"bone": "front",
+"z": 14,
+"pos": [
+164.4,
+849.0
+],
+"size": [
+458,
+101
+]
+},
+{
+"name": "15_arm_3",
+"bone": "arm_3",
+"z": 15,
+"pos": [
+109.8,
+753.0
+],
+"size": [
+209,
+200
+]
+},
+{
+"name": "16_arm_6",
+"bone": "arm_6",
+"z": 16,
+"pos": [
+459.0,
+700.8
+],
+"size": [
+167,
+101
+]
+},
+{
+"name": "17_heap",
+"bone": "heap",
+"z": 17,
+"pos": [
+186.0,
+0.0
+],
+"size": [
+690,
+517
+]
+},
+{
+"name": "18_root",
+"bone": "root",
+"z": 18,
+"pos": [
+0.0,
+934.8
+],
+"size": [
+745,
+22
+]
+}
+]
+}

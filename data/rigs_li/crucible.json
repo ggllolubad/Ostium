@@ -1,0 +1,300 @@
+{
+"key": "crucible",
+"source": "worlds/world_V_b_crucible",
+"scale": 0.6,
+"canvas": [
+1380,
+1320
+],
+"ground": 1302.0,
+"flip": true,
+"ink": [
+0,
+0,
+1380,
+1320
+],
+"bones": {
+"swing": {
+"pivot": [
+480.0,
+-540.0
+],
+"parent": null
+},
+"pot": {
+"pivot": [
+533.52,
+415.02
+],
+"parent": "swing"
+},
+"bar": {
+"pivot": [
+933.84,
+380.28
+],
+"parent": "pot"
+},
+"pour": {
+"pivot": [
+635.82,
+932.76
+],
+"parent": "pot"
+},
+"chains": {
+"pivot": [
+480.0,
+-540.0
+],
+"parent": "swing"
+},
+"pourer_1": {
+"pivot": [
+1284.0,
+358.5
+],
+"parent": "bar"
+},
+"legs_1": {
+"pivot": [
+1284.0,
+687.3
+],
+"parent": "pourer_1"
+},
+"pourer_2": {
+"pivot": [
+1140.0,
+367.44
+],
+"parent": "bar"
+},
+"legs_2": {
+"pivot": [
+1140.0,
+683.1
+],
+"parent": "pourer_2"
+},
+"pourer_3": {
+"pivot": [
+1002.0,
+376.08
+],
+"parent": "bar"
+},
+"legs_3": {
+"pivot": [
+1002.0,
+718.02
+],
+"parent": "pourer_3"
+},
+"bucket": {
+"pivot": [
+992.94,
+376.62
+],
+"parent": "bar"
+}
+},
+"layers": [
+{
+"name": "00_root",
+"bone": "root",
+"z": 0,
+"pos": [
+0.0,
+974.4
+],
+"size": [
+1380,
+346
+]
+},
+{
+"name": "01_chains",
+"bone": "chains",
+"z": 1,
+"pos": [
+465.6,
+0.0
+],
+"size": [
+90,
+7
+]
+},
+{
+"name": "02_pot",
+"bone": "pot",
+"z": 2,
+"pos": [
+36.0,
+7.8
+],
+"size": [
+910,
+907
+]
+},
+{
+"name": "03_chains",
+"bone": "chains",
+"z": 3,
+"pos": [
+477.0,
+0.0
+],
+"size": [
+112,
+398
+]
+},
+{
+"name": "04_pot",
+"bone": "pot",
+"z": 4,
+"pos": [
+36.0,
+4.2
+],
+"size": [
+682,
+1043
+]
+},
+{
+"name": "05_pour",
+"bone": "pour",
+"z": 5,
+"pos": [
+467.4,
+879.6
+],
+"size": [
+220,
+355
+]
+},
+{
+"name": "06_bar",
+"bone": "bar",
+"z": 6,
+"pos": [
+892.2,
+333.6
+],
+"size": [
+478,
+90
+]
+},
+{
+"name": "07_bucket",
+"bone": "bucket",
+"z": 7,
+"pos": [
+945.0,
+308.4
+],
+"size": [
+98,
+272
+]
+},
+{
+"name": "08_legs_1",
+"bone": "legs_1",
+"z": 8,
+"pos": [
+1245.0,
+683.4
+],
+"size": [
+99,
+251
+]
+},
+{
+"name": "09_pourer_1",
+"bone": "pourer_1",
+"z": 9,
+"pos": [
+1217.4,
+335.4
+],
+"size": [
+134,
+460
+]
+},
+{
+"name": "10_legs_2",
+"bone": "legs_2",
+"z": 10,
+"pos": [
+1080.6,
+678.6
+],
+"size": [
+94,
+240
+]
+},
+{
+"name": "11_pourer_2",
+"bone": "pourer_2",
+"z": 11,
+"pos": [
+1062.0,
+344.4
+],
+"size": [
+131,
+442
+]
+},
+{
+"name": "12_legs_3",
+"bone": "legs_3",
+"z": 12,
+"pos": [
+948.6,
+711.6
+],
+"size": [
+106,
+263
+]
+},
+{
+"name": "13_pourer_3",
+"bone": "pourer_3",
+"z": 13,
+"pos": [
+931.8,
+351.6
+],
+"size": [
+134,
+479
+]
+},
+{
+"name": "14_bar",
+"bone": "bar",
+"z": 14,
+"pos": [
+919.2,
+325.8
+],
+"size": [
+461,
+77
+]
+}
+]
+}

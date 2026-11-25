@@ -1,0 +1,307 @@
+{
+"key": "blight_snails",
+"source": "worlds/world_XIV_b_blight_snails",
+"scale": 0.6,
+"canvas": [
+408,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+0,
+289,
+389,
+492
+],
+"bones": {
+"urn": {
+"pivot": [
+118.8,
+409.2
+],
+"parent": null
+},
+"snail_6": {
+"pivot": [
+206.4,
+350.4
+],
+"parent": "urn"
+},
+"snail_1": {
+"pivot": [
+165.6,
+345.6
+],
+"parent": "urn"
+},
+"snail_2": {
+"pivot": [
+170.4,
+307.2
+],
+"parent": "snail_1"
+},
+"snail_8": {
+"pivot": [
+121.2,
+334.8
+],
+"parent": "urn"
+},
+"snail_5": {
+"pivot": [
+260.4,
+372.0
+],
+"parent": "urn"
+},
+"snail_9": {
+"pivot": [
+136.8,
+403.2
+],
+"parent": "urn"
+},
+"snail_10": {
+"pivot": [
+210.0,
+416.4
+],
+"parent": "urn"
+},
+"snail_3": {
+"pivot": [
+79.2,
+447.6
+],
+"parent": "urn"
+},
+"snail_7": {
+"pivot": [
+331.2,
+458.4
+],
+"parent": "urn"
+},
+"snail_11": {
+"pivot": [
+165.6,
+460.8
+],
+"parent": "urn"
+},
+"snail_4": {
+"pivot": [
+31.2,
+458.4
+],
+"parent": "urn"
+},
+"snail_12": {
+"pivot": [
+44.4,
+466.8
+],
+"parent": "urn"
+}
+},
+"layers": [
+{
+"name": "00_urn",
+"bone": "urn",
+"z": 0,
+"pos": [
+63.0,
+370.2
+],
+"size": [
+58,
+104
+]
+},
+{
+"name": "01_snail_6",
+"bone": "snail_6",
+"z": 1,
+"pos": [
+169.2,
+327.0
+],
+"size": [
+60,
+41
+]
+},
+{
+"name": "02_urn",
+"bone": "urn",
+"z": 2,
+"pos": [
+60.0,
+330.0
+],
+"size": [
+241,
+162
+]
+},
+{
+"name": "03_snail_1",
+"bone": "snail_1",
+"z": 3,
+"pos": [
+114.0,
+319.2
+],
+"size": [
+82,
+47
+]
+},
+{
+"name": "04_snail_2",
+"bone": "snail_2",
+"z": 4,
+"pos": [
+150.0,
+288.0
+],
+"size": [
+53,
+35
+]
+},
+{
+"name": "05_snail_8",
+"bone": "snail_8",
+"z": 5,
+"pos": [
+85.8,
+315.0
+],
+"size": [
+58,
+41
+]
+},
+{
+"name": "06_snail_5",
+"bone": "snail_5",
+"z": 6,
+"pos": [
+235.8,
+348.6
+],
+"size": [
+65,
+41
+]
+},
+{
+"name": "07_snail_9",
+"bone": "snail_9",
+"z": 7,
+"pos": [
+97.8,
+383.4
+],
+"size": [
+62,
+35
+]
+},
+{
+"name": "08_snail_10",
+"bone": "snail_10",
+"z": 8,
+"pos": [
+167.4,
+386.4
+],
+"size": [
+69,
+53
+]
+},
+{
+"name": "09_snail_3",
+"bone": "snail_3",
+"z": 9,
+"pos": [
+25.8,
+407.4
+],
+"size": [
+116,
+61
+]
+},
+{
+"name": "10_snail_7",
+"bone": "snail_7",
+"z": 10,
+"pos": [
+280.2,
+432.6
+],
+"size": [
+110,
+46
+]
+},
+{
+"name": "11_snail_11",
+"bone": "snail_11",
+"z": 11,
+"pos": [
+124.8,
+439.2
+],
+"size": [
+88,
+39
+]
+},
+{
+"name": "12_snail_4",
+"bone": "snail_4",
+"z": 12,
+"pos": [
+0.0,
+435.6
+],
+"size": [
+80,
+41
+]
+},
+{
+"name": "13_snail_12",
+"bone": "snail_12",
+"z": 13,
+"pos": [
+24.0,
+452.4
+],
+"size": [
+47,
+28
+]
+},
+{
+"name": "14_root",
+"bone": "root",
+"z": 14,
+"pos": [
+0.0,
+449.4
+],
+"size": [
+378,
+33
+]
+}
+]
+}

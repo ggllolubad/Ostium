@@ -1,0 +1,440 @@
+{
+"key": "fleet_marine",
+"source": "worlds/world_VII_b_fleet_marine",
+"scale": 0.6,
+"canvas": [
+600,
+492
+],
+"ground": 474.0,
+"flip": true,
+"ink": [
+13,
+91,
+562,
+478
+],
+"bones": {
+"pelvis": {
+"pivot": [
+420.0,
+303.6
+],
+"parent": null
+},
+"torso": {
+"pivot": [
+409.08,
+281.22
+],
+"parent": "pelvis"
+},
+"head": {
+"pivot": [
+353.58,
+195.36
+],
+"parent": "torso"
+},
+"upperarm_n": {
+"pivot": [
+383.22,
+199.68
+],
+"parent": "torso"
+},
+"forearm_n": {
+"pivot": [
+433.38,
+257.94
+],
+"parent": "upperarm_n"
+},
+"hand_n": {
+"pivot": [
+414.78,
+322.08
+],
+"parent": "forearm_n"
+},
+"upperarm_f": {
+"pivot": [
+343.8,
+220.02
+],
+"parent": "torso"
+},
+"forearm_f": {
+"pivot": [
+271.14,
+245.04
+],
+"parent": "upperarm_f"
+},
+"hand_f": {
+"pivot": [
+294.0,
+307.8
+],
+"parent": "forearm_f"
+},
+"thigh_n": {
+"pivot": [
+437.1,
+295.56
+],
+"parent": "pelvis"
+},
+"shin_n": {
+"pivot": [
+453.3,
+398.88
+],
+"parent": "thigh_n"
+},
+"foot_n": {
+"pivot": [
+542.4,
+451.2
+],
+"parent": "shin_n"
+},
+"thigh_f": {
+"pivot": [
+400.62,
+312.66
+],
+"parent": "pelvis"
+},
+"shin_f": {
+"pivot": [
+302.16,
+347.94
+],
+"parent": "thigh_f"
+},
+"foot_f": {
+"pivot": [
+304.8,
+451.2
+],
+"parent": "shin_f"
+},
+"cartridge_box": {
+"pivot": [
+448.56,
+275.76
+],
+"parent": "pelvis"
+},
+"musket": {
+"pivot": [
+414.78,
+322.08
+],
+"parent": "hand_n"
+},
+"canteen": {
+"pivot": [
+408.36,
+253.14
+],
+"parent": "torso"
+},
+"scabbard": {
+"pivot": [
+428.16,
+291.36
+],
+"parent": "pelvis"
+}
+},
+"layers": [
+{
+"name": "00_upperarm_f",
+"bone": "upperarm_f",
+"z": 0,
+"pos": [
+257.4,
+201.6
+],
+"size": [
+104,
+112
+]
+},
+{
+"name": "01_forearm_f",
+"bone": "forearm_f",
+"z": 1,
+"pos": [
+251.4,
+212.4
+],
+"size": [
+110,
+101
+]
+},
+{
+"name": "02_forearm_f",
+"bone": "forearm_f",
+"z": 2,
+"pos": [
+255.6,
+238.2
+],
+"size": [
+52,
+82
+]
+},
+{
+"name": "03_shin_f",
+"bone": "shin_f",
+"z": 3,
+"pos": [
+276.6,
+346.8
+],
+"size": [
+53,
+115
+]
+},
+{
+"name": "04_foot_f",
+"bone": "foot_f",
+"z": 4,
+"pos": [
+254.4,
+441.0
+],
+"size": [
+71,
+37
+]
+},
+{
+"name": "05_thigh_f",
+"bone": "thigh_f",
+"z": 5,
+"pos": [
+285.0,
+288.6
+],
+"size": [
+128,
+86
+]
+},
+{
+"name": "06_shin_f",
+"bone": "shin_f",
+"z": 6,
+"pos": [
+280.8,
+331.2
+],
+"size": [
+107,
+45
+]
+},
+{
+"name": "07_shin_n",
+"bone": "shin_n",
+"z": 7,
+"pos": [
+445.2,
+383.4
+],
+"size": [
+116,
+79
+]
+},
+{
+"name": "08_foot_n",
+"bone": "foot_n",
+"z": 8,
+"pos": [
+492.0,
+441.0
+],
+"size": [
+71,
+37
+]
+},
+{
+"name": "09_thigh_n",
+"bone": "thigh_n",
+"z": 9,
+"pos": [
+410.4,
+289.8
+],
+"size": [
+72,
+126
+]
+},
+{
+"name": "10_shin_n",
+"bone": "shin_n",
+"z": 10,
+"pos": [
+436.2,
+367.2
+],
+"size": [
+47,
+63
+]
+},
+{
+"name": "11_torso",
+"bone": "torso",
+"z": 11,
+"pos": [
+319.8,
+164.4
+],
+"size": [
+156,
+170
+]
+},
+{
+"name": "12_head",
+"bone": "head",
+"z": 12,
+"pos": [
+288.6,
+90.6
+],
+"size": [
+88,
+125
+]
+},
+{
+"name": "13_musket",
+"bone": "musket",
+"z": 13,
+"pos": [
+13.2,
+273.0
+],
+"size": [
+472,
+80
+]
+},
+{
+"name": "14_hand_f",
+"bone": "hand_f",
+"z": 14,
+"pos": [
+271.2,
+287.4
+],
+"size": [
+44,
+42
+]
+},
+{
+"name": "15_cartridge_box",
+"bone": "cartridge_box",
+"z": 15,
+"pos": [
+419.4,
+255.6
+],
+"size": [
+71,
+56
+]
+},
+{
+"name": "16_upperarm_n",
+"bone": "upperarm_n",
+"z": 16,
+"pos": [
+365.4,
+183.0
+],
+"size": [
+82,
+96
+]
+},
+{
+"name": "17_forearm_n",
+"bone": "forearm_n",
+"z": 17,
+"pos": [
+393.6,
+244.8
+],
+"size": [
+62,
+83
+]
+},
+{
+"name": "18_forearm_n",
+"bone": "forearm_n",
+"z": 18,
+"pos": [
+403.2,
+253.2
+],
+"size": [
+47,
+81
+]
+},
+{
+"name": "19_hand_n",
+"bone": "hand_n",
+"z": 19,
+"pos": [
+391.2,
+298.2
+],
+"size": [
+44,
+48
+]
+},
+{
+"name": "20_canteen",
+"bone": "canteen",
+"z": 20,
+"pos": [
+406.2,
+250.8
+],
+"size": [
+79,
+88
+]
+},
+{
+"name": "21_scabbard",
+"bone": "scabbard",
+"z": 21,
+"pos": [
+415.2,
+279.6
+],
+"size": [
+65,
+106
+]
+}
+]
+}
