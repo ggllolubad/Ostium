@@ -21,7 +21,7 @@ func _initialize() -> void:
 		await process_frame
 		await process_frame
 		SaveIO.remove(Run.meta_path())
-	elif mode == "map" or mode == "camp" or mode == "sub" or mode == "prepare":
+	elif mode == "map" or mode == "map2" or mode == "camp" or mode == "sub" or mode == "prepare":
 		m.hub.visible = false
 		m.run_ui.visible = true
 		m.run_ui.hub_world = OS.get_environment("WORLD") if OS.get_environment("WORLD") != "" else "drowned"
@@ -30,9 +30,28 @@ func _initialize() -> void:
 		if mode == "prepare":
 			m.run_ui.show_prepare()
 		else:
+			var coms: Array = Data.COMMISSIONS.get(m.run_ui.hub_world, [])
+			if not coms.is_empty():
+				m.run_ui.hub_commission = coms[0].ruler
 			m.run_ui._begin_run()
 		for k in 6:
 			await process_frame
+		if mode == "map2":
+			# a company four rooms in, with light spent on scouting: walked roads, rings, the ruler at the end
+			for step in 4:
+				var nx: Array = Run.next_nodes()
+				Run.move_to(nx[step % nx.size()])
+			Run.r.resolving = ""
+			Run.r.pending = []
+			Run.r.supplies.light += 1
+			Run.scout()
+			Run.scout()
+			if OS.get_environment("REVEAL") != "":
+				for nid in Run.r.map.nodes:
+					Run.r.map.nodes[nid].revealed = true
+			m.run_ui.show_map()
+			for k in 4:
+				await process_frame
 		if mode == "camp":
 			m.run_ui.show_waypoint()
 		if mode == "sub":

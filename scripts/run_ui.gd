@@ -427,6 +427,21 @@ func _ring(cv: Control, c: Vector2, r: float, col: Color, seed_s: String) -> voi
 		pts.append(c + Vector2(cos(a), sin(a) * 0.92) * rr)
 	cv.draw_polyline(pts, col, 3.0, true)
 
+## Paints a figure in the chart's two inks, so a ruler drawn in colour sits on the sheet as an engraving would.
+func _sepia() -> ShaderMaterial:
+	var sh := Shader.new()
+	sh.code = """shader_type canvas_item;
+void fragment() {
+	vec4 c = texture(TEXTURE, UV);
+	float g = dot(c.rgb, vec3(0.3, 0.59, 0.11));
+	vec3 ink = vec3(0.17, 0.11, 0.07);
+	vec3 wash = vec3(0.72, 0.6, 0.45);
+	COLOR = vec4(mix(ink, wash, smoothstep(0.05, 0.75, g)), c.a);
+}"""
+	var m := ShaderMaterial.new()
+	m.shader = sh
+	return m
+
 func show_map() -> void:
 	if Run.r.outcome != "":
 		show_end()
@@ -450,13 +465,14 @@ func show_map() -> void:
 	screen.add_child(chart)
 	var sheet := TextureRect.new()
 	sheet.texture = load("res://assets/art/map/sheet.png")
+	sheet.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sheet.position = Vector2(20, 104)
 	sheet.size = Vector2(1560, 812)
-	sheet.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	sheet.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	chart.add_child(sheet)
 	var cart := TextureRect.new()
 	cart.texture = load("res://assets/art/map/cartouche.png")
+	cart.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	cart.position = Vector2(540, 120)
 	cart.size = Vector2(520, 74)
 	cart.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -467,14 +483,14 @@ func show_map() -> void:
 	ttl.autowrap_mode = TextServer.AUTOWRAP_OFF
 	var rose := TextureRect.new()
 	rose.texture = _ink("compass")
-	rose.position = Vector2(62, 730)
-	rose.size = Vector2(128, 128)
 	rose.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rose.position = Vector2(52, 734)
+	rose.size = Vector2(106, 106)
 	rose.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rose.modulate = Color(1, 1, 1, 0.85)
 	chart.add_child(rose)
 	var nodes: Dictionary = Run.r.map.nodes
-	var pos := func(n: Dictionary) -> Vector2: return Vector2(104 + n.layer * (1392.0 / (Run.LAYERS - 1)), 116 + n.x * 790)
+	var pos := func(n: Dictionary) -> Vector2: return Vector2(104 + n.layer * (1352.0 / (Run.LAYERS - 1)), 116 + n.x * 790)
 	var nexts := Run.next_nodes()
 	var roads := Control.new()
 	roads.size = size
@@ -546,11 +562,12 @@ func show_map() -> void:
 				fig.texture = load("res://assets/art/rigs_li/%s/full.webp" % ruler)
 				fig.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 				fig.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-				fig.size = Vector2(150, 150)
-				fig.position = c + Vector2(-75, -196)
+				fig.size = Vector2(130, 130)
+				fig.position = c + Vector2(-65, -176)
 				fig.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				fig.material = _sepia()
 				chart.add_child(fig)
-			var nm := _lbl(Data.ENEMIES[ruler].name if ruler != "" and Data.ENEMIES.has(ruler) else "The ruler", c + Vector2(-90, 44), Vector2(180, 44), 17, UiStyle.font_sc, MAP_RUB, chart)
+			var nm := _lbl(Data.ENEMIES[ruler].name if ruler != "" and Data.ENEMIES.has(ruler) else "The ruler", c + Vector2(-75, 42), Vector2(150, 44), 17, UiStyle.font_sc, MAP_RUB, chart)
 			nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		if id == Run.r.at:
 			var pen := TextureRect.new()
