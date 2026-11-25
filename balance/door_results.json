@@ -1,0 +1,1090 @@
+{
+ "D13_f2.25_m6": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 3.7,
+    "elite": 5.4,
+    "guardian": 6.2,
+    "boss": 8.5
+   },
+   "hp_lost": {
+    "foe": 9.3,
+    "elite": 18.4,
+    "guardian": 21.8,
+    "boss": 64.8
+   },
+   "deaths": 0.08,
+   "max_stress": 37,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 61,
+   "upgrades": 1.4,
+   "conj": {
+    "Lockdown": 3.9,
+    "Electrocute": 3.6,
+    "Plasma": 2.0,
+    "Discharge": 1.8,
+    "Thermal Shock": 1.8,
+    "Scald": 1.5,
+    "Absolute Zero": 1.4,
+    "Hollow Flame": 1.1
+   }
+  },
+  "d13": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 3.7,
+    "elite": 5.4,
+    "guardian": 6.2,
+    "boss": 8.5
+   },
+   "hp_lost": {
+    "foe": 9.3,
+    "elite": 18.4,
+    "guardian": 21.8,
+    "boss": 64.8
+   },
+   "deaths": 0.08,
+   "max_stress": 37,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 61,
+   "upgrades": 1.4,
+   "conj": {
+    "Lockdown": 3.9,
+    "Electrocute": 3.6,
+    "Plasma": 2.0,
+    "Discharge": 1.8,
+    "Thermal Shock": 1.8,
+    "Scald": 1.5,
+    "Absolute Zero": 1.4,
+    "Hollow Flame": 1.1
+   }
+  }
+ },
+ "D13_f2.5_m8": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.3,
+    "elite": 5.1,
+    "guardian": 6.4,
+    "boss": 8.9
+   },
+   "hp_lost": {
+    "foe": 15.8,
+    "elite": 32.9,
+    "guardian": 37.8,
+    "boss": 96.6
+   },
+   "deaths": 0,
+   "max_stress": 44,
+   "virtues": 0,
+   "afflictions": 0,
+   "minutes": 64,
+   "upgrades": 1.6,
+   "conj": {
+    "Lockdown": 4.2,
+    "Electrocute": 4.2,
+    "Plasma": 2.6,
+    "Discharge": 1.8,
+    "Scald": 1.7,
+    "Thermal Shock": 1.5,
+    "Freeze": 1.2,
+    "Drown": 1.1
+   }
+  },
+  "d13": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.3,
+    "elite": 5.1,
+    "guardian": 6.4,
+    "boss": 8.9
+   },
+   "hp_lost": {
+    "foe": 15.8,
+    "elite": 32.9,
+    "guardian": 37.8,
+    "boss": 96.6
+   },
+   "deaths": 0,
+   "max_stress": 44,
+   "virtues": 0,
+   "afflictions": 0,
+   "minutes": 64,
+   "upgrades": 1.6,
+   "conj": {
+    "Lockdown": 4.2,
+    "Electrocute": 4.2,
+    "Plasma": 2.6,
+    "Discharge": 1.8,
+    "Scald": 1.7,
+    "Thermal Shock": 1.5,
+    "Freeze": 1.2,
+    "Drown": 1.1
+   }
+  }
+ },
+ "D13_f2.75_m2": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.4,
+    "elite": 6.2,
+    "guardian": 7.1,
+    "boss": 9.9
+   },
+   "hp_lost": {
+    "foe": 5.9,
+    "elite": 12.2,
+    "guardian": 8.1,
+    "boss": 81.6
+   },
+   "deaths": 0,
+   "max_stress": 38,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 70,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 5.7,
+    "Lockdown": 4.9,
+    "Plasma": 3.4,
+    "Scald": 2.1,
+    "Discharge": 2.0,
+    "Thermal Shock": 1.8,
+    "Absolute Zero": 1.5,
+    "Hollow Flame": 1.2
+   }
+  },
+  "d13": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.4,
+    "elite": 6.2,
+    "guardian": 7.1,
+    "boss": 9.9
+   },
+   "hp_lost": {
+    "foe": 5.9,
+    "elite": 12.2,
+    "guardian": 8.1,
+    "boss": 81.6
+   },
+   "deaths": 0,
+   "max_stress": 38,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 70,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 5.7,
+    "Lockdown": 4.9,
+    "Plasma": 3.4,
+    "Scald": 2.1,
+    "Discharge": 2.0,
+    "Thermal Shock": 1.8,
+    "Absolute Zero": 1.5,
+    "Hollow Flame": 1.2
+   }
+  }
+ },
+ "D13_f3.5_m3": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 5.3,
+    "elite": 7.4,
+    "guardian": 9.2,
+    "boss": 12.3
+   },
+   "hp_lost": {
+    "foe": 10.1,
+    "elite": 20.9,
+    "guardian": 16.6,
+    "boss": 103.5
+   },
+   "deaths": 0.33,
+   "max_stress": 42,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 84,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 8.2,
+    "Lockdown": 5.8,
+    "Plasma": 3.6,
+    "Discharge": 2.8,
+    "Hollow Flame": 2.8,
+    "Scald": 2.4,
+    "Thermal Shock": 2.2,
+    "Absolute Zero": 1.6
+   }
+  },
+  "d13": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 5.3,
+    "elite": 7.4,
+    "guardian": 9.2,
+    "boss": 12.3
+   },
+   "hp_lost": {
+    "foe": 10.1,
+    "elite": 20.9,
+    "guardian": 16.6,
+    "boss": 103.5
+   },
+   "deaths": 0.33,
+   "max_stress": 42,
+   "virtues": 0.08,
+   "afflictions": 0,
+   "minutes": 84,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 8.2,
+    "Lockdown": 5.8,
+    "Plasma": 3.6,
+    "Discharge": 2.8,
+    "Hollow Flame": 2.8,
+    "Scald": 2.4,
+    "Thermal Shock": 2.2,
+    "Absolute Zero": 1.6
+   }
+  }
+ },
+ "D13_f4.5_m4": {
+  "all": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 12,
+   "rounds": {
+    "foe": 6.5,
+    "elite": 8.6,
+    "guardian": 10.6,
+    "boss": 15.9
+   },
+   "hp_lost": {
+    "foe": 17.4,
+    "elite": 28.7,
+    "guardian": 32.9,
+    "boss": 143.1
+   },
+   "deaths": 1,
+   "max_stress": 47,
+   "virtues": 0.25,
+   "afflictions": 0,
+   "minutes": 100,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 8.8,
+    "Lockdown": 6.8,
+    "Discharge": 3.9,
+    "Hollow Flame": 3.6,
+    "Plasma": 3.5,
+    "Thermal Shock": 2.8,
+    "Scald": 2.7,
+    "Drown": 2.0
+   }
+  },
+  "d13": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 12,
+   "rounds": {
+    "foe": 6.5,
+    "elite": 8.6,
+    "guardian": 10.6,
+    "boss": 15.9
+   },
+   "hp_lost": {
+    "foe": 17.4,
+    "elite": 28.7,
+    "guardian": 32.9,
+    "boss": 143.1
+   },
+   "deaths": 1,
+   "max_stress": 47,
+   "virtues": 0.25,
+   "afflictions": 0,
+   "minutes": 100,
+   "upgrades": 1.4,
+   "conj": {
+    "Electrocute": 8.8,
+    "Lockdown": 6.8,
+    "Discharge": 3.9,
+    "Hollow Flame": 3.6,
+    "Plasma": 3.5,
+    "Thermal Shock": 2.8,
+    "Scald": 2.7,
+    "Drown": 2.0
+   }
+  }
+ },
+ "D1_f1.25_m0": {
+  "all": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 11.8,
+   "rounds": {
+    "foe": 4.1,
+    "guardian": 6.5,
+    "elite": 5.7,
+    "boss": 11.5
+   },
+   "hp_lost": {
+    "foe": 12.6,
+    "guardian": 22,
+    "elite": 20.5,
+    "boss": 59.7
+   },
+   "deaths": 1.08,
+   "max_stress": 87,
+   "virtues": 4.83,
+   "afflictions": 1.33,
+   "minutes": 56,
+   "upgrades": 0.8,
+   "conj": {
+    "Plasma": 14.2,
+    "Discharge": 2.6,
+    "Thermal Shock": 2.0,
+    "Hollow Flame": 1.6,
+    "Drown": 1.5,
+    "Scald": 0.9,
+    "Lockdown": 0.8,
+    "Electrocute": 0.8
+   }
+  },
+  "d1": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 11.8,
+   "rounds": {
+    "foe": 4.1,
+    "guardian": 6.5,
+    "elite": 5.7,
+    "boss": 11.5
+   },
+   "hp_lost": {
+    "foe": 12.6,
+    "guardian": 22,
+    "elite": 20.5,
+    "boss": 59.7
+   },
+   "deaths": 1.08,
+   "max_stress": 87,
+   "virtues": 4.83,
+   "afflictions": 1.33,
+   "minutes": 56,
+   "upgrades": 0.8,
+   "conj": {
+    "Plasma": 14.2,
+    "Discharge": 2.6,
+    "Thermal Shock": 2.0,
+    "Hollow Flame": 1.6,
+    "Drown": 1.5,
+    "Scald": 0.9,
+    "Lockdown": 0.8,
+    "Electrocute": 0.8
+   }
+  }
+ },
+ "D1_f1.25_m1": {
+  "all": {
+   "n": 12,
+   "win": 0.67,
+   "layer": 11.2,
+   "rounds": {
+    "foe": 4.0,
+    "guardian": 6.2,
+    "elite": 5.5,
+    "boss": 11.5
+   },
+   "hp_lost": {
+    "foe": 15.5,
+    "guardian": 26.3,
+    "elite": 15.7,
+    "boss": 56.8
+   },
+   "deaths": 1.42,
+   "max_stress": 83,
+   "virtues": 4.25,
+   "afflictions": 1.17,
+   "minutes": 51,
+   "upgrades": 0.9,
+   "conj": {
+    "Plasma": 12.9,
+    "Discharge": 2.5,
+    "Thermal Shock": 2.2,
+    "Drown": 1.9,
+    "Hollow Flame": 1.4,
+    "Scald": 0.9,
+    "Lockdown": 0.7,
+    "Electrocute": 0.7
+   }
+  },
+  "d1": {
+   "n": 12,
+   "win": 0.67,
+   "layer": 11.2,
+   "rounds": {
+    "foe": 4.0,
+    "guardian": 6.2,
+    "elite": 5.5,
+    "boss": 11.5
+   },
+   "hp_lost": {
+    "foe": 15.5,
+    "guardian": 26.3,
+    "elite": 15.7,
+    "boss": 56.8
+   },
+   "deaths": 1.42,
+   "max_stress": 83,
+   "virtues": 4.25,
+   "afflictions": 1.17,
+   "minutes": 51,
+   "upgrades": 0.9,
+   "conj": {
+    "Plasma": 12.9,
+    "Discharge": 2.5,
+    "Thermal Shock": 2.2,
+    "Drown": 1.9,
+    "Hollow Flame": 1.4,
+    "Scald": 0.9,
+    "Lockdown": 0.7,
+    "Electrocute": 0.7
+   }
+  }
+ },
+ "D1_f1.4_m0": {
+  "all": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 11.7,
+   "rounds": {
+    "foe": 4.2,
+    "guardian": 6.6,
+    "boss": 12.7,
+    "elite": 5.9
+   },
+   "hp_lost": {
+    "foe": 14.4,
+    "guardian": 25.8,
+    "boss": 49.3,
+    "elite": 24.1
+   },
+   "deaths": 1,
+   "max_stress": 88,
+   "virtues": 5.33,
+   "afflictions": 2,
+   "minutes": 57,
+   "upgrades": 1,
+   "conj": {
+    "Plasma": 16.0,
+    "Discharge": 2.8,
+    "Drown": 2.5,
+    "Thermal Shock": 1.8,
+    "Hollow Flame": 1.2,
+    "Scald": 0.8,
+    "Lockdown": 0.8,
+    "Combust": 0.6
+   }
+  },
+  "d1": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 11.7,
+   "rounds": {
+    "foe": 4.2,
+    "guardian": 6.6,
+    "boss": 12.7,
+    "elite": 5.9
+   },
+   "hp_lost": {
+    "foe": 14.4,
+    "guardian": 25.8,
+    "boss": 49.3,
+    "elite": 24.1
+   },
+   "deaths": 1,
+   "max_stress": 88,
+   "virtues": 5.33,
+   "afflictions": 2,
+   "minutes": 57,
+   "upgrades": 1,
+   "conj": {
+    "Plasma": 16.0,
+    "Discharge": 2.8,
+    "Drown": 2.5,
+    "Thermal Shock": 1.8,
+    "Hollow Flame": 1.2,
+    "Scald": 0.8,
+    "Lockdown": 0.8,
+    "Combust": 0.6
+   }
+  }
+ },
+ "D5_f1.5_m3": {
+  "all": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.2,
+    "guardian": 8.4,
+    "elite": 8.4,
+    "boss": 17.1
+   },
+   "hp_lost": {
+    "foe": 15.9,
+    "guardian": 37.3,
+    "elite": 34.4,
+    "boss": 83.3
+   },
+   "deaths": 1.33,
+   "max_stress": 67,
+   "virtues": 0.33,
+   "afflictions": 0,
+   "minutes": 70,
+   "upgrades": 1.8,
+   "conj": {
+    "Thermal Shock": 3.9,
+    "Scald": 2.6,
+    "Plasma": 2.3,
+    "Freeze": 2.2,
+    "Combust": 1.7,
+    "Hollow Flame": 1.2,
+    "Electrocute": 1.1,
+    "Drown": 1.0
+   }
+  },
+  "d5": {
+   "n": 12,
+   "win": 0.75,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.2,
+    "guardian": 8.4,
+    "elite": 8.4,
+    "boss": 17.1
+   },
+   "hp_lost": {
+    "foe": 15.9,
+    "guardian": 37.3,
+    "elite": 34.4,
+    "boss": 83.3
+   },
+   "deaths": 1.33,
+   "max_stress": 67,
+   "virtues": 0.33,
+   "afflictions": 0,
+   "minutes": 70,
+   "upgrades": 1.8,
+   "conj": {
+    "Thermal Shock": 3.9,
+    "Scald": 2.6,
+    "Plasma": 2.3,
+    "Freeze": 2.2,
+    "Combust": 1.7,
+    "Hollow Flame": 1.2,
+    "Electrocute": 1.1,
+    "Drown": 1.0
+   }
+  }
+ },
+ "D5_f1.75_m1": {
+  "all": {
+   "n": 12,
+   "win": 0.92,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.6,
+    "guardian": 9.2,
+    "elite": 8,
+    "boss": 19.8
+   },
+   "hp_lost": {
+    "foe": 10.6,
+    "guardian": 32.1,
+    "elite": 26,
+    "boss": 104.6
+   },
+   "deaths": 0.92,
+   "max_stress": 68,
+   "virtues": 0.67,
+   "afflictions": 0,
+   "minutes": 78,
+   "upgrades": 2.1,
+   "conj": {
+    "Plasma": 3.9,
+    "Thermal Shock": 3.8,
+    "Scald": 3.3,
+    "Combust": 2.2,
+    "Electrocute": 2.0,
+    "Drown": 1.9,
+    "Hollow Flame": 1.9,
+    "Freeze": 1.8
+   }
+  },
+  "d5": {
+   "n": 12,
+   "win": 0.92,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.6,
+    "guardian": 9.2,
+    "elite": 8,
+    "boss": 19.8
+   },
+   "hp_lost": {
+    "foe": 10.6,
+    "guardian": 32.1,
+    "elite": 26,
+    "boss": 104.6
+   },
+   "deaths": 0.92,
+   "max_stress": 68,
+   "virtues": 0.67,
+   "afflictions": 0,
+   "minutes": 78,
+   "upgrades": 2.1,
+   "conj": {
+    "Plasma": 3.9,
+    "Thermal Shock": 3.8,
+    "Scald": 3.3,
+    "Combust": 2.2,
+    "Electrocute": 2.0,
+    "Drown": 1.9,
+    "Hollow Flame": 1.9,
+    "Freeze": 1.8
+   }
+  }
+ },
+ "D5_f1.75_m4": {
+  "all": {
+   "n": 12,
+   "win": 0.42,
+   "layer": 11.6,
+   "rounds": {
+    "foe": 4.8,
+    "guardian": 9.8,
+    "elite": 8,
+    "boss": 14.4
+   },
+   "hp_lost": {
+    "foe": 20.6,
+    "guardian": 46.2,
+    "elite": 50.2,
+    "boss": 73.9
+   },
+   "deaths": 2,
+   "max_stress": 63,
+   "virtues": 0.75,
+   "afflictions": 0,
+   "minutes": 68,
+   "upgrades": 1.5,
+   "conj": {
+    "Thermal Shock": 3.0,
+    "Freeze": 2.5,
+    "Plasma": 2.1,
+    "Scald": 1.9,
+    "Electrocute": 1.2,
+    "Combust": 0.9,
+    "Absolute Zero": 0.8,
+    "Hollow Flame": 0.8
+   }
+  },
+  "d5": {
+   "n": 12,
+   "win": 0.42,
+   "layer": 11.6,
+   "rounds": {
+    "foe": 4.8,
+    "guardian": 9.8,
+    "elite": 8,
+    "boss": 14.4
+   },
+   "hp_lost": {
+    "foe": 20.6,
+    "guardian": 46.2,
+    "elite": 50.2,
+    "boss": 73.9
+   },
+   "deaths": 2,
+   "max_stress": 63,
+   "virtues": 0.75,
+   "afflictions": 0,
+   "minutes": 68,
+   "upgrades": 1.5,
+   "conj": {
+    "Thermal Shock": 3.0,
+    "Freeze": 2.5,
+    "Plasma": 2.1,
+    "Scald": 1.9,
+    "Electrocute": 1.2,
+    "Combust": 0.9,
+    "Absolute Zero": 0.8,
+    "Hollow Flame": 0.8
+   }
+  }
+ },
+ "D9_f2.0_m5": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 3.5,
+    "elite": 6.4,
+    "guardian": 6.5,
+    "boss": 13
+   },
+   "hp_lost": {
+    "foe": 14.3,
+    "elite": 13.2,
+    "guardian": 14.3,
+    "boss": 107
+   },
+   "deaths": 0.08,
+   "max_stress": 66,
+   "virtues": 1.17,
+   "afflictions": 0.08,
+   "minutes": 60,
+   "upgrades": 1.8,
+   "conj": {
+    "Plasma": 21.6,
+    "Hollow Flame": 3.2,
+    "Thermal Shock": 2.9,
+    "Scald": 2.3,
+    "Electrocute": 1.6,
+    "Lockdown": 1.2,
+    "Discharge": 1.2,
+    "Freeze": 1.2
+   }
+  },
+  "d9": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 3.5,
+    "elite": 6.4,
+    "guardian": 6.5,
+    "boss": 13
+   },
+   "hp_lost": {
+    "foe": 14.3,
+    "elite": 13.2,
+    "guardian": 14.3,
+    "boss": 107
+   },
+   "deaths": 0.08,
+   "max_stress": 66,
+   "virtues": 1.17,
+   "afflictions": 0.08,
+   "minutes": 60,
+   "upgrades": 1.8,
+   "conj": {
+    "Plasma": 21.6,
+    "Hollow Flame": 3.2,
+    "Thermal Shock": 2.9,
+    "Scald": 2.3,
+    "Electrocute": 1.6,
+    "Lockdown": 1.2,
+    "Discharge": 1.2,
+    "Freeze": 1.2
+   }
+  }
+ },
+ "D9_f2.25_m7": {
+  "all": {
+   "n": 12,
+   "win": 0.83,
+   "layer": 11.6,
+   "rounds": {
+    "foe": 3.9,
+    "elite": 7.8,
+    "guardian": 7.9,
+    "boss": 13.5
+   },
+   "hp_lost": {
+    "foe": 23.2,
+    "elite": 21.2,
+    "guardian": 13.5,
+    "boss": 102.5
+   },
+   "deaths": 0.83,
+   "max_stress": 65,
+   "virtues": 1.58,
+   "afflictions": 0.25,
+   "minutes": 63,
+   "upgrades": 1,
+   "conj": {
+    "Plasma": 24.2,
+    "Hollow Flame": 2.7,
+    "Scald": 2.7,
+    "Thermal Shock": 2.6,
+    "Electrocute": 1.4,
+    "Discharge": 1.2,
+    "Freeze": 1.2,
+    "Lockdown": 1.0
+   }
+  },
+  "d9": {
+   "n": 12,
+   "win": 0.83,
+   "layer": 11.6,
+   "rounds": {
+    "foe": 3.9,
+    "elite": 7.8,
+    "guardian": 7.9,
+    "boss": 13.5
+   },
+   "hp_lost": {
+    "foe": 23.2,
+    "elite": 21.2,
+    "guardian": 13.5,
+    "boss": 102.5
+   },
+   "deaths": 0.83,
+   "max_stress": 65,
+   "virtues": 1.58,
+   "afflictions": 0.25,
+   "minutes": 63,
+   "upgrades": 1,
+   "conj": {
+    "Plasma": 24.2,
+    "Hollow Flame": 2.7,
+    "Scald": 2.7,
+    "Thermal Shock": 2.6,
+    "Electrocute": 1.4,
+    "Discharge": 1.2,
+    "Freeze": 1.2,
+    "Lockdown": 1.0
+   }
+  }
+ },
+ "D9_f2.75_m2": {
+  "all": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.4,
+    "elite": 7.8,
+    "guardian": 8.3,
+    "boss": 15.4
+   },
+   "hp_lost": {
+    "foe": 13.6,
+    "elite": 17.8,
+    "guardian": 10.5,
+    "boss": 106.7
+   },
+   "deaths": 0.25,
+   "max_stress": 70,
+   "virtues": 1.75,
+   "afflictions": 0.08,
+   "minutes": 75,
+   "upgrades": 2,
+   "conj": {
+    "Plasma": 31.3,
+    "Hollow Flame": 3.8,
+    "Thermal Shock": 2.9,
+    "Scald": 2.2,
+    "Electrocute": 2.0,
+    "Freeze": 1.6,
+    "Lockdown": 1.5,
+    "Discharge": 1.3
+   }
+  },
+  "d9": {
+   "n": 12,
+   "win": 1.0,
+   "layer": 12,
+   "rounds": {
+    "foe": 4.4,
+    "elite": 7.8,
+    "guardian": 8.3,
+    "boss": 15.4
+   },
+   "hp_lost": {
+    "foe": 13.6,
+    "elite": 17.8,
+    "guardian": 10.5,
+    "boss": 106.7
+   },
+   "deaths": 0.25,
+   "max_stress": 70,
+   "virtues": 1.75,
+   "afflictions": 0.08,
+   "minutes": 75,
+   "upgrades": 2,
+   "conj": {
+    "Plasma": 31.3,
+    "Hollow Flame": 3.8,
+    "Thermal Shock": 2.9,
+    "Scald": 2.2,
+    "Electrocute": 2.0,
+    "Freeze": 1.6,
+    "Lockdown": 1.5,
+    "Discharge": 1.3
+   }
+  }
+ },
+ "D9_f3.5_m3": {
+  "all": {
+   "n": 12,
+   "win": 0.83,
+   "layer": 12,
+   "rounds": {
+    "foe": 5.1,
+    "elite": 10.4,
+    "guardian": 9.8,
+    "boss": 18.8
+   },
+   "hp_lost": {
+    "foe": 22.2,
+    "elite": 34.9,
+    "guardian": 7.8,
+    "boss": 99.5
+   },
+   "deaths": 0.83,
+   "max_stress": 67,
+   "virtues": 2.25,
+   "afflictions": 0.08,
+   "minutes": 84,
+   "upgrades": 1.8,
+   "conj": {
+    "Plasma": 41.2,
+    "Hollow Flame": 6.8,
+    "Scald": 3.7,
+    "Thermal Shock": 3.5,
+    "Lockdown": 2.3,
+    "Electrocute": 2.0,
+    "Freeze": 1.7,
+    "Drown": 1.4
+   }
+  },
+  "d9": {
+   "n": 12,
+   "win": 0.83,
+   "layer": 12,
+   "rounds": {
+    "foe": 5.1,
+    "elite": 10.4,
+    "guardian": 9.8,
+    "boss": 18.8
+   },
+   "hp_lost": {
+    "foe": 22.2,
+    "elite": 34.9,
+    "guardian": 7.8,
+    "boss": 99.5
+   },
+   "deaths": 0.83,
+   "max_stress": 67,
+   "virtues": 2.25,
+   "afflictions": 0.08,
+   "minutes": 84,
+   "upgrades": 1.8,
+   "conj": {
+    "Plasma": 41.2,
+    "Hollow Flame": 6.8,
+    "Scald": 3.7,
+    "Thermal Shock": 3.5,
+    "Lockdown": 2.3,
+    "Electrocute": 2.0,
+    "Freeze": 1.7,
+    "Drown": 1.4
+   }
+  }
+ },
+ "D9_f4.5_m4": {
+  "all": {
+   "n": 12,
+   "win": 0.5,
+   "layer": 10.9,
+   "rounds": {
+    "foe": 6.1,
+    "elite": 12,
+    "guardian": 11.5,
+    "boss": 19.3
+   },
+   "hp_lost": {
+    "foe": 32.6,
+    "elite": 30.9,
+    "guardian": 12.8,
+    "boss": 94.3
+   },
+   "deaths": 1.75,
+   "max_stress": 64,
+   "virtues": 1.92,
+   "afflictions": 0.25,
+   "minutes": 83,
+   "upgrades": 1.3,
+   "conj": {
+    "Plasma": 42.2,
+    "Hollow Flame": 5.3,
+    "Scald": 3.7,
+    "Thermal Shock": 3.4,
+    "Electrocute": 3.0,
+    "Lockdown": 2.6,
+    "Discharge": 1.6,
+    "Freeze": 1.2
+   }
+  },
+  "d9": {
+   "n": 12,
+   "win": 0.5,
+   "layer": 10.9,
+   "rounds": {
+    "foe": 6.1,
+    "elite": 12,
+    "guardian": 11.5,
+    "boss": 19.3
+   },
+   "hp_lost": {
+    "foe": 32.6,
+    "elite": 30.9,
+    "guardian": 12.8,
+    "boss": 94.3
+   },
+   "deaths": 1.75,
+   "max_stress": 64,
+   "virtues": 1.92,
+   "afflictions": 0.25,
+   "minutes": 83,
+   "upgrades": 1.3,
+   "conj": {
+    "Plasma": 42.2,
+    "Hollow Flame": 5.3,
+    "Scald": 3.7,
+    "Thermal Shock": 3.4,
+    "Electrocute": 3.0,
+    "Lockdown": 2.6,
+    "Discharge": 1.6,
+    "Freeze": 1.2
+   }
+  }
+ }
+}

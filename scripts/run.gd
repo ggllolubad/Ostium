@@ -16,8 +16,13 @@ static var C: Dictionary = Data._load_json("res://data/run.json")
 # ------------------------------------------------------------------ rng
 static func rnd() -> float:
 	r.step = int(r.get("step", 0)) + 1
-	var x := int(hash(str(r.seed) + ":" + str(r.step))) & 0x7fffffff
-	return float(x % 1000003) / 1000003.0
+	# splitmix64 over (seed, step). The old string hash moved by 1 per step, so every roll in a run came out almost the
+	# same (one encounter repeated, the same rewards and map nodes). Fixed 2026-11-25.
+	var z: int = int(r.seed) * 0x5851F42D4C957F2D + int(r.step) * 0x14057B7EF767814F
+	z = (z ^ (z >> 30)) * 0x3C79AC492BA7B653
+	z = (z ^ (z >> 27)) * 0x1C69B3F74AC4AE35
+	z = z ^ (z >> 31)
+	return float((z & 0x7fffffff) % 1000003) / 1000003.0
 
 static func rint(n: int) -> int:
 	return int(floor(rnd() * n)) % max(1, n)
@@ -111,6 +116,15 @@ static func cast_lots() -> String:
 static func world_name() -> String:
 	return Data.WORLDS.get(r.get("world", "drowned"), Data.WORLDS.drowned).name
 
+## Threat (Cole, 2026-11-25): every world's foes scale with the descents the abbey has cleared, never with which
+## world is rolled, so a random late door on a young save is no harder than the first. Fixed when a descent starts.
+## Index = descents cleared (capped at 14). Calibrated in balance/ to about a 35-40% simulated clear rate per tier.
+const THREAT_HP := [1.5, 1.63, 1.75, 1.89, 2.02, 2.2, 2.38, 2.56, 2.75, 2.92, 3.08, 3.26, 3.43, 3.58, 3.73]
+const THREAT_DMG := [1.32, 1.51, 1.73, 1.94, 2.17, 2.47, 2.8, 3.15, 3.51, 3.89, 4.3, 4.73, 5.17, 5.63, 6.12]
+
+static func threat() -> int:
+	return clamp(int(meta.get("wins", 0)), 0, THREAT_HP.size() - 1)
+
 static func asc_max() -> int:
 	return min(15, int(meta.get("wins", 0)) + 1)
 
@@ -130,7 +144,7 @@ static func new_run_roster(party: Array, objective: String, asc: Array, seed: in
 	var belt: Array = prov.belt.duplicate()
 	if belt.is_empty():
 		belt = ["fl_heal"]
-	r = {"seed": seed, "step": 0, "objective": objective, "world": world, "asc": asc, "heroes": [], "gold": 60, "relics": meta.carried.duplicate(), "runes": [],
+	r = {"seed": seed, "step": 0, "objective": objective, "world": world, "threat": threat(), "asc": asc, "heroes": [], "gold": 60, "relics": meta.carried.duplicate(), "runes": [],
 		"belt": belt, "belt_max": int(meta.belt_max), "stash": [],
 		"supplies": {"food": 8 + int(prov.food), "light": 6 + int(prov.light), "medicine": 2 + int(prov.medicine), "tools": 2 + int(prov.tools)}, "doom": 0, "nodes_moved": 0,
 		"map": {}, "at": "", "fights_won": 0, "elites_won": 0, "pilgrim": 20 if objective == "escort" else 0,
@@ -152,6 +166,9 @@ static func new_run_roster(party: Array, objective: String, asc: Array, seed: in
 			h.deck.append("dread")
 		if meta.unlocked.has("armourer") and h.gear.armor.is_empty():
 			h.gear.armor = {"id": pick(["a_padded_jack", "a_brigandine", "a_oilskin"]), "runes": []}
+		# Rules v2, rule 17: each descent starts on the calling's starter deck; curses and afflictions carried home stay
+		var carried: Array = h.deck.filter(func(c): return Data.CARDS.get(c, {}).get("rarity", "") in ["Curse", "Affliction"])
+		h.deck = Data.HEROES[h.key].deck.duplicate() + carried
 		h.hp = max_hp(h)
 		r.heroes.append(h)
 	_gen_map()
@@ -240,9 +257,10 @@ static func combat_setup() -> Dictionary:
 		hs.append({"index": i, "key": h.key, "max_hp": max_hp(h), "hp": min(h.hp, max_hp(h)), "stress": h.stress, "resolve": h.resolve,
 			"deck": full_deck(h), "grit": grit(h), "armor": int(Data.HEROES[h.key].armor) + int(st.get("armor", 0)), "stats": st, "passives": passives(h), "sub": h.get("subclass", "")})
 	var lvl := doom_level()
-	var foe_hp := 1.0 + 0.08 * lvl * (2 if has_asc("a_scaling") else 1) + (0.1 if has_asc("a_hp") else 0.0)
+	var tl: int = clamp(int(r.get("threat", 0)), 0, THREAT_HP.size() - 1)
+	var foe_hp: float = THREAT_HP[tl] + 0.08 * lvl * (2 if has_asc("a_scaling") else 1) + (0.1 if has_asc("a_hp") else 0.0)
 	var foe_might := (1 if has_asc("a_might") else 0) + (1 if r.supplies.light <= 0 else 0) + (lvl / 3)
-	return {"heroes": hs, "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "foe_might": foe_might,
+	return {"heroes": hs, "world": r.get("world", ""), "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "foe_might": foe_might, "foe_dmg": THREAT_DMG[tl],
 		"boss_hp": 1.15 if has_asc("a_boss") else 1.0}
 
 ## Writes the fight's outcome back into the run. Returns a summary for the reward screen.
@@ -266,12 +284,13 @@ static func after_combat(s: Dictionary, node: Dictionary) -> Dictionary:
 		h.stress = ch.stress
 		h.resolve = ch.resolve
 		# curses picked up in the fight join the deck
-		var dreads := 0
+		var cur := {}
 		for c in ch.discard + ch.draw + ch.hand + ch.exhaust:
-			if c == "dread":
-				dreads += 1
-		for k in max(0, dreads - h.deck.count("dread")):
-			h.deck.append("dread")
+			if c == "dread" or String(c).begins_with("aff_"):
+				cur[c] = int(cur.get(c, 0)) + 1
+		for c in cur:
+			for k in max(0, int(cur[c]) - h.deck.count(c)):
+				h.deck.append(c)
 		if ch.get("was_dd", false) or ch.deaths_door:
 			var inj: String = pick(C.injuries.keys())
 			if not h.injuries.has(inj):
@@ -286,11 +305,11 @@ static func after_combat(s: Dictionary, node: Dictionary) -> Dictionary:
 		r.outcome = "defeat"
 		return sum
 	var tier: String = node.get("tier", "foe")
-	var gold: int = {"foe": 18, "elite": 42, "boss": 100}[tier] + rint(10)
+	var gold: int = {"foe": 18, "elite": 42, "guardian": 60, "boss": 100}.get(tier, 18) + rint(10)
 	gold = int(gold * gold_mult())
 	r.gold += gold
 	sum.gold = gold
-	var xp: int = {"foe": 12, "elite": 28, "boss": 60}[tier]
+	var xp: int = {"foe": 4, "elite": 10, "guardian": 16, "boss": 24}.get(tier, 4)   # Rules v2, rule 21
 	sum.xp = xp
 	for h in living():
 		var before: int = h.level

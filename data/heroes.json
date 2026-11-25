@@ -6,9 +6,7 @@
   "grit": 3,
   "color": "7f9cc6",
   "kit": [
-   "k_shield_up",
-   "k_challenge",
-   "k_bash"
+   "k_challenge"
   ],
   "deck": [
    "brace",
@@ -43,9 +41,7 @@
   "grit": 2,
   "color": "8aa271",
   "kit": [
-   "k_slash",
-   "k_step",
-   "k_feint"
+   "k_slash"
   ],
   "deck": [
    "arc_lash",
@@ -80,9 +76,7 @@
   "grit": 1,
   "color": "8e7aa6",
   "kit": [
-   "k_bolt",
-   "k_attune",
-   "k_channel"
+   "k_attune"
   ],
   "deck": [
    "tidebolt",
@@ -117,9 +111,7 @@
   "grit": 2,
   "color": "a8653b",
   "kit": [
-   "k_toss",
-   "k_brew",
-   "k_tonic"
+   "k_brew"
   ],
   "deck": [
    "firepot",
@@ -154,9 +146,7 @@
   "grit": 2,
   "color": "6d5a8a",
   "kit": [
-   "k_foresee",
-   "k_hasten",
-   "k_delay"
+   "k_foresee"
   ],
   "attuned": 5,
   "deck": [
@@ -192,9 +182,7 @@
   "grit": 2,
   "color": "62804f",
   "kit": [
-   "k_hex",
-   "k_transfer",
-   "k_unleash"
+   "k_hex"
   ],
   "attuned": 4,
   "deck": [

@@ -33,7 +33,7 @@ func _initialize() -> void:
 				if m.plan.size() > before and m.preview.reasons.size() > 0 and m.preview.reasons[m.preview.ordered.find(m.plan[-1])] != "":
 					m.remove_slot(m.plan.size() - 1)
 			if m.energy_left() > 0:
-				m.on_kit_clicked(h.id, h.kit[rounds % 3])
+				m.on_kit_clicked(h.id, h.kit[rounds % h.kit.size()])
 				if not m.targeting.is_empty():
 					m.on_unit_clicked(m.valid_targets[0])
 		if m.plan.size() > 1:
