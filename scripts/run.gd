@@ -124,7 +124,9 @@ const THREAT_DMG := [1.32, 1.51, 1.73, 1.94, 2.17, 2.47, 2.8, 3.15, 3.51, 3.89, 
 
 ## Gate 3 creature HP against Gate 3 cards, by tier: the Threat curve was calibrated on the old cards, which hit
 ## harder, and elites and rulers ran twice their target length. The simulator overrides these (rules hp_<tier>).
-const CONTENT_HP := {"foe": 0.55, "elite": 0.35, "boss": 0.42}
+const CONTENT_HP := {"foe": 0.55, "elite": 0.35, "boss": 0.34}
+## Gate 3: foes hit a little harder to keep the shorter elite and ruler fights from getting easier (calibration pass 2).
+const CONTENT_DMG := 1.1
 
 ## Foe HP and damage by company size (index = heroes in the fight), so every size is equally hard.
 const PARTY_HP := [1.0, 0.5, 0.68, 1.0, 1.3]
@@ -274,7 +276,7 @@ static func combat_setup() -> Dictionary:
 	var tier_hp := {}
 	for t in CONTENT_HP:
 		tier_hp[t] = float(Combat.RULES.get("hp_" + t, CONTENT_HP[t])) * float(Combat.RULES.get("hp_scale", 1.0))
-	var foe_dmg: float = THREAT_DMG[tl] * float(Combat.RULES.get("party_dmg_%d" % n_alive, PARTY_DMG[n_alive]))
+	var foe_dmg: float = THREAT_DMG[tl] * float(Combat.RULES.get("party_dmg_%d" % n_alive, PARTY_DMG[n_alive])) * float(Combat.RULES.get("dmg_scale", CONTENT_DMG))
 	return {"heroes": hs, "world": r.get("world", ""), "belt": r.belt.duplicate(), "energy": energy, "start": start, "round": round_fx, "stress_res": res, "foe_hp": foe_hp, "tier_hp": tier_hp, "foe_might": foe_might, "foe_dmg": foe_dmg,
 		"boss_hp": 1.15 if has_asc("a_boss") else 1.0}
 

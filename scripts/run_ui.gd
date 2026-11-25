@@ -489,7 +489,7 @@ func _fight(n: Dictionary) -> void:
 	Run.save()
 	var setup := Run.combat_setup()
 	if n.get("tier", "") == "guardian":
-		setup.foe_hp = float(setup.foe_hp) * 1.25   # the guardian is an elite fight at 1.25x HP
+		setup.foe_hp = float(setup.foe_hp) * 1.1   # the guardian is an elite fight at 1.1x HP (Gate 3 calibration)
 	main.start_run_fight(idx, setup, int(Run.r.seed) + Run.r.nodes_moved * 97)
 
 func after_fight(s: Dictionary) -> void:

@@ -268,7 +268,7 @@ func guardian(n: Dictionary) -> void:
 			cand.append(i)
 	if cand.is_empty():
 		return
-	fight(n, cand[int(Run.r.seed) % cand.size()], "guardian", 1.25)
+	fight(n, cand[int(Run.r.seed) % cand.size()], "guardian", 1.1)
 
 # ------------------------------------------------------------------ between fights
 func take_rewards() -> void:
