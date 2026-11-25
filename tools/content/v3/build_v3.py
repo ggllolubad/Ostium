@@ -86,7 +86,7 @@ QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used"}
 STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "taunt", "thorns", "dodge", "regen",
-          "hex", "doom", "fortify", "anchor", "tenacity", "charge"}
+          "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown"}
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}
 QU = {"hp", "max_hp", "block", "armor", "ward", "stress", "grit", "omen", "played", "resolve", "missing_hp", "hp_pct", "dd", "rank",
       "elements", "spectrum", "el_total", "el_max", "attuned", "attacking", "targeting_me", "moved", "exhaust", "discard", "hand",

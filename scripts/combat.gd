@@ -16,7 +16,8 @@ static func new_state(hero_keys: Array, enemy_keys: Array, seed: int) -> Diction
 	var s := {"heroes": [], "enemies": [], "round": 0, "energy": 0, "next_id": 1, "rng": seed,
 		"prime": 0, "last_actor": -1, "echoes": [], "enemy_queue": [], "hazards": {"hero": {}, "enemy": {}},
 		"events": [], "log": [], "triggers": {}, "outcome": "", "sim": false, "lockdown_used": {},
-		"bonus_energy": 0, "primes_consumed": 0, "reactions_round": 0, "last_target": -1, "belt": []}
+		"bonus_energy": 0, "primes_consumed": 0, "reactions_round": 0, "last_target": -1, "belt": [],
+		"belt_next": [], "belt_used": [], "fresh_on_belt": [], "improved": [], "flasks_used": 0, "rites": [], "rite_depth": 0}
 	for k in hero_keys:
 		s.heroes.append(_make_hero(s, k))
 	for k in enemy_keys:
@@ -38,8 +39,8 @@ static func _blank_unit(s: Dictionary) -> Dictionary:
 	return {"id": id, "hp": 1, "max_hp": 1, "block": 0, "armor": 0, "ward": 0, "dead": false, "elements": el, "fresh": fr,
 		"st": {"bleed": 0, "stun": 0, "mark": 0, "vulnerable": 0, "might": 0, "focus": 0, "momentum": 0, "riposte": 0,
 			"taunt": 0, "tenacity": 0, "freeze": 0, "freeze_bonus": 0, "neuro": 0, "silence": 0, "blight": 0, "lockdown": 0,
-			"thorns": 0, "dodge": 0, "regen": 0, "hex": 0, "doom": 0, "fortify": 0, "anchor": 0, "cap": 0},
-		"hollow": false, "moved": false, "guarded_by": -1, "postponed": false, "turned": -1, "omen": 0}
+			"thorns": 0, "dodge": 0, "regen": 0, "hex": 0, "doom": 0, "fortify": 0, "anchor": 0, "cap": 0, "charge": 0},
+		"hollow": false, "moved": false, "guarded_by": -1, "postponed": false, "turned": -1, "omen": 0, "scars": 0}
 
 static func _make_hero(s: Dictionary, key: String) -> Dictionary:
 	var d: Dictionary = Data.HEROES[key]
@@ -55,7 +56,8 @@ static func _make_enemy(s: Dictionary, key: String) -> Dictionary:
 	var u := _blank_unit(s)
 	u.merge({"side": "enemy", "key": key, "name": d.name, "max_hp": d.hp, "hp": d.hp, "armor": d.armor, "intent": "", "intent_target": -1,
 		"art": d.art, "personality": d.get("personality", "ai"), "last_intent": "", "span": int(d.get("span", 1)), "phase": 0, "ai_override": [],
-		"resist": d.get("resist", {}).duplicate()}, true)
+		"resist": d.get("resist", {}).duplicate(), "flags": d.get("flags", []).duplicate(), "used_once": {},
+		"postponed_last": false}, true)
 	return u
 
 # ------------------------------------------------------------------ run setup
@@ -190,6 +192,10 @@ static func start_round(s: Dictionary) -> void:
 	for h in s.heroes:
 		h.kit_used = {}
 		h.played = 0
+		h.flask_round = false
+	s.flasks_used = 0
+	s.belt += s.get("belt_next", [])
+	s.belt_next = []
 	s.energy = int(s.get("vigour_base", 2 * s.heroes.size())) + s.bonus_energy
 	s.bonus_energy = 0
 	var setup: Dictionary = s.get("setup", {})
@@ -208,6 +214,7 @@ static func start_round(s: Dictionary) -> void:
 	if RULES.traits:
 		for e in s.enemies.duplicate():
 			_trait(s, e, "round_start", [e])
+	_rite_fire(s, "round_start", {})
 	_log(s, "— Round %d —" % s.round)
 	if not setup.is_empty():
 		if s.round == 1:
@@ -257,6 +264,7 @@ static func choose_intents(s: Dictionary) -> void:
 			q.append(e.id)
 			continue
 		if Data.ENEMIES[e.key].has("ai"):
+			e.postponed_last = false
 			e.intent = EnemyAI.pick(s, e, i)
 			e.last_intent = e.intent
 			e.intent_target = _intent_target(s, e, Data.ENEMIES[e.key].intents[e.intent])
@@ -315,9 +323,39 @@ static func _intent_target(s: Dictionary, e: Dictionary, intent: Dictionary) -> 
 			return best.id
 		"self":
 			return e.id
-		"all_allies", "all_heroes":
+		"rank2", "rank3":
+			if s.heroes.is_empty():
+				return -1
+			return s.heroes[min(s.heroes.size() - 1, 1 if intent.target == "rank2" else 2)].id
+		"random":
+			if s.heroes.is_empty():
+				return -1
+			match e.personality:
+				"cruel":
+					return _most_stressed(s).id
+				"cunning":
+					return s.heroes[-1].id
+			return s.heroes[_rand(s) % s.heroes.size()].id
+		"weakest":
+			var best: Dictionary = {}
+			for h in s.heroes:
+				if best.is_empty() or float(h.hp) / h.max_hp < float(best.hp) / best.max_hp:
+					best = h
+			return best.id if not best.is_empty() else -1
+		"most_stress":
+			return _most_stressed(s).id if not s.heroes.is_empty() else -1
+		"ally_front":
+			return s.enemies[0].id if not s.enemies.is_empty() else -1
+		"all_allies", "all_heroes", "front2", "back2":
 			return -1
 	return -1
+
+static func _most_stressed(s: Dictionary) -> Dictionary:
+	var best: Dictionary = {}
+	for h in s.heroes:
+		if best.is_empty() or h.stress > best.stress:
+			best = h
+	return best
 
 static func intent_of(e: Dictionary) -> Dictionary:
 	if e.intent == "":
@@ -347,6 +385,8 @@ static func check_action(s: Dictionary, a: Dictionary) -> String:
 		return "unplayable"
 	if a.source == "hand" and h.st.freeze > 0:
 		return "frozen: kit only"
+	if a.source == "belt" and h.get("flask_round", false):
+		return "one flask per hero a round"
 	var r := rank_of(s, h)
 	if a.source != "belt" and not c.use.has(r):
 		return "%s must be in rank %s" % [h.name, _ranks_text(c.use)]
@@ -451,9 +491,24 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	var neuro: bool = h.st.neuro > 0
 	if neuro:
 		h.st.neuro = 0
+	if a.get("source", "") == "belt":
+		h.flask_round = true
+		s.flasks_used = int(s.get("flasks_used", 0)) + 1
+		s.belt_used.append(a.card)
+		var fi: int = s.get("fresh_on_belt", []).find(a.card)
+		if fi >= 0:
+			s.fresh_on_belt.remove_at(fi)
 	_exec(s, h, c, targets, ctx, neuro)
 	s.last_target = a.get("target", -1)
 	h.played += 1
+	if a.get("source", "") == "belt":
+		_rite_fire(s, "flask", h)
+	elif not a.get("echo", false):
+		_rite_fire(s, "play", {}, h.id, "only", {"kw": c.get("kw", []), "cat": c.get("cat", "physical")})
+	if c.get("kw", []).has("Rite") and c.has("rite") and not a.get("echo", false):
+		s.rites.append({"uid": s.next_id, "owner": h.id, "rite": c.rite, "name": c.name, "cat": c.get("cat", "physical")})
+		s.next_id += 1
+		_ev(s, {"t": "status", "unit": h.id, "text": "Rite: " + c.name})
 	if c.get("kw", []).has("Echo") and not a.get("echo", false):
 		var e: Dictionary = a.duplicate()
 		e.echo = true
@@ -524,9 +579,15 @@ static func resolve_enemy_action(s: Dictionary, id: int) -> void:
 	match intent.target:
 		"all_heroes":
 			targets = s.heroes.duplicate()
+		"front2":
+			targets = s.heroes.slice(0, 2)
+		"back2":
+			targets = s.heroes.slice(max(0, s.heroes.size() - 2))
+		"all_allies":
+			targets = s.enemies.duplicate()
 		"self":
 			targets = [e]
-		"ally_lowest":
+		"ally_lowest", "ally_front":
 			var t := find(s, e.intent_target)
 			if t.is_empty():
 				t = e
@@ -661,6 +722,13 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 			for e in s.enemies:
 				n += e.st.hex
 			return n
+		"total_doom":
+			var n := 0
+			for e in s.enemies:
+				n += e.st.doom
+			return n
+		"flasks": return s.get("belt", []).size()
+		"flasks_used": return s.get("flasks_used", 0)
 	if u.is_empty():
 		return 0
 	match key:
@@ -670,7 +738,9 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"hp_pct": return 100.0 * u.hp / max(1, u.max_hp)
 		"dd": return 1 if u.get("deaths_door", false) else 0
 		"rank": return rank_of(s, u)
-		"elements": return elements_on(u)
+		"elements", "spectrum": return elements_on(u)
+		"ailments": return _debuff_count(u)
+		"scars": return u.get("scars", 0)
 		"el_total":
 			var n := 0
 			for el in Data.ELEMENTS:
@@ -852,7 +922,12 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 				ctx.prime = 0
 				if p > 0:
 					s.primes_consumed = s.get("primes_consumed", 0) + 1
-				var dealt := _attack(s, actor, tt, n + p, physical, fx)
+				var amount: int = n + p
+				if tt.get("flags", []).has("swarm"):
+					# Swarm: single-target hits deal half, hits on every foe deal 50% more
+					var wide: bool = c.get("target", "") == "all_enemies" or fx.get("to", "") == "all_enemies"
+					amount = int(ceil(amount * 1.5)) if wide else int(floor(amount * 0.5))
+				var dealt := _attack(s, actor, tt, amount, physical, fx)
 				ctx.dealt += dealt
 				if tt.dead:
 					ctx.killed = true
@@ -1066,16 +1141,19 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			_ev(s, {"t": "status", "unit": t.id, "text": "Transferred %d" % moved})
 			_log(s, "%s transfers %d afflictions onto %s." % [actor.name, moved, t.name])
 		"execute":
-			if t.side == "enemy" and not t.dead and t.hp <= n and _next_threshold_hp(t) > 0:
+			var eff_hp: int = t.hp - int(t.st.get("doom", 0))   # Doom lowers every execute check
+			if t.side == "enemy" and not t.dead and eff_hp <= n and _next_threshold_hp(t) > 0:
 				# a boss with phases left is driven down to its next threshold instead
 				t.hp = _next_threshold_hp(t)
 				_ev(s, {"t": "reaction", "unit": t.id, "text": "Broken"})
 				_check_phase(s, t)
-			elif t.side == "enemy" and not t.dead and t.hp <= n:
+				_rite_fire(s, "execute", t)
+			elif t.side == "enemy" and not t.dead and eff_hp <= n:
 				_ev(s, {"t": "reaction", "unit": t.id, "text": "Executed"})
 				_log(s, "%s is executed." % t.name)
 				_kill(s, t)
 				ctx.killed = true
+				_rite_fire(s, "execute", {})
 		"delay":
 			_delay(s, t)
 		"turn":
@@ -1133,6 +1211,60 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			actor.stress = min(200, actor.stress + total)
 			if total > 0:
 				_ev(s, {"t": "stress", "unit": actor.id, "n": total})
+		"brew":
+			for i in max(1, n):
+				s.belt_next.append(fx.card)
+				s.fresh_on_belt.append(fx.card)
+			_ev(s, {"t": "status", "unit": actor.id, "text": "Brews " + Data.CARDS[fx.card].name})
+			_log(s, "%s brews %s (on the belt next round)." % [actor.name, Data.CARDS[fx.card].name])
+		"refill":
+			for i in max(1, n):
+				if s.belt_used.is_empty():
+					break
+				var f: String = s.belt_used.pop_back()
+				s.belt_next.append(f)
+				s.fresh_on_belt.append(f)
+				_ev(s, {"t": "status", "unit": actor.id, "text": "Refills " + Data.CARDS[f].name})
+		"improve":
+			for i in max(1, n):
+				var done := false
+				for arr_name in ["belt", "belt_next"]:
+					var arr: Array = s[arr_name]
+					for j in arr.size():
+						var f: String = arr[j]
+						if not f.ends_with("+") and Data.CARDS.has(f + "+"):
+							arr[j] = f + "+"
+							s.improved.append(f)
+							var fi: int = s.fresh_on_belt.find(f)
+							if fi >= 0:
+								s.fresh_on_belt[fi] = f + "+"
+							_ev(s, {"t": "status", "unit": actor.id, "text": "Improves " + Data.CARDS[f].name})
+							done = true
+							break
+					if done:
+						break
+		"unbind":
+			var found := false
+			for h in s.heroes:
+				for pile in ["hand", "draw", "discard"]:
+					var arr: Array = h[pile]
+					for j in arr.size():
+						var cd: Dictionary = Data.CARDS.get(arr[j], {})
+						if cd.get("rarity", "") in ["A", "Affliction"]:
+							var cid: String = arr[j]
+							arr.remove_at(j)
+							h.exhaust.append(cid)
+							_log(s, "%s unbinds %s from %s." % [actor.name, cd.name, h.name])
+							if t.side == "enemy" and not t.dead:
+								_exec(s, actor, {"name": cd.name, "cat": "physical", "fx": cd.get("on_draw", [])}, [t], {"x": 0, "half": false, "prime": 0}, false)
+							found = true
+							break
+					if found:
+						break
+				if found:
+					break
+			if t.side == "enemy" and not t.dead and n > 0:
+				_add_status(s, actor, t, "hex", n, false)
 		_:
 			push_error("unknown fx type: " + str(fx.t))
 
@@ -1145,8 +1277,12 @@ static func _delay(s: Dictionary, t: Dictionary) -> void:
 	s.lockdown_used[t.id] = true
 	var q: Array = s.enemy_queue
 	if q.has(t.id):
-		if q.back() == t.id:
+		if q.back() == t.id and t.get("postponed_last", false):
+			_ev(s, {"t": "status", "unit": t.id, "text": "Will not wait again"})
+			_log(s, "%s already waited a round; it acts last instead." % t.name)
+		elif q.back() == t.id:
 			t.postponed = true
+			t.postponed_last = true
 			_ev(s, {"t": "status", "unit": t.id, "text": "Postponed"})
 			_log(s, "%s's action is postponed to next round." % t.name)
 		else:
@@ -1225,6 +1361,9 @@ static func _hurt(s: Dictionary, src, t: Dictionary, amount: int, opts: Dictiona
 		add_resolve(src, 12)
 	if RULES.traits and d > 0 and not t.dead and t.side == "enemy" and src != null and src.get("side", "") == "hero" and _trigger(s, "trait_hit_%d" % t.id):
 		_trait(s, t, "hit", [src])
+	if (d > 0 or blocked > 0) and t.side == "hero" and src != null and src.get("side", "") == "enemy" and not src.dead:
+		_rite_fire(s, "hit", src, t.id, "only")
+		_rite_fire(s, "ally_hit", src, t.id, "except")
 	return d
 
 static func _lose_hp(s: Dictionary, u: Dictionary, d: int) -> void:
@@ -1239,6 +1378,7 @@ static func _lose_hp(s: Dictionary, u: Dictionary, d: int) -> void:
 			else:
 				_kill(s, u)
 			return
+		u.scars = min(int(u.max_hp), int(u.get("scars", 0)) + min(d, int(u.hp)))
 		u.hp -= d
 		if u.hp <= 0:
 			u.hp = 0
@@ -1267,6 +1407,10 @@ static func _check_phase(s: Dictionary, u: Dictionary) -> void:
 			u.hp = min(u.max_hp, u.hp + int(ph.heal))
 		_ev(s, {"t": "reaction", "unit": u.id, "text": "Phase %d" % (u.phase + 1)})
 		_log(s, "%s: %s" % [u.name, ph.text])
+		if ph.has("fx"):
+			_exec(s, u, {"name": "phase", "cat": "physical", "fx": ph.fx}, [u], {"x": 0, "half": false, "prime": 0}, false)
+		if RULES.traits:
+			_trait(s, u, "phase", [u])
 
 static func _next_threshold_hp(u: Dictionary) -> int:
 	var phases: Array = Data.ENEMIES[u.key].get("phases", [])
@@ -1289,6 +1433,12 @@ static func _kill(s: Dictionary, u: Dictionary) -> void:
 	for o in s.heroes + s.enemies:
 		if o.guarded_by == u.id:
 			o.guarded_by = -1
+	if u.side == "enemy":
+		if RULES.traits:
+			for o in s.enemies.duplicate():
+				if not o.dead:
+					_trait(s, o, "ally_death", [o])
+		_rite_fire(s, "kill", {})
 	_check_outcome(s)
 
 static func _check_outcome(s: Dictionary) -> void:
@@ -1326,7 +1476,7 @@ static func _add_status(s: Dictionary, src: Dictionary, t: Dictionary, name: Str
 		return
 	match name:
 		"stun":
-			if t.st.tenacity > 0:
+			if t.st.tenacity > 0 or t.get("flags", []).has("unstunnable"):
 				_ev(s, {"t": "status", "unit": t.id, "text": "Tenacity"})
 				return
 			t.st.stun = 1
@@ -1341,7 +1491,7 @@ static func _add_status(s: Dictionary, src: Dictionary, t: Dictionary, name: Str
 		_log(s, "%s gains %s %d." % [t.name, name.capitalize(), n])
 
 static func _move(s: Dictionary, u: Dictionary, delta: int) -> void:
-	if u.st.get("anchor", 0) > 0:
+	if u.st.get("anchor", 0) > 0 or u.get("flags", []).has("immovable"):
 		_ev(s, {"t": "status", "unit": u.id, "text": "Anchored"})
 		return
 	var arr := side_arr(s, u)
@@ -1417,6 +1567,7 @@ static func _reaction(s: Dictionary, src: Dictionary, t: Dictionary, a: String, 
 	_ev(s, {"t": "reaction", "unit": t.id, "text": r.name})
 	if src.get("side", "") == "hero":
 		add_resolve(src, 8)
+		_rite_fire(s, "conjunction", t)
 	_log(s, "%s! (%s on %s, power %d)" % [r.name, key.replace("+", " + "), t.name, p])
 	match key:
 		"fire+frost":
@@ -1450,7 +1601,7 @@ static func _reaction(s: Dictionary, src: Dictionary, t: Dictionary, a: String, 
 			else:
 				t.st.lockdown = 2
 		"frost+water":
-			if t.st.tenacity > 0:
+			if t.st.tenacity > 0 or t.get("flags", []).has("unstunnable"):
 				_ev(s, {"t": "status", "unit": t.id, "text": "Tenacity"})
 			else:
 				t.st.freeze = 2 if t.side == "hero" else 1
@@ -1503,6 +1654,42 @@ static func _reaction(s: Dictionary, src: Dictionary, t: Dictionary, a: String, 
 		"toxin+void":
 			t.st.blight = 2
 
+# ------------------------------------------------------------------ rites (Gate 3: lasting card effects)
+## Fires every rite listening for `on`. subject: the trigger's target (empty for none). owner/mode filter by owner:
+## "only" keeps rites owned by `owner`, "except" skips them. info carries the played card's kw and cat for "play".
+static func _rite_fire(s: Dictionary, on: String, subject: Dictionary, owner := -1, mode := "", info := {}) -> void:
+	if s.get("rites", []).is_empty() or int(s.get("rite_depth", 0)) > 2 or s.outcome != "":
+		return
+	s.rite_depth = int(s.get("rite_depth", 0)) + 1
+	for r in s.rites.duplicate():
+		var rt: Dictionary = r.rite
+		if rt.get("on", "") != on:
+			continue
+		if mode == "only" and r.owner != owner:
+			continue
+		if mode == "except" and r.owner == owner:
+			continue
+		var h := find(s, r.owner)
+		if h.is_empty() or h.dead:
+			continue
+		if rt.has("kw") and not info.get("kw", []).has(rt.kw):
+			continue
+		if rt.has("cat") and info.get("cat", "") != rt.cat:
+			continue
+		var pr := int(rt.get("per_round", 0))
+		var key := "rite_%d" % int(r.uid)
+		if pr > 0 and int(s.triggers.get(key, 0)) >= pr:
+			continue
+		var t: Dictionary = subject if not subject.is_empty() and not subject.get("dead", false) else h
+		if rt.has("if") and not cond(s, h, t, String(rt["if"]), {}):
+			continue
+		s.triggers[key] = int(s.triggers.get(key, 0)) + 1
+		_ev(s, {"t": "status", "unit": h.id, "text": r.name})
+		_exec(s, h, {"name": r.name, "cat": r.cat, "fx": rt.get("fx", [])}, [t], {"x": 0, "half": false, "prime": 0}, false)
+		if s.outcome != "":
+			break
+	s.rite_depth = int(s.rite_depth) - 1
+
 # ------------------------------------------------------------------ traits and summons (Rules v2, rules 14 and 15)
 ## An enemy trait: {"on": "round_start" | "hit" | "death", "fx": [...], "name", "text"}. Targets: the trait's fx "to",
 ## else `base` (the enemy itself at round start and on death, the hero that hit it on "hit").
@@ -1543,6 +1730,13 @@ static func _summon(s: Dictionary, actor: Dictionary, fx: Dictionary) -> void:
 static func end_round(s: Dictionary) -> void:
 	if s.outcome != "":
 		return
+	if RULES.traits:
+		for e in s.enemies.duplicate():
+			if not e.dead:
+				_trait(s, e, "round_end", [e])
+	_rite_fire(s, "round_end", {})
+	if s.outcome != "":
+		return
 	for u in (s.heroes + s.enemies).duplicate():
 		if u.dead:
 			continue
@@ -1572,15 +1766,22 @@ static func end_round(s: Dictionary) -> void:
 			_heal(s, u, u.st.regen)
 			u.st.regen -= 1
 		if u.side == "enemy" and u.st.doom > 0 and u.st.doom >= u.hp:
-			_ev(s, {"t": "reaction", "unit": u.id, "text": "Doom"})
-			_log(s, "Doom claims %s." % u.name)
-			_kill(s, u)
+			if _next_threshold_hp(u) > 0:
+				# a ruler with phases left is broken to its next phase instead (Gate 2 decision 7)
+				u.hp = _next_threshold_hp(u)
+				_ev(s, {"t": "reaction", "unit": u.id, "text": "Doom breaks"})
+				_log(s, "Doom breaks %s." % u.name)
+				_check_phase(s, u)
+			else:
+				_ev(s, {"t": "reaction", "unit": u.id, "text": "Doom"})
+				_log(s, "Doom claims %s." % u.name)
+				_kill(s, u)
 	if s.outcome != "":
 		return
 	for u in s.heroes + s.enemies:
 		u.st.thorns = int(u.st.thorns / 2)
 		u.st.dodge = 0
-		u.st.anchor = 0
+		u.st.anchor = max(0, u.st.anchor - 1)
 		u.turned = -1
 		for e in Data.ELEMENTS:
 			if u.fresh[e]:

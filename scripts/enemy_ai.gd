@@ -9,10 +9,16 @@ static func pick(s: Dictionary, e: Dictionary, i: int) -> String:
 	for r in rules:
 		if r.get("not_twice", false) and e.last_intent == r.use:
 			continue
+		if r.get("once", false) and e.get("used_once", {}).has(r.use):
+			continue
 		if r.has("every") and (s.round + i + int(r.get("offset", 0))) % int(r.every) != 0:
 			continue
 		if r.has("if") and not Combat.cond(s, e, {}, r["if"], {}):
 			continue
+		if r.get("once", false):
+			if not e.has("used_once"):
+				e.used_once = {}
+			e.used_once[r.use] = true
 		return r.use
 	return rules[-1].use
 

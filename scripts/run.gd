@@ -167,7 +167,7 @@ static func new_run_roster(party: Array, objective: String, asc: Array, seed: in
 		if meta.unlocked.has("armourer") and h.gear.armor.is_empty():
 			h.gear.armor = {"id": pick(["a_padded_jack", "a_brigandine", "a_oilskin"]), "runes": []}
 		# Rules v2, rule 17: each descent starts on the calling's starter deck; curses and afflictions carried home stay
-		var carried: Array = h.deck.filter(func(c): return Data.CARDS.get(c, {}).get("rarity", "") in ["Curse", "Affliction"])
+		var carried: Array = h.deck.filter(func(c): return Data.CARDS.get(c, {}).get("rarity", "") in ["Curse", "Affliction", "A"])
 		h.deck = Data.HEROES[h.key].deck.duplicate() + carried
 		h.hp = max_hp(h)
 		r.heroes.append(h)
@@ -266,6 +266,15 @@ static func combat_setup() -> Dictionary:
 ## Writes the fight's outcome back into the run. Returns a summary for the reward screen.
 static func after_combat(s: Dictionary, node: Dictionary) -> Dictionary:
 	Abbey.record_fight(s)
+	# the belt (Gate 2 decision 8): used flasks are gone, Fresh (brewed or refilled) ones spoil, Improved ones revert
+	if s.has("belt"):
+		var left: Array = s.belt.duplicate() + s.get("belt_next", [])
+		for f in s.get("fresh_on_belt", []):
+			left.erase(f)
+		for i in left.size():
+			if String(left[i]).ends_with("+"):
+				left[i] = String(left[i]).trim_suffix("+")
+		r.belt = left
 	var sum := {"won": s.outcome == "victory", "gold": 0, "xp": 0, "injuries": [], "deaths": [], "levels": []}
 	var alive_ids := {}
 	for ch in s.heroes:

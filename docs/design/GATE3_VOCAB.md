@@ -35,6 +35,9 @@ Statuses (`ST(name, n)` on the target, `SELF(name, n)` on yourself, `CLR(name)` 
 | `fortify` | Block does not clear at round start this many rounds |
 | `anchor` | Cannot be moved this many rounds |
 | `tenacity` | Immune to Stun and Freeze while it lasts |
+| `blight` | No healing (and, on a foe, no Block) while it lasts. Rounds |
+| `neuro` | The unit's next action keeps only its first effect |
+| `lockdown` | Acts last this round (a hero's cards resolve after the others') while it lasts. Rounds |
 | `charge` | An enemy's visible counter (pressure, a boiling pool, a tolling bell). Raised by `SELF("charge", n)`, read by AI rules (`"if": "charge>=3"`), cleared by `CLR("charge")`. Shown with the creature's `charge_name` |
 
 Words (hover text, no new syntax):

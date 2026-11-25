@@ -44,3 +44,28 @@ card's design needs it; keep them under 10% of your cards and say why for each i
 - **Difficulty.** Cole: err on the side of harder, real players will out-play the simulator.
 - **Final report** (your last message): counts by rarity or tier, budget flags with reasons, your `NEEDS` list, and any
   place you departed from the brief and why. Keep it under 400 words.
+
+## Interaction and depth (Cole, 2026-11-25: binding)
+
+Cole: "the whole premise and original inspiration of the game was to make a deeply complex and interworking deck
+builder." No archetype may be a straight line of cards that apply one status and pay off that same status. Every card
+set must meet these:
+
+1. **Bridges.** At least a third of the commons, uncommons and rares read or spend a resource they do not create
+   themselves: another archetype's, another calling's, or the foe's own state (`t.spectrum`, `t.ailments`, `t.mark`,
+   `t.hex`, `t.doom`, `t.bleed`, a course, `t.armor`, `t.block`, `t.attacking`, `t.moved`).
+2. **Converters.** At least 6 cards per calling turn one resource into a different one (for example Momentum into
+   course stacks, Thorns into Bleed, Block into damage, Hex into Block, Scars into Prime, consumed Omen into vigour).
+   Use `CONS(...)` then effects `per="consumed"`, `CONV`, `STEAL`, `TRANSFER`, or a cost in one resource for a payoff
+   in another.
+3. **The Ordo is a dimension.** At least 6 cards per calling care about sequence inside a round: `same_target`
+   (follow-up), `played`, `prime_count`, `reactions` (Conjunctions so far this round), `t.moved`, `flasks_used`,
+   `dealt` or `killed` earlier in the same card, or Prime given to the next action.
+4. **Company reads.** At least 6 cards per calling pay off something a different calling sets up (name the pairing in
+   the card's `arch`, for example `arch="thorn_wall+hexweaver_hex"`). `arch` may name two archetypes joined by `+`.
+5. **Archetypes cross.** Each archetype has at least two setup sources and two payoff axes, and shares at least two
+   cards with another archetype of the same calling, so hybrids exist. Rares and legendaries should combine two
+   systems (for example a Rite that turns every Conjunction into Momentum).
+6. **Rank and position** count as a resource: cards that care about rank, movement, Guard and Taunt.
+
+These are counts the final report must state.
