@@ -79,7 +79,8 @@ def text_of(fx, target, charge="charge"):
         elif t == "summon":
             tail.append(f"calls {CREATURES.get(f['e'], {}).get('name', f['e'])}")
         elif t == "add":
-            tail.append(f"puts {f['card']} in their hand")
+            import dsl
+            tail.append(f"puts {dsl.CARDS.get(f['card'], {}).get('name', f['card'])} in their hand")
         elif t == "discard_random":
             tail.append("makes them discard a card")
         elif t == "lose_armor":

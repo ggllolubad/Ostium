@@ -355,7 +355,8 @@ static func objective_met() -> bool:
 # ------------------------------------------------------------------ rewards queue (shown one screen at a time)
 static func _queue_rewards(tier: String, node: Dictionary) -> void:
 	for h in living():
-		r.pending.append({"kind": "card", "hero": r.heroes.find(h)})
+		# the midpoint guardian offers each hero 3 legendaries of its path (Gate 2: build capstones at layer 7)
+		r.pending.append({"kind": "legendary" if tier == "guardian" and not legendary_choices(h).is_empty() else "card", "hero": r.heroes.find(h)})
 	if tier == "elite" or tier == "boss":
 		r.pending.append({"kind": "relic"})
 	if tier == "elite" or rnd() < 0.25:
@@ -402,9 +403,34 @@ static func card_choices(h: Dictionary, n := 3) -> Array:
 		if h.subclass != "" and rnd() < 0.3:
 			rar = "X"
 		var arr: Array = by[rar]
+		# the neutral pool is offered rarely; a world's own cards only inside that world (redesign plan)
+		var side := rnd()
+		if side < 0.06 and not Data.neutral_pool().is_empty():
+			arr = Data.neutral_pool()
+		elif side < 0.2 and not Data.world_pool(String(r.get("world", ""))).is_empty():
+			arr = Data.world_pool(String(r.get("world", "")))
 		if arr.is_empty():
 			continue
 		var id: String = pick(arr)
+		if not out.has(id):
+			out.append(id)
+	return out
+
+## Up to 3 legendaries for a hero: its own path's, or any of its calling's when it has no path yet.
+static func legendary_choices(h: Dictionary) -> Array:
+	var own := []
+	var any := []
+	for id in Data.CARDS:
+		var c: Dictionary = Data.CARDS[id]
+		if c.rarity != "L" or c.cls != h.key or id.ends_with("+") or h.deck.has(id):
+			continue
+		any.append(id)
+		if c.get("sub", "") == h.get("subclass", ""):
+			own.append(id)
+	var src: Array = own if own.size() > 0 else any
+	var out := []
+	while out.size() < 3 and out.size() < src.size():
+		var id: String = pick(src)
 		if not out.has(id):
 			out.append(id)
 	return out
@@ -553,6 +579,17 @@ static func add_stress(h: Dictionary, n: int) -> void:
 		res += float(C.relics[id].get("stress_res", 0))
 	h.stress = clamp(int(h.stress) + int(round(n * (1.0 - clamp(res, -50, 75) / 100.0))), 0, 200)
 
+## The guardian at the waypoint (Rules v2, rule 20): one of this world's elite groups, fixed per descent.
+static func guardian_room() -> int:
+	var cand := []
+	for i in Data.ENCOUNTERS.size():
+		var e: Dictionary = Data.ENCOUNTERS[i]
+		if e.tier == "elite" and e.get("world", "") == String(r.get("world", "")):
+			cand.append(i)
+	if cand.is_empty():
+		return -1
+	return cand[int(r.seed) % cand.size()]
+
 static func room_for(n: Dictionary) -> int:
 	if n.has("room"):
 		return n.room
@@ -575,6 +612,12 @@ static func room_for(n: Dictionary) -> int:
 			if L < 4 and hard and i > first + 2:
 				continue
 		cand.append(i)
+	if tier == "boss" and String(r.get("commission", "")) != "":
+		for i in cand:
+			if Data.ENCOUNTERS[i].enemies.has(r.commission):
+				n.room = i
+				n.tier = tier
+				return i
 	if tier == "boss" and w == "drowned":
 		var want: String = {"boss": "The Drowned King", "relic": "The Bell Below", "purge": "The Bell Below", "escort": "Mother of Brine"}[r.objective]
 		for i in cand:

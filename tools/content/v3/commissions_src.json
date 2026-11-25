@@ -1,0 +1,212 @@
+{
+ "baths": [
+  {
+   "name": "The Simmering Matron",
+   "text": "The Tooth hangs from her neck on a chain. She has been simmering for a hundred years and is nearly ready. Take it before she is done."
+  },
+  {
+   "name": "The Best Families",
+   "text": "The seventh pool's families have climbed out to complain about the water, and they mean to complain to the Matron. Stop them before they claim her pool, and her Tooth, as their due."
+  },
+  {
+   "name": "The Great Copper",
+   "text": "Every pool in the temple boils because of one boiler. Its stokers are still on shift. Draw the fire, and the Matron's pool may cool enough to reach her."
+  }
+ ],
+ "mire": [
+  {
+   "name": "The Mire Mother",
+   "text": "The Tooth is lodged in her lower jaw as one of her teeth. The hags will not sell it. Take it from the jaw."
+  },
+  {
+   "name": "The Stilt Hall",
+   "text": "The moot-hall walked off in the night with the village inside, toward the Mother's mere and her Tooth. Break it on its piles before it gets there."
+  },
+  {
+   "name": "The Old Heron",
+   "text": "It fished the fen before there were stilts and has come to prefer the fishermen. The villages want it dead before it wades into the Mother's mere."
+  }
+ ],
+ "pits": [
+  {
+   "name": "The Burning Lung",
+   "text": "The Tooth is set in its brow. The mine will not be safe to work while the first breath still breathes."
+  },
+  {
+   "name": "The Owner",
+   "text": "He came down to see the gas for himself, and he means to have the Tooth as well. Cut him down before he swells enough to choke the shaft."
+  },
+  {
+   "name": "The Powder Mill",
+   "text": "It ground the brimstone for every powder cart that went up to the foundry. Stop the wheel, and the carts stop with it."
+  }
+ ],
+ "barrow": [
+  {
+   "name": "The Barrow King",
+   "text": "He sealed his kingdom in to stop the plague. The Tooth is the seal on his signet; the Riven Jarl wore a copy. Unseal the barrow long enough to take it."
+  },
+  {
+   "name": "The Rat King",
+   "text": "Thousands of rats fed on the buried kingdom until they froze into one, and it is gnawing toward the Tooth. Get there first."
+  },
+  {
+   "name": "The Dead-Cart",
+   "text": "It went round the barrow calling for the dead. It no longer waits for them to finish dying, and it is coming for the living. Stop the cart."
+  }
+ ],
+ "drowned": [
+  {
+   "name": "The Drowned King",
+   "text": "The Tooth sits in the crown's front socket, where a jewel was. The sea grew the crown into his skull. Cut it out."
+  },
+  {
+   "name": "The Bell Below",
+   "text": "The abbey church has no bell. It went through the first door, and the crypt hears it every night. Silence it."
+  },
+  {
+   "name": "Mother of Brine",
+   "text": "Every siren in the kingdom is her daughter, and she is still delivering. End the line at the mother."
+  }
+ ],
+ "rime": [
+  {
+   "name": "The Riven Jarl",
+   "text": "The Tooth is set in the pommel of his axe. He rules the split; close it."
+  },
+  {
+   "name": "The Sleeper Under the Hold",
+   "text": "The hold is built on the glacier, and the glacier on her. If she wakes the hold falls; put her to rest for good."
+  },
+  {
+   "name": "The Firstbreaker",
+   "text": "He swung the pick that let the fire in, and he is climbing out. If he climbs out, the fire climbs with him. Send him back down."
+  }
+ ],
+ "fleet": [
+  {
+   "name": "The Leviathan in the Ice",
+   "text": "The fleet sailed north to kill it and froze in the trying. Its one stone tooth is the Tooth. Finish the fleet's work."
+  },
+  {
+   "name": "The Broadside",
+   "text": "Her guns still face the leviathan's water, and the Tooth is in range. Silence her before she fires the broadside she has been holding."
+  },
+  {
+   "name": "The Shrouds",
+   "text": "The topmen were aloft when the sea froze, and no one has called them down. Call them down, and the lookouts of the Tooth go with them."
+  }
+ ],
+ "coast": [
+  {
+   "name": "The Thunder Whale",
+   "text": "The Tooth is lodged in the old bull's blowhole. The wreckers hung dozens of harpoons in it and failed; finish their work, and bring home the Tooth, not the oil."
+  },
+  {
+   "name": "The Last Prize",
+   "text": "The richest ship the coast ever took has been going down for a hundred years, and the Tooth's storm is all that keeps her on the rocks. Sink her before she claims it."
+  },
+  {
+   "name": "The Wind-Seller",
+   "text": "She sold the wreckers every storm they used. She is untying the last cords now, and if the third knot comes undone the coast is hers. Cut the cord."
+  }
+ ],
+ "foundry": [
+  {
+   "name": "The Anvil Titan",
+   "text": "The Tooth is riveted into its chest as a maker's seal. The guild built it to strike forever. The Prior would like it to stop."
+  },
+  {
+   "name": "The Crucible",
+   "text": "It has been pouring the great bell since the storm struck, and the bell is not finished. Stop the pour before it is, and before the Crucible claims the Titan's Tooth for its own."
+  },
+  {
+   "name": "The Storm-Catcher",
+   "text": "He caught the storm for the forges, and now it drifts out over the coast. Make him let go of it, and of his claim on the Titan's Tooth."
+  }
+ ],
+ "pyre": [
+  {
+   "name": "The Saint Unending",
+   "text": "she preached that heaven was a garden and a woman kept it, and burned for it. Prior Aldric came out of this cathedral with his scars; he asks for the Tooth at her throat."
+  },
+  {
+   "name": "The Iron Bull",
+   "text": "the bull has walked out to the burning ground to claim the Saint's Tooth. The heretics inside are still being heard; the abbey would like them to rest."
+  },
+  {
+   "name": "The Confessor",
+   "text": "the confessional has begun hearing the company's sins from across the nave. It wants the Saint's Tooth for its poor-box."
+  }
+ ],
+ "silence": [
+  {
+   "name": "The Cold Star",
+   "text": "the camp's last fire went out the night the star came down. The abbey wants the small pale moon that circles it before the star notices the door."
+  },
+  {
+   "name": "The Unspoken Bear",
+   "text": "the hunters never said her name, and the ones who did are in her flank. She has come down to claim the star's Tooth. The company is asked not to speak of her on the way."
+  },
+  {
+   "name": "The Hearth Grandmother",
+   "text": "the faceless of the camp are walking toward the door to be fitted. The commission is to end the fitting where it starts."
+  }
+ ],
+ "garden": [
+  {
+   "name": "The Antlered Mother",
+   "text": "the garden is spreading toward the door. The abbey wants the Tooth out of the fork of her antlers before the spores find it."
+  },
+  {
+   "name": "The Lady of the Bower",
+   "text": "she has woken enough to want her garden's heart back. The abbey would rather she slept."
+  },
+  {
+   "name": "The Green Lion",
+   "text": "the hedge at the gate has decided it is the garden's lion in earnest. It wants the crown in her antlers, and the company is sent to cut it back."
+  }
+ ],
+ "spire": [
+  {
+   "name": "The Last Hour",
+   "text": "Brother Lucan was a scribe here before the hour stopped. He asks for the pivot that holds the hands, taken before the last minute passes."
+  },
+  {
+   "name": "The Stilled College",
+   "text": "the College has moved to claim the clock's pivot for itself. The prior wants the motion struck from the minutes before it is entered."
+  },
+  {
+   "name": "The Great Refractor",
+   "text": "someone has turned the great telescope round. It is aimed down the stair toward the door, and the abbey would rather it looked at the sky."
+  }
+ ],
+ "sky": [
+  {
+   "name": "The Shattered God",
+   "text": "Sister Ide keeps the Teeth and says they are warm. This is the last of them, the shard where the Mother's heart was."
+  },
+  {
+   "name": "The Wheel of Thrones",
+   "text": "it is still turning, looking for the weight, and it has found the Tooth. The abbey would rather it carried nothing."
+  },
+  {
+   "name": "The Fourfold Beast",
+   "text": "it watched the throne from every side, and now it watches the Tooth. The abbey sends a company to be watched instead."
+  }
+ ],
+ "hive": [
+  {
+   "name": "The Hive Queen",
+   "text": "The Tooth is embedded in her stinger. Every sting on the plain is hers, and the barrow's plague came up this road. Bring the stinger home."
+  },
+  {
+   "name": "The Procession",
+   "text": "The pilgrims were carrying their saint to the shrine when the storm broke, and the hive carries them now. A saint is not the hive's to carry. Lay the bearers down."
+  },
+  {
+   "name": "The Cicada Under the Road",
+   "text": "It went underground the year the lightning came. If it finishes coming up, it will sing the whole plain still. Put it back in the ground."
+  }
+ ]
+}

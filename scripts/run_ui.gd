@@ -137,6 +137,7 @@ func _toast(t: String) -> void:
 # ================================================================== hub
 var hub_party: Array = ["bulwark", "duelist", "elementalist"]
 var hub_obj := "boss"
+var hub_commission := ""
 var hub_asc: Array = []
 var hub_world := "drowned"
 
@@ -239,16 +240,33 @@ func _cast_lots() -> void:
 func show_prepare() -> void:
 	Run.meta_load()
 	_screen(Data.WORLDS[hub_world].name, "Choose the Prior's commission. The company, its gear and its vows were settled in the abbey.")
-	# objective
-	_lbl("The commission", Vector2(80, 130), Vector2(400, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
+	var coms: Array = Data.COMMISSIONS.get(hub_world, [])
+	if not coms.is_empty():
+		# the commission: which of the world's rulers the Prior sends the company after
+		_lbl("The commission", Vector2(80, 130), Vector2(400, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
+		var known := false
+		for c in coms:
+			if c.ruler == hub_commission:
+				known = true
+		if not known:
+			hub_commission = coms[0].ruler
+		for ci in coms.size():
+			var c: Dictionary = coms[ci]
+			var b := _btn(c.name, Vector2(80, 166 + ci * 58), Vector2(400, 50), func(): hub_commission = c.ruler; show_prepare(), null, c.text)
+			if c.ruler == hub_commission:
+				b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI, UiStyle.RED, 3))
+			if c.ruler == hub_commission:
+				_lbl("\u201c%s\u201d" % c.text, Vector2(80, 350), Vector2(400, 150), 16, UiStyle.font_it)
+		hub_obj = "boss"
 	var i := 0
-	for k in Run.C.objectives:
+	for k in (Run.C.objectives if coms.is_empty() else {}):
 		var o: Dictionary = Run.C.objectives[k]
 		var b := _btn(o.name, Vector2(80, 166 + i * 58), Vector2(400, 50), func(): hub_obj = k; show_prepare(), null, o.text)
 		if k == hub_obj:
 			b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI, UiStyle.RED, 3))
 		i += 1
-	_lbl(Run.C.objectives[hub_obj].text, Vector2(80, 404), Vector2(400, 80), 16, UiStyle.font_it)
+	if coms.is_empty():
+		_lbl(Run.C.objectives[hub_obj].text, Vector2(80, 404), Vector2(400, 80), 16, UiStyle.font_it)
 	# the company, from the roster
 	var party := Abbey.party_heroes()
 	_lbl("The company · %d of %d" % [party.size(), int(Abbey.A.party_max)], Vector2(540, 130), Vector2(520, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
@@ -319,6 +337,9 @@ func _begin_run() -> void:
 	if err != "":
 		_toast(err)
 		return
+	if not Data.COMMISSIONS.get(hub_world, []).is_empty():
+		Run.r.commission = hub_commission
+		Run.save()
 	show_map()
 
 func _continue_run() -> void:
@@ -430,7 +451,13 @@ func _enter(n: Dictionary) -> void:
 		"camp":
 			show_field_camp()
 		"waypoint":
-			show_waypoint()
+			# Rules v2, rule 20: the waypoint is guarded; win the guardian fight, take a legendary, then make camp
+			if not n.get("guarded", false) and Run.guardian_room() >= 0:
+				n.tier = "guardian"
+				n.room = Run.guardian_room()
+				_fight(n)
+			else:
+				show_waypoint()
 		"hidden":
 			_done_node(Run.hidden_cache())
 		_:
@@ -453,7 +480,10 @@ func _fight(n: Dictionary) -> void:
 		main.resume_run_fight(saved)
 		return
 	Run.save()
-	main.start_run_fight(idx, Run.combat_setup(), int(Run.r.seed) + Run.r.nodes_moved * 97)
+	var setup := Run.combat_setup()
+	if n.get("tier", "") == "guardian":
+		setup.foe_hp = float(setup.foe_hp) * 1.25   # the guardian is an elite fight at 1.25x HP
+	main.start_run_fight(idx, setup, int(Run.r.seed) + Run.r.nodes_moved * 97)
 
 func after_fight(s: Dictionary) -> void:
 	# the fight is over: drop it from the save first, so its spoils can never be taken twice
@@ -472,6 +502,10 @@ func after_fight(s: Dictionary) -> void:
 	for d in sum.deaths:
 		lines.append("[color=#9c3d2b]%s is dead.[/color]" % d)
 	_rich("[center]" + "\n".join(lines) + "[/center]", Vector2(300, 200), Vector2(1000, 300), 20)
+	if sum.won and n.get("type", "") == "waypoint":
+		n.guarded = true
+		Run.r.pending.append({"kind": "waypoint"})   # the camp opens after the guardian's spoils
+		Run.save()
 	_btn("Onward", Vector2(660, 560), Vector2(280, 56), show_map)
 
 # ================================================================== events
@@ -697,6 +731,21 @@ func show_reward() -> void:
 				return
 			_screen("Spoils · " + h.name, "Take one card into %s's deck, or none." % h.name)
 			var picks := Run.card_choices(h)
+			for i in picks.size():
+				var cid: String = picks[i]
+				_card(cid, Vector2(800 - picks.size() * 130 + i * 260, 200), 1.25, func(): h.deck.append(cid); next.call())
+			_btn("Take nothing", Vector2(660, 620), Vector2(280, 50), next)
+		"waypoint":
+			Run.r.pending.pop_front()
+			Run.save()
+			show_waypoint()
+		"legendary":
+			var h: Dictionary = Run.r.heroes[p.hero]
+			if h.dead:
+				next.call()
+				return
+			_screen("A Legend · " + h.name, "The guardian falls. Take one legendary card into %s's deck, or none." % h.name)
+			var picks := Run.legendary_choices(h)
 			for i in picks.size():
 				var cid: String = picks[i]
 				_card(cid, Vector2(800 - picks.size() * 130 + i * 260, 200), 1.25, func(): h.deck.append(cid); next.call())

@@ -31,7 +31,10 @@ def norm(s):
 
 
 def rig_map(out):
-    E = json.load(open(os.path.join(ROOT, "data", "enemies.json")))
+    src = os.path.join(ROOT, "data", "enemies.json")
+    if "--creatures" in sys.argv:   # Gate 3: match against the v3 creature list (build/data_v3/creatures.json)
+        src = sys.argv[sys.argv.index("--creatures") + 1]
+    E = json.load(open(src))
     by = {}
     for k, v in E.items():
         by[norm(v["name"])] = k

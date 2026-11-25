@@ -75,6 +75,11 @@ for m in mods:
         heroes[m] = dict(mod.HERO)
     needs[m] = list(getattr(mod, "NEEDS", []))
 
+# intent text again now that every creature and card exists (summons and added cards name what they bring)
+for _k, _c in cr.CREATURES.items():
+    for _it in _c["intents"].values():
+        _it["text"] = cr.text_of(_it["fx"], _it["target"], _c.get("charge_name") or "charge")
+
 # ------------------------------------------------------------------ vocabulary
 FX = {"dmg", "coup", "dmg_per_element", "block", "self_block", "block_target", "armor", "ward", "status", "self_status", "clear",
       "apply", "apply_x", "apply_attuned", "apply_next", "apply_missing", "react", "attune", "attune_to", "push", "pull", "advance",
@@ -351,6 +356,67 @@ print(f"budget: {len(flagged)} of {len(rows)} budgeted cards more than 20% off" 
 for m, n in needs.items():
     for line in n:
         print(f"NEEDS {m}: {line}")
+# ------------------------------------------------------------------ install into data/ (the game's files)
+if "--install" in args and not only:
+    if bad:
+        print("not installing: fix the validation problems first")
+    else:
+        FACES = {'bulwark': (440, 700, 190, 60, 80, 100), 'duelist': (520, 700, 226, 150, 100, 120),
+                 'elementalist': (460, 700, 206, 110, 104, 124), 'alchemist': (460, 700, 214, 112, 110, 124),
+                 'oracle': (460, 700, 206, 92, 96, 116), 'hexweaver': (460, 700, 206, 112, 104, 120),
+                 'vessel': (460, 700, 206, 110, 104, 124)}
+        data = os.path.join(ROOT, "data")
+        hs = {}
+        for h, H in heroes.items():
+            H = dict(H)
+            H["art"] = f"res://assets/art/{h}.png"
+            W_, H_, x, y, w, hh = FACES[h]
+            H["face"] = [round(x / W_, 3), round(y / H_, 3), round(w / W_, 3), round(hh / H_, 3)]
+            hs[h] = H
+        CANVAS = {"foe": (460, 700), "elite": (560, 800), "ruler": (700, 900)}
+        en = {}
+        for k, c in cr.CREATURES.items():
+            e = dict(c)
+            e["tier"] = "boss" if c["tier"] == "ruler" else c["tier"]
+            cw, ch = CANVAS[c["tier"]]
+            e["art"] = f"res://assets/art/rigs/{k}/full.png"
+            e["size"] = [round(cw * 0.471), round(ch * 0.471)]
+            e["feet"] = round((ch - 24 * ch / 700) / ch, 4)
+            en[k] = e
+        rooms = []
+        for e in cr.ENCOUNTERS:
+            r = dict(e)
+            r["tier"] = "boss" if e["tier"] == "ruler" else e["tier"]
+            rooms.append(r)
+        gauntlet = [i for i, r in enumerate(rooms) if r["world"] == "drowned" and r["tier"] == "foe"][:4]
+        gauntlet += [i for i, r in enumerate(rooms) if r["world"] == "drowned" and r["tier"] == "elite"][:2]
+        gauntlet += [i for i, r in enumerate(rooms) if r["world"] == "drowned" and r["tier"] == "boss"][:1]
+        worlds = json.load(open(os.path.join(data, "worlds.json")))
+        for w, v in worlds.items():
+            v["foes"] = [k for k, c in cr.CREATURES.items() if c["world"] == w and c["tier"] == "foe"]
+            v["elites"] = [k for k, c in cr.CREATURES.items() if c["world"] == w and c["tier"] == "elite"]
+            v["bosses"] = [k for k, c in cr.CREATURES.items() if c["world"] == w and c["tier"] == "ruler"]
+        json.dump(dsl.CARDS, open(os.path.join(data, "cards.json"), "w"), indent=0)
+        json.dump(hs, open(os.path.join(data, "heroes.json"), "w"), indent=1)
+        json.dump(en, open(os.path.join(data, "enemies.json"), "w"), indent=0)
+        json.dump({"rooms": rooms, "gauntlet": gauntlet}, open(os.path.join(data, "encounters.json"), "w"), indent=0)
+        json.dump(worlds, open(os.path.join(data, "worlds.json"), "w"), indent=1)
+        # commissions: the role maps' charge for each ruler, joined to the ruler's creature key by name
+        def _n(x):
+            return re.sub(r"[^a-z]", "", re.sub(r"\bthe\b", "", x.lower()))
+        src = json.load(open(os.path.join(HERE, "commissions_src.json")))
+        coms, missing = {}, []
+        for w, items in src.items():
+            for it in items:
+                k = next((k for k, c in cr.CREATURES.items() if c["world"] == w and c["tier"] == "ruler" and _n(c["name"]) == _n(it["name"])), None)
+                if k is None:
+                    missing.append(f"{w}: {it['name']}")
+                    continue
+                coms.setdefault(w, []).append({"ruler": k, "name": it["name"], "text": it["text"]})
+        json.dump(coms, open(os.path.join(data, "commissions.json"), "w"), indent=1)
+        if missing:
+            print("commissions with no matching ruler:", missing)
+        print(f"installed into data/: {len(dsl.CARDS)} cards, {len(hs)} callings, {len(en)} creatures, {len(rooms)} encounters")
 print("validation problems:", "none" if not bad else "")
 for b in bad:
     print("  " + b)
