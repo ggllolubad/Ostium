@@ -5,6 +5,9 @@ extends RefCounted
 ## Events for the UI are appended to s.events; human-readable lines to s.log.
 
 const TRIGGER_LIMIT := 5
+## Intent targets that pick one hero, so a Taunt pulls them.
+const SINGLE_TARGETS := ["front", "back", "rank2", "rank3", "random", "weakest", "most_stress", "marked", "most_cards", "heaviest",
+	"healthiest", "most_burn", "most_played", "acted_last", "first_actor"]
 ## Combat Rules v2 switches (2026-11-25). The balance sim flips these to compare variants; the game uses the defaults.
 static var RULES := {"vigour_per": 2, "vigour_flat": 0, "draw": 4, "hand_cap": 10, "hex": true, "az_v2": true, "drown_cap": 20,
 	"virtues": true, "afflictions": true, "traits": true}
@@ -187,11 +190,14 @@ static func start_round(s: Dictionary) -> void:
 	s.primes_consumed = 0
 	s.reactions_round = 0
 	s.last_target = -1
-	for u in s.heroes + s.enemies:
+	for u in s.heroes:
 		if u.st.fortify > 0:
 			u.st.fortify -= 1
 		else:
 			u.block = 0
+	for e in s.enemies:
+		if e.st.fortify > 0:
+			e.st.fortify -= 1
 	for h in s.heroes:
 		h.kit_used = {}
 		h.played = 0
@@ -415,6 +421,8 @@ static func check_action(s: Dictionary, a: Dictionary) -> String:
 		return "unplayable"
 	if a.source == "hand" and h.st.freeze > 0:
 		return "frozen: kit only"
+	if h.st.get("stun", 0) > 0 and a.source != "belt":
+		return "stunned this round"
 	if a.source == "belt" and h.get("flask_round", false):
 		return "one flask per hero a round"
 	var r := rank_of(s, h)
@@ -490,7 +498,7 @@ static func commit_cards(s: Dictionary, plan: Array) -> void:
 		for i in idxs:
 			var cid: String = h.hand[i]
 			h.hand.remove_at(i)
-			if card(cid).get("kw", []).has("Exhaust"):
+			if card(cid).get("kw", []).has("Exhaust") or card(cid).get("kw", []).has("Rite"):
 				h.exhaust.append(cid)
 			else:
 				h.discard.append(cid)
@@ -606,6 +614,8 @@ static func resolve_enemy_action(s: Dictionary, id: int) -> void:
 	_static_tick(s, e)
 	if e.dead:
 		return
+	if e.st.fortify <= 0:
+		e.block = 0   # a foe's Block lasts from its own action until its next one, through the heroes' turn
 	var fx: Array = intent.fx
 	var name: String = intent.name
 	if e.st.silence > 0:
@@ -651,7 +661,9 @@ static func resolve_enemy_action(s: Dictionary, id: int) -> void:
 		tids.append(tt.id)
 	_ev(s, {"t": "act", "unit": e.id, "target": targets[0].id if targets.size() == 1 else -1, "targets": tids, "text": name, "intent": intent.duplicate(true)})
 	_log(s, "%s: %s." % [e.name, name])
+	s.enemy_phase = true
 	_exec(s, e, {"name": name, "cat": "physical", "attr": "", "fx": fx}, targets, {"x": 0, "half": false, "prime": 0}, false)
+	s.enemy_phase = false
 
 static func _redirect_hero_target(s: Dictionary, t: Dictionary) -> Dictionary:
 	for h in s.heroes:
@@ -737,7 +749,7 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 			var n := 0
 			for e in s.enemies:
 				var it := intent_of(e)
-				if not it.is_empty() and it.kind == "attack" and (e.intent_target == actor.id or it.target == "all_heroes"):
+				if not it.is_empty() and it.kind == "attack" and (e.intent_target == actor.id or it.target == "all_heroes" or (actor.st.get("taunt", 0) > 0 and it.target in SINGLE_TARGETS)):
 					n += 1
 			return n
 		"elements_all":
@@ -822,8 +834,14 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 			var it := intent_of(u) if u.side == "enemy" else {}
 			return 1 if not it.is_empty() and it.kind == "attack" else 0
 		"targeting_me":
+			if u.side == "hero":
+				for e in s.enemies:
+					var ie := intent_of(e)
+					if not ie.is_empty() and ie.kind == "attack" and (e.intent_target == u.id or ie.target == "all_heroes"):
+						return 1
+				return 0
 			var it := intent_of(u) if u.side == "enemy" else {}
-			return 1 if not it.is_empty() and it.kind == "attack" and (u.intent_target == actor.id or it.target == "all_heroes") else 0
+			return 1 if not it.is_empty() and it.kind == "attack" and (u.intent_target == actor.id or it.target == "all_heroes" or (actor.st.get("taunt", 0) > 0 and it.target in SINGLE_TARGETS)) else 0
 		"moved": return 1 if u.moved else 0
 		"exhaust", "discard", "hand", "draw":
 			return u.get(key, []).size()
@@ -1042,16 +1060,19 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			if n > 0:
 				_add_status(s, actor, t, fx.s, n, false)
 		"clear":
-			t.st[fx.s] = 0
+			if fx.s == "charge":
+				actor.st.charge = 0   # a countdown is always the creature's own
+			else:
+				t.st[fx.s] = 0
 		"apply":
 			_apply_element(s, actor, t, fx.e, n + _take_prime(s, ctx, true), fx.get("attr", c.get("attr", "stable")))
 		"apply_x":
 			if ctx.x > 0:
 				_apply_element(s, actor, t, fx.e, ctx.x if not ctx.half else int(ceil(ctx.x / 2.0)), fx.get("attr", "volatile"))
 		"apply_attuned":
-			_apply_element(s, actor, t, Data.ELEMENTS[actor.get("attuned", 0)], n, fx.get("attr", c.get("attr", "stable")))
+			_apply_element(s, actor, t, Data.ELEMENTS[actor.get("attuned", 0)], n + _take_prime(s, ctx, true), fx.get("attr", c.get("attr", "stable")))
 		"apply_next":
-			_apply_element(s, actor, t, Data.ELEMENTS[(actor.get("attuned", 0) + 1) % 6], n, fx.get("attr", c.get("attr", "stable")))
+			_apply_element(s, actor, t, Data.ELEMENTS[(actor.get("attuned", 0) + 1) % 6], n + _take_prime(s, ctx, true), fx.get("attr", c.get("attr", "stable")))
 		"apply_missing":
 			for el in Data.ELEMENTS:
 				if t.elements[el] == 0 and not t.dead:
@@ -1063,7 +1084,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 					best = el
 			if best != "":
 				t.elements[best] -= 1
-				_apply_element(s, actor, t, best, max(1, n), "volatile")
+				_apply_element(s, actor, t, best, max(1, n) + _take_prime(s, ctx, true), "volatile")
 		"attune":
 			for i in max(1, n):
 				actor.attuned = (actor.attuned + 1) % Data.ELEMENTS.size()
@@ -1105,6 +1126,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 					best = o
 			if not best.is_empty():
 				best.guarded_by = actor.id
+				best.guard_fresh = actor.side == "enemy"
 				_ev(s, {"t": "status", "unit": best.id, "text": "Guarded"})
 		"prime":
 			s.prime += n
@@ -1129,7 +1151,13 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			actor.stress = clamp(actor.stress + n, 0, 200)
 			_ev(s, {"t": "stress", "unit": actor.id, "n": n})
 		"self_dmg":
-			_hurt(s, null, actor, n, {"true": true})
+			if actor.side == "hero":
+				# your own cards cannot put you at Death's Door, or cost Grit once you are there (Gate 3 review)
+				var room: int = max(0, int(actor.hp) - 1)
+				if room > 0:
+					_hurt(s, null, actor, min(n, room), {"true": true})
+			else:
+				_hurt(s, null, actor, n, {"true": true})
 		"draw":
 			if t.side == "hero":
 				t.bonus_draw += n
@@ -1204,7 +1232,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			if fx.get("from", "self") == "ally_most":
 				var best := -1
 				for h in s.heroes:
-					if _debuff_count(h) > best:
+					if h != actor and _debuff_count(h) > best:
 						best = _debuff_count(h)
 						src = h
 			var moved := 0
@@ -1231,6 +1259,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			_ev(s, {"t": "status", "unit": t.id, "text": "Transferred %d" % moved})
 			_log(s, "%s transfers %d afflictions onto %s." % [actor.name, moved, t.name])
 		"execute":
+			n += _take_prime(s, ctx, false)   # Prime raises the execute threshold
 			var eff_hp: int = t.hp - int(t.st.get("doom", 0))   # Doom lowers every execute check
 			if t.side == "enemy" and not t.dead and eff_hp <= n and _next_threshold_hp(t) > 0:
 				# a boss with phases left is driven down to its next threshold instead
@@ -1380,7 +1409,13 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 							h.exhaust.append(cid)
 							_log(s, "%s unbinds %s from %s." % [actor.name, cd.name, h.name])
 							if t.side == "enemy" and not t.dead:
-								_exec(s, actor, {"name": cd.name, "cat": "physical", "fx": cd.get("on_draw", [])}, [t], {"x": 0, "half": false, "prime": 0}, false)
+								var harm := []
+								for f in cd.get("on_draw", []):
+									if not f.t in ["energy", "draw", "discard_random", "add"]:
+										var g: Dictionary = f.duplicate()
+										g.erase("to")
+										harm.append(g)
+								_exec(s, actor, {"name": cd.name, "cat": "physical", "fx": harm}, [t], {"x": 0, "half": false, "prime": 0}, false)
 							found = true
 							break
 					if found:
@@ -1411,19 +1446,17 @@ static func _delay(s: Dictionary, t: Dictionary) -> void:
 	t.delayed_round = s.round
 	var q: Array = s.enemy_queue
 	if q.has(t.id):
-		if q.back() == t.id and t.get("postponed_last", false):
+		if t.get("postponed_last", false):
+			q.erase(t.id)
+			q.append(t.id)
 			_ev(s, {"t": "status", "unit": t.id, "text": "Will not wait again"})
 			_log(s, "%s already waited a round; it acts last instead." % t.name)
-		elif q.back() == t.id:
+		else:
+			# Gate 3 review: a Delayed foe's action waits until next round, where it acts first (never twice in a row)
 			t.postponed = true
 			t.postponed_last = true
 			_ev(s, {"t": "status", "unit": t.id, "text": "Postponed"})
 			_log(s, "%s's action is postponed to next round." % t.name)
-		else:
-			q.erase(t.id)
-			q.append(t.id)
-			_ev(s, {"t": "status", "unit": t.id, "text": "Delayed"})
-			_log(s, "%s's action is delayed to the end of the queue." % t.name)
 
 static func _attack(s: Dictionary, src: Dictionary, t: Dictionary, base: int, physical: bool, opts: Dictionary) -> int:
 	if t.is_empty() or t.dead:
@@ -1613,6 +1646,10 @@ static func _heal(s: Dictionary, u: Dictionary, n: int) -> void:
 static func _add_status(s: Dictionary, src: Dictionary, t: Dictionary, name: String, n: int, quiet: bool) -> void:
 	if t.dead:
 		return
+	if s.get("enemy_phase", false):
+		if not t.has("fresh_st"):
+			t.fresh_st = {}
+		t.fresh_st[name] = true
 	match name:
 		"stun":
 			if t.st.tenacity > 0 or t.get("flags", []).has("unstunnable"):
@@ -1623,6 +1660,8 @@ static func _add_status(s: Dictionary, src: Dictionary, t: Dictionary, name: Str
 			t.st.taunt = 1
 		"vulnerable":
 			t.st.vulnerable = max(t.st.vulnerable, n)
+		"fortify":
+			t.st.fortify = max(t.st.fortify, n)
 		_:
 			t.st[name] = t.st.get(name, 0) + n
 	if not quiet:
@@ -1788,10 +1827,11 @@ static func _reaction(s: Dictionary, src: Dictionary, t: Dictionary, a: String, 
 					_ev(s, {"t": "dd", "unit": t.id})
 			elif t.side == "enemy":
 				# Rules v2, rule 6: killed at 2x power HP or less; a ruler with phases left drops to its next phase
-				if t.hp <= p * 2 and _next_threshold_hp(t) > 0:
+				var az_hp: int = t.hp - int(t.st.get("doom", 0))   # Doom lowers this execute too (Gate 2 decision 1)
+				if az_hp <= p * 2 and _next_threshold_hp(t) > 0:
 					t.hp = _next_threshold_hp(t)
 					_check_phase(s, t)
-				elif t.hp <= p * 2:
+				elif az_hp <= p * 2:
 					_kill(s, t)
 				else:
 					_hurt(s, src, t, p, {})
@@ -1848,6 +1888,8 @@ static func _rite_fire(s: Dictionary, on: String, subject: Dictionary, owner := 
 			continue
 		if rt.has("rounds") and s.round > int(r.get("from_round", 0)) + int(rt.rounds):
 			continue
+		if on == "play" and not subject.is_empty() and subject.get("side", "") == "hero" and not rt.get("allies", false):
+			continue   # a "play" rite answers cards played on foes unless it says allies
 		var t: Dictionary = subject if not subject.is_empty() and not subject.get("dead", false) else h
 		var rctx := {"x": 0, "half": false, "prime": 0, "consumed": 0, "dealt": 0}
 		if not subject.is_empty():
@@ -1957,8 +1999,15 @@ static func end_round(s: Dictionary) -> void:
 		return
 	for u in s.heroes + s.enemies:
 		u.st.thorns = int(u.st.thorns / 2)
-		u.st.dodge = 0
-		u.st.anchor = max(0, u.st.anchor - 1)
+		u.st.momentum = int(u.st.momentum / 2)
+		u.st.riposte = int(u.st.riposte / 2)
+		u.st.focus = int(u.st.focus / 2)
+		var fs: Dictionary = u.get("fresh_st", {})
+		u.fresh_st = {}
+		if not (u.side == "enemy" and fs.has("dodge")):
+			u.st.dodge = 0
+		if not fs.has("anchor"):
+			u.st.anchor = max(0, u.st.anchor - 1)
 		u.turned = -1
 		for e in Data.ELEMENTS:
 			if u.fresh[e]:
@@ -1974,15 +2023,25 @@ static func end_round(s: Dictionary) -> void:
 					hf[e] = false
 				elif u.held[e] > 0:
 					u.held[e] -= 1
-		u.st.vulnerable = max(0, u.st.vulnerable - 1)
-		u.st.taunt = 0
+		# statuses laid in the foes' phase (fs) skip this round's decay, so they last through the next round
+		if not fs.has("vulnerable"):
+			u.st.vulnerable = max(0, u.st.vulnerable - 1)
+		if not fs.has("taunt"):
+			u.st.taunt = 0
 		u.st.tenacity = 0
-		u.st.mark = max(0, u.st.mark - 1)
-		u.st.blight = max(0, u.st.blight - 1)
-		u.st.lockdown = max(0, u.st.lockdown - 1)
+		if not fs.has("mark"):
+			u.st.mark = max(0, u.st.mark - 1)
+		if not fs.has("blight"):
+			u.st.blight = max(0, u.st.blight - 1)
+		if not fs.has("lockdown"):
+			u.st.lockdown = max(0, u.st.lockdown - 1)
 		if u.side == "hero":
 			u.st.freeze = max(0, u.st.freeze - 1)
-		u.guarded_by = -1
+			if not fs.has("stun"):
+				u.st.stun = 0   # a stunned hero loses one round of cards
+		if not (u.side == "enemy" and u.get("guard_fresh", false)):
+			u.guarded_by = -1
+		u.guard_fresh = false
 		u.moved = false
 	for h in s.heroes:
 		h.played_last = h.played

@@ -5,7 +5,7 @@ effect at a typical value of its quantity. Legendaries, Rites, curses and afflic
 PTS = {"dmg": 1, "block": 0.85, "self_block": 0.85, "block_target": 0.85, "armor": 6, "ward": 1.5, "heal": 1.2,
        "prime": 0.9, "draw": 4, "energy": 6, "push": 2, "pull": 2, "advance": 1, "retreat": 1, "execute": 0.4,
        "omen": 1.5, "grit": 4, "cleanse": 1, "react": 2.5, "brew": 5, "refill": 4, "improve": 3, "unbind": 1.2,
-       "guard": 4, "guard_weakest": 4, "delay": 4, "turn": 5, "steal_block": 3, "bash_stun": 5, "attune": 0.5,
+       "guard": 4, "guard_weakest": 4, "delay": 7, "turn": 5, "steal_block": 3, "bash_stun": 5, "attune": 0.5,
        "attune_to": 1, "apply_missing": 3, "dmg_per_element": 3, "spread": 3, "convert": 2, "double": 4, "transfer": 3,
        "to_front": 2, "swap": 1, "add": 3, "stress_take": 0.5, "cap": 1}
 STATUS = {"bleed": 1.6, "mark": 2, "vulnerable": 4, "stun": 9, "might": 5, "thorns": 1.3, "taunt": 3, "dodge": 3,
