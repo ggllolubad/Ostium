@@ -10,7 +10,7 @@ var msg := ""
 const TYPE_INFO := {
 	"start": ["Threshold", "O", "6f5036"], "combat": ["Fight", "F", "9c3d2b"], "elite": ["Elite", "E", "5e1a14"], "event": ["Event", "?", "3f6fa0"],
 	"merchant": ["Merchant", "M", "a9822f"], "shrine": ["Shrine", "S", "6d5a8a"], "camp": ["Field camp", "C", "62804f"], "hidden": ["Hidden cache", "H", "6a6a5e"],
-	"waypoint": ["Waypoint: the Camp", "W", "3f6a52"], "boss": ["Boss", "B", "2b1d12"],
+	"waypoint": ["Waypoint: a guardian, then the camp (legendary cards)", "W", "3f6a52"], "boss": ["The ruler", "B", "2b1d12"],
 }
 
 func _ready() -> void:
@@ -403,7 +403,14 @@ func show_map() -> void:
 		var shown: bool = n.revealed or n.visited
 		var b := Button.new()
 		b.text = "" if shown and UiStyle.icon("n_" + n.type) != null else (info[1] if shown else "·")
-		if shown:
+		var ruler: String = String(Run.r.get("commission", ""))
+		if n.type == "boss" and ruler != "" and ResourceLoader.exists("res://assets/art/rigs_li/%s/full.webp" % ruler):
+			# the commission's ruler waits at the end of the road
+			b.icon = load("res://assets/art/rigs_li/%s/full.webp" % ruler)
+			b.expand_icon = true
+			b.add_theme_constant_override("icon_max_width", 40)
+			b.text = ""
+		elif shown:
 			b.icon = UiStyle.icon("n_" + n.type)
 			b.expand_icon = true
 			b.add_theme_constant_override("icon_max_width", 34)
@@ -427,7 +434,7 @@ func show_map() -> void:
 		b.disabled = not nexts.has(id)
 		if n.visited and id != Run.r.at:
 			b.modulate = Color(1, 1, 1, 0.45)
-		b.tooltip_text = ("%s%s%s" % [info[0], " (the Pearl's keeper)" if n.get("keeper", false) else "", " · corrupted by the rising water" if n.get("corrupted", false) else ""]) if shown else "Unscouted"
+		b.tooltip_text = (("The ruler: " + Data.ENEMIES[ruler].name) if n.type == "boss" and ruler != "" and Data.ENEMIES.has(ruler) else "") + ("%s%s%s" % [info[0] if not (n.type == "boss" and ruler != "") else "", " (the Pearl's keeper)" if n.get("keeper", false) else "", " · corrupted by the rising water" if n.get("corrupted", false) else ""]) if shown else "Unscouted"
 		var nid: String = id
 		b.pressed.connect(func(): _enter(Run.move_to(nid)))
 		mapc.add_child(b)
@@ -575,6 +582,17 @@ func show_merchant() -> void:
 		_ibtn(k, "+1 %s · %d" % [k, st.supplies[k]], Vector2(700, sy), Vector2(260, 42), func(): _buy_supply(kk, st.supplies[kk]))
 		sy += 50
 	_btn("Strike a card from a deck · %d" % Run.price(50), Vector2(700, sy), Vector2(360, 42), func(): _pick_removal(Run.price(50), show_merchant))
+	# Rules v2, rule 19: the merchant also upgrades a card for 60 gold
+	var uy := sy + 50
+	for h in Run.living():
+		var hh: Dictionary = h
+		_btn("Upgrade a card of %s · %d" % [h.name, Run.price(60)], Vector2(700, uy), Vector2(360, 42), func():
+			if Run.r.gold < Run.price(60):
+				_toast("Not enough gold.")
+				return
+			Run.r.gold -= Run.price(60)
+			_pick_upgrade(hh, show_merchant))
+		uy += 50
 	_btn("Leave", Vector2(1300, 900), Vector2(240, 50), func(): _done_node(""))
 	Run.save()
 
@@ -669,7 +687,43 @@ func show_field_camp() -> void:
 	_screen("Field Camp", "Two food to make camp. Food: %d" % Run.r.supplies.food)
 	_btn("Tend wounds: heal 30% of max HP", Vector2(500, 260), Vector2(600, 56), func(): _done_node(Run.field_camp("rest")))
 	_btn("Talk through the night: shed 25 stress", Vector2(500, 330), Vector2(600, 56), func(): _done_node(Run.field_camp("talk")))
-	_btn("Press on", Vector2(660, 420), Vector2(280, 50), func(): _done_node(""))
+	# Rules v2, rule 19: the company may instead hone its cards, one upgrade per hero
+	_btn("Hone: each hero upgrades one card", Vector2(500, 400), Vector2(600, 56), func():
+		if Run.r.supplies.food < 2:
+			_toast("Not enough food to make camp (2 needed).")
+			return
+		Run.r.supplies.food -= 2
+		_upgrade_each(Run.living().duplicate(), func(): _done_node("The company hones its craft by the fire.")))
+	_btn("Press on", Vector2(660, 490), Vector2(280, 50), func(): _done_node(""))
+
+## One upgrade for each hero in turn, then `done`. A hero may pass.
+func _upgrade_each(hs: Array, done: Callable) -> void:
+	if hs.is_empty():
+		done.call()
+		return
+	var h: Dictionary = hs.pop_front()
+	_pick_upgrade(h, func(): _upgrade_each(hs, done))
+
+## A picker of the hero's cards that can be upgraded; the chosen card becomes its upgraded version.
+func _pick_upgrade(h: Dictionary, after: Callable) -> void:
+	var seen := {}
+	var ids := []
+	for cid in h.deck:
+		if not seen.has(cid) and not String(cid).ends_with("+") and Data.CARDS.has(String(cid) + "+"):
+			seen[cid] = true
+			ids.append(cid)
+	_screen("Upgrade · " + h.name, "Choose one card to upgrade, or pass. %d can be upgraded." % ids.size())
+	for i in ids.size():
+		var cid: String = ids[i]
+		var x := 60 + (i % 10) * 148
+		var y := 130 + int(i / 10) * 230
+		_card(cid, Vector2(x, y), 0.62, func():
+			var k: int = h.deck.find(cid)
+			if k >= 0:
+				h.deck[k] = cid + "+"
+			Run.save()
+			after.call())
+	_btn("Pass", Vector2(660, 900), Vector2(280, 50), after)
 
 func show_waypoint() -> void:
 	_screen("The Camp", "A dry chapter house the living still hold. Gold %d · medicine %d" % [Run.r.gold, Run.r.supplies.medicine])
