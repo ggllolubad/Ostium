@@ -329,6 +329,7 @@ func _build_static() -> void:
 	log_r.custom_minimum_size = Vector2(460, 480)
 	log_panel.add_child(log_r)
 	_layout_overlay(tl)
+	ordo_strip = tl
 
 ## Every panel sits over the world (Cole, 2026-11-25): a thin title line, the Ordo across the top, the hand fans and
 ## headshots at the foot, and the order summary, vigour and Play in the bottom-right corner.
@@ -731,19 +732,23 @@ func _rebuild_timeline() -> void:
 		var h := Combat.find(s, a.hero)
 		var c: Dictionary = Data.CARDS[a.card]
 		var t := Combat.find(s, a.get("target", -1))
-		var sub: String = h.get("name", "?")
+		# compact: the badge colour names the hero; the line says where it goes and its main effect
+		var sub := ""
 		if c.target == "self":
-			sub += " · self"
+			sub = "self"
 		elif c.target == "all_enemies":
-			sub += " · all foes"
+			sub = "all foes"
 		elif c.target == "all_allies":
-			sub += " · all heroes"
+			sub = "all heroes"
 		elif not t.is_empty():
-			sub += " → " + (t.name if t.side == "hero" else t.name.split(" ")[-1])
+			sub = "→ " + (t.name if t.side == "hero" else t.name.split(" ")[-1])
 		var oi: int = ordered.find(a)
 		var why := ""
 		if oi >= 0 and oi < preview.reasons.size():
 			why = preview.reasons[oi]
+		var main_fx := _main_effect(i)
+		if main_fx != "":
+			sub = main_fx if sub == "self" else sub + " · " + main_fx.split(" ", true, 1)[-1]
 		var slot := UiSlot.new()
 		var nm: String = c.name + ((" (X=%d)" % a.x) if c.cost < 0 else "")
 		slot.setup(self, i, true, nm, sub, _roman(i + 1), Color(h.get("color", "ecdfc2")), UiStyle.INK, why)
@@ -990,6 +995,121 @@ func _rebuild_summary() -> void:
 	t += "\n[b]Then the foes[/b]\n" + ("\n".join(heroes_only) if not heroes_only.is_empty() else "[i]nothing lands[/i]")
 	summary_r.text = t
 
+## The headline of one Ordo step for its compact slot: the first change it makes, without markup ("Knight -8 HP").
+func _main_effect(i: int) -> String:
+	if i < 0 or i >= plan.size():
+		return ""
+	var before: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
+	var after: Dictionary = Combat.simulate(s, plan.slice(0, i + 1), false).state
+	var lines := _diff_lines(before, after)
+	if lines.is_empty():
+		return ""
+	var t: String = lines[0]
+	t = RegEx.create_from_string("\\[[^\\]]*\\]").sub(t, "", true)
+	var parts := t.split(": ", true, 1)
+	var who: String = parts[0].split(" ")[-1]
+	var what: String = parts[1].split(", ")[0] if parts.size() > 1 else ""
+	return "%s %s" % [who, what]
+
+# ------------------------------------------------------------------ the full Ordo, shown while the strip is hovered
+var ordo_full: PanelContainer = null
+var ordo_strip: Panel = null
+
+## Hovering the Ordo strip opens the whole plan as full cards in order, each with exactly what it does underneath,
+## then the foes' turn (Cole, 2026-11-25).
+func _show_ordo_full() -> void:
+	if plan.is_empty() or resolving:
+		return
+	_hide_ordo_full()
+	ordo_full = PanelContainer.new()
+	var sb := UiStyle.box(Color(UiStyle.PARCH_L, 0.97), UiStyle.INK, 3)
+	sb.shadow_color = Color(0, 0, 0, 0.5)
+	sb.shadow_size = 10
+	sb.content_margin_left = 14
+	sb.content_margin_right = 14
+	sb.content_margin_top = 10
+	sb.content_margin_bottom = 10
+	ordo_full.add_theme_stylebox_override("panel", sb)
+	ordo_full.z_index = 50
+	ordo_full.mouse_filter = Control.MOUSE_FILTER_STOP
+	ordo_full.position = Vector2(16, 116)
+	add_child(ordo_full)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 6)
+	ordo_full.add_child(col)
+	col.add_child(UiStyle.label("The Ordo, in order", 18, UiStyle.font_sc, UiStyle.RED_D))
+	var sc := ScrollContainer.new()
+	sc.custom_minimum_size = Vector2(min(1536.0, plan.size() * (UiCard.W * 0.78 + 18.0) + 280.0), 412)
+	sc.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	col.add_child(sc)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10)
+	sc.add_child(row)
+	var k := 0.78
+	for i in plan.size():
+		var a: Dictionary = plan[i]
+		var step := VBoxContainer.new()
+		step.add_theme_constant_override("separation", 2)
+		step.custom_minimum_size = Vector2(UiCard.W * k + 8, 0)
+		var h := Combat.find(s, a.hero)
+		var t := Combat.find(s, a.get("target", -1))
+		var head := UiStyle.label("%s. %s%s" % [_roman(i + 1), h.get("name", "?"), (" → " + t.name) if not t.is_empty() and t.id != h.get("id", -2) else ""], 14, UiStyle.font_sc)
+		head.clip_text = true
+		head.custom_minimum_size = Vector2(UiCard.W * k, 0)
+		step.add_child(head)
+		var holder := Control.new()
+		holder.custom_minimum_size = Vector2(UiCard.W * k, UiCard.H * k)
+		var cv := UiCard.new()
+		cv.setup(self, a.hero, -1, a.card)
+		cv.scale = Vector2(k, k)
+		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		holder.add_child(cv)
+		step.add_child(holder)
+		var r := UiStyle.rich(13)
+		r.fit_content = true
+		r.custom_minimum_size = Vector2(UiCard.W * k, 0)
+		var before: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
+		var after: Dictionary = Combat.simulate(s, plan.slice(0, i + 1), false).state
+		var lines := _diff_lines(before, after)
+		var oi: int = preview.get("ordered", plan).find(a)
+		var why: String = preview.reasons[oi] if oi >= 0 and oi < preview.reasons.size() else ""
+		r.text = ("[color=#9c3d2b]Fizzles: %s[/color]" % why) if why != "" else ("\n".join(lines) if not lines.is_empty() else "[i]no visible change[/i]")
+		step.add_child(r)
+		row.add_child(step)
+	# then the foes
+	var foes := VBoxContainer.new()
+	foes.custom_minimum_size = Vector2(260, 0)
+	foes.add_child(UiStyle.label("Then the foes", 15, UiStyle.font_sc, UiStyle.RED_D))
+	var fr := UiStyle.rich(13)
+	fr.fit_content = true
+	fr.custom_minimum_size = Vector2(260, 0)
+	var mine: Dictionary = Combat.simulate(s, plan, false).state
+	var fl := _diff_lines(mine, preview.state)
+	fr.text = "\n".join(fl) if not fl.is_empty() else "[i]nothing lands[/i]"
+	foes.add_child(fr)
+	row.add_child(foes)
+	slot_detail.visible = false
+
+func _hide_ordo_full() -> void:
+	if ordo_full != null and is_instance_valid(ordo_full):
+		ordo_full.queue_free()
+	ordo_full = null
+
+var ordo_hover_t := -1.0
+func _process(dt: float) -> void:
+	if ordo_strip == null:
+		return
+	var m := get_global_mouse_position()
+	var on_strip := ordo_strip.get_global_rect().has_point(m)
+	if ordo_full == null:
+		# a short rest on the strip opens the full view, so passing over it on the way to a button does not
+		ordo_hover_t = ordo_hover_t + dt if on_strip else -1.0
+		if ordo_hover_t >= 0.4:
+			ordo_hover_t = -1.0
+			_show_ordo_full()
+	elif not on_strip and not ordo_full.get_global_rect().grow(6).has_point(m):
+		_hide_ordo_full()
+
 func _slot_detail(i: int) -> void:
 	if i < 0 or i >= plan.size():
 		slot_detail.visible = false
@@ -1165,7 +1285,7 @@ func _recompute_x() -> void:
 			spent += a.cost
 
 func highlight_slot(i: int, on: bool) -> void:
-	_slot_detail(i if on and i >= 0 else -1)
+	_slot_detail(i if on and i >= 0 and ordo_full == null else -1)
 	for id in unit_views:
 		unit_views[id].hovered = false
 	if on:

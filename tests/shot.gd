@@ -33,7 +33,7 @@ func _initialize() -> void:
 		m.hub.visible = false
 		for k in 20:
 			await process_frame
-		if mode == "combat" or mode == "target" or mode == "detail":
+		if mode == "combat" or mode == "target" or mode == "detail" or mode == "ordo":
 			var h = m.s.heroes
 			var e = m.s.enemies
 			m.set_active(h[2].id)
@@ -45,6 +45,10 @@ func _initialize() -> void:
 			if not m.targeting.is_empty():
 				m.on_unit_clicked(m.valid_targets[0])
 			m.set_active(h[1].id)
+			if mode == "ordo":
+				m._show_ordo_full()
+				for k in 10:
+					await process_frame
 			if mode == "detail":
 				m.highlight_slot(0, true)
 				for c in m.hand_layer.get_children():
