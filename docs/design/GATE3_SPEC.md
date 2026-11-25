@@ -64,9 +64,7 @@ the card art shows, composed from the Living Ink rigs and rooms).
 ## Creature fields
 
 Each creature: key, name, tier, HP, Armor, ranks it takes, resistances, intents (with generated text), AI rules,
-trait, phases (rulers), personality, and lore line. Numbers come from a tier budget: a foe threatens about 9 damage a
-round at Threat 0; an elite about 15; a ruler about 22 split across targets; HP so that foes last 4 to 6 rounds,
-elites 6 to 8 and rulers 8 to 12 against the reference company. The simulator corrects both.
+trait, phases (rulers), personality, and lore line. Numbers come from the tier budget in `GATE3_VOCAB.md` section 6 (base numbers that Threat multiplies). The simulator corrects both.
 
 ## Checks before a sheet goes to Cole
 

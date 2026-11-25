@@ -72,10 +72,18 @@ def HP2BLOCK(k=1, **kw): return _fx("kill_self_hp", k=k, **kw)
 def TAKESTRESS(n, **kw): return _fx("stress_take", n, **kw)
 def BASHSTUN(**kw): return _fx("bash_stun", **kw)
 def SWAPFX(**kw): return _fx("swap", **kw)
+# Gate 3 additions (docs/design/GATE3_VOCAB.md)
+def BREW(flask, n=1, **kw): return _fx("brew", n, card=flask, **kw)
+def REFILL(n=1, **kw): return _fx("refill", n, **kw)
+def IMPROVE(n=1, **kw): return _fx("improve", n, **kw)
+def UNBIND(n=1, **kw): return _fx("unbind", n, **kw)
+def DISCARD_RANDOM(**kw): return _fx("discard_random", **kw)
+def LOSE_ARMOR(n=1, **kw): return _fx("lose_armor", n, **kw)
+def SUMMON(key, max=2, **kw): return _fx("summon", e=key, max=max, **kw)
 
 
 def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical", attr=None, kw=None, sub=None, art=None, flask=False,
-         up=None, flavour=None, note=None, arch=None):
+         up=None, flavour=None, note=None, arch=None, rite=None, on_draw=None, world=None):
     """up: the upgrade, a dict of overriding fields (text is required; cost, fx, kw ... as needed).
     flavour: one line in the lore's voice. note: the art note (the chronicle moment the card art shows).
     arch: the archetype the card serves (for the sheets and the build-aware simulator)."""
@@ -102,6 +110,12 @@ def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical",
         c["note"] = note
     if arch:
         c["arch"] = arch
+    if rite:
+        c["rite"] = rite
+    if on_draw:
+        c["on_draw"] = on_draw
+    if world:
+        c["world"] = world
     CARDS[id] = c
     ORDER.append(id)
     return id
