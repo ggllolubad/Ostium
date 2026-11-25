@@ -590,8 +590,7 @@ func show_merchant() -> void:
 			if Run.r.gold < Run.price(60):
 				_toast("Not enough gold.")
 				return
-			Run.r.gold -= Run.price(60)
-			_pick_upgrade(hh, show_merchant))
+			_pick_upgrade(hh, show_merchant, Run.price(60)))
 		uy += 50
 	_btn("Leave", Vector2(1300, 900), Vector2(240, 50), func(): _done_node(""))
 	Run.save()
@@ -705,7 +704,7 @@ func _upgrade_each(hs: Array, done: Callable) -> void:
 	_pick_upgrade(h, func(): _upgrade_each(hs, done))
 
 ## A picker of the hero's cards that can be upgraded; the chosen card becomes its upgraded version.
-func _pick_upgrade(h: Dictionary, after: Callable) -> void:
+func _pick_upgrade(h: Dictionary, after: Callable, cost := 0) -> void:
 	var seen := {}
 	var ids := []
 	for cid in h.deck:
@@ -718,6 +717,11 @@ func _pick_upgrade(h: Dictionary, after: Callable) -> void:
 		var x := 60 + (i % 10) * 148
 		var y := 130 + int(i / 10) * 230
 		_card(cid, Vector2(x, y), 0.62, func():
+			if cost > 0:
+				if Run.r.gold < cost:
+					_toast("Not enough gold.")
+					return
+				Run.r.gold -= cost   # paid only when a card is chosen
 			var k: int = h.deck.find(cid)
 			if k >= 0:
 				h.deck[k] = cid + "+"

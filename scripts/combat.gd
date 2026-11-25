@@ -92,6 +92,7 @@ static func new_state_run(setup: Dictionary, enemy_keys: Array, seed: int) -> Di
 		h.st.might += int(hs.stats.get("might", 0))
 	for e in s.enemies:
 		var mult := float(setup.get("foe_hp", 1.0)) * (float(setup.get("boss_hp", 1.0)) if Data.ENEMIES[e.key].tier == "boss" else 1.0)
+		mult *= float(setup.get("tier_hp", {}).get(Data.ENEMIES[e.key].tier, 1.0))   # Gate 3 content scale by tier
 		e.max_hp = int(round(e.max_hp * mult))
 		e.hp = e.max_hp
 		e.st.might += int(setup.get("foe_might", 0))
