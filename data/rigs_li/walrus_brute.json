@@ -1,0 +1,299 @@
+{
+"key": "walrus_brute",
+"source": "worlds/world_VII_walrus_brute",
+"scale": 0.6,
+"canvas": [
+720,
+660
+],
+"ground": 642.0,
+"flip": true,
+"ink": [
+24,
+73,
+716,
+655
+],
+"bones": {
+"body": {
+"pivot": [
+557.04,
+570.24
+],
+"parent": null
+},
+"chest": {
+"pivot": [
+412.8,
+448.8
+],
+"parent": "body"
+},
+"neck": {
+"pivot": [
+280.8,
+310.8
+],
+"parent": "chest"
+},
+"head": {
+"pivot": [
+192.24,
+211.44
+],
+"parent": "neck"
+},
+"tusk_cutlass": {
+"pivot": [
+100.8,
+200.4
+],
+"parent": "head"
+},
+"flipper_fn": {
+"pivot": [
+205.68,
+526.08
+],
+"parent": "chest"
+},
+"flipper_fn_2": {
+"pivot": [
+224.34,
+590.1
+],
+"parent": "flipper_fn"
+},
+"flipper_ff": {
+"pivot": [
+243.66,
+583.5
+],
+"parent": "chest"
+},
+"tail": {
+"pivot": [
+608.4,
+614.4
+],
+"parent": "body"
+},
+"harpoon": {
+"pivot": [
+499.68,
+526.08
+],
+"parent": "body"
+}
+},
+"layers": [
+{
+"name": "00_flipper_ff",
+"bone": "flipper_ff",
+"z": 0,
+"pos": [
+183.0,
+573.0
+],
+"size": [
+122,
+70
+]
+},
+{
+"name": "01_flipper_fn",
+"bone": "flipper_fn",
+"z": 1,
+"pos": [
+167.4,
+502.2
+],
+"size": [
+85,
+104
+]
+},
+{
+"name": "02_flipper_fn_2",
+"bone": "flipper_fn_2",
+"z": 2,
+"pos": [
+164.4,
+574.2
+],
+"size": [
+122,
+76
+]
+},
+{
+"name": "03_tail",
+"bone": "tail",
+"z": 3,
+"pos": [
+501.6,
+610.2
+],
+"size": [
+163,
+39
+]
+},
+{
+"name": "04_body",
+"bone": "body",
+"z": 4,
+"pos": [
+335.4,
+381.0
+],
+"size": [
+380,
+267
+]
+},
+{
+"name": "05_chest",
+"bone": "chest",
+"z": 5,
+"pos": [
+102.0,
+243.6
+],
+"size": [
+388,
+385
+]
+},
+{
+"name": "06_neck",
+"bone": "neck",
+"z": 6,
+"pos": [
+108.0,
+154.8
+],
+"size": [
+253,
+224
+]
+},
+{
+"name": "07_head",
+"bone": "head",
+"z": 7,
+"pos": [
+32.4,
+82.2
+],
+"size": [
+224,
+186
+]
+},
+{
+"name": "08_tail",
+"bone": "tail",
+"z": 8,
+"pos": [
+483.6,
+599.4
+],
+"size": [
+186,
+50
+]
+},
+{
+"name": "09_body",
+"bone": "body",
+"z": 9,
+"pos": [
+450.6,
+490.8
+],
+"size": [
+228,
+152
+]
+},
+{
+"name": "10_chest",
+"bone": "chest",
+"z": 10,
+"pos": [
+103.2,
+385.8
+],
+"size": [
+119,
+166
+]
+},
+{
+"name": "11_neck",
+"bone": "neck",
+"z": 11,
+"pos": [
+109.2,
+193.2
+],
+"size": [
+284,
+200
+]
+},
+{
+"name": "12_harpoon",
+"bone": "harpoon",
+"z": 12,
+"pos": [
+489.6,
+438.0
+],
+"size": [
+166,
+205
+]
+},
+{
+"name": "13_head",
+"bone": "head",
+"z": 13,
+"pos": [
+24.0,
+72.6
+],
+"size": [
+143,
+317
+]
+},
+{
+"name": "14_tusk_cutlass",
+"bone": "tusk_cutlass",
+"z": 14,
+"pos": [
+93.0,
+167.4
+],
+"size": [
+40,
+196
+]
+},
+{
+"name": "15_root",
+"bone": "root",
+"z": 15,
+"pos": [
+184.2,
+612.0
+],
+"size": [
+532,
+43
+]
+}
+]
+}
