@@ -80,17 +80,19 @@ card("bw_scar_tissue", "Scar Tissue", 1, "C", "self", [B(3, per="scars", k=0.34)
      note="Blood runs from under the Bulwark's helm as he sets his shoulder harder into the door.",
      up={"text": "Gain 4 Block, plus 1 for every 2 Scars.", "fx": [B(4, per="scars", k=0.5)]})
 card("bw_toll_of_the_tower", "Toll of the Tower", 2, "C", "enemy",
-     [D(4, per="scars", k=0.5), STRESS(-6, to="self", if_="killed")],
-     "Echo. Deal 4, plus 1 for every 2 Scars. If this kills the target, shed 6 stress.", kw=["Echo"], arch=SB,
+     [D(2, per="scars", k=0.34), STRESS(-6, to="self", if_="killed")],
+     "Echo. Deal 2, plus 1 for every 3 Scars. If this kills the target, shed 6 stress.", kw=["Echo"], arch=SB,
      flavour="The tower fell. He did not. Someone has to pay for that.",
      note="A bloodied Bulwark swings the mace two-handed, the door hanging from his forearm, in the ossuary.",
-     up={"text": "Echo. Deal 7, plus 1 for every 2 Scars. If this kills the target, shed 6 stress.",
-         "fx": [D(7, per="scars", k=0.5), STRESS(-6, to="self", if_="killed")]})
-card("bw_blood_for_iron", "Blood for Iron", 1, "C", "self", [SELFDMG(2), AR(1), B(3)],
-     "Lose 2 HP. Gain 1 Armor for the fight and 3 Block. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
+     up={"text": "Echo. Deal 4, plus 1 for every 3 Scars. If this kills the target, shed 6 stress.",
+         "fx": [D(4, per="scars", k=0.34), STRESS(-6, to="self", if_="killed")]})
+card("bw_blood_for_iron", "Blood for Iron", 1, "C", "self", [SELFDMG(2), AR(1, if_="lost>=2"), B(3, per="lost", k=1, max=5)],
+     "Lose 2 HP. If you lost 2, gain 1 Armor for the fight. Gain 3 Block, plus 1 for each HP lost this way. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
      flavour="The garrison oath: my blood for the wall, the wall for the ones behind it.",
      note="The Bulwark draws his palm across the breastplate's lead patch, leaving a red smear.",
-     up={"text": "Lose 2 HP. Gain 1 Armor for the fight and 6 Block. Exhaust.", "fx": [SELFDMG(2), AR(1), B(6)]})
+     up={"text": "Lose 2 HP. If you lost 2, gain 1 Armor for the fight. Gain 6 Block, plus 1 for each HP lost this "
+                 "way. Exhaust.",
+         "fx": [SELFDMG(2), AR(1, if_="lost>=2"), B(6, per="lost", k=1, max=8)]})
 card("bw_still_standing", "Still Standing", 1, "C", "self", [B(3), B(7, if_="dd")],
      "Retain. Gain 3 Block. At Death's Door, gain 7 more.", use=ALL, kw=["Retain"], arch=SB,
      flavour="He should be dead. He has been told so, by better men than you.",
@@ -252,11 +254,12 @@ card("bw_shoulder_their_burden", "Shoulder Their Burden", 1, "U", "self",
      up={"text": "Take up to 12 stress from every other hero onto yourself. Gain 2 Block, plus 2 for each other hero "
                  "who acted before this, up to 8.",
          "fx": [TAKESTRESS(12), B(2, per="heroes_before", k=2, max=8)]})
-card("bw_tithe_of_blood", "Tithe of Blood", 0, "U", "self", [SELFDMG(3), EN(1)],
-     "Lose 3 HP. Next round, +1 vigour. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
+card("bw_tithe_of_blood", "Tithe of Blood", 0, "U", "self", [SELFDMG(2), EN(1, if_="lost>=2"), STRESS(-2)],
+     "Lose 2 HP. If you lost 2, next round +1 vigour. Shed 2 stress. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
      flavour="The abbey pays in ostia. He pays in what he has.",
      note="The Bulwark tightens the bandage under his helm until it reddens through.",
-     up={"text": "Lose 2 HP. Next round, +1 vigour. Exhaust.", "fx": [SELFDMG(2), EN(1)]})
+     up={"text": "Lose 2 HP. If you lost 2, next round +1 vigour. Shed 4 stress. Exhaust.",
+         "fx": [SELFDMG(2), EN(1, if_="lost>=2"), STRESS(-4)]})
 
 # ------------------------------------------------------------------ uncommon: Ironwarden
 card("bw_winter_vigil", "Winter Vigil", 2, "U", "self", [B(3, to="all_allies"), B(2), A("frost", 1, to="all_enemies")],
@@ -385,14 +388,14 @@ card("bw_martyrdom", "Martyrdom", 1, "R", "self", [SELF("taunt"), B(0, per="inco
      note="Every foe in the throne room turns its weapon on the Bulwark at once.",
      up={"text": "Taunt. Gain 4 Block, plus half the damage the foes mean to deal this round, up to 24. Gain 2 stress.",
          "fx": [SELF("taunt"), B(4, per="incoming", k=0.5, max=24), STRESS(2)]})
-card("bw_vengeance", "Vengeance", 2, "R", "enemy", [D(2, per="scars", k=1, max=30), GRIT(1, to="self", if_="killed")],
-     "Costs 1 less if 3 or more of your cards are Exhausted. Deal 2, plus 1 for each Scar, up to 30. If this kills "
-     "the target, gain 1 Grit.", arch=SB, cost_less={"per": "exhaust", "k": 0.34, "max": 1},
+card("bw_vengeance", "Vengeance", 2, "R", "enemy", [D(1, per="scars", k=1, max=30), GRIT(1, to="self", if_="killed")],
+     "Costs 1 less if 5 or more of your cards are Exhausted. Deal 1, plus 1 for each Scar, up to 30. If this kills "
+     "the target, gain 1 Grit.", arch=SB, cost_less={"per": "exhaust", "k": 0.2, "max": 1},
      flavour="He keeps a tally on the door. This is where he settles it.",
      note="Beside the kill tally scratched into the planks, the Bulwark's mace falls on a ruler's guard.",
-     up={"text": "Costs 1 less if 3 or more of your cards are Exhausted. Deal 6, plus 1 for each Scar, up to 34. If "
+     up={"text": "Costs 1 less if 5 or more of your cards are Exhausted. Deal 5, plus 1 for each Scar, up to 34. If "
                  "this kills the target, gain 1 Grit.",
-         "fx": [D(6, per="scars", k=1, max=34), GRIT(1, to="self", if_="killed")]})
+         "fx": [D(5, per="scars", k=1, max=34), GRIT(1, to="self", if_="killed")]})
 card("bw_deep_winter", "Deep Winter", 2, "R", "self", [B(9), SELF("fortify"), A("frost", 3, to="attackers"), BANK(1)],
      "Gain 9 Block. Fortify. Apply 3 Frost to each foe that means to strike you. Bank 1.", use=ALL, cat="frost",
      attr="stable", arch=IW,
@@ -421,11 +424,12 @@ card("bw_iron_maiden", "Iron Maiden", 1, "R", "self", [SELF("thorns", 3, per="to
      note="The Thornguard closes his barbed arms around himself; spikes stand from every plate.",
      up={"text": "Gain 5 Thorns, plus 1 for every 2 Bleed on all foes.",
          "fx": [SELF("thorns", 5, per="total_bleed", k=0.5)]})
-card("bw_rose_of_iron", "Rose of Iron", 0, "R", "self", [SELFDMG(1), DBL(s="thorns", to="self")],
-     "Lose 1 HP. Double your Thorns. Exhaust.", use=ALL, kw=["Exhaust"], arch=TG,
+card("bw_rose_of_iron", "Rose of Iron", 0, "R", "self", [SELFDMG(1), DBL(s="thorns", to="self", if_="lost"), SELF("thorns", 1)],
+     "Lose 1 HP. If you lost it, double your Thorns. Gain 1 Thorns. Exhaust.", use=ALL, kw=["Exhaust"], arch=TG,
      flavour="It blooms where he bleeds.",
      note="New barbs split open along the Thornguard's arms like iron petals.",
-     up={"text": "Double your Thorns. Exhaust.", "fx": [DBL(s="thorns", to="self")]})
+     up={"text": "Lose 1 HP. If you lost it, double your Thorns. Gain 3 Thorns. Exhaust.",
+         "fx": [SELFDMG(1), DBL(s="thorns", to="self", if_="lost"), SELF("thorns", 3)]})
 card("bw_hedge_of_spikes", "Hedge of Spikes", 2, "R", "all_allies", [ST("thorns", 3), B(2)],
      "Every hero gains 3 Thorns and 2 Block.",
      use=ALL, arch=TG,
@@ -655,8 +659,4 @@ NEEDS = [
     "and a 'play' rite filter for attack cards; the rite fires on any card played on a foe that means to attack.",
     "bw_the_long_night: a direct 'Freeze the target' effect at a Frost threshold. Written as 1 Volatile Water at 4 Frost, "
     "which sets off the Freeze Conjunction with the Frost already on the foe.",
-    "budget.py prices neither cost_less nor Echo. Winter Vigil and Vengeance (cost_less) and Toll of the Tower (Echo) "
-    "had their numbers trimmed (Block 4 to 3, Scar blow 3 to 2, Toll 6 to 4) to leave room for them.",
-    "Hair Shirt, Scourge, Welded Barbs, Flagellant's Cord and Bleed for Them read 'lost'; other self-harm cards "
-    "(Blood for Iron, Rose of Iron, Tithe of Blood) still pay their full rider at 1 HP.",
 ]

@@ -223,14 +223,14 @@ card("du_second_intention", "Second Intention", 1, "C", "enemy",
          "fx": [D(5), SELF("momentum", 1), SELF("momentum", 1, if_="handoff")]})
 
 # ------------------------------------------------------------------ uncommon: Bladedancer
-card("du_closing_whirl", "Closing Whirl", 2, "U", "all_enemies", [FIN(), D(1, per="consumed", k=2, if_="t.rank<=2")],
-     "Costs 1 less if you have played 2 or more cards this round. Finisher. Deal 1, plus 2 per Momentum spent, to "
-     "each foe in ranks 1 and 2.", hit=ALL, kw=["Finisher"], arch=BD, cost_less={"per": "played", "k": 0.5, "max": 1},
+card("du_closing_whirl", "Closing Whirl", 2, "U", "all_enemies", [FIN(), D(0, per="consumed", k=2, if_="t.rank<=2")],
+     "Costs 1 less if you have played 3 or more cards this round. Finisher. Deal 2 per Momentum spent to each foe in "
+     "ranks 1 and 2.", hit=ALL, kw=["Finisher"], arch=BD, cost_less={"per": "played", "k": 0.34, "max": 1},
      flavour="Every step of the dance was the windup. This is the swing.",
      note="The Bladedancer turns a full circle at the front of the nave, both blades out.",
-     up={"text": "Costs 1 less if you have played 2 or more cards this round. Finisher. Deal 3, plus 2 per Momentum "
+     up={"text": "Costs 1 less if you have played 3 or more cards this round. Finisher. Deal 2, plus 2 per Momentum "
                  "spent, to each foe in ranks 1 and 2.",
-         "fx": [FIN(), D(3, per="consumed", k=2, if_="t.rank<=2")]})
+         "fx": [FIN(), D(2, per="consumed", k=2, if_="t.rank<=2")]})
 card("du_quick_hands", "Quick Hands", 1, "U", "enemy", [D(1, per="spent_before", k=1, times=2, max=6)],
      "Twice: deal 1, plus 1 per vigour spent before it this round, up to 6.", arch=BD + "+alchemist_might",
      flavour="Two cuts in the time of one. Three, when the blood is up.",
@@ -414,12 +414,12 @@ card("du_bowl_passed_round", "The Bowl Passed Round", 1, "R", "all_allies", [H(0
      flavour="Drink. It was theirs. Now it is ours.",
      note="The bloodied bowl goes hand to hand around the company in the brine grotto.",
      up={"text": "Every hero heals 3, plus 1 per 2 Bleed on all foes. Exhaust.", "fx": [H(3, per="total_bleed", k=0.5)]})
-card("du_echo_of_steel", "Echo of Steel", 1, "R", "enemy", [D(3, times=2), ST("bleed", 2, if_="same_target")],
-     "Echo. Deal 3 twice. Follow-up: apply 2 Bleed.", kw=["Echo"], arch=BD + "+" + BL,
+card("du_echo_of_steel", "Echo of Steel", 1, "R", "enemy", [D(2, times=2), ST("bleed", 1, if_="same_target")],
+     "Echo. Deal 2 twice. Follow-up: apply 1 Bleed.", kw=["Echo"], arch=BD + "+" + BL,
      flavour="Strike, and strike, and the stone walls strike back with the sound of it.",
      note="The Bladedancer's two blades ring in the belfry and the ringing cuts again.",
-     up={"text": "Echo. Deal 4 twice. Follow-up: apply 2 Bleed.",
-         "fx": [D(4, times=2), ST("bleed", 2, if_="same_target")]})
+     up={"text": "Echo. Deal 3 twice. Follow-up: apply 2 Bleed.",
+         "fx": [D(3, times=2), ST("bleed", 2, if_="same_target")]})
 card("du_oath_of_the_salle", "Oath of the Salle", 1, "R", "self", [FIN(), SELF("might", 0, per="consumed", k=0.5)],
      "Finisher. Gain 1 Might per 2 Momentum spent. Exhaust.", use=ALL, kw=["Finisher", "Exhaust"], arch=BD,
      flavour="Sworn on the blade at the fencing hall. Every cut since keeps the vow.",
@@ -452,13 +452,13 @@ card("du_second_blade", "Second Blade", 1, "X", "enemy",
      note="The Bladedancer draws the second blade mid-turn and both cut together.",
      up={"text": "Deal 3 three times. Gain 1 Momentum. Follow-up: gain 1 more.",
          "fx": [D(3, times=3), SELF("momentum", 1), SELF("momentum", 1, if_="same_target")]})
-card("du_encore", "Encore", 1, "X", "enemy", [D(4, per="vigour_spent", k=0.5, max=8), SELF("momentum", 1)],
-     "Echo. Deal 4, plus 1 for every 2 vigour spent this round, up to 8. Gain 1 Momentum.", kw=["Echo"], sub=BD,
+card("du_encore", "Encore", 1, "X", "enemy", [D(2, per="vigour_spent", k=0.34, max=5), SELF("momentum", 1)],
+     "Echo. Deal 2, plus 1 for every 3 vigour spent this round, up to 5. Gain 1 Momentum.", kw=["Echo"], sub=BD,
      arch=BD,
      flavour="The crowd is dead and drowned. The dancer bows anyway, and goes again.",
      note="The Bladedancer finishes a pass, bows, and comes straight back through.",
-     up={"text": "Echo. Deal 6, plus 1 for every 2 vigour spent this round, up to 10. Gain 1 Momentum.",
-         "fx": [D(6, per="vigour_spent", k=0.5, max=10), SELF("momentum", 1)]})
+     up={"text": "Echo. Deal 3, plus 1 for every 3 vigour spent this round, up to 7. Gain 1 Momentum.",
+         "fx": [D(3, per="vigour_spent", k=0.34, max=7), SELF("momentum", 1)]})
 card("du_blade_wheel", "Blade Wheel", 2, "X", "all_enemies", [FIN(), D(2, per="consumed", k=1), D(2, if_="t.mark>0")],
      "Finisher. Deal 2, plus 1 per Momentum spent, to every foe. Hit each Marked foe again for 2.", hit=ALL,
      kw=["Finisher"], sub=BD, arch=BD + "+" + EX,
@@ -656,8 +656,6 @@ NEEDS = [
     "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
     "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
     "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",
-    "budget.py prices neither cost_less nor Echo. Second Stroke and Closing Whirl (cost_less) had their numbers "
-    "trimmed to leave room for the discount.",
     "du_fall_back_in_guard: wanted 'the hero who takes your place'. Written as the hero in front of you after the "
     "Retreat (to='in_front'), which is the same hero whenever the Retreat lands.",
     "A 'cost' read only sees Thrift's discount (nothing raises a cost), so no Duelist card reads 'cost'. Wanted: a "
