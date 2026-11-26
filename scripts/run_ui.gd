@@ -215,6 +215,8 @@ func show_hub() -> void:
 	else:
 		_btn("Theme: %s" % ("dark" if UiStyle.dark else "light"), Vector2(1010, 808), Vector2(480, 46), _toggle_theme)
 	_btn("Back to the garth", Vector2(1010, 864), Vector2(480, 44), func(): main._show_menu())
+	_btn("Playtest: all callings %s" % ("on" if Run.playtest_all() else "off"), Vector2(1010, 916), Vector2(480, 40), _toggle_playtest, null,
+		"Unlock every calling for testing. Saved with your settings; turn it off to play the unlocks normally.")
 	_toast(msg)
 	msg = ""
 
@@ -326,6 +328,11 @@ func _toggle_hero(key: String) -> void:
 			ordered.append(k)
 	hub_party = ordered
 	show_prepare()
+
+func _toggle_playtest() -> void:
+	UiStyle.settings["playtest_all"] = not Run.playtest_all()
+	UiStyle.save_settings()
+	show_hub()
 
 func _toggle_theme() -> void:
 	UiStyle.apply_theme(not UiStyle.dark)

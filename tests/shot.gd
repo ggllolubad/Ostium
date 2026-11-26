@@ -16,6 +16,7 @@ func _initialize() -> void:
 		Run.meta = {"ostia": 412, "unlocked": [], "wins": n, "runs": n, "best_depth": 7, "doors": order.slice(0, min(n + 1, 15)), "cleared": order.slice(0, n)}
 		Run.meta_save()
 		m.run_ui.hub_world = order[min(n, 14)]
+		m.hub.visible = false
 		m.run_ui.visible = true
 		m.run_ui.show_hub()
 		await process_frame

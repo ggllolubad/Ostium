@@ -89,7 +89,11 @@ static func _migrate_run(v: Dictionary) -> Dictionary:
 	return v
 
 static func class_unlocked(key: String) -> bool:
-	return key in ["bulwark", "duelist", "elementalist"] or meta.unlocked.has(key)
+	return key in ["bulwark", "duelist", "elementalist"] or meta.unlocked.has(key) or playtest_all()
+
+## Playtest switch (hub button): every calling counts as unlocked. Stored in settings, not in the save.
+static func playtest_all() -> bool:
+	return bool(UiStyle.settings.get("playtest_all", false))
 
 ## Doors follow the road (data/story.json): the Drowned Kingdom is open from the start, and clearing a world
 ## unseals the next door on the road. Once all fifteen are cleared, every door is open and the company may Cast Lots.

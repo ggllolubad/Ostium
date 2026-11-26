@@ -75,6 +75,13 @@ func _versions() -> void:
 	SaveIO.write_json(Run.run_path(), {"seed": 5, "heroes": [], "version": Run.SAVE_VERSION + 1})
 	ok(not Run.load_run(), "a run from a newer game is refused, not misread")
 	SaveIO.remove(Run.run_path())
+	# the playtest switch unlocks every calling while on, and nothing while off
+	_fresh()
+	UiStyle.settings["playtest_all"] = false
+	ok(not Run.class_unlocked("vessel") and Run.class_unlocked("bulwark"), "playtest off: locked callings stay locked")
+	UiStyle.settings["playtest_all"] = true
+	ok(Data.CLASS_ORDER.all(func(k): return Run.class_unlocked(k)), "playtest on: every calling is unlocked")
+	UiStyle.settings.erase("playtest_all")
 	# settings go through the same path
 	UiStyle.settings["probe"] = 7
 	UiStyle.save_settings()
