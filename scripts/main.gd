@@ -490,11 +490,7 @@ func _show_practice() -> void:
 		var on := UiStyle.box(UiStyle.HI, UiStyle.RED, 3)
 		b.add_theme_stylebox_override("pressed", on)
 		b.add_theme_stylebox_override("hover_pressed", on)
-		var at := AtlasTexture.new()
-		var tex: Texture2D = load(hd.art)
-		at.atlas = tex
-		var fr: Array = hd.face
-		at.region = Rect2(tex.get_width() * max(0.0, fr[0] - fr[2] * 0.5), tex.get_height() * fr[1], tex.get_width() * fr[2] * 2.0, tex.get_height() * fr[3] * 1.4)
+		var at: Texture2D = hero_face({"key": key, "art": hd.art})
 		var tr := TextureRect.new()
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
