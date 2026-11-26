@@ -91,7 +91,7 @@ QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used",
       "vigour_left", "vigour_spent", "vigour_pool", "cost", "ordo_pos", "ordo_len", "ordo_after", "spent_before", "heroes_before",
-      "handoff", "first", "last", "lost"}
+      "handoff", "first", "last", "lost", "carried", "base_cost"}
 STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "taunt", "thorns", "dodge", "regen",
           "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown", "empower", "thrift"}
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}
@@ -213,6 +213,12 @@ for cid, c in dsl.CARDS.items():
         err(cid, "afflictions need on_draw")
     if c.get("on_draw"):
         check_fx(cid, c["on_draw"])
+    if c.get("cost_less"):
+        cl = c["cost_less"]
+        if cl.get("per") not in ("ordo", "heroes", "attacks") | QU:
+            err(cid, "cost_less reads an unknown quantity: %s" % cl.get("per"))
+        if not isinstance(c["cost"], int) or c["cost"] < 1:
+            err(cid, "cost_less needs a card that costs 1 or more")
     if "Rite" in c.get("kw", []):
         r = c.get("rite")
         if not r or r.get("on") not in RITE_ON:

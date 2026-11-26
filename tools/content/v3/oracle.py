@@ -11,10 +11,10 @@ V = "void"
 CH, AU, FB = "chronomancer", "augur", "fatebinder"
 
 # ------------------------------------------------------------------ kit
-card("or_hasten", "Hasten", 1, "K", "self", [PRIME(4), PRIME(2, if_="handoff")], "Prime 4. Handoff: Prime 2 more.", cat=V,
+card("or_hasten", "Hasten", 1, "K", "self", [PRIME(3), PRIME(2, if_="handoff")], "Prime 3. Handoff: Prime 2 more.", cat=V,
      flavour="The sand falls a little faster for whoever moves next.",
      note="The Oracle tips the wrist hourglass toward an ally; the sand runs bright.",
-     arch="core", up={"text": "Prime 5. Handoff: Prime 2 more.", "fx": [PRIME(5), PRIME(2, if_="handoff")]})
+     arch="core", up={"text": "Prime 4. Handoff: Prime 2 more.", "fx": [PRIME(4), PRIME(2, if_="handoff")]})
 card("or_second_hand", "Second Hand", 1, "K", "enemy", [D(2), D(2, if_="last")], "Echo. Deal 2. Last in the Ordo: deal 2 more.",
      cat=V, kw=["Echo"], sub=CH,
      flavour="Turn it over. The same blow falls again.",
@@ -57,22 +57,22 @@ card("or_time_shear", "Time Shear", 2, "S", "enemy", [D(9), A(V, 1), D(3, if_="l
                       "fx": [D(12), A(V, 1), D(3, if_="last")]})
 
 # ------------------------------------------------------------------ common: Chronomancer
-card("or_hourglass", "Hourglass", 1, "C", "self", [EN(1), BANK(1, to="self")], "Next round, +1 vigour. Bank 1.", cat=V,
+card("or_hourglass", "Hourglass", 1, "C", "self", [BANK(2, to="self"), STRESS(-2)], "Bank 2. Shed 2 stress.", cat=V,
      flavour="Turn it, and the hour you did not use comes back to you.",
      note="The Oracle turns the hourglass on its chain; the last grain hangs.",
-     arch=CH, up={"text": "Next round, +1 vigour. Bank 2.", "fx": [EN(1), BANK(2, to="self")]})
+     arch=CH, up={"text": "Bank 2. Shed 5 stress.", "fx": [BANK(2, to="self"), STRESS(-5)]})
 card("or_glimpse_ahead", "Glimpse Ahead", 0, "C", "self", [DRAW(1), STRESS(3)],
      "Next round, draw 1 more. Gain 3 stress.", cat=V,
      flavour="Seeing tomorrow is easy. Living through today after is not.",
      note="Behind the blindfold, a painted eye seems to open.",
      arch=CH + "+" + AU, up={"text": "Next round, draw 1 more. Gain 1 stress.", "fx": [DRAW(1), STRESS(1)]})
-card("or_stutter", "Stutter", 1, "C", "enemy", [D(2, per="vigour_left", k=1, max=5), A(V, 1)],
-     "Echo. Deal 2, plus 1 per vigour left unspent this round, at most 5. Apply 1 Void.", cat=V, attr="stable",
+card("or_stutter", "Stutter", 1, "C", "enemy", [D(3, per="vigour_left", k=2, max=7), A(V, 1)],
+     "Echo. Deal 3, plus 2 per vigour left unspent this round, at most 7. Apply 1 Void.", cat=V, attr="stable",
      kw=["Echo"],
      flavour="The moment skips, and the foe is struck twice by one blow.",
      note="Two ghost images of the same pointing hand, one a beat behind.",
-     arch=CH, up={"text": "Echo. Deal 3, plus 1 per vigour left unspent this round, at most 6. Apply 1 Void.",
-                  "fx": [D(3, per="vigour_left", k=1, max=6), A(V, 1)]})
+     arch=CH, up={"text": "Echo. Deal 4, plus 2 per vigour left unspent this round, at most 8. Apply 1 Void.",
+                  "fx": [D(4, per="vigour_left", k=2, max=8), A(V, 1)]})
 card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, if_="t.delayed")],
      "Deal 4. Deal 4 more if the target was Delayed this round.", cat=V,
      flavour="It waited for you. It should not have.",
@@ -261,12 +261,12 @@ card("or_seen_coming", "Seen Coming", 1, "U", "self", [B(0, per="incoming_me"), 
                           "First in the Ordo: gain 1 Omen.",
                   "fx": [B(3, per="incoming_me"), OMEN(1, if_="first")]})
 card("or_trade_on_tomorrow", "Trade on Tomorrow", 1, "U", "self",
-     [CONS(s="omen"), SELF("thrift", 1), EN(0, per="consumed", k=0.25)],
-     "Spend all your Omen. Gain 1 Thrift. Next round, +1 vigour per 4 Omen spent.", cat=V,
+     [CONS(s="omen"), SELF("thrift", 0, per="consumed", k=0.34, max=2)],
+     "Spend all your Omen. Gain 1 Thrift per 3 Omen spent, at most 2.", cat=V,
      flavour="What I know of tomorrow, I sell to today.",
      note="The Augur pours knucklebones into the Chronomancer's hourglass.",
-     arch=AU + "+" + CH, up={"text": "Spend all your Omen. Gain 1 Thrift. Next round, +1 vigour per 3 Omen spent.",
-                             "fx": [CONS(s="omen"), SELF("thrift", 1), EN(0, per="consumed", k=0.34)]})
+     arch=AU + "+" + CH, up={"text": "Spend all your Omen. Gain 1 Thrift per 2 Omen spent, at most 3.",
+                             "fx": [CONS(s="omen"), SELF("thrift", 0, per="consumed", k=0.5, max=3)]})
 
 # ------------------------------------------------------------------ uncommon: Fatebinder
 card("or_tapestry", "Tapestry", 2, "U", "all_enemies", [D(3, per="prime_count", k=3)],
@@ -281,12 +281,12 @@ card("or_red_ink", "Red Ink", 1, "U", "enemy", [PRIME(3, per="m.bleed", k=1)],
      note="The Fatebinder dips the quill in a foe's wound and writes.",
      arch=FB + "+duelist_bleed", up={"text": "Choose a foe. Prime 4, plus 1 per Bleed on it.",
                                      "fx": [PRIME(4, per="m.bleed", k=1)]})
-card("or_gathering_thread", "Gathering Thread", 1, "U", "self", [PRIME(3, per="heroes_before", k=2)],
-     "Prime 3, plus 2 per other hero who has acted before this in the Ordo.", cat=V,
+card("or_gathering_thread", "Gathering Thread", 1, "U", "self", [PRIME(4, per="heroes_before", k=3)],
+     "Prime 4, plus 3 per other hero who has acted before this in the Ordo.", cat=V,
      flavour="Each knot tied makes the next one tighter.",
      note="Red thread winds around the Fatebinder's arm in a growing coil.",
-     arch=FB, up={"text": "Prime 4, plus 3 per other hero who has acted before this in the Ordo.",
-                  "fx": [PRIME(4, per="heroes_before", k=3)]})
+     arch=FB, up={"text": "Prime 5, plus 4 per other hero who has acted before this in the Ordo.",
+                  "fx": [PRIME(5, per="heroes_before", k=4)]})
 card("or_fates_edge", "Fate's Edge", 1, "U", "enemy", [D(5), PRIME(5, if_="killed")],
      "Deal 5. If it kills, Prime 5.", cat=V,
      flavour="One thread cut. The next blow is already falling.",
@@ -348,13 +348,13 @@ card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(2, per="ordo_pos", k=2)],
      arch=CH + "+" + FB, up={"text": "Echo. Retain. Deal 3, plus 3 times this card's place in the Ordo.",
                              "fx": [D(3, per="ordo_pos", k=3)]})
 card("or_stolen_hour", "Stolen Hour", 1, "R", "self",
-     [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.34, max=3), EN(1)],
-     "Spend all your Ward. Gain 1 Thrift per 3 Ward spent, at most 3. Next round, +1 vigour. Exhaust.", cat=V,
+     [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.25, max=3), EN(1)],
+     "Spend all your Ward. Gain 1 Thrift per 4 Ward spent, at most 3. Next round, +1 vigour. Exhaust.", cat=V,
      kw=["Exhaust"],
      flavour="The stars that shielded me now count the hours for me.",
      note="Stars peel off the Oracle's robe and become grains in the hourglass.",
-     arch=CH, up={"text": "Spend all your Ward. Gain 1 Thrift per 2 Ward spent, at most 3. Next round, +1 vigour. Exhaust.",
-                  "fx": [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.5, max=3), EN(1)]})
+     arch=CH, up={"text": "Spend all your Ward. Gain 1 Thrift per 3 Ward spent, at most 3. Next round, +1 vigour. Exhaust.",
+                  "fx": [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.34, max=3), EN(1)]})
 card("or_scatter_the_bones", "Scatter the Bones", 2, "R", "all_enemies",
      [CONS(s="omen", to="self"), D(2, per="consumed", k=1), D(3, if_="t.bleed")],
      "Spend all your Omen. Deal 2 to every foe, plus 1 per Omen spent, and 3 more to each foe that bleeds.", cat=V,
@@ -415,11 +415,11 @@ card("or_painted_eye", "Painted Eye", 1, "R", "enemy", [ST("vulnerable", 1), ST(
                       "fx": [ST("vulnerable", 1), ST("mark"), D(5)]})
 
 # ------------------------------------------------------------------ path: Chronomancer
-card("or_stopped_clock", "Stopped Clock", 1, "X", "enemy", [DELAY(), BANK(1, to="self")], "Rank 4 only. Delay the target. Bank 1.",
+card("or_stopped_clock", "Stopped Clock", 1, "X", "enemy", [DELAY()], "Rank 4 only. Delay the target.",
      cat=V, use=[4], sub=CH,
      flavour="The clock on my chest stopped the day I walled myself in.",
      note="From the back rank, the Chronomancer stops the brass clock's hands with a finger.",
-     arch=CH, up={"text": "Rank 4 only. Delay the target. Deal 2. Bank 1.", "fx": [DELAY(), D(2), BANK(1, to="self")]})
+     arch=CH, up={"text": "Rank 4 only. Delay the target. Deal 2.", "fx": [DELAY(), D(2)]})
 card("or_broken_pendulum", "Broken Pendulum", 2, "X", "enemy", [DELAY(), D(5, per="spent_before", k=1, max=11)],
      "Echo. Delay the target. Deal 5, plus 1 per vigour spent before this in the Ordo, at most 11.",
      cat=V, kw=["Echo"], sub=CH,
@@ -427,12 +427,12 @@ card("or_broken_pendulum", "Broken Pendulum", 2, "X", "enemy", [DELAY(), D(5, pe
      note="The broken pendulum staff cracks across a foe, then again a beat later.",
      arch=CH, up={"text": "Echo. Delay the target. Deal 7, plus 1 per vigour spent before this in the Ordo, at most 14.",
                   "fx": [DELAY(), D(7, per="spent_before", k=1, max=14)]})
-card("or_accelerate", "Accelerate", 1, "X", "ally_other", [ST("thrift", 1), ST("momentum", 3)],
-     "Another hero gains 1 Thrift and 3 Momentum.", cat=V, sub=CH,
+card("or_accelerate", "Accelerate", 1, "X", "ally_other", [ST("thrift", 1), ST("momentum", 1)],
+     "Another hero gains 1 Thrift and 1 Momentum.", cat=V, sub=CH,
      flavour="Your next breath, now.",
      note="The Chronomancer taps an ally's shoulder; their outline blurs forward.",
-     arch=CH + "+duelist_momentum", up={"text": "Another hero gains 1 Thrift and 4 Momentum.",
-                                        "fx": [ST("thrift", 1), ST("momentum", 4)]})
+     arch=CH + "+duelist_momentum", up={"text": "Another hero gains 1 Thrift and 2 Momentum.",
+                                        "fx": [ST("thrift", 1), ST("momentum", 2)]})
 card("or_clock_face", "Clock Face", 1, "X", "self", [EN(1), W(2, if_="vigour_left")],
      "Next round, +1 vigour. If any vigour is left unspent this round, gain 2 Ward.", cat=V, sub=CH,
      flavour="Twelve hours on the brass. I keep one back for us.",
@@ -502,24 +502,24 @@ card("or_severance", "Severance", 2, "X", "enemy", [D(8), EXEC(6, per="prime_cou
      note="The Fatebinder's quill-knife cuts a red thread above a foe; it drops.",
      arch=FB + "+hexweaver_doom", up={"text": "Deal 10. Execute 8, plus 6 per Prime spent this round.",
                   "fx": [D(10), EXEC(8, per="prime_count", k=6)]})
-card("or_red_knot", "Red Knot", 0, "X", "self", [PRIME(1, per="heroes_before", k=1), STRESS(2)],
-     "Prime 1, plus 1 per other hero who has acted before this in the Ordo. Gain 2 stress.", cat=V, sub=FB,
+card("or_red_knot", "Red Knot", 0, "X", "self", [PRIME(2, per="heroes_before", k=1), STRESS(1)],
+     "Prime 2, plus 1 per other hero who has acted before this in the Ordo. Gain 1 stress.", cat=V, sub=FB,
      flavour="Knot on knot on knot.",
      note="A tight red knot on a thread already full of them.",
-     arch=FB, up={"text": "Prime 2, plus 1 per other hero who has acted before this in the Ordo. Gain 2 stress.",
-                  "fx": [PRIME(2, per="heroes_before", k=1), STRESS(2)]})
+     arch=FB, up={"text": "Prime 3, plus 1 per other hero who has acted before this in the Ordo. Gain 1 stress.",
+                  "fx": [PRIME(3, per="heroes_before", k=1), STRESS(1)]})
 card("or_needle_and_thread", "Needle and Thread", 1, "X", "ally_other", [PRIME(5), ST("focus", 1), B(3)],
      "Prime 5. Another hero gains 1 Focus and 3 Block.", cat=V, sub=FB,
      flavour="Stitched to your fate. Hold still.",
      note="A red needle stitches a line of rubric onto an ally's sleeve.",
      arch=FB + "+elementalist_focus", up={"text": "Prime 6. Another hero gains 2 Focus and 4 Block.",
                                           "fx": [PRIME(6), ST("focus", 2), B(4)]})
-card("or_woven_mantle", "Woven Mantle", 2, "X", "all_allies", [B(3, per="heroes_before", k=1, to="all_allies")],
-     "Every hero gains 3 Block, plus 1 per other hero who has acted before this in the Ordo.", cat=V, sub=FB,
+card("or_woven_mantle", "Woven Mantle", 2, "X", "all_allies", [B(3, per="heroes_before", k=2, to="all_allies")],
+     "Every hero gains 3 Block, plus 2 per other hero who has acted before this in the Ordo.", cat=V, sub=FB,
      flavour="A cloak of every fate we have bent today.",
      note="A red-script mantle settles over the whole company.",
-     arch=FB, up={"text": "Every hero gains 4 Block, plus 2 per other hero who has acted before this in the Ordo.",
-                  "fx": [B(4, per="heroes_before", k=2, to="all_allies")]})
+     arch=FB, up={"text": "Every hero gains 4 Block, plus 3 per other hero who has acted before this in the Ordo.",
+                  "fx": [B(4, per="heroes_before", k=3, to="all_allies")]})
 card("or_scarlet_line", "Scarlet Line", 1, "X", "enemy", [D(2, per="prime_count", k=4), D(3, if_="t.moved")],
      "Deal 2, plus 4 per Prime spent this round. Deal 3 more if the target was moved this round.", cat=V, sub=FB,
      flavour="Pulled out of line, it stands on mine.",
@@ -577,13 +577,13 @@ card("or_the_bone_pouch", "The Bone Pouch", 1, "L", "self", [OMEN(3)],
 card("or_the_rubric", "The Rubric", 1, "L", "self", [PRIME(4)],
      "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo. Exhaust.", cat=V,
      kw=["Rite", "Exhaust"], sub=FB,
-     rite={"on": "play", "fx": [PRIME(1, per="ordo_pos", k=1)]},
+     rite={"on": "play", "allies": True, "fx": [PRIME(1, per="ordo_pos", k=1)]},
      flavour="Every line I write in red, the world reads twice.",
      note="Red script crawls off the Fatebinder's arms onto every hero's weapon.",
      arch=FB,
      up={"text": "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo, and "
                  "the most wounded hero gains 2 Block. Exhaust.",
-         "rite": {"on": "play", "fx": [PRIME(1, per="ordo_pos", k=1), B(2, to="lowest_ally")]}})
+         "rite": {"on": "play", "allies": True, "fx": [PRIME(1, per="ordo_pos", k=1), B(2, to="lowest_ally")]}})
 card("or_the_severed_thread", "The Severed Thread", 2, "L", "enemy",
      [D(6, per="prime_count", k=4), EXEC(0, per="dealt", if_="prime_count>=3")],
      "Deal 6, plus 4 per Prime spent this round. If 3 or more Primes have been spent this round, "
@@ -622,5 +622,12 @@ NEEDS = [
     "prime_count counts actions that spent Prime, so back-to-back Prime cards merge into one and a Block card spends "
     "Prime too. The Fatebinder (Red Letter, Tapestry, Severance, The Severed Thread) wants each Prime placed this "
     "round counted instead.",
+    "Accelerate: wanted 'the next card another hero plays costs 1 less' (Thrift on whichever hero acts next in the "
+    "Ordo); written as Thrift on a chosen hero.",
+    "The Rubric: a 'play' rite's context has no handoff, heroes_before or cost of the card that set it off; wanted "
+    "'whenever you play a card on a Handoff, Prime 3'. Written on the card's place in the Ordo.",
+    "Thrift given during the Ordo (Accelerate, Trade on Tomorrow, Stolen Hour): main.gd fixes a card's cost when it "
+    "enters the plan, so reordering the plan can put a Thrift before a card already priced in full, and "
+    "resolve_player_action then spends the Thrift without the discount. Recompute plan costs after a reorder.",
 ]
 

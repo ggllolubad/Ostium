@@ -88,7 +88,7 @@ def SUMMON(key, max=2, front=None, **kw): return _fx("summon", e=key, max=max, f
 
 
 def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical", attr=None, kw=None, sub=None, art=None, flask=False,
-         up=None, flavour=None, note=None, arch=None, rite=None, on_draw=None, world=None):
+         up=None, flavour=None, note=None, arch=None, rite=None, on_draw=None, world=None, cost_less=None):
     """up: the upgrade, a dict of overriding fields (text is required; cost, fx, kw ... as needed).
     flavour: one line in the lore's voice. note: the art note (the chronicle moment the card art shows).
     arch: the archetype the card serves (for the sheets and the build-aware simulator)."""
@@ -119,6 +119,9 @@ def card(id, name, cost, rar, tgt, fx, text, use=None, hit=None, cat="physical",
         c["rite"] = rite
     if on_draw:
         c["on_draw"] = on_draw
+    if cost_less:
+        # costs less as the Ordo fills: {"per": "ordo"|"heroes"|"attacks"|<hero quantity>, "k": 1, "max": n}
+        c["cost_less"] = cost_less
     if world:
         c["world"] = world
     CARDS[id] = c

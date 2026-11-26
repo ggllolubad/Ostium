@@ -298,5 +298,19 @@ func _init() -> void:
 		Combat.resolve_player_action(vbk, a)
 	ok(vbk.bonus_energy == 2, "Bank 2 keeps 2 of the 4 unspent vigour for next round (%d)" % vbk.bonus_energy)
 
+	# --- cost_less: a card that costs 1 less per hero already in the Ordo; Thrift not spent on a free card
+	card("t_cheap", {"cost": 3, "cost_less": {"per": "heroes", "k": 1, "max": 2}, "fx": [{"t": "block", "n": 1}]})
+	card("t_free", {"cost": 0, "fx": [{"t": "block", "n": 1}]})
+	var vc := fresh()
+	var vca: Dictionary = vc.heroes[0]
+	var vcb: Dictionary = vc.heroes[1]
+	vca.hand = ["t_free"]
+	var pre: Dictionary = Combat.simulate(vc, [{"hero": vca.id, "card": "t_free", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 0}], false).state
+	ok(Combat.cost_of(pre, Combat.find(pre, vcb.id), "t_cheap") == 2, "cost_less: 3 less 1 for one hero already in the Ordo")
+	ok(Combat.cost_of(vc, vcb, "t_cheap") == 3, "cost_less: full cost with an empty Ordo")
+	vca.st.thrift = 1
+	Combat.resolve_player_action(vc, {"hero": vca.id, "card": "t_free", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 0})
+	ok(vca.st.thrift == 1, "a free card does not spend Thrift")
+
 	print("FAILS: %d" % fails)
 	quit()

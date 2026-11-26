@@ -208,6 +208,7 @@ static func start_round(s: Dictionary) -> void:
 	s.belt += s.get("belt_next", [])
 	s.belt_next = []
 	s.energy = int(s.get("vigour_base", 2 * s.heroes.size())) + s.bonus_energy
+	s.carried = s.bonus_energy   # vigour brought into this round by Bank or next-round vigour
 	s.bonus_energy = 0
 	var setup: Dictionary = s.get("setup", {})
 	if s.round == 1 and not setup.is_empty():
@@ -413,6 +414,7 @@ static func order_plan(s: Dictionary, plan: Array) -> Array:
 	s.ordo_pos = 0
 	s.ordo_spent_before = 0
 	s.ordo_heroes = []
+	s.ordo_attacks = 0
 	var first := []
 	var last := []
 	for a in plan:
@@ -423,12 +425,37 @@ static func order_plan(s: Dictionary, plan: Array) -> Array:
 			first.append(a)
 	return first + last
 
+static func _deals_damage(c: Dictionary) -> bool:
+	for f in c.get("fx", []):
+		if String(f.get("t", "")) in ["dmg", "coup", "dmg_per_element", "execute"]:
+			return true
+	return false
+
 ## The vigour a card costs this hero now: Thrift takes 1 off each of its next cards (never below 0). X costs return -1.
+## `s` is the state with the Ordo planned so far already simulated (the UI's preview, the planner's state), so a
+## card's own `cost_less` can read the Ordo: {"per": quantity, "k": n, "max": m} takes k per unit off its cost.
+## Quantities: "ordo" (cards already in the Ordo), "heroes" (heroes already in it), "attacks" (attack cards in it),
+## and any of the hero's own (hand, discard, exhaust, draw, played, scars, and its statuses).
 static func cost_of(s: Dictionary, h: Dictionary, cid: String) -> int:
 	var c := card(cid)
 	if c.cost < 0:
 		return -1
-	return max(0, int(c.cost) - (1 if not h.is_empty() and h.st.get("thrift", 0) > 0 else 0))
+	var cost := int(c.cost)
+	if c.has("cost_less") and not h.is_empty():
+		var cl: Dictionary = c.cost_less
+		var v := 0.0
+		match String(cl.get("per", "")):
+			"ordo": v = int(s.get("ordo_pos", 0))
+			"heroes": v = s.get("ordo_heroes", []).size()
+			"attacks": v = int(s.get("ordo_attacks", 0))
+			_: v = q(s, h, h, String(cl.get("per", "")), {})
+		var off := int(floor(v * float(cl.get("k", 1))))
+		if cl.has("max"):
+			off = min(off, int(cl.max))
+		cost -= off
+	if cost > 0 and not h.is_empty() and h.st.get("thrift", 0) > 0:
+		cost -= 1
+	return max(0, cost)
 
 ## "" when the action is legal against state `s` (the state at that point of the plan), else a reason.
 static func check_action(s: Dictionary, a: Dictionary) -> String:
@@ -556,9 +583,10 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		s.ordo_pos = int(s.get("ordo_pos", 0)) + 1
 	var ctx := {"x": a.get("x", 0), "half": a.get("echo", false), "prime": 0 if a.get("echo", false) else s.prime,
 		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target,
-		"cost": int(a.get("cost", 0)), "handoff": handoff, "heroes_before": s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)}
-	if a.get("source", "") == "hand" and h.st.get("thrift", 0) > 0 and not a.get("echo", false):
-		h.st.thrift -= 1   # Thrift: this card was planned at 1 less
+		"cost": int(a.get("cost", 0)), "base_cost": max(0, int(c.cost)), "handoff": handoff, "heroes_before": s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)}
+	if a.get("source", "") == "hand" and h.st.get("thrift", 0) > 0 and not a.get("echo", false) and int(c.cost) > 0 \
+			and int(a.get("cost", 0)) < int(c.cost):
+		h.st.thrift -= 1   # Thrift: this card was planned at 1 less (a free card does not spend it)
 	if not a.get("echo", false):
 		s.prime = 0   # this action's own Prime effects build the next action's Prime
 	var targets := _targets_for(s, h, c, a)
@@ -582,6 +610,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		s.ordo_spent_before = int(s.get("ordo_spent_before", 0)) + int(a.get("cost", 0))
 		if not s.get("ordo_heroes", []).has(h.id):
 			s.ordo_heroes = s.get("ordo_heroes", []) + [h.id]
+		if c.get("target", "") in ["enemy", "all_enemies"] and _deals_damage(c):
+			s.ordo_attacks = int(s.get("ordo_attacks", 0)) + 1
 	if a.get("source", "") == "belt":
 		_rite_fire(s, "flask", h)
 	elif not a.get("echo", false):
@@ -747,6 +777,8 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 	match key:
 		"x": return ctx.get("x", 0)
 		"lost": return ctx.get("lost", 0)
+		"carried": return s.get("carried", 0)
+		"base_cost": return ctx.get("base_cost", 0)
 		"vigour_left": return s.get("vigour_left", 0)
 		"vigour_spent": return s.get("vigour_spent", 0)
 		"vigour_pool": return s.get("energy", 0)

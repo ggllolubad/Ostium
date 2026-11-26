@@ -20,7 +20,7 @@ TYPICAL = {"momentum": 3, "consumed": 4, "missing_hp": 14, "scars": 12, "hp_pct"
            "dealt": 8, "incoming": 15, "incoming_me": 8, "attackers": 1, "ward": 2, "focus": 1, "riposte": 2,
            # vigour and Ordo reads, for a 3-hero company with 6 vigour and about 4 cards a round
            "vigour_left": 1, "vigour_spent": 5, "vigour_pool": 6, "cost": 1, "ordo_pos": 2.5, "ordo_len": 4, "ordo_after": 1.5,
-           "spent_before": 2.5, "heroes_before": 1, "handoff": 0.6, "first": 0.25, "last": 0.25, "lost": 3}
+           "spent_before": 2.5, "heroes_before": 1, "handoff": 0.6, "first": 0.25, "last": 0.25, "lost": 3, "carried": 1, "base_cost": 1.5}
 MULT = {"S": 0.95, "C": 1.0, "U": 1.15, "R": 1.3, "X": 1.2, "K": 0.7, "N": 1.0, "W": 1.1, "F": 1.0}
 
 
@@ -70,7 +70,8 @@ def fx_points(fxs, card_target):
         elif allies:
             v *= 3
         if "if" in f:
-            v *= 0.7
+            # the player sets the Ordo, so a condition on its order is nearly always met when wanted
+            v *= 0.9 if str(f["if"]).lstrip("!") in ("first", "last", "handoff") else 0.7
         total += v
     return total
 

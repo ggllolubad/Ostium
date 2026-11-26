@@ -157,21 +157,22 @@ card("du_lancet", "Lancet", 1, "C", "enemy", [D(3), ST("bleed", 2)],
      flavour="A barber's first lesson: a small blade in the right place.",
      note="The Bloodletter's short curved blade flicks out and a thin red line follows.",
      up={"text": "Deal 4. Apply 3 Bleed.", "fx": [D(4), ST("bleed", 3)]})
-card("du_open_the_vein", "Open the Vein", 1, "C", "enemy", [ST("bleed", 4)],
-     "Apply 4 Bleed.", hit=ALL, arch=BL,
+card("du_open_the_vein", "Open the Vein", 1, "C", "enemy", [ST("bleed", 2), ADD("du_lancet", to="self")],
+     "Apply 2 Bleed. Put a Lancet into your next hand.", hit=ALL, arch=BL,
      flavour="Let it run. The bowl is patient.",
      note="A lancet from the belt case flies to a back-rank foe and sticks in its arm.",
-     up={"text": "Apply 5 Bleed.", "fx": [ST("bleed", 5)]})
+     up={"text": "Apply 3 Bleed. Put a Lancet into your next hand.", "fx": [ST("bleed", 3), ADD("du_lancet", to="self")]})
 card("du_letting_cut", "Letting Cut", 1, "C", "enemy", [D(3), ST("bleed", 3, if_="same_target")],
      "Deal 3. Follow-up: apply 3 Bleed.", arch=BL,
      flavour="Someone else opened the door. The barber only widens it.",
      note="The Bloodletter cuts into the wound the Bulwark's mace has just made.",
      up={"text": "Deal 4. Follow-up: apply 4 Bleed.", "fx": [D(4), ST("bleed", 4, if_="same_target")]})
-card("du_bloodmist", "Bloodmist", 2, "C", "all_enemies", [ST("bleed", 3)],
-     "Apply 3 Bleed to every foe.", hit=ALL, arch=BL,
+card("du_bloodmist", "Bloodmist", -1, "C", "all_enemies", [ST("bleed", 0, per="x", k=1), ST("bleed", 0, per="x", k=1, if_="x>=4")],
+     "Apply X Bleed to every foe. At X 4 or more, apply X more.", hit=ALL, arch=BL,
      flavour="A spray of cuts, too quick to count. They will count them later.",
      note="The Bloodletter whirls through the line and a red mist hangs over the nave.",
-     up={"text": "Apply 4 Bleed to every foe.", "fx": [ST("bleed", 4)]})
+     up={"text": "Apply X+1 Bleed to every foe. At X 4 or more, apply X more.",
+         "fx": [ST("bleed", 1, per="x", k=1), ST("bleed", 0, per="x", k=1, if_="x>=4")]})
 card("du_cupping_glass", "Cupping Glass", 1, "C", "enemy", [H(1, per="m.bleed", k=1, to="lowest_ally")],
      "The most wounded hero heals 1, plus 1 per Bleed on the target (not spent).", hit=ALL, arch=BL,
      flavour="Draw the bad blood out of them. Put the good back into us.",
@@ -196,11 +197,11 @@ card("du_en_garde", "En Garde", 1, "C", "self", [SELF("riposte", 3), B(3)],
      flavour="Come, then. The blade is waiting for you.",
      note="The Duelist sinks into the side-on stance, rapier level, rear arm back.",
      up={"text": "Gain Riposte 4. Gain 4 Block.", "fx": [SELF("riposte", 4), B(4)]})
-card("du_give_ground", "Give Ground", 1, "C", "self", [RET(1), B(5), BANK(1)],
-     "Retreat 1. Gain 5 Block. Bank 1.", use=[1, 2], arch="core",
+card("du_give_ground", "Give Ground", 1, "C", "self", [RET(1), B(3), BANK(1)],
+     "Retreat 1. Gain 3 Block. Bank 1.", use=[1, 2], arch="core",
      flavour="A fencing master yields a step to keep the measure. Never more.",
      note="The Duelist steps back behind the Bulwark's door, blade still up.",
-     up={"text": "Retreat 1. Gain 7 Block. Bank 1.", "fx": [RET(1), B(7), BANK(1)]})
+     up={"text": "Retreat 1. Gain 5 Block. Bank 1.", "fx": [RET(1), B(5), BANK(1)]})
 card("du_slip_and_cut", "Slip and Cut", 1, "C", "enemy",
      [SELF("dodge", 1), D(2), D(3, if_="t.targeting_me")],
      "Dodge the next hit this round. Deal 2. If the target means to attack you, hit it again for 3.", arch="core",
@@ -275,11 +276,11 @@ card("du_second_stroke", "Second Stroke", 2, "U", "enemy", [D(6, per="t.missing_
      flavour="A bad headsman needs a second stroke. A good one plans for it.",
      note="The heading sword falls again on a foe the company has already broken.",
      up={"text": "Deal 6, plus 1 per 2 HP the target is missing, up to 20.", "cost": 1})
-card("du_next_in_line", "Next in Line", 1, "U", "enemy", [D(5), SELF("thrift", 1, if_="killed")],
-     "Deal 5. If it kills, gain 1 Thrift.", arch=EX,
+card("du_next_in_line", "Next in Line", 1, "U", "enemy", [D(4), SELF("thrift", 1, if_="killed")],
+     "Deal 4. If it kills, gain 1 Thrift.", arch=EX,
      flavour="One down. The block is cleaned. Next.",
      note="The Executioner steps over a fallen foe toward the one behind it.",
-     up={"text": "Deal 7. If it kills, gain 1 Thrift.", "fx": [D(7), SELF("thrift", 1, if_="killed")]})
+     up={"text": "Deal 6. If it kills, gain 1 Thrift.", "fx": [D(6), SELF("thrift", 1, if_="killed")]})
 card("du_bled_pale", "Bled Pale", 1, "U", "enemy", [D(3), EXEC(2, per="t.bleed", k=2)],
      "Deal 3. Then Execute 2, plus 2 per Bleed on the target.", hit=THRUST, kw=["Execute"], arch=EX + "+" + BL,
      flavour="White as linen, light as straw. The stroke barely needs the sword.",
@@ -337,11 +338,12 @@ card("du_answering_steel", "Answering Steel", 1, "U", "enemy", [SELF("riposte", 
      note="The Duelist uncoils from a deep guard, the rapier striking from where it parried.",
      up={"text": "Gain Riposte 2. Deal 3 per Riposte you hold (not spent), up to 18.",
          "fx": [SELF("riposte", 2), D(0, per="riposte", k=3, max=18)]})
-card("du_open_guard", "Open Guard", 1, "U", "self", [SELF("taunt"), SELF("riposte", 4)],
-     "Taunt. Gain Riposte 4.", use=[1, 2], arch="core",
+card("du_open_guard", "Open Guard", 1, "U", "self", [SELFDMG(2), SELF("taunt"), SELF("riposte", 3, per="lost", k=1, max=5)],
+     "Lose 2 HP. Taunt. Gain Riposte 3, plus 1 for each HP lost this way.", use=[1, 2], arch="core",
      flavour="Here. Right here. Aim for it.",
      note="The Duelist lowers the blade in rank 1 and beckons the drowned forward.",
-     up={"text": "Taunt. Gain Riposte 6.", "fx": [SELF("taunt"), SELF("riposte", 6)]})
+     up={"text": "Lose 2 HP. Taunt. Gain Riposte 5, plus 1 for each HP lost this way.",
+         "fx": [SELFDMG(2), SELF("taunt"), SELF("riposte", 5, per="lost", k=1, max=7)]})
 card("du_in_the_wake", "In the Wake", 1, "U", "enemy",
      [D(4), D(4, if_="same_target"), SELF("momentum", 1, if_="handoff")],
      "Deal 4. Follow-up: hit it again for 4. Handoff: gain 1 Momentum.", arch="core+bulwark_cover",
@@ -418,8 +420,8 @@ card("du_oath_of_the_salle", "Oath of the Salle", 1, "R", "self", [FIN(), SELF("
      note="The Duelist kisses the swept hilt, and the scorch lines on the sword hand glow.",
      up={"text": "Finisher. Gain 1 Might, plus 1 per 2 Momentum spent. Exhaust.",
          "fx": [FIN(), SELF("might", 1, per="consumed", k=0.5)]})
-card("du_fall_back_in_guard", "Fall Back in Guard", 1, "R", "self", [RET(1), SELF("dodge", 2), ST("thrift", 1, to="in_front")],
-     "Retreat 1. Dodge the next 2 hits this round. The hero in front of you then gains 1 Thrift.", use=[1, 2],
+card("du_fall_back_in_guard", "Fall Back in Guard", 1, "R", "self", [RET(1), SELF("dodge", 1), ST("thrift", 1, to="in_front")],
+     "Retreat 1. Dodge the next hit this round. The hero in front of you then gains 1 Thrift.", use=[1, 2],
      arch="core",
      flavour="Retreat is a step of the dance. The blade never leaves the line.",
      note="The Duelist backs up the stair, parrying two blows on the way.",
@@ -493,11 +495,11 @@ card("du_hanging_day", "Hanging Day", 1, "X", "all_enemies", [FIN(), EXEC(4, per
      note="The Executioner walks the Marked line and the sword falls once for each.",
      up={"text": "Finisher. Execute 6, plus 2 per Momentum spent, on every Marked foe.",
          "fx": [FIN(), EXEC(6, per="consumed", k=2, if_="t.mark>0")]})
-card("du_wipe_the_blade", "Wipe the Blade", 1, "X", "self", [B(5), STRESS(-2, to="all_allies"), BANK(1)],
-     "Gain 5 Block. Every hero sheds 2 stress. Bank 1.", use=ALL, sub=EX, arch=EX,
+card("du_wipe_the_blade", "Wipe the Blade", 1, "X", "self", [B(3), STRESS(-2, to="all_allies"), BANK(1)],
+     "Gain 3 Block. Every hero sheds 2 stress. Bank 1.", use=ALL, sub=EX, arch=EX,
      flavour="The apron takes the blood. The company takes a breath.",
      note="The Executioner wipes the heading sword on the leather apron, unhurried.",
-     up={"text": "Gain 7 Block. Every hero sheds 3 stress. Bank 1.", "fx": [B(7), STRESS(-3, to="all_allies"), BANK(1)]})
+     up={"text": "Gain 5 Block. Every hero sheds 3 stress. Bank 1.", "fx": [B(5), STRESS(-3, to="all_allies"), BANK(1)]})
 card("du_mercy_stroke", "Mercy Stroke", 1, "X", "enemy", [D(5), EXEC(6, per="t.hex", k=1, max=12, if_="t.mark>0")],
      "Deal 5. Then, if the target is Marked, Execute 6, plus 1 per Hex on it, up to 12.", kw=["Execute"], sub=EX,
      arch=EX + "+hexweaver_hex",
@@ -523,14 +525,14 @@ card("du_bleed_the_line", "Bleed the Line", 1, "X", "enemy", [ST("bleed", 3), ST
      note="The Bloodletter's curved blade passes through one foe and catches the two beside it.",
      up={"text": "Apply 4 Bleed to the target and 3 to each foe beside it.",
          "fx": [ST("bleed", 4), ST("bleed", 3, to="adjacent")]})
-card("du_let_the_fever_out", "Let the Fever Out", 1, "X", "ally", [ST("thrift", 1, if_="t.ailments>=3"), CLEANSE(2), H(4)],
-     "If the target hero has 3 or more ailment stacks, they gain 1 Thrift. They lose 2 ailment stacks and heal 4.",
+card("du_let_the_fever_out", "Let the Fever Out", 1, "X", "ally", [ST("thrift", 1, if_="t.ailments>=3"), CLEANSE(2), H(2)],
+     "If the target hero has 3 or more ailment stacks, they gain 1 Thrift. They lose 2 ailment stacks and heal 2.",
      use=ALL, sub=BL, arch=BL,
      flavour="Bad humours out, good blood in. The oldest cure there is.",
      note="The Bloodletter opens a vein in a fevered hero's arm over the bowl, gently.",
      up={"text": "If the target hero has 3 or more ailment stacks, they gain 1 Thrift. They lose 3 ailment stacks and "
-                 "heal 6.",
-         "fx": [ST("thrift", 1, if_="t.ailments>=3"), CLEANSE(3), H(6)]})
+                 "heal 4.",
+         "fx": [ST("thrift", 1, if_="t.ailments>=3"), CLEANSE(3), H(4)]})
 card("du_arterial_cut", "Arterial Cut", 2, "X", "enemy", [D(6), ST("bleed", 4, per="vigour_spent", k=0.5, max=8)],
      "Deal 6. Apply 4 Bleed, plus 1 for every 2 vigour spent this round, up to 8.", sub=BL, arch=BL,
      flavour="There is a place on every body where the barber stops being gentle.",
@@ -647,9 +649,6 @@ NEEDS = [
     "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
     "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
     "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",
-    "budget.py: Thrift falls to the default 1.5 points a stack (worth about a vigour), and an X cost (-1) gives a "
-    "negative target, so no X card was written. Wanted: a Bladedancer X Finisher ('hit X times; at X 4 or more, "
-    "double the Momentum spent').",
     "du_fall_back_in_guard: wanted 'the hero who takes your place'. Written as the hero in front of you after the "
     "Retreat (to='in_front'), which is the same hero whenever the Retreat lands.",
     "A 'cost' read only sees Thrift's discount (nothing raises a cost), so no Duelist card reads 'cost'. Wanted: a "

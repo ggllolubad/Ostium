@@ -28,6 +28,36 @@ Each pattern is a way a card's value comes from somewhere other than its own num
 | P14 | **Companion, ally and multiplayer reads** | StS2 Osty cards, Pull Aggro, Demonic Shield, Tag Team (co-op); StS2 co-op cards that read another player |
 | P15 | **Doubling and multipliers** | StS2 Oblivion (double Doom), Molten Fist (double Vulnerable), Heavenly Drill (double X); StS1 Limit Break, Catalyst |
 
+### More patterns from the full StS2 card list (op.gg, read 2026-11-25)
+| # | Pattern | StS2 examples (paraphrased) |
+|---|---|---|
+| P16 | **Gifts to another player** | Encore (the next 4 cards other players play cost nothing), Ambush (the target takes double damage from other players this turn), Dowsing (another player's next Attack on that foe repeats), Joy (when you gain Block, other players gain half), Malice (give another player Block equal to yours) |
+| P17 | **Relay objects** | Bola (gains damage each play, then passes to a random ally's hand), Flick-Flack (Shivs into every hand) |
+| P18 | **Self-adjusting cost** | Anger (costs 1 less per Attack played this turn), Bullet Time (1 less per Skill played), Pommel (1 less per card exhausted this fight), War Drum (Attacks in hand cost 1 less until played), Accelerate (costs 1 more each play) |
+| P19 | **Replay and echo** | Rampage (the next Attack is played twice), Knife Trap (the next Skill twice), Hegemony (replays from the exhaust pile), Solid (replays itself from the discard) |
+| P20 | **Hand size and pile conditions** | Dance of Blades (2 less per other card in hand), Ricochet (an extra hit with 5 or more cards in hand), Cheat (only when the draw pile is empty), Strategist (scales with cards drawn this fight), Blade Symphony (per Skill in hand) |
+| P21 | **Spent-elsewhere scaling** | Fusion (3 damage per energy spent on other cards this turn), Phantom Blades (per Attack played this turn), Rain Dagger (the target loses HP per card played this turn) |
+
+**New hooks for these** (engine, 2026-11-25):
+- **P18 `cost_less`:** a card field `{"per": q, "k": n, "max": m}` takes k per unit of q off the card's cost while you plan. q is one of:
+  - `ordo`: cards already in the Ordo;
+  - `heroes`: heroes already in it;
+  - `attacks`: attack cards in it;
+  - any hero quantity, such as `hand`, `discard`, `exhaust`, `played`, `scars` or a status.
+
+  The hand shows the live cost in green. Example: "Costs 1 less for each other hero already in the Ordo (min 0)".
+- **`carried`:** vigour brought into this round by Bank or next-round vigour.
+- **`base_cost`:** the card's printed cost (Thrift-proof).
+- **`lost`:** HP a card's own self-harm really took.
+- **Thrift** is now spent only by a card it actually discounted. A free card or an X card leaves it.
+- **P16:** give an ally Thrift, Prime, Momentum or Block; use `to="ally"` reads; make a foe Vulnerable or Marked for the next hero (Handoff).
+- **P17:** `ADD` a card to an ally's next hand (to="ally").
+- **P19:** the Echo keyword.
+- **P20:** `hand`, `draw`, `discard` and `exhaust` hero quantities, with `if_` thresholds.
+- **P21:** `spent_before`, `ordo_pos` and `played`.
+
+**Budget:** a condition on the Ordo's order (first, last, handoff) is counted at 90%, because the player sets the order. Other conditions count at 70%.
+
 ## 2. Ostium's systems: what a card can read, and the new hooks
 
 **Vigour and the Ordo (new, engine 2026-11-25).** Vigour is shared: 2 per hero, spent when the Ordo is set. The Ordo then resolves in order. That gives Ostium a P1 and P2 space StS does not have: cards can read **the order** and **who acted**.
@@ -79,7 +109,7 @@ Each pattern is a way a card's value comes from somewhere other than its own num
 3. **Density targets per calling** (count after the pass):
    - **Cross-reads:** commons at least 30%, uncommons at least 60%, rares, path cards and legendaries at least 80% read or feed a system other than the card's own main one.
    - **Vigour and Ordo:** at least 8 cards per calling use the new hooks, spread across patterns (restraint, big turn, position, handoff, thrift, bank, X, cost). No calling uses only one.
-   - **Pattern spread:** at least 10 of the 15 patterns in section 1 appear in each calling.
+   - **Pattern spread:** at least 12 of the 21 patterns in section 1 appear in each calling, including at least 2 cards with `cost_less` (P18) and at least 2 that gift or relay to another hero (P16, P17).
    - **Company reads:** at least 6 cards per calling read or feed another hero (ally status, handoff, giving Thrift or Prime, guarding).
    - **Bridges to other callings:** at least 6 cards per calling pay off something another calling makes (for example a Duelist card that reads Hex, an Oracle card that reads Bleed).
 4. **Keep commons readable:** one main effect plus at most one read. Complexity lives in uncommons and up.

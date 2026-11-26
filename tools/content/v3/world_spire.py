@@ -29,13 +29,13 @@ card("w_spire_unwind", "Unwind", 1, "W", "ally",
      up={"text": "Remove all Frost from a hero. They gain 2 Ward, plus 1 per Frost removed (max 5).",
          "fx": [CONS(e="frost"), dsl.W(2, per="consumed", k=1, max=5)]})
 card("w_spire_second_hand", "Second Hand", 0, "W", "self",
-     [PRIME(0, per="ordo_pos", k=1, max=4)],
-     "Prime 1 per card in the Ordo so far, this one included (max 4). Exhaust.", kw=["Exhaust"], world=W,
+     [PRIME(1, per="ordo_pos", k=1, max=5)],
+     "Prime 1, plus 1 per card in the Ordo so far, this one included (max 5). Exhaust.", kw=["Exhaust"], world=W,
      arch="world",
      flavour="Idle is the second hand ticking and stopping.",
      note="A hero counts beats under their breath beside the stopped orrery, hand raised for the next strike.",
-     up={"text": "Prime 1, plus 1 per card in the Ordo so far, this one included (max 5). Exhaust.",
-         "fx": [PRIME(1, per="ordo_pos", k=1, max=5)]})
+     up={"text": "Prime 2, plus 1 per card in the Ordo so far, this one included (max 6). Exhaust.",
+         "fx": [PRIME(2, per="ordo_pos", k=1, max=6)]})
 card("w_spire_midnight", "Midnight", 2, "W", "all_enemies",
      [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile"), D(0, per="reactions", k=2, max=8)],
      "Every foe: apply 1 Frost, then 1 Volatile Lightning. Then deal 2 to every foe per Conjunction set off this round "

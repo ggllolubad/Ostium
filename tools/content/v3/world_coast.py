@@ -25,13 +25,17 @@ card("w_coast_breaking_sea", "Breaking Sea", 1, "W", "all_enemies",
      up={"text": "Apply 2 Soak to every foe, and 2 more to each foe that carries Static.",
          "fx": [A("water", 2, attr="stable"), A("water", 2, attr="stable", if_="t.lightning>0")]})
 card("w_coast_wreckers_lamp", "Wreckers' Lamp", 1, "W", "enemy",
-     [PULL(1), A("water", 2, attr="stable"), A("lightning", 1, attr="volatile", if_="t.mark>0")],
-     "Pull the target forward 1 and apply 2 Soak. If it is Marked, apply 1 Volatile Static.", cat="water", world=W,
+     [PULL(1), A("water", 2, attr="stable"), A("water", 1, attr="stable", if_="first"),
+      A("lightning", 1, attr="volatile", if_="t.mark>0")],
+     "Pull the target forward 1 and apply 2 Soak, or 3 if this is first in the Ordo. If it is Marked, apply 1 "
+     "Volatile Static.", cat="water", world=W,
      arch="world",
      flavour="It lights a lamp on the cliff and waits for the ships to come in.",
      note="A hero swings a wrecker's storm lantern on the cliff; a Storm Harpy drops toward it into the surf.",
-     up={"text": "Pull the target forward 1 and apply 3 Soak. If it is Marked, apply 1 Volatile Static.",
-         "fx": [PULL(1), A("water", 3, attr="stable"), A("lightning", 1, attr="volatile", if_="t.mark>0")]})
+     up={"text": "Pull the target forward 1 and apply 3 Soak, or 4 if this is first in the Ordo. If it is Marked, "
+                 "apply 1 Volatile Static.",
+         "fx": [PULL(1), A("water", 3, attr="stable"), A("water", 1, attr="stable", if_="first"),
+                A("lightning", 1, attr="volatile", if_="t.mark>0")]})
 card("w_coast_call_the_bolt", "Call the Bolt", 2, "W", "all_enemies",
      [D(4), A("lightning", 1, attr="volatile", if_="t.water>0")],
      "Deal 4 to every foe. Apply 1 Volatile Static to each Soaked foe.", cat="lightning", world=W, arch="world",
@@ -39,12 +43,11 @@ card("w_coast_call_the_bolt", "Call the Bolt", 2, "W", "all_enemies",
      note="A bolt comes down on the wet rocks and runs through every soaked body on the strand.",
      up={"text": "Deal 6 to every foe. Apply 1 Volatile Static to each Soaked foe.",
          "fx": [D(6), A("lightning", 1, attr="volatile", if_="t.water>0")]})
-card("w_coast_lash_it_down", "Lash It Down", 1, "W", "self", [B(1, per="hand", k=2, max=11), BANK(1, to="self")],
-     "Retain. Gain 1 Block, plus 2 per card in your hand (max 11). Bank 1.", kw=["Retain"], world=W, arch="world",
+card("w_coast_lash_it_down", "Lash It Down", 1, "W", "self", [B(1, per="hand", k=2, max=11)],
+     "Retain. Gain 1 Block, plus 2 per card in your hand (max 11).", kw=["Retain"], world=W, arch="world",
      flavour="On this coast the sea takes whatever is not tied down.",
      note="A hero lashes a satchel to their belt with tarred line as a false beam sweeps the gallery.",
-     up={"text": "Retain. Gain 3 Block, plus 2 per card in your hand (max 13). Bank 1.",
-         "fx": [B(3, per="hand", k=2, max=13), BANK(1, to="self")]})
+     up={"text": "Retain. Gain 3 Block, plus 2 per card in your hand (max 13).", "fx": [B(3, per="hand", k=2, max=13)]})
 
 # ================================================================== foes
 creature("wrecker", "Wrecker", "foe", 34, ranks=[2, 3], role="afflicter",
