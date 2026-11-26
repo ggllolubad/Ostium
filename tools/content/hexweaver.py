@@ -13,7 +13,7 @@ card("blight_touch", "Blight Touch", 1, "S", "enemy", [A(T, 2), ST("hex", 1)], "
 card("withering", "Withering", 1, "S", "enemy", [ST("hex", 2), CLR("might")], "Apply 2 Hex. The target loses its Might.", cat=V)
 card("dark_pact", "Dark Pact", 0, "S", "self", [SELFDMG(3), PRIME(4)], "Lose 3 HP. Prime 4.", cat=V, kw=["Prime"])
 card("hex_ward", "Hex Ward", 1, "S", "ally", [W(2), B(4)], "A hero gains 2 Ward and 4 Block.", cat=V)
-card("malediction", "Malediction", 2, "S", "enemy", [D(5), ST("hex", 3)], "Deal 5. Apply 3 Hex.", cat=V)
+card("malediction", "Cracked Skull", 2, "S", "enemy", [D(5), ST("hex", 3)], "Deal 5. Apply 3 Hex.", cat=V)
 # ------------------------------------------------------------------ common
 card("evil_eye", "Evil Eye", 0, "C", "enemy", [ST("hex", 1), ST("mark")], "Apply 1 Hex. Mark the target.", cat=V)
 card("rotting_word", "Rotting Word", 1, "C", "enemy", [A(T, 3)], "Apply 3 Toxin.", cat=T, attr="stable")
@@ -30,7 +30,7 @@ card("dirge", "Dirge", 1, "C", "all_enemies", [D(2, if_="t.hex>0"), D(2)], "Deal
 card("venom_kiss", "Venom Kiss", 1, "C", "enemy", [A(T, 2, attr="volatile"), D(3)], "Deal 3. Apply 2 Volatile Toxin.", cat=T)
 card("drain", "Drain", 1, "C", "enemy", [D(5, lifesteal=100)], "Deal 5. Heal the damage dealt.", cat=V)
 card("black_candle", "Black Candle", 1, "C", "self", [W(3), STRESS(-4)], "Gain 3 Ward. Shed 4 stress.", cat=V)
-card("tithe_of_blood", "Tithe of Blood", 0, "C", "self", [SELFDMG(2), SELF("might", 1)], "Lose 2 HP. Gain 1 Might.", cat=V)
+card("tithe_of_blood", "Cut Palm", 0, "C", "self", [SELFDMG(2), SELF("might", 1)], "Lose 2 HP. Gain 1 Might.", cat=V)
 card("whispered_name", "Whispered Name", 1, "C", "enemy", [ST("hex", 2), STRESS(-3, to="self")], "Apply 2 Hex. Shed 3 stress.", cat=V)
 card("corpse_candle", "Corpse Candle", 1, "C", "enemy", [ST("doom", 3), A(T, 1)], "Apply 3 Doom and 1 Toxin.", cat=T, attr="stable")
 card("sour_milk", "Sour Milk", 1, "C", "enemy", [A(T, 1), A(T, 1, to="adjacent")], "Apply 1 Toxin to the target and the foes beside it.", cat=T, attr="stable")
@@ -38,7 +38,7 @@ card("hex_shield", "Hexed Shield", 1, "C", "self", [B(3, per="total_hex", k=1)],
 card("hag_finger", "Hag's Finger", 1, "C", "enemy", [PULL(1), ST("hex", 1)], "Pull the target forward 1. Apply 1 Hex.", cat=V)
 card("nightshade", "Nightshade", 1, "C", "enemy", [A(T, 2), STRESS(-2, to="all_allies")], "Apply 2 Toxin. Every hero sheds 2 stress.", cat=T, attr="stable")
 # ------------------------------------------------------------------ uncommon
-card("rot_from_within", "Rot from Within", 2, "U", "enemy", [D(0, per="t.toxin", k=3)], "Deal 3 per Toxin on the target.", cat=T)
+card("rot_from_within", "Canker", 2, "U", "enemy", [D(0, per="t.toxin", k=3)], "Deal 3 per Toxin on the target.", cat=T)
 card("plague_of_hexes", "Plague of Hexes", 2, "U", "all_enemies", [ST("hex", 2)], "Apply 2 Hex to every foe.", cat=V)
 card("hex_spread", "Contagion", 1, "U", "enemy", [ST("hex", 0, per="t.hex", to="adjacent")], "The foes beside the target gain Hex equal to its Hex.", cat=V)
 card("double_hex", "Twofold Curse", 1, "U", "enemy", [DBL(s="hex")], "Double the target's Hex.", cat=V)
@@ -59,7 +59,7 @@ card("grand_malediction", "Grand Malediction", 3, "R", "all_enemies", [ST("hex",
 card("death_curse", "Death Curse", 2, "R", "enemy", [EXEC(0, per="t.hex", k=3)], "Execute the target if its HP is 3x its Hex or less.", cat=V)
 card("plaguebringer", "Plaguebringer", 2, "R", "all_enemies", [A(T, 3), ST("hex", 1)], "Apply 3 Toxin and 1 Hex to every foe.", cat=T, attr="stable")
 card("soul_rend", "Soul Rend", 2, "R", "enemy", [D(6, true=True), D(0, per="t.hex", k=2, true=True)], "Deal 6 true damage, plus 2 per Hex, ignoring Block and Armor.", cat=V)
-card("pact_of_bones", "Pact of Bones", 1, "R", "self", [SELFDMG(8), EN(2)], "Lose 8 HP. Next round, +2 vigour. Exhaust.", cat=V, kw=["Exhaust"])
+card("pact_of_bones", "Crow Skull", 1, "R", "self", [SELFDMG(8), EN(2)], "Lose 8 HP. Next round, +2 vigour. Exhaust.", cat=V, kw=["Exhaust"])
 card("blackest_night", "Blackest Night", 2, "R", "all_enemies", [A(V, 2), STRESS(-8, to="all_allies")], "Apply 2 Void to every foe. Every hero sheds 8 stress.", cat=V, attr="stable")
 card("scapegoat", "Scapegoat", 2, "R", "enemy", [TRANSFER("ally_most"), TURN()], "Transfer the worst-afflicted hero's afflictions to the target, and turn its attack on its ally.", cat=V)
 card("witching_hour", "Witching Hour", 1, "R", "self", [DBL(s="hex", to="all_enemies")], "Double the Hex on every foe. Exhaust.", cat=V, kw=["Exhaust"])
@@ -77,17 +77,17 @@ card("open_the_door", "Open the Door", 2, "X", "enemy", [D(10, if_="!dd"), D(25,
 card("unholy_vigour", "Unholy Vigour", 1, "X", "self", [ST("regen", 4, to="self"), STRESS(6)], "Gain Regen 4. Gain 6 stress.", cat=V, sub=PB)
 # ------------------------------------------------------------------ Doomsayer
 DS = "doomsayer"
-card("prophet_of_doom", "Prophet of Doom", 1, "X", "enemy", [ST("doom", 6)], "Apply 6 Doom.", cat=V, sub=DS)
-card("knell", "Knell", 1, "X", "all_enemies", [ST("doom", 3)], "Apply 3 Doom to every foe.", cat=V, sub=DS)
+card("prophet_of_doom", "Raven", 1, "X", "enemy", [ST("doom", 6)], "Apply 6 Doom.", cat=V, sub=DS)
+card("knell", "Bell-Cote", 1, "X", "all_enemies", [ST("doom", 3)], "Apply 3 Doom to every foe.", cat=V, sub=DS)
 card("hasten_doom", "Hasten the End", 1, "X", "enemy", [D(0, per="t.doom", k=0.5)], "Deal half the target's Doom.", cat=V, sub=DS)
 card("deaths_ledger", "Death's Ledger", 2, "X", "enemy", [ST("doom", 0, per="t.missing_hp")], "Apply Doom equal to the HP the target is missing.", cat=V, sub=DS)
-card("final_hour", "The Final Hour", 2, "X", "enemy", [EXEC(0, per="t.doom")], "Execute the target if its Doom has met its HP.", cat=V, sub=DS)
+card("final_hour", "Snuff Out", 2, "X", "enemy", [EXEC(0, per="t.doom")], "Execute the target if its Doom has met its HP.", cat=V, sub=DS)
 card("dooms_ward", "Doomward", 1, "X", "self", [B(0, per="enemies", k=3)], "Gain 3 Block per foe.", cat=V, sub=DS)
 card("harbinger", "Harbinger", 2, "X", "enemy", [ST("doom", 4), ST("hex", 2), ST("vulnerable", 1)], "Apply 4 Doom, 2 Hex and Vulnerable.", cat=V, sub=DS)
-card("toll_of_bells", "Toll of Bells", 3, "X", "all_enemies", [DBL(s="doom")], "Double the Doom on every foe. Exhaust.", cat=V, kw=["Exhaust"], sub=DS)
+card("toll_of_bells", "Peal", 3, "X", "all_enemies", [DBL(s="doom")], "Double the Doom on every foe. Exhaust.", cat=V, kw=["Exhaust"], sub=DS)
 # ------------------------------------------------------------------ Mirrorhex
 MH = "mirrorhex"
-card("mirror_mirror", "Mirror, Mirror", 1, "X", "enemy", [TURN()], "The target's attack this round strikes the foe beside it instead.", cat=V, sub=MH)
+card("mirror_mirror", "Looking Glass", 1, "X", "enemy", [TURN()], "The target's attack this round strikes the foe beside it instead.", cat=V, sub=MH)
 card("reflect_pain", "Reflect Pain", 1, "X", "self", [SELF("thorns", 4), W(1)], "Gain 4 Thorns and 1 Ward.", cat=V, sub=MH)
 card("borrowed_curse", "Borrowed Curse", 1, "X", "enemy", [TRANSFER("self"), ST("hex", 1)], "Lay your afflictions on the target. Apply 1 Hex.", cat=V, sub=MH)
 card("glass_ward", "Glass Ward", 1, "X", "ally", [ST("riposte", 3), W(2)], "A hero gains Riposte 3 and 2 Ward.", cat=V, sub=MH)

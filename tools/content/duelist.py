@@ -51,7 +51,7 @@ card("disarm", "Disarm", 2, "U", "enemy", [D(5), CLR("might"), CONS("block")], "
 card("cloak_and_dagger", "Cloak and Dagger", 1, "U", "enemy", [SELF("dodge"), D(4)], "Dodge the next hit this round. Deal 4.", hit=[1, 2, 3])
 card("static_field", "Static Field", 2, "U", "all_enemies", [A(L, 2)], "Apply 2 Lightning to every foe.", cat=L, attr="stable", hit=ALL)
 card("counter_stance", "Counter Stance", 2, "U", "self", [ST("taunt"), SELF("riposte", 6)], "Taunt. Gain Riposte 6.", use=[1, 2])
-card("bloodmist", "Bloodmist", 1, "U", "all_enemies", [ST("bleed", 2)], "Apply 2 Bleed to every foe.", hit=ALL)
+card("bloodmist", "Blood Cup", 1, "U", "all_enemies", [ST("bleed", 2)], "Apply 2 Bleed to every foe.", hit=ALL)
 card("adrenaline", "Adrenaline", 1, "U", "self", [SELF("momentum", 2), STRESS(-6)], "Gain 2 Momentum. Shed 6 stress.", use=ALL)
 card("skewer", "Skewer", 2, "U", "enemy", [D(9), D(5, to="behind")], "Deal 9 to the target and 5 to the foe behind it.")
 card("riposte_mastery", "Answering Steel", 1, "U", "enemy", [D(0, per="riposte", k=3)], "Deal 3 per Riposte you hold (not spent).")
@@ -65,7 +65,7 @@ card("duelists_oath", "Duelist's Oath", 1, "R", "self", [SELF("might", 3)], "Gai
 card("lightning_reflexes", "Lightning Reflexes", 0, "R", "self", [SELF("dodge", 2)], "Dodge the next 2 hits this round. Exhaust.", use=ALL, kw=["Exhaust"])
 card("last_dance", "The Last Dance", 3, "R", "all_enemies", [D(6, per="momentum", k=2)], "Deal 6, plus 2 per Momentum, to every foe.", hit=ALL)
 card("vein_opener", "Vein Opener", 1, "R", "enemy", [D(8), ST("bleed", 0, per="dealt")], "Deal 8. Apply Bleed equal to the HP it took.")
-card("ride_the_lightning", "Ride the Lightning", 2, "R", "self", [FRONT(), SELF("momentum", 3), A(L, 1, to="all_enemies", attr="stable")], "Move to rank 1. Gain 3 Momentum. Apply 1 Lightning to every foe.", cat=L, use=ALL)
+card("ride_the_lightning", "Lightning Step", 2, "R", "self", [FRONT(), SELF("momentum", 3), A(L, 1, to="all_enemies", attr="stable")], "Move to rank 1. Gain 3 Momentum. Apply 1 Lightning to every foe.", cat=L, use=ALL)
 card("bolt_through", "Bolt Through", 2, "R", "enemy", [D(8), D(4, to="behind"), A(L, 2, attr="volatile")], "Deal 8, and 4 to the foe behind. Apply 2 Volatile Lightning to the target.", cat=L, hit=[1, 2, 3])
 card("tempest_feint", "Tempest Feint", 1, "R", "all_enemies", [ST("mark")], "Mark every foe.", hit=ALL)
 card("second_wind", "Second Wind", 1, "R", "self", [H(0, per="momentum", k=3), STRESS(-10)], "Heal 3 per Momentum (not spent). Shed 10 stress. Exhaust.", use=ALL, kw=["Exhaust"])
@@ -92,7 +92,7 @@ card("guillotine", "Guillotine", 2, "X", "enemy", [D(6, per="t.missing_hp", k=0.
 # ------------------------------------------------------------------ Bloodletter
 BL = "bloodletter"
 card("exsanguinate", "Exsanguinate", 2, "X", "enemy", [CONS("bleed"), D(0, per="consumed", k=3, lifesteal=50)], "Consume the target's Bleed. Deal 3 per stack; heal half the damage.", sub=BL, hit=[1, 2, 3])
-card("haemorrhage", "Haemorrhage", 1, "X", "enemy", [DBL(s="bleed")], "Double the target's Bleed.", sub=BL, hit=ALL)
+card("haemorrhage", "Blood Pail", 1, "X", "enemy", [DBL(s="bleed")], "Double the target's Bleed.", sub=BL, hit=ALL)
 card("lacerate", "Lacerate", 1, "X", "enemy", [D(2), ST("bleed", 1), D(2), ST("bleed", 1), D(2), ST("bleed", 1)], "Three times: deal 2 and apply 1 Bleed.", sub=BL)
 card("blood_price", "Blood Price", 0, "X", "enemy", [SELFDMG(3), ST("bleed", 5)], "Lose 3 HP. Apply 5 Bleed.", sub=BL, hit=[1, 2, 3])
 card("crimson_tide", "Crimson Tide", 2, "X", "all_enemies", [ST("bleed", 4)], "Apply 4 Bleed to every foe.", sub=BL, hit=ALL)

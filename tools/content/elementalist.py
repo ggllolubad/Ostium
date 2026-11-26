@@ -87,7 +87,7 @@ card("chain_reaction", "Chain Conjunction", 2, "X", "enemy", [A(F, 1, attr="vola
 card("reactive_shield", "Conjoined Shield", 1, "X", "self", [B(2, per="reactions", k=3)], "Gain 2 Block, plus 3 per Conjunction so far this round.", cat="attuned", sub=CA)
 card("volatile_mix", "Volatile Mix", 1, "X", "enemy", [AN(2, attr="volatile")], "Apply 2 Volatile of the element after your attuned one.", cat="attuned", sub=CA)
 card("unstable_core", "Unstable Core", 1, "X", "self", [SELF("focus", 3), STRESS(-5)], "Gain 3 Focus. Shed 5 stress.", cat="attuned", sub=CA)
-card("feedback", "Feedback", 1, "X", "enemy", [D(2, per="reactions", k=4)], "Deal 2, plus 4 per Conjunction so far this round.", cat="attuned", sub=CA)
+card("feedback", "Backlash", 1, "X", "enemy", [D(2, per="reactions", k=4)], "Deal 2, plus 4 per Conjunction so far this round.", cat="attuned", sub=CA)
 card("flashpoint", "Flashpoint", 1, "X", "all_enemies", [A(F, 1)], "Apply 1 Volatile Fire to every foe.", cat=F, attr="volatile", sub=CA)
 card("detonation", "Detonation", 2, "X", "enemy", [CONS(e=F), D(0, per="consumed", k=4)], "Consume the target's Fire. Deal 4 per stack.", cat=F, sub=CA)
 # ------------------------------------------------------------------ Prismatic

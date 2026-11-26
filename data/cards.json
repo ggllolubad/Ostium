@@ -1695,7 +1695,7 @@
 "arch": "transmuter"
 },
 "fl_draught": {
-"name": "Plain Draught",
+"name": "Small Beer",
 "cost": 0,
 "rarity": "F",
 "target": "ally",
@@ -1846,7 +1846,7 @@
 "arch": "transmuter"
 },
 "fl_heal": {
-"name": "Healing Draught",
+"name": "Wineskin",
 "cost": 0,
 "rarity": "F",
 "target": "ally",
@@ -2113,7 +2113,7 @@
 "arch": "apothecary"
 },
 "fl_rage": {
-"name": "Bloodrage Draught",
+"name": "Mead",
 "cost": 0,
 "rarity": "F",
 "target": "ally",
@@ -2216,7 +2216,7 @@
 "arch": "transmuter"
 },
 "fl_haste": {
-"name": "Haste Draught",
+"name": "Quicksilver",
 "cost": 0,
 "rarity": "F",
 "target": "ally",
@@ -2257,7 +2257,7 @@
 "arch": "apothecary"
 },
 "fl_focus": {
-"name": "Clarity Draught",
+"name": "Eyebright",
 "cost": 0,
 "rarity": "F",
 "target": "ally",
@@ -2918,7 +2918,7 @@
 "arch": "transmuter"
 },
 "al_lye_splash": {
-"name": "Lye Splash",
+"name": "Lye",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -2972,7 +2972,7 @@
 "arch": "transmuter"
 },
 "al_base_to_gold": {
-"name": "Base to Gold",
+"name": "Crucible",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -3021,7 +3021,7 @@
 "arch": "transmuter"
 },
 "al_reagent": {
-"name": "Reagent",
+"name": "Dropper",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -3447,7 +3447,7 @@
 "arch": "plaguewright+transmuter"
 },
 "al_infect_the_wound": {
-"name": "Infect the Wound",
+"name": "Foul Basin",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -3651,7 +3651,7 @@
 "card": "fl_draught"
 }
 ],
-"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught.",
+"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Small Beer.",
 "cls": "alchemist",
 "use": [
 1,
@@ -3662,7 +3662,7 @@
 "cat": "physical",
 "art": "al_bandolier",
 "up": {
-"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught. Gain 3 Block.",
+"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Small Beer. Gain 3 Block.",
 "fx": [
 {
 "t": "brew",
@@ -4032,7 +4032,7 @@
 "arch": "apothecary+hexweaver_transfer"
 },
 "al_rectify": {
-"name": "Rectify",
+"name": "Retort",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -4096,7 +4096,7 @@
 "arch": "transmuter+apothecary"
 },
 "al_putrefaction": {
-"name": "Putrefaction",
+"name": "Toadstool",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -4462,7 +4462,7 @@
 }
 },
 "al_fester": {
-"name": "Fester",
+"name": "Blowfly",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -4624,7 +4624,7 @@
 "arch": "plaguewright+transmuter"
 },
 "al_leech_jar": {
-"name": "Leech Jar",
+"name": "Leeches",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -4750,7 +4750,7 @@
 "arch": "plaguewright+hexweaver_hex"
 },
 "al_restock": {
-"name": "Restock",
+"name": "Hamper",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -4840,7 +4840,7 @@
 "arch": "apothecary"
 },
 "al_liquid_courage": {
-"name": "Liquid Courage",
+"name": "Aqua Vitae",
 "cost": 1,
 "rarity": "U",
 "target": "ally",
@@ -4855,7 +4855,7 @@
 "card": "fl_rage"
 }
 ],
-"text": "A hero sheds 4 stress. Brew a Bloodrage Draught.",
+"text": "A hero sheds 4 stress. Brew a Mead.",
 "cls": "alchemist",
 "use": [
 1,
@@ -4866,7 +4866,7 @@
 "cat": "physical",
 "art": "al_liquid_courage",
 "up": {
-"text": "A hero sheds 7 stress. Brew a Bloodrage Draught.",
+"text": "A hero sheds 7 stress. Brew a Mead.",
 "fx": [
 {
 "t": "stress",
@@ -4884,7 +4884,7 @@
 "arch": "apothecary"
 },
 "al_round_of_tonic": {
-"name": "Round of Tonic",
+"name": "Wassail Bowl",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -5030,7 +5030,7 @@
 "arch": "apothecary+bulwark_taunt"
 },
 "al_stink_pot": {
-"name": "Stink Pot",
+"name": "Stinkpot",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -5266,7 +5266,7 @@
 }
 },
 "al_prima_materia": {
-"name": "Prima Materia",
+"name": "Cauldron",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -5438,7 +5438,7 @@
 "arch": "plaguewright+transmuter"
 },
 "al_black_rot": {
-"name": "Black Rot",
+"name": "Plague Pit",
 "cost": 1,
 "rarity": "R",
 "target": "all_enemies",
@@ -5523,7 +5523,7 @@
 "arch": "plaguewright"
 },
 "al_draw_the_venom": {
-"name": "Draw the Venom",
+"name": "Bezoar",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -5588,7 +5588,7 @@
 "arch": "plaguewright+apothecary"
 },
 "al_magnum_opus": {
-"name": "Magnum Opus",
+"name": "Medicine Chest",
 "cost": 2,
 "rarity": "R",
 "target": "self",
@@ -5614,7 +5614,7 @@
 "if": "flasks_used"
 }
 ],
-"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. Dosed: Improve 1 flask on the belt.",
+"text": "Brew Blasting Powder, a Wineskin and a Mead. Dosed: Improve 1 flask on the belt.",
 "cls": "alchemist",
 "use": [
 1,
@@ -5625,7 +5625,7 @@
 "cat": "physical",
 "art": "al_magnum_opus",
 "up": {
-"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. Dosed: Improve 2 flasks on the belt.",
+"text": "Brew Blasting Powder, a Wineskin and a Mead. Dosed: Improve 2 flasks on the belt.",
 "fx": [
 {
 "t": "brew",
@@ -5654,7 +5654,7 @@
 "arch": "apothecary"
 },
 "al_elixir_of_life": {
-"name": "Elixir of Life",
+"name": "Gold Ampoule",
 "cost": 1,
 "rarity": "R",
 "target": "ally",
@@ -5767,7 +5767,7 @@
 }
 },
 "al_panacea": {
-"name": "Panacea",
+"name": "Unicorn Horn",
 "cost": 2,
 "rarity": "R",
 "target": "ally",
@@ -5804,7 +5804,7 @@
 "arch": "apothecary"
 },
 "al_red_work": {
-"name": "The Red Work",
+"name": "Pelican",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -5867,7 +5867,7 @@
 "arch": "transmuter"
 },
 "al_white_work": {
-"name": "The White Work",
+"name": "Rosewater",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -5940,7 +5940,7 @@
 "arch": "transmuter"
 },
 "al_black_work": {
-"name": "The Black Work",
+"name": "Death's Head",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -6004,7 +6004,7 @@
 "arch": "transmuter"
 },
 "al_quintessence": {
-"name": "Quintessence",
+"name": "Fifth Phial",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -6019,7 +6019,7 @@
 "n": 1
 }
 ],
-"text": "Brew a Clarity Draught. Improve 1 flask on the belt.",
+"text": "Brew a Eyebright. Improve 1 flask on the belt.",
 "cls": "alchemist",
 "use": [
 1,
@@ -6031,7 +6031,7 @@
 "sub": "transmuter",
 "art": "al_quintessence",
 "up": {
-"text": "Brew a Clarity Draught. Improve 2 flasks on the belt.",
+"text": "Brew a Eyebright. Improve 2 flasks on the belt.",
 "fx": [
 {
 "t": "brew",
@@ -6327,7 +6327,7 @@
 "arch": "plaguewright"
 },
 "al_ripen": {
-"name": "Ripen",
+"name": "Pomegranate",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -6379,7 +6379,7 @@
 "arch": "plaguewright"
 },
 "al_kindle_the_rot": {
-"name": "Kindle the Rot",
+"name": "Brimstone",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -6575,7 +6575,7 @@
 "arch": "plaguewright"
 },
 "al_herb_bag": {
-"name": "Herb Bag",
+"name": "Herb Pouch",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -6590,7 +6590,7 @@
 "card": "fl_draught"
 }
 ],
-"text": "A hero heals 3. Brew a Plain Draught.",
+"text": "A hero heals 3. Brew a Small Beer.",
 "cls": "alchemist",
 "use": [
 1,
@@ -6602,7 +6602,7 @@
 "sub": "apothecary",
 "art": "al_herb_bag",
 "up": {
-"text": "A hero heals 5. Brew a Plain Draught.",
+"text": "A hero heals 5. Brew a Small Beer.",
 "fx": [
 {
 "t": "heal",
@@ -6656,7 +6656,7 @@
 "arch": "apothecary"
 },
 "al_snatch_from_the_door": {
-"name": "Snatch from the Door",
+"name": "Cordial",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -6701,7 +6701,7 @@
 "arch": "apothecary"
 },
 "al_measured_dose": {
-"name": "Measured Dose",
+"name": "Dram",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -6751,7 +6751,7 @@
 "arch": "apothecary"
 },
 "al_war_tonics": {
-"name": "War Tonics",
+"name": "Stirrup Cup",
 "cost": 2,
 "rarity": "X",
 "target": "self",
@@ -6776,7 +6776,7 @@
 "if": "handoff"
 }
 ],
-"text": "Brew a Bloodrage Draught and a Haste Draught. Improve 1 flask on the belt, or 2 on a Handoff.",
+"text": "Brew a Mead and a Quicksilver. Improve 1 flask on the belt, or 2 on a Handoff.",
 "cls": "alchemist",
 "use": [
 1,
@@ -6788,7 +6788,7 @@
 "sub": "apothecary",
 "art": "al_war_tonics",
 "up": {
-"text": "Brew a Bloodrage Draught and a Haste Draught. Improve 1 flask on the belt, or 2 on a Handoff.",
+"text": "Brew a Mead and a Quicksilver. Improve 1 flask on the belt, or 2 on a Handoff.",
 "cost": 1
 },
 "flavour": "For the killers. Keep them fed and keep them standing.",
@@ -6796,7 +6796,7 @@
 "arch": "apothecary+duelist_momentum"
 },
 "al_second_dose": {
-"name": "Second Dose",
+"name": "Spoonful",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -6848,7 +6848,7 @@
 "arch": "apothecary"
 },
 "al_the_great_work": {
-"name": "The Great Work",
+"name": "Philosopher's Egg",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -7115,7 +7115,7 @@
 }
 },
 "al_the_physick_garden": {
-"name": "The Physick Garden",
+"name": "Physick Garden",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -7273,7 +7273,7 @@
 "arch": "core"
 },
 "bw_k_come_on_then": {
-"name": "Come On, Then",
+"name": "War Drum",
 "cost": 1,
 "rarity": "K",
 "target": "self",
@@ -7318,7 +7318,7 @@
 "arch": "last_bastion"
 },
 "bw_k_bank_the_cold": {
-"name": "Bank the Cold",
+"name": "Ice Over",
 "cost": 1,
 "rarity": "K",
 "target": "self",
@@ -7533,7 +7533,7 @@
 "arch": "core"
 },
 "bw_hold_the_line": {
-"name": "Hold the Line",
+"name": "Pillar",
 "cost": 1,
 "rarity": "S",
 "target": "self",
@@ -7577,7 +7577,7 @@
 "arch": "core"
 },
 "bw_over_the_rim": {
-"name": "Over the Rim",
+"name": "Overhand",
 "cost": 2,
 "rarity": "S",
 "target": "enemy",
@@ -7619,7 +7619,7 @@
 "arch": "core"
 },
 "bw_draw_their_eyes": {
-"name": "Draw Their Eyes",
+"name": "Clamour",
 "cost": 0,
 "rarity": "C",
 "target": "self",
@@ -7673,7 +7673,7 @@
 "arch": "last_bastion+thornguard"
 },
 "bw_scar_tissue": {
-"name": "Scar Tissue",
+"name": "Great Helm",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -7711,7 +7711,7 @@
 "arch": "last_bastion"
 },
 "bw_toll_of_the_tower": {
-"name": "Toll of the Tower",
+"name": "Alarum",
 "cost": 2,
 "rarity": "C",
 "target": "enemy",
@@ -7766,7 +7766,7 @@
 "arch": "last_bastion"
 },
 "bw_blood_for_iron": {
-"name": "Blood for Iron",
+"name": "Tempering",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -7874,7 +7874,7 @@
 "arch": "last_bastion"
 },
 "bw_grit_your_teeth": {
-"name": "Grit Your Teeth",
+"name": "Iron Gauntlet",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -7976,7 +7976,7 @@
 "arch": "ironwarden"
 },
 "bw_hold_through_the_night": {
-"name": "Hold Through the Night",
+"name": "Nightwatch",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -8028,7 +8028,7 @@
 "arch": "ironwarden"
 },
 "bw_hoarfrost_blow": {
-"name": "Hoarfrost Blow",
+"name": "Rimed Mace",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -8178,7 +8178,7 @@
 "arch": "ironwarden"
 },
 "bw_break_the_ice": {
-"name": "Break the Ice",
+"name": "Brunt",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -8226,7 +8226,7 @@
 "arch": "ironwarden+elementalist_conjunction"
 },
 "bw_barbed_plate": {
-"name": "Barbed Plate",
+"name": "Spiked Buckler",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -8324,7 +8324,7 @@
 "arch": "thornguard+last_bastion"
 },
 "bw_come_and_take_it": {
-"name": "Come and Take It",
+"name": "Bristle",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -8468,7 +8468,7 @@
 "arch": "thornguard"
 },
 "bw_penitents_blow": {
-"name": "Penitent's Blow",
+"name": "Penance",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -8508,7 +8508,7 @@
 "arch": "thornguard"
 },
 "bw_keep_the_back_rank": {
-"name": "Keep the Back Rank",
+"name": "Rearguard",
 "cost": 1,
 "rarity": "C",
 "target": "ally_other",
@@ -8523,7 +8523,7 @@
 "if": "t.rank>=3"
 }
 ],
-"text": "Guard another hero this round. If they stand in rank 3 or 4, put a Tithe of Blood into their next hand.",
+"text": "Guard another hero this round. If they stand in rank 3 or 4, put a Cut Palm into their next hand.",
 "cls": "bulwark",
 "use": [
 1,
@@ -8533,7 +8533,7 @@
 "cat": "physical",
 "art": "bw_keep_the_back_rank",
 "up": {
-"text": "Guard another hero this round. If they stand in rank 3 or 4, they gain 3 Block and put a Tithe of Blood into their next hand.",
+"text": "Guard another hero this round. If they stand in rank 3 or 4, they gain 3 Block and put a Cut Palm into their next hand.",
 "fx": [
 {
 "t": "guard"
@@ -8556,7 +8556,7 @@
 "arch": "core"
 },
 "bw_hook_and_drag": {
-"name": "Hook and Drag",
+"name": "Billhook",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -8750,7 +8750,7 @@
 "arch": "core"
 },
 "bw_into_the_breach": {
-"name": "Into the Breach",
+"name": "Muddy Boot",
 "cost": 1,
 "rarity": "C",
 "target": "adjacent_ally",
@@ -8852,7 +8852,7 @@
 "arch": "last_bastion"
 },
 "bw_bleed_for_them": {
-"name": "Bleed for Them",
+"name": "Lifeblood",
 "cost": 1,
 "rarity": "U",
 "target": "ally_other",
@@ -8927,7 +8927,7 @@
 "arch": "last_bastion+alchemist_flask"
 },
 "bw_answer_the_blow": {
-"name": "Answer the Blow",
+"name": "Reprisal",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -8977,7 +8977,7 @@
 "arch": "last_bastion"
 },
 "bw_shoulder_their_burden": {
-"name": "Shoulder Their Burden",
+"name": "Yoke",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -9140,7 +9140,7 @@
 }
 },
 "bw_shed_the_rime": {
-"name": "Shed the Rime",
+"name": "Icicle Fringe",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -9195,7 +9195,7 @@
 "arch": "ironwarden"
 },
 "bw_glacier_wall": {
-"name": "Glacier Wall",
+"name": "Ice Shard",
 "cost": 2,
 "rarity": "U",
 "target": "self",
@@ -9370,7 +9370,7 @@
 "arch": "ironwarden"
 },
 "bw_rake_of_thorns": {
-"name": "Rake of Thorns",
+"name": "Rake",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -9436,7 +9436,7 @@
 "arch": "thornguard"
 },
 "bw_barbs_left_in": {
-"name": "Barbs Left In",
+"name": "Wrench",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -9500,7 +9500,7 @@
 "arch": "thornguard"
 },
 "bw_spiteful_guard": {
-"name": "Spiteful Guard",
+"name": "Caltrop",
 "cost": 1,
 "rarity": "U",
 "target": "ally_other",
@@ -9605,7 +9605,7 @@
 "arch": "thornguard+last_bastion"
 },
 "bw_bramble_wall": {
-"name": "Bramble Wall",
+"name": "Thicket",
 "cost": 2,
 "rarity": "U",
 "target": "self",
@@ -9665,7 +9665,7 @@
 "arch": "thornguard+ironwarden"
 },
 "bw_under_the_door": {
-"name": "Under the Door",
+"name": "Saint's Banner",
 "cost": 1,
 "rarity": "U",
 "target": "ally",
@@ -9711,7 +9711,7 @@
 "arch": "core"
 },
 "bw_weight_of_the_door": {
-"name": "Weight of the Door",
+"name": "Battering Ram",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -9817,7 +9817,7 @@
 "arch": "core+duelist_followup"
 },
 "bw_close_ranks": {
-"name": "Close Ranks",
+"name": "Oak Settle",
 "cost": 1,
 "rarity": "U",
 "target": "all_allies",
@@ -9980,7 +9980,7 @@
 "arch": "last_bastion"
 },
 "bw_martyrdom": {
-"name": "Martyrdom",
+"name": "Catherine Wheel",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -10228,7 +10228,7 @@
 "arch": "ironwarden"
 },
 "bw_frozen_bulwark": {
-"name": "Frozen Bulwark",
+"name": "Ice Rampart",
 "cost": 1,
 "rarity": "R",
 "target": "all_allies",
@@ -10310,7 +10310,7 @@
 "arch": "thornguard+duelist_bleed"
 },
 "bw_rose_of_iron": {
-"name": "Rose of Iron",
+"name": "Iron Rose",
 "cost": 0,
 "rarity": "R",
 "target": "self",
@@ -10371,7 +10371,7 @@
 "arch": "thornguard"
 },
 "bw_hedge_of_spikes": {
-"name": "Hedge of Spikes",
+"name": "Palisade",
 "cost": 2,
 "rarity": "R",
 "target": "all_allies",
@@ -10427,7 +10427,7 @@
 "arch": "thornguard"
 },
 "bw_aegis_of_the_door": {
-"name": "Aegis of the Door",
+"name": "Church Door",
 "cost": 2,
 "rarity": "R",
 "target": "all_allies",
@@ -10544,7 +10544,7 @@
 "arch": "core"
 },
 "bw_the_door_swings": {
-"name": "The Door Swings",
+"name": "Stave In",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -10637,7 +10637,7 @@
 "arch": "last_bastion+ironwarden"
 },
 "bw_patched_with_lead": {
-"name": "Patched with Lead",
+"name": "Lead Patch",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -10685,7 +10685,7 @@
 "arch": "last_bastion"
 },
 "bw_bound_with_rope": {
-"name": "Bound with Rope",
+"name": "Grapnel",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -10734,7 +10734,7 @@
 "arch": "last_bastion"
 },
 "bw_still_here": {
-"name": "Still Here",
+"name": "Endure",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -10796,7 +10796,7 @@
 "arch": "last_bastion"
 },
 "bw_come_and_finish_it": {
-"name": "Come and Finish It",
+"name": "Last Stand",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -10849,7 +10849,7 @@
 "arch": "last_bastion"
 },
 "bw_defiance": {
-"name": "Defiance",
+"name": "Drawn Sword",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -10902,7 +10902,7 @@
 "arch": "last_bastion"
 },
 "bw_pine_and_iron": {
-"name": "Pine and Iron",
+"name": "Ironbound",
 "cost": 2,
 "rarity": "X",
 "target": "self",
@@ -10948,7 +10948,7 @@
 "arch": "ironwarden"
 },
 "bw_frostbite_bash": {
-"name": "Frostbite Bash",
+"name": "Hailstone",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -11011,7 +11011,7 @@
 "arch": "ironwarden+elementalist_water"
 },
 "bw_shatter_the_line": {
-"name": "Shatter the Line",
+"name": "Shatter",
 "cost": 2,
 "rarity": "X",
 "target": "all_enemies",
@@ -11123,7 +11123,7 @@
 "arch": "ironwarden"
 },
 "bw_breath_of_the_north": {
-"name": "Breath of the North",
+"name": "North Wind",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -11389,7 +11389,7 @@
 "arch": "thornguard"
 },
 "bw_scourged_back": {
-"name": "Scourged Back",
+"name": "Stained Bandage",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -11432,7 +11432,7 @@
 "arch": "thornguard+last_bastion"
 },
 "bw_punishing_wall": {
-"name": "Punishing Wall",
+"name": "Portcullis",
 "cost": 2,
 "rarity": "X",
 "target": "self",
@@ -11472,7 +11472,7 @@
 "arch": "thornguard"
 },
 "bw_barbed_shove": {
-"name": "Barbed Shove",
+"name": "Repel",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -11527,7 +11527,7 @@
 "arch": "thornguard"
 },
 "bw_the_door_does_not_fall": {
-"name": "The Door Does Not Fall",
+"name": "Lion Knocker",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -11588,7 +11588,7 @@
 }
 },
 "bw_the_ledger_of_wounds": {
-"name": "The Ledger of Wounds",
+"name": "Reckoning",
 "cost": 2,
 "rarity": "L",
 "target": "enemy",
@@ -11653,7 +11653,7 @@
 "arch": "last_bastion"
 },
 "bw_winter_without_end": {
-"name": "Winter Without End",
+"name": "Midwinter",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -11815,7 +11815,7 @@
 }
 },
 "bw_crown_of_iron_thorns": {
-"name": "Crown of Iron Thorns",
+"name": "Crown of Thorns",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -11941,7 +11941,7 @@
 }
 },
 "du_find_the_gap": {
-"name": "Find the Gap",
+"name": "Rapier",
 "cost": 1,
 "rarity": "K",
 "target": "enemy",
@@ -12059,7 +12059,7 @@
 "arch": "bladedancer"
 },
 "du_drag_to_the_block": {
-"name": "Drag to the Block",
+"name": "Headsman's Block",
 "cost": 1,
 "rarity": "K",
 "target": "enemy",
@@ -12404,7 +12404,7 @@
 "arch": "core"
 },
 "du_feather_cut": {
-"name": "Feather Cut",
+"name": "Flourish",
 "cost": 0,
 "rarity": "C",
 "target": "enemy",
@@ -12571,7 +12571,7 @@
 "arch": "bladedancer"
 },
 "du_turn_of_the_wrist": {
-"name": "Turn of the Wrist",
+"name": "Supple Wrist",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -12703,7 +12703,7 @@
 "arch": "bladedancer"
 },
 "du_pronounce_sentence": {
-"name": "Pronounce Sentence",
+"name": "Verdict",
 "cost": 0,
 "rarity": "C",
 "target": "enemy",
@@ -12861,7 +12861,7 @@
 "arch": "executioner"
 },
 "du_heading_stroke": {
-"name": "Heading Stroke",
+"name": "Two-Hander",
 "cost": 2,
 "rarity": "C",
 "target": "enemy",
@@ -12903,7 +12903,7 @@
 "arch": "executioner"
 },
 "du_the_crowd_watches": {
-"name": "The Crowd Watches",
+"name": "Spectacle",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -13133,7 +13133,7 @@
 "arch": "bloodletter"
 },
 "du_bloodmist": {
-"name": "Bloodmist",
+"name": "Blood Cup",
 "cost": -1,
 "rarity": "C",
 "target": "all_enemies",
@@ -13235,7 +13235,7 @@
 "arch": "bloodletter"
 },
 "du_deep_cut": {
-"name": "Deep Cut",
+"name": "Long Blade",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -13287,7 +13287,7 @@
 "arch": "bloodletter"
 },
 "du_follow_through": {
-"name": "Press the Opening",
+"name": "Press",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -13428,7 +13428,7 @@
 "arch": "core"
 },
 "du_slip_and_cut": {
-"name": "Slip and Cut",
+"name": "Slip",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -13487,7 +13487,7 @@
 "arch": "core"
 },
 "du_thunder_lunge": {
-"name": "Thunder Lunge",
+"name": "Thunderbolt",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -13714,7 +13714,7 @@
 "arch": "bladedancer"
 },
 "du_catch_the_rhythm": {
-"name": "Catch the Rhythm",
+"name": "Cadence",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -13780,7 +13780,7 @@
 "arch": "bladedancer"
 },
 "du_serrated_rhythm": {
-"name": "Serrated Rhythm",
+"name": "Bonesaw",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -13838,7 +13838,7 @@
 }
 },
 "du_shatter_point": {
-"name": "Shatter Point",
+"name": "Shiver",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -13881,7 +13881,7 @@
 "arch": "bladedancer+elementalist_frost"
 },
 "du_carry_out_the_sentence": {
-"name": "Carry Out the Sentence",
+"name": "Behead",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -13947,7 +13947,7 @@
 "arch": "executioner"
 },
 "du_condemned": {
-"name": "Condemned",
+"name": "Noose",
 "cost": 1,
 "rarity": "U",
 "target": "all_enemies",
@@ -13996,7 +13996,7 @@
 "arch": "executioner"
 },
 "du_second_stroke": {
-"name": "Second Stroke",
+"name": "Hew",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -14044,7 +14044,7 @@
 }
 },
 "du_next_in_line": {
-"name": "Next in Line",
+"name": "Notch",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14095,7 +14095,7 @@
 "arch": "executioner"
 },
 "du_bled_pale": {
-"name": "Bled Pale",
+"name": "Pallor",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14148,7 +14148,7 @@
 "arch": "executioner+bloodletter"
 },
 "du_drain_the_bowl": {
-"name": "Drain the Bowl",
+"name": "Bleeding Bowl",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -14212,7 +14212,7 @@
 "arch": "bloodletter"
 },
 "du_haemorrhage": {
-"name": "Haemorrhage",
+"name": "Blood Pail",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14316,7 +14316,7 @@
 "arch": "bloodletter+alchemist_toxin"
 },
 "du_red_hands": {
-"name": "Red Hands",
+"name": "Gore",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14359,7 +14359,7 @@
 "arch": "bloodletter"
 },
 "du_barbers_trade": {
-"name": "Barber's Trade",
+"name": "Barber-Surgeon",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14572,7 +14572,7 @@
 "arch": "core"
 },
 "du_open_guard": {
-"name": "Open Guard",
+"name": "Invitation",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -14634,7 +14634,7 @@
 "arch": "core"
 },
 "du_in_the_wake": {
-"name": "In the Wake",
+"name": "Flurry",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -14695,7 +14695,7 @@
 "arch": "core+bulwark_cover"
 },
 "du_hundred_touches": {
-"name": "A Hundred Touches",
+"name": "Bout",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -14759,7 +14759,7 @@
 "arch": "bladedancer"
 },
 "du_ride_the_lightning": {
-"name": "Ride the Lightning",
+"name": "Lightning Step",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -14875,7 +14875,7 @@
 "arch": "core"
 },
 "du_duellists_eye": {
-"name": "The Duelist's Eye",
+"name": "Master's Eye",
 "cost": 2,
 "rarity": "R",
 "target": "all_enemies",
@@ -14978,7 +14978,7 @@
 "arch": "executioner+hexweaver_doom"
 },
 "du_make_an_example": {
-"name": "Make an Example",
+"name": "Gibbet",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -15039,7 +15039,7 @@
 "arch": "executioner"
 },
 "du_open_every_vein": {
-"name": "Open Every Vein",
+"name": "Fleam",
 "cost": 2,
 "rarity": "R",
 "target": "all_enemies",
@@ -15092,7 +15092,7 @@
 "arch": "bloodletter"
 },
 "du_bowl_passed_round": {
-"name": "The Bowl Passed Round",
+"name": "Leechcraft",
 "cost": 1,
 "rarity": "R",
 "target": "all_allies",
@@ -15133,7 +15133,7 @@
 "arch": "bloodletter"
 },
 "du_echo_of_steel": {
-"name": "Echo of Steel",
+"name": "Reprise",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -15187,7 +15187,7 @@
 "arch": "bladedancer+bloodletter"
 },
 "du_oath_of_the_salle": {
-"name": "Oath of the Salle",
+"name": "Salute",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -15243,7 +15243,7 @@
 "arch": "bladedancer"
 },
 "du_fall_back_in_guard": {
-"name": "Fall Back in Guard",
+"name": "Buckler",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -15370,7 +15370,7 @@
 "arch": "bladedancer+executioner"
 },
 "du_second_blade": {
-"name": "Second Blade",
+"name": "Main-Gauche",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -15545,7 +15545,7 @@
 "arch": "bladedancer+executioner"
 },
 "du_untouchable": {
-"name": "Untouchable",
+"name": "Sidestep",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -15596,7 +15596,7 @@
 "arch": "bladedancer"
 },
 "du_drink_and_dance": {
-"name": "Drink and Dance",
+"name": "Bravado",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -15651,7 +15651,7 @@
 "arch": "bladedancer+alchemist_flask"
 },
 "du_cut_between_beats": {
-"name": "Cut Between Beats",
+"name": "Tempo",
 "cost": 0,
 "rarity": "X",
 "target": "enemy",
@@ -15693,7 +15693,7 @@
 "arch": "bladedancer"
 },
 "du_square_tip": {
-"name": "The Square Tip",
+"name": "Square Tip",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -15749,7 +15749,7 @@
 "arch": "executioner"
 },
 "du_drag_them_up": {
-"name": "Drag Them Up",
+"name": "Shackle",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -15858,7 +15858,7 @@
 "arch": "executioner"
 },
 "du_wipe_the_blade": {
-"name": "Wipe the Blade",
+"name": "Sheathe",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -15968,7 +15968,7 @@
 "arch": "executioner+hexweaver_hex"
 },
 "du_heavy_sentence": {
-"name": "Heavy Sentence",
+"name": "Forfeit",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -16012,7 +16012,7 @@
 "arch": "executioner+hexweaver_doom"
 },
 "du_nick_the_vein": {
-"name": "Nick the Vein",
+"name": "Thorn",
 "cost": 0,
 "rarity": "X",
 "target": "enemy",
@@ -16066,7 +16066,7 @@
 "arch": "bloodletter"
 },
 "du_bleed_the_line": {
-"name": "Bleed the Line",
+"name": "Lacerate",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -16119,7 +16119,7 @@
 "arch": "bloodletter"
 },
 "du_let_the_fever_out": {
-"name": "Let the Fever Out",
+"name": "Purge",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -16174,7 +16174,7 @@
 "arch": "bloodletter"
 },
 "du_arterial_cut": {
-"name": "Arterial Cut",
+"name": "Jugular",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -16215,7 +16215,7 @@
 "arch": "bloodletter"
 },
 "du_turn_the_parry": {
-"name": "Turn the Parry",
+"name": "Round Shield",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -16270,7 +16270,7 @@
 "arch": "bloodletter+core"
 },
 "du_full_letting": {
-"name": "Full Letting",
+"name": "Bleeding Basin",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -16316,7 +16316,7 @@
 "arch": "bloodletter+bladedancer"
 },
 "du_the_endless_measure": {
-"name": "The Endless Measure",
+"name": "Danse Macabre",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -16378,7 +16378,7 @@
 }
 },
 "du_two_blades_one_heart": {
-"name": "Two Blades, One Heart",
+"name": "Two Blades",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -16455,7 +16455,7 @@
 }
 },
 "du_the_headsmans_round": {
-"name": "The Headsman's Round",
+"name": "Headsman",
 "cost": 1,
 "rarity": "L",
 "target": "enemy",
@@ -16598,7 +16598,7 @@
 }
 },
 "du_red_tide": {
-"name": "Red Tide",
+"name": "Sea Anchor",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -16671,7 +16671,7 @@
 }
 },
 "du_the_bowl_runs_over": {
-"name": "The Bowl Runs Over",
+"name": "Brimful",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -16736,7 +16736,7 @@
 }
 },
 "el_turn_the_ring": {
-"name": "Turn the Ring",
+"name": "Signet",
 "cost": 1,
 "rarity": "K",
 "target": "self",
@@ -16790,7 +16790,7 @@
 "arch": "core"
 },
 "el_stopper_the_jar": {
-"name": "Wax the Mouth",
+"name": "Covered Jar",
 "cost": 1,
 "rarity": "K",
 "target": "enemy",
@@ -16850,7 +16850,7 @@
 "arch": "accumulator"
 },
 "el_conjoin": {
-"name": "Strike the Wet Ink",
+"name": "Reed Pen",
 "cost": 1,
 "rarity": "K",
 "target": "enemy",
@@ -17053,7 +17053,7 @@
 "arch": "core"
 },
 "el_wet_the_nib": {
-"name": "Wet the Nib",
+"name": "Inking",
 "cost": 1,
 "rarity": "S",
 "target": "ally",
@@ -17200,7 +17200,7 @@
 "arch": "core"
 },
 "el_lay_the_ground": {
-"name": "Lay the Ground",
+"name": "Watering Can",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17250,7 +17250,7 @@
 "arch": "accumulator"
 },
 "el_hold_the_breath": {
-"name": "Hold the Breath",
+"name": "Gourd",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -17303,7 +17303,7 @@
 "arch": "accumulator"
 },
 "el_steep": {
-"name": "Steep",
+"name": "Black Cauldron",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17349,7 +17349,7 @@
 "arch": "accumulator"
 },
 "el_seal_the_jar": {
-"name": "Seal the Jar",
+"name": "Sealing Wax",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17508,7 +17508,7 @@
 }
 },
 "el_twin_sigil": {
-"name": "Twin Sigil",
+"name": "Shield",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17557,7 +17557,7 @@
 "arch": "catalyst"
 },
 "el_scatter_ink": {
-"name": "Scatter Ink",
+"name": "Scroll",
 "cost": 1,
 "rarity": "C",
 "target": "all_enemies",
@@ -17597,7 +17597,7 @@
 "arch": "catalyst"
 },
 "el_flung_ink": {
-"name": "Flung Ink",
+"name": "Spatter",
 "cost": 1,
 "rarity": "C",
 "target": "all_enemies",
@@ -17642,7 +17642,7 @@
 "arch": "catalyst"
 },
 "el_second_ink": {
-"name": "Second Ink",
+"name": "Inkhorn",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17754,7 +17754,7 @@
 "arch": "prismatic+catalyst"
 },
 "el_spectrum_bolt": {
-"name": "Spectrum Bolt",
+"name": "Refraction",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -17810,7 +17810,7 @@
 "arch": "prismatic"
 },
 "el_turn_the_page": {
-"name": "Turn the Page",
+"name": "Open Book",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -17866,7 +17866,7 @@
 "arch": "prismatic+accumulator"
 },
 "el_lend_the_nib": {
-"name": "Lend the Nib",
+"name": "Spare Quill",
 "cost": 1,
 "rarity": "U",
 "target": "ally_other",
@@ -17912,7 +17912,7 @@
 "arch": "core"
 },
 "el_wet_the_line": {
-"name": "Wet the Line",
+"name": "Kettle",
 "cost": 1,
 "rarity": "C",
 "target": "all_enemies",
@@ -17954,7 +17954,7 @@
 "arch": "catalyst"
 },
 "el_frost_the_swing": {
-"name": "Frost the Swing",
+"name": "Numb",
 "cost": 1,
 "rarity": "C",
 "target": "all_enemies",
@@ -18172,7 +18172,7 @@
 "arch": "core"
 },
 "el_sigil_on_the_door": {
-"name": "Sigil on the Door",
+"name": "Warded Door",
 "cost": 1,
 "rarity": "C",
 "target": "ally",
@@ -18216,7 +18216,7 @@
 "arch": "core+bulwark_front"
 },
 "el_draw_the_tide": {
-"name": "Draw the Tide",
+"name": "Riptide",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -18323,7 +18323,7 @@
 "arch": "core"
 },
 "el_cross_stroke": {
-"name": "Cross Stroke",
+"name": "Dividers",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18380,7 +18380,7 @@
 "arch": "catalyst+bulwark_moves"
 },
 "el_open_palm": {
-"name": "Open Palm",
+"name": "Handprint",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -18418,7 +18418,7 @@
 "arch": "catalyst+accumulator"
 },
 "el_weigh_the_stacks": {
-"name": "Weigh the Stacks",
+"name": "Plumb",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18475,7 +18475,7 @@
 "arch": "accumulator"
 },
 "el_tip_the_vessel": {
-"name": "Tip the Vessel",
+"name": "Sluice",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18607,7 +18607,7 @@
 "arch": "accumulator"
 },
 "el_spend_the_breath": {
-"name": "Spend the Breath",
+"name": "Vent",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18660,7 +18660,7 @@
 "arch": "accumulator"
 },
 "el_warding_sigil": {
-"name": "Warding Sigil",
+"name": "Talisman",
 "cost": 1,
 "rarity": "U",
 "target": "ally",
@@ -18708,7 +18708,7 @@
 "arch": "catalyst"
 },
 "el_reaction_shield": {
-"name": "Reaction Shield",
+"name": "Fireguard",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -18748,7 +18748,7 @@
 "arch": "catalyst"
 },
 "el_feedback": {
-"name": "Feedback",
+"name": "Backlash",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18805,7 +18805,7 @@
 "arch": "catalyst"
 },
 "el_second_spark": {
-"name": "Second Spark",
+"name": "Lantern",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -18957,7 +18957,7 @@
 "arch": "catalyst+prismatic"
 },
 "el_count_the_colours": {
-"name": "Count the Colours",
+"name": "Abacus",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -19046,7 +19046,7 @@
 "arch": "prismatic"
 },
 "el_wash_of_colour": {
-"name": "Wash of Colour",
+"name": "Wash Bowl",
 "cost": 2,
 "rarity": "U",
 "target": "all_enemies",
@@ -19089,7 +19089,7 @@
 "arch": "prismatic+catalyst"
 },
 "el_fill_the_gaps": {
-"name": "Fill the Gaps",
+"name": "Infill",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -19144,7 +19144,7 @@
 "arch": "prismatic"
 },
 "el_read_the_colours": {
-"name": "Read the Colours",
+"name": "Reading Desk",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -19254,7 +19254,7 @@
 "arch": "core+foe_armor"
 },
 "el_rime_and_brine": {
-"name": "Rime and Brine",
+"name": "Sprinkler",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -19316,7 +19316,7 @@
 "arch": "core+duelist_shatter"
 },
 "el_ground_the_arc": {
-"name": "Ground the Arc",
+"name": "Grounding",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -19365,7 +19365,7 @@
 "arch": "catalyst+duelist_lightning"
 },
 "el_cold_for_the_void": {
-"name": "Cold for the Void",
+"name": "Ice Phial",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -19414,7 +19414,7 @@
 "arch": "accumulator+oracle_void"
 },
 "el_deep_cold": {
-"name": "Deep Cold",
+"name": "Freeze",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -19549,7 +19549,7 @@
 }
 },
 "el_weight_and_measure": {
-"name": "Weight and Measure",
+"name": "Assay",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -19652,7 +19652,7 @@
 "arch": "accumulator"
 },
 "el_chain_of_ink": {
-"name": "Chain of Ink",
+"name": "Flint",
 "cost": 2,
 "rarity": "R",
 "target": "all_enemies",
@@ -19707,7 +19707,7 @@
 "arch": "catalyst+prismatic"
 },
 "el_spark_shower": {
-"name": "Spark Shower",
+"name": "Coal Pan",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -19807,7 +19807,7 @@
 "arch": "catalyst"
 },
 "el_full_ring": {
-"name": "Full Ring",
+"name": "Every Colour",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -19861,7 +19861,7 @@
 "arch": "prismatic"
 },
 "el_strike_the_ring": {
-"name": "Strike the Ring",
+"name": "Chime",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -20050,7 +20050,7 @@
 "arch": "accumulator+prismatic"
 },
 "el_draw_the_ink_out": {
-"name": "Draw the Ink Out",
+"name": "Siphon",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -20105,7 +20105,7 @@
 "arch": "catalyst+foe_ailments"
 },
 "el_shared_pot": {
-"name": "The Shared Pot",
+"name": "Shared Pot",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -20160,7 +20160,7 @@
 "arch": "core+alchemist_flasks"
 },
 "el_brass_bands": {
-"name": "Brass Bands",
+"name": "Astrolabe",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -20275,7 +20275,7 @@
 "arch": "accumulator+prismatic"
 },
 "el_heavy_pour": {
-"name": "Heavy Pour",
+"name": "Deluge",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -20317,7 +20317,7 @@
 "arch": "accumulator"
 },
 "el_under_the_weight": {
-"name": "Under the Weight",
+"name": "Ballast",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -20380,7 +20380,7 @@
 "arch": "accumulator"
 },
 "el_brim_over": {
-"name": "Brim Over",
+"name": "Font",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -20431,7 +20431,7 @@
 "arch": "accumulator+catalyst"
 },
 "el_weight_of_the_vessel": {
-"name": "Weight of the Vessel",
+"name": "Heft",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -20539,7 +20539,7 @@
 }
 },
 "el_sigils_on_the_skin": {
-"name": "Sigils on the Skin",
+"name": "Wax Tablet",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -20634,7 +20634,7 @@
 "arch": "catalyst"
 },
 "el_nervous_hands": {
-"name": "Nervous Hands",
+"name": "Guttering Candles",
 "cost": 0,
 "rarity": "X",
 "target": "self",
@@ -20671,7 +20671,7 @@
 "arch": "catalyst"
 },
 "el_double_flick": {
-"name": "Double Flick",
+"name": "Firesteel",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -20840,7 +20840,7 @@
 "arch": "prismatic"
 },
 "el_ring_turn": {
-"name": "Read the Halo",
+"name": "Corona",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -20904,7 +20904,7 @@
 "arch": "prismatic+accumulator"
 },
 "el_six_inks": {
-"name": "Six Inks",
+"name": "Stained Fingers",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -21023,7 +21023,7 @@
 "arch": "prismatic"
 },
 "el_glass_halo": {
-"name": "Glass Halo",
+"name": "Hand Mirror",
 "cost": 2,
 "rarity": "X",
 "target": "self",
@@ -21056,7 +21056,7 @@
 "arch": "prismatic"
 },
 "el_every_colour": {
-"name": "Every Colour at Once",
+"name": "Polychrome",
 "cost": 2,
 "rarity": "X",
 "target": "all_enemies",
@@ -21116,7 +21116,7 @@
 "arch": "prismatic"
 },
 "el_clouded_sight": {
-"name": "Clouded Sight",
+"name": "Glass Globe",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -21244,7 +21244,7 @@
 "arch": "accumulator"
 },
 "el_perpetual_working": {
-"name": "The Perpetual Working",
+"name": "Perpetual Working",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -21307,7 +21307,7 @@
 }
 },
 "el_chain_of_sigils": {
-"name": "Chain of Sigils",
+"name": "Wildfire",
 "cost": 1,
 "rarity": "L",
 "target": "enemy",
@@ -21377,7 +21377,7 @@
 }
 },
 "el_quickened_hand": {
-"name": "The Quickened Hand",
+"name": "Quickening",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -21502,7 +21502,7 @@
 "arch": "prismatic+catalyst"
 },
 "el_clouded_eye_saw": {
-"name": "What the Clouded Eye Saw",
+"name": "Clouded Eye",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -21567,7 +21567,7 @@
 }
 },
 "pass_it_on": {
-"name": "Pass It On",
+"name": "Transference",
 "cost": 1,
 "rarity": "K",
 "target": "enemy",
@@ -21680,7 +21680,7 @@
 "arch": "pactbound"
 },
 "ring_the_bell": {
-"name": "Ring the Bell",
+"name": "Clapper",
 "cost": 1,
 "rarity": "K",
 "target": "all_enemies",
@@ -22007,7 +22007,7 @@
 "arch": "pactbound"
 },
 "twist_the_pin": {
-"name": "Twist the Pin",
+"name": "Wax Heart",
 "cost": 2,
 "rarity": "C",
 "target": "enemy",
@@ -22277,7 +22277,7 @@
 "arch": "core"
 },
 "salt_the_threshold": {
-"name": "Salt the Threshold",
+"name": "Salted Threshold",
 "cost": 1,
 "rarity": "C",
 "target": "all_allies",
@@ -22318,7 +22318,7 @@
 "arch": "core"
 },
 "tithe_of_blood": {
-"name": "Tithe of Blood",
+"name": "Cut Palm",
 "cost": 0,
 "rarity": "C",
 "target": "self",
@@ -22521,7 +22521,7 @@
 "arch": "pactbound+alchemist_flask"
 },
 "take_the_rot": {
-"name": "Take the Rot",
+"name": "Drawing Salve",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -22572,7 +22572,7 @@
 "arch": "pactbound+mirrorhex"
 },
 "martyrs_pin": {
-"name": "Martyr's Pin",
+"name": "Red Hand",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -22783,7 +22783,7 @@
 "arch": "doomsayer+elementalist_conjoin"
 },
 "knell": {
-"name": "Knell",
+"name": "Bell-Cote",
 "cost": 1,
 "rarity": "C",
 "target": "all_enemies",
@@ -22884,7 +22884,7 @@
 "arch": "doomsayer"
 },
 "hasten_the_end": {
-"name": "Hasten the End",
+"name": "Coffin Nail",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -23029,7 +23029,7 @@
 "arch": "mirrorhex"
 },
 "cracked_glass": {
-"name": "Cracked Glass",
+"name": "Fracture",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -23072,7 +23072,7 @@
 "arch": "mirrorhex"
 },
 "mirror_mirror": {
-"name": "Mirror, Mirror",
+"name": "Looking Glass",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -23173,7 +23173,7 @@
 "arch": "mirrorhex"
 },
 "hand_it_back": {
-"name": "Hand It Back",
+"name": "Hand of Glory",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -23222,7 +23222,7 @@
 "arch": "mirrorhex+pactbound"
 },
 "bind_the_fear": {
-"name": "Bind the Fear",
+"name": "Horseshoe",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -23385,7 +23385,7 @@
 "arch": "doomsayer"
 },
 "hedge_charm": {
-"name": "Hedge Charm",
+"name": "Hag Stone",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -23497,7 +23497,7 @@
 "arch": "core+elementalist_conjunction"
 },
 "rot_from_within": {
-"name": "Rot from Within",
+"name": "Canker",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -23711,7 +23711,7 @@
 }
 },
 "spill_the_rot": {
-"name": "Spill the Rot",
+"name": "Unburden",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -23762,7 +23762,7 @@
 "arch": "pactbound+mirrorhex"
 },
 "blood_on_the_poppets": {
-"name": "Blood on the Poppets",
+"name": "Poppet",
 "cost": 1,
 "rarity": "U",
 "target": "all_enemies",
@@ -23862,7 +23862,7 @@
 "arch": "pactbound+oracle_prime"
 },
 "take_their_wounds": {
-"name": "Take Their Wounds",
+"name": "Proxy",
 "cost": 1,
 "rarity": "U",
 "target": "ally_other",
@@ -23876,7 +23876,7 @@
 "card": "tithe_of_blood"
 }
 ],
-"text": "Guard another hero this round. Next round, a Tithe of Blood is added to their hand. Exhaust.",
+"text": "Guard another hero this round. Next round, a Cut Palm is added to their hand. Exhaust.",
 "cls": "hexweaver",
 "use": [
 2,
@@ -23889,7 +23889,7 @@
 ],
 "art": "take_their_wounds",
 "up": {
-"text": "Guard another hero this round. Gain 3 Block. Next round, a Tithe of Blood is added to their hand. Exhaust.",
+"text": "Guard another hero this round. Gain 3 Block. Next round, a Cut Palm is added to their hand. Exhaust.",
 "fx": [
 {
 "t": "guard"
@@ -23911,7 +23911,7 @@
 "arch": "pactbound"
 },
 "toll_the_hour": {
-"name": "Toll the Hour",
+"name": "Curfew",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -24154,7 +24154,7 @@
 "arch": "mirrorhex"
 },
 "turn_the_glass": {
-"name": "Face in the Glass",
+"name": "Glamour",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -24258,7 +24258,7 @@
 "arch": "mirrorhex"
 },
 "backed_with_silver": {
-"name": "Backed with Silver",
+"name": "Silvered Shield",
 "cost": 1,
 "rarity": "U",
 "target": "ally",
@@ -24317,7 +24317,7 @@
 "arch": "mirrorhex+bulwark_block"
 },
 "pact_of_bones": {
-"name": "Pact of Bones",
+"name": "Crow Skull",
 "cost": 0,
 "rarity": "R",
 "target": "self",
@@ -24465,7 +24465,7 @@
 "arch": "pactbound+mirrorhex"
 },
 "blood_debt": {
-"name": "Blood Debt",
+"name": "Grudge",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -24636,7 +24636,7 @@
 "arch": "doomsayer+mirrorhex"
 },
 "bell_book_candle": {
-"name": "Bell, Book and Candle",
+"name": "Anathema",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -24889,7 +24889,7 @@
 }
 },
 "malediction": {
-"name": "Malediction",
+"name": "Cracked Skull",
 "cost": 2,
 "rarity": "R",
 "target": "all_enemies",
@@ -24945,7 +24945,7 @@
 "arch": "core+doomsayer"
 },
 "burn_the_poppet": {
-"name": "Burn the Poppet",
+"name": "Burning Effigy",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -25076,7 +25076,7 @@
 "arch": "pactbound+duelist_bleed"
 },
 "let_it_run": {
-"name": "Let It Run",
+"name": "Lancing",
 "cost": 0,
 "rarity": "X",
 "target": "self",
@@ -25118,7 +25118,7 @@
 "arch": "pactbound"
 },
 "take_the_curse_in": {
-"name": "Take the Curse In",
+"name": "Shears",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -25166,7 +25166,7 @@
 "arch": "pactbound+core"
 },
 "bear_the_burden": {
-"name": "Bear the Burden",
+"name": "Heavy Sack",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -25212,7 +25212,7 @@
 "arch": "pactbound"
 },
 "blood_for_blood": {
-"name": "Blood for Blood",
+"name": "Feud",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -25268,7 +25268,7 @@
 "arch": "pactbound+duelist_bleed"
 },
 "knock_at_the_door": {
-"name": "Knock at the Door",
+"name": "Knock",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -25318,7 +25318,7 @@
 "arch": "pactbound"
 },
 "prophet_of_doom": {
-"name": "Prophet of Doom",
+"name": "Raven",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -25436,7 +25436,7 @@
 "arch": "doomsayer+duelist_strike"
 },
 "the_final_hour": {
-"name": "The Final Hour",
+"name": "Snuff Out",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -25582,7 +25582,7 @@
 }
 },
 "nine_tailors": {
-"name": "Nine Tailors",
+"name": "Running Sand",
 "cost": 2,
 "rarity": "X",
 "target": "all_enemies",
@@ -25638,7 +25638,7 @@
 "arch": "doomsayer"
 },
 "toll_of_bells": {
-"name": "Toll of Bells",
+"name": "Peal",
 "cost": 1,
 "rarity": "X",
 "target": "all_enemies",
@@ -25686,7 +25686,7 @@
 "arch": "doomsayer"
 },
 "mirror_skin": {
-"name": "Mirror Skin",
+"name": "Cowl",
 "cost": 2,
 "rarity": "X",
 "target": "all_allies",
@@ -25742,7 +25742,7 @@
 "arch": "mirrorhex+bulwark_taunt"
 },
 "return_to_sender": {
-"name": "Return to Sender",
+"name": "Recoil",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -25800,7 +25800,7 @@
 "arch": "mirrorhex"
 },
 "crossed_glass": {
-"name": "Crossed Glass",
+"name": "Bewilder",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -25861,7 +25861,7 @@
 }
 },
 "mirrored_curse": {
-"name": "Mirrored Curse",
+"name": "Reflection",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -25917,7 +25917,7 @@
 "arch": "mirrorhex+doomsayer"
 },
 "thiefs_glass": {
-"name": "Thief's Glass",
+"name": "Cutpurse",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -25993,7 +25993,7 @@
 "arch": "mirrorhex"
 },
 "doubled_image": {
-"name": "Doubled Image",
+"name": "Twin Panels",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -26219,7 +26219,7 @@
 }
 },
 "death_knell": {
-"name": "Death Knell",
+"name": "Death Toll",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -26336,7 +26336,7 @@
 }
 },
 "the_witchs_glass": {
-"name": "The Witch's Glass",
+"name": "Witch Ball",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -26864,7 +26864,7 @@
 "arch": "chronomancer"
 },
 "or_glimpse_ahead": {
-"name": "Glimpse Ahead",
+"name": "Premonition",
 "cost": 0,
 "rarity": "C",
 "target": "self",
@@ -26964,7 +26964,7 @@
 "arch": "chronomancer"
 },
 "or_late_blow": {
-"name": "Late Blow",
+"name": "Smith's Hammer",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27058,7 +27058,7 @@
 "arch": "chronomancer+duelist_momentum"
 },
 "or_stopped_sand": {
-"name": "Stopped Sand",
+"name": "Stilled Pendulum",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27105,7 +27105,7 @@
 "arch": "chronomancer+bulwark_mark"
 },
 "or_knucklebones": {
-"name": "Cast the Knucklebones",
+"name": "Knucklebones",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27301,7 +27301,7 @@
 "arch": "augur+fatebinder"
 },
 "or_omen_bolt": {
-"name": "Omen Bolt",
+"name": "Portent",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27344,7 +27344,7 @@
 "arch": "augur"
 },
 "or_ill_omen": {
-"name": "Ill Omen",
+"name": "Magpie",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27405,7 +27405,7 @@
 "arch": "augur"
 },
 "or_knot": {
-"name": "Knot",
+"name": "Hangman's Knot",
 "cost": 0,
 "rarity": "C",
 "target": "self",
@@ -27440,7 +27440,7 @@
 "arch": "fatebinder"
 },
 "or_bind_fate": {
-"name": "Bind Fate",
+"name": "Padlock",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -27607,7 +27607,7 @@
 "arch": "fatebinder"
 },
 "or_pull_the_thread": {
-"name": "Pull the Thread",
+"name": "Unravel",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27717,7 +27717,7 @@
 "arch": "core+elementalist_courses"
 },
 "or_starlit_ward": {
-"name": "Starlit Ward",
+"name": "Starlight",
 "cost": 1,
 "rarity": "C",
 "target": "ally",
@@ -27758,7 +27758,7 @@
 "arch": "core"
 },
 "or_event_horizon": {
-"name": "Event Horizon",
+"name": "Abyss",
 "cost": 2,
 "rarity": "C",
 "target": "all_enemies",
@@ -27863,7 +27863,7 @@
 "arch": "core"
 },
 "or_unmaking": {
-"name": "Unmaking",
+"name": "Breastplate",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -27961,7 +27961,7 @@
 "arch": "core+bulwark_taunt"
 },
 "or_reverse_the_glass": {
-"name": "Reverse the Glass",
+"name": "Armillary Sphere",
 "cost": 2,
 "rarity": "U",
 "target": "all_enemies",
@@ -28076,7 +28076,7 @@
 "arch": "chronomancer"
 },
 "or_borrowed_time": {
-"name": "Borrowed Time",
+"name": "Night Lamp",
 "cost": 0,
 "rarity": "U",
 "target": "self",
@@ -28175,7 +28175,7 @@
 }
 },
 "or_wind_the_spring": {
-"name": "Wind the Spring",
+"name": "Mainspring",
 "cost": 1,
 "rarity": "U",
 "target": "ally_other",
@@ -28220,7 +28220,7 @@
 "arch": "chronomancer+duelist_momentum"
 },
 "or_fulfil_the_omen": {
-"name": "Fulfil the Omen",
+"name": "Swift",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -28316,7 +28316,7 @@
 "arch": "augur"
 },
 "or_wheel_turns": {
-"name": "The Wheel Turns",
+"name": "Fortune's Wheel",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -28412,7 +28412,7 @@
 "arch": "augur"
 },
 "or_trade_on_tomorrow": {
-"name": "Trade on Tomorrow",
+"name": "Augur's Fee",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -28511,7 +28511,7 @@
 }
 },
 "or_red_ink": {
-"name": "Red Ink",
+"name": "Vermilion",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -28554,7 +28554,7 @@
 "arch": "fatebinder+duelist_bleed"
 },
 "or_gathering_thread": {
-"name": "Gathering Thread",
+"name": "Spindle",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -28642,7 +28642,7 @@
 "arch": "fatebinder+augur"
 },
 "or_cut_the_cord": {
-"name": "Cut the Cord",
+"name": "Cut Short",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -28809,7 +28809,7 @@
 "arch": "core+elementalist_frost"
 },
 "or_quiet_hour": {
-"name": "The Quiet Hour",
+"name": "Vigil Candles",
 "cost": 2,
 "rarity": "U",
 "target": "all_allies",
@@ -28869,7 +28869,7 @@
 "arch": "core+alchemist_flask"
 },
 "or_unwritten": {
-"name": "The Unwritten",
+"name": "Erasure",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -29177,7 +29177,7 @@
 "arch": "chronomancer"
 },
 "or_scatter_the_bones": {
-"name": "Scatter the Bones",
+"name": "Cast Lots",
 "cost": 2,
 "rarity": "R",
 "target": "all_enemies",
@@ -29242,7 +29242,7 @@
 "arch": "augur+duelist_bleed"
 },
 "or_forestalled": {
-"name": "Forestalled",
+"name": "Door Bar",
 "cost": 2,
 "rarity": "R",
 "target": "enemy",
@@ -29301,7 +29301,7 @@
 "arch": "augur+chronomancer"
 },
 "or_augury_of_birds": {
-"name": "Augury of Birds",
+"name": "Augury",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -29552,7 +29552,7 @@
 "arch": "core+elementalist_spectrum"
 },
 "or_rewind": {
-"name": "Rewind",
+"name": "Winding Key",
 "cost": 1,
 "rarity": "R",
 "target": "ally",
@@ -29709,7 +29709,7 @@
 "arch": "chronomancer"
 },
 "or_broken_pendulum": {
-"name": "Broken Pendulum",
+"name": "Hitch",
 "cost": 2,
 "rarity": "X",
 "target": "enemy",
@@ -29764,7 +29764,7 @@
 "arch": "chronomancer"
 },
 "or_accelerate": {
-"name": "Accelerate",
+"name": "Whip",
 "cost": 1,
 "rarity": "X",
 "target": "ally_other",
@@ -29810,7 +29810,7 @@
 "arch": "chronomancer+duelist_momentum"
 },
 "or_clock_face": {
-"name": "Clock Face",
+"name": "Dial",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -29916,7 +29916,7 @@
 "arch": "chronomancer"
 },
 "or_run_back_the_sand": {
-"name": "Run Back the Sand",
+"name": "Sand Funnel",
 "cost": 1,
 "rarity": "X",
 "target": "ally",
@@ -29931,7 +29931,7 @@
 "card": "or_borrowed_time"
 }
 ],
-"text": "A hero heals 3. Next round, a Borrowed Time is added to their hand.",
+"text": "A hero heals 3. Next round, a Night Lamp is added to their hand.",
 "cls": "oracle",
 "use": [
 2,
@@ -29942,7 +29942,7 @@
 "sub": "chronomancer",
 "art": "or_run_back_the_sand",
 "up": {
-"text": "A hero heals 5. Next round, a Borrowed Time is added to their hand.",
+"text": "A hero heals 5. Next round, a Night Lamp is added to their hand.",
 "fx": [
 {
 "t": "heal",
@@ -29960,7 +29960,7 @@
 "arch": "chronomancer"
 },
 "or_read_the_signs": {
-"name": "Read the Signs",
+"name": "Weathercock",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -30026,7 +30026,7 @@
 "arch": "augur"
 },
 "or_wring_the_bird": {
-"name": "Wring the Bird",
+"name": "Sacrifice",
 "cost": 0,
 "rarity": "X",
 "target": "self",
@@ -30179,7 +30179,7 @@
 "arch": "augur"
 },
 "or_rebuke_the_seen": {
-"name": "Rebuke the Seen",
+"name": "Rebuke",
 "cost": 2,
 "rarity": "X",
 "target": "all_enemies",
@@ -30246,7 +30246,7 @@
 "arch": "augur"
 },
 "or_reading_the_knots": {
-"name": "Reading the Knots",
+"name": "Knotwork",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -30353,7 +30353,7 @@
 "arch": "fatebinder+hexweaver_doom"
 },
 "or_red_knot": {
-"name": "Red Knot",
+"name": "Tangle",
 "cost": 0,
 "rarity": "X",
 "target": "self",
@@ -30399,7 +30399,7 @@
 "arch": "fatebinder"
 },
 "or_needle_and_thread": {
-"name": "Needle and Thread",
+"name": "Needlework",
 "cost": 1,
 "rarity": "X",
 "target": "ally_other",
@@ -30549,7 +30549,7 @@
 "arch": "fatebinder+bulwark_rank"
 },
 "or_spill_the_ink": {
-"name": "Spill the Ink",
+"name": "Spilt Ink",
 "cost": 2,
 "rarity": "X",
 "target": "self",
@@ -30597,7 +30597,7 @@
 "arch": "fatebinder"
 },
 "or_the_last_hour": {
-"name": "The Last Hour",
+"name": "Snuffer",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -30664,7 +30664,7 @@
 }
 },
 "or_the_turned_glass": {
-"name": "The Turned Glass",
+"name": "Turned Glass",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -30727,7 +30727,7 @@
 }
 },
 "or_cassandra": {
-"name": "Cassandra",
+"name": "Antlers",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -30789,7 +30789,7 @@
 }
 },
 "or_the_bone_pouch": {
-"name": "The Bone Pouch",
+"name": "Bone Pouch",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -30867,7 +30867,7 @@
 }
 },
 "or_the_rubric": {
-"name": "The Rubric",
+"name": "Book of Hours",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -30934,7 +30934,7 @@
 }
 },
 "or_the_severed_thread": {
-"name": "The Severed Thread",
+"name": "Severed Thread",
 "cost": 2,
 "rarity": "L",
 "target": "enemy",
@@ -31262,7 +31262,7 @@
 "arch": "core"
 },
 "ve_bear_it": {
-"name": "Bear It",
+"name": "Reliquary",
 "cost": 1,
 "rarity": "S",
 "target": "self",
@@ -31300,7 +31300,7 @@
 "arch": "hearth"
 },
 "ve_take_into_me": {
-"name": "Take Into Me",
+"name": "Communion",
 "cost": 1,
 "rarity": "S",
 "target": "ally",
@@ -31344,7 +31344,7 @@
 "arch": "hearth"
 },
 "ve_give_back": {
-"name": "Give Back",
+"name": "Ewer",
 "cost": 1,
 "rarity": "S",
 "target": "enemy",
@@ -31517,7 +31517,7 @@
 "arch": "hearth"
 },
 "ve_stand_near": {
-"name": "Stand Near",
+"name": "Chimney Corner",
 "cost": 1,
 "rarity": "C",
 "target": "adjacent_ally",
@@ -31609,7 +31609,7 @@
 "arch": "hearth+whole"
 },
 "ve_weight_of_it": {
-"name": "The Weight of It",
+"name": "Millstone",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -31652,7 +31652,7 @@
 "arch": "hearth"
 },
 "ve_hearthstone": {
-"name": "Hearthstone",
+"name": "Fireside",
 "cost": 1,
 "rarity": "C",
 "target": "adjacent_ally",
@@ -31700,7 +31700,7 @@
 "arch": "hearth+whole"
 },
 "ve_warm_hands": {
-"name": "Warm Hands",
+"name": "Brazier",
 "cost": 1,
 "rarity": "C",
 "target": "ally",
@@ -31748,7 +31748,7 @@
 "arch": "hearth"
 },
 "ve_shoulder_it": {
-"name": "Shoulder It",
+"name": "Burden",
 "cost": 1,
 "rarity": "C",
 "target": "adjacent_ally",
@@ -31804,7 +31804,7 @@
 "arch": "hearth+bulwark_taunt"
 },
 "ve_come_to_me": {
-"name": "Come to Me",
+"name": "Clarion",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -31850,7 +31850,7 @@
 "arch": "hearth"
 },
 "ve_spit": {
-"name": "Spit",
+"name": "Holy Water",
 "cost": 0,
 "rarity": "C",
 "target": "enemy",
@@ -31952,7 +31952,7 @@
 "arch": "mouth+hearth"
 },
 "ve_mouthful": {
-"name": "Mouthful",
+"name": "Manna",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32003,7 +32003,7 @@
 "arch": "mouth+whole"
 },
 "ve_retch": {
-"name": "Retch",
+"name": "Libation",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32058,7 +32058,7 @@
 "arch": "mouth"
 },
 "ve_taste": {
-"name": "Taste",
+"name": "Salt",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32117,7 +32117,7 @@
 "arch": "mouth+elementalist_courses"
 },
 "ve_other_half": {
-"name": "The Other Half",
+"name": "Diptych",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32168,7 +32168,7 @@
 "arch": "mouth"
 },
 "ve_soak_the_mark": {
-"name": "Soak the Mark",
+"name": "Baptism",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32231,7 +32231,7 @@
 "arch": "mouth+duelist_mark"
 },
 "ve_second_mouthful": {
-"name": "Second Mouthful",
+"name": "Honey",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32294,7 +32294,7 @@
 "arch": "mouth"
 },
 "ve_bitter_gift": {
-"name": "Bitter Gift",
+"name": "Bitter Cup",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32446,7 +32446,7 @@
 "arch": "whole"
 },
 "ve_balance_the_scale": {
-"name": "Balance the Scale",
+"name": "Balance",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -32586,7 +32586,7 @@
 "arch": "whole"
 },
 "ve_copy_the_page": {
-"name": "Copy the Page",
+"name": "Transcribe",
 "cost": 1,
 "rarity": "C",
 "target": "enemy",
@@ -32707,7 +32707,7 @@
 "arch": "whole+elementalist_courses"
 },
 "ve_drink_the_dregs": {
-"name": "Drink the Dregs",
+"name": "Dregs",
 "cost": 1,
 "rarity": "C",
 "target": "self",
@@ -32880,7 +32880,7 @@
 "arch": "hearth"
 },
 "ve_unclench": {
-"name": "Unclench",
+"name": "Almsgiving",
 "cost": 2,
 "rarity": "U",
 "target": "enemy",
@@ -32952,7 +32952,7 @@
 }
 },
 "ve_warm_room": {
-"name": "The Warm Room",
+"name": "Warming Room",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -33010,7 +33010,7 @@
 "arch": "hearth+whole"
 },
 "ve_heavy_air": {
-"name": "Heavy Air",
+"name": "Thurible",
 "cost": 1,
 "rarity": "U",
 "target": "all_enemies",
@@ -33120,7 +33120,7 @@
 "arch": "hearth"
 },
 "ve_bare_skin": {
-"name": "Bare Skin",
+"name": "Stigmata",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -33295,7 +33295,7 @@
 "arch": "mouth+whole"
 },
 "ve_open_palm": {
-"name": "Open Palm",
+"name": "Benediction",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -33423,7 +33423,7 @@
 "arch": "mouth"
 },
 "ve_draw_it_out": {
-"name": "Draw It Out",
+"name": "Crosier",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -33479,7 +33479,7 @@
 "arch": "mouth"
 },
 "ve_spit_through": {
-"name": "Spit Through",
+"name": "Hyssop",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -33536,7 +33536,7 @@
 "arch": "mouth"
 },
 "ve_split_tongue": {
-"name": "Split Tongue",
+"name": "Pentecost",
 "cost": 1,
 "rarity": "U",
 "target": "all_enemies",
@@ -33587,7 +33587,7 @@
 "arch": "mouth"
 },
 "ve_bite": {
-"name": "Bite",
+"name": "Tongs",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -33642,7 +33642,7 @@
 "arch": "mouth+elementalist_courses"
 },
 "ve_open_page": {
-"name": "The Open Page",
+"name": "Lectern",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -33686,7 +33686,7 @@
 "arch": "whole"
 },
 "ve_balanced_hands": {
-"name": "Balanced Hands",
+"name": "Scales",
 "cost": 1,
 "rarity": "U",
 "target": "enemy",
@@ -33747,7 +33747,7 @@
 "arch": "whole"
 },
 "ve_even_breath": {
-"name": "Even Breath",
+"name": "Plainsong",
 "cost": 1,
 "rarity": "U",
 "target": "self",
@@ -33805,7 +33805,7 @@
 "arch": "whole"
 },
 "ve_gather_the_inks": {
-"name": "Gather the Inks",
+"name": "Gleaning",
 "cost": 1,
 "rarity": "U",
 "target": "all_enemies",
@@ -34132,7 +34132,7 @@
 }
 },
 "ve_lay_it_down": {
-"name": "Lay It Down",
+"name": "Bier",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -34241,7 +34241,7 @@
 "arch": "hearth+whole"
 },
 "ve_drink_the_spill": {
-"name": "Drink the Spill",
+"name": "Chalice",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -34323,7 +34323,7 @@
 }
 },
 "ve_return_it": {
-"name": "Return It",
+"name": "Mirror of Justice",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -34444,7 +34444,7 @@
 "arch": "whole"
 },
 "ve_take_their_place": {
-"name": "Take Their Place",
+"name": "Vicar",
 "cost": 1,
 "rarity": "R",
 "target": "adjacent_ally",
@@ -34508,7 +34508,7 @@
 "arch": "hearth"
 },
 "ve_speak_to_all": {
-"name": "Speak to All",
+"name": "Pulpit",
 "cost": 1,
 "rarity": "R",
 "target": "all_enemies",
@@ -34617,7 +34617,7 @@
 "arch": "hearth+whole"
 },
 "ve_swallow_whole": {
-"name": "Swallow Whole",
+"name": "Last Rites",
 "cost": 1,
 "rarity": "R",
 "target": "enemy",
@@ -34679,7 +34679,7 @@
 "arch": "mouth+hexweaver_doom"
 },
 "ve_keep_the_hours": {
-"name": "Keep the Hours",
+"name": "Hour Candle",
 "cost": 1,
 "rarity": "R",
 "target": "self",
@@ -34740,7 +34740,7 @@
 }
 },
 "ve_carry_them": {
-"name": "Carry Them",
+"name": "Laden Basket",
 "cost": 2,
 "rarity": "X",
 "target": "all_allies",
@@ -34829,7 +34829,7 @@
 "arch": "hearth+whole"
 },
 "ve_lend_weight": {
-"name": "Lend Weight",
+"name": "Plummet",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -34880,7 +34880,7 @@
 "arch": "hearth"
 },
 "ve_spread_arms": {
-"name": "Spread Arms",
+"name": "Cope",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -34923,7 +34923,7 @@
 "arch": "hearth"
 },
 "ve_warm_breath": {
-"name": "Warm Breath",
+"name": "Posset",
 "cost": 1,
 "rarity": "X",
 "target": "all_allies",
@@ -34970,7 +34970,7 @@
 "arch": "hearth+whole"
 },
 "ve_full_weight": {
-"name": "Full Weight",
+"name": "Winepress",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35026,7 +35026,7 @@
 "arch": "hearth"
 },
 "ve_chew": {
-"name": "Chew",
+"name": "Grind",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35098,7 +35098,7 @@
 "arch": "mouth"
 },
 "ve_double_spit": {
-"name": "Double Spit",
+"name": "Cruet",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35156,7 +35156,7 @@
 "arch": "mouth"
 },
 "ve_far_spit": {
-"name": "Far Spit",
+"name": "Long Spoon",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35218,7 +35218,7 @@
 "arch": "mouth"
 },
 "ve_chain_word": {
-"name": "Chain Word",
+"name": "Litany",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35280,7 +35280,7 @@
 "arch": "mouth"
 },
 "ve_flood_the_line": {
-"name": "Flood the Line",
+"name": "Flood",
 "cost": -1,
 "rarity": "X",
 "target": "all_enemies",
@@ -35358,7 +35358,7 @@
 "arch": "mouth"
 },
 "ve_gorge": {
-"name": "Gorge",
+"name": "Brazen Laver",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35383,7 +35383,7 @@
 "to": "self"
 }
 ],
-"text": "Take every course stack on the target. Gain 1 Block per stack taken, at most 10. Put a Temporary Spit into your next hand.",
+"text": "Take every course stack on the target. Gain 1 Block per stack taken, at most 10. Put a Temporary Holy Water into your next hand.",
 "cls": "vessel",
 "use": [
 2,
@@ -35398,7 +35398,7 @@
 "sub": "mouth",
 "art": "ve_gorge",
 "up": {
-"text": "Take every course stack on the target. Gain 2 Block, plus 1 per stack taken, at most 14 in all. Put a Temporary Spit into your next hand.",
+"text": "Take every course stack on the target. Gain 2 Block, plus 1 per stack taken, at most 14 in all. Put a Temporary Holy Water into your next hand.",
 "fx": [
 {
 "t": "take",
@@ -35426,7 +35426,7 @@
 "arch": "mouth+whole"
 },
 "ve_keep_her_quiet": {
-"name": "Keep Her Quiet",
+"name": "Silence",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35491,7 +35491,7 @@
 "arch": "whole+mouth"
 },
 "ve_six_bands": {
-"name": "Six Bands",
+"name": "Armlet",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -35548,7 +35548,7 @@
 "arch": "whole"
 },
 "ve_level_hands": {
-"name": "Level Hands",
+"name": "Mason's Level",
 "cost": 1,
 "rarity": "X",
 "target": "self",
@@ -35659,7 +35659,7 @@
 "arch": "whole"
 },
 "ve_gilded_page": {
-"name": "Gilded Page",
+"name": "Gilding",
 "cost": 1,
 "rarity": "X",
 "target": "enemy",
@@ -35762,7 +35762,7 @@
 "arch": "whole"
 },
 "ve_hearth_kept": {
-"name": "The Hearth Kept",
+"name": "Hearth Kept",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -35816,7 +35816,7 @@
 }
 },
 "ve_weight_of_the_world": {
-"name": "The Weight of the World",
+"name": "World's Weight",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -35862,7 +35862,7 @@
 }
 },
 "ve_unstopped_mouth": {
-"name": "The Unstopped Mouth",
+"name": "Endless Flagon",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -35916,7 +35916,7 @@
 }
 },
 "ve_mothers_tongue": {
-"name": "The Mother's Tongue",
+"name": "Mother Tongue",
 "cost": 1,
 "rarity": "L",
 "target": "self",
@@ -36121,7 +36121,7 @@
 "arch": "whole+mouth"
 },
 "ve_mothers_place": {
-"name": "The Mother's Place",
+"name": "Mother's Place",
 "cost": 2,
 "rarity": "L",
 "target": "self",
@@ -36246,7 +36246,7 @@
 }
 },
 "t_ve_spit": {
-"name": "Spit",
+"name": "Holy Water",
 "cost": 0,
 "rarity": "T",
 "target": "enemy",
@@ -37204,7 +37204,7 @@
 "world": "drowned"
 },
 "w_drowned_bells_silent": {
-"name": "The Bells Fall Silent",
+"name": "Silent Bells",
 "cost": 1,
 "rarity": "W",
 "target": "all_allies",
@@ -37475,7 +37475,7 @@
 "world": "fleet"
 },
 "w_fleet_frozen_to_the_rail": {
-"name": "Frozen to the Rail",
+"name": "Frozen Rail",
 "cost": 1,
 "rarity": "W",
 "target": "self",
@@ -37759,7 +37759,7 @@
 "world": "foundry"
 },
 "w_foundry_out_of_the_splash": {
-"name": "Out of the Splash",
+"name": "Leap Clear",
 "cost": 1,
 "rarity": "W",
 "target": "adjacent_ally",
@@ -37906,7 +37906,7 @@
 "world": "garden"
 },
 "w_garden_take_the_rot": {
-"name": "Take the Rot Out",
+"name": "Uproot",
 "cost": 1,
 "rarity": "W",
 "target": "enemy",
@@ -38301,7 +38301,7 @@
 "attr": "stable"
 }
 ],
-"text": "Retch it up: gain 1 Toxin. Exhaust. Until it is played it comes back with every reshuffle; removed at fight end.",
+"text": "Libation it up: gain 1 Toxin. Exhaust. Until it is played it comes back with every reshuffle; removed at fight end.",
 "cls": "world_mire",
 "use": [
 1,
@@ -39494,7 +39494,7 @@
 "world": "silence"
 },
 "w_silence_star_comes_down": {
-"name": "The Star Comes Down",
+"name": "Falling Star",
 "cost": 2,
 "rarity": "W",
 "target": "all_enemies",
@@ -39881,7 +39881,7 @@
 "world": "spire"
 },
 "w_spire_second_hand": {
-"name": "Second Hand",
+"name": "Minute Hand",
 "cost": 0,
 "rarity": "W",
 "target": "self",

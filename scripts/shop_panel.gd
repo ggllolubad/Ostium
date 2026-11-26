@@ -520,7 +520,7 @@ func _build_almonry() -> void:
 	_head("The Belt", Vector2(rp[0], rp[1] - 6), rp[2], RUBRIC, 28)
 	var belt: Array = Run.meta.provisions.belt
 	for i in int(Run.meta.belt_max):
-		_slot(Vector2(rp[0] + rp[2] / 2 - int(Run.meta.belt_max) * 38 + i * 76, rp[1] + 44), 68, belt[i] if i < belt.size() else "", func(): pass, "", Data.CARDS[belt[i]].text if i < belt.size() else "An empty loop. A Healing Draught is given free if the belt goes out bare.")
+		_slot(Vector2(rp[0] + rp[2] / 2 - int(Run.meta.belt_max) * 38 + i * 76, rp[1] + 44), 68, belt[i] if i < belt.size() else "", func(): pass, "", Data.CARDS[belt[i]].text if i < belt.size() else "An empty loop. A Wineskin is given free if the belt goes out bare.")
 	_head("The Armoury", Vector2(rp[0], rp[1] + 128), rp[2], RUBRIC, 28)
 	_lbl("Fenn buys back at %d in the hundred." % int(round(float(Abbey.A.almonry.sell_rate) * 100)), Vector2(rp[0], rp[1] + 170), Vector2(rp[2], 22), 15, UiStyle.font_it, BROWN, HORIZONTAL_ALIGNMENT_CENTER)
 	var arm: Array = Run.meta.armoury
