@@ -75,7 +75,7 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	cost_bg.add_child(cost)
 	cost_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top.add_child(cost_bg)
-	var nm := UiStyle.label(c.name, 17 if c.name.length() < 16 else 14, UiStyle.font_sc)
+	var nm := UiStyle.label(c.name, _fit_size(UiStyle.font_sc, c.name, W - 18 - 28 - 22 - 14, 17, 11), UiStyle.font_sc)
 	nm.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	nm.clip_text = true
@@ -109,7 +109,26 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	tl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	tl.clip_text = true
 	v.add_child(tl)
-	var rules := UiStyle.rich(15)
+	# Fit the rules (and the flavour, which goes first) into the space under the art: shrink the rules text down to
+	# 10 rather than let it run off the card.
+	var fl: String = c.get("flavour", "")
+	var rules_fs := 15
+	var room := float(H - 16) - 28.0 - 86.0 - 16.0 - 9.0
+	var flav_h := 0.0
+	if fl != "" and UiStyle.font_it != null:
+		flav_h = UiStyle.font_it.get_multiline_string_size(fl, HORIZONTAL_ALIGNMENT_CENTER, W - 22, 12).y + 3.0
+	var plain: String = c.text
+	if UiStyle.font_rm != null:
+		while rules_fs > 10:
+			var need := UiStyle.font_rm.get_multiline_string_size(plain, HORIZONTAL_ALIGNMENT_CENTER, W - 22, rules_fs).y * 1.15
+			if need <= room - flav_h:
+				break
+			if flav_h > 0.0 and rules_fs <= 13:
+				flav_h = 0.0
+				fl = ""
+				continue
+			rules_fs -= 1
+	var rules := UiStyle.rich(rules_fs)
 	rules.text = "[center]" + UiStyle.rules_links(c.text) + "[/center]"
 	rules.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rules.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -117,13 +136,21 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	rules.meta_hover_started.connect(_kw_on)
 	rules.meta_hover_ended.connect(_kw_off)
 	v.add_child(rules)
-	var fl: String = c.get("flavour", "")
 	if fl != "":
 		var fr := UiStyle.label(fl, 12, UiStyle.font_it, UiStyle.BROWN)
 		fr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		fr.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		fr.custom_minimum_size = Vector2(W - 22, 0)
 		v.add_child(fr)
+
+## The largest font size from hi down to lo at which text fits in width on one line.
+static func _fit_size(font: Font, text: String, width: float, hi: int, lo: int) -> int:
+	if font == null:
+		return hi
+	for fs in range(hi, lo - 1, -1):
+		if font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x <= width:
+			return fs
+	return lo
 
 var _kw_tip: PanelContainer = null
 
