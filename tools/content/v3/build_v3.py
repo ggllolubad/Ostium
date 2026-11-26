@@ -84,14 +84,16 @@ for _k, _c in cr.CREATURES.items():
 FX = {"dmg", "coup", "dmg_per_element", "block", "self_block", "block_target", "armor", "ward", "status", "self_status", "clear",
       "apply", "apply_x", "apply_attuned", "apply_next", "apply_missing", "react", "attune", "attune_to", "push", "pull", "advance",
       "retreat", "to_front", "swap", "guard", "guard_weakest", "prime", "bash_stun", "heal", "stress", "self_stress", "self_dmg",
-      "draw", "energy", "add", "consume", "double", "spread", "convert", "cleanse", "transfer", "execute", "delay", "turn",
+      "draw", "energy", "bank", "add", "consume", "double", "spread", "convert", "cleanse", "transfer", "execute", "delay", "turn",
       "steal_block", "omen", "cap", "grit", "kill_self_hp", "stress_take",
       "brew", "refill", "improve", "unbind", "discard_random", "lose_armor", "summon", "take", "give", "even", "lose_hp"}
 QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies", "allies", "allies_dd", "same_target", "round",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
-      "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used"}
+      "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used",
+      "vigour_left", "vigour_spent", "vigour_pool", "cost", "ordo_pos", "ordo_len", "ordo_after", "spent_before", "heroes_before",
+      "handoff", "first", "last"}
 STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "taunt", "thorns", "dodge", "regen",
-          "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown", "empower"}
+          "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown", "empower", "thrift"}
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}
 QU = {"hp", "max_hp", "block", "armor", "ward", "stress", "grit", "omen", "played", "resolve", "missing_hp", "hp_pct", "dd", "rank",
       "elements", "spectrum", "el_total", "el_max", "attuned", "attacking", "targeting_me", "moved", "exhaust", "discard", "hand",
@@ -330,7 +332,7 @@ rows = budget.report(dsl.CARDS)
 flagged = [r for r in rows if r["flag"]]
 
 # ------------------------------------------------------------------ write
-out = os.path.join(ROOT, "build", "data_v3" if not only else "data_v3_partial")
+out = os.path.join(ROOT, "build", "data_v3" if not only else "data_v3_partial_" + "_".join(sorted(only)))   # one folder per module set, so parallel builds do not collide
 os.makedirs(out, exist_ok=True)
 json.dump(dsl.CARDS, open(os.path.join(out, "cards.json"), "w"), indent=0)
 json.dump(heroes, open(os.path.join(out, "heroes.json"), "w"), indent=1)

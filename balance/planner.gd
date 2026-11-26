@@ -104,7 +104,7 @@ static func _add_card(out: Array, st: Dictionary, h: Dictionary, cid: String, sr
 	var c: Dictionary = Data.CARDS[cid]
 	if c.target == "none":
 		return
-	var cost: int = c.cost if c.cost >= 0 else energy
+	var cost: int = Combat.cost_of(st, h, cid) if c.cost >= 0 else energy
 	if cost > energy or (c.cost < 0 and cost == 0):
 		return
 	var base = {"hero": h.id, "card": cid, "source": src, "hand_index": idx, "target": -1, "x": cost, "cost": cost}

@@ -22,6 +22,7 @@ var rest_scale := 1.0
 var lift_pos := Vector2.ZERO
 var _tw: Tween
 var badge := ""
+var cost_label: Label = null
 const RARITY_COL := {"S": Color("6f5036"), "K": Color("6f5036"), "C": Color("2b1d12"), "U": Color("3f6fa0"), "R": Color("a9822f"), "X": Color("6d5a8a"), "F": Color("62804f"), "Curse": Color("9c3d2b")}
 
 static var _art_cache := {}
@@ -64,6 +65,7 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	var top := HBoxContainer.new()
 	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var cost := UiStyle.label("X" if c.cost < 0 else str(c.cost), 18, UiStyle.font_sc)
+	cost_label = cost
 	var cost_bg := PanelContainer.new()
 	var csb := UiStyle.box(UiStyle.GOLD, UiStyle.INK, 2)
 	csb.set_corner_radius_all(14)
@@ -180,6 +182,14 @@ func unlift() -> void:
 	_hover = false
 	z_index = 0
 	_go(rest_pos, rest_rot, rest_scale)
+
+## Shows a cost other than the printed one (Thrift); green when cheaper.
+func set_cost(n: int) -> void:
+	var c: Dictionary = Data.CARDS.get(card_id, {})
+	if cost_label == null or c.is_empty() or c.cost < 0 or n == int(c.cost):
+		return
+	cost_label.text = str(n)
+	cost_label.add_theme_color_override("font_color", Color("3d6b35"))
 
 func set_state(q: int, can_play: bool) -> void:
 	queued_at = q

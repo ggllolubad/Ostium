@@ -846,7 +846,10 @@ func _rebuild_hand() -> void:
 			var py: float = ROW_Y - 8 - UiCard.H + off * off * 3.0
 			cv.fan(Vector2(px, py), deg_to_rad(off * 4.0), FAN_SCALE, Vector2(clamp(cx + off * spacing - UiCard.W / 2.0, 4.0, 1596.0 - UiCard.W), 996.0 - UiCard.H))
 			var c: Dictionary = Data.CARDS[h.hand[i]]
-			var cost: int = c.cost if c.cost >= 0 else 1
+			var ps: Dictionary = preview.state if not preview.is_empty() else s
+			var cost: int = Combat.cost_of(ps, Combat.find(ps, h.id), h.hand[i]) if c.cost >= 0 else 1
+			if c.cost >= 0:
+				cv.set_cost(cost)
 			cv.set_state(-1, cost <= energy_left() and c.target != "none" and h.st.freeze == 0)
 			hand_layer.add_child(cv)
 	# belt flasks
@@ -1177,7 +1180,8 @@ func on_card_clicked(hid: int, idx: int) -> void:
 	if h.st.freeze > 0:
 		_hint("%s is frozen and may only use kit skills this round." % h.name)
 		return
-	var cost: int = c.cost
+	var ps: Dictionary = preview.state if not preview.is_empty() else s
+	var cost: int = Combat.cost_of(ps, Combat.find(ps, hid), cid) if c.cost >= 0 else c.cost
 	var x := 0
 	if c.cost < 0:
 		x = energy_left()

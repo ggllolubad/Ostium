@@ -42,7 +42,7 @@ static func _blank_unit(s: Dictionary) -> Dictionary:
 	return {"id": id, "hp": 1, "max_hp": 1, "block": 0, "armor": 0, "ward": 0, "dead": false, "elements": el, "fresh": fr,
 		"st": {"bleed": 0, "stun": 0, "mark": 0, "vulnerable": 0, "might": 0, "focus": 0, "momentum": 0, "riposte": 0,
 			"taunt": 0, "tenacity": 0, "freeze": 0, "freeze_bonus": 0, "neuro": 0, "silence": 0, "blight": 0, "lockdown": 0,
-			"thorns": 0, "dodge": 0, "regen": 0, "hex": 0, "doom": 0, "fortify": 0, "anchor": 0, "cap": 0, "charge": 0, "empower": 0},
+			"thorns": 0, "dodge": 0, "regen": 0, "hex": 0, "doom": 0, "fortify": 0, "anchor": 0, "cap": 0, "charge": 0, "empower": 0, "thrift": 0},
 		"hollow": false, "moved": false, "guarded_by": -1, "postponed": false, "turned": -1, "omen": 0, "scars": 0,
 		"held": {"fire": 0, "frost": 0, "lightning": 0, "water": 0, "toxin": 0, "void": 0}}
 
@@ -185,6 +185,7 @@ static func start_round(s: Dictionary) -> void:
 	s.first_actor_prev = s.get("first_actor", -1)
 	s.first_actor = -1
 	s.last_actor = -1
+	s.prev_actor = -1
 	s.echoes = []
 	s.triggers = {}
 	s.lockdown_used = {}
@@ -402,6 +403,16 @@ static func intent_of(e: Dictionary) -> Dictionary:
 # ------------------------------------------------------------------ planning
 ## Locked-down heroes act last; otherwise the plan keeps the player's order.
 static func order_plan(s: Dictionary, plan: Array) -> Array:
+	# the Ordo's vigour ledger, read by cards as quantities (Gate 3 interaction pass)
+	var spent := 0
+	for a in plan:
+		spent += int(a.get("cost", 0))
+	s.vigour_spent = spent
+	s.vigour_left = max(0, int(s.get("energy", 0)) - spent)
+	s.ordo_len = plan.size()
+	s.ordo_pos = 0
+	s.ordo_spent_before = 0
+	s.ordo_heroes = []
 	var first := []
 	var last := []
 	for a in plan:
@@ -411,6 +422,13 @@ static func order_plan(s: Dictionary, plan: Array) -> Array:
 		else:
 			first.append(a)
 	return first + last
+
+## The vigour a card costs this hero now: Thrift takes 1 off each of its next cards (never below 0). X costs return -1.
+static func cost_of(s: Dictionary, h: Dictionary, cid: String) -> int:
+	var c := card(cid)
+	if c.cost < 0:
+		return -1
+	return max(0, int(c.cost) - (1 if not h.is_empty() and h.st.get("thrift", 0) > 0 else 0))
 
 ## "" when the action is legal against state `s` (the state at that point of the plan), else a reason.
 static func check_action(s: Dictionary, a: Dictionary) -> String:
@@ -533,8 +551,14 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		s.first_actor = h.id
 	s.last_actor = h.id
 	s.acted_last = h.id
+	var handoff: bool = s.get("prev_actor", -1) != -1 and s.get("prev_actor", -1) != h.id
+	if not a.get("echo", false):
+		s.ordo_pos = int(s.get("ordo_pos", 0)) + 1
 	var ctx := {"x": a.get("x", 0), "half": a.get("echo", false), "prime": 0 if a.get("echo", false) else s.prime,
-		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target}
+		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target,
+		"cost": int(a.get("cost", 0)), "handoff": handoff, "heroes_before": s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)}
+	if a.get("source", "") == "hand" and h.st.get("thrift", 0) > 0 and not a.get("echo", false):
+		h.st.thrift -= 1   # Thrift: this card was planned at 1 less
 	if not a.get("echo", false):
 		s.prime = 0   # this action's own Prime effects build the next action's Prime
 	var targets := _targets_for(s, h, c, a)
@@ -553,6 +577,11 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		s.prime += int(ctx.prime)   # Prime this action could not use carries to the next one (Gate 3)
 	s.last_target = a.get("target", -1)
 	h.played += 1
+	if not a.get("echo", false):
+		s.prev_actor = h.id
+		s.ordo_spent_before = int(s.get("ordo_spent_before", 0)) + int(a.get("cost", 0))
+		if not s.get("ordo_heroes", []).has(h.id):
+			s.ordo_heroes = s.get("ordo_heroes", []) + [h.id]
 	if a.get("source", "") == "belt":
 		_rite_fire(s, "flask", h)
 	elif not a.get("echo", false):
@@ -717,6 +746,18 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		key = name.substr(2)
 	match key:
 		"x": return ctx.get("x", 0)
+		"vigour_left": return s.get("vigour_left", 0)
+		"vigour_spent": return s.get("vigour_spent", 0)
+		"vigour_pool": return s.get("energy", 0)
+		"cost": return ctx.get("cost", 0)
+		"ordo_pos": return s.get("ordo_pos", 0)
+		"ordo_len": return s.get("ordo_len", 0)
+		"ordo_after": return max(0, int(s.get("ordo_len", 0)) - int(s.get("ordo_pos", 0)))
+		"spent_before": return s.get("ordo_spent_before", 0)
+		"heroes_before": return ctx.get("heroes_before", 0)
+		"handoff": return 1 if ctx.get("handoff", false) else 0
+		"first": return 1 if int(s.get("ordo_pos", 0)) == 1 else 0
+		"last": return 1 if int(s.get("ordo_pos", 0)) >= int(s.get("ordo_len", 0)) else 0
 		"consumed": return ctx.get("consumed", 0)
 		"dealt": return ctx.get("dealt", 0)
 		"killed": return 1 if ctx.get("killed", false) else 0
@@ -1171,6 +1212,12 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			if t.side == "hero":
 				t.bonus_draw += n
 				_ev(s, {"t": "status", "unit": t.id, "text": "+%d draw next round" % n})
+		"bank":
+			var kept: int = min(n, int(s.get("vigour_left", 0)))
+			if kept > 0:
+				s.bonus_energy += kept
+				s.vigour_left -= kept
+				_ev(s, {"t": "status", "unit": actor.id, "text": "%d vigour banked" % kept})
 		"energy":
 			s.bonus_energy += n
 			_ev(s, {"t": "status", "unit": actor.id, "text": "+%d vigour next round" % n})

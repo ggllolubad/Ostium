@@ -29,6 +29,10 @@ const REACTIONS := {
 }
 
 const KEYWORDS := {
+	"Thrift": "Each Thrift makes this hero's next card cost 1 less vigour (never below 0).",
+	"Bank": "Vigour left unspent this round, up to the number given, carries over to next round.",
+	"Handoff": "This card is played straight after a card from a different hero in the Ordo.",
+	"Vigour": "The company's shared energy for the round. Cards spend it when the Ordo is set.",
 	"Block": "Absorbs damage. Clears at the start of each round.",
 	"Armor": "Reduces each hit by its value. Persists.",
 	"Ward": "Negates the next N element stacks applied.",

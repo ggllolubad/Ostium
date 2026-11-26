@@ -256,5 +256,47 @@ func _init() -> void:
 	Combat.end_round(sv)
 	ok(f1 == 4 and ves.held.fire == 3, "held stacks laid this round stay, then fall by 1 a round (fire %d then %d)" % [f1, ves.held.fire])
 
+	# --- Vigour and Ordo reads (interaction pass): vigour left, spent, cost, position, handoff; Thrift; Bank
+	card("t_left", {"fx": [{"t": "block", "n": 0, "per": "vigour_left", "k": 3}]})
+	card("t_spent", {"fx": [{"t": "block", "n": 0, "per": "vigour_spent", "k": 1}]})
+	card("t_hand", {"fx": [{"t": "block", "n": 0, "per": "handoff", "k": 5}]})
+	card("t_pos", {"fx": [{"t": "block", "n": 0, "per": "ordo_pos", "k": 1}]})
+	card("t_thrift", {"fx": [{"t": "self_status", "s": "thrift", "n": 1}]})
+	card("t_bank", {"fx": [{"t": "bank", "n": 2}]})
+	var vg := fresh()
+	vg.energy = 6
+	var vb: Dictionary = vg.heroes[0]
+	var vd: Dictionary = vg.heroes[1]
+	var vplan := [{"hero": vb.id, "card": "t_spent", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 2},
+		{"hero": vd.id, "card": "t_hand", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 1},
+		{"hero": vd.id, "card": "t_pos", "source": "hand", "hand_index": 1, "target": -1, "x": 0, "cost": 0},
+		{"hero": vb.id, "card": "t_left", "source": "hand", "hand_index": 1, "target": -1, "x": 0, "cost": 1}]
+	vb.hand = ["t_spent", "t_left"]
+	vd.hand = ["t_hand", "t_pos"]
+	vb.block = 0
+	vd.block = 0
+	for a in Combat.order_plan(vg, vplan):
+		Combat.resolve_player_action(vg, a)
+	ok(vg.vigour_spent == 4 and vg.vigour_left == 2, "Ordo ledger: 4 spent, 2 left of 6 (%d, %d)" % [vg.vigour_spent, vg.vigour_left])
+	ok(vb.block >= 4 + 6, "per vigour_spent (4) and per vigour_left x3 (6) both read (block %d)" % vb.block)
+	ok(vd.block >= 5 + 3, "handoff after another hero gives 5, ordo position 3 gives 3 (block %d)" % vd.block)
+	var vt := fresh()
+	var vh: Dictionary = vt.heroes[0]
+	play(vt, vh, "t_thrift")
+	ok(vh.st.thrift == 1 and Combat.cost_of(vt, vh, "t_hit") == 0, "Thrift makes the next card cost 1 less")
+	var va := {"hero": vh.id, "card": "t_hit", "source": "hand", "hand_index": 0, "target": vt.enemies[0].id, "x": 0, "cost": 0}
+	vh.hand = ["t_hit"]
+	Combat.resolve_player_action(vt, va)
+	ok(vh.st.thrift == 0, "Thrift is spent by the card it discounted")
+	var vbk := fresh()
+	vbk.energy = 5
+	var vhb: Dictionary = vbk.heroes[0]
+	vhb.hand = ["t_bank"]
+	var vpb := [{"hero": vhb.id, "card": "t_bank", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 1}]
+	vbk.bonus_energy = 0
+	for a in Combat.order_plan(vbk, vpb):
+		Combat.resolve_player_action(vbk, a)
+	ok(vbk.bonus_energy == 2, "Bank 2 keeps 2 of the 4 unspent vigour for next round (%d)" % vbk.bonus_energy)
+
 	print("FAILS: %d" % fails)
 	quit()
