@@ -145,6 +145,7 @@ const ROMAN := ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI
 
 ## The Ostium: fifteen doors laid out along the road (data/story.json), five acts of three.
 func show_hub() -> void:
+	Abbey.sync_debug_roster()
 	Run.meta_load()
 	if not Run.door_open(hub_world):
 		hub_world = "drowned"

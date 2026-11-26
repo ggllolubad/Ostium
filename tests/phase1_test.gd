@@ -82,6 +82,12 @@ func _versions() -> void:
 	UiStyle.settings["playtest_all"] = true
 	ok(Data.CLASS_ORDER.all(func(k): return Run.class_unlocked(k)), "playtest on: every calling is unlocked")
 	ok(Data.STORY.order.all(func(w): return Run.door_open(w)), "debug on: every door is open")
+	Abbey.sync_debug_roster()
+	ok(Data.CLASS_ORDER.all(func(k): return Run.meta.roster.any(func(h): return h.key == k)), "debug on: the book holds a hero of every calling")
+	UiStyle.settings["playtest_all"] = false
+	Abbey.sync_debug_roster()
+	ok(not Run.meta.roster.any(func(h): return h.get("debug", false)), "debug off: debug heroes leave the book")
+	UiStyle.settings["playtest_all"] = true
 	UiStyle.settings["playtest_all"] = false
 	ok(not Run.door_open(Data.STORY.order[Data.STORY.order.size() - 1]) or Run.meta.cleared.size() == Data.STORY.order.size(), "debug off: the last door is sealed again")
 	UiStyle.settings["playtest_all"] = true

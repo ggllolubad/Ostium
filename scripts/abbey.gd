@@ -72,6 +72,34 @@ static func make_hero(key: String, reason: String, level := 1) -> Dictionary:
 		h.level = level
 	return h
 
+## Debug switch: while it is on, the book holds a hero of every calling (marked "debug"), so all seven can be
+## chosen at the cross. Turning it off takes those debug heroes back out of the book and the company.
+static func sync_debug_roster() -> void:
+	var changed := false
+	if Run.playtest_all():
+		for key in Data.CLASS_ORDER:
+			var have := false
+			for h in Run.meta.roster:
+				if h.key == key and not h.get("dead", false):
+					have = true
+			if not have:
+				var h := make_hero(key, pick(A.reasons.keys()))
+				h["debug"] = true
+				Run.meta.roster.append(h)
+				changed = true
+	else:
+		var keep := []
+		for h in Run.meta.roster:
+			if h.get("debug", false):
+				Run.meta.party.erase(h.id)
+				Run.meta.party.erase(float(h.id))
+				changed = true
+			else:
+				keep.append(h)
+		Run.meta.roster = keep
+	if changed:
+		save()
+
 static func hero(id: int) -> Dictionary:
 	for h in Run.meta.roster:
 		if int(h.id) == id:

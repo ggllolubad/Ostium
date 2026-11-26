@@ -11,7 +11,7 @@
     "elementalist": ["Anselm", "Hesper", "Quill", "Ottilie", "Bede", "Maren", "Silvan", "Wynn", "Ivo", "Clemence", "Aldous", "Petronel"],
     "alchemist": ["Gisla", "Fulke", "Hilde", "Mabel", "Odo", "Rosamund", "Jory", "Agnes", "Wymond", "Sabeth", "Hamo", "Elfled"],
     "oracle": ["Seraphine", "Tobit", "Ilse", "Ambrose", "Nell", "Josse", "Cyra", "Lazar", "Beatrix", "Emeric", "Una", "Dunstan"],
-    "hexweaver": ["Grizel", "Mortimer", "Hagne", "Lowri", "Crispin", "Nesta", "Ulric", "Branwen", "Silas", "Morgause", "Fennick", "Wenda"]
+    "hexweaver": ["Grizel", "Mortimer", "Hagne", "Lowri", "Crispin", "Nesta", "Ulric", "Branwen", "Silas", "Morgause", "Fennick", "Wenda"], "vessel": ["Agnes", "Bede", "Clement", "Dunstan", "Etheldreda", "Hilda", "Jerome", "Leoba", "Margery", "Odo", "Petronel", "Wulfstan"]
   },
   "epithets": ["the Grey", "of the Gate", "Half-Hand", "the Younger", "the Quiet", "Ninefingers", "of Saltmarsh", "the Burnt", "Crowfoot", "the Penitent", "Longshanks", "of No House"],
   "reasons": {
