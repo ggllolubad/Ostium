@@ -105,8 +105,9 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
   - **Picking:** `pickObject` takes the per-card `o.device`, then the forced-name and noun table `NOUNS` (the name
     first), then `audit.json`, then the note nouns, then the calling or the course. In a full run, objects past 20 cards
     spread over `FAMILY`.
-  - **Allocation per batch** (`allocate`): layouts capped at 30%; a unique (object, variant, layout); about a quarter of
-    the cards get a hand, each at a free entry angle; only layouts the object can fill (`fillOf`).
+  - **The card's plan** (`planOf`, L57): layout, variant, hand angle and framing style come from a hash of the card's id
+    and object, never from the batch, so review art is production art; only layouts the object can fill (`fillOf`).
+    Grip objects go to a hand 80% of the time; close is weighted down. The batch checks verify the result.
   - **Layouts:** close, ledge, table, floor, niche, hang (hook only), water (anchor, skull, bell, keg), held (grip only)
     and scene (whole-frame objects: the door, birds, the anvil, the bandaged arms, gold leaf, the ink arm).
   - **Placement:** scale to fill, keep `sig` 95% inside with a 20 px margin, then grow toward the fill while the
@@ -134,7 +135,10 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
 - On the cool grounds (water, frost, void, lightning) the pool is lifted and the subject back-lit (L49).
 - A long thin object is shown by its distinctive part, close, with no hand (L50). A count is shown as marks on one object,
   not as a set (L51).
-- Retired objects (`RETIRED` in objcomp.js) redirect every card that would draw them (L52).
+- Retired objects (`RETIRED` in objcomp.js) redirect every card that would draw them (L52). In round 8 the scourge
+  went to the barbs and the inkpot to the scroll.
+- Warm brown objects get the slate ground (L54); pale paper keeps a dark one. Small round things are never held (L53).
+  One object per card, with no secondary props (L56).
 - **Vessel cards** are object cards, except the ids in vessel_hero_ids.txt. They draw from the Vessel's own set (palm,
   offering bowl, ewer, chalice, weights, initial, seal, hearth, reliquary, candle, mantle), picked by `VESSEL_WORDS`.
   Gold on them is worn gilt (`#9a8450`).

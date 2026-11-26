@@ -59,7 +59,7 @@ O.shears = (f, o = {}) => { // a surgeon's iron shears, open, cutting a strip of
   }
   f.part(F(ell(piv, 16, 16, 0, 12)), { fill: IRONL, shade: 0.4, inkW: 1.6 }); f.rivet(F([piv])[0], 5, '#c8c8c4');
   D.bloom(f, F([[-80, 120]])[0], 16, '#5a2a12', { n: 3 });
-  return { focus: F([[0, -100]])[0], sig: SB(F, [-200, -340, 200, 290]), feat: [], ells: [] };
+  return { focus: F([[0, -100]])[0], sig: SB(F, [-200, -340, 200, 290]), grip: { c: F([[-120, 230]])[0], thumb: (o.ang ?? -0.5) - Math.PI / 2 }, feat: [], ells: [] };
 };
 O.laundry = (f, o = {}) => { // clean linen hung over a cord to dry: one sheet in deep folds, two wooden pegs, the cord sagging from a post
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, cord = [[-330, -250], [-120, -214], [100, -206], [330, -236]];
@@ -303,7 +303,8 @@ O.goldleaf = (f, o = {}) => { // one big torn sheet of gold leaf, crinkled into 
   const F = frame([0, 0], o.ang ?? -0.12, 1), r = f.r;
   const sheet = [[-230, -150], [-120, -175], [0, -160], [120, -185], [230, -150], [220, -40], [250, 60], [220, 160], [100, 175], [-20, 150], [-130, 180], [-240, 150], [-215, 40], [-245, -60]];
   D.slab(f, F(sheet), [6, 10], '#3a2e14'); f.part(F(sheet), { fill: GILT, shade: 0.35, inkW: 2, sharp: true, tex: T(f, 'mottle'), texOp: 0.4 });
-  for (let i = 0; i < 40; i++) { const c = [-210 + r() * 420, -150 + r() * 300], q = [c, add(c, [30 + r() * 20, -8 + r() * 16]), add(c, [10 + r() * 16, 24 + r() * 14])]; f.flat(F(q), r() < 0.45 ? '#f0e4b0' : '#5a4818', { op: 0.7 }); } // the crinkle catching light
+  for (let i = 0; i < 110; i++) { const c = [-220 + r() * 440, -160 + r() * 320], q = [c, add(c, [24 + r() * 20, -8 + r() * 16]), add(c, [8 + r() * 16, 20 + r() * 14])]; f.flat(F(q), r() < 0.45 ? '#f0e4b0' : '#5a4818', { op: 0.7 }); } // the crinkle catching light
+  for (let i = 0; i < 220; i++) { const p = [-220 + r() * 440, -160 + r() * 320]; L(f, F, [p, add(p, [8 + r() * 10, (r() - 0.5) * 8])], 1 + r(), r() < 0.5 ? '#e8dca0' : '#4a3a10', { op: 0.5 }); }   // fine crinkle lines (L3)
   f.part(F([[160, -160], [230, -150], [260, -230], [200, -250]]), { fill: GILTL, shade: 0.25, inkW: 1.4, cast: false, sharp: true }); // the corner lifting
   for (const [x, y, s2] of [[300, -260, 26], [-300, -230, 18], [330, 120, 14]]) f.part(F([[x, y], [x + s2, y - s2 * 0.3], [x + s2 * 0.6, y + s2 * 0.6], [x - s2 * 0.2, y + s2 * 0.4]]), { fill: GILT, shade: 0.3, inkW: 1, cast: false, sharp: true });
   return { focus: F([[0, 0]])[0], sig: SB(F, [-250, -190, 260, 185]), feat: [], ells: [] };
@@ -344,15 +345,44 @@ O.scourge = (f, o = {}) => { // close on a flagellant's scourge: the bound grip 
     const end = pts[pts.length - 1]; f.part(F(ell(end, 40, 40, 0, 16)), { fill: '#7a7c80', shade: 0.45, inkW: 2.2 }); f.flat(F(ell(add(end, [-12, -12]), 12, 8, 0, 8)), '#f0f0ec', { op: 0.6 }); }
   return { focus: F([[100, -40]])[0], sig: SB(F, [-420, -330, 340, 260]), feat: [], ells: [] };
 };
-O.charter = (f, o = {}) => { // a sealed charter: a broad written sheet with six wax seals hanging from its foot on cords, one for each held course
-  const F = frame([0, 0], o.ang ?? -0.04, 1), r = f.r;
-  const sheet = [[-260, -230], [260, -236], [266, 70], [-262, 76]];
+O.charter = (f, o = {}) => { // a sealed charter: a broad written sheet, six big wax seals pressed along its foot, overlapping the edge, one for each held course
+  const F = frame([0, 0], o.ang ?? -0.04, 1), r = f.r, tall = !!o.repeat;   // a repeat in a batch is the tall charter: a different silhouette (L12)
+  const sheet = tall ? [[-240, -330], [240, -336], [246, 150], [-242, 156]] : [[-280, -240], [280, -246], [286, 150], [-282, 156]];
   P(f, F, sheet, VELLUM, { sharp: true, tex: T(f, 'mottle'), texOp: 0.6, dressO: { op: 0.25 } });
-  P(f, F, [[-262, 76], [266, 70], [266, 106], [-262, 112]], mix(VELLUM, '#5a4a30', 0.25), { sharp: true, dress: false }); // the turned-up foot
-  for (let k = 0; k < 9; k++) L(f, F, [[-220, -200 + k * 28], [220, -204 + k * 28]], 2.6, k === 0 ? WAX : INK, { op: 0.75, dash: `${12 + (k * 7) % 16} 3 6 3` });
-  for (let i = 0; i < 6; i++) { const x = -210 + i * 84, y = 250 + (i % 2) * 30; L(f, F, [[x, 96], [x + 4, y - 40]], 5, INK); L(f, F, [[x, 96], [x + 4, y - 40]], 3, '#8a7a5a');
-    f.part(F(ell([x + 4, y], 38, 38, 0, 16)), { fill: '#5a1a12', shade: 0.45, inkW: 1.8 }); f.part(F(ell([x + 4, y - 2], 26, 26, 0, 14)), { fill: SIX[i], shade: 0.35, inkW: 1.2, cast: false }); f.line(F(loop(ell([x + 4, y - 2], 26, 26, 0, 14))), 2, GILT); }
-  return { focus: F([[0, 200]])[0], sig: SB(F, [-270, -240, 270, 300]), feat: [], ells: [] };
+  f.part(F([[230, -246], [280, -246], [286, -190], [250, -206]]), { fill: mix(VELLUM, '#fff', 0.2), shade: 0.3, inkW: 1.4, cast: false }); // a curled corner
+  for (let k = 0; k < (tall ? 14 : 9); k++) L(f, F, [[tall ? -170 : -240, (tall ? -296 : -206) + k * 26], [tall ? 170 : 240, (tall ? -300 : -210) + k * 26]], 2.6, k === 0 ? WAX : INK, { op: 0.75, dash: `${12 + (k * 7) % 16} 3 6 3` });
+  for (let i = 0; i < 6; i++) { const x = tall ? -170 + (i % 3) * 170 : -220 + i * 88, y = tall ? 110 + Math.floor(i / 3) * 70 : 150; // each seal sits on the sheet's foot, half over the edge: one object, not a row of beads (L56)
+    f.part(F(ell([x, y], 46, 40, 0, 18)), { fill: '#5a1a12', shade: 0.45, inkW: 2 }); f.part(F(ell([x, y - 2], 32, 28, 0, 16)), { fill: SIX[i], shade: 0.35, inkW: 1.2, cast: false });
+    f.line(F(loop(ell([x, y - 2], 32, 28, 0, 16))), 2.4, GILT); L(f, F, [[x - 12, y - 4], [x + 12, y - 4]], 3, '#16110e', { op: 0.7 }); L(f, F, [[x, y - 16], [x, y + 8]], 3, '#16110e', { op: 0.7 }); }
+  return { focus: F([[0, 0]])[0], sig: SB(F, tall ? [-250, -340, 250, 225] : [-290, -250, 290, 195]), feat: [], ells: [] };
 };
 
+O.purse = (f, o = {}) => { // a drawstring pouch: a round leather belly, the neck pinched by its cord, a frilled mouth above, the cord's ends knotted and hanging
+  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, LTH = '#8a6644';
+  const belly = []; for (let i = 0; i <= 24; i++) { const t = Math.PI * (0.88 + i / 24 * 1.24); belly.push([Math.cos(t) * 190 * (1 + 0.08 * Math.sin(3 * t)), 60 - Math.sin(t) * 170]); }
+  P(f, F, [[-60, -100], ...belly, [60, -100]], LTH, { tex: T(f, 'mottle'), texOp: 0.9 });
+  for (let i = 0; i < 7; i++) L(f, F, [[-50 + i * 16, -96], [-150 + i * 50, 140 - Math.abs(i - 3) * 10]], i % 2 ? 2.4 : 6, i % 2 ? INK : '#b08a60', { op: 0.45 }); // gathers running down from the neck
+  for (let i = 0; i < 160; i++) { const p = [-170 + r() * 340, -60 + r() * 260]; if (Math.hypot(p[0] / 190, (p[1] - 60) / 170) > 0.95) continue; L(f, F, [p, add(p, [8 + r() * 12, 3 + r() * 6])], 1.2 + r(), r() < 0.5 ? '#a8845a' : '#2a1a10', { op: 0.45 }); } // grain
+  P(f, F, [[-60, -100], [60, -100], [56, -126], [-56, -126]], mix(LTH, '#000', 0.25), { dress: false }); // the pinched neck
+  const frill = [[-56, -124], [-100, -170], [-70, -160], [-60, -200], [-30, -170], [0, -210], [30, -172], [60, -204], [74, -162], [104, -168], [56, -124]];
+  P(f, F, frill, mix(LTH, '#fff', 0.1), { tex: T(f, 'mottle'), texOp: 0.7 }); f.part(F(ell([0, -168], 40, 12, 0, 14)), { fill: '#1a120c', shade: 0.2, inkW: 1.2, cast: false }); // the mouth, dark
+  const cordL = [[-60, -112], [-100, -80], [-120, -20], [-110, 30]], cordR = [[60, -112], [90, -60], [80, 0]];
+  for (const c of [[[-62, -112], [62, -112]], cordL, cordR]) { L(f, F, c, 10, INK); L(f, F, c, 6, '#c8b088'); }
+  f.part(F(ell([-64, -112], 14, 12, 0, 10)), { fill: '#c8b088', shade: 0.4, inkW: 1.4, cast: false }); // the knot
+  L(f, F, [[-150, 40], [-170, 120], [-140, 190]], 8, '#c8a878', { op: 0.5 }); // a lit flank
+  f.stitches(F([[150, -10], [180, 80], [150, 180]]), '#d8c4a0', 1.6);
+  return { focus: F([[0, 40]])[0], sig: SB(F, [-200, -215, 200, 235]), feat: [], ells: [] };
+};
+O.rope = (f, o = {}) => { // a grappling hook lying on its coil of rope: three barbed iron prongs and the eye at the right, the rope spliced to the eye and coiled at the left
+  const F = frame([0, 0], o.ang ?? -0.15, 1), r = f.r, RP = '#c8a878', IR = '#9a9ea2';
+  for (let i = 0; i < 4; i++) { const e = ell([-170 + i * 6, 40 + i * 6], 150 - i * 14, 66 - i * 6, 0.05, 28); L(f, F, loop(e), 30, INK); L(f, F, loop(e), 22, RP); for (let k = 0; k < 28; k += 2) { const p = e[k]; L(f, F, [add(p, [-5, -7]), add(p, [5, 7])], 2.4, '#6a5034', { op: 0.6 }); } }
+  const run = [[-40, 40], [20, 20], [70, 10]]; L(f, F, run, 30, INK); L(f, F, run, 22, RP);
+  for (let k = 0; k < 5; k++) { const p = lerp(run[1], run[2], k / 5); L(f, F, [add(p, [-3, -14]), add(p, [3, 14])], 3, '#6a5034'); } // the splice
+  f.line(F(loop(ell([100, 8], 32, 32, 0, 16))), 24, INK); f.line(F(loop(ell([100, 8], 32, 32, 0, 16))), 16, IR); // the eye
+  P(f, F, [[128, -14], [128, 26], [300, 22], [300, -10]], IR, { dressO: { op: 0.4 } }); lit(f, F, [[134, -6], [296, -4]], 4, 0.6); // shank
+  for (const a of [-1, 0, 1]) { const base = [300, 6], pts = a ? [base, add(base, [50, a * 60]), add(base, [130, a * 90]), add(base, [190, a * 70])] : [base, add(base, [80, 0]), add(base, [150, 0])];
+    L(f, F, pts, 30, INK); L(f, F, pts, 21, IR); L(f, F, pts.slice(0, 3), 4, '#f4f4ee', { op: 0.5 });
+    const tip = pts[pts.length - 1], d = norm(sub(tip, pts[pts.length - 2])); f.part(F([add(tip, rot([0, -20], Math.atan2(d[1], d[0]))), add(tip, mul(d, 40)), add(tip, rot([0, 20], Math.atan2(d[1], d[0])))]), { fill: IR, shade: 0.4, inkW: 1.6, sharp: true }); } // prongs
+  return { focus: F([[400, 6]])[0], sig: SB(F, [-330, -110, 520, 130]), feat: [], ells: [] };
+};
 module.exports = { O };

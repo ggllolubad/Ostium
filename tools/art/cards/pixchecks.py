@@ -21,6 +21,14 @@ L47 plank: an object mask that touches both side edges (95% of the width), is 1.
   of its box reads as a board (suture, wrapped arm, ink arm, gold leaf); long things (blades, staves) are exempt.
 L12 pairs: two cards with the same object in one batch must differ in silhouette: mask IoU under 0.5 (review 4's
   identical pairs measured 0.61 to 0.98).
+Round 8 (review 6 read 26 of 32):
+L53 hand: on a hand card the object's visible area (its mask minus the hand) must be at least the hand's area: a
+  gauntlet holding a small flask or vial took the card over (9, 10).
+L54 warm on warm: where the ground ring is warm (hue 8 to 55, S > 0.25) and so is the subject (hue within 25 degrees,
+  S > 0.2), the subject's mean luminance must clear the ring's median by 30: brown on brown read worst (purse, sack,
+  boot, the held flask and vial).
+L56 one object: the object mask's parts other than its largest must hold under 5% of it (the beads under the
+  charter, the coins under the purse, the tag on the key).
 L49 (round 7) cool grounds: where the ground ring round the subject is blue or purple (hue 170 to 320, S > 0.08), the
   subject's mean luminance must differ from the ring's median by 22 or more. L45 alone passed three dark-on-dark cards
   of review 5 (13, 21, 22); this fails them, and on review 5 also flagged the birds and the hourglass (lit since).
@@ -82,8 +90,31 @@ for fn, cid, desc in rows:
         km = clusters(small[mm], 0.3, 0.25, 0.01) if mm.sum() > 50 else 0
         if km >= 4:
             hue_bad.append(f"{cid} {km} hue clusters on the object")
-LONG = {"sword", "rapier", "knife", "needle", "rod", "brush", "feather", "key", "bone", "tongs", "coalpan", "splint", "stinger", "scourge", "candle", "hammer"}
+LONG = {"spectacles", "sword", "rapier", "knife", "needle", "rod", "brush", "feather", "key", "bone", "tongs", "coalpan", "splint", "stinger", "scourge", "candle", "hammer"}
 vis_bad, cool_bad, mass_bad, plank_bad, masks = [], [], [], [], {}
+hand_bad, warm_bad, one_bad = [], [], []
+
+
+def components(m):
+    H, W = m.shape
+    lab = np.zeros((H, W), int)
+    sizes = []
+    for y in range(H):
+        for x in range(W):
+            if m[y, x] and not lab[y, x]:
+                lab[y, x] = len(sizes) + 1
+                st, c = [(y, x)], 0
+                while st:
+                    a, b = st.pop()
+                    c += 1
+                    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                        yy, xx = a + dy, b + dx
+                        if 0 <= yy < H and 0 <= xx < W and m[yy, xx] and not lab[yy, xx]:
+                            lab[yy, xx] = len(sizes) + 1
+                            st.append((yy, xx))
+                sizes.append(c)
+    return sorted(sizes, reverse=True)
+
 for fn, cid, desc in rows:
     obj = desc.split()[-1] if desc.split() else ""
     full = os.path.join(out, "_full", fn + ".png")
@@ -105,6 +136,17 @@ for fn, cid, desc in rows:
     dmean = abs(lum[ms].mean() - g) if ms.any() else 0
     if 170 <= gh * 360 <= 320 and gs > 0.08 and dmean < 22:   # L49: on a cool (blue or purple) ground the subject's mean must clear the ground by 22
         cool_bad.append(f"{cid} {dmean:.0f}")
+    sh_, ss_, sv_ = colorsys.rgb_to_hsv(*(img[ms].mean(0) / 255)) if ms.any() else (0, 0, 0)
+    if 8 <= gh * 360 <= 55 and gs > 0.25 and ss_ > 0.2 and abs(sh_ - gh) * 360 < 25 and dmean < 30:   # L54
+        warm_bad.append(f"{cid} {dmean:.0f}")
+    hp = os.path.join(out, "_full", fn + "_hand.png")
+    if os.path.exists(hp):   # L53
+        mh = np.asarray(Image.open(hp).convert("RGBA").getchannel("A").resize((280, 153))) > 128
+        if (mo & ~mh).sum() < mh.sum():
+            hand_bad.append(f"{cid} object {(mo & ~mh).sum()} px, hand {mh.sum()} px")
+    cs = components(np.asarray(Image.fromarray((mo * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 128)   # closed by a pixel: a thin bridge or cord still joins
+    if cs and 1 - cs[0] / sum(cs) >= 0.05:   # L56
+        one_bad.append(f"{cid} {100 * (1 - cs[0] / sum(cs)):.0f}% apart")
     if mo.mean() < 0.07:
         mass_bad.append(f"{cid} {mo.mean() * 100:.0f}%")
     ys, xs = np.where(mo)
@@ -124,6 +166,9 @@ for i in range(len(ids)):
                 pair_bad.append(f"{ids[i]}/{ids[j]} {oa} IoU {iou:.2f}")
 for lesson, bad, ok, msg in [("L45", vis_bad, "every subject stands off its ground (visible mass 2.4 or more)", "subject sinks into the ground: "),
                              ("L49", cool_bad, "every subject on a cool ground clears it by 22 in mean luminance", "dark on a dark cool ground: "),
+                             ("L53", hand_bad, "every held object outweighs the hand holding it", "the hand takes over: "),
+                             ("L54", warm_bad, "no warm subject sinks into a warm ground (mean clears it by 30)", "brown on brown: "),
+                             ("L56", one_bad, "one object per card (no detached second props)", "a second object: "),
                              ("L46", mass_bad, "every object has mass (7% of the frame or more)", "a stick, not a mass: "),
                              ("L47", plank_bad, "no plank silhouettes", "plank silhouettes: "),
                              ("L12", pair_bad, "same-object cards differ in silhouette (IoU under 0.5)", "near-identical pairs: ")]:

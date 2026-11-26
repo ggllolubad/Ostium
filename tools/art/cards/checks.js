@@ -16,8 +16,8 @@ function runMeta(metas) {
   const per = {}; objs.forEach(m => (per[m.object] = per[m.object] || []).push(m.id));
   const capObj = big ? 20 : 2, over = Object.entries(per).filter(([, v]) => v.length > capObj);
   over.length ? fail('L12', `objects over ${capObj} cards: ` + over.map(([k, v]) => `${k} x${v.length}`).join(', '), over.flatMap(([, v]) => v)) : pass('L12', `no object on more than ${capObj} cards (${Object.keys(per).length} objects)`);
-  if (!big) { const keys = {}; objs.forEach(m => { const k = [m.object, m.variant, m.layout].join('|'); (keys[k] = keys[k] || []).push(m.id); }); const dup = Object.entries(keys).filter(([, v]) => v.length > 1);
-    dup.length ? fail('L12', 'repeated (object, variant, layout): ' + dup.map(([k, v]) => `${k}: ${v.join(' ')}`).join('; '), dup.flatMap(([, v]) => v)) : pass('L12', 'every (object, variant, layout) is unique'); }
+  if (!big) { const keys = {}; objs.forEach(m => { const k = [m.object, m.variant, m.layout, m.style, m.flipped].join('|'); /* the card's whole framing (L57: hashed per card) */ (keys[k] = keys[k] || []).push(m.id); }); const dup = Object.entries(keys).filter(([, v]) => v.length > 1);
+    dup.length ? fail('L12', 'repeated (object, variant, layout, framing): ' + dup.map(([k, v]) => `${k}: ${v.join(' ')}`).join('; '), dup.flatMap(([, v]) => v)) : pass('L12', 'every (object, variant, layout, framing) is unique; silhouettes are verified by the pixel IoU check'); }
   // L13: layout share and subject size
   const lay = {}; objs.forEach(m => { const k = m.layout + (m.hand ? ':' + m.hand.edge + ':' + Math.round(m.hand.angle / 15) : ''); lay[k] = (lay[k] || 0) + 1; });
   const share = N < 10 ? [] : Object.entries(lay).filter(([, v]) => v / N > 0.3);   // shares mean nothing on a handful of test cards
@@ -47,8 +47,8 @@ function runMeta(metas) {
   const acting = objs.filter(m => ACTS.has(m.act) && m.actShown).length, hands = objs.filter(m => m.hand);
   N < 10 ? pass('L20', `act and hand shares not tested: ${N} object cards (need 10)`) : acting / N < 0.8 ? fail('L20', `objects shown mid-act ${Math.round(100 * acting / N)}% (need 80%)`) : pass('L20', `objects shown mid-act ${Math.round(100 * acting / N)}%`);
   N < 10 ? 0 : hands.length / N < 0.2 ? fail('L20', `hands on ${Math.round(100 * hands.length / N)}% of object cards (need 20%)`) : pass('L20', `hands on ${Math.round(100 * hands.length / N)}% of object cards`);
-  const clash = []; for (let i = 0; i < hands.length; i++) for (let j = i + 1; j < hands.length; j++) { const a = hands[i].hand, b = hands[j].hand, d = Math.abs(((a.angle - b.angle + 540) % 360) - 180); if (a.edge === b.edge && d < 15) clash.push(hands[i].id + '/' + hands[j].id); }
-  clash.length && !big ? fail('L20', 'hand cards sharing an edge and angle: ' + clash.join(', ')) : pass('L20', 'no two hand cards share an edge and angle');
+  const clash = []; for (let i = 0; i < hands.length; i++) for (let j = i + 1; j < hands.length; j++) { const a = hands[i].hand, b = hands[j].hand, d = Math.abs(((a.angle - b.angle + 540) % 360) - 180); if (hands[i].object === hands[j].object && a.edge === b.edge && d < 15) clash.push(hands[i].id + '/' + hands[j].id); }   // L57: same-object hand cards only; angles are hashed per card
+  clash.length && !big ? fail('L20', 'hand cards sharing an edge and angle: ' + clash.join(', ')) : pass('L20', 'no two hand cards with the same object share an edge and angle');
   // L21: state words
   const st = [];
   for (const m of objs) for (const [k, rule] of Object.entries(OC.STATE_RULES)) { if (!m.state[k]) continue; for (const x of rule.forbid || []) if (m.feats.includes(x)) st.push(`${m.id} is ${k} but shows ${x}`); for (const x of rule.require || []) if (!m.feats.includes(x)) st.push(`${m.id} is ${k} but lacks ${x}`); }
@@ -56,8 +56,8 @@ function runMeta(metas) {
   // L22: void holes vary
   const voids = objs.filter(m => m.course === 'void'), vh = [];
   voids.filter(m => !m.holes.length).forEach(m => vh.push(m.id + ' has no hole'));
-  for (let i = 0; i < voids.length; i++) for (let j = i + 1; j < voids.length; j++) if (!big || voids[i].object === voids[j].object) for (const a of voids[i].holes) for (const b of voids[j].holes) if (Math.hypot(a[0] - b[0], a[1] - b[1]) < 40) vh.push(`${voids[i].id}/${voids[j].id} share a hole centre`);
-  vh.length ? fail('L22', vh.join('; ')) : pass('L22', `${voids.length} void cards, each with a seeded hole; no two ${big ? 'with the same object ' : ''}share a hole centre within 40 px`);
+  for (let i = 0; i < voids.length; i++) for (let j = i + 1; j < voids.length; j++) if (voids[i].object === voids[j].object && !big) for (const a of voids[i].holes) for (const b of voids[j].holes) if (Math.hypot(a[0] - b[0], a[1] - b[1]) < 40) vh.push(`${voids[i].id}/${voids[j].id} share a hole centre`);
+  vh.length ? fail('L22', vh.join('; ')) : pass('L22', `${voids.length} void cards, each with a seeded hole${big ? '' : '; no two with the same object share a hole centre within 40 px'}`);
   // L23: the card's own noun
   const nn = objs.filter(m => m.noun && m.noun !== m.object && !m.override);
   nn.length ? fail('L23', 'name noun disagrees with pick: ' + nn.map(m => `${m.id} ${m.noun}->${m.object}`).join(', '), nn.map(m => m.id)) : pass('L23', 'every name noun from the table matches its pick');

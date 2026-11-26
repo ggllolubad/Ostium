@@ -395,6 +395,8 @@ const READS = {
 for (const [id, dev] of Object.entries(READS)) OVR[id] = Object.assign(OVR[id] || {}, { device: dev });
 OVR.du_parry = Object.assign(OVR.du_parry || {}, { layout: 'close', zoom: 1.9, objOpt: { hilt: true } });   // the swept hilt alone, no hand: a hand on a long blade read as a stick (L50)
 OVR.bw_k_scourge = Object.assign(OVR.bw_k_scourge || {}, { layout: 'close' });
+// L57: framing is hashed per card; a hand-picked style only where two same-object cards came out alike (a per-card fix, the same in every batch)
+OVR.du_serrated_rhythm = Object.assign(OVR.du_serrated_rhythm || {}, { style: 0 });
 OVR.ve_ink_band = Object.assign(OVR.ve_ink_band || {}, { zoom: 1.35 });   // the banded hand big, the sleeve running off the frame   // close on the swept hilt: a blade alone reads as a stick (L46)
 OVR.or_augury_of_birds = Object.assign(OVR.or_augury_of_birds || {}, { ground: { dark: 0, washOp: 0.55, soot: 0.3, hatchOp: 0.2, pool: [560, 280, 760, 380] } });   // an open dusk sky behind black birds   // black birds need a lit sky behind them (L45)
 // Cole: most Vessel cards become object cards (its figure can barely move). vessel_hero_ids.txt (the pose agent's) lists the
@@ -405,6 +407,7 @@ const KIND = { attack: act, cast: act, block };
 // test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
 function testCard(id) { const [cls, kind, cat = 'physical', v] = id.slice(1).split('/'); return { name: '', cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind, _v: v == null ? null : +v }; }
 function card(id) {
+  allocate();
   if (id.includes('!')) { const [cid, lay] = id.split('!'); OVR[id] = Object.assign({}, OVR[cid] || {}, { layout: lay }); CARDS[id] = CARDS[cid]; }
   const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}, o = Object.assign({}, OVR[id] || {}, cd._kind ? { kind: cd._kind, v: cd._v } : {});
   let kind = o.kind || kindOf(cd);
@@ -418,15 +421,13 @@ let LAST_META = null;
 // the card and the metadata the checks read
 function build(id) { const svg = card(id); return { svg, meta: Object.assign({ id }, LAST_META) }; }
 // the object cards of a batch get their layouts and variants together, so the batch spreads (L12, L13, L20)
-function allocate(ids) {
-  const entries = [];
-  OC.spread([]);
-  if (ids.length > 100) { const pre = []; for (const id of ids) { const cd = CARDS[id]; if (!cd) continue; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue; pre.push({ id, obj: OC.pickObject(cd, id, o) }); } OC.spread(pre); } else OC.spread([]);
-  for (const id of ids) { const cd = CARDS[id]; if (!cd) continue; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue;
-    const obj = OC.pickObject(cd, id, o), { pts, bb } = OC.probe(cd, obj, courseOf(cd, o), o), f = { bb };
-    const n = OC.countOf(cd, o), all = OC.optionsFor(obj, pts, n, f.bb), fits = all.filter(l => l === 'held' || OC.fillOf(obj, pts, n, f.bb, l) >= 0.37);   // L13: only layouts it can fill
-    entries.push({ id, obj, opts: fits.length ? fits : all, variants: 3 }); }
-  OC.allocate(entries);
+// L57: nothing about an object card depends on the batch it is rendered in. The only deck-level step is the family
+// spread (L42), and it is always computed over the whole deck, once, so a card's object is the same alone or in a run.
+let SPREAD_DONE = false;
+function allocate() {
+  if (SPREAD_DONE) return; SPREAD_DONE = true;
+  const pre = []; for (const id of Object.keys(CARDS)) { const cd = CARDS[id]; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue; pre.push({ id, obj: OC.pickObject(cd, id, o) }); }
+  OC.spread(pre);
 }
 function generic(cd) { throw new Error('no composition yet for kind ' + kindOf(cd)); }
 

@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
 const S = require('./samples');
 if (process.argv.includes('-all')) require('./check_poses').run(S);   // L5 pose shares, L6 block hits, frame (L4 runs in rig.js on load)
 const BASE = '/home/claude/ostium/build/emblem2';
-const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r6') ? BASE + '/review6' : process.argv.includes('-r5') ? BASE + '/review5' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
+const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r7') ? BASE + '/review7' : process.argv.includes('-r6') ? BASE + '/review6' : process.argv.includes('-r5') ? BASE + '/review5' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
 const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
 
 (async () => {
@@ -35,6 +35,11 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
     if (meta.kind === 'object') { // the object alone, for the flatness check (L3)
       await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); n.removeAttribute('filter'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } });
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_subj.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });   // the subject, hand and all (L45)
+      if (meta.hand) { // the hand alone, to weigh it against the object it holds (L53)
+        await pg.evaluate(() => { for (const c of document.getElementById('subj').children) if (c.id !== 'hand') c.style.visibility = 'hidden'; });
+        await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_hand.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
+        await pg.evaluate(() => { for (const c of document.getElementById('subj').children) c.style.visibility = ''; });
+      }
       await pg.evaluate(() => { const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing (L3, L46, L47)
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_mask.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
     }
@@ -48,6 +53,9 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
   let pix = '', pixOk = true;
   try { pix = execFileSync('python3', [path.join(__dirname, 'pixchecks.py'), OUT, listFile]).toString(); } catch (e) { pix = (e.stdout || '').toString(); pixOk = false; }
   report += '\n' + pix.trim();
+  fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
+  // L57: a sample of the batch rebuilt alone in fresh processes must match the batch SVGs byte for byte (not on -all)
+  if (!process.argv.includes('-all')) { let det = ''; try { det = execFileSync('node', [path.join(__dirname, 'check_determinism.js'), OUT]).toString(); } catch (e) { det = (e.stdout || '').toString(); pixOk = false; } report += '\n' + det.trim(); pix += det; }
   fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
   console.log(pix.trim());
   if (!pixOk) { console.error('\nPIXEL CHECKS FAILED (see checks.txt)'); process.exit(1); }

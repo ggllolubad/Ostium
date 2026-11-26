@@ -172,9 +172,36 @@ Every piece of feedback becomes a rule here, so the next input starts from it in
   - rope: a thick, light coil
   - purse and boot: leather grain, for L3
 
+### From the review-6 blind test (26 of 32, 81%)
+- **L53. The held object outweighs the hand.** A gauntlet holding the flask (Saint's Ash) and the vial (Refill) read as "a gauntlet holding a sack or bag"; the hand took the card. Rules:
+  - small round or squat things are never held: the flask, vial, phial and jar have no grip;
+  - a hand card's object must show at least as much area as the hand.
+
+  Check: automated in pixchecks.py. render.js writes a hand-only mask (`_hand.png`), and the object's visible area (its mask minus the hand) must be at least the hand's. Not yet calibrated on the two failures, because those objects can no longer be held; on review 7 it passes every hand card.
+- **L54. Brown on brown reads worst.** The purse, sack and boot, and the held flask and vial, were near-unreadable on the sepia ground. Rule: an object whose mean fill is a warm brown gets the cool slate ground on the physical, fire and toxin courses, with the lifted pool and back-light of L49. A pale subject (paper, linen) keeps a dark ground, because lifting the pool behind it sinks it. Check: automated in pixchecks.py. Where the ground ring is warm (hue 8 to 55) and so is the subject (within 25 degrees), the subject's mean must clear the ground by 30. On review 6 it fails the five brown-on-brown cards, and eight cards the tester still read. The slate ground fixes all of them.
+- **L55. A silhouette reads as its best-known object.**
+  - A squat dark pot with a feather above read as a helm with a plume.
+  - A coil read as a whip unless its end shows (a hook, a knot).
+  - A small round brown thing read as a sack; a scored square brown one as a loaf.
+  - Three cords ending in balls read as bolas.
+
+  Rule: before drawing, name the object the silhouette most resembles; if it is not the intended one, change the silhouette. Examples: the rope is now a grappling hook lying on its coil, the purse a drawstring pouch with a frilled mouth, the inkpot is retired to the scroll, and the scourge to the barbs. Check: the blind test (not automatable).
+- **L56. One object per card.** The beads under the charter, the coins under the purse, the star-chart card tied to the hourglass, the key's paper tag and the hammer's wedge split attention as a second object. Rule: no secondary props; a count is shown on the object itself (the charter's seals now sit on its foot). Check: automated in pixchecks.py. The object mask is closed by one pixel, so thin cords and bridges still join; any parts apart from the largest must hold under 5% of it. The bone, drawn snapped in two, would fail this and needs a joined drawing before it is used again.
+- **L12, again: repeats in a batch.** The redirected cards bring pairs of the same object into one batch. In review batches (not full runs), a repeat is turned (where it stands on nothing), set off-centre, cropped closer and mirrored on a surface; the charter's repeat is the tall sheet. Silhouette IoU must stay under 0.5. Caveat: this variety depends on the batch, so a full run (-all) draws repeats unvaried, as the rest of the per-batch allocation already does.
+
+### Before the review-7 blind test
+- **L57. Review art is production art.** Since round 5 the allocator handed out layouts, variants, hand angles, hole positions and (in round 8) repeat framing per batch. The same card therefore rendered differently alone, in a review batch and in the full `-all` run, so a blind score measured art that would not ship. Cause: uniqueness and shares were enforced by changing cards to fit the batch. Rules:
+  - every object card's plan comes from a hash of its own id and object (`planOf` in objcomp.js): layout, variant, hand angle and one of eight framing styles (offset, crop, turn, mirror);
+  - void holes are seeded by the card alone;
+  - the family spread (L42) is computed once over the whole deck, never over a batch;
+  - the batch checks verify the result and change nothing. Where two same-object cards in a review batch still come out alike, the fix is a per-card override (`style`, `layout`) in samples.js, which is the same in every batch.
+  - As a result, two checks are narrowed to cards with the same object: the hand-clash check (L20; angles are hashed per card) and the hole-centre check (L22, review batches only; a full run checks only that each void card has a hole).
+
+  Check: automated. check_determinism.js rebuilds a sample of the batch, each card alone in a fresh node process, and compares the SVG byte for byte with the one the batch render wrote; render.js runs it on every review batch, which fails on any difference. On review 7: 10 of 10 match in the render's own check, and all 30 match when run by hand.
+
 ## Checks to run before reporting
 
-1. The build (render.js runs checks.js before rendering and pixchecks.py after, and writes checks.txt): pose limits, props, pour mouths and two-hand turns (L4, L24 to L27, rig.js on load), pose shares, block hits, grips, pose words, frame, hand FX points, face clearance, drape and joint cover (L5, L6, L24, L28 to L31, L33, check_poses.js), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9), visible mass (L45), object mass (L46), planks (L47), same-object silhouettes (L12), dark on cool grounds (L49). All must pass.
+1. The build (render.js runs checks.js before rendering and pixchecks.py after, and writes checks.txt): pose limits, props, pour mouths and two-hand turns (L4, L24 to L27, rig.js on load), pose shares, block hits, grips, pose words, frame, hand FX points, face clearance, drape and joint cover (L5, L6, L24, L28 to L31, L33, check_poses.js), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9), visible mass (L45), object mass (L46), planks (L47), same-object silhouettes (L12), dark on cool grounds (L49), hand against object (L53), brown on brown (L54), one object (L56), and alone equals batch (L57). All must pass.
 2. The unlabelled 170 px thumbnail sheet (L8), which render.js now writes as thumbs170.png on every batch with thumbs170_key.txt beside it: a fresh reviewer names each object before reading the key.
 3. The Form checklist at 2x on every new or changed object (L9).
 4. A review beside the hero render (L3, L10).

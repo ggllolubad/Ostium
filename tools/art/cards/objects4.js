@@ -226,7 +226,7 @@ O.phial = (f, o = {}) => { // a slender pale frost-blue phial, a crack star in i
   D.label(f, F([[0, 120]])[0], 70, 40, 0.06, '#cdbb94', G2 => { f.line(G2([[-24, -6], [22, -8]]), 1.2, INK, { op: 0.7 }); f.line(G2([[-24, 6], [10, 4]]), 1.2, INK, { op: 0.7 }); });
   for (const [x, y] of [[-46, -100], [-50, 200], [40, 210], [30, -120]]) f.flat(F(ell([x, y], 16, 8, 0.4, 10)), '#eef6f8', { op: 0.85 }); // rime crust
   K.fxReq(f, 'rime', F([[-44, 214]])[0], 90, { to: F([[44, 214]])[0] });
-  return { focus: F([[0, 20]])[0], sig: SB(F, [-60, -280, 60, 240]), mouth: F([[0, -270]])[0], grip: { c: F([[0, -150]])[0], thumb: (o.ang ?? 0.1) - Math.PI / 2 }, feat: ['rime', 'crack'], ells: [0.22, 0.21] };
+  return { focus: F([[0, 20]])[0], sig: SB(F, [-60, -280, 60, 240]), mouth: F([[0, -270]])[0], feat: ['rime', 'crack'], ells: [0.22, 0.21] };
 };
 O.basin = (f, o = {}) => { // a dented pewter bleeding basin tipped toward us, its blood pouring over the lip
   const F = frame([0, 0], o.ang ?? 0.22, 1), r = f.r;
@@ -239,7 +239,7 @@ O.basin = (f, o = {}) => { // a dented pewter bleeding basin tipped toward us, i
   f.flat(F(ell([256, 270], 70, 14, 0, 14)), BLOOD_D, { op: 0.9 });
   for (const x of [-120, 40]) { f.flat(F(ell([x, 40], 20, 12, 0.3, 10)), '#2a2c2a', { op: 0.45 }); }
   f.scratches(F([[-60, 40]])[0], 60, 8, '#e8e8e2'); D.bloom(f, F([[120, 70]])[0], 20, '#2a2c28', { n: 3, op: 0.5 });
-  return { focus: F([[0, -40]])[0], sig: SB(F, [-230, -110, 280, 120]), mouth: F([lip])[0], feat: ['blood', 'contents'], ells: [0.25, 0.21] };
+  return { focus: F([[0, -40]])[0], sig: SB(F, [-230, -110, 280, 120]), mouth: F([lip])[0], grip: { c: F([[-220, -30]])[0], thumb: (o.ang ?? 0.22) }, feat: ['blood', 'contents'], ells: [0.25, 0.21] };
 };
 O.broth = (f, o = {}) => { // a wooden galley bowl of broth gone solid with cold, a ladle frozen upright in it, finger bones in the ice
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, st = o.state || {};
@@ -265,6 +265,7 @@ O.handbell = (f, o = {}) => { // a small bronze handbell on a turned wooden hand
   L(f, F, [[-104, 70], [0, 84], [104, 70]], 2.4, INK, { op: 0.7 }); L(f, F, [[-70, -40], [0, -30], [70, -40]], 2, INK, { op: 0.6 });
   L(f, F, [[0, -120], [70, 110]], 6, INK); f.part(F(ell([74, 118], 18, 14, 0, 10)), { fill: IRON, shade: 0.4, inkW: 1.3 });
   D.bloom(f, F([[-80, 60]])[0], 20, mix(VERD, '#7e6440', 0.4), { n: 3, op: 0.5 }); f.scratches(F([[40, 20]])[0], 30, 6, '#e8d0a0');
+  for (let i = 0; i < 140; i++) { const y = -140 + r() * 250, w = 40 + (y + 150) * 0.45, p = [(r() - 0.5) * 2 * w, y]; L(f, F, [p, add(p, [6 + r() * 8, 2 + r() * 3])], 1.2 + r(), r() < 0.5 ? '#a8885a' : '#3a2a18', { op: 0.45 }); }   // hammer marks in the bronze (L3)
   return { focus: F([[0, 40]])[0], sig: SB(F, [-160, -180, 160, 160]), grip: { c: F([[0, -250]])[0], thumb: (o.ang ?? -0.35) + Math.PI / 2 }, hook: F([[0, -340]])[0], feat: [], ells: [0.24] };
 };
 O.anvil = (f, o = {}) => { // an anvil, a hammer coming down on the horn, the struck iron ringing, static burns branching on the face
@@ -388,7 +389,7 @@ O.book = (f, o = {}) => { // an open book, front and above: one board path under
   else f.flat(F([[-190, -90], [-160, -88], [-162, -60], [-192, -62]]), '#7a1a12', { op: 0.9 });
   f.part(F([[-5, -10], [5, -10], [8, 92], [14, 160], [8, 182], [2, 162], [-4, 92]]), { fill: '#2e3a2a', shade: 0.4, inkW: 1.1, cast: false });
   D.stain(f, F([[-110, -20]])[0], 34, '#5a3a18', { op: 0.25 });
-  return { focus: F([[0, -30]])[0], sig: SB(F, [-262, -150, 262, 160]), feat: [], ells: [] };
+  return { focus: F([[0, -30]])[0], sig: SB(F, [-262, -150, 262, 160]), grip: { c: F([[0, 150]])[0], thumb: (o.ang ?? 0) - Math.PI / 2 }, feat: [], ells: [] };   // held open from below by the spine
 };
 O.beacon = (f, o = {}) => { // a lighthouse lens: stepped glass rings in a brass cage, blinding at its centre, glare flooding out
   const F = frame([0, 0], o.ang ?? -0.08, 1), r = f.r;

@@ -41,7 +41,7 @@ O.jar = (f, o = {}) => { // clay pot with a waxed cloth cover tied down; a rag f
   D.twine(f, F([[-82, -112], [-82, -104]]), F([[82, -112], [82, -104]]), 3, TWINE, { knot: F([[84, -106]])[0], ends: [F([[100, -90], [104, -64]])] });
   D.chip(f, F([[60, -112]])[0], 10, o.ang || 0); D.crack(f, F([[-40, 140]])[0], -1.2, 80, { n: 4, lip: '#e0c0a0' });
   if (o.course === 'fire') { L(f, F, [[0, -158], [8, -190], [-4, -214]], 6, INK); L(f, F, [[0, -158], [8, -190], [-4, -214]], 3.6, '#8a7458'); flame(f, F, [-4, -212], 40); }
-  return { focus: F([[0, -40]])[0] };
+  return { focus: F([[0, -40]])[0] };   // never held: a gauntlet on a round pot read as a hand holding a sack (L53, L55)
 };
 O.vial = (f, o = {}) => { // a tall stoppered bottle of draught, label and wax, the brew coloured by its course
   const F = frame([0, 0], o.ang || 0, 1), r = f.r, liq = mix(TINT[o.course] || '#6a2018', '#2a1a10', o.course === 'physical' ? 0.1 : 0.3);
@@ -57,7 +57,7 @@ O.vial = (f, o = {}) => { // a tall stoppered bottle of draught, label and wax, 
   D.twine(f, F([[-25, -140], [-25, -134]]), F([[25, -140], [25, -134]]), 2, TWINE, { knot: F([[26, -136]])[0], ends: [F([[40, -120], [46, -96]])] });
   if (o.sprig) for (let i = 0; i < 4; i++) { const b = F([[40 + i * 4, -120]])[0]; f.part(ell(add(b, [10 + i * 6, -10 - i * 12]), 12, 5, -0.6 + i * 0.3, 8), { fill: '#6a7a44', shade: 0.4, inkW: 1, cast: false }); }
   D.chip(f, F([[20, -160]])[0], 6, o.ang || 0);
-  return { focus: F([[0, 40]])[0], mouth: F([[0, -210]])[0], grip: { c: F([[0, -112]])[0], thumb: (o.ang || 0) - Math.PI / 2 } };   // held up by the neck
+  return { focus: F([[0, 40]])[0], mouth: F([[0, -210]])[0] };   // never held: the hand took the card over (L53)
 };
 O.keg = (f, o = {}) => { // a powder keg: staves, iron hoops, a fuse burning down
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
@@ -198,7 +198,7 @@ O.candle = (f, o = {}) => { // tallow candles on an iron pricket, wax run down t
     else flame(f, F, [x + 1, 150 - h - 18], 52);
   }
   for (let i = 0; i < 6; i++) f.part(F(ell([-130 + r() * 260, 160 + r() * 10], 8 + r() * 10, 4, 0, 8)), { fill: wax, shade: 0.3, inkW: 1, cast: false });
-  return { focus: F([[20, -170]])[0] };
+  return { focus: F([[20, -170]])[0], grip: { c: F([[0, 150]])[0], thumb: (o.ang || 0) - Math.PI / 2 } };   // carried by its dish
 };
 O.lantern = (f, o = {}) => { // an iron storm lantern: horn panes, a guttering flame, soot, a dent
   const F = frame([0, 0], o.ang || 0, 1);
@@ -314,7 +314,7 @@ O.scroll = (f, o = {}) => { // a long scroll half unrolled, written over, a wax 
   f.part(F(ell([110, 110], 34, 30, 0, 16)), { fill: '#3a2a20', shade: 0.45, inkW: 1.6 }); f.line(F(loop(ell([110, 110], 18, 16, 0, 12))), 1.4, '#3a0a08');
   f.part(F([[100, 130], [130, 136], [140, 230], [124, 220], [110, 236]]), { fill: '#7a1a12', shade: 0.4, inkW: 1.2 });
   L(f, F, [[-160, 120], [-100, 100], [-40, 126]], 2.4, '#4c0c08', { op: 0.9 }); // a signature in blood
-  return { focus: F([[0, 0]])[0] };
+  return { focus: F([[0, 0]])[0] };   // never held: a dark hand on a pale scroll averaged into the ground (L49)
 };
 O.inkpot = (f, o = {}) => { // a stoneware inkpot, a quill stood in it, ink run down its sides, the six courses' rings
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
@@ -351,8 +351,7 @@ O.key = (f, o = {}) => { // a heavy iron key on a ring with a paper tag
   P(f, F, [[150, 14], [220, 14], [220, 90], [196, 90], [196, 56], [176, 56], [176, 90], [150, 90]], IRON, { sharp: true });
   for (const x of [-120, 20, 140]) f.line(F([[x, -18], [x, 18]]), 3, mix(IRON, '#000', 0.4));
   D.bloom(f, F([[60, 0]])[0], 16, RUST, { n: 3 }); D.bloom(f, F([[200, 60]])[0], 12, RUST, { n: 2 });
-  f.line([F([[-300, 10]])[0], F([[-310, 70]])[0]], 1.6, '#3a2a18');
-  D.label(f, F([[-312, 110]])[0], 50, 70, (o.ang || 0) + 0.5, '#cdbb94', (G) => { f.line(G([[-14, -10], [12, -12]]), 1.2, INK, { op: 0.7 }); f.line(G([[-14, 4], [8, 2]]), 1.2, INK, { op: 0.7 }); });
+  // (the paper tag is gone: one object per card, L56)
   return { focus: F([[40, 0]])[0], grip: { c: F([[-150, 0]])[0], thumb: o.ang || -0.5 } };
 };
 
@@ -443,8 +442,9 @@ O.hammer = (f, o = {}) => { // a smith's hammer and an iron wedge, the face burr
   for (let i = 0; i < 5; i++) { const y = 60 + i * 8; L(f, F, [[-38, y], [-2, y + 4]], 3, INK); L(f, F, [[-38, y], [-2, y + 4]], 1.6, '#8a8a86'); }
   P(f, F, [[-160, -170], [120, -170], [140, -150], [140, -60], [120, -40], [-160, -40], [-190, -80], [-190, -130]], IRON, { dressO: { op: 0.45 } });
   f.flat(F([[120, -170], [150, -160], [150, -50], [120, -40]]), '#cfd0cc', { op: 0.5 }); f.scratches(F([[140, -100]])[0], 16, 6, '#f0f0ea');
-  P(f, F, [[140, 120], [260, 140], [140, 190]], '#5a5c60', { sharp: true });
-  D.bloom(f, F([[-100, -100]])[0], 22, RUST, { n: 3 }); for (let i = 0; i < 10; i++) f.flat(F(ell([180 + r() * 100, 110 + r() * 80], 1.6, 1.6, 0, 6)), '#e8a040', { op: 0.9 }); // sparks
+  D.bloom(f, F([[-100, -100]])[0], 22, RUST, { n: 3 });   // (the wedge and the sparks are gone: one object per card, L56)
+  for (let i = 0; i < 160; i++) { const p = [-180 + r() * 310, -165 + r() * 120]; L(f, F, [p, add(p, [6 + r() * 10, 2 + r() * 4])], 1 + r(), r() < 0.5 ? '#8a8c90' : '#26282c', { op: 0.5 }); }   // forge scale on the head (L3)
+  for (let i = 0; i < 60; i++) { const p = [-34 + r() * 30, -90 + r() * 340]; L(f, F, [p, add(p, [2, 14 + r() * 16])], 1.2, r() < 0.5 ? '#9a7a5a' : '#2a1a10', { op: 0.5 }); }   // grain in the haft
   return { focus: F([[140, -100]])[0], grip: { c: F([[-20, 170]])[0], thumb: (o.ang ?? -0.25) - Math.PI / 2 } };
 };
 O.rod = (f, o = {}) => { // an iron rod planted in split stone, iron straps and a copper coil, its tip fused and split, burns branching down it

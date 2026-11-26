@@ -154,12 +154,7 @@ function hourglass(f, o = {}) {
   D.wax(f, F([[-80, capT + 2], [-70, capT - 2], [-60, capT - 1], [-48, capT - 2], [-40, capT + 2]]), mix(WAX, '#fff', 0.1), { thick: 4, drips: 0.9, dripL: 30 });
   f.line(F([[-61, capT - 50], [-60, capT - 60]]), 1.6, INK);
   K.fxReq(f, 'flame', F([[-60, capT - 56]])[0], 34);
-  // star chart scrap tied to the far post on a string
-  f.line([F([[112, -120]])[0], F([[150, -96]])[0], F([[168, -70]])[0]], 1.6, '#3a2a18');
-  D.label(f, F([[176, -36]])[0], 50, 62, a0 - 0.18, '#cdbb94', (G) => {
-    for (const [x, y] of [[-12, -14], [6, -20], [14, 0], [-4, 6], [-14, 18]]) f.flat(G(ell([x, y], 2, 2, 0, 6)), INK);
-    f.line(G([[-12, -14], [6, -20], [14, 0], [-4, 6], [-14, 18]]), 0.9, INK, { op: 0.7, straight: true });
-  });
+  // (the star-chart scrap tied to the post is gone: one object per card, L56)
   return { top: F([[0, capT - 10]])[0], neck: F([[0, 0]])[0], heap: F([[0, 120]])[0], capT: F([[0, capT]])[0], capL: F([[-150, capT]])[0], holes };
 }
 // the robe scrap with pricked stars draped over the hourglass top, its fray coming apart. Drawn after the hourglass.
