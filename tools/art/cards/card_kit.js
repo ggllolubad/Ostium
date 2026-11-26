@@ -249,6 +249,59 @@ function billow(r, c, w, h, col, o = {}) {
   return `<g filter="url(#kWob)">${s}</g>`;
 }
 
+// ==== object FX, the only way objects make fire, steam, smoke, lightning, drips or rime (L18)
+// Object builders never draw these themselves: they call fxReq(f, kind, point, size) and the composition draws the FX
+// here, in card space, in ink. Every FX group carries data-fx so the build can audit where FX came from.
+function fxReq(f, kind, p, size = 40, o = {}) { (f.fxReq = f.fxReq || []).push(Object.assign({ kind, p, size }, o)); }
+// a flame as ink: four or five dry-brush tongues bent up off one base, dark ink with the course colour only in the core,
+// ash lifting off it (review 3: bright orange spikes read as cartoon fire)
+function inkFlame(r, b, h, col = '#c8642a', o = {}) {
+  let s = '';
+  const n = 4 + Math.round(r()), dark = mix(col, '#1a120c', 0.62), core = mix(col, '#d8c8a0', 0.2);
+  for (let i = 0; i < n; i++) {
+    const dx = (i - (n - 1) / 2) * h * 0.14, hh = h * (0.5 + r() * 0.55) * (Math.abs(i - (n - 1) / 2) < 1 ? 1.2 : 0.9), lean = (r() - 0.5) * h * 0.45;
+    const p0 = [b[0] + dx, b[1] + 4], p1 = [b[0] + dx * 0.8 + lean * 0.35, b[1] - hh * 0.45], p2 = [b[0] + dx * 0.6 + lean, b[1] - hh];
+    s += drybrush(r, [p0, p1, p2], h * 0.2, dark, { profile: t => Math.pow(1 - t, 0.8), dry: 0.7, op: 0.9, bodyLen: 0.55, bristles: 7 });
+    if (Math.abs(i - (n - 1) / 2) < 1.5) s += drybrush(r, [lerp(p0, p1, 0.15), p1, lerp(p1, p2, 0.5)], h * 0.07, core, { profile: t => 1 - t, dry: 1, body: false, op: 0.8, bristles: 3 });
+  }
+  for (let i = 0; i < 10; i++) { const q = [b[0] + (r() - 0.5) * h * 0.9, b[1] - h * (0.9 + r() * 0.9)]; s += `<path d="M${f1(q[0])},${f1(q[1])}l${f1(1 + r() * 3)},${f1(-2 - r() * 4)}" stroke="${r() < 0.75 ? '#2a2020' : dark}" stroke-width="${f1(1.4 + r() * 1.6)}" stroke-linecap="round"/>`; }
+  return `<g data-fx="flame">${s}</g>`;
+}
+// steam or smoke as ink: broad dry wisps that lean and thin out as they rise, never a regular wave
+function inkSteam(r, b, h, col = '#c8c4b8', o = {}) {
+  let s = '';
+  const drift = (r() - 0.5) * h * 0.5;
+  for (let i = 0; i < (o.n || 2); i++) {
+    let p = [b[0] + (i - 0.5) * h * 0.3 + (r() - 0.5) * 10, b[1]]; const pts = [p];
+    for (let k = 1; k < 4; k++) { p = [p[0] + drift * 0.4 + (r() - 0.5) * h * 0.15, p[1] - h * (0.24 + r() * 0.1)]; pts.push(p); }
+    s += drybrush(r, pts, h * 0.24, col, { profile: t => 0.25 + 0.75 * Math.sin(Math.PI * Math.min(1, t * 1.3)), dry: 1, body: false, op: 0.32, bristles: 12 });
+  }
+  return `<g data-fx="steam">${s}</g>`;
+}
+// lightning as ink: a ragged bolt, a split loaded brush stroke with forks, burns where it lands
+function inkBolt(r, a, b, col = '#f0e8c8', o = {}) {
+  const pts = [a]; let p = a; const n = 7;
+  for (let i = 1; i < n; i++) { const t = i / n; p = add(lerp(a, b, t), [(r() - 0.5) * 60, (r() - 0.5) * 20]); pts.push(p); }
+  pts.push(b);
+  let s = drybrush(r, pts, 22, INK, { dry: 0.8, op: 0.95, bodyLen: 0.5, bristles: 8, filter: 'kRag' }) + drybrush(r, pts, 8, col, { dry: 0.6, op: 0.95, body: false, bristles: 4 });
+  for (let k = 2; k < n; k += 2) { const q = pts[k], e = add(q, [(r() - 0.5) * 140, 40 + r() * 80]); s += drybrush(r, [q, lerp(q, e, 0.5), e], 8, INK, { dry: 1, op: 0.85, body: false, bristles: 4 }); }
+  s += splatter(r, b, 90, INK, { n: 18, blotR: 0.25 });
+  return `<g data-fx="bolt">${s}</g>`;
+}
+// rime: a crust of pale broken strokes along an edge and specks of frost on and round it
+function inkRime(r, pts, w = 18) {
+  let s = drybrush(r, pts, w, '#e6eef0', { dry: 1, op: 0.85, body: false, bristles: 10 });
+  for (const q of catmull(pts, 4)) for (let k = 0; k < 2; k++) { const p = add(q, [(r() - 0.5) * w * 2, (r() - 0.5) * w]); s += `<path d="M${f1(p[0])},${f1(p[1])}l${f1((r() - 0.5) * 6)},${f1(4 + r() * 6)}" stroke="#f0f6f8" stroke-width="1.6" stroke-linecap="round"/>`; }
+  return `<g data-fx="rime">${s}</g>`;
+}
+// drips falling from a point
+function inkDrip(r, p, col = INK, n = 3) {
+  let s = '';
+  for (let i = 0; i < n; i++) { const q = add(p, [(r() - 0.5) * 30, 14 + i * 22 + r() * 10]), rr = 3 + r() * 3; s += `<path d="${pathD([add(q, [0, -rr * 2.4]), add(q, [rr, 0]), add(q, [0, rr]), add(q, [-rr, 0])], true)}" fill="${col}" stroke="${INK}" stroke-width="1"/>`; }
+  return `<g data-fx="drip">${s}</g>`;
+}
+const FX = { flame: inkFlame, steam: inkSteam, bolt: inkBolt, rime: inkRime, drip: inkDrip };
+
 // ==== object detail helpers (Fig space)
 // Everything here draws into a Fig with its own shading, so details get the same cel band, hatch and grit.
 const D = {
@@ -377,6 +430,7 @@ function hero(mod, key, pose = {}, list = 'heroes', o = {}) {
   let body = '';
   for (const run of f.runs()) {
     if ((o.hide || []).includes(run.bone)) continue;
+    if (o.only && !o.only.includes(run.bone)) continue;
     const ops = run.bone === 'root' || !J[run.bone] ? [] : chain(run.bone).filter(b => pose[b]).map(b => `rotate(${pose[b]} ${J[b].pivot[0]} ${J[b].pivot[1]})`);
     body += ops.length ? `<g transform="${ops.join(' ')}">${run.body}</g>` : run.body;
   }
@@ -409,4 +463,4 @@ function svgDoc(seed, c, defs, body, o = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${cardDefs(seed, c)}${defs}</defs>${body}${finish(c, o)}</svg>`;
 }
 
-module.exports = { W, H, INK, COURSE, INK6, BLOOD, BLOOD_L, BONE, PAPER, catmull, plen, normals, arc, blob, pathD, polyD, cardDefs, ground, lightShaft, edgeHatch, finish, drybrush, splatter, motionHatch, impact, flick, slash, billow, D, hero, place, mapPt, objFig, figSVG, svgDoc, E, KIT, f1 };
+module.exports = { W, H, INK, COURSE, INK6, BLOOD, BLOOD_L, BONE, PAPER, catmull, plen, normals, arc, blob, pathD, polyD, cardDefs, ground, lightShaft, edgeHatch, finish, drybrush, splatter, motionHatch, impact, flick, slash, billow, fxReq, FX, inkFlame, inkSteam, inkBolt, inkRime, inkDrip, D, hero, place, mapPt, objFig, figSVG, svgDoc, E, KIT, f1 };

@@ -6,7 +6,7 @@ const G = require('../gear');
 const { E, D, INK, BONE } = K;
 const { add, sub, mul, lerp, rot, mix, ell, frame, limb } = E;
 
-const IRON = '#4d4f52', OAK = '#5b412a', OAKL = '#7a5a3a', LEATHER = '#5a3e28', LINEN = '#c8bca0', SACK = '#8a7a5a', BRASS = '#9a7a3a',
+const IRON = '#4d4f52', OAK = '#5b412a', OAKL = '#7a5a3a', LEATHER = '#5a3e28', LINEN = '#c8bca0', SACK = '#8a7a5a', BRASS = '#7a6848',
   BONEC = '#d4c8a8', TWINE = '#9a8460', RUST = '#5a2a12', VERD = '#4f7a66', GLASS = '#6a7a72', SKIN = '#b89a7c', COPPER = '#8a5a34';
 const SIX = ['#b8341f', '#8fb2c9', '#c9a43a', '#2f4f8f', '#7d9a3a', '#4b2a5c'];
 const T = (f, n) => n + f.o.seed;
@@ -118,7 +118,7 @@ O.hood = (f, o = {}) => { // a limp sacking hood, soaked through and steaming, i
   f.part(F([[-120, 120], [120, 116], [128, 150], [-128, 154]]), { fill: mix(SACK, '#000', 0.2), shade: 0.4, inkW: 1.2, cast: false }); for (let i = 0; i < 12; i++) L(f, F, [[-118 + i * 20, 122], [-122 + i * 20, 150]], 1.2, INK, { op: 0.6 }); // gathered at the neck
   f.flat(F([[-180, 60], [-160, -80], [-100, -40], [-120, 100]]), '#2a2014', { op: 0.35 }); // wet dark
   for (let i = 0; i < 6; i++) { const x = -120 + i * 50; f.flat(F([[x - 3, 196], [x + 3, 196], [x, 220 + r() * 20]]), '#3a4a52', { op: 0.8 }); }
-  for (let i = 0; i < 4; i++) L(f, F, [[-60 + i * 40, -230], [-50 + i * 40, -270], [-64 + i * 40, -310]], 2.4, '#d8d4c8', { op: 0.5 });
+  K.fxReq(f, 'steam', F([[0, -230]])[0], 110);
   return { focus: F([[0, 0]])[0], top: F([[10, -220]])[0] };
 };
 O.sack = (f, o = {}) => { // a tied sack, patched, spilling: dirt, powder, rats' gnawed corner
@@ -162,13 +162,13 @@ O.feather = (f, o = {}) => { // a black flight feather, ragged, a drop of blood 
 O.bellrope = (f, o = {}) => { // a belfry rope coming down out of the dark, its striped woollen grip (the sally) worn bare, the tail coiled
   const F = frame([0, 0], o.ang ?? 0.04, 1), r = f.r;
   L(f, F, [[0, -400], [4, -140]], 14, INK); L(f, F, [[0, -400], [4, -140]], 9, '#7a6a4a'); for (let y = -390; y < -140; y += 14) L(f, F, [[-5, y], [7, y + 8]], 1.4, INK, { op: 0.7 });
-  P(f, F, limb([4, -140], [6, 80], 46, 46, { capK: 0.4 }), '#7a2a20', { tex: T(f, 'weave'), texOp: 0.8 });
-  for (let i = 0; i < 6; i++) f.part(F([[-23, -120 + i * 36], [27, -124 + i * 36], [28, -108 + i * 36], [-22, -104 + i * 36]]), { fill: i % 2 ? '#d0c6a8' : '#2f4f6f', shade: 0.4, inkW: 1, cast: false });
+  P(f, F, limb([4, -140], [6, 80], 46, 46, { capK: 0.4 }), '#5a3a2c', { tex: T(f, 'weave'), texOp: 0.8 });
+  for (let i = 0; i < 6; i++) f.part(F([[-23, -120 + i * 36], [27, -124 + i * 36], [28, -108 + i * 36], [-22, -104 + i * 36]]), { fill: i % 2 ? '#9a8e74' : '#3a3428', shade: 0.4, inkW: 1, cast: false });
   f.flat(F([[-23, -40], [10, -46], [12, 20], [-20, 26]]), '#6a5a40', { op: 0.6 }); // worn by hands
   const tail = [[6, 80], [10, 160], [-60, 230], [-140, 220], [-160, 170], [-80, 150], [40, 190], [120, 240], [60, 280]];
   L(f, F, tail, 14, INK); L(f, F, tail, 9, '#7a6a4a'); for (let i = 1; i < tail.length; i++) L(f, F, [lerp(tail[i - 1], tail[i], 0.5), add(lerp(tail[i - 1], tail[i], 0.5), [6, 6])], 1.4, INK, { op: 0.7 });
   for (let i = 0; i < 5; i++) L(f, F, [[56 + i * 4, 280], [50 + i * 7, 300 + r() * 10]], 1.4, '#7a6a4a');
-  return { focus: F([[4, -40]])[0], top: F([[0, -400]])[0] };
+  return { focus: F([[4, -40]])[0], top: F([[0, -400]])[0], grip: { c: F([[5, -30]])[0], thumb: (o.ang ?? 0.04) - Math.PI / 2 }, sig: [-60, -200, 70, 120] };
 };
 
 // ==== the alchemist's apparatus
@@ -185,9 +185,9 @@ O.alembic = (f, o = {}) => { // a glass alembic on its stand: the bulb of brew, 
   for (let i = 0; i < 3; i++) f.flat(F(ell([332, -40 + i * 26], 5, 7, 0, 8)), liq);
   P(f, F, turned([[46, 150], [52, 100], [20, 60], [16, 30]]).map(p => [p[0] + 330, p[1]]), GLASS, { tex: T(f, 'mottle'), texOp: 0.3 });
   f.flat(F([[294, 120], [366, 120], [374, 148], [286, 148]]), liq, { op: 0.9 });
-  D.wax(f, F([[-24, -98], [0, -104], [24, -98]]), '#6a1a12', { thick: 4, drips: 1, dripL: 24 });
+  D.wax(f, F([[-24, -98], [0, -104], [24, -98]]), '#8a8478', { thick: 4, drips: 1, dripL: 24 });
   D.label(f, F([[60, 40]])[0], 50, 40, 0.1, '#cdbb94', G2 => f.line(G2([[-16, 0], [14, -2]]), 1.2, INK, { op: 0.7 }));
-  for (let i = 0; i < 4; i++) L(f, F, [[-40 + i * 26, -260], [-30 + i * 26, -300], [-44 + i * 26, -340]], 2.4, '#d8d4c8', { op: 0.5 });
+  K.fxReq(f, 'steam', F([[0, -260]])[0], 100);
   return { focus: F([[0, -20]])[0] };
 };
 O.crucible = (f, o = {}) => { // a clay crucible hung glowing on its chain over coals, the melt in it bright, slag on its lip
@@ -235,7 +235,7 @@ O.vessel = (f, o = {}) => { // the Accumulator's brass vessel: banded, gauged, a
   P(f, F, turned([[110, 200], [140, 150], [150, 0], [130, -110], [70, -170], [56, -200]]), BRASS, { tex: T(f, 'mottle'), texOp: 0.7 });
   for (const y of [-120, -20, 80, 160]) { L(f, F, [[-148 + Math.abs(y) * 0.05, y], [0, y + 10], [148 - Math.abs(y) * 0.05, y]], 10, INK); L(f, F, [[-146 + Math.abs(y) * 0.05, y], [0, y + 10], [146 - Math.abs(y) * 0.05, y]], 6, mix(BRASS, '#000', 0.25)); for (const x of [-110, -40, 40, 110]) f.rivet(F([[x, y + 6]])[0], 2.6, '#c8a860'); }
   f.part(F(ell([60, 30], 40, 40, 0, 18)), { fill: '#d8d0b8', shade: 0.3, inkW: 2.4, cast: false }); for (let i = 0; i < 9; i++) { const a = E.deg(200 + i * 18); L(f, F, [[60 + Math.cos(a) * 30, 30 + Math.sin(a) * 30], [60 + Math.cos(a) * 38, 30 + Math.sin(a) * 38]], 1.2, INK); }
-  L(f, F, [[60, 30], [84, 6]], 3, '#6a1a12'); f.flat(F(ell([60, 30], 4, 4, 0, 6)), INK);
+  L(f, F, [[60, 30], [84, 6]], 3, '#1a120c'); f.flat(F(ell([60, 30], 4, 4, 0, 6)), INK);
   P(f, F, [[-50, -200], [50, -200], [44, -250], [-44, -250]], '#8a6a44', { tex: T(f, 'mottle'), texOp: 0.8, dress: false });
   D.wax(f, F([[-60, -238], [-30, -256], [0, -260], [30, -256], [60, -238]]), '#c8b890', { thick: 6, drips: 1, dripL: 40 });
   const glow = o.course && o.course !== 'physical' ? K.INK6[o.course] : '#f0e0a0';
@@ -319,14 +319,14 @@ O.scales = (f, o = {}) => { // a pair of iron scales on a post, the pans hanging
   P(f, F, [[-110, 260], [110, 260], [90, 224], [-90, 224]], OAK, { tex: T(f, 'wood'), texOp: 0.8 });
   const beam = [[-240, -200 + 240 * tilt], [240, -200 - 240 * tilt]];
   L(f, F, beam, 16, INK); L(f, F, beam, 10, IRON); f.part(F(ell([0, -200], 18, 18, 0, 12)), { fill: IRON, shade: 0.4, inkW: 1.4 }); f.rivet(F([[0, -200]])[0], 5, '#8a8a86');
-  for (const [b, s] of [[beam[0], -1], [beam[1], 1]]) { const pan = add(b, [0, 220]); for (const dx of [-60, 60]) { L(f, F, [b, add(pan, [dx, -10])], 3, INK); L(f, F, [b, add(pan, [dx, -10])], 1.6, '#8a8a86', { dash: '6 3' }); } f.part(F([add(pan, [-80, -12]), add(pan, [80, -12]), add(pan, [60, 20]), add(pan, [-60, 20])]), { fill: '#6a6c6a', shade: 0.45, inkW: 1.5 }); if (s < 0) for (let i = 0; i < 5; i++) f.part(F(ell(add(pan, [-30 + i * 14, -22 - (i % 2) * 10]), 14, 6, 0, 10)), { fill: '#a8842a', shade: 0.4, inkW: 1, cast: false }); else f.part(F(ell(add(pan, [0, -26]), 20, 16, 0, 12)), { fill: o.course && o.course !== 'physical' ? K.INK6[o.course] : '#5c0f0b', shade: 0.45, inkW: 1.2, cast: false }); }
+  for (const [b, s] of [[beam[0], -1], [beam[1], 1]]) { const pan = add(b, [0, 220]); for (const dx of [-60, 60]) { L(f, F, [b, add(pan, [dx, -10])], 3, INK); L(f, F, [b, add(pan, [dx, -10])], 1.6, '#8a8a86', { dash: '6 3' }); } f.part(F([add(pan, [-80, -12]), add(pan, [80, -12]), add(pan, [60, 20]), add(pan, [-60, 20])]), { fill: '#6a6c6a', shade: 0.45, inkW: 1.5 }); f.part(F(ell(add(pan, [0, -12]), 80, 13, 0, 18)), { fill: '#8a8c88', shade: 0.3, inkW: 1.3, cast: false }); f.part(F(ell(add(pan, [0, -10]), 66, 8, 0, 16)), { fill: '#3e403e', shade: 0.2, inkW: 0.8, cast: false, hatch: false }); if (s < 0) for (let i = 0; i < 5; i++) f.part(F(ell(add(pan, [-30 + i * 14, -22 - (i % 2) * 10]), 14, 6, 0, 10)), { fill: '#a8842a', shade: 0.4, inkW: 1, cast: false }); else f.part(F(ell(add(pan, [0, -26]), 20, 16, 0, 12)), { fill: '#c8bca0', shade: 0.45, inkW: 1.2, cast: false }); }   // a knucklebone against the coins (L14: no red ball)
   D.bloom(f, F([[0, 100]])[0], 18, RUST, { n: 2 }); f.scratches(F([[0, 0]])[0], 20, 5, '#d8d8d4');
   return { focus: F([[0, -100]])[0] };
 };
 O.hand = (f, o = {}) => { // a carved wooden votive hand, palm out, banded at the wrist in the six inks, a seal pressed in its palm
   const F = frame([0, 0], o.ang ?? -0.05, 1), r = f.r, wood = '#a8865e';
   P(f, F, [[-90, 260], [-100, 120], [100, 120], [90, 260]], wood, { tex: T(f, 'wood'), texOp: 0.7 });
-  SIX.forEach((c, i) => f.part(F([[-98, 130 + i * 20], [98, 126 + i * 20], [98, 142 + i * 20], [-98, 146 + i * 20]]), { fill: mix(c, '#3a2a1a', 0.3), shade: 0.4, inkW: 1, cast: false }));
+  SIX.forEach((c, i) => f.part(F([[-98, 130 + i * 20], [98, 126 + i * 20], [98, 142 + i * 20], [-98, 146 + i * 20]]), { fill: mix(c, '#3a2a1a', 0.62), shade: 0.4, inkW: 1, cast: false }));
   D.slab(f, F([[-120, 120], [-140, 0], [-130, -80], [130, -80], [140, 0], [120, 120]]), [12, 8], mix(wood, '#000', 0.5));
   P(f, F, [[-120, 120], [-140, 0], [-130, -80], [130, -80], [140, 0], [120, 120]], wood, { tex: T(f, 'wood'), texOp: 0.7 });
   [[-110, -60, -0.12, 150], [-40, -80, -0.04, 200], [30, -80, 0.04, 210], [100, -60, 0.12, 170]].forEach(([x, y, a, l]) => { P(f, F, limb([x, y], add([x, y], rot([0, -l], a)), 50, 40, { capK: 0.9 }), wood, { tex: T(f, 'wood'), texOp: 0.6, dressO: { op: 0.35 } }); for (const t of [0.35, 0.68]) L(f, F, [add([x - 18, y], rot([0, -l * t], a)), add([x + 18, y], rot([0, -l * t], a))], 1.4, INK, { op: 0.7 }); });
@@ -348,7 +348,7 @@ O.ring = (f, o = {}) => { // the Elementalist's copper sigil ring, six course st
 O.brush = (f, o = {}) => { // a scribe's brush loaded with ink, a drop about to fall, the handle stained in six colours
   const F = frame([0, 0], o.ang ?? -0.6, 1), r = f.r, ink = o.course && o.course !== 'physical' ? mix(K.INK6[o.course], '#16110e', 0.5) : '#16121a';
   P(f, F, limb([-300, 0], [60, 0], 22, 30, { capK: 0.6 }), '#6a4a2a', { tex: T(f, 'wood'), texOp: 0.8 });
-  SIX.forEach((c, i) => f.flat(F(ell([-220 + i * 44, (i % 2 ? 6 : -6)], 14, 7, 0.4, 8)), mix(c, '#2a1a10', 0.2), { op: 0.85 }));
+  for (let i = 0; i < 6; i++) f.flat(F(ell([-220 + i * 44, (i % 2 ? 6 : -6)], 14, 7, 0.4, 8)), i % 2 ? '#3a3026' : mix(ink, '#2a1a10', 0.3), { op: 0.85 });   // ink-stained thread wraps (L14: no six-colour daubs)
   P(f, F, [[60, -18], [100, -20], [100, 20], [60, 18]], BRASS, { sharp: true, dressO: { op: 0.4 } });
   for (let i = 0; i < 3; i++) L(f, F, [[68 + i * 10, -18], [68 + i * 10, 18]], 1.4, INK, { op: 0.7 });
   P(f, F, [[100, -20], [180, -30], [270, -6], [300, 0], [270, 12], [180, 30], [100, 20]], ink, { tex: T(f, 'mottle'), texOp: 0.4, dressO: { op: 0.3, lt: '#8a8aa0' } });
@@ -356,7 +356,7 @@ O.brush = (f, o = {}) => { // a scribe's brush loaded with ink, a drop about to 
   f.flat(F([[296, -2], [308, 2], [306, 40], [298, 40]]), ink); f.flat(F(ell([302, 54], 9, 13, 0, 10)), ink); f.flat(F(ell([298, 48], 3, 4, 0, 6)), '#ffffff', { op: 0.5 });
   f.line(F(loop(ell([-300, 0], 12, 12, 0, 10))), 3, '#2a2420'); L(f, F, [[-310, 10], [-330, 60], [-316, 100]], 2, '#2a2420');
   f.spatter(F([[250, 80]])[0], 60, 14, ink);
-  return { focus: F([[250, 0]])[0] };
+  return { focus: F([[250, 0]])[0], grip: { c: F([[-130, 0]])[0], thumb: o.ang ?? -0.6 } };
 };
 
 // ==== denser versions of plain objects from objects2.js (same frame, more secondary details on top)
@@ -369,7 +369,7 @@ O.bowl = (f, o = {}) => { // the bowl, with staples across an old crack, a notch
   for (let i = 0; i < 6; i++) L(f, F, [[-180 + i * 12, -6], [-178 + i * 12, 8]], 1.6, INK, { op: 0.7 }); // tally notches on the rim
   for (const x of [-60, 40, 140]) { f.flat(F([[x - 6, 40], [x + 6, 40], [x + 2, 90 + r() * 20], [x - 2, 90]]), '#2a1a0c', { op: 0.45 }); }
   D.bloom(f, F([[120, 90]])[0], 20, '#2a1a0c', { n: 3, op: 0.4 }); f.flat(F([[140, -210], [160, -230], [170, -214]]), '#1a0c06', { op: 0.8 });
-  for (let i = 0; i < 4; i++) L(f, F, [[-80 + i * 40, -30], [-70 + i * 40, -80], [-84 + i * 40, -130]], 2.4, '#d8d4c8', { op: 0.45 });
+  if (!(o.state || {}).frozen) K.fxReq(f, 'steam', F([[0, -30]])[0], 120);
   return p;
 };
 O.inkpot = (f, o = {}) => { // the inkpot, with its cork on a string, a stained rag, a chipped lip, spatter and a scratched mark

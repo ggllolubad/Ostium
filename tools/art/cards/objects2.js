@@ -25,11 +25,9 @@ function P(f, F, pts, fill, o = {}) {
 const turned = prof => { const [w0, y0] = prof[0], arc = []; for (let i = 1; i < 8; i++) { const t = Math.PI * i / 8; arc.push([w0 * Math.cos(t), y0 + w0 * 0.2 * Math.sin(t)]); } return [...prof.map(([w, y]) => [-w, y]).reverse().reverse(), ...prof.slice().reverse().map(([w, y]) => [w, y]), ...arc]; };
 const L = (f, F, pts, w, col, o) => f.line(F(pts), w, col, o);
 // a candle or lamp flame: a guttering tongue, dark-edged, never a cartoon fire
-function flame(f, F, b, h, col = '#e0a040', core = '#f8e8b0') {
-  f.flat(F([[b[0] - h * 0.18, b[1]], [b[0] - h * 0.22, b[1] - h * 0.45], [b[0] - h * 0.04, b[1] - h * 0.8], [b[0] + h * 0.02, b[1] - h], [b[0] + h * 0.16, b[1] - h * 0.5], [b[0] + h * 0.16, b[1]]]), col, { op: 0.95 });
-  f.flat(F([[b[0] - h * 0.07, b[1] - h * 0.05], [b[0] - h * 0.04, b[1] - h * 0.55], [b[0] + h * 0.06, b[1] - h * 0.1]]), core);
-  L(f, F, [[b[0] - h * 0.18, b[1]], [b[0] - h * 0.22, b[1] - h * 0.45], [b[0] - h * 0.04, b[1] - h * 0.8]], 1.1, INK, { op: 0.6 });
-}
+// a flame is requested, not drawn: the composition draws it in ink (L18)
+function flame(f, F, b, h, col = '#c8642a') { K.fxReq(f, 'flame', F([b])[0], h, { col }); }
+
 const O = {};
 
 // ==== vessels
@@ -53,7 +51,7 @@ O.vial = (f, o = {}) => { // a tall stoppered bottle of draught, label and wax, 
   L(f, F, [[-50, -20], [-56, 40], [-52, 110]], 5, '#e8e4d0', { op: 0.45 });
   D.label(f, F([[4, 80]])[0], 84, 60, (o.ang || 0) - 0.04, '#cdbb94', (G) => { for (let k = 0; k < 3; k++) f.line(G([[-30, -14 + k * 12], [26, -16 + k * 12]]), 1.1, INK, { op: 0.7, dash: '7 3 4 2' }); });
   P(f, F, [[-22, -160], [-26, -206], [26, -208], [22, -160]], '#8a6a44', { tex: T(f, 'mottle'), texOp: 0.8 });
-  D.wax(f, F([[-30, -196], [-18, -212], [0, -214], [18, -212], [30, -196]]), '#6a1a12', { thick: 6, drips: 1, dripL: 40 });
+  D.wax(f, F([[-30, -196], [-18, -212], [0, -214], [18, -212], [30, -196]]), '#3a2a20', { thick: 6, drips: 1, dripL: 40 });
   D.twine(f, F([[-25, -140], [-25, -134]]), F([[25, -140], [25, -134]]), 2, TWINE, { knot: F([[26, -136]])[0], ends: [F([[40, -120], [46, -96]])] });
   if (o.sprig) for (let i = 0; i < 4; i++) { const b = F([[40 + i * 4, -120]])[0]; f.part(ell(add(b, [10 + i * 6, -10 - i * 12]), 12, 5, -0.6 + i * 0.3, 8), { fill: '#6a7a44', shade: 0.4, inkW: 1, cast: false }); }
   D.chip(f, F([[20, -160]])[0], 6, o.ang || 0);
@@ -68,9 +66,9 @@ O.keg = (f, o = {}) => { // a powder keg: staves, iron hoops, a fuse burning dow
   f.part(F(ell([0, -150], 104, 20, 0, 18)), { fill: mix(OAKL, '#fff', 0.1), shade: 0.35, inkW: 1.4, tex: T(f, 'wood'), texOp: 0.5 });
   f.part(F(ell([30, -152], 14, 6, 0, 10)), { fill: '#2a1a10', shade: 0.2, inkW: 1, cast: false });
   L(f, F, [[30, -154], [44, -190], [30, -226], [50, -250]], 5, INK); L(f, F, [[30, -154], [44, -190], [30, -226], [50, -250]], 2.8, '#6a5a44');
-  flame(f, F, [50, -250], 30, '#e07a30'); for (let i = 0; i < 8; i++) f.flat(F(ell([50 + (r() - 0.5) * 50, -270 - r() * 40], 1.6, 1.6, 0, 6)), '#e0a040', { op: 0.9 });
+  flame(f, F, [50, -250], 30, '#e07a30');
   f.part(F([[-60, 20], [40, 14], [44, 70], [-56, 76]]), { fill: '#c8b890', shade: 0.3, inkW: 1.2, tex: T(f, 'mottle'), texOp: 0.5 });
-  L(f, F, [[-40, 30], [20, 60]], 3, '#6a1a12', { op: 0.85 }); L(f, F, [[20, 30], [-40, 60]], 3, '#6a1a12', { op: 0.85 }); // a rubric warning cross on the label
+  L(f, F, [[-40, 30], [20, 60]], 3, '#7a1a12', { op: 0.85 }); L(f, F, [[20, 30], [-40, 60]], 3, '#7a1a12', { op: 0.85 }); // a rubric warning cross on the label
   for (let i = 0; i < 20; i++) f.flat(F(ell([-90 + r() * 180, 150 + r() * 14], 1.6, 1.2, 0, 6)), '#1a1410', { op: 0.8 }); // spilled powder
   return { focus: F([[0, -40]])[0] };
 };
@@ -217,12 +215,12 @@ O.brazier = (f, o = {}) => { // an iron brazier on three legs, coals and a low d
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
   for (const [a, b] of [[[-110, 20], [-160, 200]], [[110, 20], [160, 200]], [[0, 30], [10, 210]]]) { L(f, F, [a, b], 16, INK); L(f, F, [a, b], 11, IRON); }
   for (let i = 0; i < 9; i++) f.part(F(ell([-120 + i * 30, -60 - r() * 30], 22, 16, r(), 10)), { fill: i % 3 ? '#2a1a14' : '#8a3a1a', shade: 0.4, inkW: 1.2, cast: false });
-  if (o.course === 'void') f.flat(F([[-120, -60], [-60, -200], [0, -150], [40, -230], [90, -130], [130, -60]]), '#08060a'); else { flame(f, F, [-40, -70], 140, '#c86030', '#f0c070'); flame(f, F, [50, -70], 110, '#c86030', '#f0c070'); }
+  if (o.course === 'void') f.flat(F([[-120, -60], [-60, -200], [0, -150], [40, -230], [90, -130], [130, -60]]), '#08060a'); else { flame(f, F, [-40, -70], 140, '#c86030'); flame(f, F, [50, -70], 110, '#c86030'); }
   P(f, F, [[-170, -70], [170, -70], [140, 10], [80, 40], [-80, 40], [-140, 10]], IRON, { dressO: { op: 0.45 } });
   f.line(F(ell([0, -70], 170, 26, 0, 24).slice(0, 13)), 3, mix(IRON, '#fff', 0.25), { op: 0.8 }); f.line(F(ell([0, -70], 170, 26, 0, 24).slice(12, 25)), 2.4, INK, { op: 0.8 });
   for (let i = 0; i < 7; i++) f.rivet(F([[-130 + i * 44, -50]])[0], 3, '#6a6a66');
   D.bloom(f, F([[80, 0]])[0], 26, RUST, { n: 4, specks: 10 });
-  for (let i = 0; i < 16; i++) f.flat(F(ell([-140 + r() * 280, -260 - r() * 120], 2 + r() * 2, 1.4, r(), 6)), r() < 0.5 ? '#3a3030' : '#e0a040', { op: 0.85 });
+  for (let i = 0; i < 16; i++) f.flat(F(ell([-140 + r() * 280, -260 - r() * 120], 2 + r() * 2, 1.4, r(), 6)), r() < 0.5 ? '#3a3030' : '#5a4a40', { op: 0.85 });
   return { focus: F([[0, -120]])[0] };
 };
 
@@ -305,7 +303,7 @@ O.scroll = (f, o = {}) => { // a long scroll half unrolled, written over, a wax 
   P(f, F, [[-200, -150], [200, -150], [200, 150], [-200, 150]], '#d4c6a0', { tex: T(f, 'mottle'), texOp: 0.6, dressO: { op: 0.3 } });
   for (let k = 0; k < 10; k++) L(f, F, [[-170, -120 + k * 26], [0, -124 + k * 26], [170, -118 + k * 26]], 1.4, INK, { op: 0.7, dash: `${(10 + r() * 20).toFixed(0)} 3 6 4` });
   for (const y of [-170, 170]) { P(f, F, limb([-220, y], [220, y], 44, 44, { capK: 0.4 }), mix('#d4c6a0', '#000', 0.08), { dressO: { op: 0.35 } }); for (const x of [-232, 232]) f.part(F(ell([x, y], 12, 24, 0, 12)), { fill: OAK, shade: 0.4, inkW: 1.2 }); }
-  f.part(F(ell([110, 110], 34, 30, 0, 16)), { fill: '#6a1a12', shade: 0.45, inkW: 1.6 }); f.line(F(loop(ell([110, 110], 18, 16, 0, 12))), 1.4, '#3a0a08');
+  f.part(F(ell([110, 110], 34, 30, 0, 16)), { fill: '#3a2a20', shade: 0.45, inkW: 1.6 }); f.line(F(loop(ell([110, 110], 18, 16, 0, 12))), 1.4, '#3a0a08');
   f.part(F([[100, 130], [130, 136], [140, 230], [124, 220], [110, 236]]), { fill: '#7a1a12', shade: 0.4, inkW: 1.2 });
   L(f, F, [[-160, 120], [-100, 100], [-40, 126]], 2.4, '#4c0c08', { op: 0.9 }); // a signature in blood
   return { focus: F([[0, 0]])[0] };
@@ -342,7 +340,7 @@ O.key = (f, o = {}) => { // a heavy iron key on a ring with a paper tag
   D.bloom(f, F([[60, 0]])[0], 16, RUST, { n: 3 }); D.bloom(f, F([[200, 60]])[0], 12, RUST, { n: 2 });
   f.line([F([[-300, 10]])[0], F([[-310, 70]])[0]], 1.6, '#3a2a18');
   D.label(f, F([[-312, 110]])[0], 50, 70, (o.ang || 0) + 0.5, '#cdbb94', (G) => { f.line(G([[-14, -10], [12, -12]]), 1.2, INK, { op: 0.7 }); f.line(G([[-14, 4], [8, 2]]), 1.2, INK, { op: 0.7 }); });
-  return { focus: F([[40, 0]])[0] };
+  return { focus: F([[40, 0]])[0], grip: { c: F([[-150, 0]])[0], thumb: o.ang || -0.5 } };
 };
 
 // ==== care and keeping
@@ -445,11 +443,11 @@ O.rod = (f, o = {}) => { // an iron rod planted in split stone, iron straps and 
   f.part(F([[-14, -250], [-34, -300], [-8, -282], [0, -340], [8, -280], [34, -304], [14, -250]]), { fill: '#7a5a3a', shade: 0.4, inkW: 1.4 });
   f.flat(F(ell([0, -256], 16, 10, 0, 10)), '#1a1410', { op: 0.7 });
   for (let i = 0; i < 4; i++) f.flat(F(ell([-10 + i * 6, -240 + i * 12], 4, 6, 0, 8)), '#d8c8a0', { op: 0.8 }); // fused drips
-  const br = (p, a, l, d) => { if (d > 4 || l < 10) return; const q = add(p, rot([0, l], a)); f.line(F([p, q]), Math.max(1, 3 - d * 0.5), '#f0e8c8', { straight: true, op: 0.85 }); f.line(F([add(p, [1.5, 1.5]), add(q, [1.5, 1.5])]), 1, INK, { straight: true, op: 0.6 }); br(q, a + 0.4 + r() * 0.3, l * 0.7, d + 1); if (r() < 0.7) br(q, a - 0.4 - r() * 0.3, l * 0.6, d + 1); };
+  const br = (p, a, l, d) => { if (d > 4 || l < 10) return; const q = add(p, rot([0, l], a)); f.line(F([p, q]), Math.max(1.4, 4 - d * 0.6), '#1a1008', { straight: true, op: 0.85 }); f.line(F([add(p, [1.5, 1.5]), add(q, [1.5, 1.5])]), 1, '#8a6a4a', { straight: true, op: 0.5 });   // scorch, not white twigs (L18) br(q, a + 0.4 + r() * 0.3, l * 0.7, d + 1); if (r() < 0.7) br(q, a - 0.4 - r() * 0.3, l * 0.6, d + 1); };
   br([0, -240], 0, 60, 0); br([-14, -150], 0.5, 40, 1); br([14, 0], -0.4, 44, 1); br([-60, 120], 0.9, 40, 1); br([60, 124], -0.9, 44, 1);
   for (let i = 0; i < 8; i++) f.flat(F(ell([-140 + r() * 280, 130 + r() * 60], 10 + r() * 14, 4, 0, 8)), '#1a1410', { op: 0.55 });
   D.wear(f, F([[0, -60]])[0], 14, 160, 20);
-  return { focus: F([[0, -280]])[0], grip: { c: F([[0, -40]])[0], thumb: (o.ang ?? 0.05) - Math.PI / 2 } };
+  return { focus: F([[0, -280]])[0], sig: [-180, -345, 185, 215] };   // planted in the rock, never held (review 3)
 };
 O.stinger = (f, o = {}) => { // a torn-out insect stinger, chitin plates, a bead of venom at its point
   const F = frame([0, 0], o.ang || -0.6, 1), r = f.r;

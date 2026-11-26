@@ -86,9 +86,12 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
 
 - **Hero**: the calling's figure, or the path variant from `worlds/hero_paths_A/B` when the card's `arch` names one.
   The Vessel has no path figures, so its path cards use the base Vessel.
-- **Rigs** (`RIG` in `samples.js`): attack, cast and block poses for all seven callings, tuned by eye. Path variants
-  share their calling's rig. FX anchor on named bones (`mace`, `rapier`, `flask`, `hourglass`, `poppet`, hands) and
-  fall back to the near hand when a variant lacks the bone.
+- **Rigs** (`RIG` in `rig.js`): attack, cast and block poses for all seven callings. Path variants share their
+  calling's rig; a variant whose rest arm differs gets `pose.vary[<figure key>]` (merged by `card_kit.hero`). rig.js
+  checks every pose on every figure when it loads (wrist, elbow fold, shoulder range, plumb props, flask mouth,
+  two-handed turn) and throws; `check_poses.js` (run first by `render.js -all`) checks pose shares, block hits, grips,
+  pose words and the frame. FX anchor on named bones (`mace`, `rapier`, `flask`, `hourglass`, `poppet`, `pin`, hands)
+  or joints, and fall back to the near hand when a variant lacks the bone.
 - **Room**: world cards, foe-added cards and afflictions use their own world's room (from the cls or the id);
   everything else uses the course's room.
 - **Object**: `pickObject` scores about 40 word lists against the card's name (weight 3), note (1) and rules text

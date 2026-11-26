@@ -351,167 +351,10 @@ ART.el_strike_the_ring = (card) => {
   });
 };
 
-// ==== generic device card (any card without a hand-made one)
-// The object is picked from the card's own words (name weighs most, then the note, then the rules text), so cards
-// about bells get a bell and cards about salt get salt. Kind, calling and course break ties and fill gaps. The FX come
-// from the course. Plain on purpose: a rare card earns an ART entry.
-const { O } = require('./objects2');
-const O3 = require('./objects3').O;
-const FLASK_COL = { physical: ['#5a4a30', '#8a5a2a'], fire: ['#7a5a2a', '#c8742a'], frost: ['#6a8a9a', '#b8d0dc'], lightning: ['#7a7040', '#d8c870'], water: ['#3a5a4a', '#3a6a8a'], toxin: ['#4a6232', '#7a8636'], void: ['#3a3048', '#2a1a3a'] };
-const LIB = Object.assign({ flask: (f, o) => OB.flask(f, Object.assign({ glass: (FLASK_COL[o.course] || FLASK_COL.physical)[0], liquid: (FLASK_COL[o.course] || FLASK_COL.physical)[1], skull: o.course === 'toxin' }, o)), hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7, bites: o.course === 'void' ? [[50, -30, 20], [20, 50, 12]] : [] }, o)) }, O, O3);
-const OBJ_WORDS = [
-  ['poppet', /poppet|doll|effigy|straw/], ['mirror', /mirror|silver|reflection|glint|\bglass\b/], ['shard', /shard|splinter/],
-  ['bell', /\bbells?\b|toll|knell|tailors|dirge|handbell|chime|ringing/], ['hourglass', /\bhour|time|clock|delay|hasten|stillness|second hand|watch\b/],
-  ['needle', /needle|sewn|stitch|seam|\bpins?\b/], ['candle', /candle|tallow|taper|\bwax|vigil|witching/], ['eye', /\beyes?\b|stare|gaze|\bseen\b/],
-  ['knife', /knife|blade|bleed|letting|\bcut|scar|stab|dagger|edge/], ['skull', /skull|death|doom|grave|corpse|barrow|dread|final|harbinger|prophet|tomb|draugr|dead/],
-  ['bone', /\bbones?\b|marrow|knuckle/], ['cord', /\bcord|knot|thread|ladder|\bbind|\btie/], ['rope', /rope|hook|\bhaul|harpoon|keelhaul|lash|\bline\b/],
-  ['chain', /chain|flail|shackle|penitent/], ['book', /codex|\bbook|\bpage|ledger|\bread|tome/], ['scroll', /scroll|signed|letter|\bnames?\b|chalk|writ/],
-  ['inkpot', /\bink\b|quill|\bnib|\bwrite|spectrum|six courses/], ['key', /\bkeys?\b|\block\b|threshold|\bgate/], ['lantern', /\blamp|lantern|glare|beam|false light/],
-  ['purse', /alms|purse|coin|tithe|price|debt|\bgold|wealth|\bpay/], ['bandage', /bandage|linen|towel|\brag\b|cloth|vinegar|wrap|fever|frostbite|sickness|hood|sacking/], ['suture', /barber|stitch|\bsew|suture|\bgut\b|wound|fester|\bsores?\b/], ['tourniquet', /tourniquet|bleed|bled|staunch|tighten|cinch/], ['splint', /splint|broken|\bbreak|fracture|\bset\b/],
-  ['herbs', /herb|simple|sage|bloom|flower|seed|spore|garden|blight|moss|\broot/], ['bread', /bread|feast|cellar|sin-eater|\beats?\b/],
-  ['bowl', /broth|ladle|milk|\bbowl|soup|stew/], ['brazier', /brazier|\bfire\b|burn|\bash|flame|smoulder/], ['tongs', /tongs|ember|coal|fire-setting|forge/], ['coalpan', /\bpan\b|hearth|warm|cinder/], ['salt', /\bsalt\b/],
-  ['cup', /drink|\bcup|chalice|wine|offering|drain|blood/], ['hammer', /hammer|anvil|wedge|forge|temper|quench|weld|melt|smith/],
-  ['rod', /\brod\b|storm|\bbolt|lightning/], ['stinger', /sting|venom|wasp|hive/], ['reliquary', /relic|saint|holy|hymn|prayer|abbey|blessing|vigil/],
-  ['boot', /\bstep|march|shoulder|\bswap|\brank|fall back|\bgap\b|advance|retreat|wade|stride|dodge|stumble/],
-  ['anchor', /anchor|\bsea\b|drown|keel|\bwave|undertow|pressure|flood|brine|\btide|\bdeep\b/], ['door', /\bdoor|bar the|barricade|hold the line/],
-  ['shield', /shield|guard|\bwall\b|\bward|parry|brace|\bblock/], ['keg', /powder|\bkeg|blast|charge|explo/], ['jar', /\bjar\b|\bpot\b|firepot|crock/],
-  ['vial', /draught|phial|vial|tincture|bottle|potion|salts|tonic/], ['flask', /flask|\bbrew|acid/],
-];
-const OBJ_BY_CLS = { alchemist: 'vial', oracle: 'hourglass', hexweaver: 'poppet', elementalist: 'inkpot', bulwark: 'shield', duelist: 'knife', vessel: 'reliquary' };
-const OBJ_BY_COURSE = { physical: 'boot', fire: 'brazier', frost: 'bandage', water: 'anchor', toxin: 'herbs', void: 'candle', lightning: 'rod', attuned: 'inkpot' };
-function pickObject(card, id = '') {
-  const course = courseOf(card), kind = kindOf(card);
-  const name = (card.name || '').toLowerCase(), note = (card.note || '').toLowerCase(), text = (card.text || '').toLowerCase();
-  let best = null, bs = 0;
-  const FLASKS = ['flask', 'vial', 'jar', 'keg'], isFlask = (card.kw || []).includes('Flask') || /^fl_/.test(id);
-  if (isFlask && /drink|sip|throws back|bites the cork|lifts .* drinks|holds a small open vial|hangs from/.test(note)) return /powder|blast/.test(note + name) ? 'keg' : 'vial';
-  OBJ_WORDS.forEach(([k, re], i) => {
-    if (k === 'eye' && course !== 'void') return;
-    if (isFlask && !FLASKS.includes(k)) return;
-    const sc = (re.test(name) ? 3 : 0) + (re.test(note) ? 1 : 0) + (re.test(text) ? 0.3 : 0) - i * 0.001;
-    if (sc > bs) { bs = sc; best = k; }
-  });
-  // a word in the name names its object outright; otherwise a family of close objects shares the card by hash
-  const ALT = { bandage: ['bandage', 'suture', 'tourniquet', 'splint'], brazier: ['brazier', 'coalpan', 'tongs'], vial: ['vial', 'jar'], candle: ['candle', 'lantern'] };
-  if (bs >= 0.9) return bs >= 3 || !ALT[best] ? best : ALT[best][seedOf(id || name) % ALT[best].length];
-  if (kind === 'flask') return 'flask';
-  if (kind === 'curse') return 'chain';
-  return OBJ_BY_CLS[card.cls] || OBJ_BY_COURSE[course] || 'skull';
-}
-// the course's mark round the object: what the course does to the air and the floor, never sparkles or glows
-function courseFX(r, at, course, back, lay = 'close') {
-  const ink = fxInk(course); let s = '';
-  if (back) {
-    // the object's shadow on the floor: a dry ink pool, hatched, so it sits in the room instead of floating
-    const side = r() < 0.5 ? -1 : 1, a0 = side < 0 ? 150 : -40;
-    for (const R of [300, 360]) s += K.motionHatch(r, K.arc(at, R, R * 0.72, a0, a0 + 70, 10), 24, INK, { lw: 2, op: 0.45, grow: false });
-    if (course === 'toxin') for (const [x, w] of [[at[0] - 260, 110], [at[0] + 270, 120]]) s += K.billow(r, [x, 540], w, 34, '#68705a', { op: 0.4, lw: 4 });
-    if (course === 'water') for (let i = 0; i < 3; i++) s += K.drybrush(r, [[at[0] - 420, 540 + i * 22], [at[0], 520 + i * 26], [at[0] + 420, 545 + i * 20]], 26, mix('#2f4f8f', '#16110e', 0.65), { dry: 1, body: false, op: 0.65, bristles: 12 });
-    return s;
-  }
-  if (course === 'fire') for (let i = 0; i < 30; i++) { const p = [at[0] - 260 + r() * 520, 80 + r() * 300]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l${(2 + r() * 4).toFixed(1)},${(-3 - r() * 5).toFixed(1)}" stroke="${r() < 0.6 ? '#2a2020' : '#d8742a'}" stroke-width="${(1.5 + r() * 2).toFixed(1)}" stroke-linecap="round"/>`; }
-  else if (course === 'frost') { for (let i = 0; i < 40; i++) { const p = [at[0] - 300 + r() * 600, 60 + r() * 480]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l0,${(3 + r() * 6).toFixed(1)}" stroke="#e8eef0" stroke-width="${(1 + r() * 1.6).toFixed(1)}" stroke-linecap="round" opacity="0.8"/>`; } s += K.drybrush(r, [[0, 596], [W / 2, 580], [W, 598]], 34, '#d8e4e8', { dry: 1, body: false, op: 0.6, bristles: 18 }); }
-  else if (course === 'lightning') { const br = (p, a, l, d) => { if (d > 4) return ''; const q = add(p, [Math.cos(a) * l, Math.sin(a) * l]); return `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}L${q[0].toFixed(1)},${q[1].toFixed(1)}" stroke="#f0e8c0" stroke-width="${(3 - d * 0.5).toFixed(1)}" stroke-linecap="round"/><path d="M${(p[0] + 2).toFixed(1)},${(p[1] + 2).toFixed(1)}L${(q[0] + 2).toFixed(1)},${(q[1] + 2).toFixed(1)}" stroke="${INK}" stroke-width="1.2" opacity="0.7"/>` + br(q, a + 0.3 + r() * 0.4, l * 0.72, d + 1) + (r() < 0.7 ? br(q, a - 0.3 - r() * 0.4, l * 0.65, d + 1) : ''); }; s += `<g filter="url(#kWob)">${br([at[0] - 40, 600], -1.9, 70, 0)}${br([at[0] + 60, 600], -1.3, 64, 0)}</g>`; }
-  else if (course === 'void') { for (const [x, y, rr] of [[at[0] - 300, 470, 26], [at[0] + 330, 150, 18], [at[0] + 270, 500, 12]]) s += `<ellipse cx="${x}" cy="${y}" rx="${rr}" ry="${rr * 0.9}" fill="#060509" stroke="${INK}" stroke-width="2.4"/><path d="M${x - rr * 0.8},${y - rr * 0.6}A${rr} ${rr * 0.9} 0 0 1 ${x + rr * 0.6},${y - rr * 0.8}" stroke="#d8d0e0" stroke-width="1.2" fill="none" opacity="0.8"/>`; }
-  else if (course === 'water') for (let i = 0; i < 12; i++) { const p = [at[0] - 200 + r() * 400, 320 + r() * 200]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}q-4,8 0,12q4,-4 0,-12z" fill="${mix('#2f4f8f', '#16110e', 0.5)}" stroke="${INK}" stroke-width="1"/>`; }
-  else if (course === 'toxin') for (let i = 0; i < 30; i++) { const p = [at[0] - 300 + r() * 600, 150 + r() * 380]; s += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${(1 + r() * 2).toFixed(1)}" fill="${r() < 0.5 ? '#c8c890' : '#22220e'}" opacity="0.75"/>`; }
-  s += K.splatter(r, add(at, [220, -80]), 130, ink, { blot: false, n: 14, dir: [1, -0.4], spread: 1.4 });
-  return s;
-}
-const OBJ_SCALE = { ring: 1.0, coins: 1.0, feather: 1.1, lens: 1.05, brush: 1.1, knife: 1.2, needle: 1.15, bandage: 1.1, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, jar: 1.15, skull: 1.05, cord: 1.0, purse: 1.05, cup: 1.05, eye: 1.05, shard: 1.15, poppet: 1.05, hammer: 1.0, salt: 0.95, book: 1.0, bread: 1.05, boot: 1.05 };
-// ==== object layouts (StS2 framing): the object fills the frame, crops off an edge, and sits in something of the room
-const BODY = require('../body');
-const DEFAULT_ANG = { bandage: -0.12, hood: 0.08, sack: -0.05, barbs: 0.1, feather: -0.7, bellrope: 0.04, bellows: -0.15, sword: -0.35, rapier: -0.35, clock: -0.08, lens: -0.1, hand: -0.05, brush: -0.6, needle: -0.5, cord: 0.25, knife: -0.4, shard: 0.15, skull: 0.1, bone: -0.35, key: -0.5, herbs: 0.2, scroll: -0.12, hammer: -0.25, rod: 0.05, stinger: -0.6, anchor: 0.15, suture: -0.08, tourniquet: 0.1, splint: -0.3, coalpan: -0.1, tongs: -0.35 };
-const LONG = new Set(['sword', 'rapier', 'brush', 'feather', 'knife', 'needle', 'key', 'bone', 'rod', 'hammer', 'tongs', 'coalpan', 'splint', 'shard', 'stinger', 'candle']);
-const SUITS = {
-  hang: new Set(['lantern', 'bell', 'key', 'chain', 'cord', 'poppet', 'herbs', 'skull', 'shard', 'eye', 'rope', 'bone', 'tongs', 'purse', 'mirror', 'vial', 'hood', 'sack', 'bellrope', 'crucible', 'lens', 'feather', 'barbs', 'clock']),
-  water: new Set(['anchor', 'skull', 'bell', 'keg']),
-  held: new Set(['knife', 'hammer', 'rod', 'coalpan', 'tongs', 'sword', 'rapier', 'bellows']),
-  ledge: new Set(['sack', 'mortar', 'alembic', 'clock', 'vessel', 'coins', 'scales', 'knuckles', 'hand', 'ring', 'brush', 'lens', 'feather', 'bellows', 'barbs', 'hood', 'candle', 'skull', 'jar', 'vial', 'cup', 'bowl', 'book', 'scroll', 'inkpot', 'purse', 'bread', 'salt', 'reliquary', 'boot', 'keg', 'lantern', 'brazier', 'bell', 'hourglass', 'flask', 'bandage', 'herbs', 'splint', 'tourniquet', 'suture', 'shield', 'door', 'poppet', 'knife', 'key', 'bone', 'needle', 'coalpan']),
-};
-// an object Fig that records the bounding box of its solid parts as they are drawn (lines and clipped hatching do not count)
-function measuredFig(seed) {
-  const f = K.objFig(seed), part = f.part.bind(f);
-  f.bb = [1e9, 1e9, -1e9, -1e9];
-  f.part = (pts, o) => { if (Array.isArray(pts)) { const q = E.bbox(pts); f.bb = [Math.min(f.bb[0], q[0]), Math.min(f.bb[1], q[1]), Math.max(f.bb[2], q[2]), Math.max(f.bb[3], q[3])]; } return part(pts, o); };
-  return f;
-}
-const figBBox = f => f.bb;
-// the count comes from the name only (a note's 'two heroes' is not two objects); counts the note implies are OVR entries
-const countOf = card => { const t = (card.name || '').toLowerCase(); return /\b(three|thrice|triple)\b/.test(t) ? 3 : /\b(two|twin|twins|pair|both|twofold|double|doubled)\b/.test(t) ? 2 : /\beach\b/.test(t) ? 3 : 1; };
-// a stair edge or stone ledge across the lower frame, in card space, drawn as a figure so it carries the same ink
-function ledge(seed, y) {
-  const f = K.objFig(seed), r = f.r;
-  const top = [[-30, y], [300, y - 6], [700, y + 4], [1150, y - 4]], face = [...top, [1150, H + 30], [-30, H + 30]];
-  f.part(face, { fill: '#6a645a', shade: 0.4, tex: 'mottle' + seed, texOp: 0.8 });
-  f.part([[-30, y], [1150, y - 4], [1150, y + 16], [-30, y + 18]], { fill: '#8a8478', shade: 0.3, inkW: 1.4, cast: false });
-  D.dress(f, face, { op: 0.4, dir: 0.05 });
-  for (let i = 0; i < 6; i++) D.chip(f, [60 + i * 190 + r() * 60, y + 2], 9 + r() * 8, 0);
-  for (let i = 0; i < 3; i++) D.crack(f, [100 + r() * 900, y + 20], 1.3 + r() * 0.4, 90, { n: 5, lip: '#a8a49a' });
-  for (let i = 0; i < 5; i++) f.flat(blobAt(r, [r() * W, y + 8 + r() * 20], 30 + r() * 30, 8), '#3e4a28', { op: 0.6 }); // moss in the joint
-  for (let i = 1; i < 4; i++) f.line([[i * 290 + r() * 40, y + 18], [i * 290 + r() * 40 + 6, H + 20]], 2, INK, { op: 0.7 });
-  return K.figSVG(f);
-}
-const blobAt = (r, c, w, h) => { const o = []; for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; o.push([c[0] + Math.cos(a) * w * (0.7 + r() * 0.5), c[1] + Math.sin(a) * h * (0.7 + r() * 0.5)]); } return o; };
-// a beam across the top of the frame with an iron hook, for hanging things
-function beam(seed, hookX) {
-  const f = K.objFig(seed), r = f.r;
-  const b = [[-30, -20], [1150, -20], [1150, 62], [-30, 74]];
-  f.part(b, { fill: '#5b412a', shade: 0.45, tex: 'wood' + seed, texOp: 0.9 });
-  D.dress(f, b, { op: 0.45 });
-  f.line([[-30, 70], [1150, 58]], 2, '#a88a62', { op: 0.6 });
-  for (const x of [120, hookX - 70, hookX + 70, 980]) f.rivet([x, 30], 5, '#6a6a66');
-  f.part([[hookX - 16, 56], [hookX + 16, 54], [hookX + 14, 84], [hookX - 14, 86]], { fill: '#3a3a3c', shade: 0.4, inkW: 1.3 });
-  D.bloom(f, [hookX + 30, 50], 18, '#5a2a12', { n: 3 });
-  D.wax(f, [[300, 70], [320, 72], [340, 70]], '#cfc3a0', { thick: 3, drips: 1, dripL: 26 });
-  return K.figSVG(f);
-}
-// dark water over the lower frame: flat, cold, ripples and broken light on it, what floats
-function water(r, y, course) {
-  const col = mix(COURSE[course === 'physical' ? 'water' : course].deep, '#16232c', 0.5);
-  let s = `<path d="M-20,${y} Q300,${y - 6} 560,${y + 2} T1140,${y} L1140,${H + 20} L-20,${H + 20}Z" fill="${col}" opacity="0.82"/>`;
-  for (let i = 0; i < 9; i++) { const yy = y + 8 + i * 16 + r() * 8, x0 = r() * 300, x1 = x0 + 200 + r() * 700; s += `<path d="M${x0.toFixed(1)},${yy.toFixed(1)}Q${((x0 + x1) / 2).toFixed(1)},${(yy - 4).toFixed(1)} ${x1.toFixed(1)},${yy.toFixed(1)}" stroke="${i % 3 ? INK : '#c8d4d8'}" stroke-width="${(1.2 + r()).toFixed(1)}" fill="none" opacity="${i % 3 ? 0.55 : 0.4}" stroke-dasharray="${(30 + r() * 80).toFixed(0)} ${(8 + r() * 30).toFixed(0)}"/>`; }
-  s += K.drybrush(r, [[-20, y], [560, y - 3], [1140, y + 1]], 8, '#d8e0e0', { dry: 1, body: false, op: 0.55, bristles: 4 });
-  for (let i = 0; i < 6; i++) { const p = [r() * W, y + 20 + r() * 120]; s += `<path d="${K.polyD([[p[0], p[1]], [p[0] + 14, p[1] - 3], [p[0] + 18, p[1] + 2], [p[0] + 3, p[1] + 4]])}" fill="#5a4a30" stroke="${INK}" stroke-width="1"/>`; }
-  return `<g filter="url(#kWob)">${s}</g>`;
-}
-function deviceGeneric(card, id, o = {}) {
-  const course = courseOf(card, o), obj = o.device || pickObject(card, id), seed = o.seed || seedOf(id), c = COURSE[course], r = rng(seed);
-  const n = o.count || countOf(card), long = LONG.has(obj), base = OBJ_SCALE[obj] || 0.95;
-  // build the copies first, to measure them
-  const copies = [];
-  for (let k = 0; k < n; k++) { const f = measuredFig(seed + k * 7); const a0 = (o.ang ?? DEFAULT_ANG[obj] ?? 0); const da = n > 1 ? (k - (n - 1) / 2) * (long ? 1.0 : 0.22) : 0; const pts = LIB[obj](f, Object.assign({ course, ang: a0 + da }, o.objOpt || {})); copies.push({ f, pts, bb: figBBox(f) }); }
-  const options = ['close'].concat(['ledge', 'hang', 'water', 'held'].filter(l => SUITS[l].has(obj) && !(n > 1 && l !== 'ledge') && !(l === 'held' && !copies[0].pts.grip)));
-  const lay = o.layout && (o.layout !== 'held' || (copies[0].pts.grip && n === 1)) ? o.layout : n > 1 ? (SUITS.ledge.has(obj) ? 'ledge' : 'close') : options[(seed >> 3) % options.length];
-  const bb = copies[0].bb, bw = bb[2] - bb[0], bh = bb[3] - bb[1], bcx = (bb[0] + bb[2]) / 2, bcy = (bb[1] + bb[3]) / 2;
-  const fit = Math.min(980 / (bw * (n > 1 && !long ? 1.6 : 1)), 560 / bh);    // the scale at which it would just fit
-  let sc, at, extra = '', over = '', defs = '', pool;
-  const side = (seed >> 5) % 2 ? 1 : -1;
-  if (lay === 'close') { sc = Math.min(fit * (n > 1 ? 0.75 : 1.4), base * 1.7); at = [560 + side * 90 - bcx * sc, 330 + bh * sc * 0.18 - bcy * sc]; pool = [560 + side * 60, 260, 380 + r() * 120, 230 + r() * 80]; }
-  else if (lay === 'ledge') { const ly = 430 + Math.round(r() * 40); sc = Math.min(fit * (n > 1 ? 0.95 : 1.25), (ly - 40) / bh, base * 1.6); at = [560 + side * 40 - bcx * sc, ly + 6 - bb[3] * sc]; const L1 = ledge(seed + 50, ly); extra = L1.body; defs += L1.defs; pool = [560, ly - 120, 420, 200]; }
-  else if (lay === 'hang') { const hx = 560 + side * 40; sc = Math.min(fit * 1.3, 470 / bh, base * 1.6); at = [hx - bcx * sc, 150 - bb[1] * sc]; const B1 = beam(seed + 60, hx); over = ''; extra = `<path d="M${hx},84 L${hx},${(at[1] + bb[1] * sc + 4).toFixed(1)}" stroke="${INK}" stroke-width="7"/><path d="M${hx},84 L${hx},${(at[1] + bb[1] * sc + 4).toFixed(1)}" stroke="#6a5a40" stroke-width="4" stroke-dasharray="6 3"/>`; defs += B1.defs; over = B1.body; pool = [hx, 300, 360 + r() * 100, 260]; }
-  else if (lay === 'water') { const wy = 440 + Math.round(r() * 40); sc = Math.min(fit * 1.2, (wy - 30) / (bh * 0.8), base * 1.6); at = [560 + side * 70 - bcx * sc, wy - (bb[3] - bh * 0.22) * sc]; over = water(r, wy, course); pool = [560 + side * 40, wy - 140, 440, 220]; }
-  else { sc = Math.min(fit * 1.4, base * 1.7); at = [520 + side * 30 - bcx * sc, 300 - bcy * sc]; pool = [520, 280, 420, 260];
-    // held: a gloved hand from the frame's edge closes on the grip
-    const f = copies[0].f, g = copies[0].pts.grip, away = norm([side * -0.5 - 0.2, 0.9]), elbow = add(g.c, mul(away, 360 / sc)), wrist = add(g.c, mul(away, 70));
-    f.part(E.limb(elbow, wrist, 120, 96, { q: [[0.3, 0.15, 0.2]] }), { fill: '#5f5546', shade: 0.45, tex: 'weave' + f.o.seed, texOp: 0.6 });
-    D.dress(f, E.limb(elbow, wrist, 120, 96), { op: 0.4 });
-    f.part(E.limb(add(wrist, mul(away, 40)), add(wrist, mul(away, -6)), 104, 100, { capK: 0.3 }), { fill: '#4a3424', shade: 0.45 });
-    BODY.grip(f, g.c, wrist, g.thumb, 62, '#4a3424', { quiet: true, maxBend: 70, cuff: false });
-  }
-  // the copies: side by side for round things, crossed for long ones
-  const placed = copies.map((cp, k) => { const dx = n > 1 && !long ? (k - (n - 1) / 2) * bw * sc * 0.62 : 0, dy = n > 1 && !long ? Math.abs(k - (n - 1) / 2) * 24 : 0; const s2 = K.figSVG(cp.f); defs += s2.defs; return K.place(s2.body, [0, 0], [at[0] + dx, at[1] + dy], sc * (n > 1 && !long && k !== (n - 1) / 2 ? 0.92 : 1)); });
-  const focus = K.mapPt(copies[0].pts.focus || [bcx, bcy], [0, 0], at, sc);
-  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c, pool: pool || [focus[0], focus[1], 430, 270], dark: 0.3, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
-  body += courseFX(r, focus, course, true, lay);
-  if (lay === 'hang') body += extra;
-  if (lay === 'ledge') body += extra;
-  body += placed.slice().reverse().join('');
-  if (lay === 'hang' || lay === 'water') body += over;
-  body += courseFX(r, focus, course, false, lay);
-  return { course: c, defs, body };
-}
-const DEVICE_KIND = { flask: deviceGeneric, device: deviceGeneric, rite: deviceGeneric, curse: deviceGeneric };
+// ==== object cards: picking, layouts, acts, hands and the check metadata live in objcomp.js
+const OC = require('./objcomp');
+const objectCard = (cd, id, o) => OC.deviceCard(cd, id, o, { courseOf, roomOf });
+const DEVICE_KIND = { flask: objectCard, device: objectCard, rite: objectCard, curse: objectCard };
 
 // ==== assembly
 // Per-card overrides: which composition, and anything the data cannot say (a room named in the note, a style).
@@ -521,224 +364,8 @@ const OVR = {
   el_ink_bolt: { kind: 'cast', room: 'nave' },
   bw_brace: { kind: 'block', room: 'stair' },
 };
-// The audit of all 408 object cards (devices.csv): cards whose words picked an object that ignores their name or note.
-const DEVICE_OVR = {
-  dread: { device: 'door' },
-  festering: { device: 'bandage' },
-  aff_mire: { device: 'boot' },
-  aff_baths: { device: 'bandage' },
-  aff_fleet: { device: 'hand' },
-  aff_rime: { device: 'shield' },
-  aff_silence: { device: 'bell' },
-  aff_pyre: { device: 'hand' },
-  aff_sky: { device: 'eye' },
-  off_key_hymn: { device: 'book' },
-  change_of_watch: { device: 'shield' },
-  red_strip: { device: 'cord' },
-  al_brew: { device: 'alembic' },
-  al_refill: { device: 'jar' },
-  al_hurled_pitch: { device: 'jar' },
-  al_brine_splash: { device: 'jar' },
-  al_quicklime: { device: 'sack' },
-  al_decant: { device: 'jar' },
-  al_lye_splash: { device: 'jar' },
-  al_fen_water: { device: 'jar' },
-  al_field_dressing: { device: 'bandage' },
-  al_steady_hand: { device: 'lens' },
-  al_bandolier: { device: 'vial', count: 2 },
-  al_magnum_opus: { device: 'flask', count: 3 },
-  toll_of_bells: { device: 'bell', count: 2 },
-  al_poultice: { device: 'bandage' },
-  al_hartshorn: { device: 'mortar' },
-  al_quench: { device: 'jar' },
-  al_cauterize: { device: 'tongs' },
-  al_rectify: { device: 'alembic' },
-  al_putrefaction: { device: 'crucible' },
-  al_fulminating_gold: { device: 'mortar' },
-  al_aqua_fortis: { device: 'flask' },
-  al_boiling_flood: { device: 'bowl' },
-  al_rat_bag: { device: 'sack' },
-  al_fester: { device: 'lens' },
-  al_foul_bellows: { device: 'bellows' },
-  al_wormwood: { device: 'cup' },
-  al_alembic: { device: 'alembic' },
-  al_tasting_spoon: { device: 'mortar' },
-  al_athanor: { device: 'crucible' },
-  al_prima_materia: { device: 'mortar' },
-  al_catalytic_still: { device: 'alembic' },
-  al_miasmatic_cloud: { device: 'jar' },
-  al_black_rot: { device: 'skull' },
-  al_elixir_of_life: { device: 'vial' },
-  al_panacea: { device: 'vial' },
-  al_red_work: { device: 'crucible' },
-  al_white_work: { device: 'alembic' },
-  al_quintessence: { device: 'vial' },
-  al_spagyric_rain: { device: 'bellrope' },
-  al_diagnosis: { device: 'lens' },
-  al_ripen: { device: 'herbs' },
-  al_rat_swarm: { device: 'sack' },
-  al_marsh_lights: { device: 'lantern' },
-  al_triage: { device: 'splint' },
-  al_second_dose: { device: 'vial' },
-  al_the_great_work: { device: 'crucible' },
-  al_solve_et_coagula: { device: 'alembic' },
-  al_firedamp: { device: 'lantern' },
-  bw_k_come_on_then: { device: 'door' },
-  bw_k_scourge: { device: 'barbs' },
-  bw_draw_their_eyes: { device: 'door' },
-  bw_hair_shirt: { device: 'barbs' },
-  bw_thorn_hedge: { device: 'barbs' },
-  bw_tithe_of_blood: { device: 'bandage' },
-  bw_barbs_left_in: { device: 'barbs' },
-  bw_flagellants_cord: { device: 'barbs' },
-  bw_counterweight: { device: 'chain' },
-  bw_iron_maiden: { device: 'barbs' },
-  bw_rose_of_iron: { device: 'barbs' },
-  bw_defiance: { device: 'shield' },
-  bw_scourged_back: { device: 'barbs' },
-  bw_crown_of_iron_thorns: { device: 'barbs' },
-  bw_the_scourged_hand: { device: 'barbs' },
-  du_find_the_gap: { device: 'rapier' },
-  du_drag_to_the_block: { device: 'sword' },
-  du_staunch: { device: 'bowl', objOpt: { blood: true } },
-  du_parry: { device: 'rapier' },
-  du_light_feet: { device: 'boot' },
-  du_pronounce_sentence: { device: 'sword' },
-  du_open_the_vein: { device: 'knife' },
-  du_bloodmist: { device: 'cup' },
-  du_cupping_glass: { device: 'cup' },
-  du_catch_the_rhythm: { device: 'bellrope' },
-  du_condemned: { device: 'sword' },
-  du_haemorrhage: { device: 'bowl', objOpt: { blood: true } },
-  du_open_guard: { device: 'rapier' },
-  du_duellists_eye: { device: 'lens' },
-  du_final_judgment: { device: 'sword' },
-  du_bowl_passed_round: { device: 'bowl', objOpt: { blood: true } },
-  du_oath_of_the_salle: { device: 'rapier' },
-  du_untouchable: { device: 'knife' },
-  du_drag_them_up: { device: 'chain' },
-  du_let_the_fever_out: { device: 'bowl', objOpt: { blood: true } },
-  du_turn_the_parry: { device: 'rapier' },
-  du_full_letting: { device: 'bowl', objOpt: { blood: true } },
-  du_the_endless_measure: { device: 'rapier' },
-  du_the_headsmans_round: { device: 'sword' },
-  du_red_tide: { device: 'bowl', objOpt: { blood: true } },
-  du_the_bowl_runs_over: { device: 'bowl', objOpt: { blood: true } },
-  el_turn_the_ring: { device: 'ring' },
-  el_stopper_the_jar: { device: 'vessel' },
-  el_conjoin: { device: 'brush' },
-  el_twin_sigil: { device: 'brush' },
-  el_scatter_ink: { device: 'brush' },
-  el_flung_ink: { device: 'brush' },
-  el_wet_the_line: { device: 'brush' },
-  el_draw_the_tide: { device: 'rope' },
-  el_open_palm: { device: 'hand' },
-  el_tip_the_vessel: { device: 'vessel' },
-  el_wash_of_colour: { device: 'brush' },
-  el_strip_the_plate: { device: 'shield' },
-  el_ground_the_arc: { device: 'rod' },
-  el_brass_gauge: { device: 'vessel' },
-  el_stored_breath: { device: 'vessel' },
-  el_spark_shower: { device: 'brush' },
-  el_brass_bands: { device: 'vessel' },
-  el_hair_trigger: { device: 'brush' },
-  el_six_inks: { device: 'hand' },
-  el_clouded_sight: { device: 'lens' },
-  el_brass_reservoir: { device: 'vessel' },
-  el_quickened_hand: { device: 'hand' },
-  el_sixfold_ring: { device: 'ring' },
-  el_clouded_eye_saw: { device: 'lens' },
-  graveyard_dirt: { device: 'sack' },
-  whispered_name: { device: 'poppet' },
-  hags_finger: { device: 'hand' },
-  tithe_of_blood: { device: 'knife' },
-  blood_offering: { device: 'candle' },
-  take_the_rot: { device: 'hand' },
-  weeping_sores: { device: 'sack' },
-  old_wounds: { device: 'bandage' },
-  scapegoat: { device: 'poppet' },
-  malediction: { device: 'skull' },
-  bear_the_burden: { device: 'sack' },
-  deaths_ledger: { device: 'cord' },
-  bad_tidings: { device: 'bell' },
-  prophet_of_doom: { device: 'bell' },
-  harbinger: { device: 'bell' },
-  blood_debt: { device: 'hand' },
-  crossed_glass: { device: 'shard', count: 2 },
-  hall_of_mirrors: { device: 'shard' },
-  cracked_glass: { device: 'shard' },
-  passing_bell: { device: 'bellrope' },
-  or_read_the_bones: { device: 'knuckles' },
-  or_bind_fate: { device: 'scroll' },
-  or_skipped_tooth: { device: 'clock' },
-  or_wind_the_spring: { device: 'clock' },
-  or_wheel_turns: { device: 'feather' },
-  or_trade_on_tomorrow: { device: 'knuckles' },
-  or_augury_of_birds: { device: 'feather' },
-  or_rubric_capital: { device: 'book' },
-  or_eclipse: { device: 'candle' },
-  or_stopped_clock: { device: 'clock' },
-  or_accelerate: { device: 'hourglass' },
-  or_wring_the_bird: { device: 'feather' },
-  or_the_last_hour: { device: 'clock' },
-  or_the_turned_glass: { device: 'hourglass' },
-  or_the_bone_pouch: { device: 'knuckles' },
-  or_the_rubric: { device: 'book' },
-  ve_take_into_me: { device: 'hand' },
-  ve_warm_hands: { device: 'hand' },
-  ve_retch: { device: 'hand' },
-  ve_ink_band: { device: 'hand' },
-  ve_balance_the_scale: { device: 'scales' },
-  ve_illumination: { device: 'book' },
-  ve_unclench: { device: 'hand' },
-  ve_pass_through: { device: 'hand' },
-  ve_open_page: { device: 'book' },
-  ve_gilt_edge: { device: 'brush' },
-  ve_return_it: { device: 'hand' },
-  ve_lend_weight: { device: 'hand' },
-  ve_double_spit: { device: 'hand' },
-  ve_keep_her_quiet: { device: 'hand' },
-  ve_six_bands: { device: 'hand' },
-  ve_level_hands: { device: 'scales', objOpt: { level: true } },
-  ve_weight_of_the_world: { device: 'scales' },
-  ve_mothers_place: { device: 'reliquary' },
-  t_barrow_fleas: { device: 'sack' },
-  w_barrow_burial_axe: { device: 'skull' },
-  w_barrow_vinegar_rag: { device: 'hood' },
-  w_barrow_the_long_winter: { device: 'cup' },
-  w_baths_cold_plunge: { device: 'bowl' },
-  w_baths_open_valve: { device: 'key' },
-  t_coast_glare: { device: 'lens' },
-  w_coast_breaking_sea: { device: 'anchor' },
-  w_drowned_wring_out: { device: 'hood' },
-  w_fleet_ice_breaker: { device: 'shard' },
-  w_foundry_melt_down: { device: 'tongs' },
-  w_foundry_out_of_the_splash: { device: 'crucible' },
-  w_garden_deadhead: { device: 'knife' },
-  w_garden_take_the_rot: { device: 'hand' },
-  w_garden_nothing_regrows: { device: 'herbs' },
-  w_hive_take_the_sting: { device: 'shield' },
-  t_mire_offering: { device: 'knuckles' },
-  w_mire_poisoned_shallows: { device: 'boot' },
-  w_mire_flood_cuttings: { device: 'anchor' },
-  w_pits_gas_pocket: { device: 'lantern' },
-  w_pits_wet_hood: { device: 'hood' },
-  w_pyre_saints_ash: { device: 'vial' },
-  w_pyre_fire_unending: { device: 'candle' },
-  w_rime_wedge_and_feather: { device: 'hammer' },
-  w_rime_the_glacier_splits: { device: 'shard' },
-  w_silence_cold_eye: { device: 'eye' },
-  w_silence_say_it_aloud: { device: 'bell' },
-  w_silence_star_comes_down: { device: 'eye' },
-  w_sky_struck_out: { device: 'feather' },
-  w_sky_gold_leaf: { device: 'coins' },
-  w_sky_through_the_tear: { device: 'shard' },
-  w_sky_something_leans_closer: { device: 'eye' },
-  w_spire_stop_the_watch: { device: 'clock' },
-  w_spire_second_hand: { device: 'clock' },
-  w_spire_midnight: { device: 'clock' },
-};
-for (const [k, v] of Object.entries(DEVICE_OVR)) OVR[k] = Object.assign({}, OVR[k] || {}, v);
+// counts the name does not carry (L11): set by hand
+Object.assign(OVR, { ve_balance_the_scale: { objOpt: { level: true } }, al_bandolier: { count: 2 }, al_magnum_opus: { count: 3 }, toll_of_bells: { count: 2 }, crossed_glass: { count: 2 } });
 const KIND = { attack: act, cast: act, block };
 // test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
 function testCard(id) { const [cls, kind, cat = 'physical', v] = id.slice(1).split('/'); return { name: '', cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind, _v: v == null ? null : +v }; }
@@ -749,10 +376,22 @@ function card(id) {
   if (KIND[kind] && !ART[id] && !heroOf(cd, courseOf(cd, o))) kind = 'device';   // shared and world cards have no hero
   const fn = ART[id] || KIND[kind] || DEVICE_KIND[kind] || generic;
   const res = fn(cd, id, o);
+  LAST_META = res.meta || { id, kind: 'hero' };
   return K.svgDoc(seedOf(id) % 97, res.course, res.defs, res.body, res.finish || {});
+}
+let LAST_META = null;
+// the card and the metadata the checks read
+function build(id) { const svg = card(id); return { svg, meta: Object.assign({ id }, LAST_META) }; }
+// the object cards of a batch get their layouts and variants together, so the batch spreads (L12, L13, L20)
+function allocate(ids) {
+  const entries = [];
+  for (const id of ids) { const cd = CARDS[id]; if (!cd) continue; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue;
+    const obj = OC.pickObject(cd, id, o), f = OC.measuredFig(1), pts = OC.LIB[obj](f, { course: courseOf(cd, o), state: OC.stateOf(cd) }) || {};
+    entries.push({ id, obj, opts: OC.optionsFor(obj, pts, OC.countOf(cd, o), f.bb), variants: 3 }); }
+  OC.allocate(entries);
 }
 function generic(cd) { throw new Error('no composition yet for kind ' + kindOf(cd)); }
 
 // one line saying what a card got: its kind and hero or object (for review sheets)
-function describe(id) { const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}; const o = OVR[id] || {}; let k = cd._kind || o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; const h = KIND[k] && !ART[id] ? (heroOf(cd, courseOf(cd, o)) || [])[1] : (o.device || (typeof pickObject === 'function' ? pickObject(cd, id) : '')); return k + ' ' + (h || ''); }
-module.exports = { SAMPLES, CARDS, card, worldOf, describe, kindOf, heroOf, roomOf, courseOf, W, H };
+function describe(id) { const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}; const o = OVR[id] || {}; let k = cd._kind || o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; const h = KIND[k] && !ART[id] ? (heroOf(cd, courseOf(cd, o)) || [])[1] : ART[id] ? 'hand-made' : OC.pickObject(cd, id, o); return k + ' ' + (h || ''); }
+module.exports = { SAMPLES, CARDS, card, build, allocate, OVR, worldOf, describe, kindOf, heroOf, roomOf, courseOf, W, H };

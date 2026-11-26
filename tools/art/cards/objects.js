@@ -152,8 +152,7 @@ function hourglass(f, o = {}) {
   f.part(F([[-74, capT], [-73, capT - 46], [-62, capT - 50], [-48, capT - 46], [-47, capT]]), { fill: WAX, shade: 0.35, inkW: 1.3, cast: true, hi: 0.15 });
   D.wax(f, F([[-80, capT + 2], [-70, capT - 2], [-60, capT - 1], [-48, capT - 2], [-40, capT + 2]]), mix(WAX, '#fff', 0.1), { thick: 4, drips: 0.9, dripL: 30 });
   f.line(F([[-61, capT - 50], [-60, capT - 60]]), 1.6, INK);
-  f.flat(F([[-66, capT - 58], [-61, capT - 84], [-55, capT - 58], [-60, capT - 52]]), '#e0a040', { op: 0.95 });
-  f.flat(F([[-62, capT - 58], [-60, capT - 72], [-58, capT - 58]]), '#f8e8b0');
+  K.fxReq(f, 'flame', F([[-60, capT - 56]])[0], 34);
   // star chart scrap tied to the far post on a string
   f.line([F([[112, -120]])[0], F([[150, -96]])[0], F([[168, -70]])[0]], 1.6, '#3a2a18');
   D.label(f, F([[176, -36]])[0], 50, 62, a0 - 0.18, '#cdbb94', (G) => {
@@ -224,7 +223,7 @@ function mirror(f, o = {}) {
   for (let i = 0; i < 6; i++) { const y = -60 + i * 8; f.line(F([[148, y], [166, y + 4]]), 3.4, INK); f.line(F([[148, y], [166, y + 4]]), 1.6, '#2e3428'); } // thread binding a cracked frame
   D.crack(f, F([[160, -70]])[0], a0 + 1.7, 60, { n: 4, forks: false, w: 1.6 });
   f.flat(F([[-90, -120], [-40, -150], [40, -152], [90, -120], [40, -128], [-40, -126]]), '#0a0a0e', { op: 0.35 }); // candle soot on the glass
-  return { glass: F([[0, 0]])[0], left: F([[-158, -20]])[0], strike: F([cp])[0], holes };
+  return { glass: F([[0, 0]])[0], left: F([[-158, -20]])[0], strike: F([cp])[0], holes, focus: F([[0, 0]])[0], sig: [-170, -200, 170, 200], grip: { c: F([[0, 330]])[0], thumb: a0 - Math.PI / 2 } };
 }
 
 // ==== bell (elementalist: ring, spectrum; abbey: toll)
