@@ -70,3 +70,19 @@ Finding: the 3-per-calling cap passes the blind test but fails matching. Twins (
 - Align the picks with the picture column of the proposed names: 15 Vessel and 15 Alchemist cards differ.
 
 Hero cards (Bulwark + Oracle, 53 cards): 11/53 (21%). The same props appear on every card and nothing points to the name. Round 11 adds a name cue placed in the scene (L67).
+
+## Hero cards, round 11 (name cues added; matching, fresh readers, proposed names)
+
+| calling | matched |
+|---|---|
+| Hexweaver | 17/17 (100%) |
+| Elementalist | 19/23 (83%) |
+| Alchemist | 7/10 (70%) |
+| Oracle | 14/22 (64%) |
+| Duelist | 26/46 (57%) |
+| Bulwark | 13/31 (42%) |
+| Total | 96/149 (64%), up from 21% |
+
+Failures come from cue collisions: the Bulwark breakage family, holding versus standing, grave versus banner, and death symbols on the Duelist. Unidentifiable cues on the Duelist and Oracle also miss.
+
+Next: L69, a text-only pretest of cue labels against names before any render. L68 brings the cue style in line with the scene (textured, hand-scaled, lit).
