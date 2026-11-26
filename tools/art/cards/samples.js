@@ -385,9 +385,12 @@ function build(id) { const svg = card(id); return { svg, meta: Object.assign({ i
 // the object cards of a batch get their layouts and variants together, so the batch spreads (L12, L13, L20)
 function allocate(ids) {
   const entries = [];
+  OC.spread([]);
+  if (ids.length > 100) { const pre = []; for (const id of ids) { const cd = CARDS[id]; if (!cd) continue; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue; pre.push({ id, obj: OC.pickObject(cd, id, o) }); } OC.spread(pre); } else OC.spread([]);
   for (const id of ids) { const cd = CARDS[id]; if (!cd) continue; const o = OVR[id] || {}; let k = o.kind || kindOf(cd); if (KIND[k] && !ART[id] && !heroOf(cd, courseOf(cd, o))) k = 'device'; if (KIND[k] || ART[id]) continue;
-    const obj = OC.pickObject(cd, id, o), f = OC.measuredFig(1), pts = OC.LIB[obj](f, { course: courseOf(cd, o), state: OC.stateOf(cd) }) || {};
-    entries.push({ id, obj, opts: OC.optionsFor(obj, pts, OC.countOf(cd, o), f.bb), variants: 3 }); }
+    const obj = OC.pickObject(cd, id, o), { pts, bb } = OC.probe(cd, obj, courseOf(cd, o), o), f = { bb };
+    const n = OC.countOf(cd, o), all = OC.optionsFor(obj, pts, n, f.bb), fits = all.filter(l => l === 'held' || OC.fillOf(obj, pts, n, f.bb, l) >= 0.37);   // L13: only layouts it can fill
+    entries.push({ id, obj, opts: fits.length ? fits : all, variants: 3 }); }
   OC.allocate(entries);
 }
 function generic(cd) { throw new Error('no composition yet for kind ' + kindOf(cd)); }

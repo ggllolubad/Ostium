@@ -11,16 +11,16 @@ const { E, W, H, INK, COURSE, INK6, BLOOD, D } = K;
 const { add, sub, mul, lerp, rot, mix, rng, norm, len, ell } = E;
 
 // ==== the library
-const FLASK_COL = { physical: ['#5a4a30', '#6a4a2a'], fire: ['#6a5034', '#8a4a2a'], frost: ['#6a7a82', '#9aaab0'], lightning: ['#6a6448', '#8a8060'], water: ['#3e4e46', '#3a4e5a'], toxin: ['#4a5636', '#5e6636'], void: ['#3a3048', '#2a1a3a'] };
+const FLASK_COL = { physical: ['#5a4a30', '#6a4a2a'], fire: ['#6a5034', '#8a4a2a'], frost: ['#6a7a82', '#9aaab0'], lightning: ['#6a6448', '#8a8060'], water: ['#3e4e46', '#3e4a50'], toxin: ['#4a5636', '#5e6636'], void: ['#3a3048', '#2a1a3a'] };
 const BREWS = ['#6a4a2a', '#3a4a52', '#5a6236', '#4a3a4e', '#7a7050', '#5a3226'];   // L14: brews differ in value and murk, not in saturated hue
 const LIB = Object.assign({},
   { flask: (f, o) => { const p = OB.flask(f, Object.assign({ glass: (FLASK_COL[o.course] || FLASK_COL.physical)[0], liquid: o.brew || (FLASK_COL[o.course] || FLASK_COL.physical)[1], skull: o.course === 'toxin' }, o)) || {};
-      if (f.bb && p.mouth) { const bw = f.bb[2] - f.bb[0]; p.sig = [f.bb[0] + bw * 0.1, p.mouth[1], f.bb[2] - bw * 0.1, f.bb[3] - 10]; } return p; },   // L16: the cork may crop, the neck and body may not
+      if (f.bb && p.neck) { const bw = f.bb[2] - f.bb[0]; p.sig = [f.bb[0] + bw * 0.1, p.neck[1] - 20, f.bb[2] - bw * 0.1, f.bb[3] - 10]; } if (p.neck) p.grip = { c: p.neck, thumb: (o.ang || 0) - Math.PI / 2 }; return p; },   // L16: the cork may crop, the neck and body may not
     hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7, bites: [] }, o)) },
   O2, O3, O4);
 LIB.cauldron = undefined; delete LIB.cauldron; delete LIB.hymnal;
 // per-object defaults: tilt, base scale, long (crossed when counted), allowed water (L15)
-const ANG = { feather: -0.6, sword: -0.35, rapier: -0.35, knife: -0.4, needle: -0.5, key: -0.5, brush: -0.6, bone: -0.35, hammer: -0.25, stinger: -0.6, tongs: -0.35, coalpan: -0.1, splint: -0.3, scroll: -0.12, cord: 1.3, shard: 0.15, handbell: -0.35, scourge: 0.1 };
+const ANG = { phial: -0.55, feather: -0.6, sword: -0.35, rapier: -0.35, knife: -0.4, needle: -0.5, key: -0.5, brush: -0.6, bone: -0.35, hammer: -0.25, stinger: -0.6, tongs: -0.35, coalpan: -0.1, splint: -0.3, scroll: -0.12, cord: 1.3, shard: 0.15, handbell: -0.35, scourge: 0.1 };
 const SCALE = { ring: 1.0, coins: 1.0, feather: 1.05, signet: 1.0, knife: 1.2, needle: 1.15, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, phial: 1.15, jar: 1.15, skull: 1.05, cup: 1.05, shard: 1.15, poppet: 1.05, bread: 1.05, boot: 1.05 };
 const LONG = new Set(['sword', 'rapier', 'brush', 'feather', 'knife', 'needle', 'key', 'bone', 'rod', 'hammer', 'tongs', 'coalpan', 'splint', 'shard', 'stinger', 'candle', 'scourge']);
 const WATER_OK = new Set(['anchor', 'skull', 'bell', 'keg']);   // L15: heavy things only
@@ -28,7 +28,7 @@ const WATER_OK = new Set(['anchor', 'skull', 'bell', 'keg']);   // L15: heavy th
 // ==== picking (L11, L23): the card name's noun first, then the audit table, then word scoring
 const NOUNS = [
   // forced names first: card names whose noun is not the object, or would hit a wrong word below
-  [/wax the mouth/, 'vessel'], [/crossed glass/, 'shard'], [/ink band/, 'inkarm'], [/steady hand/, 'vial'], [/wheel turns/, 'hourglass'], [/lens glare/, 'spectacles'],
+  [/wax the mouth/, 'vessel'], [/crossed glass/, 'shard'], [/^bind$/, 'bound'], [/ink band/, 'inkarm'], [/steady hand/, 'vial'], [/wheel turns/, 'hourglass'], [/lens glare/, 'spectacles'],
   [/handbell/, 'handbell'], [/\bbells?\b|knell|toll|tailors/, 'bell'], [/phial/, 'phial'], [/\bflasks?\b|\bopus\b/, 'flask'], [/\bdraught|tincture|bottle|tonic|elixir|simple\b/, 'vial'],
   [/\bjar\b|\bpot\b|firepot/, 'jar'], [/powder|\bkeg\b|blast/, 'keg'], [/hourglass|\bsand\b/, 'hourglass'], [/\bclock|\bwatch\b|second hand|midnight|\bhour\b/, 'clock'],
   [/mirror|\bglass\b/, 'mirror'], [/shard|splinter/, 'shard'], [/bandage|\blinen\b|dressing/, 'bandage'], [/\bwound|festering|\bsores?\b/, 'wrapped'], [/stitch|sewn|suture|barber/, 'suture'],
@@ -51,8 +51,19 @@ function nounOf(card) { const n = (card.name || '').toLowerCase(); for (const [r
 const OBJ_BY_CLS = { alchemist: 'vial', oracle: 'hourglass', hexweaver: 'poppet', elementalist: 'inkpot', bulwark: 'shield', duelist: 'knife', vessel: 'reliquary' };
 const OBJ_BY_COURSE = { physical: 'boot', fire: 'brazier', frost: 'bandage', water: 'anchor', toxin: 'herbs', void: 'candle', lightning: 'rod', attuned: 'inkpot' };
 // o.device (a per-card override) wins, then the name's noun, then the audit table, then the calling or course
+// L12 in a full run: past 20 cards an object hands its extra cards to its family, in turn (an override, so L23 allows it)
+const FAMILY = { vial: ['phial', 'flask', 'jar', 'cup'], hand: ['inkarm', 'signet', 'goldleaf', 'spectacles'], inkpot: ['brush', 'book', 'scroll'], candle: ['lantern', 'brazier'], herbs: ['mortar', 'jar'], knife: ['rapier', 'sword', 'needle'], skull: ['bone', 'knuckles'], bandage: ['wrapped', 'suture'], bell: ['handbell', 'anvil'], book: ['scroll', 'hymnal'], poppet: ['needle', 'cord'], hourglass: ['clock'], boot: ['sack'], shield: ['door'] };
+const SPREAD = {};
+function spread(list) { // list: [{ id, obj }] of a big batch, in order
+  for (const k in SPREAD) delete SPREAD[k];
+  const count = {}; list.forEach(e => count[e.obj] = (count[e.obj] || 0) + 1); const seen = {};
+  for (const e of list) { seen[e.obj] = (seen[e.obj] || 0) + 1; if (seen[e.obj] <= 20 || !FAMILY[e.obj]) continue;
+    const alt = FAMILY[e.obj].filter(k => LIB[k] && (count[k] || 0) < 20).sort((a, b) => (count[a] || 0) - (count[b] || 0))[0]; if (!alt) continue;
+    SPREAD[e.id] = alt; count[alt] = (count[alt] || 0) + 1; count[e.obj] -= 1; e.obj = alt; }
+}
 function pickObject(card, id, o = {}) {
   if (o.device && LIB[o.device]) return o.device;
+  if (SPREAD[id]) return SPREAD[id];
   const nn = nounOf(card); if (nn) return nn;
   const a = AUDIT[id]; if (a && LIB[a]) return a;
   const note = (card.note || '').toLowerCase(); for (const [re, k] of NOUNS) if (re.test(note) && LIB[k]) return k;
@@ -72,7 +83,7 @@ const ACT_DEFAULT = { flask: 'burst', vial: 'pour', phial: 'crack', jar: 'burst'
   coalpan: 'burn', tongs: 'burn', sword: 'swing', rapier: 'swing', knife: 'swing', hammer: 'swing', scourge: 'swing', rod: 'bolt', anchor: 'swing', rope: 'fling', chain: 'swing', brush: 'fling', inkpot: 'drip', sack: 'fling', ratsack: 'burst',
   salt: 'pour', herbs: 'fling', bandage: 'unspool', wrapped: 'drip', suture: 'drip', inkarm: 'drip', hand: 'drip', goldleaf: 'press', feather: 'fling', birds: 'fling', knuckles: 'fling', coins: 'fling', purse: 'fling', scales: 'swing',
   clock: 'crack', hourglass: 'drip', mirror: 'crack', shard: 'swing', beacon: 'glare', spectacles: 'crack', book: 'turn', hymnal: 'turn', scroll: 'fling', cord: 'swing', poppet: 'drip', needle: 'drip', bone: 'crack', skull: 'crack',
-  eye: 'drip', doorajar: 'open', shield: 'swing', door: 'swing', hood: 'drip', reliquary: 'glare', boot: 'fling', alembic: 'drip', mortar: 'fling', bellows: 'blow', vessel: 'drip', signet: 'swing', bellrope: 'swing', key: 'swing',
+  eye: 'drip', doorajar: 'open', shield: 'swing', door: 'swing', hood: 'drip', bound: 'swing', reliquary: 'glare', boot: 'fling', alembic: 'drip', mortar: 'fling', bellows: 'blow', vessel: 'drip', signet: 'swing', bellrope: 'swing', key: 'swing',
   splint: 'crack', tourniquet: 'swing', bread: 'fling', stinger: 'drip', reliquary2: 'glare' };
 
 // ==== measured figure: records part bounding boxes and every red or gold fill, so the checks can read them (L14)
@@ -86,6 +97,8 @@ function measuredFig(seed) {
   f.bb = [1e9, 1e9, -1e9, -1e9]; f.parts = []; f.colours = [];
   const note = (pts, fill) => { if (Array.isArray(pts) && pts.length > 2) { const q = E.bbox(pts); f.bb = [Math.min(f.bb[0], q[0]), Math.min(f.bb[1], q[1]), Math.max(f.bb[2], q[2]), Math.max(f.bb[3], q[3])]; f.parts.push(q); } if (fill && /^#/.test(fill)) f.colours.push(fill.toLowerCase()); };
   f.part = (pts, o = {}) => { note(pts, o.fill); return part(pts, o); };
+  const line = f.line.bind(f);
+  f.line = (pts, w, col, o) => { if (Array.isArray(pts) && pts.length > 1 && w >= 6 && !(o && o.op < 0.5)) { const q = E.bbox(pts); f.bb = [Math.min(f.bb[0], q[0] - w / 2), Math.min(f.bb[1], q[1] - w / 2), Math.max(f.bb[2], q[2] + w / 2), Math.max(f.bb[3], q[3] + w / 2)]; f.parts.push([q[0] - w / 2, q[1] - w / 2, q[2] + w / 2, q[3] + w / 2]); } return line(pts, w, col, o); };   // body strokes (rings, ropes, blades) count; thin detail lines do not
   f.flat = (pts, fill, o) => { if (Array.isArray(pts) && pts.length > 2) f.colours.push(String(fill).toLowerCase()); return flat(pts, fill, o); };
   return f;
 }
@@ -156,11 +169,11 @@ const HAND_OF = { bulwark: 'bulwark', duelist: 'duelist' };
 function heroHand(cls, gripCard, thumbAng, sc, seedFlip) {
   const hk = HAND_OF[cls] || (seedFlip ? 'bulwark' : 'duelist'), Hd = HANDS[hk];
   const h = K.hero(Hd.mod, Hd.key, {}, 'heroes', { only: ['forearm_n', 'hand_n'] });
-  const s = Hd.scale * sc, th = thumbAng - Hd.axis;
+  const s = Math.min(Hd.scale * sc, 3.3), th = thumbAng - Hd.axis;   // the hand keeps near hero scale, never a giant fist over the object
   const elbow = h.joint('forearm_n'), dirE = rot(sub(elbow, Hd.grip), th), elbowCard = add(gripCard, mul(dirE, s));
   const tf = `translate(${gripCard[0].toFixed(1)},${gripCard[1].toFixed(1)}) rotate(${(th * 180 / Math.PI).toFixed(1)}) scale(${s.toFixed(3)}) translate(${-Hd.grip[0]},${-Hd.grip[1]})`;
   const ang = Math.atan2(dirE[1], dirE[0]), edge = Math.abs(Math.cos(ang)) > Math.abs(Math.sin(ang)) ? (Math.cos(ang) > 0 ? 'right' : 'left') : (Math.sin(ang) > 0 ? 'bottom' : 'top');
-  return { svg: `<g transform="${tf}">${h.body}</g>`, defs: h.defs, edge, angle: ((ang * 180 / Math.PI) + 360) % 360, hand: hk, elbow: elbowCard };
+  return { svg: `<g id="hand" transform="${tf}">${h.body}</g>`, defs: h.defs, edge, angle: ((ang * 180 / Math.PI) + 360) % 360, hand: hk, elbow: elbowCard };
 }
 
 // ==== act FX in card space (all through card_kit ink FX, L18)
@@ -175,7 +188,7 @@ function actFX(r, act, M, pts, course, place, state) {
   else if (act === 'drip' || act === 'press' || act === 'open' || act === 'turn') { s += K.inkDrip(r, add(focus, [0, 60]), ink, 3); }
   else if (act === 'crack') { s += K.splatter(r, focus, 100, INK, { blot: false, n: 10 }); feats.push('crack'); }
   else if (act === 'bolt') { s += K.inkBolt(r, [focus[0] + 160, -20], add(focus, [10, -10])); }
-  else if (act === 'glare') { for (let i = 0; i < 14; i++) { const a = i / 14 * 6.28, p0 = add(focus, [Math.cos(a) * 120, Math.sin(a) * 120]), p1 = add(focus, [Math.cos(a) * (260 + r() * 140), Math.sin(a) * (260 + r() * 140)]); s += K.drybrush(r, [p0, lerp(p0, p1, 0.5), p1], 20, '#e8e0c0', { profile: t => 1 - t, dry: 1, body: false, op: 0.45, bristles: 5 }); } }
+  else if (act === 'glare') { s += `<ellipse cx="${focus[0].toFixed(1)}" cy="${focus[1].toFixed(1)}" rx="260" ry="200" fill="#e8dcb8" opacity="0.16" filter="url(#kSoft)"/>`; for (let i = 0; i < 9; i++) { const a = i / 9 * 6.28 + r() * 0.3, p0 = add(focus, [Math.cos(a) * 170, Math.sin(a) * 150]), p1 = add(focus, [Math.cos(a) * (330 + r() * 160), Math.sin(a) * (300 + r() * 120)]); s += K.drybrush(r, [p0, lerp(p0, p1, 0.5), p1], 26, '#d8ccaa', { profile: t => 1 - t, dry: 1, body: false, op: 0.18, bristles: 9 }); } }   // a soft bloom with faint dry rays, not a cartoon sun
   else if (act === 'blow') { s += K.billow(r, add(focus, [100, -10]), 80, 40, course === 'toxin' ? '#68705a' : '#6a6458', { op: 0.5, lw: 4 }) + K.billow(r, add(focus, [200, -40]), 100, 50, course === 'toxin' ? '#68705a' : '#6a6458', { op: 0.45, lw: 4 }); }
   else if (act === 'freeze') { /* the object itself carries the rime */ }
   return { s: `<g data-fx="act-${act}">${s}</g>`, feats };
@@ -194,7 +207,7 @@ function courseMarks(r, focus, course) {
 const HAND_ANGS = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 300, 320, 340];
 const LAYOUTS = ['close', 'ledge', 'table', 'floor', 'niche', 'hang', 'water', 'held', 'scene'];
 const ALLOC = {};
-let BATCH = null; const USED_HOLES = [], USED_HANDS = [];
+let BATCH = null; const BIG = () => !!BATCH && BATCH.length > 100; const USED_HOLES = [], USED_HANDS = [];
 const edgeOf = a => { const t = a * Math.PI / 180; return Math.abs(Math.cos(t)) > Math.abs(Math.sin(t)) ? (Math.cos(t) > 0 ? 'right' : 'left') : (Math.sin(t) > 0 ? 'bottom' : 'top'); };
 const SCENE = new Set(['doorajar', 'birds', 'anvil', 'wrapped', 'suture', 'goldleaf', 'inkarm', 'beacon']);
 function optionsFor(obj, pts, n, bb) {
@@ -206,6 +219,23 @@ function optionsFor(obj, pts, n, bb) {
   if (n === 1 && pts.grip) ops.push('held');
   return ops;
 }
+// the share of the frame an object would fill in a layout (L13), estimated the way deviceCard places it, so the batch
+// allocation never hands a layout that must fail the subject-size check
+function fillOf(obj, pts, n, bb, lay) {
+  const long = LONG.has(obj), bw = bb[2] - bb[0], bh = bb[3] - bb[1], sig0 = pts.sig || [bb[0] + bw * 0.06, bb[1] + bh * 0.06, bb[2] - bw * 0.06, bb[3] - bh * 0.06];
+  const nW = n > 1 && !long ? 1 + 0.62 * (n - 1) : 1, areaSc = Math.sqrt(0.46 * W * H / (bw * nW * bh)), sigSc = Math.min((W - 60) / ((sig0[2] - sig0[0]) * nW), (H - 60) / (sig0[3] - sig0[1])), fit = Math.min(areaSc, sigSc);
+  const tall = bh > 1.15 * bw * nW;
+  let sc = lay === 'close' || lay === 'held' ? Math.min(areaSc * 1.1, sigSc) : lay === 'scene' ? Math.min(Math.max(1100 / bw, 600 / bh) * 0.92, sigSc)
+    : lay === 'hang' ? Math.min(fit * 1.05, (H - 144) / Math.max(1, sig0[3] - (pts.hook || [0, bb[1]])[1])) : lay === 'water' ? Math.min(fit * 1.1, 436 / (bh * 0.8))
+    : Math.min(fit * 1.05, ((tall ? 576 : lay === 'ledge' ? 540 : lay === 'table' ? 525 : lay === 'floor' ? 555 : 550) - 21) / (bb[3] - sig0[1]));
+  const w = Math.min(W, bw * nW * sc), h = Math.min(H, bh * sc);
+  return fillOk(w * h / (W * H), Math.max(w / W, h / H), 0.04) ? 1 : 0;
+}
+// L13 subject size: the subject (object and hand) covers 35% of the frame, or runs edge to edge (90% of the frame's
+// width or height) and covers 20%: a bottle or a chain cannot cover 35% without losing its signature (L16)
+const fillOk = (area, span, margin = 0) => area >= 0.35 + margin || (span >= 0.9 + margin && area >= 0.2 + margin);
+// the object as deviceCard will first draw it (default tilt, the card's course, state and calling), for the allocation
+function probe(card, obj, course, o = {}) { const f = measuredFig(1), pts = LIB[obj](f, Object.assign({ course, ang: (o.ang ?? ANG[obj] ?? 0), state: stateOf(card), variant: 0, holy: card.cls === 'vessel' }, o.objOpt || {})) || {}; return { pts, bb: f.bb }; }
 function allocate(entries) { // entries: [{ id, obj, opts, variants }] in batch order
   BATCH = entries.map(e => e.id);
   USED_HOLES.length = 0; USED_HANDS.length = 0; let nHeld = 0; const lay = {}, seen = new Set(), cap = Math.max(1, Math.floor(entries.length * 0.3));
@@ -245,40 +275,44 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   // a held card turns its object so the hand enters at the angle the batch allotted it (L20: no two hands alike)
   if (lay === 'held' && copies[0].pts.grip) { const h0 = heroHand(card.cls, [0, 0], copies[0].pts.grip.thumb, 1, seed % 2), dif = a => ((a - h0.angle + 540) % 360) - 180;
     const free = a => USED_HANDS.every(u => edgeOf(u) !== edgeOf(a) || Math.abs(((u - a + 540) % 360) - 180) >= 16);
-    const tgt = HAND_ANGS.filter(a => Math.abs(dif(a)) <= 90 && free(a)).sort((a, b) => Math.abs(dif(a)) - Math.abs(dif(b)))[0];
+    const tgt = HAND_ANGS.filter(a => free(a)).sort((a, b) => Math.abs(dif(a)) - Math.abs(dif(b)))[0];
     const d = tgt == null ? 0 : dif(tgt); if (Math.abs(d) > 2) copies = makeCopies(d * Math.PI / 180); USED_HANDS.push(tgt == null ? h0.angle : tgt); }
   const P0 = copies[0].pts;
   // placement: scale to fit, then honour the signature box (L16) by shifting, then by shrinking
   const bb = copies[0].bb, bw = bb[2] - bb[0], bh = bb[3] - bb[1], bcx = (bb[0] + bb[2]) / 2, bcy = (bb[1] + bb[3]) / 2;
-  const sig0 = P0.sig || [bb[0] + bw * 0.14, bb[1] + bh * 0.14, bb[2] - bw * 0.14, bb[3] - bh * 0.14];
+  const sig0 = P0.sig ? [Math.max(P0.sig[0], bb[0]), Math.max(P0.sig[1], bb[1]), Math.min(P0.sig[2], bb[2]), Math.min(P0.sig[3], bb[3])] : [bb[0] + bw * 0.06, bb[1] + bh * 0.06, bb[2] - bw * 0.06, bb[3] - bh * 0.06];   // a declared box never exceeds the drawing
   const nW = n > 1 && !long ? 1 + 0.62 * (n - 1) : 1, sigW = (sig0[2] - sig0[0]) * nW, sigH = sig0[3] - sig0[1];
   const areaSc = Math.sqrt(0.46 * W * H / (bw * nW * bh)), sigSc = Math.min((W - 60) / sigW, (H - 60) / sigH), fit = Math.min(areaSc, sigSc), side = (seed >> 5) % 2 ? 1 : -1;
   let holeOver = '', sc, at, surf = null, surfaceY = null, under = '', over = '', defs = '', pool, hand = null, hookGap = null, extra = '';
   const placeOn = (y, mul2, xc) => { sc = Math.min(fit * mul2, (y - 21) / (bb[3] - sig0[1])); at = [xc - bcx * sc, y + 2 - bb[3] * sc]; surfaceY = y; };
   if (lay === 'close') { sc = Math.min(areaSc * 1.1, sigSc); at = [560 + side * 50 - bcx * sc, 306 - bcy * sc + bh * sc * 0.08]; }
   else if (lay === 'scene') { sc = Math.min(Math.max(1100 / bw, 600 / bh) * 0.92, sigSc); at = [560 - bcx * sc, 306 - bcy * sc]; }
-  else if (lay === 'ledge' || lay === 'table' || lay === 'floor' || lay === 'niche') { const tall = bh > 1.15 * bw * nW, y = tall ? 556 + Math.round(r() * 26) : lay === 'ledge' ? 500 + Math.round(r() * 40) : lay === 'table' ? 480 + Math.round(r() * 40) : lay === 'floor' ? 520 + Math.round(r() * 40) : 540; placeOn(y, 1.05, 560 + side * (lay === 'niche' ? 0 : 50)); surf = surface(seed + 50, lay, y); }
+  else if (lay === 'ledge' || lay === 'table' || lay === 'floor' || lay === 'niche') { const tall = bh > 1.15 * bw * nW, y = tall ? 566 + Math.round(r() * 20) : lay === 'ledge' ? 520 + Math.round(r() * 40) : lay === 'table' ? 505 + Math.round(r() * 40) : lay === 'floor' ? 540 + Math.round(r() * 30) : 550; placeOn(y, 1.05, 560 + side * (lay === 'niche' ? 0 : 50)); surf = surface(seed + 50, lay, y); }
   else if (lay === 'hang') { const hx = 560 + side * 40; const hk = P0.hook; sc = Math.min(fit * 1.05, (H - 24 - 120) / Math.max(1, sig0[3] - hk[1])); at = [hx - hk[0] * sc, 120 - hk[1] * sc]; }
   else if (lay === 'water') { const wy = 440 + Math.round(r() * 40); sc = Math.min(fit * 1.1, (wy - 24) / (bh * 0.8)); at = [560 + side * 70 - bcx * sc, wy - (bb[3] - bh * 0.22) * sc]; over = water(r, wy, course); surfaceY = wy; }
   else { sc = Math.min(areaSc * 1.05, sigSc); at = [540 + side * 40 - bcx * sc, 300 - bcy * sc]; }
   const M = p => K.mapPt(p, [0, 0], at, sc), inFrame = b => { const ix = Math.max(0, Math.min(b[2], W - 20) - Math.max(b[0], 20)), iy = Math.max(0, Math.min(b[3], H - 20) - Math.max(b[1], 20)); return (ix * iy) / Math.max(1, (b[2] - b[0]) * (b[3] - b[1])); };
   const sigCard = () => { const a = M([sig0[0], sig0[1]]), b2 = M([sig0[2], sig0[3]]); return [Math.min(a[0], b2[0]), Math.min(a[1], b2[1]), Math.max(a[0], b2[0]), Math.max(a[1], b2[1])]; };
-  for (let k = 0; k < 8 && inFrame(sigCard()) < 0.97; k++) {
-    const sg = sigCard(); let dx = 0, dy = 0;
+  const shift = () => { const sg = sigCard(); let dx = 0, dy = 0;
     if (sg[0] < 20) dx = 20 - sg[0]; else if (sg[2] > W - 20) dx = W - 20 - sg[2];
     if (!surfaceY && lay !== 'hang') { if (sg[1] < 20) dy = 20 - sg[1]; else if (sg[3] > H - 20) dy = H - 20 - sg[3]; }
-    at = [at[0] + dx, at[1] + dy];
-    if (inFrame(sigCard()) < 0.97) { const s2 = sc * 0.9, anchor = surfaceY ? [bcx, bb[3]] : lay === 'hang' ? P0.hook : [bcx, bcy], fixed = M(anchor); sc = s2; at = [fixed[0] - anchor[0] * sc, fixed[1] - anchor[1] * sc]; }
-  }
+    if (lay === 'hang' && sg[1] < 20 && sg[3] + 20 - sg[1] < H - 20) dy = 20 - sg[1];   // a hung thing may hang lower on a longer chain
+    at = [at[0] + dx, at[1] + dy]; };
+  const anchor = surfaceY ? [bcx, bb[3]] : lay === 'hang' ? P0.hook : [bcx, bcy], scaleTo = s2 => { const fixed = M(anchor); sc = s2; at = [fixed[0] - anchor[0] * sc, fixed[1] - anchor[1] * sc]; };
+  for (let k = 0; k < 8 && inFrame(sigCard()) < 0.97; k++) { shift(); if (inFrame(sigCard()) < 0.97) scaleTo(sc * 0.9); }
+  // then grow toward the L13 fill while the signature still fits (L16): layouts never leave a small subject they could avoid
+  const fillNow = () => { const a = M([bb[0], bb[1]]), b2 = M([bb[2], bb[3]]), ex = n > 1 && !long ? bw * sc * 0.62 * (n - 1) / 2 : 0, x0 = Math.max(0, Math.min(a[0], b2[0]) - ex), x1 = Math.min(W, Math.max(a[0], b2[0]) + ex), y0 = Math.max(0, Math.min(a[1], b2[1])), y1 = Math.min(H, Math.max(a[1], b2[1])); return [(x1 - x0) * (y1 - y0) / (W * H), Math.max((x1 - x0) / W, (y1 - y0) / H)]; };
+  let growStop = ''; if (lay !== 'scene') for (let k = 0; k < 14 && !fillOk(...fillNow(), 0.01); k++) { const keep = [sc, at]; scaleTo(sc * 1.06); shift(); if (inFrame(sigCard()) < 0.97) { growStop = sigCard().map(Math.round).join(','); [sc, at] = keep; break; } }
+
   // void holes (L22): seeded per card, 1 or 2, on a solid part of the object, drawn with D.hole so the wall shows,
   // and never within 48 px of a hole already drawn in this batch
   const holes = [];
   if (course === 'void') { const f = copies[0].f, area = q => (q[2] - q[0]) * (q[3] - q[1]); let big = f.parts.filter(q => area(q) > 6000); if (!big.length) big = f.parts.slice().sort((a, b) => area(b) - area(a)).slice(0, 2); const nh = 1;   // one hole: two side by side read as eyes
     for (let i = 0; i < nh && big.length; i++) { let p = null, q = null;
-      for (let t = 0; t < 24 && !p; t++) { q = big[Math.floor(r() * big.length)]; const c = [q[0] + (q[2] - q[0]) * (0.2 + r() * 0.6), q[1] + (q[3] - q[1]) * (0.2 + r() * 0.6)], cc = M(c); if (cc[0] > 40 && cc[0] < W - 40 && cc[1] > 40 && cc[1] < H - 40 && USED_HOLES.concat(holes.map(h => h.card)).every(u => Math.hypot(u[0] - cc[0], u[1] - cc[1]) >= 48)) p = c; }
+      for (let t = 0; t < 60 && !p; t++) { const pool2 = t < 24 ? big : f.parts, mg = t < 24 ? 40 : 24; q = pool2[Math.floor(r() * pool2.length)]; const c = [q[0] + (q[2] - q[0]) * (0.2 + r() * 0.6), q[1] + (q[3] - q[1]) * (0.2 + r() * 0.6)], cc = M(c); if (cc[0] > mg && cc[0] < W - mg && cc[1] > mg && cc[1] < H - mg && USED_HOLES.filter(u => !BIG() || u.obj === obj).map(u => u.p).concat(holes.map(h => h.card)).every(u => Math.hypot(u[0] - cc[0], u[1] - cc[1]) >= 48)) p = c; }
       if (!p) continue; const rr = Math.min(26, (q[2] - q[0]) * 0.16, (q[3] - q[1]) * 0.16) + 6; D.hole(f, p, rr, rr * 0.9, '#8a8478', { ang: r() }); holes.push({ fig: p, card: M(p), r: rr }); }
-    if (!holes.length && surfaceY) { const f2 = K.objFig(seed + 77); for (let t = 0; t < 12 && !holes.length; t++) { const cc = [objBox[0] - 60 - r() * 120 + (t % 2) * (objBox[2] - objBox[0] + 240), surfaceY + 26 + r() * 30]; if (cc[0] > 50 && cc[0] < W - 50 && USED_HOLES.every(u => Math.hypot(u[0] - cc[0], u[1] - cc[1]) >= 48)) { D.hole(f2, cc, 34, 14, '#5a564e', { ang: 0 }); holes.push({ card: cc, r: 34 }); } } const s4 = K.figSVG(f2); defs += s4.defs; holeOver = s4.body; }   // a hole in the ground beside it
-    holes.forEach(h => USED_HOLES.push(h.card)); }
+    if (!holes.length && surfaceY) { const f2 = K.objFig(seed + 77), q0 = M([bb[0], bb[1]]), q1 = M([bb[2], bb[3]]), ob = [Math.min(q0[0], q1[0]), 0, Math.max(q0[0], q1[0]), 0]; for (let t = 0; t < 12 && !holes.length; t++) { const cc = [ob[0] - 60 - r() * 120 + (t % 2) * (ob[2] - ob[0] + 240), surfaceY + 26 + r() * 30]; if (cc[0] > 50 && cc[0] < W - 50 && USED_HOLES.filter(u => !BIG() || u.obj === obj).every(u => Math.hypot(u.p[0] - cc[0], u.p[1] - cc[1]) >= 48)) { D.hole(f2, cc, 34, 14, '#5a564e', { ang: 0 }); holes.push({ card: cc, r: 34 }); } } const s4 = K.figSVG(f2); defs += s4.defs; holeOver = s4.body; }   // a hole in the ground beside it
+    holes.forEach(h => USED_HOLES.push({ obj, p: h.card })); }
   // the hang line ends on the hook (L17)
   if (lay === 'hang') { const hk = M(P0.hook), hx = hk[0]; const B1 = beam(seed + 60, hx); defs += B1.defs; under += B1.body + `<path d="M${hx.toFixed(1)},84 L${hk[0].toFixed(1)},${hk[1].toFixed(1)}" stroke="${INK}" stroke-width="7"/><path d="M${hx.toFixed(1)},84 L${hk[0].toFixed(1)},${hk[1].toFixed(1)}" stroke="#6a5a40" stroke-width="4" stroke-dasharray="6 3"/>`; hookGap = 0; pool = [hx, 300, 380, 260]; }
   if (surf) { defs += surf.defs; under += surf.body; }
@@ -298,8 +332,10 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   let act = o.act || (ACT_WORDS.find(([re]) => re.test((card.name || '').toLowerCase())) || [])[1] || ACT_DEFAULT[obj] || 'drip';
   if (act === 'pour' && !P0.mouth) act = ACT_DEFAULT[obj] === 'pour' ? 'drip' : (ACT_DEFAULT[obj] || 'drip');
   if (state.frozen && act === 'pour') act = 'freeze';
+  if (state.empty && act === 'pour') act = 'fling';   // L21: an empty thing cannot pour
   const A = actFX(r, act, M, Object.assign({}, P0, { feat: [...feats] }), course, { surfaceY, pivot: hand ? hand.elbow : null }, state);
-  fx += A.s; A.feats.forEach(x => feats.add(x));
+  if (act === 'glare') under += A.s; else fx += A.s;   // glare is a halo behind the thing, not a veil over it
+  A.feats.forEach(x => feats.add(x));
   if (state.frozen && !feats.has('rime')) { fx += K.inkRime(r, [[objBox[0], objBox[3] - 10], [(objBox[0] + objBox[2]) / 2, objBox[3] - 24], [objBox[2], objBox[3] - 8]]); feats.add('rime'); }
   if (state.broken && !feats.has('crack')) { const f2 = K.objFig(seed + 90); D.crack(f2, focus, -1.2, 120, { n: 6, w: 2.6 }); D.crack(f2, add(focus, [10, 6]), 0.6, 80, { n: 4 }); const s3 = K.figSVG(f2); defs += s3.defs; fx += s3.body; feats.add('crack'); }
   // ground and assembly
@@ -315,8 +351,8 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   const meta = { id, kind: 'object', object: obj, variant, layout: lay, act, actShown: act !== 'freeze' || feats.has('rime'), hand: hand ? { edge: hand.edge, angle: hand.angle, hand: hand.hand } : null,
     sigInside: inFrame(sgc), hook: !!P0.hook, hookGap, surfaceY, contact: surfaceY && lay !== 'water' ? Math.abs(objBox[3] - surfaceY) : null,
     holes: holes.map(h => h.card), copies: copies.map(cp => cp.key), feats: [...feats], state, ells: P0.ells || null,
-    subjFrac: (cw * ch) / (W * H), thin: Math.max(cw, ch) / Math.max(1, Math.min(cw, ch)) >= 2.2, longSpan: cw > ch ? cw / W : ch / H, dbg: { sc: +sc.toFixed(2), bw: Math.round(bw), bh: Math.round(bh), box: cb.map(Math.round), areaSc: +areaSc.toFixed(2), sigSc: +sigSc.toFixed(2) }, badRed, badGold, noun: nounOf(card), override: !!o.device, course, fxSrc };
+    subjFrac: (cw * ch) / (W * H), span: Math.max(cw / W, ch / H), dbg: { growStop, sc: +sc.toFixed(2), bw: Math.round(bw), bh: Math.round(bh), box: cb.map(Math.round), areaSc: +areaSc.toFixed(2), sigSc: +sigSc.toFixed(2) }, badRed, badGold, noun: nounOf(card), override: !!o.device || !!SPREAD[id], spread: SPREAD[id] || null, course, fxSrc };
   return { course: c, defs, body, meta };
 }
 
-module.exports = { SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT };
+module.exports = { spread, FAMILY, probe, fillOf, fillOk, SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT };

@@ -20,11 +20,12 @@
 const RIG = {
   bulwark: {
     act: [
-      // overhead chop: shoulder flexed 150 against the trunk, elbow bent 30, the trunk pitched into the blow so the
-      // mace comes over 30 degrees ahead of vertical (a vertical mace does not fit the frame at hero scale)
-      { style: 'swing', words: /swing|smash|over|crush|blow|maul|hook/, pose: { upperarm_n: -150, forearm_n: 69, hand_n: 40, torso: 16, lean: 6, head: -6, upperarm_f: -6 }, at: [380, 525], scale: 1.2, weapon: ['mace', [500, 236]], pivot: 'upperarm_n', sweep: 85 },
-      // the mace driven straight out from the shoulder, weight on the front foot
-      { style: 'strike', words: /thrust|jab|drive|punch|pommel|butt/, pose: { upperarm_n: -70, forearm_n: 75, hand_n: 20, torso: 10, lean: 6, head: -4, upperarm_f: -8 }, at: [330, 330], scale: 1.25, weapon: ['mace', [500, 236]], off: [40, 10] },
+      // the overhead chop at its end: the mace driven down ahead, the arc trailing over the top from behind. An
+      // overhead near arm in profile crosses the great helm unless it is vertical, and a vertical mace runs off the
+      // frame at hero scale (LESSONS L28, L30), so the chop is shown landing.
+      { style: 'swing', words: /swing|smash|over|crush|blow|maul|hook/, pose: { upperarm_n: -54, forearm_n: 74, hand_n: 15, torso: 16, lean: 6, head: -6, upperarm_f: -6 }, at: [330, 230], scale: 1.25, weapon: ['mace', [500, 236]], pivot: 'upperarm_n', sweep: 110 },
+      // the mace punched up and out from a lowered elbow, weight on the front foot
+      { style: 'strike', words: /thrust|jab|drive|punch|pommel|butt/, pose: { upperarm_n: -38, forearm_n: 9, hand_n: 20, torso: 10, lean: 6, head: -4, upperarm_f: -8 }, at: [330, 330], scale: 1.25, weapon: ['mace', [500, 236]], off: [40, 10] },
       // shoulder behind the door, driving it forward
       { style: 'strike', words: /shove|shield|door|push|bash|ram|shoulder|slam/, pose: { torso: 14, lean: 9, head: -4, upperarm_f: -18, upperarm_n: -20, forearm_n: 10 }, at: [360, 330], scale: 1.32, weapon: ['door', [530, 300]], off: [40, 0] },
     ],
@@ -52,11 +53,11 @@ const RIG = {
       // the book kept carried at the chest (the figure's book is drawn closed, cover out, so it is not lifted to the
       // face), head bowed to it, the near hand laid on it, the cast thrown off the book
       { style: 'cast', words: /page|book|read|codex|script|rite|word/, pose: { upperarm_f: -6, forearm_f: -4, torso: -4, head: 8, upperarm_n: -15, forearm_n: 57, vary: { elementalist_catalyst: { upperarm_n: 10, forearm_n: 30 }, elementalist_accumulator: { upperarm_n: -27, forearm_n: 54 } } }, hide: ['sign'], at: [280, 300], scale: 1.3, hand: ['book', null] },
-      // the sweep: arm thrown up and forward, ahead of the face
-      { style: 'cast', words: /sweep|spray|all|wave|spill|ring|spectrum|flood/, pose: { upperarm_n: -80, forearm_n: 95, hand_n: -20, torso: -6, head: -6, vary: { elementalist_catalyst: { forearm_n: 68 } } }, hide: ['sign'], at: [280, 310], scale: 1.3, hand: ['hand_n', null], spray: true },
+      // the sweep: the arm flung straight out at chest height, below the face (L28)
+      { style: 'cast', words: /sweep|spray|all|wave|spill|ring|spectrum|flood/, pose: { upperarm_n: -18, forearm_n: 80, hand_n: -20, torso: -6, head: -6, vary: { elementalist_catalyst: { upperarm_n: 7, forearm_n: 53 }, elementalist_accumulator: { upperarm_n: -30, forearm_n: 77 } } }, hide: ['sign'], at: [280, 310], scale: 1.3, hand: ['hand_n', null], spray: true },
     ],
     block: [
-      { words: /book|page|cover|shield/, pose: { upperarm_f: -12, forearm_f: -12, torso: -5, head: -4, upperarm_n: 10 }, hide: ['sign'], at: [300, 290], scale: 1.3, face: ['book', null] },
+      { words: /book|page|cover|shield/, pose: { upperarm_f: -4, forearm_f: -6, torso: -5, head: -4, upperarm_n: 10 }, hide: ['sign'], at: [300, 290], scale: 1.3, face: ['book', null] },
       // the warding palm raised ahead of the face from a lowered elbow (a level arm at shoulder height crosses the chin)
       { words: /\bward|palm|sign|hand|still|calm/, pose: { upperarm_n: -33, forearm_n: 50, hand_n: -25, torso: -6, head: -4, vary: { elementalist_catalyst: { upperarm_n: -8, forearm_n: 23 }, elementalist_accumulator: { upperarm_n: -45, forearm_n: 47 } } }, hide: ['sign'], at: [290, 300], scale: 1.3, face: ['hand_n', null] },
     ],
@@ -83,8 +84,8 @@ const RIG = {
     // The far hand holds the robe front and stays put.
     act: [
       { style: 'cast', words: /hour|time|glass|sand|turn/, pose: { upperarm_n: -33, forearm_n: 43, hand_n: -13, torso: 3, head: -2, vary: { oracle_chronomancer: { upperarm_n: -39, forearm_n: 17, hand_n: 19 }, oracle_fatebinder: { upperarm_n: -52, forearm_n: 31, hand_n: 18 } } }, at: [300, 280], scale: 1.25, hand: ['hourglass', null] },
-      // raised high and forward, ahead of the face
-      { style: 'cast', words: /raise|star|sky|heaven|unmak|\bend\b|\ball\b/, pose: { upperarm_n: -74, forearm_n: 73, hand_n: 5, torso: -4, head: -8, vary: { oracle_chronomancer: { upperarm_n: -70, forearm_n: 42, hand_n: 32 }, oracle_fatebinder: { upperarm_n: -93, forearm_n: 61, hand_n: 36 } } }, at: [310, 320], scale: 1.2, hand: ['hourglass', null], spray: true },
+      // raised straight up, the arm behind the line of the face (L28)
+      { style: 'cast', words: /raise|star|sky|heaven|unmak|\bend\b|\ball\b/, pose: { upperarm_n: -124, forearm_n: 83, hand_n: 45, torso: -4, head: -8, vary: { oracle_chronomancer: { upperarm_n: -40, forearm_n: 17, hand_n: 27 }, oracle_fatebinder: { upperarm_n: -53, forearm_n: 31, hand_n: 26 } } }, at: [310, 370], scale: 1.2, hand: ['hourglass', null], spray: true },
       { style: 'cast', words: /point|foretell|\bsee|name|doom(?!sayer)|mark|fate(?!binder)|omen/, pose: { upperarm_n: -53, forearm_n: 78, hand_n: -34, torso: 6, lean: 3, head: -2, vary: { oracle_chronomancer: { upperarm_n: -59, forearm_n: 52, hand_n: -2 }, oracle_fatebinder: { upperarm_n: -72, forearm_n: 66, hand_n: -3 } } }, at: [300, 290], scale: 1.25, hand: ['hourglass', null] },
     ],
     block: [
@@ -102,26 +103,27 @@ const RIG = {
       { style: 'cast', words: /fling|dirt|throw|spit|curse|raise|bell|toll|hour|glass|mirror(?!hex)/, pose: { upperarm_f: -20, forearm_f: -30, torso: -6, head: -4, upperarm_n: 25, forearm_n: 20, hand_n: -35, vary: { hexweaver_doomsayer: { upperarm_f: 0, forearm_f: 0, hand_f: 6 }, hexweaver_mirrorhex: { hand_f: 35 } } }, at: [300, 320], scale: 1.25, hand: ['hand_f', null], spray: true },
     ],
     block: [
-      { words: /poppet|\bbind|charm|\bward|doll|mirror(?!hex)|glass/, pose: { upperarm_n: -68, forearm_n: 63, hand_n: 14, torso: -6, lean: -3, vary: { hexweaver_doomsayer: { upperarm_n: -41, forearm_n: 61, hand_n: -11 } } }, at: [310, 300], scale: 1.3, face: ['poppet', null], off: [80, -10] },
+      { words: /poppet|\bbind|charm|\bward|doll|mirror(?!hex)|glass/, pose: { upperarm_n: -28, forearm_n: 23, hand_n: 14, torso: -6, lean: -3, vary: { hexweaver_doomsayer: { upperarm_n: -1, forearm_n: 21, hand_n: -11 } } }, at: [310, 300], scale: 1.3, face: ['poppet', null], off: [80, -10] },
       { style: 'salt', words: /salt|line|threshold|circle|ground|dirt|ash/, pose: { torso: 14, lean: 6, upperarm_n: -22, forearm_n: 68, hand_n: -40, upperarm_f: 20, forearm_f: -10, hand_f: -20 }, at: [320, 300], scale: 1.25, face: ['hand_n', null] },
     ],
   },
   vessel: {
-    // faces the viewer: the acts turn across the body toward the right, cropped tight on the arms
+    // faces the viewer, and both forearms and the far upper arm carry wide sleeves hanging far below them, so a sleeved
+    // bone turns at most 25 degrees in all (LESSONS L33). One arm acts, the other rests; the hands carry the gesture,
+    // and the crop is tight on the acting hand.
     act: [
-      // palm strike: far arm driven out level to the right, the body leaning into it
-      { style: 'strike', words: /strike|palm|blow|push|hit|drive/, pose: { upperarm_f: -100, forearm_f: 106, torso: 6, lean: 4, upperarm_n: -45, forearm_n: -110 }, at: [300, 200], scale: 1.55, weapon: ['hand_f', null] },
-      // both arms reaching right: the far arm out and up, the near arm across the belly after it (a level near arm
-      // crosses the face)
-      { style: 'cast', words: /reach|draw|take|pull|across|breath|out/, pose: { upperarm_f: -128, forearm_f: 104, upperarm_n: -63, forearm_n: -106, torso: 8, lean: 5 }, at: [300, 230], scale: 1.45, hand: ['hand_f', null] },
-      { style: 'cast', words: /give|gift|offer|pour|both|open|mantle/, pose: { upperarm_f: -129, forearm_f: 96, upperarm_n: 36, forearm_n: -51, torso: 4 }, at: [320, 275], scale: 1.5, hand: ['hand_f', null], spray: true },
+      // palm strike: the far forearm swung level and the heel of the palm driven out, leaning into it
+      { style: 'strike', words: /strike|palm|blow|push|hit|drive/, pose: { upperarm_f: -20, forearm_f: 30, hand_f: -40, torso: 6, lean: 4 }, at: [270, 190], scale: 1.6, weapon: ['hand_f', null] },
+      // reaching up and out with the far hand, fingers open
+      { style: 'cast', words: /reach|draw|take|pull|across|breath|out/, pose: { upperarm_f: -18, forearm_f: -5, hand_f: 25, torso: 4, lean: 3 }, at: [270, 200], scale: 1.6, hand: ['hand_f', null] },
+      // offering: the far forearm lowered forward, palm turned up and out
+      { style: 'cast', words: /give|gift|offer|pour|both|open|mantle/, pose: { upperarm_f: -10, forearm_f: 32, hand_f: 30, torso: 3 }, at: [270, 190], scale: 1.6, hand: ['hand_f', null], spray: true },
     ],
     block: [
-      // braced: far palm out at head height, near hand across the body behind it (the Vessel's elbows fold outward
-      // only, so its forearms cannot cross)
-      { words: /cross|\bbar\b|brace|\bguard|hold|nimbus/, pose: { upperarm_f: -71, forearm_f: 46, upperarm_n: -61, forearm_n: -76, torso: -4, lean: -2 }, at: [320, 220], scale: 1.5, face: ['hand_f', null] },
-      // one palm raised high, open to the blow
-      { words: /palm|\bward|stop|raise|still|breath/, pose: { upperarm_f: -136, forearm_f: 96, torso: -6, lean: -3, upperarm_n: 15 }, at: [320, 350], scale: 1.45, face: ['hand_f', null] },
+      // braced: leaning back, the far palm turned out to the blow
+      { words: /cross|\bbar\b|brace|\bguard|hold|nimbus/, pose: { upperarm_f: -5, forearm_f: -10, hand_f: -20, torso: -5, lean: -3 }, at: [300, 210], scale: 1.55, face: ['hand_f', null] },
+      // recoiling, both palms still raised
+      { words: /palm|\bward|stop|raise|still|breath/, pose: { hand_f: -30, hand_n: 20, torso: -10, lean: -5 }, at: [310, 210], scale: 1.55, face: ['hand_f', null] },
     ],
   },
 };

@@ -4,6 +4,7 @@
 // object can be tilted without turning the key light. Returns named points (in figure px) for card FX to attach to.
 'use strict';
 const K = require('./card_kit');
+const SB = (F, b) => require('./card_kit').E.bbox(F([[b[0], b[1]], [b[2], b[1]], [b[2], b[3]], [b[0], b[3]]]));   // a signature box given in the object's own frame, as a figure-space box (L16)
 const { E, D, INK, BONE } = K;
 const { add, sub, mul, lerp, rot, mix, ell, frame, limb, norm, len } = E;
 
@@ -196,6 +197,7 @@ function mirror(f, o = {}) {
   const gl = ell([0, 0], 126, 156, 0, 36);
   f.part(F(gl), { fill: '#40444c', shade: 0.3, inkW: 2, inkHeavy: 3.4, hatch: false, hi: 0.02, tex: T(f, 'mottle'), texOp: 0.5 });
   f.flat(F([[-100, -90], [-60, -140], [20, -150], [-40, -60], [-90, 20]]), '#8a8e96', { op: 0.25 });
+  for (let i = 0; i < 9; i++) { const x = -100 + i * 24; f.line(F([[x, -130 + (i % 3) * 20], [x + 30, 120 - (i % 2) * 30]]), 1.4 + (i % 3), i % 2 ? '#9a9ea6' : '#24262c', { op: 0.3 }); }   // the room in the glass
   // the caught guard: a shield warped by the curve of the glass, pale and wrong
   const sh = [[-44, -66], [40, -72], [46, -10], [26, 48], [-4, 76], [-30, 44], [-48, -6]];
   f.part(F(sh), { fill: '#8a8478', shade: 0.4, inkW: 1.4, inkHeavy: 2, cast: false, tex: T(f, 'wood'), texOp: 0.4 });
@@ -208,7 +210,6 @@ function mirror(f, o = {}) {
   // the crack: a star of cracks from a strike point, plus the void's clean bite out of the edge
   const cp = [40, -40];
   for (const a of [0.2, 1.3, 2.4, 3.3, 4.4, 5.4]) D.crack(f, F([cp])[0], a0 + a, 70 + r() * 60, { n: 5, lip: '#dfe2e8' });
-  D.hole(f, F([[-62, 92]])[0], 28, 25, '#8a8e96', { ang: a0, th: 0.16 });
   const holes = undefined;
   f.line(F([[-96, -110], [-110, -50], [-108, 0]]), 5, '#e4e6ea', { op: 0.55 }); f.line(F([[-104, 30], [-98, 60]]), 4, '#e4e6ea', { op: 0.4 });
   // tarnish blooms, scratches and a dent on the frame
@@ -223,7 +224,7 @@ function mirror(f, o = {}) {
   for (let i = 0; i < 6; i++) { const y = -60 + i * 8; f.line(F([[148, y], [166, y + 4]]), 3.4, INK); f.line(F([[148, y], [166, y + 4]]), 1.6, '#2e3428'); } // thread binding a cracked frame
   D.crack(f, F([[160, -70]])[0], a0 + 1.7, 60, { n: 4, forks: false, w: 1.6 });
   f.flat(F([[-90, -120], [-40, -150], [40, -152], [90, -120], [40, -128], [-40, -126]]), '#0a0a0e', { op: 0.35 }); // candle soot on the glass
-  return { glass: F([[0, 0]])[0], left: F([[-158, -20]])[0], strike: F([cp])[0], holes, focus: F([[0, 0]])[0], sig: [-170, -200, 170, 200], grip: { c: F([[0, 330]])[0], thumb: a0 - Math.PI / 2 } };
+  return { glass: F([[0, 0]])[0], left: F([[-158, -20]])[0], strike: F([cp])[0], holes, focus: F([[0, 0]])[0], sig: SB(F, [-170, -200, 170, 200]), grip: { c: F([[0, 330]])[0], thumb: a0 - Math.PI / 2 } };
 }
 
 // ==== bell (elementalist: ring, spectrum; abbey: toll)

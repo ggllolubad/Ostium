@@ -19,7 +19,7 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
   fs.mkdirSync(path.join(OUT, '_full'), { recursive: true });
   // the lessons checks run on the batch metadata before anything renders (checks.js); a failure stops the run
   S.allocate(list);
-  const built = list.map(id => Object.assign({ id }, S.build(id)));
+  const built = list.map(id => { const b = S.build(id); fs.writeFileSync(path.join(OUT, '_full', fname(id) + '.svg'), b.svg); return { id, meta: b.meta }; });   // SVGs go to disk now, so a full run holds only metadata
   const C = require('./checks'), res = C.runMeta(built.map(b => b.meta));
   let report = `checks for ${list.length} cards (${built.filter(b => b.meta.kind === 'object').length} object cards), ${new Date().toISOString()}\n` + C.report(res);
   fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
@@ -27,13 +27,13 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
   if (res.some(r => !r.ok) && !process.argv.includes('-force')) { console.error('\nCHECKS FAILED: nothing rendered. Fix the cards above (or pass -force to render anyway for a look).'); process.exit(1); }
   const b = await chromium.launch();
   const pg = await b.newPage({ viewport: { width: S.W, height: S.H } });
-  for (const { id, svg, meta } of built) {
+  for (const { id, meta } of built) {
     const t0 = Date.now();
-    fs.writeFileSync(path.join(OUT, '_full', fname(id) + '.svg'), svg);
+    const svg = fs.readFileSync(path.join(OUT, '_full', fname(id) + '.svg'), 'utf8');
     await pg.setContent(`<html><body style="margin:0;background:#000">${svg}</body></html>`);
     await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '.png'), clip: { x: 0, y: 0, width: S.W, height: S.H } });
     if (meta.kind === 'object') { // the object alone, for the flatness check (L3)
-      await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } });
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_mask.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
     }
     console.log(id, ((Date.now() - t0) / 1000).toFixed(1) + 's');

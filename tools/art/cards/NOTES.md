@@ -30,8 +30,10 @@ object picking, overrides), `render.js`, `downscale.py`.
 8. **Course marks**: void is a clean bored hole with its wall showing (`D.hole`); toxin is mould and grey-green
    hatched mist; frost falls as pale specks and rimes the floor; lightning burns branch along the floor; fire throws
    ash and embers. Never sparkles, neon, slime or clean crystals.
-9. **Colour**: red only for blood (and the rubric on a powder keg's warning); gold only on holy things (the
-   reliquary) and money (the purse).
+9. **Colour**: red only for blood, doom (the Fatebinder's thread) and rubric (a powder keg's warning); gold only on
+   holy things (the reliquary, gold leaf) and money (the purse, coins). **The Vessel is holy** (Cole, 2026-11-25: "the
+   vessel should be holy yes"): gold is allowed on every Vessel card (the hand, its bands, the gold hairline), as worn,
+   aged gold (`#9a8450`), never bright yellow. Course colours appear as ink, never as rainbow daubs.
 10. **Read at 170 px**: one subject, one focal pool, one act.
 
 ## What gets a hero and what gets an object
@@ -94,10 +96,32 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
   or joints, and fall back to the near hand when a variant lacks the bone.
 - **Room**: world cards, foe-added cards and afflictions use their own world's room (from the cls or the id);
   everything else uses the course's room.
-- **Object**: `pickObject` scores about 40 word lists against the card's name (weight 3), note (1) and rules text
-  (0.3). Flask cards choose only among flask, vial, jar and keg. Eyes only on void cards. If nothing matches:
-  flask for flasks, chain for curses, then the calling's object, then the course's object.
+- **Object**: see "Object cards and the build checks" below (the old word scoring is gone).
 - **Course** sets the wash, the FX ink and the course marks round an object.
+
+## Object cards and the build checks (round 5)
+
+- **objcomp.js** composes every object card (device, rite, curse, flask), and records the metadata the checks read.
+  - **Picking:** `pickObject` takes the per-card `o.device`, then the forced-name and noun table `NOUNS` (the name
+    first), then `audit.json`, then the note nouns, then the calling or the course. In a full run, objects past 20 cards
+    spread over `FAMILY`.
+  - **Allocation per batch** (`allocate`): layouts capped at 30%; a unique (object, variant, layout); about a quarter of
+    the cards get a hand, each at a free entry angle; only layouts the object can fill (`fillOf`).
+  - **Layouts:** close, ledge, table, floor, niche, hang (hook only), water (anchor, skull, bell, keg), held (grip only)
+    and scene (whole-frame objects: the door, birds, the anvil, the bandaged arms, gold leaf, the ink arm).
+  - **Placement:** scale to fill, keep `sig` 95% inside with a 20 px margin, then grow toward the fill while the
+    signature fits. Every object on a surface gets a contact shadow.
+  - **Acts:** taken from the name's words, then the object's default. Every FX goes through card_kit's ink FX
+    (`inkFlame`, `inkSteam`, `inkBolt`, `inkRime`, `inkDrip`, `drybrush`, `splatter`, `impact`, `billow`).
+  - **State words** (frozen, clean, broken, empty) set or forbid FX (`STATE_RULES`).
+- **Object contract** (objects4.js header): `{ focus, sig, hook?, grip?, mouth?, feat, ells }`, with `sig` given as
+  `SB(F, box)`. Objects never draw FX or void holes themselves: they call `K.fxReq`.
+- **The calling's hand:** the bulwark and duelist forearm and hand from card_figure, turned onto the grip, capped near
+  hero scale. Other callings borrow one of the two (a known gap).
+- **checks.js** (before rendering) and **pixchecks.py** (after) implement every measurable lesson. render.js:
+  - stops on any FAIL;
+  - writes checks.txt, the unlabelled thumbs170.png and its key;
+  - takes `-r4` for build/emblem2/review4, and `-force` to render a failing batch for a look.
 
 ## Needs a hand-made override
 

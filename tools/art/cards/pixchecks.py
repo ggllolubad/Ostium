@@ -4,7 +4,7 @@ Usage: python3 pixchecks.py <out dir> <list file>     (prints PASS/FAIL lines; e
 L3 flatness: over the object mask (the #subj layer rendered alone), the share of 16 x 16 tiles whose luminance
 standard deviation is under T. T and the allowed share are calibrated on the hero render rigs_li/bulwark/full.webp
 (tiles of 8 px there, since the hero sprite is drawn at about half the object scale). A card fails when its flat share
-exceeds the hero's share plus 0.10.
+exceeds the hero's share plus 0.10. Tiles darker than DARK are skipped on both (deliberate ink-black voids).
 L14 hue clusters: pixels with S > 0.45 and V > 0.35, binned by hue in 30 degree bins; a bin counts when it holds more
 than 0.3% of the card. Four or more counted bins fail. That spec missed the rainbow bands on ve_ink_band (translucent
 bands lose saturation), so the object mask is tested too, tighter: S > 0.3, V > 0.25, a bin counts above 1% of the
@@ -19,6 +19,7 @@ out, listfile = sys.argv[1], sys.argv[2]
 rows = [l.split("\t") for l in open(listfile).read().splitlines() if l.strip()]
 HERO = "/home/claude/ostium/assets/art/rigs_li/bulwark/full.webp"
 T = 5.0
+DARK = 45   # near-black tiles (a bell's mouth, a hole, the gap of a door) are ink, not a flat fill: skipped on the hero and the cards alike
 
 
 def flat_share(rgb, alpha, tile):
@@ -27,7 +28,7 @@ def flat_share(rgb, alpha, tile):
     n = flat = 0
     for y in range(0, h - tile + 1, tile):
         for x in range(0, w - tile + 1, tile):
-            if alpha[y:y + tile, x:x + tile].mean() < 0.9:
+            if alpha[y:y + tile, x:x + tile].mean() < 0.9 or lum[y:y + tile, x:x + tile].mean() < DARK:
                 continue
             n += 1
             if lum[y:y + tile, x:x + tile].std() < T:

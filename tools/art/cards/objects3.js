@@ -2,6 +2,7 @@
 // redrawn bandage and suture. Same contract as objects2.js: (f, o) => { focus, grip? }, drawn with kit.base, dressed.
 'use strict';
 const K = require('./card_kit');
+const SB = (F, b) => require('./card_kit').E.bbox(F([[b[0], b[1]], [b[2], b[1]], [b[2], b[3]], [b[0], b[3]]]));   // a signature box given in the object's own frame, as a figure-space box (L16)
 const G = require('../gear');
 const { E, D, INK, BONE } = K;
 const { add, sub, mul, lerp, rot, mix, ell, frame, limb } = E;
@@ -149,7 +150,7 @@ O.barbs = (f, o = {}) => { // a coil of barbed flagellant's cord: knotted cord w
 O.feather = (f, o = {}) => { // a black flight feather, ragged, a drop of blood on its quill, a small bone tied to it
   const F = frame([0, 0], o.ang ?? -0.7, 1), r = f.r;
   const vane = []; for (let i = 0; i <= 14; i++) { const t = i / 14; vane.push([-250 + t * 480, -Math.sin(Math.PI * Math.pow(t, 0.8)) * 70 - 6]); }
-  for (let i = 14; i >= 0; i--) { const t = i / 14; vane.push([-250 + t * 480, Math.sin(Math.PI * Math.pow(t, 0.9)) * 52 + 6]); }
+  for (let i = 14; i >= 0; i -= 1) { const t = i / 14; vane.push([-250 + t * 480, Math.sin(Math.PI * Math.pow(t, 0.9)) * 52 + 6]); }
   P(f, F, vane, '#24222a', { tex: T(f, 'mottle'), texOp: 0.4, dressO: { op: 0.25, lt: '#9a98a8' } });
   for (let i = 0; i < 26; i++) { const x = -230 + i * 17, up = r() < 0.5; L(f, F, [[x, 0], [x + 26, up ? -50 : 40]], 1.2, '#6a6878', { op: 0.6 }); }
   for (const x of [-60, 90]) f.flat(F([[x, -4], [x + 30, -70], [x + 42, -66], [x + 10, 0]]), mix('#5a4a38', '#000', 0.1)); // splits in the vane
@@ -168,7 +169,7 @@ O.bellrope = (f, o = {}) => { // a belfry rope coming down out of the dark, its 
   const tail = [[6, 80], [10, 160], [-60, 230], [-140, 220], [-160, 170], [-80, 150], [40, 190], [120, 240], [60, 280]];
   L(f, F, tail, 14, INK); L(f, F, tail, 9, '#7a6a4a'); for (let i = 1; i < tail.length; i++) L(f, F, [lerp(tail[i - 1], tail[i], 0.5), add(lerp(tail[i - 1], tail[i], 0.5), [6, 6])], 1.4, INK, { op: 0.7 });
   for (let i = 0; i < 5; i++) L(f, F, [[56 + i * 4, 280], [50 + i * 7, 300 + r() * 10]], 1.4, '#7a6a4a');
-  return { focus: F([[4, -40]])[0], top: F([[0, -400]])[0], grip: { c: F([[5, -30]])[0], thumb: (o.ang ?? 0.04) - Math.PI / 2 }, sig: [-60, -200, 70, 120] };
+  return { focus: F([[4, -40]])[0], top: F([[0, -400]])[0], grip: { c: F([[5, -30]])[0], thumb: (o.ang ?? 0.04) - Math.PI / 2 }, sig: SB(F, [-60, -200, 70, 120]) };
 };
 
 // ==== the alchemist's apparatus
@@ -202,7 +203,7 @@ O.crucible = (f, o = {}) => { // a clay crucible hung glowing on its chain over 
   D.crack(f, F([[-80, -40]])[0], 1.4, 90, { n: 5, lip: '#e8904a' });
   for (let i = 0; i < 9; i++) f.part(F(ell([-140 + i * 34, 170 - r() * 20], 22, 15, r(), 10)), { fill: i % 3 ? '#2a1a14' : '#9a4a1e', shade: 0.4, inkW: 1.2, cast: false });
   for (let i = 0; i < 12; i++) f.flat(F(ell([(r() - 0.5) * 260, -100 - r() * 160], 1.6, 1.6, 0, 6)), r() < 0.5 ? '#e8904a' : '#3a3030', { op: 0.85 });
-  return { focus: F([[0, -60]])[0], top: F([[0, -340]])[0] };
+  return { focus: F([[0, -60]])[0], top: F([[0, -340]])[0], hook: F([[0, -345]])[0], sig: SB(F, [-170, -150, 170, 190]) };
 };
 O.mortar = (f, o = {}) => { // a brass mortar and pestle, a horn spoon, ground powder spilled round it
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
@@ -382,16 +383,23 @@ O.inkpot = (f, o = {}) => { // the inkpot, with its cork on a string, a stained 
   D.label(f, F([[70, 80]])[0], 50, 36, 0.12, '#cdbb94', G2 => f.line(G2([[-16, 0], [14, -2]]), 1.2, INK, { op: 0.7 }));
   return p;
 };
-O.stinger = (f, o = {}) => { // the stinger, with barbs along its shaft, a torn wing scrap, plate rims, venom running from the point
-  const r = f.r, F = frame([0, 0], o.ang ?? -0.6, 1), p = O2.stinger(f, o);
-  for (let i = 0; i < 6; i++) { const x = 60 + i * 28, y = -32 + i * 4.6; f.part(F([[x, y], [x + 22, y - 18], [x + 14, y + 2]]), { fill: '#3a3428', shade: 0.4, inkW: 1, cast: false, sharp: true }); }
-  for (const x of [-160, -100, -40]) L(f, F, [[x, -64], [x + 8, -40]], 2.4, '#c8c8a0', { op: 0.6 });
-  P(f, F, [[-200, -60], [-260, -180], [-150, -230], [-90, -150], [-120, -70]], '#8a8a7a', { opacity: 0.6, tex: T(f, 'mottle'), texOp: 0.4, dressO: { op: 0.2 } });
-  for (let i = 0; i < 5; i++) L(f, F, [[-190, -70], [-230 + i * 30, -200 + i * 8]], 1, INK, { op: 0.6 });
-  L(f, F, [[-200, 0], [-60, 4], [120, 0], [230, 0]], 2, '#7d9a3a', { op: 0.6 });
-  for (let i = 0; i < 4; i++) { const q = F([[270 + i * 6, 30 + i * 24]])[0]; f.flat(ell(q, 4, 6, 0, 8), '#7d9a3a'); }
-  for (let i = 0; i < 14; i++) L(f, F, [[-200 + i * 26, 50], [-204 + i * 26, 64]], 1, '#3a3428', { op: 0.8 }); // bristles
-  return p;
+O.stinger = (f, o = {}) => { // a wasp's abdomen torn free: a banded, tapering body of chitin plates ending in a glossy barbed sting, a bead of venom at its point, the torn waist and a wing scrap behind
+  const r = f.r, F = frame([0, 0], o.ang ?? -0.45, 1), BAND = '#7a6a44', DARKC = '#221c16';
+  P(f, F, [[-250, -40], [-330, -170], [-220, -230], [-150, -120], [-180, -40]], '#8a8a7a', { opacity: 0.55, tex: T(f, 'mottle'), texOp: 0.5, dressO: { op: 0.2 } }); // a wing scrap
+  for (let i = 0; i < 6; i++) L(f, F, [[-200, -50], [-300 + i * 26, -190 + i * 6]], 1, INK, { op: 0.6 });
+  const seg = 6, len0 = 380, x0 = -200; // the plates, overlapping toward the tip, each narrower
+  for (let i = 0; i < seg; i++) { const t0 = i / seg, t1 = (i + 1.15) / seg, w0 = 120 * Math.sin(Math.PI * (0.18 + t0 * 0.78)), w1 = 120 * Math.sin(Math.PI * (0.18 + Math.min(1, t1) * 0.78)), xa = x0 + t0 * len0, xb = x0 + Math.min(1, t1) * len0;
+    const q = [[xa, -w0], [xb, -w1], [xb + 6, 0], [xb, w1], [xa, w0], [xa - 10, 0]];
+    P(f, F, q, i % 2 ? BAND : DARKC, { tex: T(f, 'mottle'), texOp: 0.7, dressO: { op: 0.3 } });
+    L(f, F, [[xb, -w1], [xb + 6, 0], [xb, w1]], 2.4, INK, { op: 0.8 }); L(f, F, [[xb - 6, -w1 * 0.8], [xb, -w1 * 0.2]], 2, '#d8d0b0', { op: 0.45 }); // plate rim, lit
+    for (let k = 0; k < 5; k++) L(f, F, [[xa + 10 + k * 10, -w0 * 0.9], [xa + 14 + k * 10, -w0 * 0.7]], 1, '#3a3020', { op: 0.6 }); } // bristles
+  L(f, F, [[x0 + 30, -70], [x0 + len0 * 0.6, -50], [x0 + len0 * 0.9, -20]], 5, '#e8e0c8', { op: 0.3 }); // a gloss along the back
+  const tip = x0 + len0 + 150; f.part(F([[x0 + len0 - 4, -16], [tip, -2], [tip + 6, 2], [x0 + len0 - 4, 16]]), { fill: '#120e0c', shade: 0.3, inkW: 1.4, cast: false, sharp: true }); // the sting
+  for (let k = 0; k < 4; k++) { const x = x0 + len0 + 30 + k * 28; f.part(F([[x, -8 + k * 1.4], [x - 14, -20 + k * 2], [x + 6, -7 + k * 1.4]]), { fill: '#120e0c', shade: 0.3, inkW: 1, cast: false, sharp: true }); } // its barbs
+  L(f, F, [[x0 + len0, -8], [tip - 10, -3]], 1.6, '#c8c8c0', { op: 0.6 });
+  f.part(F([[x0 - 10, -30], [x0 - 40, -20], [x0 - 46, 0], [x0 - 40, 22], [x0 - 10, 30]]), { fill: '#3a2a1a', shade: 0.4, inkW: 1.3, cast: false }); for (let k = 0; k < 6; k++) L(f, F, [[x0 - 40, -16 + k * 7], [x0 - 56 - r() * 10, -18 + k * 8]], 1, '#c8b890', { op: 0.7 }); // the torn waist
+  const drop = F([[tip + 8, 6]])[0]; K.fxReq(f, 'drip', drop, 2, { col: '#5a6a34' });
+  return { focus: F([[x0 + len0 * 0.6, 0]])[0], sig: SB(F, [x0 - 50, -130, tip + 10, 130]), feat: [], ells: [] };
 };
 O.salt = (f, o = {}) => { // the salt sack, with a wooden scoop in it, a branded mark, a patch, a lead seal and the poured line
   const r = f.r, F = frame([0, 0], o.ang || 0, 1), p = O2.salt(f, o);

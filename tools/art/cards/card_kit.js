@@ -321,7 +321,7 @@ const D = {
     f.flat(ell(c, rx, ry, a, 28), '#060509');
     const wallP = [];
     for (let i = 0; i <= 14; i++) { const t = E.deg(-20 + i * 160 / 14); wallP.push(add(c, rot([Math.cos(t) * rx, Math.sin(t) * ry], a))); }
-    for (let i = 14; i >= 0; i--) { const t = E.deg(-20 + i * 160 / 14); wallP.push(add(c, rot([Math.cos(t) * rx * (1 - th) - rx * th * 0.4, Math.sin(t) * ry * (1 - th) - ry * th * 0.6], a))); }
+    for (let i = 14; i >= 0; i -= 1) { const t = E.deg(-20 + i * 160 / 14); wallP.push(add(c, rot([Math.cos(t) * rx * (1 - th) - rx * th * 0.4, Math.sin(t) * ry * (1 - th) - ry * th * 0.6], a))); }
     f.flat(wallP, wall); f.flat(wallP.slice(0, 8).concat(wallP.slice(-8)), mix(wall, '#000', 0.35), { op: 0.6 });
     f.line(ell(c, rx, ry, a, 28).concat([ell(c, rx, ry, a, 28)[0]]), o.w || 2.2, INK);
     f.line(ell(c, rx + 1.6, ry + 1.6, a, 28).slice(15, 22), 1.1, o.glint || '#e8e2d8', { op: 0.8 });
