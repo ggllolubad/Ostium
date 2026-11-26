@@ -5,7 +5,8 @@ Archetypes (arch keys match the path keys):
   ironwarden    Winter Wall: Fortified Block, Frost on the foes that mean to strike him, Block turned into blows.
   thornguard    Penance: Thorns, Taunt and self-harm; blows that add or spend his Thorns.
 Each archetype's six key cards (ARCHETYPES below) are commons and uncommons; rares, path cards and legendaries
-accelerate them. Riposte is the Duelist's (DECISIONS row 2); the one Bleed card is Barbs Left In (row 3)."""
+accelerate them. Riposte is the Duelist's (DECISIONS row 2); the one Bleed card is Iron Maiden, which reads the
+Bloodletter's Bleed (row 3)."""
 from dsl import *
 
 set_class("bulwark", [1, 2], [1, 2])
@@ -28,7 +29,7 @@ card("bw_k_come_on_then", "Come On, Then", 1, "K", "self", [SELF("taunt"), STRES
      up={"text": "Taunt. Shed 7 stress.", "fx": [SELF("taunt"), STRESS(-7)]})
 card("bw_k_bank_the_cold", "Bank the Cold", 1, "K", "self", [SELF("fortify"), BANK(1)],
      "Fortify. Bank 1.",
-     use=ALL, sub=IW, cat="frost", arch=IW,
+     use=ALL, sub=IW, arch=IW,
      flavour="In the north they let the snow drift high against the wall. It holds.",
      note="Frost creeps across the pine door's windward planks as the Ironwarden settles behind it.",
      up={"text": "Gain 3 Block. Fortify. Bank 1.", "fx": [B(3), SELF("fortify"), BANK(1)]})
@@ -74,18 +75,18 @@ card("bw_draw_their_eyes", "Draw Their Eyes", 0, "C", "self", [SELF("taunt"), ST
      note="The Bulwark raps the mace on the door's ring handle; the belfry's foes turn from the back rank.",
      up={"text": "Taunt. Gain 3 stress. First in the Ordo: gain 4 Block.",
          "fx": [SELF("taunt"), STRESS(3), B(4, if_="first")]})
-card("bw_scar_tissue", "Scar Tissue", 1, "C", "self", [B(3, per="scars", k=0.34)], "Gain 3 Block, plus 1 for every 3 Scars.",
+card("bw_scar_tissue", "Scar Tissue", 1, "C", "self", [B(3, per="scars", k=0.3334)], "Gain 3 Block, plus 1 for every 3 Scars.",
      use=ALL, arch=SB,
      flavour="Every scar on him is a place where something failed to finish the job.",
      note="Blood runs from under the Bulwark's helm as he sets his shoulder harder into the door.",
      up={"text": "Gain 4 Block, plus 1 for every 2 Scars.", "fx": [B(4, per="scars", k=0.5)]})
 card("bw_toll_of_the_tower", "Toll of the Tower", 2, "C", "enemy",
-     [D(2, per="scars", k=0.34), STRESS(-6, to="self", if_="killed")],
-     "Echo. Deal 2, plus 1 for every 3 Scars. If this kills the target, shed 6 stress.", kw=["Echo"], arch=SB,
+     [D(4, per="scars", k=0.3334), STRESS(-4, to="self", if_="killed")],
+     "Echo. Deal 4, plus 1 for every 3 Scars. If this kills the target, shed 4 stress.", kw=["Echo"], arch=SB,
      flavour="The tower fell. He did not. Someone has to pay for that.",
      note="A bloodied Bulwark swings the mace two-handed, the door hanging from his forearm, in the ossuary.",
-     up={"text": "Echo. Deal 4, plus 1 for every 3 Scars. If this kills the target, shed 6 stress.",
-         "fx": [D(4, per="scars", k=0.34), STRESS(-6, to="self", if_="killed")]})
+     up={"text": "Echo. Deal 6, plus 1 for every 3 Scars. If this kills the target, shed 6 stress.",
+         "fx": [D(6, per="scars", k=0.3334), STRESS(-6, to="self", if_="killed")]})
 card("bw_blood_for_iron", "Blood for Iron", 1, "C", "self", [SELFDMG(2), AR(1, if_="lost>=2"), B(3, per="lost", k=1, max=5)],
      "Lose 2 HP. If you lost 2, gain 1 Armor for the fight. Gain 3 Block, plus 1 for each HP lost this way. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
      flavour="The garrison oath: my blood for the wall, the wall for the ones behind it.",
@@ -133,19 +134,18 @@ card("bw_windward_shield", "Windward Shield", 1, "C", "ally_other", [B(5), A("fr
      note="The Ironwarden turns the pine door into the wind so the Duelist stands in its lee.",
      up={"text": "Another hero gains 7 Block. Apply 1 Frost to the front foe.",
          "fx": [B(7), A("frost", 1, attr="stable", to="front_enemy")]})
-card("bw_cold_iron", "Cold Iron", 1, "C", "self", [B(4, per="total_frost", k=1, max=14)],
-     "Gain 4 Block, plus 1 for each Frost on all foes, up to 14.", use=ALL, cat="frost", arch=IW,
+card("bw_cold_iron", "Cold Iron", 1, "C", "self", [B(4, per="total_frost", k=1, max=10)],
+     "Gain 4 Block, plus 1 for each Frost on all foes, up to 10.", use=ALL, cat="frost", arch=IW,
      flavour="Iron in the cold does not bend. It waits.",
      note="Frost climbs the door's iron straps while the foes beyond it slow and stiffen.",
-     up={"text": "Gain 6 Block, plus 1 for each Frost on all foes, up to 16.", "fx": [B(6, per="total_frost", k=1, max=16)]})
-card("bw_break_the_ice", "Break the Ice", 1, "C", "enemy", [D(0, per="block", k=0.5, max=8), D(3, if_="reactions")],
-     "Deal damage equal to half your Block, up to 8. If a Conjunction has gone off this round, hit it again for 3.",
+     up={"text": "Gain 6 Block, plus 1 for each Frost on all foes, up to 12.", "fx": [B(6, per="total_frost", k=1, max=12)]})
+card("bw_break_the_ice", "Break the Ice", 1, "C", "enemy", [D(2, per="block", k=0.5, max=10)],
+     "Deal 2, plus half your Block, up to 10.",
      arch=IW + "+elementalist_conjunction",
      flavour="The door is the weight. The mace only tells it where to go.",
      note="The Ironwarden drives the rimed door's edge into a frozen foe and the ice cracks.",
-     up={"text": "Deal damage equal to half your Block, up to 10. If a Conjunction has gone off this round, hit it "
-                 "again for 5.",
-         "fx": [D(0, per="block", k=0.5, max=10), D(5, if_="reactions")]})
+     up={"text": "Deal 3, plus half your Block, up to 12. If a Conjunction has gone off this round, deal 3 more.",
+         "fx": [D(3, per="block", k=0.5, max=12), D(3, bonus=True, if_="reactions")]})
 
 # ------------------------------------------------------------------ common: Thornguard (Penance)
 card("bw_barbed_plate", "Barbed Plate", 1, "C", "self", [SELF("thorns", 3), B(3)], "Gain 3 Thorns and 3 Block.",
@@ -153,13 +153,13 @@ card("bw_barbed_plate", "Barbed Plate", 1, "C", "self", [SELF("thorns", 3), B(3)
      flavour="He welded every barb himself. One for each name.",
      note="The Thornguard braces his barbed forearm across the door's face.",
      up={"text": "Gain 4 Thorns and 4 Block.", "fx": [SELF("thorns", 4), B(4)]})
-card("bw_hair_shirt", "Hair Shirt", 0, "C", "self", [SELFDMG(3), SELF("thorns", 1, per="lost", k=1, max=4)],
-     "Lose 3 HP. Gain 1 Thorns, plus 1 for each HP lost this way.",
+card("bw_hair_shirt", "Hair Shirt", 1, "C", "self", [SELFDMG(3), SELF("thorns", 4, per="lost", k=1, max=7)],
+     "Lose 3 HP. Gain 4 Thorns, plus 1 for each HP lost this way.",
      use=ALL, arch=TG + "+" + SB,
      flavour="Penance is worn against the skin, where only he can feel it.",
      note="The Thornguard tugs the hair shirt tight at his neck; blood spots the collar.",
-     up={"text": "Lose 3 HP. Gain 3 Thorns, plus 1 for each HP lost this way.",
-         "fx": [SELFDMG(3), SELF("thorns", 3, per="lost", k=1, max=6)]})
+     up={"text": "Lose 3 HP. Gain 6 Thorns, plus 1 for each HP lost this way.",
+         "fx": [SELFDMG(3), SELF("thorns", 6, per="lost", k=1, max=9)]})
 card("bw_come_and_take_it", "Come and Take It", 1, "C", "self", [SELF("taunt"), SELF("thorns", 2)],
      "Taunt. Gain 2 Thorns.", arch=TG,
      flavour="Strike me. I want you to.",
@@ -183,26 +183,26 @@ card("bw_penitents_blow", "Penitent's Blow", 1, "C", "enemy", [D(3, per="thorns"
      up={"text": "Deal 5, plus your Thorns.", "fx": [D(5, per="thorns", k=1)]})
 
 # ------------------------------------------------------------------ common: the company's wall
-card("bw_keep_the_back_rank", "Keep the Back Rank", 1, "C", "ally_other", [GUARD(), ADD("bw_brace", if_="t.rank>=3")],
-     "Guard another hero this round. If they stand in rank 3 or 4, put a Brace into their next hand.", use=COVER,
+card("bw_keep_the_back_rank", "Keep the Back Rank", 1, "C", "ally_other", [GUARD(), ADD("bw_tithe_of_blood", if_="t.rank>=3")],
+     "Guard another hero this round. If they stand in rank 3 or 4, put a Tithe of Blood into their next hand.", use=COVER,
      arch="core",
      flavour="The ones at the back are the ones who know what we are fighting.",
      note="The Bulwark backs up the stair to stand over the kneeling Oracle.",
-     up={"text": "Guard another hero this round. If they stand in rank 3 or 4, they gain 3 Block and put a Brace into "
-                 "their next hand.",
-         "fx": [GUARD(), B(3, if_="t.rank>=3"), ADD("bw_brace", if_="t.rank>=3")]})
+     up={"text": "Guard another hero this round. If they stand in rank 3 or 4, they gain 3 Block and put a Tithe of "
+                 "Blood into their next hand.",
+         "fx": [GUARD(), B(3, if_="t.rank>=3"), ADD("bw_tithe_of_blood", if_="t.rank>=3")]})
 card("bw_hook_and_drag", "Hook and Drag", 1, "C", "enemy", [PULL(1), D(4)], "Pull the target forward 1, then deal 4.",
      hit=BACK, arch="core",
      flavour="The flanges catch. Whatever they catch comes forward.",
      note="The Bulwark hooks the mace's flanges into a caster's robe and hauls it out of the back rank.",
      up={"text": "Pull the target forward 1, then deal 6.", "fx": [PULL(1), D(6)]})
-card("bw_shield_rim", "Shield Rim", 1, "C", "enemy", [D(3), B(3, to="self", per="m.hex", k=1, if_="m.targeting_me")],
-     "Deal 3. If the target means to strike you, gain 3 Block, plus 1 for each Hex on it.",
+card("bw_shield_rim", "Shield Rim", 1, "C", "enemy", [D(4), B(3, to="self", if_="m.targeting_me")],
+     "Deal 4. If the target means to strike you, gain 3 Block.",
      arch="core+hexweaver_hex",
      flavour="Meet the blow with the edge, not the face. A cursed arm swings slow.",
      note="The door's iron-bound edge cracks into a foe's raised arm mid-swing.",
-     up={"text": "Deal 4. If the target means to strike you, gain 5 Block, plus 1 for each Hex on it.",
-         "fx": [D(4), B(5, to="self", per="m.hex", k=1, if_="m.targeting_me")]})
+     up={"text": "Deal 4. If the target means to strike you, gain 4 Block, plus 1 for each Hex on it, up to 9.",
+         "fx": [D(4), B(4, to="self", per="m.hex", k=1, max=9, if_="m.targeting_me")]})
 card("bw_ring_the_helm", "Ring the Helm", 2, "C", "enemy", [D(9), BASHSTUN()],
      "Deal 9. Stun the target if it is Marked or was moved this round. Exhaust.", kw=["Exhaust"],
      arch="core+duelist_mark",
@@ -246,14 +246,14 @@ card("bw_answer_the_blow", "Answer the Blow", 1, "U", "enemy", [D(3, per="attack
      up={"text": "Deal 4, plus 2 for each foe that means to strike you. At Death's Door, hit it again for 8.",
          "fx": [D(4, per="attackers", k=2), D(8, if_="dd")]})
 card("bw_shoulder_their_burden", "Shoulder Their Burden", 1, "U", "self",
-     [TAKESTRESS(8), B(1, per="heroes_before", k=1, max=4)],
+     [TAKESTRESS(8), B(1, per="heroes_before", k=1)],
      "Take up to 8 stress from every other hero onto yourself. Gain 1 Block, plus 1 for each other hero who acted "
-     "before this, up to 4.", use=ALL, arch=SB,
+     "before this.", use=ALL, arch=SB,
      flavour="Give it here. He has carried a door this far.",
      note="The Bulwark lays a gauntlet on the trembling Alchemist's shoulder at the nave's edge.",
      up={"text": "Take up to 12 stress from every other hero onto yourself. Gain 2 Block, plus 2 for each other hero "
-                 "who acted before this, up to 8.",
-         "fx": [TAKESTRESS(12), B(2, per="heroes_before", k=2, max=8)]})
+                 "who acted before this.",
+         "fx": [TAKESTRESS(12), B(2, per="heroes_before", k=2)]})
 card("bw_tithe_of_blood", "Tithe of Blood", 0, "U", "self", [SELFDMG(2), EN(1, if_="lost>=2"), STRESS(-2)],
      "Lose 2 HP. If you lost 2, next round +1 vigour. Shed 2 stress. Exhaust.", use=ALL, kw=["Exhaust"], arch=SB,
      flavour="The abbey pays in ostia. He pays in what he has.",
@@ -289,11 +289,11 @@ card("bw_glacier_wall", "Glacier Wall", 2, "U", "self",
                  "off this round, up to 9. Fortify.",
          "fx": [B(11, per="total_frost", k=1, max=17), B(0, per="reactions", k=3, max=9), SELF("fortify")]})
 card("bw_numbing_cold", "Numbing Cold", 1, "U", "all_enemies", [A("frost", 2), A("frost", 1, if_="t.water")],
-     "Apply 2 Frost to every foe, and 1 more to each foe with Soak.", hit=ALL, cat="frost", attr="stable",
+     "Apply 2 Frost to every foe, and 1 more to each foe with Water.", hit=ALL, cat="frost", attr="stable",
      arch=IW + "+elementalist_water",
      flavour="The chapel's cold came with the door. Wet things freeze first.",
      note="The Ironwarden breathes out behind the door and frost spreads across the floor to every foe.",
-     up={"text": "Apply 3 Frost to every foe, and 1 more to each foe with Soak.",
+     up={"text": "Apply 3 Frost to every foe, and 1 more to each foe with Water.",
          "fx": [A("frost", 3), A("frost", 1, if_="t.water")]})
 card("bw_brittle", "Brittle", 1, "U", "enemy", [A("frost", 1, attr="stable", if_="handoff"), D(1, per="t.frost", k=2, max=12)],
      "Handoff: apply 1 Frost first. Deal 1, plus 2 for each Frost on the target, up to 12.",
@@ -313,12 +313,14 @@ card("bw_rake_of_thorns", "Rake of Thorns", 1, "U", "enemy",
      up={"text": "Lose all your Thorns. Deal 4, plus 1 for each Thorns lost, up to 16. Prime 1 for every 2 Thorns "
                  "lost, up to 5.",
          "fx": [CONS(s="thorns", to="self"), D(4, per="consumed", k=1, max=16), PRIME(0, per="consumed", k=0.5, max=5)]})
-card("bw_barbs_left_in", "Barbs Left In", 1, "U", "enemy", [CONS(s="thorns", to="self"), ST("bleed", 0, per="consumed", k=1)],
-     "Lose all your Thorns. Apply 1 Bleed for each Thorns lost.", arch=TG,
+card("bw_barbs_left_in", "Barbs Left In", 1, "U", "enemy", [CONS(s="thorns", to="self"), D(0, per="consumed", k=1, max=12), ST("vulnerable", 1, if_="consumed>=4")],
+     "Lose all your Thorns. Deal 1 for each Thorns lost, up to 12. If you lost 4 or more, the target becomes "
+     "Vulnerable.", arch=TG,
      flavour="The barber-surgeons taught him this one. He did not ask how they knew.",
      note="The Thornguard snaps his barbs off in a foe's hide and leaves them there.",
-     up={"text": "Lose all your Thorns. Apply 2 Bleed, plus 1 for each Thorns lost.",
-         "fx": [CONS(s="thorns", to="self"), ST("bleed", 2, per="consumed", k=1)]})
+     up={"text": "Lose all your Thorns. Deal 2, plus 1 for each Thorns lost, up to 14. If you lost 3 or more, the "
+                 "target becomes Vulnerable.",
+         "fx": [CONS(s="thorns", to="self"), D(2, per="consumed", k=1, max=14), ST("vulnerable", 1, if_="consumed>=3")]})
 card("bw_spiteful_guard", "Spiteful Guard", 1, "U", "ally_other", [GUARD(), SELF("thorns", 3)],
      "Guard another hero this round. Gain 3 Thorns.", use=COVER, arch=TG,
      flavour="Go on. Reach past him for the scholar.",
@@ -365,22 +367,22 @@ card("bw_close_ranks", "Close Ranks", 1, "U", "all_allies", [B(2), B(1, if_="t.a
      note="The company presses in behind the church door, shoulder to shoulder on the stair.",
      up={"text": "Every hero gains 3 Block, and 1 more if they have an ailment.", "fx": [B(3), B(1, if_="t.ailments")]})
 card("bw_dig_in", "Dig In", -1, "U", "self",
-     [B(0, per="x", k=4), B(0, per="x", k=4, if_="x>=4"), SELF("fortify", 1, if_="!moved")],
-     "Gain 4 Block per X. At X 4 or more, gain 4 more per X. If you have not moved this round, Fortify.", arch="core",
+     [B(0, per="x", k=4), B(6, if_="x>=4"), SELF("fortify", 1, if_="!moved")],
+     "Gain 4 Block per X. At X 4 or more, gain 6 more. If you have not moved this round, Fortify.", arch="core",
      flavour="The front rank is his. It has been since the tower.",
      note="The Bulwark grinds the door's lower edge into the flagstones at the front of the line.",
-     up={"text": "Gain 5 Block per X. At X 4 or more, gain 5 more per X. If you have not moved this round, Fortify.",
-         "fx": [B(0, per="x", k=5), B(0, per="x", k=5, if_="x>=4"), SELF("fortify", 1, if_="!moved")]})
+     up={"text": "Gain 5 Block per X. At X 4 or more, gain 8 more. If you have not moved this round, Fortify.",
+         "fx": [B(0, per="x", k=5), B(8, if_="x>=4"), SELF("fortify", 1, if_="!moved")]})
 
 # ------------------------------------------------------------------ rare
 card("bw_undying_watch", "Undying Watch", 1, "R", "self",
-     [GRIT(1), B(0, per="scars", k=0.34), STRESS(-2, to="allies_other")],
+     [GRIT(1), B(0, per="scars", k=0.3334), STRESS(-2, to="allies_other")],
      "Gain 1 Grit, and 1 Block for every 3 Scars. Every other hero sheds 2 stress. Exhaust.", use=ALL, kw=["Exhaust"],
      arch=SB,
      flavour="The last watch of the tower never ended. He is still standing it.",
      note="The Bulwark stands alone in the ossuary doorway, plate patched with lead, as bones stir.",
      up={"text": "Gain 2 Grit, and 1 Block for every 3 Scars. Every other hero sheds 3 stress. Exhaust.",
-         "fx": [GRIT(2), B(0, per="scars", k=0.34), STRESS(-3, to="allies_other")]})
+         "fx": [GRIT(2), B(0, per="scars", k=0.3334), STRESS(-3, to="allies_other")]})
 card("bw_martyrdom", "Martyrdom", 1, "R", "self", [SELF("taunt"), B(0, per="incoming", k=0.5, max=20), STRESS(2)],
      "Taunt. Gain Block equal to half the damage the foes mean to deal this round, up to 20. Gain 2 stress.",
      arch=SB + "+" + IW,
@@ -388,13 +390,13 @@ card("bw_martyrdom", "Martyrdom", 1, "R", "self", [SELF("taunt"), B(0, per="inco
      note="Every foe in the throne room turns its weapon on the Bulwark at once.",
      up={"text": "Taunt. Gain 4 Block, plus half the damage the foes mean to deal this round, up to 24. Gain 2 stress.",
          "fx": [SELF("taunt"), B(4, per="incoming", k=0.5, max=24), STRESS(2)]})
-card("bw_vengeance", "Vengeance", 2, "R", "enemy", [D(1, per="scars", k=1, max=30), GRIT(1, to="self", if_="killed")],
-     "Costs 1 less if 5 or more of your cards are Exhausted. Deal 1, plus 1 for each Scar, up to 30. If this kills "
-     "the target, gain 1 Grit.", arch=SB, cost_less={"per": "exhaust", "k": 0.2, "max": 1},
+card("bw_vengeance", "Vengeance", 2, "R", "enemy", [D(0, per="scars", k=1, max=30), GRIT(1, to="self", if_="killed")],
+     "Costs 1 less if you have 15 or more Scars. Deal 1 for each Scar, up to 30. If this kills the target, gain 1 "
+     "Grit.", arch=SB, cost_less={"per": "scars", "k": 0.0667, "max": 1},
      flavour="He keeps a tally on the door. This is where he settles it.",
      note="Beside the kill tally scratched into the planks, the Bulwark's mace falls on a ruler's guard.",
-     up={"text": "Costs 1 less if 5 or more of your cards are Exhausted. Deal 5, plus 1 for each Scar, up to 34. If "
-                 "this kills the target, gain 1 Grit.",
+     up={"text": "Costs 1 less if you have 15 or more Scars. Deal 5, plus 1 for each Scar, up to 34. If this kills "
+                 "the target, gain 1 Grit.",
          "fx": [D(5, per="scars", k=1, max=34), GRIT(1, to="self", if_="killed")]})
 card("bw_deep_winter", "Deep Winter", 2, "R", "self", [B(9), SELF("fortify"), A("frost", 3, to="attackers"), BANK(1)],
      "Gain 9 Block. Fortify. Apply 3 Frost to each foe that means to strike you. Bank 1.", use=ALL, cat="frost",
@@ -430,17 +432,19 @@ card("bw_rose_of_iron", "Rose of Iron", 0, "R", "self", [SELFDMG(1), DBL(s="thor
      note="New barbs split open along the Thornguard's arms like iron petals.",
      up={"text": "Lose 1 HP. If you lost it, double your Thorns. Gain 3 Thorns. Exhaust.",
          "fx": [SELFDMG(1), DBL(s="thorns", to="self", if_="lost"), SELF("thorns", 3)]})
-card("bw_hedge_of_spikes", "Hedge of Spikes", 2, "R", "all_allies", [ST("thorns", 3), B(2)],
-     "Every hero gains 3 Thorns and 2 Block.",
+card("bw_hedge_of_spikes", "Hedge of Spikes", 2, "R", "all_allies", [ST("thorns", 2), B(2), ST("thorns", 2, if_="t.targeted")],
+     "Every hero gains 2 Thorns and 2 Block, and 2 more Thorns if a foe means to strike them.",
      use=ALL, arch=TG,
      flavour="He hands out penance like bread. Everyone gets some.",
      note="The Thornguard lashes barbed cord around the whole company's arms in the nave.",
-     up={"text": "Every hero gains 4 Thorns and 3 Block.", "fx": [ST("thorns", 4), B(3)]})
-card("bw_aegis_of_the_door", "Aegis of the Door", 2, "R", "all_allies", [W(2), B(5)],
-     "Every hero gains 2 Ward and 5 Block. Exhaust.", use=ALL, kw=["Exhaust"], arch="core",
+     up={"text": "Every hero gains 3 Thorns and 3 Block, and 2 more Thorns if a foe means to strike them.",
+         "fx": [ST("thorns", 3), B(3), ST("thorns", 2, if_="t.targeted")]})
+card("bw_aegis_of_the_door", "Aegis of the Door", 2, "R", "all_allies", [W(2), B(4), W(1, if_="t.ailments")],
+     "Every hero gains 2 Ward and 4 Block, and 1 more Ward if they have an ailment. Exhaust.", use=ALL, kw=["Exhaust"], arch="core",
      flavour="It was a church door before it was a shield. It remembers.",
      note="The church door stands upright in the nave and its keyhole plate glows faintly over the company.",
-     up={"text": "Every hero gains 3 Ward and 7 Block. Exhaust.", "fx": [W(3), B(7)]})
+     up={"text": "Every hero gains 3 Ward and 6 Block, and 1 more Ward if they have an ailment. Exhaust.",
+         "fx": [W(3), B(6), W(1, if_="t.ailments")]})
 card("bw_vanguard", "Vanguard", 1, "R", "self", [FRONT(), SELF("taunt"), B(3), PRIME(2, if_="first")],
      "Move to rank 1. Taunt. Gain 3 Block. First in the Ordo: Prime 2.",
      use=ALL, arch="core",
@@ -484,7 +488,7 @@ card("bw_still_here", "Still Here", 1, "X", "self",
      note="The Last Bastion, on his feet with no right to be, raises the roped door again.",
      up={"text": "Gain 8 Block. At Death's Door, gain 1 Grit, and the hero behind you gains 1 Thrift. Exhaust.",
          "fx": [B(8), GRIT(1, if_="dd"), ST("thrift", 1, to="behind", if_="dd")]})
-card("bw_come_and_finish_it", "Come and Finish It", 1, "X", "enemy", [D(0, per="scars", k=0.34), SELF("taunt")],
+card("bw_come_and_finish_it", "Come and Finish It", 1, "X", "enemy", [D(0, per="scars", k=0.3334), SELF("taunt")],
      "Deal 1 for every 3 Scars. Taunt.", sub=SB, arch=SB,
      flavour="You have nearly killed him. Nearly is the worst place to stop.",
      note="Blood running from the helm's slit, the Last Bastion beckons the ruler on with the mace.",
@@ -507,10 +511,10 @@ card("bw_pine_and_iron", "Pine and Iron", 2, "X", "self",
          "cost": 1})
 card("bw_frostbite_bash", "Frostbite Bash", 1, "X", "enemy",
      [D(5), A("frost", 2, attr="stable"), A("frost", 1, attr="stable", if_="t.water")],
-     "Deal 5. Apply 2 Frost, and 1 more if the target has Soak.", sub=IW, arch=IW + "+elementalist_water",
+     "Deal 5. Apply 2 Frost, and 1 more if the target has Water.", sub=IW, arch=IW + "+elementalist_water",
      flavour="The frost in his beard is on the mace now. Soon it is in you.",
      note="The Ironwarden's rimed mace strikes and frost blooms across the foe's face.",
-     up={"text": "Deal 7. Apply 3 Frost, and 1 more if the target has Soak.",
+     up={"text": "Deal 7. Apply 3 Frost, and 1 more if the target has Water.",
          "fx": [D(7), A("frost", 3, attr="stable"), A("frost", 1, attr="stable", if_="t.water")]})
 card("bw_shatter_the_line", "Shatter the Line", 2, "X", "all_enemies",
      [D(3, per="t.frost", k=1), A("frost", 1, attr="stable", if_="last")],
@@ -547,13 +551,13 @@ card("bw_briar_mail", "Briar Mail", 1, "X", "self", [SELF("thorns", 3), B(3), SE
      note="The Thornguard's penitent armour, barbs welded outward, catches the torchlight.",
      up={"text": "Gain 4 Thorns and 4 Block. Handoff: gain 2 more Thorns.",
          "fx": [SELF("thorns", 4), B(4), SELF("thorns", 2, if_="handoff")]})
-card("bw_barbed_haft", "Barbed Haft", 1, "X", "enemy", [D(0, per="thorns", k=1, times=2), ST("bleed", 1, if_="t.bleed")],
-     "Deal damage equal to your Thorns, twice. If the target has Bleed, apply 1 more Bleed.", sub=TG,
-     arch=TG + "+duelist_bleed",
+card("bw_barbed_haft", "Barbed Haft", 1, "X", "enemy", [SELF("thorns", 2, if_="t.hex"), D(0, per="thorns", k=1, times=2)],
+     "If the target has Hex, gain 2 Thorns first. Deal damage equal to your Thorns, twice.", sub=TG,
+     arch=TG + "+hexweaver_hex",
      flavour="He wrapped the mace haft in barbed wire. His palms remember.",
      note="The Thornguard's wire-wrapped mace strikes twice, the second blow tearing.",
-     up={"text": "Deal 1, plus your Thorns, twice. If the target has Bleed, apply 2 more Bleed.",
-         "fx": [D(1, per="thorns", k=1, times=2), ST("bleed", 2, if_="t.bleed")]})
+     up={"text": "If the target has Hex, gain 3 Thorns first. Deal 1, plus your Thorns, twice.",
+         "fx": [SELF("thorns", 3, if_="t.hex"), D(1, per="thorns", k=1, times=2)]})
 card("bw_welded_barbs", "Welded Barbs", 1, "X", "self", [SELFDMG(4), SELF("thorns", 5, per="lost", k=1, max=9)],
      "Lose 4 HP. Gain 5 Thorns, plus 1 for each HP lost this way.",
      use=ALL, sub=TG, arch=TG,
@@ -561,11 +565,11 @@ card("bw_welded_barbs", "Welded Barbs", 1, "X", "self", [SELFDMG(4), SELF("thorn
      note="Sparks fly as the Thornguard welds a new barb to his arm, the plate still on him.",
      up={"text": "Lose 2 HP. Gain 7 Thorns, plus 1 for each HP lost this way.",
          "fx": [SELFDMG(2), SELF("thorns", 7, per="lost", k=1, max=9)]})
-card("bw_scourged_back", "Scourged Back", 1, "X", "self", [SELF("thorns", 2, per="scars", k=0.34)],
+card("bw_scourged_back", "Scourged Back", 1, "X", "self", [SELF("thorns", 2, per="scars", k=0.3334)],
      "Gain 2 Thorns, plus 1 for every 3 Scars.", use=ALL, sub=TG, arch=TG + "+" + SB,
      flavour="His back is a ledger of penance. Every line of it bites.",
      note="Through the torn gambeson, the Thornguard's scourged back is a lattice of old cuts.",
-     up={"text": "Gain 4 Thorns, plus 1 for every 3 Scars.", "fx": [SELF("thorns", 4, per="scars", k=0.34)]})
+     up={"text": "Gain 4 Thorns, plus 1 for every 3 Scars.", "fx": [SELF("thorns", 4, per="scars", k=0.3334)]})
 card("bw_punishing_wall", "Punishing Wall", 2, "X", "self", [SELF("taunt"), B(6), SELF("thorns", 5)],
      "Taunt. Gain 6 Block and 5 Thorns.", sub=TG, arch=TG,
      flavour="Strike the door if you must. It was made for sinners.",
@@ -619,14 +623,14 @@ card("bw_the_long_night", "The Long Night", 1, "L", "self", [B(5), A("frost", 1,
                  "Exhaust.",
          "fx": [B(5), SELF("fortify"), A("frost", 1, attr="stable", to="attackers")]})
 card("bw_crown_of_iron_thorns", "Crown of Iron Thorns", 1, "L", "self", [SELF("thorns", 4), ST("thorns", 1, to="allies_other")],
-     "Gain 4 Thorns. Every other hero gains 1 Thorns. Rite: each time a foe strikes another hero, deal damage equal "
-     "to your Thorns to it. Exhaust.",
+     "Gain 4 Thorns. Every other hero gains 1 Thorns. Rite: the first 3 times each round a foe strikes another hero, "
+     "deal damage equal to your Thorns to it. Exhaust.",
      use=ALL, kw=["Rite", "Exhaust"], sub=TG, arch=TG,
-     rite={"on": "ally_hit", "fx": [D(0, per="thorns", k=1)]},
+     rite={"on": "ally_hit", "per_round": 3, "fx": [D(0, per="thorns", k=1)]},
      flavour="He wears the crown for all of them. Strike any one of them and it bites.",
      note="A crown of welded barbs sits on the Thornguard's helm; a foe that struck the Duelist reels, torn.",
-     up={"text": "Gain 6 Thorns. Every other hero gains 2 Thorns. Rite: each time a foe strikes another hero, deal "
-                 "damage equal to your Thorns to it. Exhaust.",
+     up={"text": "Gain 6 Thorns. Every other hero gains 2 Thorns. Rite: the first 3 times each round a foe strikes "
+                 "another hero, deal damage equal to your Thorns to it. Exhaust.",
          "fx": [SELF("thorns", 6), ST("thorns", 2, to="allies_other")]})
 card("bw_the_scourged_hand", "The Scourged Hand", 1, "L", "self", [SELF("thorns", 5)],
      "Gain 5 Thorns. Rite: each time you play a card on a foe that means to attack, deal damage equal to your Thorns "

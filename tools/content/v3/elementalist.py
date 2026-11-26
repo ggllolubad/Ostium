@@ -49,13 +49,13 @@ card("el_turn_the_ring", "Turn the Ring", 1, "K", "self", [ATTUNE(1), SELF("focu
      up={"text": "Attune to the next course. Gain 2 Focus. Bank 1.", "fx": [ATTUNE(1), SELF("focus", 2), BANK(1)]})
 card("el_stopper_the_jar", "Wax the Mouth", 1, "K", "enemy",
      [AT(1, if_="t.attuned>0"), SELF("focus", 2, per="vigour_left", k=1, max=4)],
-     "If the target has your attuned course, apply 1 more of it (this uses your Focus), so it does not fall this "
-     "round. Then gain 2 Focus, plus 1 for each vigour left unspent, up to 4.",
+     "If the target has your attuned course, apply 1 more of it. Then gain 2 Focus, plus 1 for each vigour left "
+     "unspent, up to 4.",
      sub=AC, cat=ATT, arch=AC,
      flavour="What is poured in stays in. That is the whole art of the brass.",
      note="The Accumulator presses a wax stopper into the brass vessel on its back; the foe's ink stays wet.",
-     up={"text": "If the target has your attuned course, apply 1 more of it (this uses your Focus), so it does not "
-                 "fall this round. Then gain 3 Focus, plus 1 for each vigour left unspent, up to 5.",
+     up={"text": "If the target has your attuned course, apply 1 more of it. Then gain 3 Focus, plus 1 for each vigour "
+                 "left unspent, up to 5.",
          "fx": [AT(1, if_="t.attuned>0"), SELF("focus", 3, per="vigour_left", k=1, max=5)]})
 card("el_conjoin", "Strike the Wet Ink", 1, "K", "enemy", [REACT(1), REACT(1, if_="handoff")],
      "Conjoin 1. Handoff: Conjoin 1 again.", sub=CA, cat=ATT, arch=CA,
@@ -95,12 +95,12 @@ card("el_ward_sigil", "Ward Sigil", 1, "S", "ally", [W(2), B(3)], "A hero gains 
      flavour="Drawn on the skin, a sigil turns a course aside like a hand turns rain.",
      note="The Elementalist paints a ward sigil on the Bulwark's gauntlet as brine spits from the dark.",
      up={"text": "A hero gains 3 Ward and 4 Block.", "fx": [W(3), B(4)]})
-card("el_strike_across", "Strike Across", 1, "S", "enemy", [REACT(1), D(2), D(2, if_="handoff")],
+card("el_strike_across", "Strike Across", 1, "S", "enemy", [REACT(1), D(2), D(2, bonus=True, if_="handoff")],
      "Conjoin 1. Deal 2. Handoff: deal 2 more.",
      cat=ATT, arch="core",
      flavour="Half the chapter calls this heresy. The other half takes notes.",
      note="One stroke of ink across another on a foe's hide; the meeting flashes white.",
-     up={"text": "Conjoin 2. Deal 2. Handoff: deal 2 more.", "fx": [REACT(2), D(2), D(2, if_="handoff")]})
+     up={"text": "Conjoin 2. Deal 2. Handoff: deal 2 more.", "fx": [REACT(2), D(2), D(2, bonus=True, if_="handoff")]})
 
 # ------------------------------------------------------------------ common: The Great Working
 card("el_lay_the_ground", "Lay the Ground", 1, "C", "enemy", [AT(4), B(2, to="self")],
@@ -190,12 +190,11 @@ card("el_turn_the_page", "Turn the Page", 1, "C", "self", [ATTUNE(1), SELF("focu
          "fx": [ATTUNE(1), SELF("focus", 3), DRAW(1, if_="first")]})
 
 # ------------------------------------------------------------------ common: core and company
-card("el_lend_the_nib", "Lend the Nib", 1, "U", "ally_other", [ST("focus", 3), ADD("el_sulphur_match")],
-     "Another hero gains 3 Focus. Put a Sulphur Match into their next hand.", use=ALL, cat=ATT, arch="core",
+card("el_lend_the_nib", "Lend the Nib", 1, "U", "ally_other", [ST("focus", 3), ST("thrift", 1)],
+     "Another hero gains 3 Focus and 1 Thrift.", use=ALL, cat=ATT, arch="core",
      flavour="Any hand can carry a course. It writes better with a scholar's ink on it.",
      note="The Elementalist presses a stained thumb to the Alchemist's flask; the glass takes the colour.",
-     up={"text": "Another hero gains 4 Focus. Put a Sulphur Match into their next hand.",
-         "fx": [ST("focus", 4), ADD("el_sulphur_match")]})
+     up={"text": "Another hero gains 4 Focus and 1 Thrift.", "fx": [ST("focus", 4), ST("thrift", 1)]})
 card("el_wet_the_line", "Wet the Line", 1, "C", "all_enemies", [A(WA, 2)], "Apply 2 Water to every foe.",
      cat=WA, attr="stable", arch=CA,
      flavour="Soak them all. The Duelist's blade will find the rest.",
@@ -210,17 +209,18 @@ card("el_frost_the_swing", "Frost the Swing", 1, "C", "all_enemies", [A(FR, 2, i
          "fx": [A(FR, 3, if_="t.attacking"), B(2, to="self")]})
 card("el_gall_ink", "Gall Ink", 1, "C", "enemy", [A(T, 2, per="t.armor", k=1, max=5)],
      "Apply 2 Toxin, plus 1 for each Armor the target has, up to 5.", cat=T, attr="stable",
-     arch="core+duelist_flurry",
+     arch="core+foe_armor",
      flavour="Oak-gall ink eats parchment. It eats plate faster.",
      note="Sick-green ink runs into the seams of a foe's armour and the rivets bubble.",
      up={"text": "Apply 3 Toxin, plus 1 for each Armor the target has, up to 7.",
          "fx": [A(T, 3, per="t.armor", k=1, max=7)]})
-card("el_sulphur_match", "Sulphur Match", 1, "C", "enemy", [D(5, if_="!t.toxin"), A(F, 1, attr=VOL)],
-     "If the target has no Toxin, deal 5. Apply 1 Volatile Fire.", cat=F, arch="core+alchemist_toxin",
+card("el_sulphur_match", "Sulphur Match", 1, "C", "enemy",
+     [D(3), D(2, bonus=True, if_="t.toxin"), A(F, 1, attr=VOL)],
+     "Deal 3. If the target has Toxin, deal 2 more. Apply 1 Volatile Fire.", cat=F, arch="core+alchemist_toxin",
      flavour="The Plaguewright lays the poison. The scholar brings the light.",
      note="A vermilion spark drops onto a foe sweating green and the poison goes up in one bright bloom.",
-     up={"text": "If the target has no Toxin, deal 7. Apply 1 Volatile Fire.",
-         "fx": [D(7, if_="!t.toxin"), A(F, 1, attr=VOL)]})
+     up={"text": "Deal 4. If the target has Toxin, deal 3 more. Apply 1 Volatile Fire.",
+         "fx": [D(4), D(3, bonus=True, if_="t.toxin"), A(F, 1, attr=VOL)]})
 card("el_blotting_sand", "Blotting Sand", 1, "C", "self", [B(4), W(1), B(3, if_="rank<=2")],
      "Gain 4 Block and 1 Ward. If you stand in rank 1 or 2, gain 3 more Block.", use=ALL, cat=ATT, arch="core",
      flavour="Sand on wet ink. Nothing runs, nothing smears.",
@@ -260,13 +260,13 @@ card("el_open_palm", "Open Palm", 1, "C", "enemy", [AT(3, attr=VOL)], "Apply 3 V
 
 # ------------------------------------------------------------------ uncommon: The Great Working
 card("el_weigh_the_stacks", "Weigh the Stacks", 1, "U", "enemy",
-     [D(0, per="t.attuned", k=2, max=20), D(2, if_="last")],
+     [D(0, per="t.attuned", k=2, max=20), D(2, bonus=True, if_="last")],
      "Deal 2 for each of your attuned course on the target, up to 20. If this is last in the Ordo, deal 2 more.",
      cat=ATT, arch=AC,
      flavour="Measure twice. The scale does the rest.",
      note="The brass vessel tilts; the foe sags under the weight of its own ink.",
      up={"text": "Deal 2 for each of your attuned course on the target, up to 22. If this is last in the Ordo, deal "
-                 "4 more.", "fx": [D(0, per="t.attuned", k=2, max=22), D(4, if_="last")]})
+                 "4 more.", "fx": [D(0, per="t.attuned", k=2, max=22), D(4, bonus=True, if_="last")]})
 card("el_tip_the_vessel", "Tip the Vessel", 1, "U", "enemy",
      [SELF("focus", 0, per="vigour_left", k=1, max=3), REACT(2)],
      "Gain 1 Focus for each vigour left unspent, up to 3. Then Conjoin 2.", cat=ATT, arch=AC + "+" + CA,
@@ -275,13 +275,15 @@ card("el_tip_the_vessel", "Tip the Vessel", 1, "U", "enemy",
      up={"text": "Gain 1 Focus, plus 1 for each vigour left unspent, up to 4. Then Conjoin 2.",
          "fx": [SELF("focus", 1, per="vigour_left", k=1, max=4), REACT(2)]})
 card("el_full_measure", "Full Measure", -1, "U", "enemy",
-     [D(0, per="x", k=3), AT(0, per="x", k=2), AT(0, per="x", k=2, if_="x>=4")],
-     "Deal 3 per X. Apply 2 of your attuned course per X. If X is 4 or more, apply as many again.", use=BACK,
+     [D(0, per="x", k=3, max=15), AT(0, per="x", k=2, max=10), AT(0, per="x", k=2, max=10, if_="x>=4")],
+     "Deal 3 per X. Apply 2 of your attuned course per X. If X is 4 or more, apply as many again. X counts up to "
+     "5.", use=BACK,
      cat=ATT, attr="stable", arch=AC,
      flavour="Fill it to the line. Then fill the line.",
      note="From the back rank the Elementalist empties a whole pot of one ink over a single foe.",
-     up={"text": "Deal 4 per X. Apply 2 of your attuned course per X. If X is 4 or more, apply as many again.",
-         "fx": [D(0, per="x", k=4), AT(0, per="x", k=2), AT(0, per="x", k=2, if_="x>=4")]})
+     up={"text": "Deal 4 per X. Apply 2 of your attuned course per X. If X is 4 or more, apply as many again. X "
+                 "counts up to 5.",
+         "fx": [D(0, per="x", k=4, max=20), AT(0, per="x", k=2, max=10), AT(0, per="x", k=2, max=10, if_="x>=4")]})
 card("el_spend_the_breath", "Spend the Breath", 1, "U", "enemy",
      [CONS(s="focus", to="self"), D(0, per="consumed", k=2)],
      "Spend all your Focus. Deal 2 for each Focus spent.", cat=ATT, arch=AC,
@@ -291,25 +293,25 @@ card("el_spend_the_breath", "Spend the Breath", 1, "U", "enemy",
          "fx": [CONS(s="focus", to="self"), D(2, per="consumed", k=2)]})
 
 # ------------------------------------------------------------------ uncommon: Chain Reaction
-card("el_warding_sigil", "Warding Sigil", 1, "U", "ally", [W(1, per="reactions", k=2), B(2)],
-     "A hero gains 2 Block and 1 Ward, plus 2 Ward for each Conjunction so far this round.", use=ALL, cat=ATT,
+card("el_warding_sigil", "Warding Sigil", 1, "U", "ally", [W(1, per="reactions", k=2, max=9), B(2)],
+     "A hero gains 2 Block and 1 Ward, plus 2 Ward for each Conjunction so far this round, up to 9 Ward.", use=ALL, cat=ATT,
      arch=CA,
      flavour="Every flare lights the sigil brighter.",
      note="Ward sigils inked on the Catalyst's forearms glow, and the same sigil blooms on the Oracle's brow.",
-     up={"text": "A hero gains 3 Block and 2 Ward, plus 2 Ward for each Conjunction so far this round.",
-         "fx": [W(2, per="reactions", k=2), B(3)]})
-card("el_reaction_shield", "Reaction Shield", 1, "C", "self", [B(4, per="reactions", k=4)],
-     "Gain 4 Block, plus 4 for each Conjunction so far this round.", use=ALL, cat=ATT, arch=CA,
+     up={"text": "A hero gains 3 Block and 2 Ward, plus 2 Ward for each Conjunction so far this round, up to 10 Ward.",
+         "fx": [W(2, per="reactions", k=2, max=10), B(3)]})
+card("el_reaction_shield", "Reaction Shield", 1, "C", "self", [B(4, per="reactions", k=4, max=16)],
+     "Gain 4 Block, plus 4 for each Conjunction so far this round, up to 16.", use=ALL, cat=ATT, arch=CA,
      flavour="The heat of the meeting, caught and turned outward.",
      note="The light of a Conjunction folds around the Catalyst like a cloak.",
-     up={"text": "Gain 5 Block, plus 5 for each Conjunction so far this round.",
-         "fx": [B(5, per="reactions", k=5)]})
-card("el_feedback", "Feedback", 1, "U", "enemy", [D(0, per="reactions", k=4), D(3, if_="handoff")],
-     "Deal 4 for each Conjunction so far this round. Handoff: deal 3 more.", cat=ATT, arch=CA,
+     up={"text": "Gain 5 Block, plus 5 for each Conjunction so far this round, up to 20.",
+         "fx": [B(5, per="reactions", k=5, max=20)]})
+card("el_feedback", "Feedback", 1, "U", "enemy", [D(0, per="reactions", k=4, max=16), D(3, bonus=True, if_="handoff")],
+     "Deal 4 for each Conjunction so far this round, up to 16. Handoff: deal 3 more.", cat=ATT, arch=CA,
      flavour="It comes back down the line. Aim it.",
      note="Lines of light from three flaring foes converge in the Catalyst's palm and leap at a fourth.",
-     up={"text": "Deal 5 for each Conjunction so far this round. Handoff: deal 4 more.",
-         "fx": [D(0, per="reactions", k=5), D(4, if_="handoff")]})
+     up={"text": "Deal 5 for each Conjunction so far this round, up to 20. Handoff: deal 4 more.",
+         "fx": [D(0, per="reactions", k=5, max=20), D(4, bonus=True, if_="handoff")]})
 card("el_second_spark", "Second Spark", 1, "U", "enemy", [AN(1, attr=VOL), D(1)],
      "Costs 1 less if 2 or more heroes are already in the Ordo. Apply 1 Volatile of the next course. Deal 1.",
      cat=ATT, arch=CA, cost_less={"per": "heroes", "k": 0.5, "max": 1},
@@ -367,7 +369,7 @@ card("el_read_the_colours", "Read the Colours", 1, "U", "self", [SELF("focus", 0
 # ------------------------------------------------------------------ uncommon: core and company
 card("el_strip_the_plate", "Strip the Plate", 1, "U", "enemy",
      [A(F, 1), A(FR, 1, attr=VOL, per="t.armor", k=1, max=3)],
-     "Apply 1 Fire, then 1 Volatile Frost, plus 1 for each Armor the target has, up to 3.", cat=FR, attr="stable", arch="core+duelist_flurry",
+     "Apply 1 Fire, then 1 Volatile Frost, plus 1 for each Armor the target has, up to 3.", cat=FR, attr="stable", arch="core+foe_armor",
      flavour="Hot, then cold. Iron forgets what shape it was.",
      note="Vermilion then pale-blue ink: a foe's breastplate cracks and falls before the Duelist's lunge.",
      up={"text": "Apply 2 Fire, then 1 Volatile Frost, plus 1 for each Armor the target has, up to 4.",
@@ -432,7 +434,8 @@ card("el_chain_of_ink", "Chain of Ink", 2, "R", "all_enemies",
      up={"text": "Apply 3 of your attuned course to every foe, then 1 Volatile of the next course to every foe, or "
                  "2 on a Handoff.", "fx": [AT(3), AN(1, attr=VOL, per="handoff", k=1, max=2)]})
 card("el_spark_shower", "Spark Shower", 1, "R", "enemy", [AT(1, attr=VOL)],
-     "Retain. Echo. Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned course.", cat=ATT, kw=["Retain", "Echo"], arch=CA, cost_less={"per": "played", "k": 1, "max": 1},
+     "Retain. Echo. Costs 1 less if another hero is already in the Ordo. Apply 1 Volatile of your attuned course.",
+     cat=ATT, kw=["Retain", "Echo"], arch=CA, cost_less={"per": "others", "k": 1, "max": 1},
      flavour="Nervous fingers, quick sigils, sparks everywhere.",
      note="The Catalyst's fingers twitch and a shower of tiny sparks patters across a foe.",
      up={"text": "Retain. Echo. Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned "

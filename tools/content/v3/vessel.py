@@ -135,12 +135,12 @@ card("ve_banked_coals", "Banked Coals", 1, "C", "self", [B(1, per="held_total", 
      note="The Vessel stands still while the held seals glow under the robe like coals under ash.",
      up={"text": "Gain 2 Block, plus 1 per stack you hold, at most 12 in all. Bank 2.",
          "fx": [B(2, per="held_total", k=1, max=12), BANK(2, to="self")]})
-card("ve_weight_of_it", "The Weight of It", 1, "C", "enemy", [D(2, per="held_total", k=1, max=12)],
-     "Deal 2, plus 1 per stack you hold, at most 12 in all.", arch=HE,
+card("ve_weight_of_it", "The Weight of It", 1, "C", "enemy", [D(2, per="held_total", k=1, max=9)],
+     "Deal 2, plus 1 per stack you hold, at most 9 in all.", arch=HE,
      flavour="You laid all of this on them. Feel what it weighs.",
      note="The Vessel lowers one open palm onto a foe and the foe sags as if under a millstone.",
-     up={"text": "Deal 3, plus 1 per stack you hold, at most 16 in all.",
-         "fx": [D(3, per="held_total", k=1, max=16)]})
+     up={"text": "Deal 3, plus 1 per stack you hold, at most 12 in all.",
+         "fx": [D(3, per="held_total", k=1, max=12)]})
 card("ve_hearthstone", "Hearthstone", 1, "C", "adjacent_ally", [B(3), ST("regen", 1, per="held_kinds", k=0.5)],
      "An adjacent hero gains 3 Block and Regen 1, plus 1 Regen per 2 different courses you hold.",
      use=ALL, arch="hearth+whole",
@@ -156,11 +156,11 @@ card("ve_warm_hands", "Warm Hands", 1, "C", "ally", [TAKE("all", 1), H(1, per="c
          "fx": [TAKE("all", 1), H(3, per="consumed", k=1)]})
 card("ve_shoulder_it", "Shoulder It", 1, "C", "adjacent_ally",
      [TAKE("largest"), B(3, to="self"), B(4, if_="t.taunt>0")],
-     "Take all of an adjacent hero's largest course. Gain 3 Block. If that hero has Taunt, it gains 4 Block.",
+     "Take all of an adjacent hero's largest course. Gain 3 Block. If that hero has Taunt, they gain 4 Block.",
      use=ALL, arch="hearth+bulwark_taunt",
      flavour="You hold the door. I will hold what comes through it.",
      note="The Vessel stands at the Bulwark's back, drawing a green rot off the door-shield into the skin.",
-     up={"text": "Take all of an adjacent hero's largest course. Gain 4 Block. If that hero has Taunt, it gains 6 "
+     up={"text": "Take all of an adjacent hero's largest course. Gain 4 Block. If that hero has Taunt, they gain 6 "
                  "Block.", "fx": [TAKE("largest"), B(4, to="self"), B(6, if_="t.taunt>0")]})
 card("ve_come_to_me", "Come to Me", 1, "C", "self", [SELF("taunt", 1), B(4)],
      "Gain Taunt and 4 Block.", use=ALL, arch=HE,
@@ -221,12 +221,12 @@ card("ve_soak_the_mark", "Soak the Mark", 1, "C", "enemy",
          "fx": [D(4), GIVE(WA, 3), GIVE(WA, 3, attr=VOL, if_="t.mark>0")]})
 card("ve_second_mouthful", "Second Mouthful", 1, "C", "enemy",
      [D(3), GIVE("largest", 2), GIVE("largest", 2, attr=VOL, if_="same_target")],
-     "Deal 3. Give up to 2 stacks of your largest held course to the target. If the action before this one struck "
-     "the same foe, also give it up to 2 Volatile stacks of your largest held course.", arch=MO,
+     "Deal 3. Give the target up to 2 stacks of your largest held course, and up to 2 more, Volatile, if the action "
+     "before this hit it too.", arch=MO,
      flavour="The first lays the table. The second lights it.",
      note="The Vessel's second palm follows the first onto the same foe, and the inks meet.",
-     up={"text": "Deal 4. Give up to 3 stacks of your largest held course to the target. If the action before this "
-                 "one struck the same foe, also give it up to 2 Volatile stacks of your largest held course.",
+     up={"text": "Deal 4. Give the target up to 3 stacks of your largest held course, and up to 2 more, Volatile, if "
+                 "the action before this hit it too.",
          "fx": [D(4), GIVE("largest", 3), GIVE("largest", 2, attr=VOL, if_="same_target")]})
 card("ve_bitter_gift", "Bitter Gift", 1, "C", "enemy", [GIVE(TX, 2), GIVE(VO, 2), D(0, per="t.hex", k=0.5)],
      "Give up to 2 Toxin and up to 2 Void to the target. Deal 1 per 2 Hex on it.", cat=TX,
@@ -237,11 +237,12 @@ card("ve_bitter_gift", "Bitter Gift", 1, "C", "enemy", [GIVE(TX, 2), GIVE(VO, 2)
          "fx": [GIVE(TX, 3), GIVE(VO, 3), D(0, per="t.hex", k=0.5)]})
 
 # ------------------------------------------------------------------ common: Whole
-card("ve_ink_band", "Ink Band", 1, "C", "self", lack(),
-     "Hold 1 stack of each course you do not hold.", use=ALL, arch=WH,
+card("ve_ink_band", "Ink Band", 1, "C", "self", [TAKE("all", 1, to="front_enemy"), B(5)],
+     "Take 1 stack of every course on the front foe. Gain 5 Block.", use=ALL, arch=WH,
      flavour="Vermilion, pale blue, gold, deep blue, green, violet-black. In that order.",
      note="A bare band on the Vessel's arm fills with ink, edged in a hairline of gold.",
-     up={"text": "Hold 1 stack of each course you do not hold. Gain 3 Block.", "fx": lack() + [B(3)]})
+     up={"text": "Take 1 stack of every course on the front foe. Gain 7 Block.",
+         "fx": [TAKE("all", 1, to="front_enemy"), B(7)]})
 card("ve_rule_line", "Rule Line", 1, "C", "enemy", [D(1, per="held_kinds", k=2)],
      "Deal 1, plus 2 per different course you hold.", arch=WH,
      flavour="Straight as a scribe's rule. Each line a colour, each colour a cut.",
@@ -260,12 +261,12 @@ card("ve_nimbus", "Nimbus", 1, "C", "self", [B(4), W(1, to="allies_other", if_=E
      note="The six-part ink ring behind the Vessel's head brightens arc by arc over the company.",
      up={"text": "Gain 5 Block. If you hold 2 or more courses, all in equal stacks, every other hero gains 2 Ward.",
          "fx": [B(5), W(2, to="allies_other", if_=EVENQ)]})
-card("ve_illumination", "Illumination", 0, "C", "self", [PRIME(0, per="held_kinds", k=1, max=4, if_="handoff")],
-     "Handoff: Prime 1 per different course you hold, at most 4.", use=ALL, arch=WH,
+card("ve_illumination", "Illumination", 0, "C", "self", [PRIME(1, per="held_kinds", k=1, max=5, if_="handoff"), STRESS(1)],
+     "Handoff: Prime 1, plus 1 per different course you hold, at most 5 in all. Gain 1 stress.", use=ALL, arch=WH,
      flavour="Gold on the margin, so the eye goes where it must.",
      note="Faint script in the Vessel's bands lights up, and a hero's blade catches the colours.",
-     up={"text": "Prime 1. Handoff: Prime 1 more per different course you hold, at most 4 more.",
-         "fx": [PRIME(1), PRIME(0, per="held_kinds", k=1, max=4, if_="handoff")]})
+     up={"text": "Handoff: Prime 2, plus 1 per different course you hold, at most 6 in all. Gain 1 stress.",
+         "fx": [PRIME(2, per="held_kinds", k=1, max=6, if_="handoff"), STRESS(1)]})
 card("ve_copy_the_page", "Copy the Page", 1, "C", "enemy", [D(2)] + copy_main(),
      "Deal 2. Hold 1 stack of each course the target carries.", arch="whole+elementalist_courses",
      flavour="A scholar's habit. Read it once and it is written in you.",
@@ -297,29 +298,27 @@ card("ve_unclench", "Unclench", 2, "U", "enemy",
                  "hero heals 1 per 2 stacks given, at most 7, and sheds 6 stress.",
          "fx": [GIVE("all"), H(0, per="consumed", k=0.5, max=7, to="all_allies"), STRESS(-6, to="all_allies")]})
 card("ve_warm_room", "The Warm Room", 1, "U", "self",
-     [B(1, per="held_kinds", k=1, to="self_adjacent"), ST("thrift", 1, to="self_adjacent", if_="vigour_left>=2")],
-     "Each hero beside you gains 1 Block, plus 1 per different course you hold. If 2 or more vigour is left unspent "
-     "this round, each of them also gains 1 Thrift.",
+     [B(1, per="held_kinds", k=1, to="self_adjacent"), ST("thrift", 1, to="self_adjacent", if_="first")],
+     "Each hero beside you gains 1 Block, plus 1 per different course you hold. If this is first in the Ordo, each of "
+     "them also gains 1 Thrift.",
      use=ALL, arch="hearth+whole",
      flavour="One room in the Guesthouse is always warm. The Vessel stands in it.",
      note="The heroes on either side lean in toward the Vessel as toward a stove in a cold room.",
-     up={"text": "Each hero beside you gains 2 Block, plus 1 per different course you hold. Gain 3 Block. If 2 or more "
-                 "vigour is left unspent this round, each hero beside you also gains 1 Thrift.",
-         "fx": [B(2, per="held_kinds", k=1, to="self_adjacent"), B(3),
-                ST("thrift", 1, to="self_adjacent", if_="vigour_left>=2")]})
+     up={"text": "Each hero beside you gains 2 Block, plus 1 per different course you hold. Gain 3 Block. If this is "
+                 "first in the Ordo, each hero beside you also gains 1 Thrift.",
+         "fx": [B(2, per="held_kinds", k=1, to="self_adjacent"), B(3), ST("thrift", 1, to="self_adjacent", if_="first")]})
 card("ve_heavy_air", "Heavy Air", 1, "U", "all_enemies", [D(0, per="held_total", k=0.5, max=5), BANK(1, to="self")],
      "Deal 1 per 2 stacks you hold to every foe, at most 5 each. Bank 1.", arch=HE,
      flavour="The room grows heavy with everything I carry.",
      note="The air around the still Vessel thickens with colour and the foes' line bows under it.",
      up={"text": "Deal 1, plus 1 per 2 stacks you hold, to every foe, at most 6 each. Bank 1.",
          "fx": [D(1, per="held_total", k=0.5, max=6), BANK(1, to="self")]})
-card("ve_keep_watch", "Keep Watch", 1, "U", "adjacent_ally", [GUARD(), TAKE("all"), BANK(1, to="self", if_="last")],
-     "Guard an adjacent hero this round and take every course stack on it. If this is last in the Ordo, Bank 1.", use=ALL, arch=HE,
+card("ve_keep_watch", "Keep Watch", 1, "U", "adjacent_ally", [GUARD(), TAKE("all"), BANK(1, to="self")],
+     "Guard an adjacent hero this round and take every course stack on it. Bank 1.", use=ALL, arch=HE,
      flavour="Sleep. I sleep standing, and I will stand here.",
      note="The Vessel stands asleep beside a resting hero, drawing the fever off them in thin threads.",
-     up={"text": "Guard an adjacent hero this round and take every course stack on it. Gain 3 Block. If this is last "
-                 "in the Ordo, Bank 1.",
-         "fx": [GUARD(), TAKE("all"), B(3, to="self"), BANK(1, to="self", if_="last")]})
+     up={"text": "Guard an adjacent hero this round and take every course stack on it. Gain 3 Block. Bank 1.",
+         "fx": [GUARD(), TAKE("all"), B(3, to="self"), BANK(1, to="self")]})
 card("ve_bare_skin", "Bare Skin", 1, "U", "self", [SELF("taunt", 1), SELF("thorns", 1, per="held_kinds", k=1)],
      "Gain Taunt, and 1 Thorns plus 1 per different course you hold.", use=ALL, arch="hearth+whole",
      flavour="Strike the inked skin if you like. Every band bites back.",
@@ -327,14 +326,14 @@ card("ve_bare_skin", "Bare Skin", 1, "U", "self", [SELF("taunt", 1), SELF("thorn
      up={"text": "Gain Taunt and 4 Block, and 1 Thorns plus 1 per different course you hold.",
          "fx": [SELF("taunt", 1), B(4), SELF("thorns", 1, per="held_kinds", k=1)]})
 card("ve_pass_through", "Pass Through", 1, "U", "ally",
-     [TAKE("largest"), GIVE("largest", 3, to="front_enemy"), ADD("ve_bear_it")],
+     [TAKE("largest"), GIVE("largest", 3, to="front_enemy"), ADD("t_ve_settle")],
      "Take all of a hero's largest course. Give up to 3 stacks of your largest held course to the front foe. Put a "
-     "Bear It into that hero's next hand.", use=ALL, arch="hearth+mouth",
+     "Settle into that hero's next hand.", use=ALL, arch="hearth+mouth",
      flavour="In through one hand, out through the other. I am only the door.",
      note="One palm rests on a hero, the other opens at the front foe; the colour runs between them.",
      up={"text": "Take all of a hero's largest course. That hero heals 2. Give up to 3 Volatile stacks of your largest "
-                 "held course to the front foe. Put a Bear It into that hero's next hand.",
-         "fx": [TAKE("largest"), H(2), GIVE("largest", 3, attr=VOL, to="front_enemy"), ADD("ve_bear_it")]})
+                 "held course to the front foe. Put a Settle into that hero's next hand.",
+         "fx": [TAKE("largest"), H(2), GIVE("largest", 3, attr=VOL, to="front_enemy"), ADD("t_ve_settle")]})
 
 # ------------------------------------------------------------------ uncommon: Mouth
 card("ve_exhale", "Exhale", 1, "U", "enemy", [GIVE("all", 1, attr=VOL), D(3, per="reactions", k=2)],
@@ -396,14 +395,14 @@ card("ve_open_page", "The Open Page", 1, "U", "self", [DRAW(1), EN(1, if_=WHOLE)
      note="The Vessel stands with one palm turned up like a lectern, six inks bright on the wrist.",
      up={"text": "Draw 2 more cards next round. If you are Whole, also gain 1 vigour next round.",
          "fx": [DRAW(2), EN(1, if_=WHOLE)]})
-card("ve_balanced_hands", "Balanced Hands", 1, "U", "enemy", [D(3), D(5, if_=EVENQ), D(2, if_="!first&!last")],
+card("ve_balanced_hands", "Balanced Hands", 1, "U", "enemy", [D(3), D(5, if_=EVENQ, bonus=True), D(2, if_="!first&!last", bonus=True)],
      "Deal 3. If you hold 2 or more courses, all in equal stacks, deal 5 more. If this is neither first nor last in "
      "the Ordo, deal 2 more.", arch=WH,
      flavour="Neither hand heavier. Neither hand slower.",
      note="Both of the Vessel's palms meet a foe at once, the bands on each arm exactly matched.",
      up={"text": "Deal 4. If you hold 2 or more courses, all in equal stacks, deal 6 more. If this is neither first "
                  "nor last in the Ordo, deal 3 more.",
-         "fx": [D(4), D(6, if_=EVENQ), D(3, if_="!first&!last")]})
+         "fx": [D(4), D(6, if_=EVENQ, bonus=True), D(3, if_="!first&!last", bonus=True)]})
 card("ve_even_breath", "Even Breath", 1, "U", "self",
      [EVEN(), B(2, per="held_kinds", k=1), B(0, per="vigour_left", k=1, max=3)],
      "Even out your held stacks across the courses you hold. Gain 2 Block, plus 1 per different course you hold. "
@@ -444,7 +443,8 @@ card("ve_upright", "Upright", 1, "U", "self",
 
 # ------------------------------------------------------------------ rare
 card("ve_the_weighing", "The Weighing", 2, "R", "enemy",
-     [EVEN(), D(0, per="held_kinds", k=2), D(0, per="held_kinds", k=2, if_=WHOLE), D(0, per="heroes_before", k=2)],
+     [EVEN(), D(0, per="held_kinds", k=2), D(0, per="held_kinds", k=2, if_=WHOLE, bonus=True),
+      D(0, per="heroes_before", k=2, bonus=True)],
      "Costs 1 less if 2 or more other heroes are already in the Ordo. Even out your held stacks across the courses you hold. "
      "Deal 2 per different course you hold. If you are Whole, deal 12 more. Deal 2 more per other hero who has acted "
      "before this card this round.", arch=WH, cost_less={"per": "others", "k": 0.5, "max": 1},
@@ -453,8 +453,8 @@ card("ve_the_weighing", "The Weighing", 2, "R", "enemy",
      up={"text": "Costs 1 less if 2 or more other heroes are already in the Ordo. Even out your held stacks across the courses "
                  "you hold. Deal 3 per different course you hold. If you are Whole, deal 12 more. Deal 2 more per other "
                  "hero who has acted before this card this round.",
-         "fx": [EVEN(), D(0, per="held_kinds", k=3), D(0, per="held_kinds", k=2, if_=WHOLE),
-                D(0, per="heroes_before", k=2)]})
+         "fx": [EVEN(), D(0, per="held_kinds", k=3), D(0, per="held_kinds", k=2, if_=WHOLE, bonus=True),
+                D(0, per="heroes_before", k=2, bonus=True)]})
 card("ve_mantle", "Mantle", 1, "R", "self", [TAKE("all", to="allies_other"), B(4)],
      "Take every course stack from every other hero. Gain 4 Block. Rite: at the end of this round and the next, take "
      "every course stack from every other hero. Exhaust.", use=ALL, kw=["Rite", "Exhaust"], arch=HE,
@@ -496,13 +496,13 @@ card("ve_return_it", "Return It", 1, "R", "self", [B(4)],
                  "your largest held course. Exhaust.",
          "rite": {"on": "hit", "per_round": 2, "fx": [GIVE("largest", 2, attr=VOL)]}})
 card("ve_illuminated_initial", "Illuminated Initial", 1, "R", "enemy",
-     [D(0, per="held_kinds", k=1), D(2, if_="first"), PRIME(0, per="dealt", k=0.5)],
+     [D(0, per="held_kinds", k=1), D(2, if_="first", bonus=True), PRIME(0, per="dealt", k=0.5)],
      "Deal 1 per different course you hold. If this is first in the Ordo, deal 2 more. Prime half the damage dealt.", arch=WH,
      flavour="The first letter of the page, in every colour. The rest follows from it.",
      note="The Vessel's strike leaves a great illuminated letter on a foe, and a hero reads the gap.",
      up={"text": "Deal 1, plus 1 per different course you hold. If this is first in the Ordo, deal 3 more. Prime half "
                  "the damage dealt.",
-         "fx": [D(1, per="held_kinds", k=1), D(3, if_="first"), PRIME(0, per="dealt", k=0.5)]})
+         "fx": [D(1, per="held_kinds", k=1), D(3, if_="first", bonus=True), PRIME(0, per="dealt", k=0.5)]})
 card("ve_take_their_place", "Take Their Place", 1, "R", "adjacent_ally",
      [SWAP(), TAKE("all"), SELF("taunt", 1), B(4, to="self")],
      "Swap places with an adjacent hero and take every course stack on it. Gain Taunt and 4 Block.", use=ALL, arch=HE,
@@ -551,13 +551,13 @@ card("ve_carry_them", "Carry Them", 2, "X", "all_allies", [TAKE("all"), B(0, per
      note="The Hearth Vessel draws the whole company's colours up the bands in one long breath.",
      up={"text": "Take every course stack from every hero. Every hero gains 1 Block per stack taken, at most 6.",
          "cost": 1})
-card("ve_stoke", "Stoke", 0, "X", "self", [A(FI, 1, to="self"), B(3, to="self_adjacent", if_="vigour_left")],
-     "Hold 1 Fire. If any vigour is left unspent this round, each hero beside you gains 3 Block.", use=ALL, cat=FI,
+card("ve_stoke", "Stoke", 0, "X", "self", [A(FI, 1, to="self"), B(2, to="self_adjacent", if_="vigour_left")],
+     "Hold 1 Fire. If any vigour is left unspent this round, each hero beside you gains 2 Block.", use=ALL, cat=FI,
      sub=HE, arch="hearth+whole",
      flavour="A hearth needs a coal. I keep one lit.",
      note="A single bead of fire wakes on the vermilion band and the heroes beside it lean closer.",
-     up={"text": "Hold 1 Fire. If any vigour is left unspent this round, each hero beside you gains 4 Block.",
-         "fx": [A(FI, 1, to="self"), B(4, to="self_adjacent", if_="vigour_left")]})
+     up={"text": "Hold 1 Fire. If any vigour is left unspent this round, each hero beside you gains 3 Block.",
+         "fx": [A(FI, 1, to="self"), B(3, to="self_adjacent", if_="vigour_left")]})
 card("ve_lend_weight", "Lend Weight", 1, "X", "self", [PRIME(3, per="held_total", k=1, max=12), PRIME(2, if_="handoff")],
      "Prime 3, plus 1 per stack you hold, at most 12 in all. Handoff: Prime 2 more.", use=ALL, sub=HE, arch=HE,
      flavour="Lean your blow on me. I am heavier than I look.",
@@ -577,23 +577,23 @@ card("ve_warm_breath", "Warm Breath", 1, "X", "all_allies", [H(0, per="held_kind
      up={"text": "Every hero heals 1, plus 1 per 2 different courses you hold, and sheds 3 stress.",
          "fx": [H(1, per="held_kinds", k=0.5), STRESS(-3)]})
 card("ve_full_weight", "Full Weight", 1, "X", "enemy",
-     [D(2, per="held_total", k=1, max=12), D(3, if_="vigour_left>=2")],
+     [D(2, per="held_total", k=1, max=12), D(3, if_="vigour_left>=2", bonus=True)],
      "Deal 2, plus 1 per stack you hold, at most 12 in all. If 2 or more vigour is left unspent this round, deal 3 "
      "more.", sub=HE, arch=HE,
      flavour="Everything you laid on them, all at once.",
      note="The Hearth Vessel presses a palm to a foe and every seal on the bands bears down with it.",
      up={"text": "Deal 4, plus 1 per stack you hold, at most 16 in all. If 2 or more vigour is left unspent this round, "
-                 "deal 4 more.", "fx": [D(4, per="held_total", k=1, max=16), D(4, if_="vigour_left>=2")]})
+                 "deal 4 more.", "fx": [D(4, per="held_total", k=1, max=16), D(4, if_="vigour_left>=2", bonus=True)]})
 
 # ------------------------------------------------------------------ path: Mouth
-card("ve_chew", "Chew", 1, "X", "enemy", [D(2), TAKE("largest"), GIVE("largest", 3, attr=VOL), D(2, if_="handoff")],
-     "Deal 2. Take all of the target's largest course, then give it up to 3 Volatile stacks of your largest held "
-     "course. Handoff: deal 2 more.", sub=MO, arch=MO,
+card("ve_chew", "Chew", 1, "X", "enemy", [D(2), D(2, if_="handoff", bonus=True), TAKE("largest"), GIVE("largest", 3, attr=VOL)],
+     "Deal 2, or 4 on a Handoff. Take all of the target's largest course, then give it up to 3 Volatile stacks of your "
+     "largest held course.", sub=MO, arch=MO,
      flavour="Taken in, turned over, given back. It never tastes the same twice.",
      note="The Mouth Vessel draws a foe's colour into the palm and pushes it straight back, flaring.",
-     up={"text": "Deal 3. Take all of the target's largest course, then give it up to 4 Volatile stacks of your "
-                 "largest held course. Handoff: deal 2 more.",
-         "fx": [D(3), TAKE("largest"), GIVE("largest", 4, attr=VOL), D(2, if_="handoff")]})
+     up={"text": "Deal 3, or 5 on a Handoff. Take all of the target's largest course, then give it up to 4 Volatile "
+                 "stacks of your largest held course.",
+         "fx": [D(3), D(2, if_="handoff", bonus=True), TAKE("largest"), GIVE("largest", 4, attr=VOL)]})
 card("ve_double_spit", "Double Spit", 1, "X", "enemy",
      [DBL(s="largest"), GIVE("largest", 1, attr=VOL), D(2)],
      "Double the target's largest course. Give it 1 Volatile stack of your largest held course. Deal 2.", sub=MO,
@@ -602,13 +602,13 @@ card("ve_double_spit", "Double Spit", 1, "X", "enemy",
      note="Two bright beads leave the Mouth Vessel's fingertips one after the other.",
      up={"text": "Double the target's largest course. Give it 2 Volatile stacks of your largest held course. Deal 2.",
          "fx": [DBL(s="largest"), GIVE("largest", 2, attr=VOL), D(2)]})
-card("ve_far_spit", "Far Spit", 1, "X", "enemy", [GIVE("largest", 2, attr=VOL), D(4), D(2, if_="t.rank>=3")],
+card("ve_far_spit", "Far Spit", 1, "X", "enemy", [GIVE("largest", 2, attr=VOL), D(4), D(2, if_="t.rank>=3", bonus=True)],
      "Give up to 2 Volatile stacks of your largest held course to the target. Deal 4, and 2 more if it stands in rank "
      "3 or 4.", hit=BACKREACH, sub=MO, arch=MO,
      flavour="The back of the line is not far enough.",
      note="A bead of colour arcs over the front foes and bursts on the one hiding at the back.",
      up={"text": "Give up to 2 Volatile stacks of your largest held course to the target. Deal 6, and 2 more if it "
-                 "stands in rank 3 or 4.", "fx": [GIVE("largest", 2, attr=VOL), D(6), D(2, if_="t.rank>=3")]})
+                 "stands in rank 3 or 4.", "fx": [GIVE("largest", 2, attr=VOL), D(6), D(2, if_="t.rank>=3", bonus=True)]})
 card("ve_chain_word", "Chain Word", 1, "X", "enemy",
      [D(2), GIVE("largest", 2, attr=VOL), DRAW(1, to="self", if_="reactions>=2")],
      "Deal 2. Give up to 2 Volatile stacks of your largest held course to the target. If the company has set off 2 "
@@ -630,14 +630,15 @@ card("ve_flood_the_line", "Flood the Line", -1, "X", "all_enemies",
          "fx": [GIVE("largest", 0, per="x", k=1, if_="x<3"), GIVE("largest", 0, per="x", k=1, attr=VOL, if_="x>=3"),
                 D(0, per="x", k=2)]})
 card("ve_gorge", "Gorge", 1, "X", "enemy",
-     [TAKE("all"), B(0, per="consumed", k=1, max=10, to="self"), ADD("ve_spit", to="self")],
-     "Take every course stack on the target. Gain 1 Block per stack taken, at most 10. Put a Spit into your next hand.",
+     [TAKE("all"), B(0, per="consumed", k=1, max=10, to="self"), ADD("t_ve_spit", to="self")],
+     "Take every course stack on the target. Gain 1 Block per stack taken, at most 10. Put a Temporary Spit into your "
+     "next hand.",
      sub=MO, arch="mouth+whole",
      flavour="Every course it carried, swallowed. It stands there grey.",
      note="A foe's colours pour off it into the Mouth Vessel, leaving it the grey of old ash.",
      up={"text": "Take every course stack on the target. Gain 2 Block, plus 1 per stack taken, at most 14 in all. Put "
-                 "a Spit into your next hand.",
-         "fx": [TAKE("all"), B(2, per="consumed", k=1, max=14, to="self"), ADD("ve_spit", to="self")]})
+                 "a Temporary Spit into your next hand.",
+         "fx": [TAKE("all"), B(2, per="consumed", k=1, max=14, to="self"), ADD("t_ve_spit", to="self")]})
 
 # ------------------------------------------------------------------ path: Whole
 card("ve_keep_her_quiet", "Keep Her Quiet", 1, "X", "enemy",
@@ -648,13 +649,15 @@ card("ve_keep_her_quiet", "Keep Her Quiet", 1, "X", "enemy",
      note="The Whole Vessel lays a violet-black palm over a foe's mouth and the hollow spreads.",
      up={"text": "Give 1 Water to the target, then all your held Void, Volatile. Its next action keeps only its first "
                  "effect.", "fx": [GIVE(WA, 1), GIVE(VO, 6, attr=VOL), ST("neuro", 1)]})
-card("ve_six_bands", "Six Bands", 1, "X", "self", lack() + [DRAW(1, if_=WHOLE)],
-     "Hold 1 stack of each course you do not hold. Then, if you are Whole, draw 1 more card next round.",
+card("ve_six_bands", "Six Bands", 1, "X", "self",
+     [TAKE("all", 1, to="allies_other"), B(2), DRAW(1, if_=WHOLE)],
+     "Take 1 stack of every course on every other hero. Gain 2 Block. Then, if you are Whole, draw 1 more card next "
+     "round.",
      use=ALL, sub=WH, arch=WH,
      flavour="Fingertip to jaw, six bands, and every one of them full.",
      note="The Whole Vessel's six bands fill one after another, from the fingertips to the jaw.",
-     up={"text": "Hold 1 stack of each course you do not hold. Gain 3 Block. Then, if you are Whole, draw 1 more card "
-                 "next round.", "fx": lack() + [B(3), DRAW(1, if_=WHOLE)]})
+     up={"text": "Take 1 stack of every course on every other hero. Gain 4 Block. Then, if you are Whole, draw 1 more "
+                 "card next round.", "fx": [TAKE("all", 1, to="allies_other"), B(4), DRAW(1, if_=WHOLE)]})
 card("ve_level_hands", "Level Hands", 1, "X", "self", [EVEN(), PRIME(3, per="held_kinds", k=1)],
      "Even out your held stacks across the courses you hold. Prime 3, plus 1 per different course you hold.",
      use=ALL, sub=WH, arch=WH,
@@ -663,7 +666,7 @@ card("ve_level_hands", "Level Hands", 1, "X", "self", [EVEN(), PRIME(3, per="hel
      up={"text": "Even out your held stacks across the courses you hold. Prime 5, plus 1 per different course you "
                  "hold.", "fx": [EVEN(), PRIME(5, per="held_kinds", k=1)]})
 card("ve_six_rays", "Six Rays", 2, "X", "all_enemies",
-     [D(1, per="held_kinds", k=1), D(3, if_=WHOLE), D(2, if_="heroes_before>=2")],
+     [D(1, per="held_kinds", k=1), D(3, if_=WHOLE, bonus=True), D(2, if_="heroes_before>=2", bonus=True)],
      "Deal 1, plus 1 per different course you hold, to every foe. If you are Whole, deal 3 more to every foe. If 2 or "
      "more other heroes have acted before this card this round, deal 2 more to every foe.",
      sub=WH, arch=WH,
@@ -671,7 +674,7 @@ card("ve_six_rays", "Six Rays", 2, "X", "all_enemies",
      note="The broken nimbus behind the Whole Vessel's head throws six thin rays of ink across the foes.",
      up={"text": "Deal 2, plus 1 per different course you hold, to every foe. If you are Whole, deal 4 more to every "
                  "foe. If 2 or more other heroes have acted before this card this round, deal 3 more to every foe.",
-         "fx": [D(2, per="held_kinds", k=1), D(4, if_=WHOLE), D(3, if_="heroes_before>=2")]})
+         "fx": [D(2, per="held_kinds", k=1), D(4, if_=WHOLE, bonus=True), D(3, if_="heroes_before>=2", bonus=True)]})
 card("ve_gilded_page", "Gilded Page", 1, "X", "enemy", [GIVE("all", 1), D(3, per="t.spectrum", k=1)],
      "Give 1 stack of every course you hold to the target. Deal 3, plus 1 per different course on it.",
      sub=WH, arch="whole+mouth",
@@ -727,15 +730,15 @@ card("ve_mothers_tongue", "The Mother's Tongue", 1, "L", "self", [],
                  "Conjunction on a foe, give 1 Volatile stack of your largest held course to each foe beside it. "
                  "Exhaust.", "fx": lack()})
 card("ve_whole_conjunction", "The Whole Conjunction", 2, "L", "enemy",
-     [D(8, if_=WHOLE), ST("thrift", 1, to="allies_other", if_=WHOLE), GIVE("all", 1), GIVE("all", 0, attr=VOL)],
-     "If you are Whole, deal 8 and every other hero gains 1 Thrift. Give 1 stack of every course you hold to the "
+     [D(8, if_=WHOLE), ST("thrift", 1, to="lowest_ally", if_=WHOLE), GIVE("all", 1), GIVE("all", 0, attr=VOL)],
+     "If you are Whole, deal 8 and the most wounded hero gains 1 Thrift. Give 1 stack of every course you hold to the "
      "target, then everything else you hold, Volatile.", sub=WH, arch="whole+mouth",
      flavour="All six in one body, without letting them fuse. Until now.",
      note="The Whole Vessel opens both palms and all six bands pour into one foe in a single blinding knot.",
-     up={"text": "If you are Whole, deal 8 and every other hero gains 1 Thrift. Give 1 stack of every course you hold "
+     up={"text": "If you are Whole, deal 8 and the most wounded hero gains 1 Thrift. Give 1 stack of every course you hold "
                  "to the target, then everything else you hold, Volatile. Then hold 1 stack of each course you do not "
                  "hold.",
-         "fx": [D(8, if_=WHOLE), ST("thrift", 1, to="allies_other", if_=WHOLE), GIVE("all", 1),
+         "fx": [D(8, if_=WHOLE), ST("thrift", 1, to="lowest_ally", if_=WHOLE), GIVE("all", 1),
                 GIVE("all", 0, attr=VOL)] + lack()})
 card("ve_mothers_place", "The Mother's Place", 2, "L", "self", [],
      "Rite: three times a round, when the company sets off a Conjunction on a foe, hold 1 stack of each course you "
@@ -747,6 +750,15 @@ card("ve_mothers_place", "The Mother's Place", 2, "L", "self", [],
      up={"text": "Hold 1 stack of each course you do not hold. Rite: three times a round, when the company sets off a "
                  "Conjunction on a foe, hold 1 stack of each course you do not hold, then, if you are Whole, deal 5 "
                  "to that foe. Exhaust.", "fx": lack()})
+
+# ------------------------------------------------------------------ tokens (Temporary: removed when the fight ends)
+card("t_ve_spit", "Spit", 0, "Curse", "enemy", [GIVE("largest", 1, attr=VOL), D(2)],
+     "Give 1 Volatile stack of your largest held course to the target. Deal 2. Temporary.", use=ALL, kw=["Temporary"],
+     flavour="A drop is enough, if it lands on the right ink.",
+     note="The Vessel flicks two fingers and one bright bead flies from the band into a foe's settled ink.")
+card("t_ve_settle", "Settle", 0, "Curse", "self", [B(4)], "Gain 4 Block. Temporary.", use=ALL, kw=["Temporary"],
+     flavour="What would burn you only settles on me. Rest a moment.",
+     note="A hero breathes out slowly, shoulders easing, while the Vessel's palm lifts from their back.")
 
 HERO = {"name": "Vessel", "hp": 32, "armor": 0, "grit": 2, "color": "8a7fb0", "kit": ["ve_draw_breath"],
         "deck": ["ve_open_hand", "ve_open_hand", "ve_open_hand", "ve_bear_it", "ve_bear_it", "ve_take_into_me",
@@ -779,8 +791,6 @@ NEEDS = [
     "ve_weight_of_the_world: the brief adds the held weight to the Vessel's next hit on a foe. A play rite now lands on "
     "the played card's target, but on a card with no foe target it lands on the owner, so a play-rite hit would strike "
     "the Vessel itself. Written as an ally_hit rite on the foe that hits another hero (interaction pass).",
-    "Interaction pass: a rite's context has no handoff, cost or heroes_before (they read 0), so rites can only use the "
-    "round-wide vigour and Ordo quantities (vigour_left, vigour_spent, ordo_pos, first, last).",
     "ve_unstopped_mouth: wanted a 'course laid on a hero' trigger to spit each one back at the foe that laid it; "
     "written as a round-end Take from every other hero and a Volatile give to the front foe.",
     "ve_mothers_place: the brief makes every Conjunction full power while Whole; needs a power modifier. Written as a "

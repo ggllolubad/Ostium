@@ -15,11 +15,11 @@ card("or_hasten", "Hasten", 1, "K", "self", [PRIME(3), PRIME(2, if_="handoff")],
      flavour="The sand falls a little faster for whoever moves next.",
      note="The Oracle tips the wrist hourglass toward an ally; the sand runs bright.",
      arch="core", up={"text": "Prime 4. Handoff: Prime 2 more.", "fx": [PRIME(4), PRIME(2, if_="handoff")]})
-card("or_second_hand", "Second Hand", 1, "K", "enemy", [D(1), D(2, if_="last")], "Echo. Deal 1. Last in the Ordo: deal 2 more.",
+card("or_second_hand", "Second Hand", 1, "K", "enemy", [D(1), D(2, bonus=True, if_="last")], "Echo. Deal 1, or 3 if this is last in the Ordo.",
      cat=V, kw=["Echo"], sub=CH,
      flavour="Turn it over. The same blow falls again.",
      note="The brass clock face on the chest shows two hands where one should be.",
-     arch=CH, up={"text": "Echo. Deal 2. Last in the Ordo: deal 2 more.", "fx": [D(2), D(2, if_="last")]})
+     arch=CH, up={"text": "Echo. Deal 2, or 4 if this is last in the Ordo.", "fx": [D(2), D(2, bonus=True, if_="last")]})
 card("or_read_the_bones", "Read the Bones", 1, "K", "enemy", [OMEN(1), OMEN(1, if_="m.attacking"), OMEN(1, if_="first")],
      "Choose a foe. Gain 1 Omen, 1 more if it means to attack, and 1 more if this is first in the Ordo.", cat=V, sub=AU,
      flavour="Knucklebones on the flagstones. Three fall face down.",
@@ -49,12 +49,12 @@ card("or_drawn_veil", "Drawn Veil", 1, "S", "ally", [B(5), W(1)], "A hero gains 
      flavour="The linen over my eyes keeps out more than light.",
      note="A fold of violet-black robe drawn across an ally like a curtain.",
      arch="core", up={"text": "A hero gains 7 Block and 1 Ward.", "fx": [B(7), W(1)]})
-card("or_time_shear", "Time Shear", 2, "S", "enemy", [D(9), A(V, 1), D(3, if_="last")],
-     "Deal 9. Apply 1 Void. Last in the Ordo: deal 3 more.", cat=V, attr="stable",
+card("or_time_shear", "Time Shear", 2, "S", "enemy", [D(9), D(3, bonus=True, if_="last"), A(V, 1)],
+     "Deal 9, or 12 if this is last in the Ordo. Apply 1 Void.", cat=V, attr="stable",
      flavour="A moment cut out of the day. The foe was standing in it.",
      note="A slice of night opens across a foe, stars showing through the wound.",
-     arch="core", up={"text": "Deal 12. Apply 1 Void. Last in the Ordo: deal 3 more.",
-                      "fx": [D(12), A(V, 1), D(3, if_="last")]})
+     arch="core", up={"text": "Deal 12, or 15 if this is last in the Ordo. Apply 1 Void.",
+                      "fx": [D(12), D(3, bonus=True, if_="last"), A(V, 1)]})
 
 # ------------------------------------------------------------------ common: Chronomancer
 card("or_hourglass", "Hourglass", 1, "C", "self", [BANK(2, to="self"), STRESS(-2)], "Bank 2. Shed 2 stress.", cat=V,
@@ -73,12 +73,12 @@ card("or_stutter", "Stutter", 1, "C", "enemy", [D(2, per="vigour_left", k=1, max
      note="Two ghost images of the same pointing hand, one a beat behind.",
      arch=CH, up={"text": "Echo. Deal 3, plus 1 per vigour left unspent this round, at most 6. Apply 1 Void.",
                   "fx": [D(3, per="vigour_left", k=1, max=6), A(V, 1)]})
-card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, if_="t.delayed")],
-     "Deal 4. Deal 4 more if the target was Delayed this round.", cat=V,
+card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, bonus=True, if_="t.delayed")],
+     "Deal 4, or 8 if the target was Delayed this round.", cat=V,
      flavour="It waited for you. It should not have.",
      note="A foe frozen mid-step while a second blow arrives from behind it.",
-     arch=CH, up={"text": "Deal 5. Deal 6 more if the target was Delayed this round.",
-                   "fx": [D(5), D(6, if_="t.delayed")]})
+     arch=CH, up={"text": "Deal 5, or 11 if the target was Delayed this round.",
+                   "fx": [D(5), D(6, bonus=True, if_="t.delayed")]})
 card("or_quicken", "Quicken", 1, "C", "ally_other", [ST("momentum", 2), B(3)],
      "Another hero gains 2 Momentum and 3 Block.", cat=V,
      flavour="Your hour, given early. Spend it well.",
@@ -129,15 +129,15 @@ card("or_ill_omen", "Ill Omen", 1, "C", "enemy",
                   "fx": [D(5), ST("vulnerable", 1, if_="t.attacking"), OMEN(1, if_="m.attacking")]})
 
 # ------------------------------------------------------------------ common: Fatebinder
-card("or_knot", "Knot", 0, "C", "self", [PRIME(4, if_="handoff"), STRESS(1)], "Handoff: Prime 4. Gain 1 stress.", cat=V,
+card("or_knot", "Knot", 0, "C", "self", [PRIME(3, if_="handoff")], "Handoff: Prime 3.", cat=V,
      flavour="A knot in red thread. Someone's fate just tightened.",
      note="Ink-red fingers pull a small knot tight.",
-     arch=FB, up={"text": "Handoff: Prime 5. Gain 1 stress.", "fx": [PRIME(5, if_="handoff"), STRESS(1)]})
+     arch=FB, up={"text": "Handoff: Prime 4.", "fx": [PRIME(4, if_="handoff")]})
 card("or_bind_fate", "Bind Fate", 1, "C", "self", [PRIME(4, per="hand", k=1, max=8)],
-     "Retain. Prime 4, plus 1 per other card in your hand, at most 8.", cat=V, kw=["Retain"],
+     "Retain. Prime 4, plus 1 per card you keep in hand this round, at most 8.", cat=V, kw=["Retain"],
      flavour="Written now. Paid when it is needed.",
      note="The Fatebinder writes one red word on the wax tablet and holds it closed.",
-     arch=FB, up={"text": "Retain. Prime 5, plus 1 per other card in your hand, at most 10.",
+     arch=FB, up={"text": "Retain. Prime 5, plus 1 per card you keep in hand this round, at most 10.",
                   "fx": [PRIME(5, per="hand", k=1, max=10)]})
 card("or_guiding_word", "Guiding Word", 1, "C", "ally_other", [PRIME(4), ST("focus", 2)],
      "Prime 4. Another hero gains 2 Focus.", cat=V,
@@ -208,13 +208,13 @@ card("or_reverse_the_glass", "Reverse the Glass", 2, "U", "all_enemies", [DELAY(
      note="The Chronomancer flips a great hourglass; every foe's weapon slows.",
      arch=CH + "+" + AU, up={"text": "Delay every foe that means to attack. Deal 4 to every foe. Exhaust.",
                              "fx": [DELAY(if_="t.attacking"), D(4)]})
-card("or_pendulum", "Pendulum", 2, "U", "enemy", [D(6), A(V, 1), D(3, if_="!vigour_left")],
-     "Echo. Deal 6. Apply 1 Void. If no vigour is left unspent this round, deal 3 more.", cat=V,
+card("or_pendulum", "Pendulum", 2, "U", "enemy", [D(6), D(3, bonus=True, if_="!vigour_left"), A(V, 1)],
+     "Echo. Deal 6, or 9 if no vigour is left unspent this round. Apply 1 Void.", cat=V,
      attr="stable", kw=["Echo"],
      flavour="It swings out. It swings back. Both ways it hurts.",
      note="The broken pendulum staff swings through a foe, and swings again.",
-     arch=CH, up={"text": "Echo. Deal 8. Apply 1 Void. If no vigour is left unspent this round, deal 3 more.",
-                  "fx": [D(8), A(V, 1), D(3, if_="!vigour_left")]})
+     arch=CH, up={"text": "Echo. Deal 8, or 11 if no vigour is left unspent this round. Apply 1 Void.",
+                  "fx": [D(8), D(3, bonus=True, if_="!vigour_left"), A(V, 1)]})
 card("or_borrowed_time", "Borrowed Time", 0, "U", "self", [EN(1), STRESS(7)], "Next round, +1 vigour. Gain 7 stress. Exhaust.",
      cat=V, kw=["Exhaust"], use=[1, 2, 3, 4],
      flavour="Time borrowed from the dark is paid back with interest.",
@@ -222,11 +222,13 @@ card("or_borrowed_time", "Borrowed Time", 0, "U", "self", [EN(1), STRESS(7)], "N
      arch=CH, up={"text": "Next round, +1 vigour. Gain 4 stress. Exhaust.", "fx": [EN(1), STRESS(4)]})
 card("or_skipped_tooth", "Skipped Tooth", 2, "U", "all_allies",
      [ST("momentum", 1, to="all_allies"), DRAW(1, to="all_allies", if_="cost<=1")],
-     "Every hero gains 1 Momentum. If this cost 1 or less, every hero also draws 1 more next round.", cat=V,
+     "Costs 1 less once 3 cards are in the Ordo. Every hero gains 1 Momentum. If this cost 1 or less, every hero also "
+     "draws 1 more next round.", cat=V,
+     cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="The clock skips a tooth, and the whole company is ahead of it.",
      note="The clock face on the Chronomancer's chest spins; the company leans forward.",
      arch=CH + "+duelist_momentum",
-     up={"text": "Every hero gains 2 Momentum. If this cost 1 or less, every hero also draws 1 more next round.",
+     up={"text": "Costs 1 less once 3 cards are in the Ordo. Every hero gains 2 Momentum. If this cost 1 or less, every hero also draws 1 more next round.",
          "fx": [ST("momentum", 2, to="all_allies"), DRAW(1, to="all_allies", if_="cost<=1")]})
 card("or_wind_the_spring", "Wind the Spring", 1, "U", "ally_other", [CONS(s="momentum"), PRIME(0, per="consumed", k=2)],
      "Take all of another hero's Momentum. Prime 2 per Momentum taken.", cat=V,
@@ -284,12 +286,12 @@ card("or_red_ink", "Red Ink", 1, "U", "enemy", [PRIME(3, per="m.bleed", k=1)],
      note="The Fatebinder dips the quill in a foe's wound and writes.",
      arch=FB + "+duelist_bleed", up={"text": "Choose a foe. Prime 4, plus 1 per Bleed on it.",
                                      "fx": [PRIME(4, per="m.bleed", k=1)]})
-card("or_gathering_thread", "Gathering Thread", 1, "U", "self", [PRIME(4, per="heroes_before", k=3)],
-     "Prime 4, plus 3 per other hero who has acted before this in the Ordo.", cat=V,
+card("or_gathering_thread", "Gathering Thread", 1, "U", "self", [PRIME(4, per="heroes_before", k=3, max=10)],
+     "Prime 4, plus 3 per other hero who has acted before this in the Ordo, at most 10.", cat=V,
      flavour="Each knot tied makes the next one tighter.",
      note="Red thread winds around the Fatebinder's arm in a growing coil.",
-     arch=FB, up={"text": "Prime 5, plus 4 per other hero who has acted before this in the Ordo.",
-                  "fx": [PRIME(5, per="heroes_before", k=4)]})
+     arch=FB, up={"text": "Prime 5, plus 4 per other hero who has acted before this in the Ordo, at most 12.",
+                  "fx": [PRIME(5, per="heroes_before", k=4, max=12)]})
 card("or_fates_edge", "Fate's Edge", 1, "U", "enemy", [D(5), PRIME(5, if_="killed")],
      "Deal 5. If it kills, Prime 5.", cat=V,
      flavour="One thread cut. The next blow is already falling.",
@@ -344,12 +346,12 @@ card("or_stop_time", "Stop Time", 3, "R", "all_enemies", [DELAY(), D(3), BANK(2,
      flavour="Between one grain and the next, I walk among them.",
      note="Every foe hangs motionless in falling sand; the Oracle walks between.",
      arch=CH, up={"text": "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 5 to each. Bank 2. Exhaust.", "fx": [DELAY(), D(5), BANK(2, to="self")]})
-card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(0, per="ordo_pos", k=2)],
-     "Echo. Retain. Deal 2 times this card's place in the Ordo.", cat=V, kw=["Echo", "Retain"],
+card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(0, per="ordo_pos", k=2, max=10)],
+     "Echo. Retain. Deal 2 times this card's place in the Ordo, at most 10.", cat=V, kw=["Echo", "Retain"],
      flavour="This has happened. It will happen again, harder.",
      note="The same red thread strikes a foe twice in the same place.",
-     arch=CH + "+" + FB, up={"text": "Echo. Retain. Deal 2, plus 2 times this card's place in the Ordo.",
-                             "fx": [D(2, per="ordo_pos", k=2)]})
+     arch=CH + "+" + FB, up={"text": "Echo. Retain. Deal 2, plus 2 times this card's place in the Ordo, at most 12.",
+                             "fx": [D(2, per="ordo_pos", k=2, max=12)]})
 card("or_stolen_hour", "Stolen Hour", 1, "R", "self",
      [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.25, max=3), EN(1)],
      "Spend all your Ward. Gain 1 Thrift per 4 Ward spent, at most 3. Next round, +1 vigour. Exhaust.", cat=V,
@@ -359,13 +361,13 @@ card("or_stolen_hour", "Stolen Hour", 1, "R", "self",
      arch=CH, up={"text": "Spend all your Ward. Gain 1 Thrift per 3 Ward spent, at most 3. Next round, +1 vigour. Exhaust.",
                   "fx": [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.34, max=3), EN(1)]})
 card("or_scatter_the_bones", "Scatter the Bones", 2, "R", "all_enemies",
-     [CONS(s="omen", to="self"), D(2, per="consumed", k=1), D(3, if_="t.bleed")],
+     [CONS(s="omen", to="self"), D(2, per="consumed", k=1), D(3, bonus=True, if_="t.bleed")],
      "Spend all your Omen. Deal 2 to every foe, plus 1 per Omen spent, and 3 more to each foe that bleeds.", cat=V,
      flavour="Every bone a foe. Every foe a bone.",
      note="The Augur flings the whole pouch; bones strike every foe at once.",
      arch=AU + "+duelist_bleed",
      up={"text": "Spend all your Omen. Deal 4 to every foe, plus 1 per Omen spent, and 3 more to each foe that bleeds.",
-         "fx": [CONS(s="omen", to="self"), D(4, per="consumed", k=1), D(3, if_="t.bleed")]})
+         "fx": [CONS(s="omen", to="self"), D(4, per="consumed", k=1), D(3, bonus=True, if_="t.bleed")]})
 card("or_forestalled", "Forestalled", 2, "R", "enemy", [D(4), ST("stun", 1, if_="t.attacking"), DELAY(if_="!t.attacking")],
      "Deal 4. If the target means to attack, Stun it. Otherwise, Delay it.", cat=V,
      flavour="The blow you meant is already spent. You just have not felt it.",
@@ -387,17 +389,17 @@ card("or_rubric_capital", "Rubric Capital", 1, "R", "self", [CONS(s="omen"), PRI
      arch=FB + "+" + AU, up={"text": "Spend all your Omen. Prime 4, plus 2 per Omen spent.",
                              "fx": [CONS(s="omen"), PRIME(4, per="consumed", k=2)]})
 card("or_red_harvest", "Red Harvest", 2, "R", "enemy",
-     [D(6, per="prime_count", k=4), D(4, if_="handoff"), PRIME(6, if_="killed")],
-     "Deal 6, plus 4 per Prime spent this round. Handoff: deal 4 more. If it kills, Prime 6.", cat=V,
+     [D(6, per="prime_count", k=4), D(4, bonus=True, if_="handoff"), PRIME(6, if_="killed")],
+     "Deal 6, plus 4 per Prime spent this round, and 4 more on a Handoff. If it kills, Prime 6.", cat=V,
      flavour="Reap one. The thread runs on to the next.",
      note="The Fatebinder's red thread cuts down a foe and snaps toward another.",
-     arch=FB, up={"text": "Deal 8, plus 5 per Prime spent this round. Handoff: deal 4 more. If it kills, Prime 8.",
-                  "fx": [D(8, per="prime_count", k=5), D(4, if_="handoff"), PRIME(8, if_="killed")]})
-card("or_written_ahead", "Written Ahead", 1, "R", "self", [PRIME(3), DRAW(1)],
-     "Retain. Prime 3. Next round, draw 1 more.", cat=V, kw=["Retain"],
+     arch=FB, up={"text": "Deal 8, plus 5 per Prime spent this round, and 4 more on a Handoff. If it kills, Prime 8.",
+                  "fx": [D(8, per="prime_count", k=5), D(4, bonus=True, if_="handoff"), PRIME(8, if_="killed")]})
+card("or_written_ahead", "Written Ahead", 1, "R", "self", [PRIME(3, per="carried", k=2, max=9), DRAW(1)],
+     "Retain. Prime 3, plus 2 per vigour carried into this round, at most 9. Next round, draw 1 more.", cat=V, kw=["Retain"],
      flavour="Tomorrow's page is already inked. I only turn it.",
      note="The Fatebinder writes on a page that has not been bound yet.",
-     arch=FB + "+" + CH, up={"text": "Retain. Prime 5. Next round, draw 1 more.", "fx": [PRIME(5), DRAW(1)]})
+     arch=FB + "+" + CH, up={"text": "Retain. Prime 5, plus 2 per vigour carried into this round, at most 11. Next round, draw 1 more.", "fx": [PRIME(5, per="carried", k=2, max=11), DRAW(1)]})
 card("or_eclipse", "Eclipse", 2, "R", "all_enemies", [A(V, 1, attr="volatile", per="t.spectrum", k=1)],
      "Apply 1 Volatile Void to every foe, plus 1 per different course on it.", cat=V, attr="volatile",
      flavour="For a moment there are no stars at all.",
@@ -418,11 +420,11 @@ card("or_painted_eye", "Painted Eye", 1, "R", "enemy", [ST("vulnerable", 1), ST(
                       "fx": [ST("vulnerable", 1), ST("mark"), D(5)]})
 
 # ------------------------------------------------------------------ path: Chronomancer
-card("or_stopped_clock", "Stopped Clock", 1, "X", "enemy", [DELAY()], "Rank 4 only. Delay the target.",
+card("or_stopped_clock", "Stopped Clock", 1, "X", "enemy", [DELAY(), OMEN(1, if_="m.attacking")], "Rank 4 only. Delay the target. If it means to attack, gain 1 Omen.",
      cat=V, use=[4], sub=CH,
      flavour="The clock on my chest stopped the day I walled myself in.",
      note="From the back rank, the Chronomancer stops the brass clock's hands with a finger.",
-     arch=CH, up={"text": "Rank 4 only. Delay the target. Deal 2.", "fx": [DELAY(), D(2)]})
+     arch=CH, up={"text": "Rank 4 only. Delay the target. Deal 2. If it means to attack, gain 1 Omen.", "fx": [DELAY(), D(2), OMEN(1, if_="m.attacking")]})
 card("or_broken_pendulum", "Broken Pendulum", 2, "X", "enemy", [DELAY(), D(1, per="spent_before", k=1, max=7)],
      "Echo. Delay the target. Deal 1, plus 1 per vigour spent before this in the Ordo, at most 7.",
      cat=V, kw=["Echo"], sub=CH,
@@ -465,18 +467,18 @@ card("or_read_the_signs", "Read the Signs", 1, "X", "enemy", [D(2), OMEN(2), OME
      arch=AU, up={"text": "Rank 4 only. Deal 4. Gain 2 Omen, 1 more if the target means to attack, and 1 more if this "
                           "is first in the Ordo.",
                   "fx": [D(4), OMEN(2), OMEN(1, if_="m.attacking"), OMEN(1, if_="first")]})
-card("or_wring_the_bird", "Wring the Bird", 0, "X", "self", [OMEN(2), SELFDMG(1)], "Gain 2 Omen. Lose 1 HP.", cat=V,
+card("or_wring_the_bird", "Wring the Bird", 0, "X", "self", [OMEN(3), SELFDMG(1)], "Gain 3 Omen. Lose 1 HP. Exhaust.", kw=["Exhaust"], cat=V,
      sub=AU,
      flavour="A small life for a long look.",
      note="The Augur's trembling hands over a dead wren, blood on the feathers.",
-     arch=AU, up={"text": "Gain 3 Omen. Lose 1 HP.", "fx": [OMEN(3), SELFDMG(1)]})
+     arch=AU, up={"text": "Gain 4 Omen. Lose 1 HP. Exhaust.", "fx": [OMEN(4), SELFDMG(1)]})
 card("or_foretold_ruin", "Foretold Ruin", 1, "X", "enemy",
-     [D(3), D(5, if_="t.targeting_me"), OMEN(1, if_="m.targeting_me")],
-     "Deal 3. If the target means to attack you, deal 5 more and gain 1 Omen.", cat=V, sub=AU,
+     [D(3), D(5, bonus=True, if_="t.targeting_me"), OMEN(1, if_="m.targeting_me")],
+     "Deal 3, or 8 if the target means to attack you. If it does, gain 1 Omen.", cat=V, sub=AU,
      flavour="You came for the blind one. The blind one saw you first.",
      note="A diving foe reaches the back rank and meets a fistful of bone.",
-     arch=AU, up={"text": "Deal 4. If the target means to attack you, deal 7 more and gain 1 Omen.",
-                  "fx": [D(4), D(7, if_="t.targeting_me"), OMEN(1, if_="m.targeting_me")]})
+     arch=AU, up={"text": "Deal 4, or 11 if the target means to attack you. If it does, gain 1 Omen.",
+                  "fx": [D(4), D(7, bonus=True, if_="t.targeting_me"), OMEN(1, if_="m.targeting_me")]})
 card("or_knucklebone_charm", "Knucklebone Charm", 1, "X", "ally", [B(4, per="omen", k=1), W(1)],
      "A hero gains 4 Block, plus 1 per Omen you hold, and 1 Ward.", cat=V, sub=AU,
      flavour="Wear it. The bones know where you will be hit.",
@@ -484,14 +486,13 @@ card("or_knucklebone_charm", "Knucklebone Charm", 1, "X", "ally", [B(4, per="ome
      arch=AU, up={"text": "A hero gains 6 Block, plus 1 per Omen you hold, and 1 Ward.",
                   "fx": [B(6, per="omen", k=1), W(1)]})
 card("or_rebuke_the_seen", "Rebuke the Seen", 2, "X", "all_enemies",
-     [D(6, if_="t.attacking"), A(V, 1, if_="t.attacking"), D(3, if_="t.attacking&first")],
-     "Deal 6 and apply 1 Void to every foe that means to attack. First in the Ordo: deal 3 more to each of them.", cat=V,
+     [D(6, if_="t.attacking"), D(3, bonus=True, if_="t.attacking&first"), A(V, 1, if_="t.attacking")],
+     "Deal 6 to every foe that means to attack, or 9 if this is first in the Ordo. Apply 1 Void to each of them.", cat=V,
      attr="stable", sub=AU,
      flavour="I saw you raise your hands. All of you.",
      note="Every foe with a raised weapon is struck by a falling star.",
-     arch=AU, up={"text": "Deal 8 and apply 1 Void to every foe that means to attack. First in the Ordo: deal 3 more to "
-                          "each of them.",
-                  "fx": [D(8, if_="t.attacking"), A(V, 1, if_="t.attacking"), D(3, if_="t.attacking&first")]})
+     arch=AU, up={"text": "Deal 8 to every foe that means to attack, or 11 if this is first in the Ordo. Apply 1 Void to each of them.",
+                  "fx": [D(8, if_="t.attacking"), D(3, bonus=True, if_="t.attacking&first"), A(V, 1, if_="t.attacking")]})
 card("or_reading_the_knots", "Reading the Knots", 1, "X", "enemy", [D(3), OMEN(1, per="m.hex", k=0.5)],
      "Deal 3. Gain 1 Omen, plus 1 per 2 Hex on the target.", cat=V, sub=AU,
      flavour="The witch's knots are a script. I read it aloud.",
@@ -518,24 +519,24 @@ card("or_needle_and_thread", "Needle and Thread", 1, "X", "ally_other", [PRIME(5
      note="A red needle stitches a line of rubric onto an ally's sleeve.",
      arch=FB + "+elementalist_focus", up={"text": "Prime 6. Another hero gains 2 Focus and 4 Block.",
                                           "fx": [PRIME(6), ST("focus", 2), B(4)]})
-card("or_woven_mantle", "Woven Mantle", 2, "X", "all_allies", [B(3, per="heroes_before", k=2, to="all_allies")],
-     "Every hero gains 3 Block, plus 2 per other hero who has acted before this in the Ordo.", cat=V, sub=FB,
+card("or_woven_mantle", "Woven Mantle", 2, "X", "all_allies", [B(3, per="heroes_before", k=2, max=6, to="all_allies")],
+     "Every hero gains 3 Block, plus 2 per other hero who has acted before this in the Ordo, at most 6 each.", cat=V, sub=FB,
      flavour="A cloak of every fate we have bent today.",
      note="A red-script mantle settles over the whole company.",
-     arch=FB, up={"text": "Every hero gains 4 Block, plus 3 per other hero who has acted before this in the Ordo.",
-                  "fx": [B(4, per="heroes_before", k=3, to="all_allies")]})
-card("or_scarlet_line", "Scarlet Line", 1, "X", "enemy", [D(2, per="prime_count", k=4), D(3, if_="t.moved")],
-     "Deal 2, plus 4 per Prime spent this round. Deal 3 more if the target was moved this round.", cat=V, sub=FB,
+     arch=FB, up={"text": "Every hero gains 4 Block, plus 3 per other hero who has acted before this in the Ordo, at most 8 each.",
+                  "fx": [B(4, per="heroes_before", k=3, max=8, to="all_allies")]})
+card("or_scarlet_line", "Scarlet Line", 1, "X", "enemy", [D(2, per="prime_count", k=4), D(3, bonus=True, if_="t.moved")],
+     "Deal 2, plus 4 per Prime spent this round, and 3 more if the target was moved this round.", cat=V, sub=FB,
      flavour="Pulled out of line, it stands on mine.",
      note="A red line drawn on the floor; a dragged foe stands on it.",
      arch=FB + "+bulwark_rank",
-     up={"text": "Deal 3, plus 5 per Prime spent this round. Deal 4 more if the target was moved this round.",
-         "fx": [D(3, per="prime_count", k=5), D(4, if_="t.moved")]})
-card("or_spill_the_ink", "Spill the Ink", 2, "X", "self", [PRIME(7), EN(1)], "Prime 7. Next round, +1 vigour.", cat=V,
+     up={"text": "Deal 3, plus 5 per Prime spent this round, and 4 more if the target was moved this round.",
+         "fx": [D(3, per="prime_count", k=5), D(4, bonus=True, if_="t.moved")]})
+card("or_spill_the_ink", "Spill the Ink", 2, "X", "self", [PRIME(5, per="spent_before", k=1, max=10), EN(1)], "Prime 5, plus 1 per vigour spent before this in the Ordo, at most 10. Next round, +1 vigour.", cat=V,
      sub=FB,
      flavour="The ink horn tips. A whole chapter, written at once.",
      note="Red ink floods across the floor and runs toward an ally's feet.",
-     arch=FB, up={"text": "Prime 9. Next round, +1 vigour.", "fx": [PRIME(9), EN(1)]})
+     arch=FB, up={"text": "Prime 7, plus 1 per vigour spent before this in the Ordo, at most 12. Next round, +1 vigour.", "fx": [PRIME(7, per="spent_before", k=1, max=12), EN(1)]})
 
 # ------------------------------------------------------------------ legendary
 card("or_the_last_hour", "The Last Hour", 1, "L", "self", [EN(1)],
@@ -557,27 +558,28 @@ card("or_the_turned_glass", "The Turned Glass", 2, "L", "self", [W(2)],
      up={"text": "Gain 2 Ward. Rite: at the start of each round, Delay the front foe, deal 4 to it, and gain 1 Omen. Exhaust.",
          "rite": {"on": "round_start", "fx": [DELAY(to="front_enemy"), D(4, to="front_enemy"), OMEN(1)]}})
 card("or_cassandra", "Cassandra", 1, "L", "self", [OMEN(2)],
-     "Gain 2 Omen. Rite: whenever a foe hits another hero, it takes 3, plus 1 per Omen you hold, and becomes Marked. Exhaust.",
+     "Gain 2 Omen. Rite: twice a round, when a foe hits another hero, it takes 3, plus 1 per Omen you hold, and becomes "
+     "Marked. Exhaust.",
      cat=V, kw=["Rite", "Exhaust"], sub=AU,
-     rite={"on": "ally_hit", "fx": [D(3, per="omen", k=1), ST("mark", 1)]},
+     rite={"on": "ally_hit", "per_round": 2, "fx": [D(3, per="omen", k=1), ST("mark", 1)]},
      flavour="I told them all. None of them listened. Every one of them paid.",
      note="A foe strikes the Bulwark and recoils, a bone driven into its own arm.",
      arch=AU + "+duelist_mark",
-     up={"text": "Gain 2 Omen. Every foe that means to attack becomes Vulnerable. Rite: whenever a foe hits "
-                 "another hero, it takes 3, plus 1 per Omen you hold, and becomes Marked. Exhaust.",
+     up={"text": "Gain 2 Omen. Every foe that means to attack becomes Vulnerable. Rite: twice a round, when a "
+                 "foe hits another hero, it takes 3, plus 1 per Omen you hold, and becomes Marked. Exhaust.",
          "fx": [OMEN(2), ST("vulnerable", 1, to="all_enemies", if_="t.attacking")]})
 card("or_the_bone_pouch", "The Bone Pouch", 1, "L", "self", [OMEN(3)],
-     "Gain 3 Omen. Rite: at the start of each round, every hero gains 1 Block per Omen you hold (at most 8) "
-     "and 1 Ward per 2 Omen (at most 4). Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=AU,
-     rite={"on": "round_start", "fx": [B(0, per="omen", k=1, max=8, to="all_allies"),
-                                       W(0, per="omen", k=0.5, max=4, to="all_allies")]},
+     "Gain 3 Omen. Rite: at the start of each round, every hero gains 1 Block per Omen you hold (at most 5) "
+     "and 1 Ward per 2 Omen (at most 2). Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=AU,
+     rite={"on": "round_start", "fx": [B(0, per="omen", k=1, max=5, to="all_allies"),
+                                       W(0, per="omen", k=0.5, max=2, to="all_allies")]},
      flavour="Every bone in it once warned someone. Now they warn us.",
      note="The Augur's pouch hangs open; little bones circle the company like moons.",
      arch=AU,
      up={"text": "Gain 3 Omen. Rite: at the start of each round, gain 1 Omen, then every hero gains 1 Block per Omen "
-                 "you hold (at most 8) and 1 Ward per 2 Omen (at most 4). Exhaust.",
-         "rite": {"on": "round_start", "fx": [OMEN(1), B(0, per="omen", k=1, max=8, to="all_allies"),
-                                              W(0, per="omen", k=0.5, max=4, to="all_allies")]}})
+                 "you hold (at most 5) and 1 Ward per 2 Omen (at most 2). Exhaust.",
+         "rite": {"on": "round_start", "fx": [OMEN(1), B(0, per="omen", k=1, max=5, to="all_allies"),
+                                              W(0, per="omen", k=0.5, max=2, to="all_allies")]}})
 card("or_the_rubric", "The Rubric", 1, "L", "self", [PRIME(4)],
      "Prime 4. Rite: whenever you play a card, Prime 2, and 2 more if that card was played on a Handoff. Exhaust.", cat=V,
      kw=["Rite", "Exhaust"], sub=FB,
@@ -626,8 +628,5 @@ NEEDS = [
     "prime_count counts actions that spent Prime, so back-to-back Prime cards merge into one and a Block card spends "
     "Prime too. The Fatebinder (Red Letter, Tapestry, Severance, The Severed Thread) wants each Prime placed this "
     "round counted instead.",
-    "Bind Fate reads 'hand': the real Ordo runs after commit_cards (main.gd), but Combat.simulate (the Ordo preview) "
-    "never removes planned cards, so the preview counts them and shows more Prime than resolves. simulate should "
-    "take the planned cards out of the clone's hands first.",
 ]
 
