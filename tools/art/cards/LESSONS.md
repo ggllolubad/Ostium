@@ -48,9 +48,27 @@ Every piece of feedback becomes a rule here, so the next input starts from it in
 - **L14. No rainbows.** Strike the Ring's five daubs, and later Turn the Ring's gems, read as a rainbow. Rule: course colours pulled toward the course inks, used as marks rather than saturated colour; red only for blood, doom and rubric; gold only on holy things. Check: in review, any card with four or more saturated hues fails.
 - **L15. Water layout only for heavy things.** The stinger and the bowl looked wrong half-submerged. Rule: water only for anchor, skull, bell, keg and other heavy objects. Check: an allow-list in code.
 
+### From review 3 (independent reviewer, 43 fails on 46 cards)
+- **L16. Crops keep the signature shape.** The anchor lost its crown and read as a cross; the handbell lost its mouth; the brine flask, the alembic's receiver and the bolt rod's base were cropped. Cause: layouts crop by bounding box. Rule: each object declares a `sig` box, and layouts may crop only the rest. Check: the build asserts at least 95% of `sig` is inside the frame with a 20 px margin.
+- **L17. Hung things hang.** The chain ended in mid-air on t_coast_glare, bw_k_scourge and or_augury_of_birds, and or_bind had two hang points. Cause: the beam and chain are drawn apart from the object. Rule: only objects with a `hook` anchor may hang, and the chain ends on it. Check: SUITS allows hang only with `hook`; the build asserts the chain end is within 3 px of the hook. Reference: al_red_work.
+- **L18. Object FX are ink FX.** Sine-wave steam (hood, broth, staunch, alembic), cartoon flames (brazier, candle, lantern), twig lightning and flat fog. Cause: objects carry their own quick FX. Rule: objects draw FX only through card_kit's ink FX. Check: the build fails if objects*.js emits a constant-width periodic stroke or an FX path not made by K.fx.
+- **L19. Counted copies differ.** Magnum Opus drew three identical flasks for three different brews. Rule: copies take their contents from the card text, or at least differ in seed, fill and tilt. Check: the build asserts distinct variants within a count.
+- **L20. Show the act, sometimes with a hand.** 44 of 46 object cards were still lifes, and the two hand cards used the same hand. Rule: every object card shows its object mid-act (pouring, cracking, unspooling, flung, bound, swung, pressed), and about a quarter include a hand or forearm from card_figure, with varied entry edges and angles. Check: comps record `act` and `hand`; the build fails if act is under 80% or hand under 20%, or if two hand cards share an edge and an angle within 15 degrees.
+- **L21. Art never contradicts the card's state words.** Frozen broth that steams, bloodstained Clean Linen, a freezing sea that stays liquid. Rule: state words set or forbid FX. Check: a table in code (frozen/frost forbids steam and requires rime; clean forbids stains; broken/cracked requires a crack; empty forbids contents); the build fails on a conflict.
+- **L22. Void holes vary and show their wall.** All 8 void cards had the same three floating dots. Rule: holes are seeded per card, drawn with D.hole with the wall showing, 1 or 2 of them, in the object or the ground. Check: no two void cards share a hole centre within 40 px; each hole overlaps the object or floor mask.
+- **L23. Pick by the card's own noun.** Handbell got a tower bell, Frost Phial a wine bottle, Gold Leaf coins, Augury of Birds a feather, Rat Bag no rats, Hartshorn no horn. Cause: scoring on note nouns. Rule: a noun in the card name wins, and a forced-noun table runs before scoring. Check: the build fails when a name noun from the table or library disagrees with the pick, unless overridden.
+
+### Strengthened checks (after review 3 showed L3, L8, L9 and L11 to L15 failing)
+- **L3:** a flatness metric. The share of 16 x 16 tiles in the object mask with luminance std under a threshold calibrated on bulwark/full.webp must not exceed the hero's share plus a margin.
+- **L8:** the build writes an unlabelled thumbs170.png. The lead has a fresh reviewer name each object, and a script diffs the names against the object keys. Any miss fails the batch.
+- **L9:** per-object ellipse ratios are recorded and asserted (max/min no more than 1.3); ledge contact and a contact shadow are asserted; the book has a single board path.
+- **L12 and L13:** checked per batch, not only over 744 cards: a unique (object, variant, layout), at most 2 cards per object, no layout over 30%, the same hand and angle counted as one layout, and the subject bbox at least 35% of the frame.
+- **L14:** automated. Saturated hue clusters (S > 0.45, V > 0.35, each over 0.3% of the area): fail at 4 or more. Colour roles are tagged on parts; red or gold in an untagged part fails.
+- **L15:** the water allow-list is asserted in SUITS.
+
 ## Checks to run before reporting
 
-1. The build: pose limits (L4), object counts (L12), layout shares and repeats (L13), water allow-list (L15). All must pass.
+1. The build: pose limits (L4), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9). All must pass.
 2. The unlabelled 170 px thumbnail sheet (L8): name each object before reading the labels.
 3. The Form checklist at 2x on every new or changed object (L9).
 4. A review beside the hero render (L3, L10).
