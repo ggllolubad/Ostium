@@ -1,0 +1,502 @@
+{
+ "bw_aegis_of_the_door": {
+  "suggest": "door",
+  "why": "the church door upright, its keyhole plate lit: the door is the card"
+ },
+ "bw_barbed_plate": {
+  "suggest": "barbs",
+  "why": "barbed forearm plate: the barbs are the thing"
+ },
+ "bw_blood_for_iron": {
+  "suggest": "hand",
+  "why": "a gauntlet smearing red across a lead patch (new object idea: breastplate)"
+ },
+ "bw_bound_with_rope": {
+  "suggest": "rope",
+  "why": "names rope; the current render shows none"
+ },
+ "bw_bramble_wall": {
+  "suggest": "barbs",
+  "why": "names brambles; the current render shows none"
+ },
+ "bw_breath_of_the_north": {
+  "suggest": "hood",
+  "why": "breath smoking white through the helm slit (new object idea: great helm)"
+ },
+ "bw_briar_mail": {
+  "suggest": "barbs",
+  "why": "barbed penitent mail (new object idea: barbed hauberk)"
+ },
+ "bw_close_ranks": {
+  "suggest": "shield",
+  "why": "shields overlapped in a line"
+ },
+ "bw_cold_iron": {
+  "suggest": "chain",
+  "why": "iron rimed with frost: the iron is the card"
+ },
+ "bw_deathless": {
+  "suggest": "skull",
+  "why": "a ring of the fallen, shown as bone; no foes"
+ },
+ "bw_deep_winter": {
+  "suggest": "door",
+  "why": "snow drifted against the door"
+ },
+ "bw_draw_their_eyes": {
+  "suggest": "doorajar",
+  "why": "the mace rapped on the door ring: the ring knocker"
+ },
+ "bw_frozen_bulwark": {
+  "suggest": "shield",
+  "why": "a shield rimed white"
+ },
+ "bw_fur_mantle": {
+  "suggest": "hood",
+  "why": "names the fur mantle (new object idea: fur mantle)"
+ },
+ "bw_glacier_wall": {
+  "suggest": "door",
+  "why": "ice thickening on the pine door"
+ },
+ "bw_grit_your_teeth": {
+  "suggest": "hand",
+  "why": "the gauntlet laid on the iron hinges"
+ },
+ "bw_hedge_of_spikes": {
+  "suggest": "cord",
+  "why": "barbed cord lashed round"
+ },
+ "bw_hold_the_line": {
+  "suggest": "door",
+  "why": "the door planted in the aisle"
+ },
+ "bw_hold_through_the_night": {
+  "suggest": "lantern",
+  "why": "a lantern guttering in the snow as the light goes"
+ },
+ "bw_into_the_breach": {
+  "suggest": "boot",
+  "why": "the iron sabaton stepping into the front rank"
+ },
+ "bw_k_bar_the_door": {
+  "suggest": "doorajar",
+  "why": "a door barred"
+ },
+ "bw_keep_the_back_rank": {
+  "suggest": "shield",
+  "why": "the guard held over the back rank"
+ },
+ "bw_martyrdom": {
+  "suggest": "shield",
+  "why": "every weapon turned on one shield: blades stuck in it"
+ },
+ "bw_patched_with_lead": {
+  "suggest": "hammer",
+  "why": "the hammer that beats the lead patch on"
+ },
+ "bw_pine_and_iron": {
+  "suggest": "door",
+  "why": "iron-bound pine with frost running from it"
+ },
+ "bw_punishing_wall": {
+  "suggest": "barbs",
+  "why": "the barbed door face"
+ },
+ "bw_rime_coat": {
+  "suggest": "shield",
+  "why": "rime racing over the face"
+ },
+ "bw_scar_tissue": {
+  "suggest": "skull",
+  "why": "blood under the helm (new object idea: great helm)"
+ },
+ "bw_shoulder_their_burden": {
+  "suggest": "hand",
+  "why": "a gauntlet laid on a shoulder"
+ },
+ "bw_spiteful_guard": {
+  "suggest": "barbs",
+  "why": "a claw caught on the spikes"
+ },
+ "bw_unbroken": {
+  "suggest": "anvil",
+  "why": "unbroken iron"
+ },
+ "bw_under_the_door": {
+  "suggest": "doorajar",
+  "why": "the door tilted over, the red rubric strip fluttering on its ring"
+ },
+ "bw_undying_watch": {
+  "suggest": "bone",
+  "why": "bones stirring in the ossuary doorway"
+ },
+ "bw_windbreak": {
+  "suggest": "lantern",
+  "why": "a gale of frost bending the flame"
+ },
+ "bw_windward_shield": {
+  "suggest": "shield",
+  "why": "the shield turned into the wind"
+ },
+ "bw_winter_vigil": {
+  "suggest": "candle",
+  "why": "a vigil candle in the frost"
+ },
+ "du_drain_the_bowl": {
+  "suggest": "basin",
+  "why": "names the bowl; the act is the bowl tipping (attack exception)"
+ },
+ "du_wipe_the_blade": {
+  "suggest": "sword",
+  "why": "the heading sword wiped on a cloth"
+ },
+ "el_blot_spread": {
+  "suggest": "scroll",
+  "why": "a blot spreading through vellum"
+ },
+ "el_bright_margin": {
+  "suggest": "book",
+  "why": "an illuminated capital in four inks (no gold: not holy)"
+ },
+ "el_cascade": {
+  "suggest": "lantern",
+  "why": "two flares chasing: no act of the hero in it"
+ },
+ "el_count_the_colours": {
+  "suggest": "eye",
+  "why": "the clouded eye that counts"
+ },
+ "el_cross_stroke": {
+  "suggest": "scroll",
+  "why": "two inks sloshing together where they cross"
+ },
+ "el_every_colour": {
+  "suggest": "signet",
+  "why": "the sigil ring with every colour"
+ },
+ "el_fill_the_gaps": {
+  "suggest": "jar",
+  "why": "the missing colours dabbed in"
+ },
+ "el_second_spark": {
+  "suggest": "lantern",
+  "why": "already READS: a lantern throwing a second spark"
+ },
+ "el_sulphur_match": {
+  "suggest": "candle",
+  "why": "names the match (new object idea: sulphur match)"
+ },
+ "el_weigh_the_stacks": {
+  "suggest": "scales",
+  "why": "names weighing"
+ },
+ "el_deep_cold": {
+  "suggest": "phial",
+  "why": "brine turning to rime"
+ },
+ "el_frost_the_swing": {
+  "suggest": "hand",
+  "why": "pale ink riming a raised arm"
+ },
+ "el_glass_halo": {
+  "suggest": "hood",
+  "why": "the hood whose six sigils light"
+ },
+ "el_lay_the_ground": {
+  "suggest": "book",
+  "why": "a thick wash of one ink, brush strokes showing"
+ },
+ "el_pressure": {
+  "suggest": "hand",
+  "why": "a stained fist clenched"
+ },
+ "el_prism_ward": {
+  "suggest": "shard",
+  "why": "light through a cracked window, six thin bands"
+ },
+ "el_reaction_shield": {
+  "suggest": "hood",
+  "why": "light folding round like a cloak"
+ },
+ "el_read_the_colours": {
+  "suggest": "book",
+  "why": "reading the colours like a line"
+ },
+ "el_seal_the_jar": {
+  "suggest": "jar",
+  "why": "names the jar and its wax seal"
+ },
+ "el_sigil_on_the_door": {
+  "suggest": "door",
+  "why": "names the door and the sigil painted on it"
+ },
+ "el_sigils_on_the_skin": {
+  "suggest": "inkarm",
+  "why": "sigils burning on the forearm"
+ },
+ "el_ward_sigil": {
+  "suggest": "hand",
+  "why": "a ward sigil painted on a gauntlet"
+ },
+ "el_warding_sigil": {
+  "suggest": "inkarm",
+  "why": "ward sigils inked on the forearm"
+ },
+ "el_wet_the_nib": {
+  "suggest": "rapier",
+  "why": "the blade drinking the colour"
+ },
+ "al_base_to_gold": {
+  "suggest": "crucible",
+  "why": "the alembic flash: the vessel is the card"
+ },
+ "al_buboes_burst": {
+  "suggest": "flask",
+  "why": "swellings split: no act of the hero in it"
+ },
+ "al_beak_mask": {
+  "suggest": "hood",
+  "why": "names the beaked mask (new object idea: beak mask)"
+ },
+ "al_fume_hood": {
+  "suggest": "hood",
+  "why": "names the hood, the cloth tied over the mouth"
+ },
+ "al_ironbark_rub": {
+  "suggest": "jar",
+  "why": "a jar of dark salve"
+ },
+ "al_measured_dose": {
+  "suggest": "phial",
+  "why": "a line marked on the glass by a thumbnail"
+ },
+ "al_round_of_tonic": {
+  "suggest": "cup",
+  "why": "one brown bottle passed down the line"
+ },
+ "al_tincture": {
+  "suggest": "phial",
+  "why": "drops counted from a dropper"
+ },
+ "or_collapse": {
+  "suggest": "shard",
+  "why": "a point of starless dark (a bored void hole)"
+ },
+ "or_cut_the_cord": {
+  "suggest": "shears",
+  "why": "scissors closing on a red thread"
+ },
+ "or_dread_vision": {
+  "suggest": "mirror",
+  "why": "the stars staring back"
+ },
+ "or_entrails": {
+  "suggest": "bone",
+  "why": "reading what spilled"
+ },
+ "or_forestalled": {
+  "suggest": "clock",
+  "why": "a swing stopped dead in time"
+ },
+ "or_fulfil_the_omen": {
+  "suggest": "knuckles",
+  "why": "every bone in the pouch"
+ },
+ "or_ill_omen": {
+  "suggest": "feather",
+  "why": "names the crow feather"
+ },
+ "or_knucklebones": {
+  "suggest": "knuckles",
+  "why": "names the knucklebones"
+ },
+ "or_late_blow": {
+  "suggest": "key",
+  "why": "the clock spring wound back for a second blow"
+ },
+ "or_painted_eye": {
+  "suggest": "eye",
+  "why": "names the painted eye"
+ },
+ "or_read_the_signs": {
+  "suggest": "birds",
+  "why": "the Augur listening to the birds: no act"
+ },
+ "or_reading_the_knots": {
+  "suggest": "cord",
+  "why": "a knotted cord read like text"
+ },
+ "or_red_letter": {
+  "suggest": "book",
+  "why": "a single red capital"
+ },
+ "or_reverse_the_glass": {
+  "suggest": "hourglass",
+  "why": "names the glass, flipped"
+ },
+ "or_scarlet_line": {
+  "suggest": "needle",
+  "why": "a red line drawn"
+ },
+ "or_second_hand": {
+  "suggest": "clock",
+  "why": "names the clock hand"
+ },
+ "or_stall": {
+  "suggest": "hourglass",
+  "why": "the sand hanging"
+ },
+ "or_stopped_sand": {
+  "suggest": "hourglass",
+  "why": "names the sand, stopped"
+ },
+ "or_stutter": {
+  "suggest": "handbell",
+  "why": "one beat behind: a struck bell"
+ },
+ "or_tapestry": {
+  "suggest": "laundry",
+  "why": "a hanging red tapestry"
+ },
+ "or_unheeded_warning": {
+  "suggest": "sword",
+  "why": "a raised blade turning to smoke"
+ },
+ "or_unmaking": {
+  "suggest": "shield",
+  "why": "a shield crumbling into motes"
+ },
+ "or_unwritten": {
+  "suggest": "scroll",
+  "why": "a line scraped off (new object idea: wax tablet)"
+ },
+ "or_bird_bone_ward": {
+  "suggest": "skull",
+  "why": "tiny bird skulls on red thread"
+ },
+ "or_blind_spot": {
+  "suggest": "eye",
+  "why": "the blindfold eye"
+ },
+ "or_clock_face": {
+  "suggest": "clock",
+  "why": "names the clock face, one numeral missing"
+ },
+ "or_foretelling": {
+  "suggest": "hand",
+  "why": "long fingers resting, stars clinging"
+ },
+ "or_forewarn": {
+  "suggest": "handbell",
+  "why": "a warning"
+ },
+ "or_knucklebone_charm": {
+  "suggest": "knuckles",
+  "why": "names the knucklebone charm"
+ },
+ "or_needle_and_thread": {
+  "suggest": "needle",
+  "why": "names the needle and thread"
+ },
+ "or_quiet_hour": {
+  "suggest": "candle",
+  "why": "still candlelight"
+ },
+ "or_starlit_ward": {
+  "suggest": "hood",
+  "why": "a ring of tiny stars"
+ },
+ "or_woven_mantle": {
+  "suggest": "hood",
+  "why": "names the red-script mantle"
+ },
+ "or_woven_shield": {
+  "suggest": "cord",
+  "why": "a web of red thread"
+ },
+ "backed_with_silver": {
+  "suggest": "shard",
+  "why": "a silvered shard pressed on"
+ },
+ "burn_the_poppet": {
+  "suggest": "poppet",
+  "why": "names the poppet, held to the candle"
+ },
+ "cracked_glass": {
+  "suggest": "mirror",
+  "why": "names the cracked glass"
+ },
+ "dirge": {
+  "suggest": "candle",
+  "why": "a ring of candles"
+ },
+ "doubled_image": {
+  "suggest": "mirror",
+  "why": "a reflection stepping out"
+ },
+ "echoing_hex": {
+  "suggest": "mirror",
+  "why": "a curse coming back out of the glass"
+ },
+ "glint": {
+  "suggest": "shard",
+  "why": "a glint in the cracked glass"
+ },
+ "hedge_charm": {
+  "suggest": "cord",
+  "why": "a black thread wound round"
+ },
+ "knotted_cord": {
+  "suggest": "cord",
+  "why": "names the knotted cord"
+ },
+ "lych_gate": {
+  "suggest": "doorajar",
+  "why": "names the roofed gate"
+ },
+ "mirror_shard": {
+  "suggest": "shard",
+  "why": "names the shard"
+ },
+ "mirror_skin": {
+  "suggest": "hood",
+  "why": "shards from the hood settling"
+ },
+ "toll_the_hour": {
+  "suggest": "handbell",
+  "why": "names the toll; the bell is the card"
+ },
+ "twist_the_pin": {
+  "suggest": "poppet",
+  "why": "a pin twisted in a poppet (Pin the Poppet keeps the hero)"
+ },
+ "ve_bear_it": {
+  "suggest": "reliquary",
+  "why": "upright, unmoved"
+ },
+ "ve_bitter_gift": {
+  "suggest": "ewer",
+  "why": "green and violet-black given"
+ },
+ "ve_illuminated_initial": {
+  "suggest": "initial",
+  "why": "names the initial (attack exception)"
+ },
+ "ve_open_hand": {
+  "suggest": "palm",
+  "why": "the open inked palm (Open Palm keeps the hero)"
+ },
+ "ve_shelter": {
+  "suggest": "hood",
+  "why": "the long sleeve raised: the mantle"
+ },
+ "ve_stand_near": {
+  "suggest": "hearth",
+  "why": "the hearth Vessel standing near"
+ },
+ "ve_weigh": {
+  "suggest": "weights",
+  "why": "names weighing"
+ }
+}

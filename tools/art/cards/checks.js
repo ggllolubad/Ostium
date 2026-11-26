@@ -66,7 +66,22 @@ function runMeta(metas) {
   el.length ? fail('L9', 'ellipse ratios disagree: ' + el.map(m => `${m.id} ${m.ells.map(x => x.toFixed(2)).join('/')}`).join(', ')) : pass('L9', 'ellipse ratios agree within 1.3 on every object that declares them');
   const ct = objs.filter(m => m.contact != null && m.contact > 8);
   ct.length ? fail('L9', 'not touching its surface: ' + ct.map(m => `${m.id} ${m.contact.toFixed(0)}px`).join(', ')) : pass('L9', 'every object on a surface touches it, with a contact shadow');
+  // L58: variety. Deck-wide on every run (a deck property, not a batch one): within one calling, the shared pool and
+  // each world, no object on more than 3 object cards; a calling's listed signature object may take 4.
+  const R = reuse();
+  R.over.length ? fail('L58', 'objects on too many cards in one calling: ' + R.over.map(x => `${x.group} ${x.obj} x${x.ids.length}`).join(', '), R.over.flatMap(x => x.ids)) : pass('L58', `no object on more than 3 cards in any calling, the shared pool or a world (signatures at most 4: ${Object.entries(SIGNATURE).map(([k, v]) => k + ' ' + v).join(', ')}); ${R.cards} object cards on ${R.objects} objects; uses per object ${R.hist}`);
   return out;
 }
+// L58: the signature exception, listed explicitly (a calling's own object, allowed on 4 cards with different silhouettes)
+const SIGNATURE = { vessel: 'chalice', alchemist: 'flask', hexweaver: 'poppet', oracle: 'hourglass' };
+const CAP = 3;
+function reuse() {
+  const S = require('./samples'); S.allocate();
+  const per = {}; let cards = 0;
+  for (const id of Object.keys(S.CARDS)) { const [k, obj] = S.describe(id).split(' '); if (['attack', 'cast', 'block'].includes(k) || obj === 'hand-made' || !obj) continue; cards++; const g = S.CARDS[id].cls || 'shared'; ((per[g] = per[g] || {})[obj] = per[g][obj] || []).push(id); }
+  const over = [], hist = {}; let objects = 0;
+  for (const [g, m] of Object.entries(per)) for (const [obj, ids] of Object.entries(m)) { objects++; hist[ids.length] = (hist[ids.length] || 0) + 1; if (ids.length > (SIGNATURE[g] === obj ? CAP + 1 : CAP)) over.push({ group: g, obj, ids }); }
+  return { per, over, cards, objects, hist: Object.entries(hist).map(([n, c]) => `${n}:${c}`).join(' ') };
+}
 function report(results) { return results.map(r => `${r.ok ? 'PASS' : 'FAIL'}  ${r.lesson.padEnd(4)} ${r.msg}`).join('\n'); }
-module.exports = { runMeta, report };
+module.exports = { runMeta, report, reuse, SIGNATURE, CAP };

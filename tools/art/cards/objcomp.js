@@ -401,4 +401,5 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   return { course: c, defs, body, meta };
 }
 
-module.exports = { pickRaw, RETIRED, spread, FAMILY, probe, fillOf, fillOk, SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT };
+module.exports = { pickRaw, RETIRED, spread, FAMILY, probe, fillOf, fillOk, SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT,
+  ANG, SCALE, LONG, ONLY, NO_TURN, ACT_DEFAULT, GOLD_OBJECTS };   // per-object tables, exported so the variety objects (objects6+, samples.js) can register their defaults
