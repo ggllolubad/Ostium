@@ -49,6 +49,39 @@ object picking, overrides), `render.js`, `downscale.py`.
 
 Shared, world and foe-added cards have no hero, so their hero kinds become objects.
 
+## Pose variety and object framing (second review, 2026-11-25)
+
+- Every calling has three act poses (attacks and casts) and two block poses (`RIG[calling].act` and `.block`). A card
+  takes the first pose whose `words` match its name, then its note, else one by a hash of its id. Styles: `swing`,
+  `cuts`, `strike`, `cast` (with `spray` for a wide fling), `pour` (a stream to the floor, fumes); block styles: guard
+  (default), `pour` (a poured barrier of fumes), `salt` (a salt line the blow stops at).
+- Object cards use one of five layouts, picked by hash among those that suit the object (`SUITS`): `close` (scaled up
+  to crop off an edge), `ledge` (resting on a stone stair edge), `hang` (from an iron hook in a beam), `water` (the
+  lower part under dark water), `held` (a gloved hand from the frame edge closes on the object's grip; objects that
+  return a `grip`). The light pool moves and changes shape with the layout and the seed.
+- Counts: two, twin, pair, both, double draw two copies (long things crossed, round things side by side); three or
+  thrice draw three.
+- Families share cards by hash unless the name names the object: bandage, suture, tourniquet, splint; brazier, coal
+  pan, tongs; vial, jar; candle, lantern.
+- Test ids: `@<calling>/<kind>/<course>/<pose index>` for poses, `<card id>!<layout>` to force a layout.
+
+## Form checklist (every object, Cole, 2026-11-25)
+
+1. **One viewpoint per object**: three-quarter from slightly above unless the object hangs high (a bell, seen from
+   below) or lies flat (a scroll, seen from the front). Do not mix front-on parts with tilted parts.
+2. **Ellipses agree**: tops, rims, openings and bases are ellipses at one ratio for the object (about 0.2 for a
+   vessel seen from a little above). A turned profile closes with the front arc of its base (`turned()` does it).
+3. **Thickness shows** wherever the material has it: rims, lids, covers, boards, blades, straps, doors, frames.
+   `D.slab` gives a flat-fronted thing its depth: the outline pushed back and down-right, darker, drawn first.
+4. **Parts connect**: handles attach into the body, hinges sit on both leaves, cords wrap round (pass behind and come
+   back) instead of lying on top, a strip leaves a roll from its outer turn.
+5. **Covers follow pages**: a book's boards and spine curve under the fanned page block, with the block's thickness
+   at the near and fore edges and the board's own thickness below.
+6. **Shading follows the form** under the upper-left key light (the cel band falls lower right on every part); a cast
+   shadow agrees with the surface the object rests on (ledge, water line, floor).
+7. **Nothing reads cut-out**: if a part looks like a paper shape, give it an edge, a rim, a fold or a second plane.
+8. **Check at card size and at 2x** (`objsheet.js <out> <course> <keys> <scale> <cols>`).
+
 ## Data-driven
 
 - **Hero**: the calling's figure, or the path variant from `worlds/hero_paths_A/B` when the card's `arch` names one.

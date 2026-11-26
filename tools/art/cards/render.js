@@ -8,8 +8,8 @@ const { execFileSync } = require('child_process');
 const { chromium } = require('playwright');
 const S = require('./samples');
 const BASE = '/home/claude/ostium/build/emblem2';
-const OUT = process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r') ? BASE + '/review' : BASE;
-const fname = id => id.replace(/^@/, 'test_').replace(/\//g, '_');
+const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
+const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
 
 (async () => {
   const ids = process.argv.slice(2).filter(a => !a.startsWith('-'));

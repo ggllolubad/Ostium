@@ -131,6 +131,8 @@ function hourglass(f, o = {}) {
   // caps: thick turned oak boards, bevelled, nailed
   const cap = (y, h, flipY) => {
     const s = flipY ? -1 : 1;
+    const ty = flipY ? y - h : y;   // the cap's upper edge; its top face shows above it, receding up and to the right
+    f.part(F([[-150, ty, 1], [150, ty, 1], [164, ty - 16, 1], [-136, ty - 16, 1]]), { fill: mix(OAKL, '#fff', 0.12), shade: 0.3, inkW: 1.4, cast: false, tex: T(f, 'wood'), texOp: 0.6 });
     f.part(F([[-150, y, 1], [150, y, 1], [146, y + s * h * 0.65], [138, y + s * h, 1], [-138, y + s * h, 1], [-146, y + s * h * 0.65]]), { fill: OAKL, shade: 0.42, tex: T(f, 'wood'), texOp: 0.7, sharp: false, k: 0.5 });
     f.line(F([[-146, y + s * h * 0.62], [146, y + s * h * 0.62]]), 1.4, INK, { op: 0.7 });
     f.line(F([[-140, y + s * 3], [140, y + s * 3]]), 1.2, mix(OAKL, '#fff', 0.45), { op: 0.6 });
@@ -187,6 +189,7 @@ function mirror(f, o = {}) {
   f.part(F(ell([-38, 404], 13, 11, 0.2, 12)), { fill: BONE, shade: 0.35, inkW: 1.3, tex: T(f, 'mottle'), texOp: 0.4 }); f.flat(F(ell([-38, 400], 3, 3, 0, 6)), INK);
   f.line(F([[-46, 410], [-32, 412]]), 1, INK, { op: 0.6 });
   // frame: tarnished pewter oval, bead rim, scrollwork stub where the handle joins
+  D.slab(f, F(ell([0, 0], 158, 190, 0, 36)), [10, 8], mix(PEWTER, '#000', 0.5));
   f.part(F(ell([0, 0], 158, 190, 0, 36)), { fill: PEWTER, shade: 0.45, tex: T(f, 'mottle'), texOp: 0.6 });
   f.part(F([[-34, 168], [34, 168], [28, 204], [-28, 204]]), { fill: mix(PEWTER, '#000', 0.1), shade: 0.4, inkW: 1.3 });
   for (let i = 0; i < 28; i++) { const a = i / 28 * Math.PI * 2, p = [Math.cos(a) * 146, Math.sin(a) * 177]; if (r() < 0.12) continue; f.rivet(F([p])[0], 3.2, '#9a9c96'); }
@@ -285,6 +288,7 @@ function bell(f, o = {}) {
 function shield(f, o = {}) {
   const F = frame(o.at || [0, 0], o.ang || 0, o.s || 1), r = f.r, a0 = o.ang || 0, sc = o.s || 1;
   const out = [[-84, -112, 1], [-30, -120], [30, -120], [84, -112, 1], [86, -40], [70, 30], [36, 90], [0, 128, 1], [-36, 90], [-70, 30], [-86, -40]];
+  D.slab(f, F(out), [10 * sc, 8 * sc], '#3a2a1a');
   f.part(F(out), { fill: '#5e4a34', shade: 0.45, tex: T(f, 'wood'), texOp: 0.8 });
   // the device painted on it long ago, flaking: a chevron in drowned blue
   const chev = [[-80, -10], [0, -80], [80, -10], [80, 28], [0, -40], [-80, 28]];

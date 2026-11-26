@@ -70,53 +70,28 @@ function flecks(r, c, R, dir, col) {
 }
 const fxInk = course => course === 'physical' ? INK : mix(INK6[course] || INK, '#16110e', 0.6);
 
-// ==== hero rigs per calling and kind
-// Pose (bone rotations, posed the way card_figure.js does), placement (the head joint lands on `at`, at `scale`) and
-// the points the FX hang on, in figure px on a named bone. Tuned by eye with posepeek.js and the @cls/kind test ids.
-// Path variants share their calling's rig: their joints sit where the base figure's do.
-const RIG = {
-  bulwark: {
-    attack: { style: 'swing', pose: { upperarm_n: -160, forearm_n: 40, hand_n: 160, torso: 10, upperarm_f: -10, lean: 4 }, at: [330, 372], scale: 1.22, weapon: ['mace', [500, 236]], pivot: 'upperarm_n', sweep: 85 },
-    block: { pose: { torso: 4, head: 4, lean: -2, upperarm_f: -2 }, at: [380, 352], scale: 1.42, face: ['door', [526, 330]], wood: true },
-  },
-  duelist: {
-    attack: { style: 'cuts', pose: { upperarm_n: -35, forearm_n: -5, hand_n: -10, torso: 6, lean: 6, head: -6, cape: -10 }, at: [300, 236], scale: 1.2, weapon: ['rapier', [588, 518]], off: 'dagger' },
-    block: { pose: { upperarm_n: -30, forearm_n: -70, hand_n: -30, torso: -4, lean: -3 }, at: [330, 250], scale: 1.25, face: ['rapier', [520, 460]] },
-  },
-  elementalist: {
-    cast: { pose: { upperarm_n: -60, forearm_n: 110, hand_n: -30, torso: -4, head: -10 }, hide: ['sign'], at: [262, 300], scale: 1.32, hand: ['hand_n', [394, 296]] },
-    block: { pose: { upperarm_f: -12, forearm_f: -12, torso: -5, head: -4, upperarm_n: 10 }, hide: ['sign'], at: [300, 290], scale: 1.3, face: ['book', null] },
-  },
-  alchemist: {
-    cast: { pose: { upperarm_f: -25, forearm_f: -15, torso: 5, lean: 4 }, at: [300, 300], scale: 1.2, hand: ['flask', null], glass: true },
-    block: { pose: { upperarm_n: -25, forearm_n: -60, torso: -4, lean: -2 }, at: [330, 300], scale: 1.25, face: ['hand_n', null] },
-  },
-  oracle: {
-    cast: { pose: { upperarm_n: -55, forearm_n: 25, torso: 3, head: -4 }, at: [300, 280], scale: 1.25, hand: ['hourglass', null] },
-    block: { pose: { upperarm_n: -35, forearm_n: -35, torso: -5, lean: -2 }, at: [330, 290], scale: 1.25, face: ['hourglass', null] },
-  },
-  hexweaver: {
-    cast: { pose: { upperarm_n: -45, forearm_n: 15, torso: 4, head: -6 }, at: [300, 300], scale: 1.3, hand: ['poppet', null] },
-    attack: { style: 'strike', pose: { upperarm_f: 50, forearm_f: 60, hand_f: 10, torso: 8, lean: 5 }, at: [300, 300], scale: 1.3, weapon: ['hand_f', null] },
-    block: { pose: { upperarm_n: -20, forearm_n: -40, torso: -8, lean: -3 }, at: [320, 300], scale: 1.3, face: ['poppet', null] },
-  },
-  vessel: {
-    cast: { pose: { upperarm_n: -60, forearm_n: -15, torso: 3 }, at: [330, 250], scale: 1.2, hand: ['hand_n', null] },
-    attack: { style: 'strike', pose: { upperarm_f: -60, forearm_f: -20, torso: 6, lean: 4 }, at: [330, 250], scale: 1.2, weapon: ['hand_f', null] },
-    block: { pose: { upperarm_n: 30, forearm_n: -60, upperarm_f: -30, forearm_f: -60, torso: -3 }, at: [340, 250], scale: 1.2, face: ['hand_f', null] },
-  },
-};
-// a calling with no attack rig attacks the way it casts (the Elementalist, Alchemist and Oracle throw or flick)
-const DEFAULT_RIG = { attack: { style: 'strike', pose: {}, at: [330, 300], scale: 1.2 }, cast: { pose: {}, at: [300, 300], scale: 1.25 }, block: { pose: {}, at: [380, 330], scale: 1.3 } };
-const rigOf = (cls, kind) => Object.assign({}, DEFAULT_RIG[kind], (RIG[cls] || {})[kind] || {});
+// ==== hero rigs per calling (the pose table lives in rig.js)
+const { RIG, DEFAULT_RIG } = require('./rig');
 const seedOf = id => { let h = 7; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return 1000 + (h % 8000); };
+// choose a pose: o.v forces one; else the first whose words match the card's name, then its note; else by id hash
+function rigOf(card, id, list, o = {}) {
+  const L = ((RIG[card.cls] || DEFAULT_RIG)[list]) || DEFAULT_RIG[list];
+  if (o.v != null) return Object.assign({}, L[o.v % L.length]);
+  const name = (card.name || '').toLowerCase(), note = (card.note || '').toLowerCase();
+  const hit = L.find(v => v.words && v.words.test(name)) || L.find(v => v.words && v.words.test(note));
+  return Object.assign({}, hit || L[seedOf(id) % L.length]);
+}
 // a point on a bone (null point = that bone's joint), mapped to the card; falls back to the near hand
 const bonePt = (P, ref) => { if (!ref || !P.h.J[ref[0]]) return P.J('hand_n'); return ref[1] ? P.M(P.h.at(ref[0], ref[1])) : P.J(ref[0]); };
 
 // ==== hero compositions (attack, cast, block)
-function attack(card, id, o = {}) {
-  if (!RIG[card.cls] || !RIG[card.cls].attack) return cast(card, id, Object.assign({ asAttack: true }, o));
-  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card.cls, 'attack'), o.rig || {});
+function act(card, id, o = {}) {
+  const R = Object.assign(rigOf(card, id, 'act', o), o.rig || {});
+  if (R.style === 'cast' || R.style === 'pour') return cast(card, id, o, R);
+  return attack(card, id, o, R);
+}
+function attack(card, id, o = {}, R) {
+  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id));
   const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
   const room = o.room || roomOf(card, course, id), ink = fxInk(course);
   const hits = Math.max(1, ...(card.fx || []).map(x => x.times || 1));
@@ -148,7 +123,7 @@ function attack(card, id, o = {}) {
     if (R.off && P.h.J[R.off]) { const dag = P.J(R.off); body += K.motionHatch(r, [add(dag, [-30, -60]), add(dag, [90, -100]), add(X, [-70, -150])], 30, INK, { lw: 2, op: 0.6 }); }
   } else {
     // strike: a short hard blow; hatched motion from behind the hand, the smash just past it
-    const hand = bonePt(P, R.weapon), hit = add(hand, [90, 10]);
+    const hand = bonePt(P, R.weapon), hit = add(hand, R.off || [90, 10]);
     body = K.ground(r, Object.assign({ room, x: 700, w: 1500, c, pool: [hit[0] - 120, hit[1], 430, 270], dark: 0.3 }, o.ground || {}));
     body += K.motionHatch(r, [add(hand, [-230, 30]), add(hand, [-120, 14]), add(hand, [-20, 4])], 44, INK, { lw: 2.4, op: 0.75 });
     body += P.svg;
@@ -159,13 +134,26 @@ function attack(card, id, o = {}) {
 }
 
 // CAST: the course's ink flung from the hand (or a flask from it) in an arc that bursts in the air at the right
-function cast(card, id, o = {}) {
-  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), ink = mix(INK6[course] || INK, '#16110e', course === 'physical' ? 0 : 0.74), R = Object.assign(rigOf(card.cls, 'cast'), o.rig || {});
+function cast(card, id, o = {}, R) {
+  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), ink = mix(INK6[course] || INK, '#16110e', course === 'physical' ? 0 : 0.74);
   const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
   const tipF = bonePt(P, R.hand);
   const hitP = o.hitAt || [930, Math.min(470, tipF[1] + 70)];
   let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 700, w: 1500, c, pool: [600, 280, 480, 270], dark: 0.3 }, o.ground || {}));
+  if (R.style === 'pour') {
+    // poured: a stream falling from the flask's mouth, splashing and spreading on the floor, fumes standing up from it
+    const floor = [tipF[0] + 150, 560], st = [tipF, add(tipF, [60, 40]), add(tipF, [120, 160]), floor];
+    body += P.svg;
+    body += K.drybrush(r, st, 18, ink, { profile: t => 0.5 + 0.5 * t, dry: 0.5, op: 0.9, bodyLen: 0.6, bristles: 8 });
+    body += K.drybrush(r, [add(floor, [-200, 18]), add(floor, [0, 6]), add(floor, [260, 20])], 34, ink, { dry: 0.8, op: 0.8, bodyLen: 0.5, bristles: 14 });
+    body += K.splatter(r, floor, 140, ink, { dir: [0.4, -1], spread: 2.2, n: 26, blotR: 0.18 });
+    for (const [dx, w] of [[-60, 70], [80, 90], [220, 70]]) body += K.billow(r, add(floor, [dx, -70 - r() * 40]), w, 34, course === 'toxin' ? '#68705a' : '#6a6458', { op: 0.4, lw: 4 });
+    if (o.barrier) body += o.barrier(r, floor);
+    return { course: c, defs: P.defs, body };
+  }
+  if (R.spray) hitP[1] = Math.min(hitP[1], tipF[1] + 20);
   const mid = [lerp(tipF, hitP, 0.5)[0], Math.min(tipF[1], hitP[1]) - 70], path = [tipF, lerp(tipF, mid, 0.5), mid, lerp(mid, hitP, 0.55), hitP];
+  if (R.spray) for (let k = 0; k < 2; k++) { const h2 = add(hitP, [-60 - k * 40, (k ? 1 : -1) * 120]); body += K.drybrush(r, [tipF, add(lerp(tipF, h2, 0.5), [0, -50]), h2], 24, ink, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.7, bristles: 10 }); body += K.splatter(r, h2, 110, ink, { dir: [1, 0], spread: 2, n: 14, blotR: 0.2 }); }
   const PP = K.catmull(path, 10), bi = Math.round(PP.length * 0.62), bead = PP[bi];
   body += K.drybrush(r, K.catmull(path, 3).filter(q => q[0] < bead[0] - 10), 30, ink, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.85, bristles: 12 });
   body += K.motionHatch(r, K.catmull(path, 3).filter(q => q[0] < bead[0] - 30).map(q => add(q, [0, 26])), 26, INK, { lw: 2, op: 0.6 });
@@ -198,14 +186,26 @@ function shards(r, c, R, dir, col) {
 
 // BLOCK: the hero set behind their guard; an unseen blow smashes on it from the right
 function block(card, id, o = {}) {
-  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card.cls, 'block'), o.rig || {});
+  const course = courseOf(card, o), c = COURSE[course], r = rng(o.seed || seedOf(id)), R = Object.assign(rigOf(card, id, 'block', o), o.rig || {});
+  if (R.style === 'pour') return cast(card, id, Object.assign({ barrier: (r2, floor) => {
+    // the poured barrier: fumes standing up in a hatched wall, and the blow breaking on it
+    let s2 = ''; for (let i = 0; i < 5; i++) s2 += K.billow(r2, add(floor, [40 + i * 30, -120 - i * 60]), 70, 40, '#6a6458', { op: 0.5, lw: 4 });
+    const hit2 = add(floor, [180, -200]);
+    for (let i = 0; i < 3; i++) s2 += K.motionHatch(r2, [[hit2[0] + 300, hit2[1] - 60 + i * 60], [hit2[0] + 150, hit2[1] - 50 + i * 55], [hit2[0] + 30, hit2[1] - 40 + i * 50]], 30, INK, { lw: 2.3, op: 0.7, slant: 0.35 });
+    return s2 + K.impact(r2, hit2, 54, INK, { rays: 6, a0: 1.6, fan: 0.6, core: false });
+  } }, o), R);
   const P = placeHero({ hero: o.hero || heroOf(card, course), pose: R.pose, hide: R.hide, at: R.at, scale: R.scale });
-  const g = bonePt(P, R.face), hit = R.face && R.face[1] ? g : add(g, [120, 10]), ink = fxInk(course);
+  const g = bonePt(P, R.face), hit = R.face && R.face[1] ? g : add(g, R.off || [120, 10]), ink = fxInk(course);
   let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 1200, w: 1500, c, pool: [hit[0] - 40, hit[1] - 40, 450, 280], dark: 0.3 }, o.ground || {}));
   for (let i = 0; i < 4; i++) { const y = hit[1] - 120 + i * 85 + (r() - 0.5) * 20; body += K.motionHatch(r, [[hit[0] + 340, y + 30], [hit[0] + 190, y + 10], [hit[0] + 50, y]], 32, INK, { lw: 2.4, op: 0.75, slant: 0.35 }); }
   body += P.svg;
   body += K.impact(r, add(hit, [8, 0]), 60, ink, { rays: 7, a0: 1.7, fan: 0.55, core: false, splat: { dir: [0.3, -1], spread: 2.6 } });
   body += R.wood ? splinters(r, add(hit, [10, -10]), 120, [0.6, -1]) : flecks(r, hit, 120, [0.6, -1], ink === INK ? '#5a4a3a' : ink);
+  if (R.style === 'salt') {
+    // the salt line on the floor: the blow stops dead above it
+    body += K.drybrush(r, [[hit[0] - 120, 572], [hit[0] + 60, 566], [hit[0] + 260, 576]], 16, '#ece6d8', { dry: 0.7, op: 0.95, bodyLen: 0.6, bristles: 10 });
+    for (let i = 0; i < 40; i++) body += `<circle cx="${(hit[0] - 120 + r() * 380).toFixed(1)}" cy="${(560 + r() * 26).toFixed(1)}" r="${(0.8 + r() * 1.6).toFixed(1)}" fill="#f4f0e4"/>`;
+  }
   body += grit(r, [hit[0] - 120, 600], 300);
   return { course: c, defs: P.defs, body };
 }
@@ -356,8 +356,9 @@ ART.el_strike_the_ring = (card) => {
 // about bells get a bell and cards about salt get salt. Kind, calling and course break ties and fill gaps. The FX come
 // from the course. Plain on purpose: a rare card earns an ART entry.
 const { O } = require('./objects2');
+const O3 = require('./objects3').O;
 const FLASK_COL = { physical: ['#5a4a30', '#8a5a2a'], fire: ['#7a5a2a', '#c8742a'], frost: ['#6a8a9a', '#b8d0dc'], lightning: ['#7a7040', '#d8c870'], water: ['#3a5a4a', '#3a6a8a'], toxin: ['#4a6232', '#7a8636'], void: ['#3a3048', '#2a1a3a'] };
-const LIB = Object.assign({ flask: (f, o) => OB.flask(f, Object.assign({ glass: (FLASK_COL[o.course] || FLASK_COL.physical)[0], liquid: (FLASK_COL[o.course] || FLASK_COL.physical)[1], skull: o.course === 'toxin' }, o)), hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7, bites: o.course === 'void' ? [[50, -30, 20], [20, 50, 12]] : [] }, o)) }, O);
+const LIB = Object.assign({ flask: (f, o) => OB.flask(f, Object.assign({ glass: (FLASK_COL[o.course] || FLASK_COL.physical)[0], liquid: (FLASK_COL[o.course] || FLASK_COL.physical)[1], skull: o.course === 'toxin' }, o)), hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7, bites: o.course === 'void' ? [[50, -30, 20], [20, 50, 12]] : [] }, o)) }, O, O3);
 const OBJ_WORDS = [
   ['poppet', /poppet|doll|effigy|straw/], ['mirror', /mirror|silver|reflection|glint|\bglass\b/], ['shard', /shard|splinter/],
   ['bell', /\bbells?\b|toll|knell|tailors|dirge|handbell|chime|ringing/], ['hourglass', /\bhour|time|clock|delay|hasten|stillness|second hand|watch\b/],
@@ -366,9 +367,9 @@ const OBJ_WORDS = [
   ['bone', /\bbones?\b|marrow|knuckle/], ['cord', /\bcord|knot|thread|ladder|\bbind|\btie/], ['rope', /rope|hook|\bhaul|harpoon|keelhaul|lash|\bline\b/],
   ['chain', /chain|flail|shackle|penitent/], ['book', /codex|\bbook|\bpage|ledger|\bread|tome/], ['scroll', /scroll|signed|letter|\bnames?\b|chalk|writ/],
   ['inkpot', /\bink\b|quill|\bnib|\bwrite|spectrum|six courses/], ['key', /\bkeys?\b|\block\b|threshold|\bgate/], ['lantern', /\blamp|lantern|glare|beam|false light/],
-  ['purse', /alms|purse|coin|tithe|price|debt|\bgold|wealth|\bpay/], ['bandage', /bandage|linen|wound|festering|towel|\brag\b|cloth|vinegar|\bsores?\b|fever|frostbite|sickness/],
+  ['purse', /alms|purse|coin|tithe|price|debt|\bgold|wealth|\bpay/], ['bandage', /bandage|linen|towel|\brag\b|cloth|vinegar|wrap|fever|frostbite|sickness|hood|sacking/], ['suture', /barber|stitch|\bsew|suture|\bgut\b|wound|fester|\bsores?\b/], ['tourniquet', /tourniquet|bleed|bled|staunch|tighten|cinch/], ['splint', /splint|broken|\bbreak|fracture|\bset\b/],
   ['herbs', /herb|simple|sage|bloom|flower|seed|spore|garden|blight|moss|\broot/], ['bread', /bread|feast|cellar|sin-eater|\beats?\b/],
-  ['bowl', /broth|ladle|milk|\bbowl|soup|stew/], ['brazier', /brazier|coals|\bfire\b|burn|\bash|flame|fire-setting|ember|smoulder/], ['salt', /\bsalt\b/],
+  ['bowl', /broth|ladle|milk|\bbowl|soup|stew/], ['brazier', /brazier|\bfire\b|burn|\bash|flame|smoulder/], ['tongs', /tongs|ember|coal|fire-setting|forge/], ['coalpan', /\bpan\b|hearth|warm|cinder/], ['salt', /\bsalt\b/],
   ['cup', /drink|\bcup|chalice|wine|offering|drain|blood/], ['hammer', /hammer|anvil|wedge|forge|temper|quench|weld|melt|smith/],
   ['rod', /\brod\b|storm|\bbolt|lightning/], ['stinger', /sting|venom|wasp|hive/], ['reliquary', /relic|saint|holy|hymn|prayer|abbey|blessing|vigil/],
   ['boot', /\bstep|march|shoulder|\bswap|\brank|fall back|\bgap\b|advance|retreat|wade|stride|dodge|stumble/],
@@ -382,26 +383,26 @@ function pickObject(card, id = '') {
   const course = courseOf(card), kind = kindOf(card);
   const name = (card.name || '').toLowerCase(), note = (card.note || '').toLowerCase(), text = (card.text || '').toLowerCase();
   let best = null, bs = 0;
-  const FLASKS = ['flask', 'vial', 'jar', 'keg'];
-  if (kind === 'flask' && /drink|sip|throws back|bites the cork|lifts .* drinks|holds a small open vial|hangs from/.test(note)) return /powder|blast/.test(note + name) ? 'keg' : 'vial';
+  const FLASKS = ['flask', 'vial', 'jar', 'keg'], isFlask = (card.kw || []).includes('Flask') || /^fl_/.test(id);
+  if (isFlask && /drink|sip|throws back|bites the cork|lifts .* drinks|holds a small open vial|hangs from/.test(note)) return /powder|blast/.test(note + name) ? 'keg' : 'vial';
   OBJ_WORDS.forEach(([k, re], i) => {
     if (k === 'eye' && course !== 'void') return;
-    if (kind === 'flask' && !FLASKS.includes(k)) return;
+    if (isFlask && !FLASKS.includes(k)) return;
     const sc = (re.test(name) ? 3 : 0) + (re.test(note) ? 1 : 0) + (re.test(text) ? 0.3 : 0) - i * 0.001;
     if (sc > bs) { bs = sc; best = k; }
   });
-  if (bs >= 0.9) return best;
+  // a word in the name names its object outright; otherwise a family of close objects shares the card by hash
+  const ALT = { bandage: ['bandage', 'suture', 'tourniquet', 'splint'], brazier: ['brazier', 'coalpan', 'tongs'], vial: ['vial', 'jar'], candle: ['candle', 'lantern'] };
+  if (bs >= 0.9) return bs >= 3 || !ALT[best] ? best : ALT[best][seedOf(id || name) % ALT[best].length];
   if (kind === 'flask') return 'flask';
   if (kind === 'curse') return 'chain';
   return OBJ_BY_CLS[card.cls] || OBJ_BY_COURSE[course] || 'skull';
 }
 // the course's mark round the object: what the course does to the air and the floor, never sparkles or glows
-function courseFX(r, at, course, back) {
+function courseFX(r, at, course, back, lay = 'close') {
   const ink = fxInk(course); let s = '';
   if (back) {
     // the object's shadow on the floor: a dry ink pool, hatched, so it sits in the room instead of floating
-    s += K.drybrush(r, [[at[0] - 230, 560], [at[0], 548], [at[0] + 260, 562]], 40, '#120c08', { dry: 0.6, op: 0.55, bodyLen: 0.6, bristles: 14 });
-    s += K.motionHatch(r, [[at[0] - 200, 575], [at[0], 568], [at[0] + 240, 578]], 24, INK, { lw: 1.8, op: 0.5, grow: false });
     const side = r() < 0.5 ? -1 : 1, a0 = side < 0 ? 150 : -40;
     for (const R of [300, 360]) s += K.motionHatch(r, K.arc(at, R, R * 0.72, a0, a0 + 70, 10), 24, INK, { lw: 2, op: 0.45, grow: false });
     if (course === 'toxin') for (const [x, w] of [[at[0] - 260, 110], [at[0] + 270, 120]]) s += K.billow(r, [x, 540], w, 34, '#68705a', { op: 0.4, lw: 4 });
@@ -417,15 +418,98 @@ function courseFX(r, at, course, back) {
   s += K.splatter(r, add(at, [220, -80]), 130, ink, { blot: false, n: 14, dir: [1, -0.4], spread: 1.4 });
   return s;
 }
-const OBJ_SCALE = { knife: 1.2, needle: 1.15, bandage: 1.1, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, jar: 1.15, skull: 1.05, cord: 1.0, purse: 1.05, cup: 1.05, eye: 1.05, shard: 1.15, poppet: 1.05, hammer: 1.0, salt: 0.95, book: 1.0, bread: 1.05, boot: 1.05 };
+const OBJ_SCALE = { ring: 1.0, coins: 1.0, feather: 1.1, lens: 1.05, brush: 1.1, knife: 1.2, needle: 1.15, bandage: 1.1, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, jar: 1.15, skull: 1.05, cord: 1.0, purse: 1.05, cup: 1.05, eye: 1.05, shard: 1.15, poppet: 1.05, hammer: 1.0, salt: 0.95, book: 1.0, bread: 1.05, boot: 1.05 };
+// ==== object layouts (StS2 framing): the object fills the frame, crops off an edge, and sits in something of the room
+const BODY = require('../body');
+const DEFAULT_ANG = { bandage: -0.12, hood: 0.08, sack: -0.05, barbs: 0.1, feather: -0.7, bellrope: 0.04, bellows: -0.15, sword: -0.35, rapier: -0.35, clock: -0.08, lens: -0.1, hand: -0.05, brush: -0.6, needle: -0.5, cord: 0.25, knife: -0.4, shard: 0.15, skull: 0.1, bone: -0.35, key: -0.5, herbs: 0.2, scroll: -0.12, hammer: -0.25, rod: 0.05, stinger: -0.6, anchor: 0.15, suture: -0.08, tourniquet: 0.1, splint: -0.3, coalpan: -0.1, tongs: -0.35 };
+const LONG = new Set(['sword', 'rapier', 'brush', 'feather', 'knife', 'needle', 'key', 'bone', 'rod', 'hammer', 'tongs', 'coalpan', 'splint', 'shard', 'stinger', 'candle']);
+const SUITS = {
+  hang: new Set(['lantern', 'bell', 'key', 'chain', 'cord', 'poppet', 'herbs', 'skull', 'shard', 'eye', 'rope', 'bone', 'tongs', 'purse', 'mirror', 'vial', 'hood', 'sack', 'bellrope', 'crucible', 'lens', 'feather', 'barbs', 'clock']),
+  water: new Set(['anchor', 'skull', 'bell', 'keg']),
+  held: new Set(['knife', 'hammer', 'rod', 'coalpan', 'tongs', 'sword', 'rapier', 'bellows']),
+  ledge: new Set(['sack', 'mortar', 'alembic', 'clock', 'vessel', 'coins', 'scales', 'knuckles', 'hand', 'ring', 'brush', 'lens', 'feather', 'bellows', 'barbs', 'hood', 'candle', 'skull', 'jar', 'vial', 'cup', 'bowl', 'book', 'scroll', 'inkpot', 'purse', 'bread', 'salt', 'reliquary', 'boot', 'keg', 'lantern', 'brazier', 'bell', 'hourglass', 'flask', 'bandage', 'herbs', 'splint', 'tourniquet', 'suture', 'shield', 'door', 'poppet', 'knife', 'key', 'bone', 'needle', 'coalpan']),
+};
+// an object Fig that records the bounding box of its solid parts as they are drawn (lines and clipped hatching do not count)
+function measuredFig(seed) {
+  const f = K.objFig(seed), part = f.part.bind(f);
+  f.bb = [1e9, 1e9, -1e9, -1e9];
+  f.part = (pts, o) => { if (Array.isArray(pts)) { const q = E.bbox(pts); f.bb = [Math.min(f.bb[0], q[0]), Math.min(f.bb[1], q[1]), Math.max(f.bb[2], q[2]), Math.max(f.bb[3], q[3])]; } return part(pts, o); };
+  return f;
+}
+const figBBox = f => f.bb;
+// the count comes from the name only (a note's 'two heroes' is not two objects); counts the note implies are OVR entries
+const countOf = card => { const t = (card.name || '').toLowerCase(); return /\b(three|thrice|triple)\b/.test(t) ? 3 : /\b(two|twin|twins|pair|both|twofold|double|doubled)\b/.test(t) ? 2 : /\beach\b/.test(t) ? 3 : 1; };
+// a stair edge or stone ledge across the lower frame, in card space, drawn as a figure so it carries the same ink
+function ledge(seed, y) {
+  const f = K.objFig(seed), r = f.r;
+  const top = [[-30, y], [300, y - 6], [700, y + 4], [1150, y - 4]], face = [...top, [1150, H + 30], [-30, H + 30]];
+  f.part(face, { fill: '#6a645a', shade: 0.4, tex: 'mottle' + seed, texOp: 0.8 });
+  f.part([[-30, y], [1150, y - 4], [1150, y + 16], [-30, y + 18]], { fill: '#8a8478', shade: 0.3, inkW: 1.4, cast: false });
+  D.dress(f, face, { op: 0.4, dir: 0.05 });
+  for (let i = 0; i < 6; i++) D.chip(f, [60 + i * 190 + r() * 60, y + 2], 9 + r() * 8, 0);
+  for (let i = 0; i < 3; i++) D.crack(f, [100 + r() * 900, y + 20], 1.3 + r() * 0.4, 90, { n: 5, lip: '#a8a49a' });
+  for (let i = 0; i < 5; i++) f.flat(blobAt(r, [r() * W, y + 8 + r() * 20], 30 + r() * 30, 8), '#3e4a28', { op: 0.6 }); // moss in the joint
+  for (let i = 1; i < 4; i++) f.line([[i * 290 + r() * 40, y + 18], [i * 290 + r() * 40 + 6, H + 20]], 2, INK, { op: 0.7 });
+  return K.figSVG(f);
+}
+const blobAt = (r, c, w, h) => { const o = []; for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; o.push([c[0] + Math.cos(a) * w * (0.7 + r() * 0.5), c[1] + Math.sin(a) * h * (0.7 + r() * 0.5)]); } return o; };
+// a beam across the top of the frame with an iron hook, for hanging things
+function beam(seed, hookX) {
+  const f = K.objFig(seed), r = f.r;
+  const b = [[-30, -20], [1150, -20], [1150, 62], [-30, 74]];
+  f.part(b, { fill: '#5b412a', shade: 0.45, tex: 'wood' + seed, texOp: 0.9 });
+  D.dress(f, b, { op: 0.45 });
+  f.line([[-30, 70], [1150, 58]], 2, '#a88a62', { op: 0.6 });
+  for (const x of [120, hookX - 70, hookX + 70, 980]) f.rivet([x, 30], 5, '#6a6a66');
+  f.part([[hookX - 16, 56], [hookX + 16, 54], [hookX + 14, 84], [hookX - 14, 86]], { fill: '#3a3a3c', shade: 0.4, inkW: 1.3 });
+  D.bloom(f, [hookX + 30, 50], 18, '#5a2a12', { n: 3 });
+  D.wax(f, [[300, 70], [320, 72], [340, 70]], '#cfc3a0', { thick: 3, drips: 1, dripL: 26 });
+  return K.figSVG(f);
+}
+// dark water over the lower frame: flat, cold, ripples and broken light on it, what floats
+function water(r, y, course) {
+  const col = mix(COURSE[course === 'physical' ? 'water' : course].deep, '#16232c', 0.5);
+  let s = `<path d="M-20,${y} Q300,${y - 6} 560,${y + 2} T1140,${y} L1140,${H + 20} L-20,${H + 20}Z" fill="${col}" opacity="0.82"/>`;
+  for (let i = 0; i < 9; i++) { const yy = y + 8 + i * 16 + r() * 8, x0 = r() * 300, x1 = x0 + 200 + r() * 700; s += `<path d="M${x0.toFixed(1)},${yy.toFixed(1)}Q${((x0 + x1) / 2).toFixed(1)},${(yy - 4).toFixed(1)} ${x1.toFixed(1)},${yy.toFixed(1)}" stroke="${i % 3 ? INK : '#c8d4d8'}" stroke-width="${(1.2 + r()).toFixed(1)}" fill="none" opacity="${i % 3 ? 0.55 : 0.4}" stroke-dasharray="${(30 + r() * 80).toFixed(0)} ${(8 + r() * 30).toFixed(0)}"/>`; }
+  s += K.drybrush(r, [[-20, y], [560, y - 3], [1140, y + 1]], 8, '#d8e0e0', { dry: 1, body: false, op: 0.55, bristles: 4 });
+  for (let i = 0; i < 6; i++) { const p = [r() * W, y + 20 + r() * 120]; s += `<path d="${K.polyD([[p[0], p[1]], [p[0] + 14, p[1] - 3], [p[0] + 18, p[1] + 2], [p[0] + 3, p[1] + 4]])}" fill="#5a4a30" stroke="${INK}" stroke-width="1"/>`; }
+  return `<g filter="url(#kWob)">${s}</g>`;
+}
 function deviceGeneric(card, id, o = {}) {
-  const course = courseOf(card, o), obj = o.device || pickObject(card, id), at = o.at || [560, 318], scale = o.scale || OBJ_SCALE[obj] || 0.95;
-  return device({
-    course, seed: o.seed || seedOf(id), at, scale, ground: Object.assign({ room: o.room || roomOf(card, course, id), x: 800, w: 1500, pool: [at[0], at[1] - 20, 430, 270], dark: 0.3 }, o.ground || {}),
-    build: f => LIB[obj](f, { course, ang: o.ang }),
-    back: r => courseFX(r, at, course, true),
-    front: r => courseFX(r, at, course, false),
-  });
+  const course = courseOf(card, o), obj = o.device || pickObject(card, id), seed = o.seed || seedOf(id), c = COURSE[course], r = rng(seed);
+  const n = o.count || countOf(card), long = LONG.has(obj), base = OBJ_SCALE[obj] || 0.95;
+  // build the copies first, to measure them
+  const copies = [];
+  for (let k = 0; k < n; k++) { const f = measuredFig(seed + k * 7); const a0 = (o.ang ?? DEFAULT_ANG[obj] ?? 0); const da = n > 1 ? (k - (n - 1) / 2) * (long ? 1.0 : 0.22) : 0; const pts = LIB[obj](f, Object.assign({ course, ang: a0 + da }, o.objOpt || {})); copies.push({ f, pts, bb: figBBox(f) }); }
+  const options = ['close'].concat(['ledge', 'hang', 'water', 'held'].filter(l => SUITS[l].has(obj) && !(n > 1 && l !== 'ledge') && !(l === 'held' && !copies[0].pts.grip)));
+  const lay = o.layout && (o.layout !== 'held' || (copies[0].pts.grip && n === 1)) ? o.layout : n > 1 ? (SUITS.ledge.has(obj) ? 'ledge' : 'close') : options[(seed >> 3) % options.length];
+  const bb = copies[0].bb, bw = bb[2] - bb[0], bh = bb[3] - bb[1], bcx = (bb[0] + bb[2]) / 2, bcy = (bb[1] + bb[3]) / 2;
+  const fit = Math.min(980 / (bw * (n > 1 && !long ? 1.6 : 1)), 560 / bh);    // the scale at which it would just fit
+  let sc, at, extra = '', over = '', defs = '', pool;
+  const side = (seed >> 5) % 2 ? 1 : -1;
+  if (lay === 'close') { sc = Math.min(fit * (n > 1 ? 0.75 : 1.4), base * 1.7); at = [560 + side * 90 - bcx * sc, 330 + bh * sc * 0.18 - bcy * sc]; pool = [560 + side * 60, 260, 380 + r() * 120, 230 + r() * 80]; }
+  else if (lay === 'ledge') { const ly = 430 + Math.round(r() * 40); sc = Math.min(fit * (n > 1 ? 0.95 : 1.25), (ly - 40) / bh, base * 1.6); at = [560 + side * 40 - bcx * sc, ly + 6 - bb[3] * sc]; const L1 = ledge(seed + 50, ly); extra = L1.body; defs += L1.defs; pool = [560, ly - 120, 420, 200]; }
+  else if (lay === 'hang') { const hx = 560 + side * 40; sc = Math.min(fit * 1.3, 470 / bh, base * 1.6); at = [hx - bcx * sc, 150 - bb[1] * sc]; const B1 = beam(seed + 60, hx); over = ''; extra = `<path d="M${hx},84 L${hx},${(at[1] + bb[1] * sc + 4).toFixed(1)}" stroke="${INK}" stroke-width="7"/><path d="M${hx},84 L${hx},${(at[1] + bb[1] * sc + 4).toFixed(1)}" stroke="#6a5a40" stroke-width="4" stroke-dasharray="6 3"/>`; defs += B1.defs; over = B1.body; pool = [hx, 300, 360 + r() * 100, 260]; }
+  else if (lay === 'water') { const wy = 440 + Math.round(r() * 40); sc = Math.min(fit * 1.2, (wy - 30) / (bh * 0.8), base * 1.6); at = [560 + side * 70 - bcx * sc, wy - (bb[3] - bh * 0.22) * sc]; over = water(r, wy, course); pool = [560 + side * 40, wy - 140, 440, 220]; }
+  else { sc = Math.min(fit * 1.4, base * 1.7); at = [520 + side * 30 - bcx * sc, 300 - bcy * sc]; pool = [520, 280, 420, 260];
+    // held: a gloved hand from the frame's edge closes on the grip
+    const f = copies[0].f, g = copies[0].pts.grip, away = norm([side * -0.5 - 0.2, 0.9]), elbow = add(g.c, mul(away, 360 / sc)), wrist = add(g.c, mul(away, 70));
+    f.part(E.limb(elbow, wrist, 120, 96, { q: [[0.3, 0.15, 0.2]] }), { fill: '#5f5546', shade: 0.45, tex: 'weave' + f.o.seed, texOp: 0.6 });
+    D.dress(f, E.limb(elbow, wrist, 120, 96), { op: 0.4 });
+    f.part(E.limb(add(wrist, mul(away, 40)), add(wrist, mul(away, -6)), 104, 100, { capK: 0.3 }), { fill: '#4a3424', shade: 0.45 });
+    BODY.grip(f, g.c, wrist, g.thumb, 62, '#4a3424', { quiet: true, maxBend: 70, cuff: false });
+  }
+  // the copies: side by side for round things, crossed for long ones
+  const placed = copies.map((cp, k) => { const dx = n > 1 && !long ? (k - (n - 1) / 2) * bw * sc * 0.62 : 0, dy = n > 1 && !long ? Math.abs(k - (n - 1) / 2) * 24 : 0; const s2 = K.figSVG(cp.f); defs += s2.defs; return K.place(s2.body, [0, 0], [at[0] + dx, at[1] + dy], sc * (n > 1 && !long && k !== (n - 1) / 2 ? 0.92 : 1)); });
+  const focus = K.mapPt(copies[0].pts.focus || [bcx, bcy], [0, 0], at, sc);
+  let body = K.ground(r, Object.assign({ room: o.room || roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c, pool: pool || [focus[0], focus[1], 430, 270], dark: 0.3, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
+  body += courseFX(r, focus, course, true, lay);
+  if (lay === 'hang') body += extra;
+  if (lay === 'ledge') body += extra;
+  body += placed.slice().reverse().join('');
+  if (lay === 'hang' || lay === 'water') body += over;
+  body += courseFX(r, focus, course, false, lay);
+  return { course: c, defs, body };
 }
 const DEVICE_KIND = { flask: deviceGeneric, device: deviceGeneric, rite: deviceGeneric, curse: deviceGeneric };
 
@@ -437,11 +521,230 @@ const OVR = {
   el_ink_bolt: { kind: 'cast', room: 'nave' },
   bw_brace: { kind: 'block', room: 'stair' },
 };
-const KIND = { attack, cast, block };
+// The audit of all 408 object cards (devices.csv): cards whose words picked an object that ignores their name or note.
+const DEVICE_OVR = {
+  dread: { device: 'door' },
+  festering: { device: 'bandage' },
+  aff_mire: { device: 'boot' },
+  aff_baths: { device: 'bandage' },
+  aff_fleet: { device: 'hand' },
+  aff_rime: { device: 'shield' },
+  aff_silence: { device: 'bell' },
+  aff_pyre: { device: 'hand' },
+  aff_sky: { device: 'eye' },
+  off_key_hymn: { device: 'book' },
+  change_of_watch: { device: 'shield' },
+  red_strip: { device: 'cord' },
+  al_brew: { device: 'alembic' },
+  al_refill: { device: 'jar' },
+  al_hurled_pitch: { device: 'jar' },
+  al_brine_splash: { device: 'jar' },
+  al_quicklime: { device: 'sack' },
+  al_decant: { device: 'jar' },
+  al_lye_splash: { device: 'jar' },
+  al_fen_water: { device: 'jar' },
+  al_field_dressing: { device: 'bandage' },
+  al_steady_hand: { device: 'lens' },
+  al_bandolier: { device: 'vial', count: 2 },
+  al_magnum_opus: { device: 'flask', count: 3 },
+  toll_of_bells: { device: 'bell', count: 2 },
+  al_poultice: { device: 'bandage' },
+  al_hartshorn: { device: 'mortar' },
+  al_quench: { device: 'jar' },
+  al_cauterize: { device: 'tongs' },
+  al_rectify: { device: 'alembic' },
+  al_putrefaction: { device: 'crucible' },
+  al_fulminating_gold: { device: 'mortar' },
+  al_aqua_fortis: { device: 'flask' },
+  al_boiling_flood: { device: 'bowl' },
+  al_rat_bag: { device: 'sack' },
+  al_fester: { device: 'lens' },
+  al_foul_bellows: { device: 'bellows' },
+  al_wormwood: { device: 'cup' },
+  al_alembic: { device: 'alembic' },
+  al_tasting_spoon: { device: 'mortar' },
+  al_athanor: { device: 'crucible' },
+  al_prima_materia: { device: 'mortar' },
+  al_catalytic_still: { device: 'alembic' },
+  al_miasmatic_cloud: { device: 'jar' },
+  al_black_rot: { device: 'skull' },
+  al_elixir_of_life: { device: 'vial' },
+  al_panacea: { device: 'vial' },
+  al_red_work: { device: 'crucible' },
+  al_white_work: { device: 'alembic' },
+  al_quintessence: { device: 'vial' },
+  al_spagyric_rain: { device: 'bellrope' },
+  al_diagnosis: { device: 'lens' },
+  al_ripen: { device: 'herbs' },
+  al_rat_swarm: { device: 'sack' },
+  al_marsh_lights: { device: 'lantern' },
+  al_triage: { device: 'splint' },
+  al_second_dose: { device: 'vial' },
+  al_the_great_work: { device: 'crucible' },
+  al_solve_et_coagula: { device: 'alembic' },
+  al_firedamp: { device: 'lantern' },
+  bw_k_come_on_then: { device: 'door' },
+  bw_k_scourge: { device: 'barbs' },
+  bw_draw_their_eyes: { device: 'door' },
+  bw_hair_shirt: { device: 'barbs' },
+  bw_thorn_hedge: { device: 'barbs' },
+  bw_tithe_of_blood: { device: 'bandage' },
+  bw_barbs_left_in: { device: 'barbs' },
+  bw_flagellants_cord: { device: 'barbs' },
+  bw_counterweight: { device: 'chain' },
+  bw_iron_maiden: { device: 'barbs' },
+  bw_rose_of_iron: { device: 'barbs' },
+  bw_defiance: { device: 'shield' },
+  bw_scourged_back: { device: 'barbs' },
+  bw_crown_of_iron_thorns: { device: 'barbs' },
+  bw_the_scourged_hand: { device: 'barbs' },
+  du_find_the_gap: { device: 'rapier' },
+  du_drag_to_the_block: { device: 'sword' },
+  du_staunch: { device: 'bowl', objOpt: { blood: true } },
+  du_parry: { device: 'rapier' },
+  du_light_feet: { device: 'boot' },
+  du_pronounce_sentence: { device: 'sword' },
+  du_open_the_vein: { device: 'knife' },
+  du_bloodmist: { device: 'cup' },
+  du_cupping_glass: { device: 'cup' },
+  du_catch_the_rhythm: { device: 'bellrope' },
+  du_condemned: { device: 'sword' },
+  du_haemorrhage: { device: 'bowl', objOpt: { blood: true } },
+  du_open_guard: { device: 'rapier' },
+  du_duellists_eye: { device: 'lens' },
+  du_final_judgment: { device: 'sword' },
+  du_bowl_passed_round: { device: 'bowl', objOpt: { blood: true } },
+  du_oath_of_the_salle: { device: 'rapier' },
+  du_untouchable: { device: 'knife' },
+  du_drag_them_up: { device: 'chain' },
+  du_let_the_fever_out: { device: 'bowl', objOpt: { blood: true } },
+  du_turn_the_parry: { device: 'rapier' },
+  du_full_letting: { device: 'bowl', objOpt: { blood: true } },
+  du_the_endless_measure: { device: 'rapier' },
+  du_the_headsmans_round: { device: 'sword' },
+  du_red_tide: { device: 'bowl', objOpt: { blood: true } },
+  du_the_bowl_runs_over: { device: 'bowl', objOpt: { blood: true } },
+  el_turn_the_ring: { device: 'ring' },
+  el_stopper_the_jar: { device: 'vessel' },
+  el_conjoin: { device: 'brush' },
+  el_twin_sigil: { device: 'brush' },
+  el_scatter_ink: { device: 'brush' },
+  el_flung_ink: { device: 'brush' },
+  el_wet_the_line: { device: 'brush' },
+  el_draw_the_tide: { device: 'rope' },
+  el_open_palm: { device: 'hand' },
+  el_tip_the_vessel: { device: 'vessel' },
+  el_wash_of_colour: { device: 'brush' },
+  el_strip_the_plate: { device: 'shield' },
+  el_ground_the_arc: { device: 'rod' },
+  el_brass_gauge: { device: 'vessel' },
+  el_stored_breath: { device: 'vessel' },
+  el_spark_shower: { device: 'brush' },
+  el_brass_bands: { device: 'vessel' },
+  el_hair_trigger: { device: 'brush' },
+  el_six_inks: { device: 'hand' },
+  el_clouded_sight: { device: 'lens' },
+  el_brass_reservoir: { device: 'vessel' },
+  el_quickened_hand: { device: 'hand' },
+  el_sixfold_ring: { device: 'ring' },
+  el_clouded_eye_saw: { device: 'lens' },
+  graveyard_dirt: { device: 'sack' },
+  whispered_name: { device: 'poppet' },
+  hags_finger: { device: 'hand' },
+  tithe_of_blood: { device: 'knife' },
+  blood_offering: { device: 'candle' },
+  take_the_rot: { device: 'hand' },
+  weeping_sores: { device: 'sack' },
+  old_wounds: { device: 'bandage' },
+  scapegoat: { device: 'poppet' },
+  malediction: { device: 'skull' },
+  bear_the_burden: { device: 'sack' },
+  deaths_ledger: { device: 'cord' },
+  bad_tidings: { device: 'bell' },
+  prophet_of_doom: { device: 'bell' },
+  harbinger: { device: 'bell' },
+  blood_debt: { device: 'hand' },
+  crossed_glass: { device: 'shard', count: 2 },
+  hall_of_mirrors: { device: 'shard' },
+  cracked_glass: { device: 'shard' },
+  passing_bell: { device: 'bellrope' },
+  or_read_the_bones: { device: 'knuckles' },
+  or_bind_fate: { device: 'scroll' },
+  or_skipped_tooth: { device: 'clock' },
+  or_wind_the_spring: { device: 'clock' },
+  or_wheel_turns: { device: 'feather' },
+  or_trade_on_tomorrow: { device: 'knuckles' },
+  or_augury_of_birds: { device: 'feather' },
+  or_rubric_capital: { device: 'book' },
+  or_eclipse: { device: 'candle' },
+  or_stopped_clock: { device: 'clock' },
+  or_accelerate: { device: 'hourglass' },
+  or_wring_the_bird: { device: 'feather' },
+  or_the_last_hour: { device: 'clock' },
+  or_the_turned_glass: { device: 'hourglass' },
+  or_the_bone_pouch: { device: 'knuckles' },
+  or_the_rubric: { device: 'book' },
+  ve_take_into_me: { device: 'hand' },
+  ve_warm_hands: { device: 'hand' },
+  ve_retch: { device: 'hand' },
+  ve_ink_band: { device: 'hand' },
+  ve_balance_the_scale: { device: 'scales' },
+  ve_illumination: { device: 'book' },
+  ve_unclench: { device: 'hand' },
+  ve_pass_through: { device: 'hand' },
+  ve_open_page: { device: 'book' },
+  ve_gilt_edge: { device: 'brush' },
+  ve_return_it: { device: 'hand' },
+  ve_lend_weight: { device: 'hand' },
+  ve_double_spit: { device: 'hand' },
+  ve_keep_her_quiet: { device: 'hand' },
+  ve_six_bands: { device: 'hand' },
+  ve_level_hands: { device: 'scales', objOpt: { level: true } },
+  ve_weight_of_the_world: { device: 'scales' },
+  ve_mothers_place: { device: 'reliquary' },
+  t_barrow_fleas: { device: 'sack' },
+  w_barrow_burial_axe: { device: 'skull' },
+  w_barrow_vinegar_rag: { device: 'hood' },
+  w_barrow_the_long_winter: { device: 'cup' },
+  w_baths_cold_plunge: { device: 'bowl' },
+  w_baths_open_valve: { device: 'key' },
+  t_coast_glare: { device: 'lens' },
+  w_coast_breaking_sea: { device: 'anchor' },
+  w_drowned_wring_out: { device: 'hood' },
+  w_fleet_ice_breaker: { device: 'shard' },
+  w_foundry_melt_down: { device: 'tongs' },
+  w_foundry_out_of_the_splash: { device: 'crucible' },
+  w_garden_deadhead: { device: 'knife' },
+  w_garden_take_the_rot: { device: 'hand' },
+  w_garden_nothing_regrows: { device: 'herbs' },
+  w_hive_take_the_sting: { device: 'shield' },
+  t_mire_offering: { device: 'knuckles' },
+  w_mire_poisoned_shallows: { device: 'boot' },
+  w_mire_flood_cuttings: { device: 'anchor' },
+  w_pits_gas_pocket: { device: 'lantern' },
+  w_pits_wet_hood: { device: 'hood' },
+  w_pyre_saints_ash: { device: 'vial' },
+  w_pyre_fire_unending: { device: 'candle' },
+  w_rime_wedge_and_feather: { device: 'hammer' },
+  w_rime_the_glacier_splits: { device: 'shard' },
+  w_silence_cold_eye: { device: 'eye' },
+  w_silence_say_it_aloud: { device: 'bell' },
+  w_silence_star_comes_down: { device: 'eye' },
+  w_sky_struck_out: { device: 'feather' },
+  w_sky_gold_leaf: { device: 'coins' },
+  w_sky_through_the_tear: { device: 'shard' },
+  w_sky_something_leans_closer: { device: 'eye' },
+  w_spire_stop_the_watch: { device: 'clock' },
+  w_spire_second_hand: { device: 'clock' },
+  w_spire_midnight: { device: 'clock' },
+};
+for (const [k, v] of Object.entries(DEVICE_OVR)) OVR[k] = Object.assign({}, OVR[k] || {}, v);
+const KIND = { attack: act, cast: act, block };
 // test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
-function testCard(id) { const [cls, kind, cat = 'physical'] = id.slice(1).split('/'); return { name: id, cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind }; }
+function testCard(id) { const [cls, kind, cat = 'physical', v] = id.slice(1).split('/'); return { name: '', cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind, _v: v == null ? null : +v }; }
 function card(id) {
-  const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}, o = Object.assign({}, OVR[id] || {}, cd._kind ? { kind: cd._kind } : {});
+  if (id.includes('!')) { const [cid, lay] = id.split('!'); OVR[id] = Object.assign({}, OVR[cid] || {}, { layout: lay }); CARDS[id] = CARDS[cid]; }
+  const cd = id[0] === '@' ? testCard(id) : CARDS[id] || {}, o = Object.assign({}, OVR[id] || {}, cd._kind ? { kind: cd._kind, v: cd._v } : {});
   let kind = o.kind || kindOf(cd);
   if (KIND[kind] && !ART[id] && !heroOf(cd, courseOf(cd, o))) kind = 'device';   // shared and world cards have no hero
   const fn = ART[id] || KIND[kind] || DEVICE_KIND[kind] || generic;

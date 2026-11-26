@@ -292,6 +292,13 @@ const D = {
     f.defs.push(`<clipPath id="${id}"><path d="${smooth(outline, true, o.k ?? 1)}"/></clipPath>`);
     f.raw(`<g clip-path="url(#${id})">${body}</g>`);
   },
+  // thickness for a flat-fronted object (door, shield, mirror, plaque): the same outline pushed back and down-right, darker,
+  // drawn first, so the edge between reads as the material's depth. Returns the back outline.
+  slab(f, outline, depth = [8, 7], col = '#2a2018') {
+    const back = outline.map(p => p.length > 2 ? [p[0] + depth[0], p[1] + depth[1], p[2]] : [p[0] + depth[0], p[1] + depth[1]]);
+    f.part(back, { fill: col, shade: 0.3, inkW: 1.6, inkHeavy: 3, cast: true, hatch: false });
+    return back;
+  },
   // surface breakup for a large plain area: pits, nicks and fine scratches scattered in a region
   wear(f, c, rx, ry, n = 20, col = '#1a120c', lt = '#e8dcc0') {
     const r = f.r;
@@ -364,6 +371,8 @@ function hero(mod, key, pose = {}, list = 'heroes', o = {}) {
   const h = Dm[list].find(q => q.key === key);
   if (!h) throw new Error('no figure ' + key + ' in ' + mod);
   const f = h.build(), FW = h.w || 600, J = f.joints;
+  // a pose may carry per-figure corrections, { vary: { <figure key>: { bone: deg } } }, for path variants whose rest arms differ
+  if (pose.vary && pose.vary[key]) pose = Object.assign({}, pose, pose.vary[key]);
   const chain = b => { const c = []; while (b && J[b]) { c.push(b); b = J[b].parent; } return c.reverse(); };
   let body = '';
   for (const run of f.runs()) {
