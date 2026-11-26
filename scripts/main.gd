@@ -1192,7 +1192,8 @@ func on_card_clicked(hid: int, idx: int) -> void:
 	if cost > energy_left():
 		_hint("Not enough vigour.")
 		return
-	_begin_action({"hero": hid, "card": cid, "source": "hand", "hand_index": idx, "target": -1, "x": x, "cost": cost})
+	_begin_action({"hero": hid, "card": cid, "source": "hand", "hand_index": idx, "target": -1, "x": x, "cost": cost,
+		"thrift": Combat.thrift_used(ps, Combat.find(ps, hid), cid)})
 
 func on_kit_clicked(hid: int, kid: String) -> void:
 	if resolving:
@@ -1291,6 +1292,7 @@ func _recost() -> bool:
 		if a.source == "hand" and c.cost >= 0:
 			var st: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
 			a.cost = Combat.cost_of(st, Combat.find(st, a.hero), a.card)
+			a.thrift = Combat.thrift_used(st, Combat.find(st, a.hero), a.card)
 		if c.cost >= 0:
 			total += int(a.cost)
 	_recompute_x()

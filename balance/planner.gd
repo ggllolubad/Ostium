@@ -107,7 +107,8 @@ static func _add_card(out: Array, st: Dictionary, h: Dictionary, cid: String, sr
 	var cost: int = Combat.cost_of(st, h, cid) if c.cost >= 0 else energy
 	if cost > energy or (c.cost < 0 and cost == 0):
 		return
-	var base = {"hero": h.id, "card": cid, "source": src, "hand_index": idx, "target": -1, "x": cost, "cost": cost}
+	var base = {"hero": h.id, "card": cid, "source": src, "hand_index": idx, "target": -1, "x": cost, "cost": cost,
+		"thrift": src == "hand" and Combat.thrift_used(st, h, cid)}
 	match c.target:
 		"enemy":
 			for e in st.enemies:

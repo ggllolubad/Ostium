@@ -186,6 +186,9 @@ static func start_round(s: Dictionary) -> void:
 	s.first_actor = -1
 	s.last_actor = -1
 	s.prev_actor = -1
+	for k in ["ordo_pos", "ordo_len", "ordo_spent_before", "ordo_attacks", "vigour_spent", "vigour_left", "banked"]:
+		s[k] = 0
+	s.ordo_heroes = []
 	s.echoes = []
 	s.triggers = {}
 	s.lockdown_used = {}
@@ -410,6 +413,7 @@ static func order_plan(s: Dictionary, plan: Array) -> Array:
 		spent += int(a.get("cost", 0))
 	s.vigour_spent = spent
 	s.vigour_left = max(0, int(s.get("energy", 0)) - spent)
+	s.banked = 0
 	s.ordo_len = plan.size()
 	s.ordo_pos = 0
 	s.ordo_spent_before = 0
@@ -452,6 +456,15 @@ static func _deals_damage(c: Dictionary) -> bool:
 ## Quantities: "ordo" (cards already in the Ordo), "heroes" (heroes already in it), "others" (heroes other than this
 ## one already in it), "attacks" (attack cards in it),
 ## and any of the hero's own (hand, discard, exhaust, draw, played, scars, and its statuses).
+## True when Thrift takes 1 off this card now (the card still costs something after cost_less).
+static func thrift_used(s: Dictionary, h: Dictionary, cid: String) -> bool:
+	var c := card(cid)
+	if c.cost < 0 or h.is_empty() or h.st.get("thrift", 0) <= 0:
+		return false
+	var hc: Dictionary = h.duplicate(true)
+	hc.st.thrift = 0
+	return cost_of(s, hc, cid) > 0
+
 static func cost_of(s: Dictionary, h: Dictionary, cid: String) -> int:
 	var c := card(cid)
 	if c.cost < 0:
@@ -601,8 +614,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	var ctx := {"x": a.get("x", 0), "half": a.get("echo", false), "prime": 0 if a.get("echo", false) else s.prime,
 		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target,
 		"cost": int(a.get("cost", 0)), "base_cost": max(0, int(c.cost)), "handoff": handoff, "heroes_before": s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)}
-	if a.get("source", "") == "hand" and h.st.get("thrift", 0) > 0 and not a.get("echo", false) and int(c.cost) > 0 \
-			and int(a.get("cost", 0)) < int(c.cost):
+	var thrifted: bool = a.get("thrift", false) if a.has("thrift") else (int(c.cost) > 0 and int(a.get("cost", 0)) < int(c.cost))
+	if a.get("source", "") == "hand" and h.st.get("thrift", 0) > 0 and not a.get("echo", false) and thrifted:
 		h.st.thrift -= 1   # Thrift: this card was planned at 1 less (a free card does not spend it)
 	if not a.get("echo", false):
 		s.prime = 0   # this action's own Prime effects build the next action's Prime
@@ -642,6 +655,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	if c.get("kw", []).has("Echo") and not a.get("echo", false):
 		var e: Dictionary = a.duplicate()
 		e.echo = true
+		e.echo_pos = int(s.get("ordo_pos", 0))
+		e.echo_spent_before = int(s.get("ordo_spent_before", 0)) - int(a.get("cost", 0))
 		s.echoes.append(e)
 	return ""
 
@@ -654,7 +669,8 @@ static func resolve_echoes(s: Dictionary) -> void:
 		_ev(s, {"t": "act", "unit": h.id, "target": e.get("target", -1), "text": c.name + " (Echo)", "card": e.card})
 		_log(s, "%s's %s echoes." % [h.name, c.name])
 		var targets := _targets_for(s, h, c, e)
-		_exec(s, h, c, targets, {"x": e.get("x", 0), "half": true, "prime": 0}, false)
+		_exec(s, h, c, targets, {"x": e.get("x", 0), "half": true, "prime": 0, "cost": int(e.get("cost", 0)),
+			"base_cost": max(0, int(c.cost)), "echo_pos": e.get("echo_pos", 0), "echo_spent_before": e.get("echo_spent_before", 0)}, false)
 	s.echoes = []
 
 static func _targets_for(s: Dictionary, h: Dictionary, c: Dictionary, a: Dictionary) -> Array:
@@ -801,10 +817,10 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"vigour_spent": return s.get("vigour_spent", 0)
 		"vigour_pool": return s.get("energy", 0)
 		"cost": return ctx.get("cost", 0)
-		"ordo_pos": return s.get("ordo_pos", 0)
+		"ordo_pos": return ctx.get("echo_pos", s.get("ordo_pos", 0))
 		"ordo_len": return s.get("ordo_len", 0)
 		"ordo_after": return max(0, int(s.get("ordo_len", 0)) - int(s.get("ordo_pos", 0)))
-		"spent_before": return s.get("ordo_spent_before", 0)
+		"spent_before": return ctx.get("echo_spent_before", s.get("ordo_spent_before", 0))
 		"heroes_before": return ctx.get("heroes_before", 0)
 		"handoff": return 1 if ctx.get("handoff", false) and not ctx.get("half", false) else 0
 		"first": return 1 if int(s.get("ordo_pos", 0)) == 1 and not ctx.get("half", false) else 0
@@ -849,8 +865,7 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"attackers":
 			var n := 0
 			for e in s.enemies:
-				var it := intent_of(e)
-				if not it.is_empty() and it.kind == "attack" and (e.intent_target == actor.id or it.target == "all_heroes" or (actor.st.get("taunt", 0) > 0 and it.target in SINGLE_TARGETS)):
+				if strikes(s, e, actor):
 					n += 1
 			return n
 		"elements_all":
@@ -896,21 +911,9 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"delayed": return 1 if int(u.get("delayed_round", -1)) == int(s.round) else 0
 		"incoming_to": return _incoming(s, u.id)
 		"targeted":
-			# a single-target strike goes to a Taunting hero, so count it there and not on its marked hero
-			var taunter := -1
-			for hh in s.heroes:
-				if not hh.dead and hh.st.get("taunt", 0) > 0:
-					taunter = hh.id
-					break
 			var n := 0
 			for e in s.enemies:
-				var it := intent_of(e)
-				if it.is_empty() or it.kind != "attack" or e.dead:
-					continue
-				var on_me: bool = it.target == "all_heroes"
-				if not on_me:
-					on_me = (taunter == u.id) if (taunter != -1 and it.target in SINGLE_TARGETS) else e.intent_target == u.id
-				if on_me:
+				if strikes(s, e, u):
 					n += 1
 			return n
 		"scars": return u.get("scars", 0)
@@ -948,12 +951,11 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"targeting_me":
 			if u.side == "hero":
 				for e in s.enemies:
-					var ie := intent_of(e)
-					if not ie.is_empty() and ie.kind == "attack" and (e.intent_target == u.id or ie.target == "all_heroes"):
+					if strikes(s, e, u):
 						return 1
 				return 0
 			var it := intent_of(u) if u.side == "enemy" else {}
-			return 1 if not it.is_empty() and it.kind == "attack" and (u.intent_target == actor.id or it.target == "all_heroes" or (actor.st.get("taunt", 0) > 0 and it.target in SINGLE_TARGETS)) else 0
+			return 1 if u.side == "enemy" and strikes(s, u, actor) else 0
 		"moved": return 1 if u.moved else 0
 		"exhaust", "discard", "hand", "draw":
 			var n: int = u.get(key, []).size()
@@ -998,17 +1000,39 @@ static func _cond1(s: Dictionary, actor: Dictionary, t: Dictionary, c: String, c
 		return q(s, actor, t, c.substr(1), ctx) == 0
 	return q(s, actor, t, c, ctx) > 0
 
+## Does foe e's planned attack land on hero h? Follows the redirection the strike will really take: Taunt pulls a
+## single-target blow, Guard takes it for the guarded hero, front2/back2 hit by rank, all_heroes hits everyone.
+static func strikes(s: Dictionary, e: Dictionary, h: Dictionary) -> bool:
+	var it := intent_of(e)
+	if it.is_empty() or it.kind != "attack" or e.dead or e.get("postponed", false) or h.is_empty() or h.dead:
+		return false
+	match String(it.target):
+		"all_heroes": return true
+		"front2": return rank_of(s, h) <= 2
+		"back2": return rank_of(s, h) >= 3
+	var victim: Dictionary = find(s, e.intent_target)
+	if it.target in SINGLE_TARGETS:
+		for th in s.heroes:
+			if not th.dead and th.st.get("taunt", 0) > 0:
+				victim = th
+				break
+	if not victim.is_empty() and victim.get("guarded_by", -1) != -1:
+		var g := find(s, victim.guarded_by)
+		if not g.is_empty() and not g.dead:
+			victim = g
+	return not victim.is_empty() and victim.id == h.id
+
 static func _incoming(s: Dictionary, only_id: int) -> int:
 	var total := 0
 	for e in s.enemies:
 		var it := intent_of(e)
-		if it.is_empty() or it.kind != "attack" or e.get("postponed", false):
+		if it.is_empty() or it.kind != "attack" or e.get("postponed", false) or e.dead:
 			continue
-		if only_id != -1 and e.intent_target != only_id and it.target != "all_heroes":
+		if only_id != -1 and not strikes(s, e, find(s, only_id)):
 			continue
 		for f in it.fx:
 			if f.t == "dmg":
-				total += int(f.n) + e.st.might
+				total += (int(f.n) + e.st.might) * int(f.get("times", 1))
 	return total
 
 static func _debuff_count(u: Dictionary) -> int:
@@ -1027,8 +1051,8 @@ static func _amt(s: Dictionary, actor: Dictionary, t: Dictionary, fx: Dictionary
 	if fx.has("max"):
 		n = min(n, float(fx.max))
 	var v := int(floor(n))
-	if ctx.get("half", false) and v > 0:
-		v = int(ceil(v / 2.0))
+	if ctx.get("half", false) and v != 0:
+		v = int(ceil(v / 2.0)) if v > 0 else -int(ceil(-v / 2.0))   # an Echo halves sheds and losses too
 	return v
 
 # ------------------------------------------------------------------ effects
@@ -1085,8 +1109,7 @@ static func _fx_targets(s: Dictionary, actor: Dictionary, fx: Dictionary, base: 
 		"attackers":
 			var o := []
 			for e in s.enemies:
-				var it := intent_of(e)
-				if not it.is_empty() and it.kind == "attack" and (e.intent_target == actor.id or it.target == "all_heroes"):
+				if strikes(s, e, actor):
 					o.append(e)
 			return o
 	return base
@@ -1102,9 +1125,12 @@ static func _exec(s: Dictionary, actor: Dictionary, c: Dictionary, targets: Arra
 			ctx[k] = 0
 	if not ctx.has("main"):
 		ctx.main = targets[0] if targets.size() > 0 else {}
-	for fx in list:
+	for fi in list.size():
+		var fx: Dictionary = list[fi]
 		if actor.dead or s.outcome != "":
 			return
+		if fx.t == "dmg" and fx.get("bonus", false):
+			continue   # folded into the hit before it (see below)
 		var tl := _fx_targets(s, actor, fx, targets)
 		if fx.t in ["self_block", "self_status", "armor", "advance", "retreat", "attune", "attune_to", "prime", "energy", "omen", "self_dmg", "self_stress", "to_front"] and not fx.has("to"):
 			tl = [actor]
@@ -1116,7 +1142,18 @@ static func _exec(s: Dictionary, actor: Dictionary, c: Dictionary, targets: Arra
 				continue
 			if c_if != "" and not cond(s, actor, t, c_if, ctx):
 				continue
+			if fx.t == "dmg":
+				# "Deal N more" (bonus) effects right after this hit add to it rather than striking again
+				var extra := 0
+				for bj in range(fi + 1, list.size()):
+					var b: Dictionary = list[bj]
+					if b.t != "dmg" or not b.get("bonus", false):
+						break
+					if String(b.get("if", "")) == "" or cond(s, actor, t, String(b["if"]), ctx):
+						extra += _amt(s, actor, t, b, ctx)
+				ctx.bonus = extra
 			_fx1(s, actor, c, fx, t, ctx, physical)
+			ctx.bonus = 0
 			if actor.dead or s.outcome != "":
 				break
 		if fx.t == "dmg":
@@ -1133,9 +1170,12 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 			var tt: Dictionary = t
 			if actor.side == "hero" and tt.side == "enemy":
 				tt = _redirect_enemy_target(s, tt)
+			n += int(ctx.get("bonus", 0))
 			for i in times:
 				if tt.dead or actor.dead:
 					break
+				if n + int(ctx.prime) <= 0:
+					break   # a hit of nothing does not land: no Might, no Dodge spent, no Thorns or Riposte
 				var p: int = ctx.prime
 				ctx.prime = 0
 				if p > 0:
@@ -1282,10 +1322,12 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 				t.bonus_draw += n
 				_ev(s, {"t": "status", "unit": t.id, "text": "+%d draw next round" % n})
 		"bank":
-			var kept: int = min(n, int(s.get("vigour_left", 0)))
+			# vigour_left stays the round's unspent vigour (banked vigour is still unspent); Bank can only keep what
+			# no earlier Bank has already kept
+			var kept: int = min(n, int(s.get("vigour_left", 0)) - int(s.get("banked", 0)))
 			if kept > 0:
 				s.bonus_energy += kept
-				s.vigour_left -= kept
+				s.banked = int(s.get("banked", 0)) + kept
 				_ev(s, {"t": "status", "unit": actor.id, "text": "%d vigour banked" % kept})
 		"energy":
 			s.bonus_energy += n
@@ -1376,7 +1418,8 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 				moved += int(a[2])
 				if a[0] == "e":
 					src.elements[a[1]] = 0
-					_apply_element(s, actor, t, a[1], int(a[2]), "stable")
+					# moved stacks keep their size: the mover's Focus neither swells nor is spent by a transfer
+					_apply_element(s, {"side": "hazard", "st": {"focus": 0}, "id": -1}, t, a[1], int(a[2]), "stable")
 				else:
 					t.st[a[1]] = t.st.get(a[1], 0) + int(a[2])
 					src.st[a[1]] = 0
@@ -2017,6 +2060,19 @@ static func _rite_fire(s: Dictionary, on: String, subject: Dictionary, owner := 
 			continue
 		if on == "play" and not subject.is_empty() and subject.get("side", "") == "hero" and not rt.get("allies", false):
 			continue   # a "play" rite answers cards played on foes unless it says allies
+		if on == "play" and subject.is_empty() and not rt.get("allies", false):
+			# a card with no foe target (a self or kit card): a rite aimed at "that foe" has nothing to land on, so it
+			# must not fall back on its own owner (checker, interaction pass)
+			var aims := false
+			for f in rt.get("fx", []):
+				var hostile: bool = String(f.t) in ["dmg", "coup", "dmg_per_element", "apply", "apply_attuned", "apply_next",
+					"apply_missing", "execute", "push", "pull", "delay", "turn", "steal_block", "bash_stun", "double", "spread",
+					"convert", "consume", "transfer", "lose_hp", "lose_armor", "unbind"] \
+					or (String(f.t) == "status" and String(f.get("s", "")) in ["bleed", "mark", "vulnerable", "hex", "doom", "stun"])
+				if hostile and String(f.get("to", "")) in ["", "target"]:
+					aims = true
+			if aims:
+				continue
 		var t: Dictionary = subject if not subject.is_empty() and not subject.get("dead", false) else h
 		var rctx := {"x": 0, "half": false, "prime": 0, "consumed": 0, "dealt": 0,
 			"handoff": info.get("handoff", false), "cost": info.get("cost", 0), "base_cost": info.get("base_cost", 0),

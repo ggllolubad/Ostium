@@ -312,5 +312,36 @@ func _init() -> void:
 	Combat.resolve_player_action(vc, {"hero": vca.id, "card": "t_free", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 0})
 	ok(vca.st.thrift == 1, "a free card does not spend Thrift")
 
+	# --- checker fixes: bonus damage is one hit; a 0 hit does not land; Bank leaves vigour_left; Taunt counts in reads
+	card("t_bonus", {"target": "enemy", "fx": [{"t": "dmg", "n": 4}, {"t": "dmg", "n": 3, "bonus": true}]})
+	card("t_zero", {"target": "enemy", "fx": [{"t": "dmg", "n": 0}]})
+	var xb := fresh()
+	var xh: Dictionary = xb.heroes[1]
+	var xe: Dictionary = xb.enemies[0]
+	xe.armor = 3
+	var xhp: int = xe.hp
+	play(xb, xh, "t_bonus", xe.id)
+	ok(xe.hp == xhp - 4, "a bonus folds into the hit, so Armor 3 is paid once (lost %d, want 4)" % (xhp - xe.hp))
+	xe.armor = 0
+	xe.st.thorns = 3
+	var xhh: int = xh.hp
+	play(xb, xh, "t_zero", xe.id)
+	ok(xh.hp == xhh, "a hit of 0 does not land, so Thorns do not answer it")
+	var xk := fresh()
+	xk.energy = 6
+	var xkh: Dictionary = xk.heroes[0]
+	xkh.hand = ["t_bank", "t_left"]
+	var xp := [{"hero": xkh.id, "card": "t_bank", "source": "hand", "hand_index": 0, "target": -1, "x": 0, "cost": 1},
+		{"hero": xkh.id, "card": "t_left", "source": "hand", "hand_index": 1, "target": -1, "x": 0, "cost": 1}]
+	xkh.block = 0
+	for a in Combat.order_plan(xk, xp):
+		Combat.resolve_player_action(xk, a)
+	ok(xk.vigour_left == 4 and xkh.block >= 12, "Bank leaves vigour left at 4, so the reader still sees it (block %d)" % xkh.block)
+	var xt := fresh()
+	xt.heroes[0].st.taunt = 1
+	xt.enemies[0].intent = "hit"
+	xt.enemies[0].intent_target = xt.heroes[2].id
+	ok(Combat.strikes(xt, xt.enemies[0], xt.heroes[0]) and not Combat.strikes(xt, xt.enemies[0], xt.heroes[2]), "a Taunted strike counts on the Taunter")
+
 	print("FAILS: %d" % fails)
 	quit()
