@@ -1,298 +1,316 @@
-id,cls,rarity,old_name,new_name,reason,art_ok
-al_base_to_gold,alchemist,C,Base to Gold,Crucible,head 'Gold' x2; matches art,yes
-al_infect_the_wound,alchemist,C,Infect the Wound,Sepsis,3 words,yes (basin)
-al_lye_splash,alchemist,C,Lye Splash,Lye,head 'Splash' x2,yes
-al_leech_jar,alchemist,U,Leech Jar,Leeches,head 'Jar' x3,yes (albarello)
-al_liquid_courage,alchemist,U,Liquid Courage,Aqua Vitae,modern idiom,yes (tankard)
-al_round_of_tonic,alchemist,U,Round of Tonic,Tonic,3 words,yes (onion bottle)
-al_stink_pot,alchemist,U,Stink Pot,Stinkpot,head 'Pot' x3; period weapon name,yes
-al_draw_the_venom,alchemist,R,Draw the Venom,Bezoar,3 words; period antidote,yes (no object; a bezoar stone would suit)
-al_magnum_opus,alchemist,R,Magnum Opus,Medicine Chest,synonym of The Great Work,yes (flask; a chest would be truer)
-al_the_physick_garden,alchemist,L,The Physick Garden,Physick Garden,too many 'The',yes
-al_black_work,alchemist,X,The Black Work,Nigredo,'The' on a path card; 'Work' x4,yes
-al_herb_bag,alchemist,X,Herb Bag,Herbal,head 'Bag' x2,yes
-al_kindle_the_rot,alchemist,X,Kindle the Rot,Brimstone,3 words,yes (candle)
-al_measured_dose,alchemist,X,Measured Dose,Dram,head 'Dose' x2,yes
-al_red_work,alchemist,X,The Red Work,Rubedo,'The' on a path card; 'Work' x4,yes
-al_snatch_from_the_door,alchemist,X,Snatch from the Door,Cordial,4 words,yes (door ajar; a cordial glass would be truer)
-al_war_tonics,alchemist,X,War Tonics,Stirrup Cup,head 'Tonic' x2; period parting drink,yes (bandolier)
-al_white_work,alchemist,X,The White Work,Albedo,'The' on a path card; 'Work' x4,yes
-bw_k_bank_the_cold,bulwark,K,Bank the Cold,Ice Over,3 words; plain verb,yes
-bw_k_come_on_then,bulwark,K,"Come On, Then",Provoke,spoken line; plain taunt verb,yes (door shown as the thing he bangs on)
-bw_hold_the_line,bulwark,S,Hold the Line,Hold Fast,3 words,yes (door upright)
-bw_over_the_rim,bulwark,S,Over the Rim,Overhand,3 words; head 'Rim' x2,yes
-bw_blood_for_iron,bulwark,C,Blood for Iron,Tempering,head 'iron' repeated; blood-tempered plate,yes
-bw_break_the_ice,bulwark,C,Break the Ice,Brunt,idiom pun,yes
-bw_come_and_take_it,bulwark,C,Come and Take It,Bristle,4-word spoken line,change: door ajar -> barbs bristling
-bw_draw_their_eyes,bulwark,C,Draw Their Eyes,Clamour,pronoun phrase; one loud noun,yes (knocker rapped = clamour)
-bw_grit_your_teeth,bulwark,C,Grit Your Teeth,Fortitude,pronoun phrase; 'Grit' is a keyword,yes
-bw_hoarfrost_blow,bulwark,C,Hoarfrost Blow,Rimed Mace,head 'Blow' x4,yes
-bw_hold_through_the_night,bulwark,C,Hold Through the Night,Nightwatch,4 words,yes
-bw_hook_and_drag,bulwark,C,Hook and Drag,Billhook,3 words; period polearm,yes
-bw_into_the_breach,bulwark,C,Into the Breach,Stopgap,quoted idiom,yes (boot stepping in)
-bw_keep_the_back_rank,bulwark,C,Keep the Back Rank,Rearguard,4 words,yes
-bw_penitents_blow,bulwark,C,Penitent's Blow,Penance,head 'Blow' x4; one strong noun,yes
-bw_toll_of_the_tower,bulwark,C,Toll of the Tower,Alarum,"4 words; tower alarm bell, echo",yes (no object; hero strikes)
-bw_answer_the_blow,bulwark,U,Answer the Blow,Reprisal,3 words; head 'Blow',yes
-bw_barbs_left_in,bulwark,U,Barbs Left In,Wrench,3 words; barbs torn free,yes
-bw_bleed_for_them,bulwark,U,Bleed for Them,Lifeblood,pronoun phrase,yes
-bw_bramble_wall,bulwark,U,Bramble Wall,Thicket,head 'Wall' x3,yes
-bw_rake_of_thorns,bulwark,U,Rake of Thorns,Rake,3 words,yes
-bw_shed_the_rime,bulwark,U,Shed the Rime,Sleet,3 words; rime shed onto foes,yes
-bw_shoulder_their_burden,bulwark,U,Shoulder Their Burden,Yoke,3 words; matches art object,yes
-bw_under_the_door,bulwark,U,Under the Door,Sanctuary,3 words; 'Door' x10,yes (church door = sanctuary)
-bw_weight_of_the_door,bulwark,U,Weight of the Door,Battering Ram,4 words; 'Door' x10,yes (no object; door used as ram)
-bw_aegis_of_the_door,bulwark,R,Aegis of the Door,Church Door,4 words; door kept as signature,yes
-bw_frozen_bulwark,bulwark,R,Frozen Bulwark,Ice Rampart,uses the calling's own name,yes (column/shield read as rampart)
-bw_hedge_of_spikes,bulwark,R,Hedge of Spikes,Palisade,3 words; siege word,yes (caltrops read as stakes)
-bw_rose_of_iron,bulwark,R,Rose of Iron,Iron Rose,3 words,yes
-bw_the_door_swings,bulwark,R,The Door Swings,Stave In,'The' on a rare; 'Door' x10,yes
-bw_crown_of_iron_thorns,bulwark,L,Crown of Iron Thorns,Crown of Thorns,4 words,yes
-bw_the_door_does_not_fall,bulwark,L,The Door Does Not Fall,Indomitable,5-word sentence,yes (door ajar still fits)
-bw_the_ledger_of_wounds,bulwark,L,The Ledger of Wounds,Reckoning,4 words,yes
-bw_winter_without_end,bulwark,L,Winter Without End,Midwinter,3 words; head 'Winter' x3,yes
-bw_barbed_shove,bulwark,X,Barbed Shove,Repel,'Barbed' x4,yes
-bw_bound_with_rope,bulwark,X,Bound with Rope,Bindings,3 words,yes
-bw_breath_of_the_north,bulwark,X,Breath of the North,North Wind,4 words,yes
-bw_come_and_finish_it,bulwark,X,Come and Finish It,Last Stand,4-word spoken line,yes
-bw_frostbite_bash,bulwark,X,Frostbite Bash,Hailstone,clashes with Frostbite affliction,yes
-bw_patched_with_lead,bulwark,X,Patched with Lead,Lead Patch,3 words,yes
-bw_pine_and_iron,bulwark,X,Pine and Iron,Ironbound,3 words; the door's iron bands,yes
-bw_punishing_wall,bulwark,X,Punishing Wall,Portcullis,head 'Wall' x3; matches art,yes
-bw_scourged_back,bulwark,X,Scourged Back,Welts,near-dup of The Scourged Hand,yes
-bw_shatter_the_line,bulwark,X,Shatter the Line,Shatter,3 words,yes
-bw_still_here,bulwark,X,Still Here,Endure,second spoken line,yes
-du_drag_to_the_block,duelist,K,Drag to the Block,Collar,4 words,yes (block as destination)
-du_find_the_gap,duelist,K,Find the Gap,Feint,3 words,yes
-du_deep_cut,duelist,C,Deep Cut,Gash,head 'Cut' x7,yes
-du_feather_cut,duelist,C,Feather Cut,Flourish,head 'Cut' x7,yes
-du_follow_through,duelist,C,Press the Opening,Press,3 words,yes
-du_heading_stroke,duelist,C,Heading Stroke,Two-Hander,head 'Stroke' x3; the headsman's sword,yes
-du_pronounce_sentence,duelist,C,Pronounce Sentence,Verdict,'Sentence' x4,yes
-du_slip_and_cut,duelist,C,Slip and Cut,Slip,3 words; head 'Cut',yes
-du_the_crowd_watches,duelist,C,The Crowd Watches,Spectacle,'The' on a common,yes
-du_thunder_lunge,duelist,C,Thunder Lunge,Thunderbolt,head 'Lunge' x2,yes
-du_turn_of_the_wrist,duelist,C,Turn of the Wrist,Supple Wrist,4 words,yes
-du_barbers_trade,duelist,U,Barber's Trade,Barber-Surgeon,pun,yes
-du_bled_pale,duelist,U,Bled Pale,Pallor,pun,yes
-du_carry_out_the_sentence,duelist,U,Carry Out the Sentence,Behead,4 words,yes
-du_catch_the_rhythm,duelist,U,Catch the Rhythm,Cadence,3 words,yes
-du_drain_the_bowl,duelist,U,Drain the Bowl,Bleeding Bowl,3 words; the barber's own bowl,yes
-du_in_the_wake,duelist,U,In the Wake,Flurry,3 words,yes
-du_next_in_line,duelist,U,Next in Line,Notch,3 words; kill notched on the haft,yes
-du_open_guard,duelist,U,Open Guard,Invitation,'Open' x3; fencing term for an opened guard,yes
-du_red_hands,duelist,U,Red Hands,Gore,head 'Hands' x2,yes
-du_second_stroke,duelist,U,Second Stroke,Hew,'Second' x3; 'Stroke' x3,yes
-du_serrated_rhythm,duelist,U,Serrated Rhythm,Bonesaw,head 'Rhythm' x2; barber-surgeon's saw,yes
-du_shatter_point,duelist,U,Shatter Point,Shiver,head 'Point' x2,yes
-du_bowl_passed_round,duelist,R,The Bowl Passed Round,Leechcraft,pun; 4 words,yes (bowl)
-du_duellists_eye,duelist,R,The Duelist's Eye,Master's Eye,'The' + calling name,yes
-du_echo_of_steel,duelist,R,Echo of Steel,Reprise,3 words; fencing renewed attack,yes
-du_fall_back_in_guard,duelist,R,Fall Back in Guard,Disengage,4 words,yes
-du_hundred_touches,duelist,R,A Hundred Touches,Bout,3 words; head 'Touch' x2,yes
-du_make_an_example,duelist,R,Make an Example,Gibbet,idiom; concrete headsman object,yes
-du_oath_of_the_salle,duelist,R,Oath of the Salle,Salute,4 words,yes (gauntlet raised)
-du_open_every_vein,duelist,R,Open Every Vein,Bloodbath,'Vein' x3,yes (lancet)
-du_ride_the_lightning,duelist,R,Ride the Lightning,Lightning Step,modern reference,yes
-du_the_bowl_runs_over,duelist,L,The Bowl Runs Over,Brimful,4 words; 'Bowl' x3,yes
-du_the_endless_measure,duelist,L,The Endless Measure,Danse Macabre,'Measure' x3,change: hourglass -> dancing figure or skull
-du_the_headsmans_round,duelist,L,The Headsman's Round,Headsman,3 words,yes
-du_two_blades_one_heart,duelist,L,"Two Blades, One Heart",Ambidexter,4 words,yes (shears read as two blades)
-du_arterial_cut,duelist,X,Arterial Cut,Jugular,head 'Cut' x7,yes
-du_bleed_the_line,duelist,X,Bleed the Line,Lacerate,3 words,yes
-du_cut_between_beats,duelist,X,Cut Between Beats,Tempo,3 words; head 'Cut',yes
-du_drag_them_up,duelist,X,Drag Them Up,Shackle,pronoun phrase; matches art,yes
-du_drink_and_dance,duelist,X,Drink and Dance,Bravado,3 words,yes
-du_heavy_sentence,duelist,X,Heavy Sentence,Forfeit,'Sentence' x4,yes
-du_let_the_fever_out,duelist,X,Let the Fever Out,Purge,4 words,yes
-du_nick_the_vein,duelist,X,Nick the Vein,Nick,3 words,yes
-du_second_blade,duelist,X,Second Blade,Main-Gauche,'Second' x3; 'Blade' x3,yes
-du_square_tip,duelist,X,The Square Tip,Square Tip,'The' on a path card,yes
-du_turn_the_parry,duelist,X,Turn the Parry,Turnabout,3 words; 'Parry' x2,yes
-du_untouchable,duelist,X,Untouchable,Sidestep,identical to a StS card,yes (hand)
-du_wipe_the_blade,duelist,X,Wipe the Blade,Sheathe,3 words,yes
-el_conjoin,elementalist,K,Strike the Wet Ink,Strikethrough,4 words; 'Ink' x10,yes
-el_stopper_the_jar,elementalist,K,Wax the Mouth,Stopper,odd phrase,yes
-el_turn_the_ring,elementalist,K,Turn the Ring,Signet,3 words; 'Ring' x4,yes
-el_wet_the_nib,elementalist,S,Wet the Nib,Inking,3 words; 'Nib' x3,yes
-el_count_the_colours,elementalist,C,Count the Colours,Abacus,3 words; matches art,yes
-el_draw_the_tide,elementalist,C,Draw the Tide,Riptide,3 words,yes
-el_flung_ink,elementalist,C,Flung Ink,Spatter,'Ink' x10,yes
-el_frost_the_swing,elementalist,C,Frost the Swing,Numb,3 words,yes
-el_hold_the_breath,elementalist,C,Hold the Breath,Patience,near-dup of Hold Your Breath; 'Breath' x3,yes
-el_lay_the_ground,elementalist,C,Lay the Ground,Undercoat,3 words,yes
-el_open_palm,elementalist,C,Open Palm,Handprint,duplicate of the Vessel's Open Palm,yes (gauntlet hand)
-el_reaction_shield,elementalist,C,Reaction Shield,Fireguard,modern chemistry word,yes (hood; a fire screen would be truer)
-el_seal_the_jar,elementalist,C,Seal the Jar,Sealing Wax,3 words,yes
-el_second_ink,elementalist,C,Second Ink,Inkhorn,'Ink' x10; 'Second'; matches art,yes
-el_sigil_on_the_door,elementalist,C,Sigil on the Door,Lintel,4 words; 'Sigil' x7,yes (door)
-el_spectrum_bolt,elementalist,C,Spectrum Bolt,Refraction,head 'Bolt' x2,yes
-el_turn_the_page,elementalist,C,Turn the Page,Overleaf,3-word idiom,yes
-el_twin_sigil,elementalist,C,Twin Sigil,Ligature,'Sigil' x7; two letters joined,yes
-el_wet_the_line,elementalist,C,Wet the Line,Drench,3 words,yes
-el_cold_for_the_void,elementalist,U,Cold for the Void,Starless Cold,4 words,yes
-el_deep_cold,elementalist,U,Deep Cold,Freeze,head 'Cold' x2,yes
-el_feedback,elementalist,U,Feedback,Backlash,modern audio word,yes
-el_fill_the_gaps,elementalist,U,Fill the Gaps,Infill,3 words,yes
-el_ground_the_arc,elementalist,U,Ground the Arc,Grounding,3 words,yes
-el_lend_the_nib,elementalist,U,Lend the Nib,Spare Quill,3 words; 'Nib' x3,yes
-el_read_the_colours,elementalist,U,Read the Colours,Survey,3 words; 'Colour' x4,yes (lectern)
-el_rime_and_brine,elementalist,U,Rime and Brine,Freezing Spray,rhyming pair,yes (no strong object)
-el_second_spark,elementalist,U,Second Spark,Tinder,'Second'; head 'Spark' x2,yes
-el_spend_the_breath,elementalist,U,Spend the Breath,Vent,3 words; 'Breath' x3,yes
-el_tip_the_vessel,elementalist,U,Tip the Vessel,Sluice,3 words; avoids the Vessel's name,yes
-el_warding_sigil,elementalist,U,Warding Sigil,Talisman,'Sigil' x7,yes
-el_wash_of_colour,elementalist,U,Wash of Colour,Wash,3 words; 'Colour' x4,yes
-el_weigh_the_stacks,elementalist,U,Weigh the Stacks,Plumb,3 words; matches art,yes
-el_chain_of_ink,elementalist,R,Chain of Ink,Cursive,3 words; 'Ink' x10; linked script,yes
-el_draw_the_ink_out,elementalist,R,Draw the Ink Out,Siphon,4 words; 'Ink',yes
-el_full_ring,elementalist,R,Full Ring,Every Colour,'Ring' x4,yes
-el_shared_pot,elementalist,R,The Shared Pot,Shared Pot,'The' on a rare,yes
-el_strike_the_ring,elementalist,R,Strike the Ring,Chime,3 words; 'Ring' x4,yes
-el_weight_and_measure,elementalist,R,Weight and Measure,Assay,3 words; 'Weight' x3,yes
-el_chain_of_sigils,elementalist,L,Chain of Sigils,Wildfire,head 'Sigil' x2; spreads to neighbours,yes (match)
-el_clouded_eye_saw,elementalist,L,What the Clouded Eye Saw,Clouded Eye,5-word clause,yes
-el_perpetual_working,elementalist,L,The Perpetual Working,Perpetual Working,too many 'The',yes
-el_quickened_hand,elementalist,L,The Quickened Hand,Quickening,too many 'The'; head 'Hand',yes (reed pen)
-el_clouded_sight,elementalist,X,Clouded Sight,Spectacles,near-dup of Clouded Eye; matches art,yes
-el_double_flick,elementalist,X,Double Flick,Firesteel,head 'Flick' x2; matches art,yes
-el_every_colour,elementalist,X,Every Colour at Once,Polychrome,4 words,yes (inkhorn)
-el_heavy_pour,elementalist,X,Heavy Pour,Deluge,head 'Pour' x2,yes
-el_ring_turn,elementalist,X,Read the Halo,Corona,3 words; head 'Halo' x2,yes
-el_sigils_on_the_skin,elementalist,X,Sigils on the Skin,Inked Skin,4 words; 'Sigil' x7,yes
-el_six_inks,elementalist,X,Six Inks,Stained Fingers,'Ink' x10; near Sixth Ink,yes (gauntlet hand)
-el_under_the_weight,elementalist,X,Under the Weight,Ballast,3 words; 'Weight' x3,yes
-el_weight_of_the_vessel,elementalist,X,Weight of the Vessel,Heft,4 words; avoids the Vessel's name,yes
-pass_it_on,hexweaver,K,Pass It On,Transference,pronoun phrase,yes (poppet)
-cracked_glass,hexweaver,C,Cracked Glass,Fracture,head 'Glass' x5,yes (shard)
-hand_it_back,hexweaver,C,Hand It Back,Ill-Wishing,pronoun phrase,yes (hand)
-hasten_the_end,hexweaver,C,Hasten the End,Coffin Nail,3 words,yes
-martyrs_pin,hexweaver,C,Martyr's Pin,Red Hand,head 'Pin' x2,yes
-mirror_mirror,hexweaver,C,"Mirror, Mirror",Looking Glass,spoken line,yes
-salt_the_threshold,hexweaver,C,Salt the Threshold,Salted Threshold,3 words,yes
-take_the_rot,hexweaver,C,Take the Rot,Drawing Salve,near-dup of Take the Rot Out,yes (sponge; a salve pot would be truer)
-tithe_of_blood,hexweaver,C,Tithe of Blood,Cut Palm,duplicate of the Bulwark's Tithe of Blood,yes (knife)
-backed_with_silver,hexweaver,U,Backed with Silver,Silvering,3 words,yes
-bind_the_fear,hexweaver,U,Bind the Fear,Banishing,3 words,yes (cord)
-blood_on_the_poppets,hexweaver,U,Blood on the Poppets,Bloodied Straw,4 words; head 'Poppet' x3,yes (poppet)
-rot_from_within,hexweaver,U,Rot from Within,Canker,3 words,yes
-spill_the_rot,hexweaver,U,Spill the Rot,Unburden,3 words; 'Rot' x3,yes
-take_their_wounds,hexweaver,U,Take Their Wounds,Proxy,pronoun phrase,yes
-toll_the_hour,hexweaver,U,Toll the Hour,Curfew,3 words; 'Hour' x3,yes (bell wheel)
-turn_the_glass,hexweaver,U,Face in the Glass,Glamour,3 words; 'Glass' x5,yes (mirror)
-bell_book_candle,hexweaver,R,"Bell, Book and Candle",Anathema,4 words; the curse that rite pronounces,yes (snuffer: candles snuffed at the anathema)
-blood_debt,hexweaver,R,Blood Debt,Grudge,'Blood' x7,yes (book as tally)
-burn_the_poppet,hexweaver,R,Burn the Poppet,Burning Effigy,3 words; head 'Poppet' x3,yes (brazier/poppet)
-death_knell,hexweaver,L,Death Knell,Death Toll,head 'Knell' x2,yes (coffin)
-the_witchs_glass,hexweaver,L,The Witch's Glass,Witch Ball,too many 'The'; matches art,yes
-bear_the_burden,hexweaver,X,Bear the Burden,Rancour,3 words,yes (sack as the load borne)
-blood_for_blood,hexweaver,X,Blood for Blood,Feud,3 words; 'Blood' x7,yes
-crossed_glass,hexweaver,X,Crossed Glass,Bewilder,head 'Glass' x5,yes (shard)
-doubled_image,hexweaver,X,Doubled Image,Fetch,folk spirit-double,yes
-knock_at_the_door,hexweaver,X,Knock at the Door,Knock,4 words,yes
-let_it_run,hexweaver,X,Let It Run,Lancing,pronoun phrase,yes
-mirrored_curse,hexweaver,X,Mirrored Curse,Reflection,head 'Curse' x3,yes
-prophet_of_doom,hexweaver,X,Prophet of Doom,Raven,3-word idiom; matches art,yes
-return_to_sender,hexweaver,X,Return to Sender,Recoil,modern postal idiom,yes
-take_the_curse_in,hexweaver,X,Take the Curse In,Curse-Breaking,4 words,yes (poppet)
-the_final_hour,hexweaver,X,The Final Hour,Snuff Out,'The' on a path card; 'Hour' x3,yes
-thiefs_glass,hexweaver,X,Thief's Glass,Cutpurse,head 'Glass' x5,yes (witch ball)
-toll_of_bells,hexweaver,X,Toll of Bells,Peal,3 words; head 'Bell' x4,yes
-or_event_horizon,oracle,C,Event Horizon,Abyss,modern physics,yes
-or_glimpse_ahead,oracle,C,Glimpse Ahead,Premonition,head 'Ahead' x2; 'Glimpse' x2,yes
-or_knucklebones,oracle,C,Cast the Knucklebones,Knucklebones,3 words,yes
-or_omen_bolt,oracle,C,Omen Bolt,Portent,'Omen' x3,yes
-or_pull_the_thread,oracle,C,Pull the Thread,Unravel,3 words; 'Thread' x4,yes
-or_starlit_ward,oracle,C,Starlit Ward,Starlight,head 'Ward' x2,yes
-or_borrowed_time,oracle,U,Borrowed Time,Sleepless,identical to a StS card,yes
-or_cut_the_cord,oracle,U,Cut the Cord,Cut Short,idiom; 'Shears' head clash,yes
-or_fulfil_the_omen,oracle,U,Fulfil the Omen,Prophecy,3 words; 'Omen' x3,yes
-or_gathering_thread,oracle,U,Gathering Thread,Spindle,'Thread' x4; matches art,yes
-or_quiet_hour,oracle,U,The Quiet Hour,Quiet Hour,'The' on an uncommon,yes
-or_red_ink,oracle,U,Red Ink,Vermilion,'Red' x4; head 'Ink' x2,yes
-or_reverse_the_glass,oracle,U,Reverse the Glass,Retrograde,3 words; 'Glass' x2,yes
-or_trade_on_tomorrow,oracle,U,Trade on Tomorrow,Augur's Fee,3 words,yes
-or_unwritten,oracle,U,The Unwritten,Erasure,'The' on an uncommon,yes
-or_wheel_turns,oracle,U,The Wheel Turns,Fortune's Wheel,'The' on an uncommon,yes
-or_wind_the_spring,oracle,U,Wind the Spring,Mainspring,3 words,yes (key)
-or_augury_of_birds,oracle,R,Augury of Birds,Augury,3 words,yes
-or_scatter_the_bones,oracle,R,Scatter the Bones,Cast Lots,3 words; 'Bones' x3,yes (no object; scattered bones)
-or_the_bone_pouch,oracle,L,The Bone Pouch,Bone Pouch,too many 'The',yes
-or_the_severed_thread,oracle,L,The Severed Thread,Severed Thread,too many 'The',yes
-or_the_turned_glass,oracle,L,The Turned Glass,Turned Glass,too many 'The',yes
-or_broken_pendulum,oracle,X,Broken Pendulum,Hitch,head 'Pendulum' x2,yes
-or_clock_face,oracle,X,Clock Face,Dial,head 'Clock' x2,yes
-or_needle_and_thread,oracle,X,Needle and Thread,Needlework,3 words; 'Thread' x4,yes
-or_read_the_signs,oracle,X,Read the Signs,Auspices,3 words,yes
-or_reading_the_knots,oracle,X,Reading the Knots,Knotwork,3 words; 'Knot' x3,yes
-or_rebuke_the_seen,oracle,X,Rebuke the Seen,Rebuke,3 words,yes
-or_red_knot,oracle,X,Red Knot,Tangle,'Red' x4; head 'Knot' x3,yes
-or_run_back_the_sand,oracle,X,Run Back the Sand,Reprieve,4 words; 'Sand' x2,yes (funnel as sand)
-or_spill_the_ink,oracle,X,Spill the Ink,Spilt Ink,3 words,yes
-or_wring_the_bird,oracle,X,Wring the Bird,Sacrifice,3 words; crude,yes (feather)
-ve_bear_it,vessel,S,Bear It,Forbearance,pronoun phrase,yes
-ve_give_back,vessel,S,Give Back,Oblation,plain phrase; the offering given,yes
-ve_take_into_me,vessel,S,Take Into Me,Communion,pronoun phrase; matches chalice,yes
-ve_balance_the_scale,vessel,C,Balance the Scale,Balance,3 words,yes
-ve_bitter_gift,vessel,C,Bitter Gift,Bitter Cup,liturgical; head 'Gift',yes
-ve_come_to_me,vessel,C,Come to Me,Angelus,spoken line; the bell that calls,yes
-ve_copy_the_page,vessel,C,Copy the Page,Transcribe,3 words; 'Page' x3,yes
-ve_drink_the_dregs,vessel,C,Drink the Dregs,Dregs,3 words,yes
-ve_hearthstone,vessel,C,Hearthstone,Fireside,shares a famous game's name,yes
-ve_mouthful,vessel,C,Mouthful,Manna,gross-out; bread art,yes
-ve_other_half,vessel,C,The Other Half,Diptych,'The' on a common; matches art,yes
-ve_retch,vessel,C,Retch,Libation,gross-out,yes (basin)
-ve_second_mouthful,vessel,C,Second Mouthful,Antiphon,gross-out; follow-up response,change: spoon -> antiphonary or choir book
-ve_shoulder_it,vessel,C,Shoulder It,Burden,pronoun phrase,yes
-ve_soak_the_mark,vessel,C,Soak the Mark,Baptism,3 words,yes (bucket; a font would be truer)
-ve_spit,vessel,C,Spit,Aspersion,gross-out; matches aspergillum art,yes
-ve_stand_near,vessel,C,Stand Near,Intercede,flat phrase,yes (lamp/hearth)
-ve_taste,vessel,C,Taste,Foretaste,bodily; draw next round,yes
-ve_warm_hands,vessel,C,Warm Hands,Unction,liturgical; healing anointing,yes (brazier; a chrism flask would be truer)
-ve_weight_of_it,vessel,C,The Weight of It,Millstone,pronoun phrase; matches art,yes
-ve_balanced_hands,vessel,U,Balanced Hands,Justice,head 'Hands' x4; scales,yes
-ve_bare_skin,vessel,U,Bare Skin,Stigmata,bodily; thorns from wounds,change: hood -> marked palms
-ve_bite,vessel,U,Bite,Tongs,bodily; matches art,yes
-ve_draw_it_out,vessel,U,Draw It Out,Exorcism,pronoun phrase,yes
-ve_even_breath,vessel,U,Even Breath,Plainsong,head 'Breath' x4; level chant,yes (mason's level as evenness)
-ve_gather_the_inks,vessel,U,Gather the Inks,Gleaning,3 words,yes (spindle)
-ve_heavy_air,vessel,U,Heavy Air,Thurible,vague; matches art,yes
-ve_open_page,vessel,U,The Open Page,Lectern,'The' on an uncommon; matches art,yes
-ve_open_palm,vessel,U,Open Palm,Benediction,duplicate of Elementalist's Open Palm,yes
-ve_spit_through,vessel,U,Spit Through,Unveil,gross-out; strips Ward,yes (ewer)
-ve_split_tongue,vessel,U,Split Tongue,Pentecost,bodily; tongues to every foe,yes (handbell)
-ve_unclench,vessel,U,Unclench,Absolution,bodily; release of all held,yes (open hand)
-ve_warm_room,vessel,U,The Warm Room,Warming Room,'The' on an uncommon,yes
-ve_drink_the_spill,vessel,R,Drink the Spill,Chalice,3 words,yes
-ve_keep_the_hours,vessel,R,Keep the Hours,Compline,3 words; the evening office,yes
-ve_lay_it_down,vessel,R,Lay It Down,Requiem,pronoun phrase,yes
-ve_return_it,vessel,R,Return It,Recompense,pronoun phrase,yes (mirror)
-ve_speak_to_all,vessel,R,Speak to All,Sermon,3 words,yes (bell)
-ve_swallow_whole,vessel,R,Swallow Whole,Last Rites,gross-out; execute,change: funnel -> oil stock or viaticum pyx
-ve_take_their_place,vessel,R,Take Their Place,Vicar,pronoun phrase; one who stands in,yes (chair)
-ve_hearth_kept,vessel,L,The Hearth Kept,Hearth Kept,too many 'The',yes
-ve_mothers_place,vessel,L,The Mother's Place,Mother's Place,too many 'The',yes
-ve_mothers_tongue,vessel,L,The Mother's Tongue,Mother Tongue,too many 'The',yes
-ve_unstopped_mouth,vessel,L,The Unstopped Mouth,Wellspring,bodily; endless outpouring,yes (onion bottle)
-ve_weight_of_the_world,vessel,L,The Weight of the World,World's Weight,4 words,yes
-ve_carry_them,vessel,X,Carry Them,Ingathering,pronoun phrase,yes
-ve_chain_word,vessel,X,Chain Word,Litany,flat phrase; chain of invocations,yes (torch)
-ve_chew,vessel,X,Chew,Grind,gross-out,yes (mortar)
-ve_double_spit,vessel,X,Double Spit,Cruet,gross-out; matches art,yes
-ve_far_spit,vessel,X,Far Spit,Holy Water,gross-out,yes (ewer)
-ve_flood_the_line,vessel,X,Flood the Line,Flood,3 words,yes (font)
-ve_full_weight,vessel,X,Full Weight,Winepress,head 'Weight' x4; matches art,yes
-ve_gilded_page,vessel,X,Gilded Page,Gilding,head 'Page' x3,yes (book)
-ve_gorge,vessel,X,Gorge,Purification,gross-out,yes (cauldron)
-ve_keep_her_quiet,vessel,X,Keep Her Quiet,Silence,pronoun phrase,yes (padlock)
-ve_lend_weight,vessel,X,Lend Weight,Plummet,head 'Weight' x4; matches art,yes
-ve_level_hands,vessel,X,Level Hands,Mason's Level,head 'Hands' x4; matches art,yes
-ve_six_bands,vessel,X,Six Bands,Reliquary,head 'Band' x2; matches arm reliquary,yes
-ve_spread_arms,vessel,X,Spread Arms,Cruciform,flat phrase,yes (robe)
-ve_warm_breath,vessel,X,Warm Breath,Consolation,head 'Breath' x4,yes (kettle)
-w_drowned_bells_silent,world_drowned,W,The Bells Fall Silent,Silent Bells,4 words,yes
-w_fleet_frozen_to_the_rail,world_fleet,W,Frozen to the Rail,Frozen Rail,4 words,yes
-w_foundry_out_of_the_splash,world_foundry,W,Out of the Splash,Leap Clear,4 words,yes
-w_garden_take_the_rot,world_garden,W,Take the Rot Out,Uproot,near-dup of Take the Rot; 4 words,yes
-w_silence_star_comes_down,world_silence,W,The Star Comes Down,Falling Star,4 words,yes
-w_spire_second_hand,world_spire,W,Second Hand,Minute Hand,duplicate of Oracle's Second Hand,yes
+id,cls,rarity,old_name,new_name,reason,art_ok,picture
+al_base_to_gold,alchemist,C,Base to Gold,Crucible,abstract; tester miss; head 'Gold' x2,yes,crucible
+al_infect_the_wound,alchemist,C,Infect the Wound,Foul Basin,3 words; object over Sepsis,yes,fouled basin
+al_lye_splash,alchemist,C,Lye Splash,Lye,head 'Splash' x2,yes,bucket
+al_reagent,alchemist,C,Reagent,Dropper,abstract; tester miss,yes,dropper
+al_fester,alchemist,U,Fester,Blowfly,rot name; art was spectacles,change: spectacles -> blowfly,blowfly
+al_leech_jar,alchemist,U,Leech Jar,Leeches,head 'Jar' x3,yes (jar of leeches),leech jar
+al_liquid_courage,alchemist,U,Liquid Courage,Aqua Vitae,modern idiom,yes (tankard),tankard
+al_putrefaction,alchemist,U,Putrefaction,Toadstool,rot name; tester miss,yes,toadstool
+al_rectify,alchemist,U,Rectify,Retort,abstract verb; tester miss,yes,retort
+al_restock,alchemist,U,Restock,Hamper,plain verb; tester miss,yes,wicker hamper
+al_round_of_tonic,alchemist,U,Round of Tonic,Wassail Bowl,plain potion name; every hero shares it,change: drinking horn -> wassail bowl,wassail bowl
+al_stink_pot,alchemist,U,Stink Pot,Stinkpot,head 'Pot' x3; period weapon name,yes,chamberpot
+al_black_rot,alchemist,R,Black Rot,Plague Pit,rot name; tester miss,change: skull -> lime pit with skulls,plague pit
+al_draw_the_venom,alchemist,R,Draw the Venom,Bezoar,3 words; period antidote,yes (no object; a bezoar stone would suit),bezoar stone
+al_elixir_of_life,alchemist,R,Elixir of Life,Gold Ampoule,abstract; tester miss,"yes (ampoule, gilded)",gilded ampoule
+al_magnum_opus,alchemist,R,Magnum Opus,Medicine Chest,abstract; synonym of the Great Work,change: flask -> medicine chest of flasks,medicine chest
+al_panacea,alchemist,R,Panacea,Unicorn Horn,abstract; period cure-all; StS name,yes,unicorn horn
+al_prima_materia,alchemist,R,Prima Materia,Cauldron,abstract Latin; tester miss,yes,cauldron
+al_the_great_work,alchemist,L,The Great Work,Philosopher's Egg,abstract; tester miss,yes,philosopher's egg
+al_the_physick_garden,alchemist,L,The Physick Garden,Physick Garden,too many 'The',yes,wateringcan
+al_black_work,alchemist,X,The Black Work,Death's Head,'The' on path card; object over Nigredo,yes,skull
+al_herb_bag,alchemist,X,Herb Bag,Herb Pouch,head 'Bag' x2; object over Herbal,yes,herb pouch
+al_kindle_the_rot,alchemist,X,Kindle the Rot,Brimstone,3 words,yes (candle),brimstone candle
+al_measured_dose,alchemist,X,Measured Dose,Dram,head 'Dose' x2,yes,spoon
+al_quintessence,alchemist,X,Quintessence,Fifth Phial,abstract; names the fifth phial on the rack,yes,"rack of phials, fifth apart"
+al_red_work,alchemist,X,The Red Work,Pelican,'The' on path card; object over Rubedo,yes,pelican vessel
+al_ripen,alchemist,X,Ripen,Pomegranate,rot name; tester miss; seeds multiply,yes,split pomegranate
+al_second_dose,alchemist,X,Second Dose,Spoonful,plain potion name; tester miss,yes,spoon
+al_snatch_from_the_door,alchemist,X,Snatch from the Door,Cordial,4 words,yes (door ajar; a cordial glass would be truer),cordial glass
+al_war_tonics,alchemist,X,War Tonics,Stirrup Cup,head 'Tonic' x2; period parting drink,yes (bandolier),stirrup cup
+al_white_work,alchemist,X,The White Work,Rosewater,'The' on path card; water then Conjoin,yes (cruet of rosewater),cruet
+fl_draught,alchemist,F,Plain Draught,Small Beer,plain potion name; tester miss,yes (vial; a tankard would be truer),small beer
+fl_focus,alchemist,F,Clarity Draught,Eyebright,plain potion name; herb for clear sight,yes (spectacles; a sprig of eyebright beside them),spectacles
+fl_haste,alchemist,F,Haste Draught,Quicksilver,plain potion name; haste,yes (hourglass running with quicksilver),hourglass
+fl_heal,alchemist,F,Healing Draught,Wineskin,plain potion name; wine for wounds,yes,leather wineskin
+fl_rage,alchemist,F,Bloodrage Draught,Mead,plain potion name; berserk mead,yes,drinking horn of mead
+bw_k_bank_the_cold,bulwark,K,Bank the Cold,Ice Over,3 words; plain verb,yes,icicles
+bw_k_come_on_then,bulwark,K,"Come On, Then",Provoke,spoken line; plain taunt verb,yes (door shown as the thing he bangs on),door
+bw_hold_the_line,bulwark,S,Hold the Line,Hold Fast,3 words,yes (column),column
+bw_over_the_rim,bulwark,S,Over the Rim,Overhand,3 words; head 'Rim' x2,yes,hero doing the act (no object)
+bw_blood_for_iron,bulwark,C,Blood for Iron,Tempering,head 'iron' repeated; blood-tempered plate,yes,breastplate
+bw_break_the_ice,bulwark,C,Break the Ice,Brunt,idiom pun,yes,hero doing the act (no object)
+bw_come_and_take_it,bulwark,C,Come and Take It,Bristle,4-word spoken line,yes (breastplate bristling with barbs),barbed breastplate
+bw_draw_their_eyes,bulwark,C,Draw Their Eyes,Clamour,pronoun phrase; one loud noun,yes (handbell),handbell
+bw_grit_your_teeth,bulwark,C,Grit Your Teeth,Fortitude,pronoun phrase; 'Grit' is a keyword,yes,gauntlet
+bw_hoarfrost_blow,bulwark,C,Hoarfrost Blow,Rimed Mace,head 'Blow' x4,yes,hero doing the act (no object)
+bw_hold_through_the_night,bulwark,C,Hold Through the Night,Nightwatch,4 words,yes,lantern
+bw_hook_and_drag,bulwark,C,Hook and Drag,Billhook,3 words; period polearm,yes,hero doing the act (no object)
+bw_into_the_breach,bulwark,C,Into the Breach,Stopgap,quoted idiom,yes (boot stepping in),boot
+bw_keep_the_back_rank,bulwark,C,Keep the Back Rank,Rearguard,4 words,yes,shield
+bw_penitents_blow,bulwark,C,Penitent's Blow,Penance,head 'Blow' x4; one strong noun,yes,hero doing the act (no object)
+bw_toll_of_the_tower,bulwark,C,Toll of the Tower,Alarum,"4 words; tower alarm bell, echo",yes (no object; hero strikes),tower bell
+bw_answer_the_blow,bulwark,U,Answer the Blow,Reprisal,3 words; head 'Blow',yes,hero doing the act (no object)
+bw_barbs_left_in,bulwark,U,Barbs Left In,Wrench,3 words; barbs torn free,yes,hero doing the act (no object)
+bw_bleed_for_them,bulwark,U,Bleed for Them,Lifeblood,pronoun phrase,yes,shears
+bw_bramble_wall,bulwark,U,Bramble Wall,Thicket,head 'Wall' x3,yes,bramble
+bw_rake_of_thorns,bulwark,U,Rake of Thorns,Rake,3 words,yes,hero doing the act (no object)
+bw_shed_the_rime,bulwark,U,Shed the Rime,Sleet,3 words; rime shed onto foes,yes,icicles
+bw_shoulder_their_burden,bulwark,U,Shoulder Their Burden,Yoke,3 words; matches art object,yes,yoke
+bw_under_the_door,bulwark,U,Under the Door,Saint's Banner,3 words; 'Door' x10,yes (banner),banner
+bw_weight_of_the_door,bulwark,U,Weight of the Door,Battering Ram,4 words; 'Door' x10,yes (no object; door used as ram),door used as a ram
+bw_aegis_of_the_door,bulwark,R,Aegis of the Door,Church Door,4 words; door kept as signature,yes,knocker
+bw_frozen_bulwark,bulwark,R,Frozen Bulwark,Ice Rampart,uses the calling's own name,yes (column/shield read as rampart),column
+bw_hedge_of_spikes,bulwark,R,Hedge of Spikes,Palisade,3 words; siege word,yes (caltrops read as stakes),caltrops
+bw_rose_of_iron,bulwark,R,Rose of Iron,Iron Rose,3 words,yes,ironrose
+bw_the_door_swings,bulwark,R,The Door Swings,Stave In,'The' on a rare; 'Door' x10,yes,door
+bw_crown_of_iron_thorns,bulwark,L,Crown of Iron Thorns,Crown of Thorns,4 words,yes,crown
+bw_the_door_does_not_fall,bulwark,L,The Door Does Not Fall,Indomitable,5-word sentence,yes (portcullis),portcullis
+bw_the_ledger_of_wounds,bulwark,L,The Ledger of Wounds,Reckoning,4 words,yes,hero doing the act (no object)
+bw_winter_without_end,bulwark,L,Winter Without End,Midwinter,3 words; head 'Winter' x3,yes,icicles
+bw_barbed_shove,bulwark,X,Barbed Shove,Repel,'Barbed' x4,yes,hero doing the act (no object)
+bw_bound_with_rope,bulwark,X,Bound with Rope,Bindings,3 words,yes,rope
+bw_breath_of_the_north,bulwark,X,Breath of the North,North Wind,4 words,yes,greathelm
+bw_come_and_finish_it,bulwark,X,Come and Finish It,Last Stand,4-word spoken line,yes,hero doing the act (no object)
+bw_frostbite_bash,bulwark,X,Frostbite Bash,Hailstone,clashes with Frostbite affliction,yes,hero doing the act (no object)
+bw_patched_with_lead,bulwark,X,Patched with Lead,Lead Patch,3 words,yes,hammer
+bw_pine_and_iron,bulwark,X,Pine and Iron,Ironbound,3 words; the door's iron bands,yes (chain),chain
+bw_punishing_wall,bulwark,X,Punishing Wall,Portcullis,head 'Wall' x3; matches art,yes,portcullis
+bw_scourged_back,bulwark,X,Scourged Back,Welts,near-dup of The Scourged Hand,yes,cord
+bw_shatter_the_line,bulwark,X,Shatter the Line,Shatter,3 words,yes,hero doing the act (no object)
+bw_still_here,bulwark,X,Still Here,Endure,second spoken line,yes,hero doing the act (no object)
+du_drag_to_the_block,duelist,K,Drag to the Block,Collar,4 words,yes (block as destination),block
+du_find_the_gap,duelist,K,Find the Gap,Feint,3 words,yes,rapier
+du_deep_cut,duelist,C,Deep Cut,Gash,head 'Cut' x7,yes,block
+du_feather_cut,duelist,C,Feather Cut,Flourish,head 'Cut' x7,yes,hero doing the act (no object)
+du_follow_through,duelist,C,Press the Opening,Press,3 words,yes,hero doing the act (no object)
+du_heading_stroke,duelist,C,Heading Stroke,Two-Hander,head 'Stroke' x3; the headsman's sword,yes,hero doing the act (no object)
+du_pronounce_sentence,duelist,C,Pronounce Sentence,Verdict,'Sentence' x4,yes,scroll
+du_slip_and_cut,duelist,C,Slip and Cut,Slip,3 words; head 'Cut',yes,hero doing the act (no object)
+du_the_crowd_watches,duelist,C,The Crowd Watches,Spectacle,'The' on a common,yes,hero doing the act (no object)
+du_thunder_lunge,duelist,C,Thunder Lunge,Thunderbolt,head 'Lunge' x2,yes,hero doing the act (no object)
+du_turn_of_the_wrist,duelist,C,Turn of the Wrist,Supple Wrist,4 words,yes,hero doing the act (no object)
+du_barbers_trade,duelist,U,Barber's Trade,Barber-Surgeon,pun,yes,razor
+du_bled_pale,duelist,U,Bled Pale,Pallor,pun,yes,hero doing the act (no object)
+du_carry_out_the_sentence,duelist,U,Carry Out the Sentence,Behead,4 words,yes,hero doing the act (no object)
+du_catch_the_rhythm,duelist,U,Catch the Rhythm,Cadence,3 words,yes,drum
+du_drain_the_bowl,duelist,U,Drain the Bowl,Bleeding Bowl,3 words; the barber's own bowl,yes,basin
+du_in_the_wake,duelist,U,In the Wake,Flurry,3 words,yes,hero doing the act (no object)
+du_next_in_line,duelist,U,Next in Line,Notch,3 words; kill notched on the haft,yes,hero doing the act (no object)
+du_open_guard,duelist,U,Open Guard,Invitation,'Open' x3; fencing term for an opened guard,yes,gauntlet
+du_red_hands,duelist,U,Red Hands,Gore,head 'Hands' x2,yes,hero doing the act (no object)
+du_second_stroke,duelist,U,Second Stroke,Hew,'Second' x3; 'Stroke' x3,yes,hero doing the act (no object)
+du_serrated_rhythm,duelist,U,Serrated Rhythm,Bonesaw,head 'Rhythm' x2; barber-surgeon's saw,yes,saw
+du_shatter_point,duelist,U,Shatter Point,Shiver,head 'Point' x2,yes,hero doing the act (no object)
+du_bowl_passed_round,duelist,R,The Bowl Passed Round,Leechcraft,pun; 4 words,yes (bowl),bowl
+du_duellists_eye,duelist,R,The Duelist's Eye,Master's Eye,'The' + calling name,yes,eye
+du_echo_of_steel,duelist,R,Echo of Steel,Reprise,3 words; fencing renewed attack,yes,hero doing the act (no object)
+du_fall_back_in_guard,duelist,R,Fall Back in Guard,Disengage,4 words,yes,boot
+du_hundred_touches,duelist,R,A Hundred Touches,Bout,3 words; head 'Touch' x2,yes,hero doing the act (no object)
+du_make_an_example,duelist,R,Make an Example,Gibbet,idiom; concrete headsman object,yes,gibbet
+du_oath_of_the_salle,duelist,R,Oath of the Salle,Salute,4 words,yes (gauntlet raised),gauntlet
+du_open_every_vein,duelist,R,Open Every Vein,Bloodbath,'Vein' x3,yes (lancet),saw
+du_ride_the_lightning,duelist,R,Ride the Lightning,Lightning Step,modern reference,yes,firesteel
+du_the_bowl_runs_over,duelist,L,The Bowl Runs Over,Brimful,4 words; 'Bowl' x3,yes,font
+du_the_endless_measure,duelist,L,The Endless Measure,Danse Macabre,'Measure' x3,change: hourglass -> dancing figure or skull,dancing skeleton
+du_the_headsmans_round,duelist,L,The Headsman's Round,Headsman,3 words,yes,sword
+du_two_blades_one_heart,duelist,L,"Two Blades, One Heart",Ambidexter,4 words,yes (shears read as two blades),shears
+du_arterial_cut,duelist,X,Arterial Cut,Jugular,head 'Cut' x7,yes,hero doing the act (no object)
+du_bleed_the_line,duelist,X,Bleed the Line,Lacerate,3 words,yes,chain
+du_cut_between_beats,duelist,X,Cut Between Beats,Tempo,3 words; head 'Cut',yes,hero doing the act (no object)
+du_drag_them_up,duelist,X,Drag Them Up,Shackle,pronoun phrase; matches art,yes,chain
+du_drink_and_dance,duelist,X,Drink and Dance,Bravado,3 words,yes,hero doing the act (no object)
+du_heavy_sentence,duelist,X,Heavy Sentence,Forfeit,'Sentence' x4,yes,hero doing the act (no object)
+du_let_the_fever_out,duelist,X,Let the Fever Out,Purge,4 words,yes,cuppingglass
+du_nick_the_vein,duelist,X,Nick the Vein,Nick,3 words,yes,needle
+du_second_blade,duelist,X,Second Blade,Main-Gauche,'Second' x3; 'Blade' x3,yes,hero doing the act (no object)
+du_square_tip,duelist,X,The Square Tip,Square Tip,'The' on a path card,yes,hero doing the act (no object)
+du_turn_the_parry,duelist,X,Turn the Parry,Turnabout,3 words; 'Parry' x2,yes,gauntlet
+du_untouchable,duelist,X,Untouchable,Sidestep,identical to a StS card,yes (hand),hand
+du_wipe_the_blade,duelist,X,Wipe the Blade,Sheathe,3 words,yes,sword
+el_conjoin,elementalist,K,Strike the Wet Ink,Strikethrough,4 words; 'Ink' x10,yes,reedpen
+el_stopper_the_jar,elementalist,K,Wax the Mouth,Stopper,odd phrase,yes,jar
+el_turn_the_ring,elementalist,K,Turn the Ring,Signet,3 words; 'Ring' x4,yes,signet
+el_wet_the_nib,elementalist,S,Wet the Nib,Inking,3 words; 'Nib' x3,yes,quill
+el_count_the_colours,elementalist,C,Count the Colours,Abacus,3 words; matches art,yes,abacus
+el_draw_the_tide,elementalist,C,Draw the Tide,Riptide,3 words,yes,pulley
+el_flung_ink,elementalist,C,Flung Ink,Spatter,'Ink' x10,yes,ewer
+el_frost_the_swing,elementalist,C,Frost the Swing,Numb,3 words,yes,sword
+el_hold_the_breath,elementalist,C,Hold the Breath,Patience,near-dup of Hold Your Breath; 'Breath' x3,yes,gourd
+el_lay_the_ground,elementalist,C,Lay the Ground,Undercoat,3 words,yes,bucket
+el_open_palm,elementalist,C,Open Palm,Handprint,duplicate of the Vessel's Open Palm,yes (gauntlet hand),gauntlet
+el_reaction_shield,elementalist,C,Reaction Shield,Fireguard,modern chemistry word,yes (hood; a fire screen would be truer),hood
+el_seal_the_jar,elementalist,C,Seal the Jar,Sealing Wax,3 words,yes,jar
+el_second_ink,elementalist,C,Second Ink,Inkhorn,'Ink' x10; 'Second'; matches art,yes,inkhorn
+el_sigil_on_the_door,elementalist,C,Sigil on the Door,Lintel,4 words; 'Sigil' x7,yes (door),door
+el_spectrum_bolt,elementalist,C,Spectrum Bolt,Refraction,head 'Bolt' x2,yes,hero doing the act (no object)
+el_turn_the_page,elementalist,C,Turn the Page,Overleaf,3-word idiom,yes,book
+el_twin_sigil,elementalist,C,Twin Sigil,Ligature,'Sigil' x7; two letters joined,yes,sigilstone
+el_wet_the_line,elementalist,C,Wet the Line,Drench,3 words,yes,reedpen
+el_cold_for_the_void,elementalist,U,Cold for the Void,Starless Cold,4 words,yes,phial
+el_deep_cold,elementalist,U,Deep Cold,Freeze,head 'Cold' x2,yes,icicles
+el_feedback,elementalist,U,Feedback,Backlash,modern audio word,yes,hero doing the act (no object)
+el_fill_the_gaps,elementalist,U,Fill the Gaps,Infill,3 words,yes,funnel
+el_ground_the_arc,elementalist,U,Ground the Arc,Grounding,3 words,yes,anchor
+el_lend_the_nib,elementalist,U,Lend the Nib,Spare Quill,3 words; 'Nib' x3,yes,quill
+el_read_the_colours,elementalist,U,Read the Colours,Survey,3 words; 'Colour' x4,yes (lectern),lectern
+el_rime_and_brine,elementalist,U,Rime and Brine,Freezing Spray,rhyming pair,yes (no strong object),doorajar
+el_second_spark,elementalist,U,Second Spark,Tinder,'Second'; head 'Spark' x2,yes,lantern
+el_spend_the_breath,elementalist,U,Spend the Breath,Vent,3 words; 'Breath' x3,yes,hero doing the act (no object)
+el_tip_the_vessel,elementalist,U,Tip the Vessel,Sluice,3 words; avoids the Vessel's name,yes,reservoir
+el_warding_sigil,elementalist,U,Warding Sigil,Talisman,'Sigil' x7,yes,shield
+el_wash_of_colour,elementalist,U,Wash of Colour,Wash,3 words; 'Colour' x4,yes,basin
+el_weigh_the_stacks,elementalist,U,Weigh the Stacks,Plumb,3 words; matches art,yes,plumbbob
+el_chain_of_ink,elementalist,R,Chain of Ink,Flint,3 words; 'Ink' x10; sparks scatter to every foe,yes,firesteel and flint
+el_draw_the_ink_out,elementalist,R,Draw the Ink Out,Siphon,4 words; 'Ink',yes,hero doing the act (no object)
+el_full_ring,elementalist,R,Full Ring,Every Colour,'Ring' x4,yes,hero doing the act (no object)
+el_shared_pot,elementalist,R,The Shared Pot,Shared Pot,'The' on a rare,yes,crock
+el_strike_the_ring,elementalist,R,Strike the Ring,Chime,3 words; 'Ring' x4,yes,hero doing the act (no object)
+el_weight_and_measure,elementalist,R,Weight and Measure,Assay,3 words; 'Weight' x3,yes,hero doing the act (no object)
+el_chain_of_sigils,elementalist,L,Chain of Sigils,Wildfire,head 'Sigil' x2; spreads to neighbours,yes (match),match
+el_clouded_eye_saw,elementalist,L,What the Clouded Eye Saw,Clouded Eye,5-word clause,yes,eye
+el_perpetual_working,elementalist,L,The Perpetual Working,Perpetual Working,too many 'The',yes,pelican
+el_quickened_hand,elementalist,L,The Quickened Hand,Quickening,too many 'The'; head 'Hand',yes (reed pen),reedpen
+el_clouded_sight,elementalist,X,Clouded Sight,Spectacles,near-dup of Clouded Eye; matches art,yes,spectacles
+el_double_flick,elementalist,X,Double Flick,Firesteel,head 'Flick' x2; matches art,yes,firesteel
+el_every_colour,elementalist,X,Every Colour at Once,Polychrome,4 words,yes (inkhorn),inkhorn
+el_heavy_pour,elementalist,X,Heavy Pour,Deluge,head 'Pour' x2,yes,hero doing the act (no object)
+el_ring_turn,elementalist,X,Read the Halo,Corona,3 words; head 'Halo' x2,yes,hero doing the act (no object)
+el_sigils_on_the_skin,elementalist,X,Sigils on the Skin,Inked Skin,4 words; 'Sigil' x7,yes,inkwell
+el_six_inks,elementalist,X,Six Inks,Stained Fingers,'Ink' x10; near Sixth Ink,yes (gauntlet hand),gauntlet
+el_under_the_weight,elementalist,X,Under the Weight,Ballast,3 words; 'Weight' x3,yes,hero doing the act (no object)
+el_weight_of_the_vessel,elementalist,X,Weight of the Vessel,Heft,4 words; avoids the Vessel's name,yes,hero doing the act (no object)
+pass_it_on,hexweaver,K,Pass It On,Transference,pronoun phrase,yes (poppet),poppet
+cracked_glass,hexweaver,C,Cracked Glass,Fracture,head 'Glass' x5,yes (shard),shard
+hand_it_back,hexweaver,C,Hand It Back,Ill-Wishing,pronoun phrase,yes (hand),mirror
+hasten_the_end,hexweaver,C,Hasten the End,Coffin Nail,3 words,yes,hero doing the act (no object)
+martyrs_pin,hexweaver,C,Martyr's Pin,Red Hand,head 'Pin' x2,yes,hand
+mirror_mirror,hexweaver,C,"Mirror, Mirror",Looking Glass,spoken line,yes,mirror
+salt_the_threshold,hexweaver,C,Salt the Threshold,Salted Threshold,3 words,yes,hero doing the act (no object)
+take_the_rot,hexweaver,C,Take the Rot,Drawing Salve,near-dup of Take the Rot Out,yes (sponge; a salve pot would be truer),sponge
+tithe_of_blood,hexweaver,C,Tithe of Blood,Cut Palm,duplicate of the Bulwark's Tithe of Blood,yes (knife),knife
+backed_with_silver,hexweaver,U,Backed with Silver,Silvering,3 words,yes,shield
+bind_the_fear,hexweaver,U,Bind the Fear,Banishing,3 words,yes (cord),cord
+blood_on_the_poppets,hexweaver,U,Blood on the Poppets,Bodkin,4 words; head 'Poppet' x3,yes,needle
+rot_from_within,hexweaver,U,Rot from Within,Canker,3 words,yes,hero doing the act (no object)
+spill_the_rot,hexweaver,U,Spill the Rot,Unburden,3 words; 'Rot' x3,yes,hero doing the act (no object)
+take_their_wounds,hexweaver,U,Take Their Wounds,Proxy,pronoun phrase,yes,hero doing the act (no object)
+toll_the_hour,hexweaver,U,Toll the Hour,Curfew,3 words; 'Hour' x3,yes (bell wheel),bellwheel
+turn_the_glass,hexweaver,U,Face in the Glass,Glamour,3 words; 'Glass' x5,yes (mirror),mirror
+bell_book_candle,hexweaver,R,"Bell, Book and Candle",Anathema,4 words; the curse that rite pronounces,yes (snuffer: candles snuffed at the anathema),snuffer
+blood_debt,hexweaver,R,Blood Debt,Grudge,'Blood' x7,yes (book as tally),book
+burn_the_poppet,hexweaver,R,Burn the Poppet,Burning Effigy,3 words; head 'Poppet' x3,yes (brazier/poppet),brazier
+death_knell,hexweaver,L,Death Knell,Death Toll,head 'Knell' x2,yes (coffin),coffin
+the_witchs_glass,hexweaver,L,The Witch's Glass,Witch Ball,too many 'The'; matches art,yes,witchball
+bear_the_burden,hexweaver,X,Bear the Burden,Rancour,3 words,yes (sack as the load borne),sack
+blood_for_blood,hexweaver,X,Blood for Blood,Feud,3 words; 'Blood' x7,yes,hero doing the act (no object)
+crossed_glass,hexweaver,X,Crossed Glass,Bewilder,head 'Glass' x5,yes (shard),shard
+doubled_image,hexweaver,X,Doubled Image,Fetch,folk spirit-double,yes,diptych
+knock_at_the_door,hexweaver,X,Knock at the Door,Knock,4 words,yes,hero doing the act (no object)
+let_it_run,hexweaver,X,Let It Run,Lancing,pronoun phrase,yes,knife
+mirrored_curse,hexweaver,X,Mirrored Curse,Reflection,head 'Curse' x3,yes,chevalmirror
+prophet_of_doom,hexweaver,X,Prophet of Doom,Raven,3-word idiom; matches art,yes,birds
+return_to_sender,hexweaver,X,Return to Sender,Recoil,modern postal idiom,yes,hero doing the act (no object)
+take_the_curse_in,hexweaver,X,Take the Curse In,Curse-Breaking,4 words,yes (poppet),poppet
+the_final_hour,hexweaver,X,The Final Hour,Snuff Out,'The' on a path card; 'Hour' x3,yes,hero doing the act (no object)
+thiefs_glass,hexweaver,X,Thief's Glass,Cutpurse,head 'Glass' x5,yes (witch ball),witchball
+toll_of_bells,hexweaver,X,Toll of Bells,Peal,3 words; head 'Bell' x4,yes,bellwheel
+or_event_horizon,oracle,C,Event Horizon,Abyss,modern physics,yes,hero doing the act (no object)
+or_glimpse_ahead,oracle,C,Glimpse Ahead,Premonition,head 'Ahead' x2; 'Glimpse' x2,yes,blindfold
+or_knucklebones,oracle,C,Cast the Knucklebones,Knucklebones,3 words,yes,knuckles
+or_omen_bolt,oracle,C,Omen Bolt,Portent,'Omen' x3,yes,hero doing the act (no object)
+or_pull_the_thread,oracle,C,Pull the Thread,Unravel,3 words; 'Thread' x4,yes,hero doing the act (no object)
+or_starlit_ward,oracle,C,Starlit Ward,Starlight,head 'Ward' x2,yes,lantern
+or_borrowed_time,oracle,U,Borrowed Time,Sleepless,identical to a StS card,yes,pocketwatch
+or_cut_the_cord,oracle,U,Cut the Cord,Cut Short,idiom; 'Shears' head clash,yes,shears
+or_fulfil_the_omen,oracle,U,Fulfil the Omen,Prophecy,3 words; 'Omen' x3,yes,birds
+or_gathering_thread,oracle,U,Gathering Thread,Spindle,'Thread' x4; matches art,yes,spindle
+or_quiet_hour,oracle,U,The Quiet Hour,Quiet Hour,'The' on an uncommon,yes,candle
+or_red_ink,oracle,U,Red Ink,Vermilion,'Red' x4; head 'Ink' x2,yes,quill
+or_reverse_the_glass,oracle,U,Reverse the Glass,Retrograde,3 words; 'Glass' x2,yes,hourglass
+or_trade_on_tomorrow,oracle,U,Trade on Tomorrow,Augur's Fee,3 words,yes,coins
+or_unwritten,oracle,U,The Unwritten,Erasure,'The' on an uncommon,yes,waxtablet
+or_wheel_turns,oracle,U,The Wheel Turns,Fortune's Wheel,'The' on an uncommon,yes,wheel
+or_wind_the_spring,oracle,U,Wind the Spring,Mainspring,3 words,yes (key),key
+or_augury_of_birds,oracle,R,Augury of Birds,Augury,3 words,yes,birds
+or_scatter_the_bones,oracle,R,Scatter the Bones,Cast Lots,3 words; 'Bones' x3,yes (no object; scattered bones),hero doing the act (no object)
+or_the_bone_pouch,oracle,L,The Bone Pouch,Bone Pouch,too many 'The',yes,sack
+or_the_severed_thread,oracle,L,The Severed Thread,Severed Thread,too many 'The',yes,hero doing the act (no object)
+or_the_turned_glass,oracle,L,The Turned Glass,Turned Glass,too many 'The',yes,hourglass
+or_broken_pendulum,oracle,X,Broken Pendulum,Hitch,head 'Pendulum' x2,yes,hero doing the act (no object)
+or_clock_face,oracle,X,Clock Face,Dial,head 'Clock' x2,yes,clock
+or_needle_and_thread,oracle,X,Needle and Thread,Needlework,3 words; 'Thread' x4,yes,needle
+or_read_the_signs,oracle,X,Read the Signs,Auspices,3 words,yes,astrolabe
+or_reading_the_knots,oracle,X,Reading the Knots,Knotwork,3 words; 'Knot' x3,yes,cord
+or_rebuke_the_seen,oracle,X,Rebuke the Seen,Rebuke,3 words,yes,hero doing the act (no object)
+or_red_knot,oracle,X,Red Knot,Tangle,'Red' x4; head 'Knot' x3,yes,cord
+or_run_back_the_sand,oracle,X,Run Back the Sand,Reprieve,4 words; 'Sand' x2,yes (funnel as sand),funnel
+or_spill_the_ink,oracle,X,Spill the Ink,Spilt Ink,3 words,yes,inkwell
+or_wring_the_bird,oracle,X,Wring the Bird,Sacrifice,3 words; crude,yes (feather),feather
+ve_bear_it,vessel,S,Bear It,Reliquary,pronoun phrase; holds what it carries,yes,reliquary
+ve_give_back,vessel,S,Give Back,Ewer,plain phrase; object first,yes,ewer
+ve_take_into_me,vessel,S,Take Into Me,Communion,pronoun phrase; matches chalice,yes,chalice
+ve_balance_the_scale,vessel,C,Balance the Scale,Balance,3 words,yes,weights
+ve_bitter_gift,vessel,C,Bitter Gift,Bitter Cup,liturgical; head 'Gift',yes,cup
+ve_come_to_me,vessel,C,Come to Me,Clarion,spoken line; a horn call draws foes,yes,oliphant
+ve_copy_the_page,vessel,C,Copy the Page,Transcribe,3 words; 'Page' x3,yes,feather
+ve_drink_the_dregs,vessel,C,Drink the Dregs,Dregs,3 words,yes,flask
+ve_hearthstone,vessel,C,Hearthstone,Fireside,shares a famous game's name,yes,hearth
+ve_mouthful,vessel,C,Mouthful,Manna,gross-out; bread art,yes,bread
+ve_other_half,vessel,C,The Other Half,Diptych,'The' on a common; matches art,yes,diptych
+ve_retch,vessel,C,Retch,Libation,gross-out,yes (basin),basin
+ve_second_mouthful,vessel,C,Second Mouthful,Honey,gross-out; sweet second helping,yes (spoon of honey),spoon
+ve_shoulder_it,vessel,C,Shoulder It,Burden,pronoun phrase,yes,yoke
+ve_soak_the_mark,vessel,C,Soak the Mark,Baptism,3 words,yes (bucket; a font would be truer),bucket
+ve_spit,vessel,C,Spit,Holy Water,gross-out,yes,aspergillum
+ve_stand_near,vessel,C,Stand Near,Chimney Corner,flat phrase; tester miss,yes,hearth
+ve_taste,vessel,C,Taste,Salt,bodily; a taste of what it carries,yes (spoon of salt),spoon
+ve_warm_hands,vessel,C,Warm Hands,Brazier,flat phrase; object first,yes,brazier
+ve_weight_of_it,vessel,C,The Weight of It,Millstone,pronoun phrase; matches art,yes,millstone
+ve_balanced_hands,vessel,U,Balanced Hands,Scales,head 'Hands' x4; object first,yes,scales
+ve_bare_skin,vessel,U,Bare Skin,Stigmata,bodily; thorns from wounds,change: hood -> marked palms,marked palms
+ve_bite,vessel,U,Bite,Tongs,bodily; matches art,yes,pincers
+ve_draw_it_out,vessel,U,Draw It Out,Crosier,pronoun phrase; the crook pulls,yes (hero pulling with crook),crosier
+ve_even_breath,vessel,U,Even Breath,Plainsong,head 'Breath' x4; even chant,yes (organ pipes),organ pipes
+ve_gather_the_inks,vessel,U,Gather the Inks,Gleaning,3 words,yes (spindle),spindle
+ve_heavy_air,vessel,U,Heavy Air,Thurible,vague; matches art,yes,thurible
+ve_open_page,vessel,U,The Open Page,Lectern,'The' on an uncommon; matches art,yes,lectern
+ve_open_palm,vessel,U,Open Palm,Benediction,duplicate of Elementalist's Open Palm,yes,hand raised in blessing
+ve_spit_through,vessel,U,Spit Through,Hyssop,"gross-out; hyssop purges, strips Ward",change: ewer -> hyssop sprig,hyssop sprig
+ve_split_tongue,vessel,U,Split Tongue,Pentecost,bodily; tongues to every foe,yes (handbell),tongues of flame
+ve_unclench,vessel,U,Unclench,Almsgiving,bodily; gives everything away,yes (open hand),open hand
+ve_warm_room,vessel,U,The Warm Room,Warming Room,'The' on an uncommon,yes (brazier in a room),brazier
+ve_drink_the_spill,vessel,R,Drink the Spill,Chalice,3 words,yes,cup
+ve_keep_the_hours,vessel,R,Keep the Hours,Hour Candle,3 words; object first,yes,hour-marked candle
+ve_lay_it_down,vessel,R,Lay It Down,Bier,pronoun phrase; object first,yes,coffin on bier
+ve_return_it,vessel,R,Return It,Mirror of Justice,pronoun phrase; tester miss,yes,mirror
+ve_speak_to_all,vessel,R,Speak to All,Pulpit,3 words; speaks to every foe,change: bell -> pulpit,pulpit
+ve_swallow_whole,vessel,R,Swallow Whole,Last Rites,gross-out; execute,change: funnel -> oil stock or viaticum pyx,oil stock
+ve_take_their_place,vessel,R,Take Their Place,Vicar,pronoun phrase; one who stands in,yes (chair),chair
+ve_hearth_kept,vessel,L,The Hearth Kept,Hearth Kept,too many 'The',yes,hearth
+ve_mothers_place,vessel,L,The Mother's Place,Mother's Place,too many 'The',yes,reliquary
+ve_mothers_tongue,vessel,L,The Mother's Tongue,Mother Tongue,too many 'The',yes,bell
+ve_unstopped_mouth,vessel,L,The Unstopped Mouth,Endless Flagon,bodily; object first,yes,unstopped flagon
+ve_weight_of_the_world,vessel,L,The Weight of the World,World's Weight,4 words,yes,orb
+ve_carry_them,vessel,X,Carry Them,Laden Basket,pronoun phrase; object first,yes,basket
+ve_chain_word,vessel,X,Chain Word,Litany,flat phrase; chain of invocations,yes (torch),torch
+ve_chew,vessel,X,Chew,Grind,gross-out,yes (mortar),mortar
+ve_double_spit,vessel,X,Double Spit,Cruet,gross-out; matches art,yes,cruet
+ve_far_spit,vessel,X,Far Spit,Long Spoon,gross-out; reach to rank 4,yes,spoon
+ve_flood_the_line,vessel,X,Flood the Line,Flood,3 words,yes (font),font
+ve_full_weight,vessel,X,Full Weight,Winepress,head 'Weight' x4; matches art,yes,screwpress
+ve_gilded_page,vessel,X,Gilded Page,Gilding,head 'Page' x3,yes (book),book
+ve_gorge,vessel,X,Gorge,Brazen Laver,gross-out; object first,yes (cauldron as bronze basin),bronze laver
+ve_keep_her_quiet,vessel,X,Keep Her Quiet,Silence,pronoun phrase,yes (padlock),padlock
+ve_lend_weight,vessel,X,Lend Weight,Plummet,head 'Weight' x4; matches art,yes,plumbbob
+ve_level_hands,vessel,X,Level Hands,Mason's Level,head 'Hands' x4; matches art,yes,mason's level
+ve_six_bands,vessel,X,Six Bands,Armlet,head 'Band' x2,yes (arm reliquary as armlet),arm reliquary
+ve_spread_arms,vessel,X,Spread Arms,Cope,flat phrase; the cope spreads over both,yes (robe spread),cope
+ve_warm_breath,vessel,X,Warm Breath,Posset,head 'Breath' x4; tester miss,yes,posset pot
+w_drowned_bells_silent,world_drowned,W,The Bells Fall Silent,Silent Bells,4 words,yes,hero doing the act (no object)
+w_fleet_frozen_to_the_rail,world_fleet,W,Frozen to the Rail,Frozen Rail,4 words,yes,hero doing the act (no object)
+w_foundry_out_of_the_splash,world_foundry,W,Out of the Splash,Leap Clear,4 words,yes,hero doing the act (no object)
+w_garden_take_the_rot,world_garden,W,Take the Rot Out,Uproot,near-dup of Take the Rot; 4 words,yes,hero doing the act (no object)
+w_silence_star_comes_down,world_silence,W,The Star Comes Down,Falling Star,4 words,yes,hero doing the act (no object)
+w_spire_second_hand,world_spire,W,Second Hand,Minute Hand,duplicate of Oracle's Second Hand,yes,hero doing the act (no object)
