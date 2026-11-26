@@ -91,7 +91,7 @@ QG = {"x", "consumed", "dealt", "killed", "prime_count", "reactions", "enemies",
       "incoming", "incoming_me", "attackers", "elements_all", "total_bleed", "total_frost", "total_hex", "total_doom", "ally_hurt",
       "ally_hurt75", "hero_dd", "hero_stress", "flasks", "flasks_used",
       "vigour_left", "vigour_spent", "vigour_pool", "cost", "ordo_pos", "ordo_len", "ordo_after", "spent_before", "heroes_before",
-      "handoff", "first", "last"}
+      "handoff", "first", "last", "lost"}
 STATUS = {"bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "taunt", "thorns", "dodge", "regen",
           "hex", "doom", "fortify", "anchor", "tenacity", "charge", "blight", "neuro", "lockdown", "empower", "thrift"}
 ELS = {"fire", "frost", "lightning", "water", "toxin", "void"}

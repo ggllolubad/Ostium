@@ -7,15 +7,20 @@ PTS = {"dmg": 1, "block": 0.85, "self_block": 0.85, "block_target": 0.85, "armor
        "omen": 1.5, "grit": 4, "cleanse": 1, "react": 2.5, "brew": 5, "refill": 4, "improve": 3, "unbind": 1.2,
        "guard": 4, "guard_weakest": 4, "delay": 7, "turn": 5, "steal_block": 3, "bash_stun": 5, "attune": 0.5,
        "attune_to": 1, "apply_missing": 3, "dmg_per_element": 3, "spread": 3, "convert": 2, "double": 4, "transfer": 3,
-       "to_front": 2, "swap": 1, "add": 3, "stress_take": 0.5, "cap": 1}
+       "to_front": 2, "swap": 1, "add": 3, "stress_take": 0.5, "cap": 1,
+       "bank": 3}   # Bank only keeps vigour that was left unspent, so a banked point is worth about half a vigour
 STATUS = {"bleed": 1.6, "mark": 2, "vulnerable": 4, "stun": 9, "might": 5, "thorns": 1.3, "taunt": 3, "dodge": 3,
           "regen": 1.5, "hex": 1.2, "doom": 1.4, "focus": 1, "momentum": 1.5, "riposte": 1.2, "fortify": 2, "anchor": 1,
-          "tenacity": 2}
+          "tenacity": 2,
+          "thrift": 5}   # one Thrift is one vigour off a later card: about a vigour, a little less as it can go unused
 TYPICAL = {"momentum": 3, "consumed": 4, "missing_hp": 14, "scars": 12, "hp_pct": 60, "armor": 3, "block": 8,
            "spectrum": 2, "elements": 2, "el_total": 4, "hex": 4, "doom": 4, "bleed": 4, "mark": 1, "x": 2, "omen": 2,
            "played": 2, "prime_count": 1, "reactions": 1, "enemies": 3, "allies": 4, "total_bleed": 6, "total_hex": 6,
            "total_doom": 6, "total_frost": 3, "ailments": 3, "flasks": 2, "flasks_used": 1, "stress": 40, "thorns": 3,
-           "dealt": 8, "incoming": 15, "incoming_me": 8, "attackers": 1, "ward": 2, "focus": 1, "riposte": 2}
+           "dealt": 8, "incoming": 15, "incoming_me": 8, "attackers": 1, "ward": 2, "focus": 1, "riposte": 2,
+           # vigour and Ordo reads, for a 3-hero company with 6 vigour and about 4 cards a round
+           "vigour_left": 1, "vigour_spent": 5, "vigour_pool": 6, "cost": 1, "ordo_pos": 2.5, "ordo_len": 4, "ordo_after": 1.5,
+           "spent_before": 2.5, "heroes_before": 1, "handoff": 0.6, "first": 0.25, "last": 0.25, "lost": 3}
 MULT = {"S": 0.95, "C": 1.0, "U": 1.15, "R": 1.3, "X": 1.2, "K": 0.7, "N": 1.0, "W": 1.1, "F": 1.0}
 
 
@@ -80,8 +85,8 @@ def report(cards):
         pts = fx_points(c["fx"], c["target"])
         if r == "F":
             want = 5.0   # a flask is free to use; Brew prices it at 5 points (GATE3_VOCAB section 6)
-        elif cost == "X" or not isinstance(cost, int):
-            want = 0
+        elif cost == "X" or not isinstance(cost, int) or cost < 0:
+            want = 6 * TYPICAL["x"] * MULT[r]   # an X card is priced at a typical X
         elif cost == 0:
             want = 2.5
         else:

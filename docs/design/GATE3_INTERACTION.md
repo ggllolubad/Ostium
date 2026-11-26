@@ -84,6 +84,6 @@ Each pattern is a way a card's value comes from somewhere other than its own num
    - **Bridges to other callings:** at least 6 cards per calling pay off something another calling makes (for example a Duelist card that reads Hex, an Oracle card that reads Bleed).
 4. **Keep commons readable:** one main effect plus at most one read. Complexity lives in uncommons and up.
 5. **No straight lines:** an archetype must not be a column of cards that all add and read one status. Each archetype needs at least two input systems and two outputs.
-6. **Budget:** run `python3 tools/content/v3/build_v3.py --only <module> --budget` and keep every card within its rarity band. Conditional value counts at about 60% of its maximum unless the condition is nearly always met.
+6. **Budget:** run `python3 tools/content/v3/build_v3.py --only <module> --budget` and keep every card within its rarity band. Conditional value counts at 70% of its maximum (the budget tool's figure) unless the condition is nearly always met. Thrift is priced at 5 points a stack, Bank at 3 a point, and X cards at a typical X of 2.
 7. **Validation:** `build_v3.py --only <module>` must report no problems. Use only the VOCAB plus section 2's new hooks; propose anything else in the module's NEEDS rather than inventing it.
 8. **Style:** no em dashes or double hyphens; terse rules text in the house style; keywords capitalised as in data.gd KEYWORDS (Thrift, Bank, Handoff, Vigour).

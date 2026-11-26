@@ -746,6 +746,7 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		key = name.substr(2)
 	match key:
 		"x": return ctx.get("x", 0)
+		"lost": return ctx.get("lost", 0)
 		"vigour_left": return s.get("vigour_left", 0)
 		"vigour_spent": return s.get("vigour_spent", 0)
 		"vigour_pool": return s.get("energy", 0)
@@ -845,10 +846,21 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"delayed": return 1 if int(u.get("delayed_round", -1)) == int(s.round) else 0
 		"incoming_to": return _incoming(s, u.id)
 		"targeted":
+			# a single-target strike goes to a Taunting hero, so count it there and not on its marked hero
+			var taunter := -1
+			for hh in s.heroes:
+				if not hh.dead and hh.st.get("taunt", 0) > 0:
+					taunter = hh.id
+					break
 			var n := 0
 			for e in s.enemies:
 				var it := intent_of(e)
-				if not it.is_empty() and it.kind == "attack" and (e.intent_target == u.id or it.target == "all_heroes"):
+				if it.is_empty() or it.kind != "attack" or e.dead:
+					continue
+				var on_me: bool = it.target == "all_heroes"
+				if not on_me:
+					on_me = (taunter == u.id) if (taunter != -1 and it.target in SINGLE_TARGETS) else e.intent_target == u.id
+				if on_me:
 					n += 1
 			return n
 		"scars": return u.get("scars", 0)
@@ -1206,6 +1218,7 @@ static func _fx1(s: Dictionary, actor: Dictionary, c: Dictionary, fx: Dictionary
 				var room: int = max(0, int(actor.hp) - 1)
 				if room > 0:
 					_hurt(s, null, actor, min(n, room), {"true": true})
+				ctx["lost"] = int(ctx.get("lost", 0)) + min(n, room)   # what the card really cost: later effects can read "lost"
 			else:
 				_hurt(s, null, actor, n, {"true": true})
 		"draw":
