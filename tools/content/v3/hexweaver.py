@@ -193,11 +193,11 @@ card("mirror_mirror", "Mirror, Mirror", 1, "C", "enemy", [TURN(), ST("hex", 1)],
      note="The Mirrorhex flashes the glass and a foe's blow lands on its neighbour.",
      up={"text": "If the target attacks this round, its attack strikes a foe beside it instead. Apply 3 Hex.",
          "fx": [TURN(), ST("hex", 3)]})
-card("echoing_hex", "Echoing Hex", 1, "C", "enemy", [ST("hex", 2), W(2, to="self")],
-     "Echo. Apply 2 Hex. Gain 2 Ward.", cat=V, kw=["Echo"], arch=MH,
+card("echoing_hex", "Echoing Hex", 1, "C", "enemy", [ST("hex", 2), W(1, to="self")],
+     "Echo. Apply 2 Hex. Gain 1 Ward.", cat=V, kw=["Echo"], arch=MH,
      flavour="Say it once to the foe, once to the glass.",
      note="A curse spoken into the mirror comes back out of it, twice as loud.",
-     up={"text": "Echo. Apply 3 Hex. Gain 2 Ward.", "fx": [ST("hex", 3), W(2, to="self")]})
+     up={"text": "Echo. Apply 3 Hex. Gain 1 Ward.", "fx": [ST("hex", 3), W(1, to="self")]})
 card("hand_it_back", "Hand It Back", 1, "C", "enemy", [TRANSFER("ally_most"), ST("hex", 2)],
      "Move every ailment off the other hero carrying the most onto the target. Apply 2 Hex.", cat=V,
      arch="mirrorhex+pactbound",
@@ -257,12 +257,12 @@ card("witchs_ladder", "Witch's Ladder", 1, "U", "enemy", [ST("hex", 1), ST("hex"
          "fx": [ST("hex", 2), ST("hex", 0, per="t.spectrum", k=2)]})
 
 # ------------------------------------------------------------------ uncommon: pactbound
-card("blood_moon", "Blood Moon", 2, "U", "enemy", [D(6, per="missing_hp", k=0.5)],
-     "Costs 1 less once you carry 10 Scars. Deal 6, plus 1 per 2 HP you are missing.", cat=P,
+card("blood_moon", "Blood Moon", 2, "U", "enemy", [D(5, per="missing_hp", k=0.5)],
+     "Costs 1 less once you carry 10 Scars. Deal 5, plus 1 per 2 HP you are missing.", cat=P,
      cost_less={"per": "scars", "k": 0.1, "max": 1}, use=KNIFE, hit=TOUCH, arch=PB,
      flavour="The thinner I bleed, the sharper the knife.",
      note="The Pactbound, pale and swaying, lunges with the bone knife under a red light.",
-     up={"text": "Costs 1 less once you carry 10 Scars. Deal 8, plus 1 per 2 HP you are missing.", "fx": [D(8, per="missing_hp", k=0.5)]})
+     up={"text": "Costs 1 less once you carry 10 Scars. Deal 7, plus 1 per 2 HP you are missing.", "fx": [D(7, per="missing_hp", k=0.5)]})
 card("spill_the_rot", "Spill the Rot", 2, "U", "enemy", [TRANSFER("self"), D(2, per="consumed", k=2)],
      "Move every ailment you carry onto the target. Deal 2, plus 2 per ailment moved.", cat=V,
      arch="pactbound+mirrorhex",
@@ -460,12 +460,11 @@ card("harbinger", "Harbinger", 2, "X", "enemy", [ST("doom", 4), ST("hex", 3), ST
      up={"text": "Apply 5 Doom and 4 Hex. First in the Ordo: the target is Vulnerable for 2 rounds.",
          "fx": [ST("doom", 5), ST("hex", 4), ST("vulnerable", 2, if_="first")]})
 card("the_final_hour", "The Final Hour", 2, "X", "enemy", [D(5), EXEC(6, if_="!last"), EXEC(12, if_="last"), ST("doom", 2, to="all_enemies", if_="killed")],
-     "Costs 1 less once 3 cards are in the Ordo. Deal 5. Execute 6, or 12 if this is last in the Ordo. If this kills, "
-     "every foe gains 2 Doom.", cat=V, kw=["Execute"], sub=DS, arch=DS, cost_less={"per": "ordo", "k": 0.34, "max": 1},
+     "Deal 5. Execute 6, or 12 if this is last in the Ordo. If this kills, every foe gains 2 Doom.", cat=V,
+     kw=["Execute"], sub=DS, arch=DS,
      flavour="The last stroke of the hour. Then quiet.",
      note="The Doomsayer swings the bell staff and the struck foe falls silent mid-cry.",
-     up={"text": "Costs 1 less once 3 cards are in the Ordo. Deal 6. Execute 8, or 15 if this is last in the Ordo. If "
-                 "this kills, every foe gains 3 Doom.",
+     up={"text": "Deal 6. Execute 8, or 15 if this is last in the Ordo. If this kills, every foe gains 3 Doom.",
          "fx": [D(6), EXEC(8, if_="!last"), EXEC(15, if_="last"), ST("doom", 3, to="all_enemies", if_="killed")]})
 card("death_watch", "Death Watch", 1, "X", "self", [],
      "Rite: whenever a foe dies, every foe gains 3 Doom, and 2 more if the dead foe was Marked. Exhaust.", cat=V,

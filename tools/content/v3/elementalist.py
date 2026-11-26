@@ -137,13 +137,13 @@ card("el_pour_out", "Pour Out", 1, "C", "enemy", [AN(2, attr=VOL), D(0, per="spe
                  "up to 4.", "fx": [AN(3, attr=VOL), D(0, per="spent_before", k=1, max=4)]})
 
 # ------------------------------------------------------------------ common: Chain Reaction
-card("el_spark", "Spark", 1, "C", "enemy", [AT(2, attr=VOL), D(1)],
-     "Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned course. Deal 1.",
+card("el_spark", "Spark", 1, "C", "enemy", [AT(1, attr=VOL)],
+     "Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned course.",
      cat=ATT, arch=CA, cost_less={"per": "played", "k": 1, "max": 1},
      flavour="A spark is cheap. What it lands on is not.",
      note="A single bright fleck leaves the Elementalist's fingernail and finds the ink already on a foe.",
-     up={"text": "Retain. Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned "
-                 "course. Deal 1.", "kw": ["Retain"]})
+     up={"text": "Retain. Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned "
+                 "course.", "kw": ["Retain"]})
 card("el_twin_sigil", "Twin Sigil", 1, "C", "enemy", [AT(2), AN(2, attr=VOL)],
      "Apply 2 of your attuned course, then 2 Volatile of the next course.", cat=ATT, arch=CA,
      flavour="Two sigils, one stroke. The chapter still argues which came first.",
@@ -310,13 +310,13 @@ card("el_feedback", "Feedback", 1, "U", "enemy", [D(0, per="reactions", k=4), D(
      note="Lines of light from three flaring foes converge in the Catalyst's palm and leap at a fourth.",
      up={"text": "Deal 5 for each Conjunction so far this round. Handoff: deal 4 more.",
          "fx": [D(0, per="reactions", k=5), D(4, if_="handoff")]})
-card("el_second_spark", "Second Spark", 1, "U", "enemy", [AN(2, attr=VOL), D(2)],
-     "Costs 1 less if 2 or more heroes are already in the Ordo. Apply 2 Volatile of the next course. Deal 2.",
+card("el_second_spark", "Second Spark", 1, "U", "enemy", [AN(1, attr=VOL), D(1)],
+     "Costs 1 less if 2 or more heroes are already in the Ordo. Apply 1 Volatile of the next course. Deal 1.",
      cat=ATT, arch=CA, cost_less={"per": "heroes", "k": 0.5, "max": 1},
      flavour="The first spark lit nothing. The second never misses.",
      note="A second fleck of a different colour follows the first across the nave.",
-     up={"text": "Retain. Costs 1 less if 2 or more heroes are already in the Ordo. Apply 2 Volatile of the next "
-                 "course. Deal 2.", "kw": ["Retain"]})
+     up={"text": "Retain. Costs 1 less if 2 or more heroes are already in the Ordo. Apply 1 Volatile of the next "
+                 "course. Deal 1.", "kw": ["Retain"]})
 card("el_cascade", "Cascade", 1, "U", "enemy", [REACT(1), REACT(1, if_="spent_before>=3"), D(2)],
      "Conjoin 1. If 3 or more vigour was spent before this card this round, Conjoin 1 again. Deal 2.", cat=ATT, arch=CA,
      flavour="One meeting wakes the next.",
@@ -431,13 +431,12 @@ card("el_chain_of_ink", "Chain of Ink", 2, "R", "all_enemies",
      note="Down the whole line of foes, two colours cross and flare one after another like lit wicks.",
      up={"text": "Apply 3 of your attuned course to every foe, then 1 Volatile of the next course to every foe, or "
                  "2 on a Handoff.", "fx": [AT(3), AN(1, attr=VOL, per="handoff", k=1, max=2)]})
-card("el_spark_shower", "Spark Shower", 1, "R", "enemy", [AT(2, attr=VOL), D(2)],
-     "Retain. Echo. Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned course. "
-     "Deal 2.", cat=ATT, kw=["Retain", "Echo"], arch=CA, cost_less={"per": "played", "k": 1, "max": 1},
+card("el_spark_shower", "Spark Shower", 1, "R", "enemy", [AT(1, attr=VOL)],
+     "Retain. Echo. Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned course.", cat=ATT, kw=["Retain", "Echo"], arch=CA, cost_less={"per": "played", "k": 1, "max": 1},
      flavour="Nervous fingers, quick sigils, sparks everywhere.",
      note="The Catalyst's fingers twitch and a shower of tiny sparks patters across a foe.",
-     up={"text": "Retain. Echo. Costs 1 less if you have already acted this round. Apply 3 Volatile of your attuned "
-                 "course. Deal 2.", "fx": [AT(3, attr=VOL), D(2)]})
+     up={"text": "Retain. Echo. Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned "
+                 "course.", "fx": [AT(2, attr=VOL)]})
 card("el_afterglow", "Afterglow", 1, "R", "self", [DRAW(0, per="reactions", k=1, max=3), EN(1, if_="reactions>=2")],
      "Next round, draw 1 more for each Conjunction so far this round, up to 3. If there were 2 or more, gain 1 "
      "vigour next round.", use=ALL, cat=ATT, arch=CA,
@@ -542,12 +541,12 @@ card("el_weight_of_the_vessel", "Weight of the Vessel", 1, "X", "enemy",
                  "3. Your Focus is not spent.", "fx": [D(5, per="focus", k=2, max=15), D(0, per="vigour_left", k=1, max=3)]})
 
 # ------------------------------------------------------------------ path: Catalyst
-card("el_hair_trigger", "Hair Trigger", 1, "X", "enemy", [REACT(2), D(2)],
-     "Costs 1 less if 3 or more cards are already in the Ordo. Conjoin 2. Deal 2.", cat=ATT, sub=CA, arch=CA,
+card("el_hair_trigger", "Hair Trigger", 1, "X", "enemy", [REACT(1), D(1)],
+     "Costs 1 less if 3 or more cards are already in the Ordo. Conjoin 1. Deal 1.", cat=ATT, sub=CA, arch=CA,
      cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="It wanted to go off. It only needed asking.",
      note="The Catalyst barely flicks a finger and the ink on a foe goes up.",
-     up={"text": "Retain. Costs 1 less if 3 or more cards are already in the Ordo. Conjoin 2. Deal 2.",
+     up={"text": "Retain. Costs 1 less if 3 or more cards are already in the Ordo. Conjoin 1. Deal 1.",
          "kw": ["Retain"]})
 card("el_sigils_on_the_skin", "Sigils on the Skin", 1, "X", "self",
      [W(0, per="reactions", k=1, to="all_allies"), B(3)],

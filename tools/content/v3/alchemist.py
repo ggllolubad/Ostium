@@ -269,20 +269,20 @@ card("al_tincture", "Tincture", 1, "C", "ally", [B(2), STRESS(-3), ST("thrift", 
      note="The Alchemist counts drops from a brown dropper onto the Oracle's tongue.",
      up={"text": "A hero gains 3 Block and sheds 4 stress. Dosed: they gain 1 Thrift.",
          "fx": [B(3), STRESS(-4), ST("thrift", 1, if_=DOSED)]})
-card("al_steady_hand", "Steady Hand", 1, "C", "self", [IMPROVE(1), IMPROVE(1, if_=DOSED)],
-     "Costs 1 less if you have already acted this round. Improve 1 flask on the belt. Dosed: Improve 1 more.",
+card("al_steady_hand", "Steady Hand", 1, "C", "self", [IMPROVE(1, if_=DOSED)],
+     "Costs 1 less if you have already acted this round. Dosed: Improve 1 flask on the belt.",
      use=ALL, kw=["Dosed"], arch=AP, cost_less={"per": "played", "k": 1, "max": 1},
      flavour="Hired for a steady hand. Paid for it, too.",
      note="Spectacles down, the Alchemist adds one careful drop to a flask held up to the light.",
-     up={"text": "Retain. Costs 1 less if you have already acted this round. Improve 1 flask on the belt. Dosed: "
-                 "Improve 1 more.", "kw": ["Retain", "Dosed"]})
-card("al_bandolier", "Bandolier", 2, "C", "self", [BREW("fl_firepot"), BREW("fl_draught"), B(2)],
-     "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught. Gain 2 Block.",
+     up={"text": "Retain. Costs 1 less if you have already acted this round. Improve 1 flask on the belt.",
+         "kw": ["Retain"], "fx": [IMPROVE(1)]})
+card("al_bandolier", "Bandolier", 2, "C", "self", [BREW("fl_firepot"), BREW("fl_draught")],
+     "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught.",
      use=ALL, arch=AP, cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="Every loop filled before the door opens. Every loop.",
      note="The Alchemist slots two fresh bottles into the bandolier, corks still warm.",
      up={"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught. Gain "
-                 "5 Block.", "fx": [BREW("fl_firepot"), BREW("fl_draught"), B(5)]})
+                 "3 Block.", "fx": [BREW("fl_firepot"), BREW("fl_draught"), B(3)]})
 card("al_poultice", "Poultice", 1, "C", "ally", [ST("regen", 1, per="t.ailments", k=1), CLEANSE(1)],
      "A hero gains Regen 1, plus 1 per ailment on them. Remove 1 ailment from them.", use=ALL,
      arch=AP, flavour="Bread, milk and comfrey, hot as they can bear. It draws the bad out.",

@@ -15,11 +15,11 @@ card("or_hasten", "Hasten", 1, "K", "self", [PRIME(3), PRIME(2, if_="handoff")],
      flavour="The sand falls a little faster for whoever moves next.",
      note="The Oracle tips the wrist hourglass toward an ally; the sand runs bright.",
      arch="core", up={"text": "Prime 4. Handoff: Prime 2 more.", "fx": [PRIME(4), PRIME(2, if_="handoff")]})
-card("or_second_hand", "Second Hand", 1, "K", "enemy", [D(2), D(2, if_="last")], "Echo. Deal 2. Last in the Ordo: deal 2 more.",
+card("or_second_hand", "Second Hand", 1, "K", "enemy", [D(1), D(2, if_="last")], "Echo. Deal 1. Last in the Ordo: deal 2 more.",
      cat=V, kw=["Echo"], sub=CH,
      flavour="Turn it over. The same blow falls again.",
      note="The brass clock face on the chest shows two hands where one should be.",
-     arch=CH, up={"text": "Echo. Deal 3. Last in the Ordo: deal 2 more.", "fx": [D(3), D(2, if_="last")]})
+     arch=CH, up={"text": "Echo. Deal 2. Last in the Ordo: deal 2 more.", "fx": [D(2), D(2, if_="last")]})
 card("or_read_the_bones", "Read the Bones", 1, "K", "enemy", [OMEN(1), OMEN(1, if_="m.attacking"), OMEN(1, if_="first")],
      "Choose a foe. Gain 1 Omen, 1 more if it means to attack, and 1 more if this is first in the Ordo.", cat=V, sub=AU,
      flavour="Knucklebones on the flagstones. Three fall face down.",
@@ -66,13 +66,13 @@ card("or_glimpse_ahead", "Glimpse Ahead", 0, "C", "self", [DRAW(1), STRESS(3)],
      flavour="Seeing tomorrow is easy. Living through today after is not.",
      note="Behind the blindfold, a painted eye seems to open.",
      arch=CH + "+" + AU, up={"text": "Next round, draw 1 more. Gain 1 stress.", "fx": [DRAW(1), STRESS(1)]})
-card("or_stutter", "Stutter", 1, "C", "enemy", [D(3, per="vigour_left", k=2, max=7), A(V, 1)],
-     "Echo. Deal 3, plus 2 per vigour left unspent this round, at most 7. Apply 1 Void.", cat=V, attr="stable",
+card("or_stutter", "Stutter", 1, "C", "enemy", [D(2, per="vigour_left", k=1, max=5), A(V, 1)],
+     "Echo. Deal 2, plus 1 per vigour left unspent this round, at most 5. Apply 1 Void.", cat=V, attr="stable",
      kw=["Echo"],
      flavour="The moment skips, and the foe is struck twice by one blow.",
      note="Two ghost images of the same pointing hand, one a beat behind.",
-     arch=CH, up={"text": "Echo. Deal 4, plus 2 per vigour left unspent this round, at most 8. Apply 1 Void.",
-                  "fx": [D(4, per="vigour_left", k=2, max=8), A(V, 1)]})
+     arch=CH, up={"text": "Echo. Deal 3, plus 1 per vigour left unspent this round, at most 6. Apply 1 Void.",
+                  "fx": [D(3, per="vigour_left", k=1, max=6), A(V, 1)]})
 card("or_late_blow", "Late Blow", 1, "C", "enemy", [D(4), D(4, if_="t.delayed")],
      "Deal 4. Deal 4 more if the target was Delayed this round.", cat=V,
      flavour="It waited for you. It should not have.",
@@ -208,13 +208,13 @@ card("or_reverse_the_glass", "Reverse the Glass", 2, "U", "all_enemies", [DELAY(
      note="The Chronomancer flips a great hourglass; every foe's weapon slows.",
      arch=CH + "+" + AU, up={"text": "Delay every foe that means to attack. Deal 4 to every foe. Exhaust.",
                              "fx": [DELAY(if_="t.attacking"), D(4)]})
-card("or_pendulum", "Pendulum", 2, "U", "enemy", [D(8), A(V, 1), D(4, if_="!vigour_left")],
-     "Echo. Deal 8. Apply 1 Void. If no vigour is left unspent this round, deal 4 more.", cat=V,
+card("or_pendulum", "Pendulum", 2, "U", "enemy", [D(6), A(V, 1), D(3, if_="!vigour_left")],
+     "Echo. Deal 6. Apply 1 Void. If no vigour is left unspent this round, deal 3 more.", cat=V,
      attr="stable", kw=["Echo"],
      flavour="It swings out. It swings back. Both ways it hurts.",
      note="The broken pendulum staff swings through a foe, and swings again.",
-     arch=CH, up={"text": "Echo. Deal 11. Apply 1 Void. If no vigour is left unspent this round, deal 4 more.",
-                  "fx": [D(11), A(V, 1), D(4, if_="!vigour_left")]})
+     arch=CH, up={"text": "Echo. Deal 8. Apply 1 Void. If no vigour is left unspent this round, deal 3 more.",
+                  "fx": [D(8), A(V, 1), D(3, if_="!vigour_left")]})
 card("or_borrowed_time", "Borrowed Time", 0, "U", "self", [EN(1), STRESS(7)], "Next round, +1 vigour. Gain 7 stress. Exhaust.",
      cat=V, kw=["Exhaust"], use=[1, 2, 3, 4],
      flavour="Time borrowed from the dark is paid back with interest.",
@@ -338,18 +338,18 @@ card("or_dread_vision", "Dread Vision", 1, "U", "enemy", [A(V, 1, if_="t.hex"), 
                                     "fx": [A(V, 1, if_="t.hex"), D(2, per="t.void", k=3)]})
 
 # ------------------------------------------------------------------ rare
-card("or_stop_time", "Stop Time", 3, "R", "all_enemies", [DELAY(), D(4), BANK(2, to="self")],
-     "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 4 to each. Bank 2. Exhaust.",
+card("or_stop_time", "Stop Time", 3, "R", "all_enemies", [DELAY(), D(3), BANK(2, to="self")],
+     "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 3 to each. Bank 2. Exhaust.",
      cat=V, kw=["Exhaust"], cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="Between one grain and the next, I walk among them.",
      note="Every foe hangs motionless in falling sand; the Oracle walks between.",
-     arch=CH, up={"text": "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 6 to each. Bank 2. Exhaust.", "fx": [DELAY(), D(6), BANK(2, to="self")]})
-card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(2, per="ordo_pos", k=2)],
-     "Echo. Retain. Deal 2, plus 2 times this card's place in the Ordo.", cat=V, kw=["Echo", "Retain"],
+     arch=CH, up={"text": "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 5 to each. Bank 2. Exhaust.", "fx": [DELAY(), D(5), BANK(2, to="self")]})
+card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(0, per="ordo_pos", k=2)],
+     "Echo. Retain. Deal 2 times this card's place in the Ordo.", cat=V, kw=["Echo", "Retain"],
      flavour="This has happened. It will happen again, harder.",
      note="The same red thread strikes a foe twice in the same place.",
-     arch=CH + "+" + FB, up={"text": "Echo. Retain. Deal 3, plus 3 times this card's place in the Ordo.",
-                             "fx": [D(3, per="ordo_pos", k=3)]})
+     arch=CH + "+" + FB, up={"text": "Echo. Retain. Deal 2, plus 2 times this card's place in the Ordo.",
+                             "fx": [D(2, per="ordo_pos", k=2)]})
 card("or_stolen_hour", "Stolen Hour", 1, "R", "self",
      [CONS(s="ward"), SELF("thrift", 0, per="consumed", k=0.25, max=3), EN(1)],
      "Spend all your Ward. Gain 1 Thrift per 4 Ward spent, at most 3. Next round, +1 vigour. Exhaust.", cat=V,
@@ -423,13 +423,13 @@ card("or_stopped_clock", "Stopped Clock", 1, "X", "enemy", [DELAY()], "Rank 4 on
      flavour="The clock on my chest stopped the day I walled myself in.",
      note="From the back rank, the Chronomancer stops the brass clock's hands with a finger.",
      arch=CH, up={"text": "Rank 4 only. Delay the target. Deal 2.", "fx": [DELAY(), D(2)]})
-card("or_broken_pendulum", "Broken Pendulum", 2, "X", "enemy", [DELAY(), D(5, per="spent_before", k=1, max=11)],
-     "Echo. Delay the target. Deal 5, plus 1 per vigour spent before this in the Ordo, at most 11.",
+card("or_broken_pendulum", "Broken Pendulum", 2, "X", "enemy", [DELAY(), D(1, per="spent_before", k=1, max=7)],
+     "Echo. Delay the target. Deal 1, plus 1 per vigour spent before this in the Ordo, at most 7.",
      cat=V, kw=["Echo"], sub=CH,
      flavour="It does not keep time any more. It takes it.",
      note="The broken pendulum staff cracks across a foe, then again a beat later.",
-     arch=CH, up={"text": "Echo. Delay the target. Deal 7, plus 1 per vigour spent before this in the Ordo, at most 14.",
-                  "fx": [DELAY(), D(7, per="spent_before", k=1, max=14)]})
+     arch=CH, up={"text": "Echo. Delay the target. Deal 3, plus 1 per vigour spent before this in the Ordo, at most 10.",
+                  "fx": [DELAY(), D(3, per="spent_before", k=1, max=10)]})
 card("or_accelerate", "Accelerate", 1, "X", "ally_other", [ST("thrift", 1), ST("momentum", 1)],
      "Another hero gains 1 Thrift and 1 Momentum.", cat=V, sub=CH,
      flavour="Your next breath, now.",
@@ -442,13 +442,13 @@ card("or_clock_face", "Clock Face", 1, "X", "self", [EN(1), W(2, if_="vigour_lef
      note="The brass clock face on the chest glows; one numeral is missing.",
      arch=CH, up={"text": "Gain 1 Ward. Next round, +1 vigour. If any vigour is left unspent this round, gain 2 more Ward.",
                   "fx": [W(1), EN(1), W(2, if_="vigour_left")]})
-card("or_repetition", "Repetition", 2, "X", "all_enemies", [D(3, per="played", k=1), A(V, 1)],
-     "Echo. Deal 3 to every foe, plus 1 per other card you have played this round. Apply 1 Void to every foe.", cat=V,
+card("or_repetition", "Repetition", 2, "X", "all_enemies", [D(1, per="played", k=1), A(V, 1)],
+     "Echo. Deal 1 to every foe, plus 1 per other card you have played this round. Apply 1 Void to every foe.", cat=V,
      attr="stable", kw=["Echo"], sub=CH,
      flavour="Once. And once. And once.",
      note="A ring of afterimages of the Oracle's pointing hand surrounds the foes.",
-     arch=CH, up={"text": "Echo. Deal 4 to every foe, plus 1 per other card you have played this round. "
-                          "Apply 1 Void to every foe.", "fx": [D(4, per="played", k=1), A(V, 1)]})
+     arch=CH, up={"text": "Echo. Deal 2 to every foe, plus 1 per other card you have played this round. "
+                          "Apply 1 Void to every foe.", "fx": [D(2, per="played", k=1), A(V, 1)]})
 card("or_run_back_the_sand", "Run Back the Sand", 1, "X", "ally", [H(3), ADD("or_borrowed_time")],
      "A hero heals 3. Next round, a Borrowed Time is added to their hand.", cat=V, sub=CH,
      flavour="A minute ago you were whole. Go back there.",
