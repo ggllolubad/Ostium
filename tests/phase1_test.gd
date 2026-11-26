@@ -61,10 +61,17 @@ func _versions() -> void:
 	_fresh()
 	Run.meta_save()
 	ok(int(SaveIO.read_json(Run.meta_path()).get("version", 0)) == Run.SAVE_VERSION, "meta save carries its version")
-	# a run saved before versions existed, with a stray fight entry: loads, fight dropped, version stamped
+	# a run saved before the Gate 3 card set (versions 0 and 1) holds cards that no longer exist: refused, and not offered
 	SaveIO.write_json(Run.run_path(), {"seed": 5, "step": 0, "heroes": [], "at": "", "fight": {"idx": 0, "blob": "x"}})
-	ok(Run.load_run(), "a version-0 run loads")
-	ok(not Run.r.has("fight") and int(Run.r.version) == Run.SAVE_VERSION, "version-0 run migrated to the current version")
+	ok(not Run.load_run() and not Run.has_save(), "a version-0 run is refused and not offered")
+	SaveIO.write_json(Run.run_path(), {"seed": 5, "step": 0, "heroes": [], "at": "", "version": 1})
+	ok(not Run.load_run() and not Run.has_save(), "a version-1 run is refused and not offered")
+	SaveIO.write_json(Run.run_path(), {"seed": 5, "step": 0, "heroes": [], "at": "", "version": Run.SAVE_VERSION})
+	ok(Run.load_run() and Run.has_save(), "a current-version run loads")
+	# saved heroes keep only the cards that still exist; a stripped hero gets the starting deck back
+	var m := Run._migrate_meta({"version": 1, "roster": [{"id": 1, "key": "bulwark", "deck": ["gone_card", "dread"]}]})
+	var dk: Array = m.roster[0].deck
+	ok(dk.all(func(c): return Data.CARDS.has(c)) and dk.size() >= Data.HEROES["bulwark"].deck.size(), "an old hero's deck is rebuilt from cards that exist")
 	SaveIO.write_json(Run.run_path(), {"seed": 5, "heroes": [], "version": Run.SAVE_VERSION + 1})
 	ok(not Run.load_run(), "a run from a newer game is refused, not misread")
 	SaveIO.remove(Run.run_path())

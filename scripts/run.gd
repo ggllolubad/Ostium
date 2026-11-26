@@ -5,7 +5,7 @@ extends RefCounted
 ## so it saves to JSON as-is. Randomness is seeded from the run seed and a step counter.
 
 ## Save format version. Bump it when the shape of run.json or meta.json changes, and teach _migrate_* the step.
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 const LAYERS := 13
 const SLOTS := ["weapon", "armor", "trinket1", "trinket2"]
 
@@ -58,6 +58,19 @@ static func _migrate_meta(v: Dictionary) -> Dictionary:
 	if ver > SAVE_VERSION:
 		push_warning("meta.json was written by a newer Ostium (version %d); loading what this version understands." % ver)
 	# 0 -> 1: no shape change; Abbey.ensure() fills in anything missing.
+	# 1 -> 2: the Gate 3 card set replaced most card ids. Saved heroes keep the cards that still exist; a hero
+	# left with fewer cards than the calling's starting deck gets that deck back, plus the curses it carried.
+	if ver < 2:
+		for list_key in ["roster", "recruits"]:
+			for e in v.get(list_key, []):
+				var h: Dictionary = e.get("hero", e) if e is Dictionary else {}
+				if not h.has("deck") or not Data.HEROES.has(str(h.get("key", ""))):
+					continue
+				var kept: Array = h.deck.filter(func(c): return Data.CARDS.has(c))
+				var start: Array = Data.HEROES[h.key].deck
+				if kept.size() < start.size():
+					kept = start.duplicate() + kept.filter(func(c): return Data.CARDS[c].get("rarity", "") in ["Curse", "Affliction", "A"])
+				h.deck = kept
 	return v
 
 ## Brings an older run save up to SAVE_VERSION. Returns {} if the run cannot be carried forward.
@@ -69,6 +82,9 @@ static func _migrate_run(v: Dictionary) -> Dictionary:
 	# 0 -> 1: a fight in progress was not saved before version 1; the room simply begins again.
 	if ver < 1:
 		v.erase("fight")
+	# 1 -> 2: a run begun before the Gate 3 card set holds cards, rooms and foes that no longer exist; it ends.
+	if ver < 2:
+		return {}
 	v.version = SAVE_VERSION
 	return v
 
@@ -954,8 +970,12 @@ static func save() -> void:
 	r.version = SAVE_VERSION
 	SaveIO.write_json(run_path(), r)
 
+## A run save that can still be carried forward (one from before the Gate 3 card set cannot, and is not offered).
 static func has_save() -> bool:
-	return SaveIO.exists(run_path())
+	if not SaveIO.exists(run_path()):
+		return false
+	var v := SaveIO.read_json(run_path())
+	return not v.is_empty() and not _migrate_run(Data._ints(v)).is_empty()
 
 static func load_run() -> bool:
 	var v := SaveIO.read_json(run_path())
