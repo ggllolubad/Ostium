@@ -1,5 +1,7 @@
 # Card art: gritty pass (brief)
 
+**Read `cards/LESSONS.md` first.** It is the running record of every mistake and the rule and check that prevent it. Add to it after every review.
+
 ## What Cole asked for (2026-11-25, his words)
 
 - "the card art can be a little more symbol and less literal, think on the order of slay the spire 2 where it's a depiction of the act but not like EXACTLY it every time"
