@@ -84,6 +84,13 @@ def report(cards):
             continue
         cost = c["cost"]
         pts = fx_points(c["fx"], c["target"])
+        if "Echo" in c.get("kw", []):
+            pts *= 1.5   # an Echo replays the card at half value after the Ordo
+        if c.get("cost_less"):
+            cl = c["cost_less"]
+            off = float(cl.get("k", 1)) * {"ordo": 2, "heroes": 1.5, "others": 1, "attacks": 1}.get(cl.get("per"), _qty(cl.get("per", "")))
+            off = min(off, float(cl.get("max", off)), float(cost) if isinstance(cost, int) else 0)
+            pts += 6 * off * 0.7   # vigour it saves, counted like a condition
         if r == "F":
             want = 5.0   # a flask is free to use; Brew prices it at 5 points (GATE3_VOCAB section 6)
         elif cost == "X" or not isinstance(cost, int) or cost < 0:

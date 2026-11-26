@@ -415,6 +415,21 @@ static func order_plan(s: Dictionary, plan: Array) -> Array:
 	s.ordo_spent_before = 0
 	s.ordo_heroes = []
 	s.ordo_attacks = 0
+	if s.get("sim", false):
+		# what committing this plan would move, per hero: out of hand, into discard or exhaust (see q, pile reads)
+		var po := {}
+		for a in plan:
+			if a.get("source", "") != "hand":
+				continue
+			var d: Dictionary = po.get(a.hero, {"hand": 0, "discard": 0, "exhaust": 0})
+			d.hand -= 1
+			var kw: Array = card(a.card).get("kw", [])
+			if kw.has("Exhaust") or kw.has("Rite"):
+				d.exhaust += 1
+			else:
+				d.discard += 1
+			po[a.hero] = d
+		s.planned_out = po
 	var first := []
 	var last := []
 	for a in plan:
@@ -941,7 +956,13 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 			return 1 if not it.is_empty() and it.kind == "attack" and (u.intent_target == actor.id or it.target == "all_heroes" or (actor.st.get("taunt", 0) > 0 and it.target in SINGLE_TARGETS)) else 0
 		"moved": return 1 if u.moved else 0
 		"exhaust", "discard", "hand", "draw":
-			return u.get(key, []).size()
+			var n: int = u.get(key, []).size()
+			# the Ordo preview (simulate) never commits the planned cards, so it sees them still in hand and not yet
+			# in discard or exhaust; correct it so the preview reads what the real round will read
+			if s.get("sim", false) and u.get("side", "") == "hero":
+				var pl: Dictionary = s.get("planned_out", {}).get(u.id, {})
+				n += int(pl.get(key, 0))
+			return max(0, n)
 		"debuffs": return _debuff_count(u)
 	if Data.ELEMENTS.has(key):
 		return u.elements[key]
