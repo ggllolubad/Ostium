@@ -48,9 +48,11 @@ const OBJ = {
   bw_windbreak: ['lantern', 'a gale of frost bending the flame'],
   bw_windward_shield: ['shield', 'the shield turned into the wind'],
   bw_winter_vigil: ['candle', 'a vigil candle in the frost'],
-  // ==== Duelist (2 of 50: the bowl and the wiped blade)
+  // ==== Duelist (4 of 50: the bowl, the wiped blade, the scales, the lancet)
   du_drain_the_bowl: ['basin', 'names the bowl; the act is the bowl tipping (attack exception)'],
   du_wipe_the_blade: ['sword', 'the heading sword wiped on a cloth'],
+  du_weigh_the_wound: ['scales', 'names weighing (coordinator, phase 2)'],
+  du_lancet: ['lancet', 'names the lancet: a lancet or fleam drawn as its own object, not the generic knife (coordinator, phase 2)'],
   // ==== Elementalist (24; el_strike_the_ring is already a hand-made bell scene)
   el_blot_spread: ['scroll', 'a blot spreading through vellum'],
   el_bright_margin: ['book', 'an illuminated capital in four inks (no gold: not holy)'],
@@ -178,7 +180,7 @@ const HERO = {
   bw_still_here: ['three', 'brace', 'the roped door raised again, rope lashing on it', null],
   bw_still_standing: ['full', 'rise', 'on one knee, pushing up on the mace haft', null],
   bw_vanguard: ['full', 'wade', 'wading through the shallows, water at the shins', 'brine_grotto'],
-  // ==== Duelist: 46 attacks and 2 blocks
+  // ==== Duelist: 44 attacks and 2 blocks
   du_answering_steel: ['three', 'thrust', 'uncoiling from a deep guard', null],
   du_arc_cut: ['close', 'cut', 'a white-gold spark running down the scorched blade', null],
   du_arterial_cut: ['three', 'cut', 'a bright red arc across the flagstones', 'nave'],
@@ -203,7 +205,6 @@ const HERO = {
   du_hundred_touches: ['close', 'flurry', 'a coat coming apart in ribbons', null],
   du_in_the_wake: ['three', 'thrust', 'the lunge into a mace dent', null],
   du_killing_thrust: ['close', 'thrust', 'through to the swept hilt, not looking back', null],
-  du_lancet: ['close', 'flick', 'the short curved blade, a thin red line following', null],
   du_letting_cut: ['three', 'cut', 'cutting into a wound already open', null],
   du_lunge: ['full', 'lunge', 'almost flat across the flooded stair, sash streaming', 'stair'],
   du_make_an_example: ['low', 'chop', 'the sword planted, the line flinching', null],
@@ -224,7 +225,6 @@ const HERO = {
   du_thunder_lunge: ['full', 'lunge', 'sparks branching up the blade', null],
   du_turn_of_the_wrist: ['close', 'circle', 'a small circle of the tip, a guard coming apart', null],
   du_two_step: ['three', 'cut', 'the sample: two crossing cuts in the belfry light', 'belfry'],
-  du_weigh_the_wound: ['ots', 'raise', 'sizing up before the stroke', null],
   du_en_garde: ['full', 'stance', 'the side-on stance, rapier level', null],
   du_give_ground: ['full', 'retreat', 'stepping back, blade still up', null],
   // ==== Elementalist: 20 casts and 3 blocks

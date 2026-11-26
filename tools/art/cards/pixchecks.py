@@ -160,7 +160,7 @@ ids = list(masks)
 for i in range(len(ids)):
     for j in range(i + 1, len(ids)):
         (oa, a), (ob, b) = masks[ids[i]], masks[ids[j]]
-        if oa == ob:
+        if oa == ob and ids[i].split('~')[0] != ids[j].split('~')[0]:   # an attuned card's ~course variants are one card (L60): not a pair
             iou = (a & b).sum() / max(1, (a | b).sum())
             if iou >= 0.5:
                 pair_bad.append(f"{ids[i]}/{ids[j]} {oa} IoU {iou:.2f}")

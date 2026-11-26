@@ -8,6 +8,7 @@ const O2 = require('./objects2').O;
 const O3 = require('./objects3').O;
 const O4 = require('./objects4').O;
 const O5 = require('./objects5').O;
+const EF = require('./element_fx');   // L61: an element is a shape, not a hue (shared with the hero cards)
 const { E, W, H, INK, COURSE, INK6, BLOOD, D } = K;
 const { add, sub, mul, lerp, rot, mix, rng, norm, len, ell } = E;
 
@@ -205,12 +206,13 @@ function heroPartSVG(hp, turn) {
 
 // ==== act FX in card space (all through card_kit ink FX, L18)
 function actFX(r, act, M, pts, course, place, state) {
-  const ink = course === 'physical' ? INK : mix(INK6[course] || INK, '#16110e', 0.6), focus = M(pts.focus || [0, 0]), feats = [];
+  const ink = K.courseInk(course, { attuned: !!place.attuned }), focus = M(pts.focus || [0, 0]), feats = [];   // L60: the shared course ink, pulled less on attuned cards
   let s = '';
-  const surf = place.surfaceY || 560;
-  if (act === 'pour' && pts.mouth) { const m = M(pts.mouth), floor = [m[0] + 60, surf]; const liq = (pts.feat || []).includes('blood') ? BLOOD : ink; s += K.drybrush(r, [m, add(m, [30, 40]), add(m, [50, (floor[1] - m[1]) * 0.6]), floor], 16, liq, { profile: t => 0.5 + 0.5 * t, dry: 0.4, op: 0.9, bodyLen: 0.7, bristles: 7 }); s += K.splatter(r, floor, 90, liq, { dir: [0.3, -1], spread: 2.4, n: 16, blotR: 0.2 }); feats.push('contents'); }
-  else if (act === 'burst') { s += K.impact(r, focus, 70, ink, { rays: 7, core: false, a0: -0.4 }); for (let i = 0; i < 8; i++) { const a = r() * 6.28, d = 60 + r() * 110, p = add(focus, [Math.cos(a) * d, Math.sin(a) * d]), z = 6 + r() * 10; s += `<path d="${K.polyD([add(p, rot([z, 0], a)), add(p, rot([-z * 0.3, z * 0.4], a)), add(p, rot([-z * 0.8, -z * 0.1], a))])}" fill="#b8c0b0" stroke="${INK}" stroke-width="1.4"/>`; } feats.push('crack'); }
-  else if (act === 'swing' || act === 'fling') { const piv = place.pivot || add(focus, [-260, 200]), R = len(sub(focus, piv)), a1 = Math.atan2(focus[1] - piv[1], focus[0] - piv[0]), a0 = a1 - (act === 'swing' ? 1.1 : 0.7); const arc = []; for (let i = 0; i <= 10; i++) { const a = a0 + (a1 - a0) * i / 10; arc.push(add(piv, [Math.cos(a) * R * 1.05, Math.sin(a) * R * 1.05])); } s += K.drybrush(r, arc, 50, INK, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.55, bristles: 12 }); s += K.motionHatch(r, arc.map(p => add(piv, mul(sub(p, piv), 0.85))), 36, INK, { lw: 2.2, op: 0.65 }); if (act === 'fling') s += K.splatter(r, add(focus, [90, -30]), 140, ink, { blot: false, n: 14, dir: [1, -0.3], spread: 1.2 }); }
+  const surf = place.surfaceY || 560, EL = EF.isElement(course) && course !== 'void' ? course : null;   // L61: the course lands as its element; void keeps its one bored hole (L38)
+  if (act === 'pour' && pts.mouth && EL && !(pts.feat || []).includes('blood')) { const m = M(pts.mouth); s += EF.pour(r, EL, m, [m[0] + 60, surf], 12); feats.push('contents'); }
+  else if (act === 'pour' && pts.mouth) { const m = M(pts.mouth), floor = [m[0] + 60, surf]; const liq = (pts.feat || []).includes('blood') ? BLOOD : ink; s += K.drybrush(r, [m, add(m, [30, 40]), add(m, [50, (floor[1] - m[1]) * 0.6]), floor], 16, liq, { profile: t => 0.5 + 0.5 * t, dry: 0.4, op: 0.9, bodyLen: 0.7, bristles: 7 }); s += K.splatter(r, floor, 90, liq, { dir: [0.3, -1], spread: 2.4, n: 16, blotR: 0.2 }); feats.push('contents'); }
+  else if (act === 'burst') { s += EL ? EF.impact(r, EL, focus, 56, { floorY: place.surfaceY }) : K.impact(r, focus, 70, ink, { rays: 7, core: false, a0: -0.4 }); for (let i = 0; i < 8; i++) { const a = r() * 6.28, d = 60 + r() * 110, p = add(focus, [Math.cos(a) * d, Math.sin(a) * d]), z = 6 + r() * 10; s += `<path d="${K.polyD([add(p, rot([z, 0], a)), add(p, rot([-z * 0.3, z * 0.4], a)), add(p, rot([-z * 0.8, -z * 0.1], a))])}" fill="#b8c0b0" stroke="${INK}" stroke-width="1.4"/>`; } feats.push('crack'); }
+  else if (act === 'swing' || act === 'fling') { const piv = place.pivot || add(focus, [-260, 200]), R = len(sub(focus, piv)), a1 = Math.atan2(focus[1] - piv[1], focus[0] - piv[0]), a0 = a1 - (act === 'swing' ? 1.1 : 0.7); const arc = []; for (let i = 0; i <= 10; i++) { const a = a0 + (a1 - a0) * i / 10; arc.push(add(piv, [Math.cos(a) * R * 1.05, Math.sin(a) * R * 1.05])); } s += K.drybrush(r, arc, 50, INK, { profile: t => 0.1 + 0.9 * t, dry: 1, body: false, op: 0.55, bristles: 12 }); s += K.motionHatch(r, arc.map(p => add(piv, mul(sub(p, piv), 0.85))), 36, INK, { lw: 2.2, op: 0.65 }); if (act === 'fling') s += EL ? EF.impact(r, EL, add(focus, [110, -40]), 40) : K.splatter(r, add(focus, [90, -30]), 140, ink, { blot: false, n: 14, dir: [1, -0.3], spread: 1.2 }); }
   else if (act === 'ring') { for (const [k, R0] of [[0, 220], [1, 280], [2, 340]]) for (const [a0, a1] of [[-60, 40], [140, 240]]) s += K.motionHatch(r, K.arc(focus, R0, R0 * 0.85, a0, a1, 14), 34 - k * 8, INK, { lw: 2.6 - k * 0.5, op: 0.85 - k * 0.15, grow: false, slant: 0.2, step: 10 + k * 2 }); }
   else if (act === 'drip' || act === 'press' || act === 'open' || act === 'turn') { s += K.inkDrip(r, add(focus, [0, 60]), ink, 3); }
   else if (act === 'crack') { s += K.splatter(r, focus, 100, INK, { blot: false, n: 10 }); feats.push('crack'); }
@@ -221,8 +223,9 @@ function actFX(r, act, M, pts, course, place, state) {
   return { s: `<g data-fx="act-${act}">${s}</g>`, feats };
 }
 // course marks in the air round the object (no stray dots: void holes are D.hole on the object, L22)
-function courseMarks(r, focus, course) {
+function courseMarks(r, focus, course, box) {
   let s = '';
+  if (box && EF.isElement(course) && course !== 'void') { const side = (focus[0] < W / 2) ? 1 : -1, x = side > 0 ? Math.min(W - 90, box[2] + 40) : Math.max(90, box[0] - 40), y = Math.min(H - 70, Math.max(box[1] + 120, (box[1] + box[3]) / 2 + 80)); return `<g data-fx="course">${EF.impact(r, course, [x, y], 42, { floorY: Math.min(H - 20, y + 60), dir: [-side, -0.3] })}</g>`; }   // L61: the element's own shape beside the object, not coloured specks
   if (course === 'fire') for (let i = 0; i < 24; i++) { const p = [focus[0] - 260 + r() * 520, 80 + r() * 300]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l${(2 + r() * 4).toFixed(1)},${(-3 - r() * 5).toFixed(1)}" stroke="${r() < 0.6 ? '#2a2020' : '#b8642a'}" stroke-width="${(1.5 + r() * 2).toFixed(1)}" stroke-linecap="round"/>`; }
   else if (course === 'frost') for (let i = 0; i < 36; i++) { const p = [focus[0] - 300 + r() * 600, 60 + r() * 480]; s += `<path d="M${p[0].toFixed(1)},${p[1].toFixed(1)}l0,${(3 + r() * 6).toFixed(1)}" stroke="#e8eef0" stroke-width="${(1 + r() * 1.6).toFixed(1)}" stroke-linecap="round" opacity="0.8"/>`; }
   else if (course === 'toxin') for (let i = 0; i < 26; i++) { const p = [focus[0] - 300 + r() * 600, 150 + r() * 380]; s += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${(1 + r() * 2).toFixed(1)}" fill="${r() < 0.5 ? '#c8c890' : '#22220e'}" opacity="0.75"/>`; }
@@ -372,7 +375,7 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   if (act === 'pour' && !P0.mouth) act = ACT_DEFAULT[obj] === 'pour' ? 'drip' : (ACT_DEFAULT[obj] || 'drip');
   if (state.frozen && act === 'pour') act = 'freeze';
   if (state.empty && act === 'pour') act = 'fling';   // L21: an empty thing cannot pour
-  const A = actFX(r, act, M, Object.assign({}, P0, { feat: [...feats] }), course, { surfaceY, pivot: hand ? hand.elbow : null }, state);
+  const A = actFX(r, act, M, Object.assign({}, P0, { feat: [...feats] }), course, { surfaceY, pivot: hand ? hand.elbow : null, attuned: card.cat === 'attuned' }, state);
   if (act === 'glare') under += A.s; else fx += A.s;   // glare is a halo behind the thing, not a veil over it
   A.feats.forEach(x => feats.add(x));
   if (state.frozen && !feats.has('rime')) { fx += K.inkRime(r, [[objBox[0], objBox[3] - 10], [(objBox[0] + objBox[2]) / 2, objBox[3] - 24], [objBox[2], objBox[3] - 8]]); feats.add('rime'); }
@@ -381,12 +384,12 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   // L54: a warm brown subject on the sepia or fire ground reads worst, so it gets a cool slate ground instead
   const rgbs = [...new Set(copies[0].f.colours)].filter(x => /^#[0-9a-f]{6}$/.test(x)).map(x => [1, 3, 5].map(i => parseInt(x.substr(i, 2), 16))), avg = rgbs.length ? [0, 1, 2].map(k => rgbs.reduce((t, c) => t + c[k], 0) / rgbs.length) : null;
   const av = avg ? hsv('#' + avg.map(v => Math.round(v).toString(16).padStart(2, '0')).join('')) : null, warm = !!av && av[0] >= 8 && av[0] <= 60 && av[1] > 0.12;   // the object's mean fill is a warm brown
-  const slate = (warm || !!P0.heroPart) && ['physical', 'fire', 'toxin'].includes(course) && !o.ground;
+  const slate = (o.slate ?? (warm || !!P0.heroPart)) && ['physical', 'fire', 'toxin'].includes(course) && !o.ground;
   const pale = (!!av && av[2] > 0.62) || ['scroll', 'book', 'initial', 'charter', 'laundry'].includes(obj);   // a pale subject (paper, linen) keeps a dark ground: lifting the pool behind it would sink it (L49)
   const cool = !pale && (slate || ['water', 'frost', 'void', 'lightning'].includes(course));   // L49: on the cool grounds the pool is lifted and the subject is back-lit
   if (cool) defs += '<filter id="kBack" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="22" result="d"/><feGaussianBlur in="d" stdDeviation="14" result="b"/><feFlood flood-color="#d8dce0" flood-opacity="0.62"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
-  let body = K.ground(r, Object.assign({ room: o.room || ctx.roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c: slate ? SLATE : c, pool: pool || [focus[0] + (r() - 0.5) * 160, focus[1] - 40 - r() * 60, 380 + r() * 140 + (cool ? 160 : 0), 220 + r() * 100 + (cool ? 110 : 0)], dark: cool ? 0.08 : 0.3, washOp: cool ? 0.7 : undefined, soot: cool ? 0.45 : undefined, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
-  body += under + `<g id="subj"${cool ? ' filter="url(#kBack)"' : ''}>${placed.slice().reverse().join('')}${extra}</g>` + over + fx + courseMarks(r, focus, course);
+  let body = K.ground(r, Object.assign({ room: o.room || ctx.roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c: slate ? (card.cat === 'attuned' ? Object.assign({}, c, { wash: mix(SLATE.wash, c.wash, 0.5), deep: mix(SLATE.deep, c.deep, 0.5), pool: SLATE.pool }) : SLATE) : c, pool: pool || [focus[0] + (r() - 0.5) * 160, focus[1] - 40 - r() * 60, 380 + r() * 140 + (cool ? 160 : 0), 220 + r() * 100 + (cool ? 110 : 0)], dark: cool ? 0.08 : 0.3, washOp: cool ? 0.7 : undefined, soot: cool ? 0.45 : undefined, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
+  body += under + `<g id="subj"${cool ? ' filter="url(#kBack)"' : ''}>${placed.slice().reverse().join('')}${extra}</g>` + over + fx + courseMarks(r, focus, course, objBox);
   // metadata for the checks
   const sgc = sigCard(), clip = b => [Math.max(0, b[0]), Math.max(0, b[1]), Math.min(W, b[2]), Math.min(H, b[3])];
   const sb = objBox.slice(); if (hand) { const g = M(P0.grip.c), e = hand.elbow, pad = 60 * sc; sb[0] = Math.min(sb[0], g[0] - pad, e[0] - pad); sb[1] = Math.min(sb[1], g[1] - pad, e[1] - pad); sb[2] = Math.max(sb[2], g[0] + pad, e[0] + pad); sb[3] = Math.max(sb[3], g[1] + pad, e[1] + pad); }

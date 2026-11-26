@@ -16,11 +16,11 @@ const { W, H } = K;
 // ==== framings. at/scale are per card from a seeded choice inside these ranges (and the deck-level spread, phase 2).
 // anchor: what lands on `at`; 'feet' = the lowest ankle on the floor line.
 const FRAMES = {
-  full: { anchor: 'feet', scale: [0.62, 0.7], at: [[260, 760], [560, 575]], face: 'in', note: 'whole figure on a visible floor, the act wide round it; the room seen deep' },
-  three: { anchor: 'head', scale: [1.45, 1.7], at: [[280, 560], [150, 210]], face: 'in', note: 'cut at mid thigh, figure half the frame wide (was 1.2 to 1.45 in the left third)' },
-  close: { anchor: 'act', scale: [2.4, 3.0], at: [[520, 700], [280, 360]], face: 'either', note: 'the hands and the weapon or prop filling the frame; the FX big' },
-  low: { anchor: 'head', scale: [1.5, 1.7], at: [[320, 600], [95, 135]], face: 'in', horizon: 0.82, note: 'feet below the bottom edge, horizon low, the pool behind the head so the figure towers back-lit' },
-  ots: { anchor: 'head', scale: [2.3, 2.6], at: [[110, 190], [200, 260]], face: 'in', shade: 0.55, fxScale: 0.6, note: 'head and shoulder huge at the left edge in shadow, looking into the lit room where the act lands small and far' },
+  full: { anchor: 'feet', scale: [0.74, 0.92], at: [[120, 960], [596, 640]], face: 'in', note: 'whole figure on a visible floor, the act wide round it; the room seen deep' },
+  three: { anchor: 'head', scale: [1.25, 1.8], at: [[180, 780], [140, 230]], face: 'in', note: 'cut at mid thigh, figure half the frame wide (was 1.2 to 1.45 in the left third)' },
+  close: { anchor: 'grip', scale: [1.7, 2.6], at: [[420, 720], [240, 380]], face: 'either', note: 'the hand and the weapon or prop together filling the frame (anchored between the grip and the act); the FX big' },
+  low: { anchor: 'head', scale: [1.35, 1.9], at: [[220, 760], [90, 140]], face: 'in', horizon: 0.82, note: 'feet below the bottom edge, horizon low, the pool behind the head so the figure towers back-lit' },
+  ots: { anchor: 'head', scale: [2.0, 2.8], at: [[90, 220], [190, 300]], face: 'in', shade: 0.55, fxScale: 0.6, note: 'head and shoulder huge at the left edge in shadow, looking into the lit room where the act lands small and far' },
 };
 
 // ==== leg limits (new; measured rests: knee bends 0 to 69, thighs 32 to 109 degrees)
@@ -111,6 +111,8 @@ const POSES = {
   vessel: [],
 };
 
+// the close crop's centre: between the hand that holds the act's prop (or makes it) and the act point
+function gripPt(h, ref, refPt) { let b = ref && h.J[ref[0]] ? ref[0] : 'hand_n'; while (b && !/^hand_/.test(b) && h.J[b]) b = h.J[b].parent; const hand = h.J[b] ? h.joint(b) : h.joint('hand_n'); return [hand[0] + (refPt[0] - hand[0]) * 0.45, hand[1] + (refPt[1] - hand[1]) * 0.45]; }
 // ==== placement for a framing (the middle of its ranges here; per card in phase 2)
 function placeIn(cls, key, P, frameName, at, scale) {
   const F = FRAMES[frameName], [mod, k, list] = key === cls ? ({ bulwark: ['dirAC', 'bulwark'], duelist: ['dirAC', 'duelist'], elementalist: ['dirAC', 'elementalist_fire', 'signs'], alchemist: ['dirAC2', 'alchemist'], oracle: ['dirAC2', 'oracle'], hexweaver: ['dirAC2', 'hexweaver'], vessel: ['worlds/hero_vessel', 'vessel'] })[cls] : [/^(bulwark|duelist|elementalist)_/.test(key) ? 'worlds/hero_paths_A' : 'worlds/hero_paths_B', key];
@@ -118,7 +120,7 @@ function placeIn(cls, key, P, frameName, at, scale) {
   const ref = P.weapon || P.hand || P.face;
   const refPt = (!ref || !h.J[ref[0]]) ? h.joint('hand_n') : ref[1] ? h.at(ref[0], ref[1]) : h.joint(ref[0]);
   const feet = ['foot_n', 'foot_f'].filter(n => h.J[n]).map(n => h.joint(n)).sort((a, b) => b[1] - a[1])[0];
-  const A = F.anchor === 'feet' ? feet : F.anchor === 'act' ? refPt : h.joint('head');
+  const A = F.anchor === 'feet' ? feet : F.anchor === 'act' ? refPt : F.anchor === 'grip' ? gripPt(h, ref, refPt) : h.joint('head');
   scale = scale ?? (F.scale[0] + F.scale[1]) / 2; at = at ?? F.at.map(r => (r[0] + r[1]) / 2);
   const M = p => K.mapPt(p, A, at, scale);
   return { h, M, A, at, scale, act: M(refPt), head: M(h.joint('head')), face: M(h.at('head', CP.FACE[key] || CP.FACE[cls])) };
@@ -127,12 +129,12 @@ function placeIn(cls, key, P, frameName, at, scale) {
 // phase 2 picks a card's placement from these, so a pose fails a framing only when none exists
 const M24 = 24, inC = p => p[0] > M24 && p[0] < W - M24 && p[1] > M24 && p[1] < H - M24;
 const outC = p => p[0] < -30 || p[0] > W + 30 || p[1] < -30 || p[1] > H + 30;
-function placements(cls, key, P, frameName) {
-  const F = FRAMES[frameName], ok = [], lerp1 = (r, t) => r[0] + (r[1] - r[0]) * t;
+function placements(cls, key, P, frameName, fine = false) {
+  const F = FRAMES[frameName], ok = [], lerp1 = (r, t) => r[0] + (r[1] - r[0]) * t, TX = fine ? [0, 1 / 8, 2 / 8, 3 / 8, 4 / 8, 5 / 8, 6 / 8, 7 / 8, 1] : [0, 0.25, 0.5, 0.75, 1];
   const pl0 = placeIn(cls, key, P, frameName, [0, 0], 1);   // unit placement; others are affine in it
   const rel = p => [p[0] - pl0.at[0], p[1] - pl0.at[1]];
   const act = rel(pl0.act), face = rel(pl0.face);
-  for (const ts of [0, 0.5, 1]) for (const tx of [0, 0.25, 0.5, 0.75, 1]) for (const ty of [0, 0.25, 0.5, 0.75, 1]) {
+  for (const ts of (fine ? [0, 1 / 3, 2 / 3, 1] : [0, 0.5, 1])) for (const tx of TX) for (const ty of [0, 0.25, 0.5, 0.75, 1]) {
     const s = lerp1(F.scale, ts), at = [lerp1(F.at[0], tx), lerp1(F.at[1], ty)], map = q => [at[0] + q[0] * s, at[1] + q[1] * s];
     const a = map(act), f = map(face);
     if (!inC(a)) continue;
@@ -168,7 +170,7 @@ function validate() {
   });
   return bad;
 }
-module.exports = { FRAMES, POSES, KNEE, HIP, legFaults, solveGrip, placeIn, placements, frameFaults, validate };
+module.exports = { FRAMES, POSES, KNEE, HIP, legFaults, solveGrip, placeIn, placements, frameFaults, validate, gripPt };
 if (require.main === module) {
   const bad = validate();
   const n = Object.values(POSES).reduce((a, l) => a + l.length, 0);

@@ -1,5 +1,5 @@
-"""Hero card similarity within a calling (LESSONS.md L58).
-Usage: python3 herosim.py <out dir> <list file> [--masks <dir>] [--report <file>]
+"""Hero card similarity within a calling (LESSONS.md L59).
+Usage: python3 herosim.py <out dir> <list file> [--masks <dir>] [--report <file>] [--separate <hero_separate.json>]
 Prints PASS/FAIL lines; exit 1 on any FAIL.
 
 Every hero card (kinds attack, cast, block in the list file) is compared with every other hero card of its calling.
@@ -31,6 +31,7 @@ args = sys.argv[1:]
 out, listfile = args[0], args[1]
 mask_dir = args[args.index("--masks") + 1] if "--masks" in args else None
 report = args[args.index("--report") + 1] if "--report" in args else None
+separate = args[args.index("--separate") + 1] if "--separate" in args else None   # add failing pairs to the allocator's separation list (hero_comp.js)
 rows = [l.split("\t") for l in open(listfile).read().splitlines() if l.strip()]
 
 
@@ -78,23 +79,34 @@ failing = {x for _, a, b in sil_bad + pic_bad for x in (a, b)}
 by_cal = {}
 for cid, cal, _, _ in cards:
     t = by_cal.setdefault(cal, [0, 0]); t[0] += 1; t[1] += cid in failing
-lines = [f"INFO  L58  {len(cards)} hero cards; cards with a twin in their calling: " + ", ".join(f"{c} {f}/{n}" for c, (n, f) in sorted(by_cal.items()))]
+lines = [f"INFO  L59  {len(cards)} hero cards; cards with a twin in their calling: " + ", ".join(f"{c} {f}/{n}" for c, (n, f) in sorted(by_cal.items()))]
 if missing:
-    lines.append(f"FAIL  L58  no hero mask for {len(missing)} cards (silhouette check needs <id>_hero.png): " + ", ".join(missing[:8]))
+    lines.append(f"FAIL  L59  no hero mask for {len(missing)} cards (silhouette check needs <id>_hero.png): " + ", ".join(missing[:8]))
 show = lambda L, f: ", ".join(f"{a}/{b} {v:.2f}" for v, a, b in sorted(L, key=f)[:12]) + (f" (+{len(L) - 12} more)" if len(L) > 12 else "")
 if sil_bad:
-    lines.append(f"FAIL  L58  same figure, same staging (silhouette IoU {SIL_MAX} or more), {len(sil_bad)} pairs: " + show(sil_bad, lambda r: -r[0]))
+    lines.append(f"FAIL  L59  same figure, same staging (silhouette IoU {SIL_MAX} or more), {len(sil_bad)} pairs: " + show(sil_bad, lambda r: -r[0]))
 else:
-    lines.append(f"PASS  L58  every hero pair in a calling differs in silhouette (IoU under {SIL_MAX})")
+    lines.append(f"PASS  L59  every hero pair in a calling differs in silhouette (IoU under {SIL_MAX})")
 if pic_bad:
-    lines.append(f"FAIL  L58  near-identical pictures (band-pass distance under {PIC_MIN}), {len(pic_bad)} pairs: " + show(pic_bad, lambda r: r[0]))
+    lines.append(f"FAIL  L59  near-identical pictures (band-pass distance under {PIC_MIN}), {len(pic_bad)} pairs: " + show(pic_bad, lambda r: r[0]))
 else:
-    lines.append(f"PASS  L58  every hero pair in a calling differs as a picture (distance {PIC_MIN} or more)")
+    lines.append(f"PASS  L59  every hero pair in a calling differs as a picture (distance {PIC_MIN} or more)")
 if report:
     with open(report, "w") as fh:
         fh.write("id\tcalling\tnearest\tdistance\tsilhouette_iou\n")
         for cid, cal, _, _ in cards:
             d, y, iou = near.get(cid, (1.0, "", 0.0))
             fh.write(f"{cid}\t{cal}\t{y}\t{d:.3f}\t{iou:.3f}\n")
+if separate and (sil_bad or pic_bad):
+    import json
+    try:
+        old = json.load(open(separate))
+    except Exception:
+        old = []
+    seen = {tuple(sorted(p)) for p in old}
+    for _, a, b in sil_bad + pic_bad:
+        seen.add(tuple(sorted((a, b))))
+    json.dump(sorted(list(p) for p in seen), open(separate, "w"))
+    lines.append(f"INFO  L59  {len(seen)} pairs on the allocator's separation list ({separate})")
 print("\n".join(lines))
 sys.exit(1 if (sil_bad or pic_bad or missing) else 0)

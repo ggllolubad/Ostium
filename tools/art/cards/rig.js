@@ -171,7 +171,7 @@ const FIGURES = {
 };
 // L6: the bones a block's hit may land on (the guard), per calling; never the head or torso
 const GUARD = {
-  bulwark: ['door'], duelist: ['rapier'], elementalist: ['book', 'hand_n'], alchemist: ['hand_n', 'flask'],
+  bulwark: ['door'], duelist: ['rapier'], elementalist: ['book', 'hand_n', 'vessel'], alchemist: ['hand_n', 'flask'],   // vessel: the Accumulator's brass vessel (Under the Weight)
   oracle: ['hourglass', 'hand_n'], hexweaver: ['poppet', 'hand_n'], vessel: ['hand_f', 'hand_n'],
 };
 // held props that must stay near plumb: the most a hand's total rotation may tilt them, per figure and hand

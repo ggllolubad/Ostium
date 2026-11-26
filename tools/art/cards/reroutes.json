@@ -151,6 +151,14 @@
   "suggest": "sword",
   "why": "the heading sword wiped on a cloth"
  },
+ "du_weigh_the_wound": {
+  "suggest": "scales",
+  "why": "names weighing (coordinator, phase 2)"
+ },
+ "du_lancet": {
+  "suggest": "lancet",
+  "why": "names the lancet: a lancet or fleam drawn as its own object, not the generic knife (coordinator, phase 2)"
+ },
  "el_blot_spread": {
   "suggest": "scroll",
   "why": "a blot spreading through vellum"

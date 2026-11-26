@@ -10,12 +10,18 @@ const { chromium } = require('playwright');
 const S = require('./samples');
 if (process.argv.includes('-all')) require('./check_poses').run(S);   // L5 pose shares, L6 block hits, frame (L4 runs in rig.js on load)
 const BASE = '/home/claude/ostium/build/emblem2';
-const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r7') ? BASE + '/review7' : process.argv.includes('-r6') ? BASE + '/review6' : process.argv.includes('-r5') ? BASE + '/review5' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
-const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
+const RV = (process.argv.find(a => a.startsWith('-rv=')) || '').slice(4);   // -rv=<name>: the variety pass's review batches, to emblem2/variety/<name> (with -all too)
+// hero staging (hero-card agent): -h renders to emblem2/_heroes; -heroes[=bulwark,duelist] takes the staged hero cards of those callings (all if none);
+// -dry runs the checks and stops before rendering (with -all: the full-deck dry run)
+const HEROES = (process.argv.find(a => a === '-heroes' || a.startsWith('-heroes=')) || '');
+const HSUB = (process.argv.find(a => a.startsWith('-h=')) || '').slice(3);   // -h=<name>: emblem2/_heroes/<name> (calibration batches)
+const OUT = HSUB ? BASE + '/_heroes/' + HSUB : process.argv.includes('-h') ? BASE + '/_heroes' : RV ? BASE + '/variety/' + RV : process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r7') ? BASE + '/review7' : process.argv.includes('-r6') ? BASE + '/review6' : process.argv.includes('-r5') ? BASE + '/review5' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
+const fname = id => id.replace(/^@/, 'test_').replace(/[\/!~]/g, '_');   // <id>~<course> is written as <id>_<course> (attuned variants)
 
 (async () => {
   const ids = process.argv.slice(2).filter(a => !a.startsWith('-'));
-  const list = ids.length ? ids : S.SAMPLES;
+  const want = HEROES.includes('=') ? HEROES.split('=')[1].split(',') : null;
+  const list = ids.length ? ids : process.argv.includes('-all') ? Object.keys(S.CARDS) : HEROES ? Object.keys(require('./hero_routes').HERO).filter(id => S.CARDS[id] && (!want || want.includes(S.CARDS[id].cls))).sort() : S.SAMPLES;
   fs.mkdirSync(path.join(OUT, '_full'), { recursive: true });
   // the lessons checks run on the batch metadata before anything renders (checks.js); a failure stops the run
   S.allocate(list);
@@ -25,6 +31,7 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
   fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
   console.log(report);
   if (res.some(r => !r.ok) && !process.argv.includes('-force')) { console.error('\nCHECKS FAILED: nothing rendered. Fix the cards above (or pass -force to render anyway for a look).'); process.exit(1); }
+  if (process.argv.includes('-dry')) { console.log(`\nDRY RUN: ${list.length} cards built and checked, nothing rendered`); return; }
   const b = await chromium.launch();
   const pg = await b.newPage({ viewport: { width: S.W, height: S.H } });
   for (const { id, meta } of built) {
@@ -43,6 +50,15 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
       await pg.evaluate(() => { const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing (L3, L46, L47)
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_mask.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
     }
+    if (meta.course) { // an attuned variant's FX layer alone (the .cfx groups), for the greyscale element check (attuned_check.py, L61)
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; for (const c of document.querySelector('svg').children) if (c.tagName !== 'defs' && !(c.classList && c.classList.contains('cfx'))) c.style.display = 'none'; });
+      await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_fx.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
+      await pg.evaluate(() => { for (const c of document.querySelector('svg').children) c.style.display = ''; });
+    }
+    if (meta.kind === 'hero' && meta.frame) { // the hero figure alone, for the silhouette check (herosim.py)
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('hero'); n.removeAttribute('filter'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } });
+      await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_hero.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
+    }
     console.log(id, ((Date.now() - t0) / 1000).toFixed(1) + 's');
   }
   await b.close();
@@ -53,6 +69,8 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
   let pix = '', pixOk = true;
   try { pix = execFileSync('python3', [path.join(__dirname, 'pixchecks.py'), OUT, listFile]).toString(); } catch (e) { pix = (e.stdout || '').toString(); pixOk = false; }
   report += '\n' + pix.trim();
+  // hero cards of a calling must each be their own picture: silhouette and band-pass picture distance (herosim.py)
+  if (built.some(x => x.meta.kind === 'hero' && x.meta.frame)) { let hs = ''; try { hs = execFileSync('python3', [path.join(__dirname, 'herosim.py'), OUT, listFile, '--report', path.join(OUT, 'herosim.tsv')]).toString(); } catch (e) { hs = (e.stdout || '').toString(); pixOk = false; } report += '\n' + hs.trim(); pix += '\n' + hs.trim(); }
   fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
   // L57: a sample of the batch rebuilt alone in fresh processes must match the batch SVGs byte for byte (not on -all)
   if (!process.argv.includes('-all')) { let det = ''; try { det = execFileSync('node', [path.join(__dirname, 'check_determinism.js'), OUT]).toString(); } catch (e) { det = (e.stdout || '').toString(); pixOk = false; } report += '\n' + det.trim(); pix += det; }

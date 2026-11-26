@@ -403,7 +403,51 @@ OVR.or_augury_of_birds = Object.assign(OVR.or_augury_of_birds || {}, { ground: {
 // ones that stay hero cards; until it exists, only the Vessel cards above are forced to objects.
 const VESSEL_HEROES = (() => { try { return new Set(require('fs').readFileSync(require('path').join(__dirname, 'vessel_hero_ids.txt'), 'utf8').split(/\s+/).filter(Boolean)); } catch (e) { return null; } })();
 for (const id of Object.keys(CARDS)) if (CARDS[id].cls === 'vessel' && (VESSEL_HEROES ? !VESSEL_HEROES.has(id) : READS[id])) OVR[id] = Object.assign(OVR[id] || {}, { kind: 'device' });
+// ==== VARIETY PASS (object-variety agent, L58; this block and the files it loads are that agent's). The new objects in
+// objects6.js, objects7.js, ... join the library with their defaults (META), and picks.json sets each object card's
+// object (id -> key, or id -> { device, act, ang, layout, style, zoom, count, objOpt }). Applied before the pick logic.
+(() => {
+  const OCv = require('./objcomp'), fsv = require('fs'), pv = require('path');
+  for (const fn of fsv.readdirSync(__dirname).filter(n => /^objects([6-9]|\d\d)\.js$/.test(n)).sort()) {
+    const m = require('./' + fn); Object.assign(OCv.LIB, m.O);
+    for (const [k, d] of Object.entries(m.META || {})) { if (d.ang != null) OCv.ANG[k] = d.ang; if (d.scale) OCv.SCALE[k] = d.scale; if (d.long) OCv.LONG.add(k); if (d.only) OCv.ONLY[k] = d.only; if (d.noTurn) OCv.NO_TURN.add(k); if (d.act) OCv.ACT_DEFAULT[k] = d.act; if (d.gold) OCv.GOLD_OBJECTS.add(k); if (d.water) OCv.WATER_OK.add(k); if (d.scene) OCv.SCENE.add(k); }
+  }
+  let picks = {}; try { picks = JSON.parse(fsv.readFileSync(pv.join(__dirname, 'picks.json'), 'utf8')); } catch (e) { if (e.code !== 'ENOENT') throw e; }
+  for (const [id, p] of Object.entries(picks)) { if (id[0] === '_' || !CARDS[id]) continue; OVR[id] = Object.assign(OVR[id] || {}, typeof p === 'string' ? { device: p } : p); }
+})();
+// ==== end of the variety pass block
 const KIND = { attack: act, cast: act, block };
+// ==== HERO STAGING (hero-card agent, round 9; this block and hero_routes.js, hero_staging.js, hero_comp.js are that
+// agent's). A hero card earns its hero only when the act is the point: the cards in hero_routes.OBJ become object cards
+// (their object comes from picks.json), and every card in hero_routes.HERO is staged by hero_comp.js as its own picture
+// (framing, pose, room view and motif; herosim.py checks them).
+(() => {
+  const HROUTES = require('./hero_routes'), HCOMP = require('./hero_comp');
+  for (const id of Object.keys(HROUTES.OBJ)) if (CARDS[id]) OVR[id] = Object.assign(OVR[id] || {}, { kind: 'device' });
+  const ctx = { get S() { return module.exports; }, courseOf, roomOf, heroOf };
+  for (const k of ['attack', 'cast', 'block']) { const plain = KIND[k]; KIND[k] = (cd, id, o) => HCOMP.has(id) ? HCOMP.heroCard(cd, id, o, ctx) : plain(cd, id, o); }
+  // ---- attuned course variants (Cole, 2026-11-25; LESSONS L60). The game shows an attuned card's art for the element its
+  // hero is attuned to now (assets/art/cards/<id>_<element>.jpg), falling back to <id>.jpg.
+  // - The base <id> of an attuned card is drawn in the Elementalist's starting element (data/heroes.json `attuned`, an
+  //   index into the game's ELEMENTS order), which is fire. It is the same picture as <id>~fire.
+  // - An attuned card's room follows its course (ROOM_BY_COURSE), not one room for every attuned card.
+  // - <id>~<course> builds the base card with only the course changed: the same seed, layout, framing and pose (it is
+  //   built under the base id), so it is deterministic under L57. render.js writes it as <id>_<course>.jpg.
+  const ELEMENTS = ['fire', 'frost', 'lightning', 'water', 'toxin', 'void'];   // scripts/data.gd ELEMENTS
+  const BASE_ELEMENT = ELEMENTS[(JSON.parse(fs.readFileSync('/home/claude/ostium/data/heroes.json', 'utf8')).elementalist.attuned || 0) % ELEMENTS.length];
+  for (const id of Object.keys(CARDS)) if (CARDS[id].cat === 'attuned' && !(OVR[id] && OVR[id].course)) OVR[id] = Object.assign(OVR[id] || {}, { course: BASE_ELEMENT });
+  delete ROOM_BY_COURSE.attuned;
+  const VARIANT = new RegExp('^(.+)~(' + ELEMENTS.join('|') + ')$');
+  const baseCard = card, baseDescribe = describe;
+  card = function (id) {
+    const m = VARIANT.exec(id); if (!m) return baseCard(id);
+    const [, cid, course] = m; if (!CARDS[cid]) throw new Error('no card ' + cid + ' for variant ' + id);
+    const keep = OVR[cid]; OVR[cid] = Object.assign({}, keep || {}, { course });
+    try { const svg = baseCard(cid); LAST_META = Object.assign({}, LAST_META, { id, base: cid, course }); return svg; } finally { if (keep) OVR[cid] = keep; else delete OVR[cid]; }
+  };
+  describe = id => { const m = VARIANT.exec(id); return baseDescribe(m ? m[1] : id); };
+})();
+// ==== end of the hero staging block
 // test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
 function testCard(id) { const [cls, kind, cat = 'physical', v] = id.slice(1).split('/'); return { name: '', cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind, _v: v == null ? null : +v }; }
 function card(id) {

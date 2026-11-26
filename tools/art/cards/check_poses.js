@@ -130,11 +130,11 @@ function grips() {
   return bad;
 }
 function shares(S, ids) {
-  const bad = [], count = {};
+  const bad = [], count = {}, staged = require('./hero_comp').allocation(S);
   for (const id of ids) {
     const card = S.CARDS[id]; if (!card || !RIG[card.cls]) continue;
     const kind = S.describe(id).split(' ')[0]; if (!['attack', 'block', 'cast'].includes(kind)) continue;
-    const list = kind === 'block' ? 'block' : 'act', c = (count[card.cls] = count[card.cls] || { n: 0 }), k = list + pick(card, id, list);
+    const st = staged[id], list = kind === 'block' ? 'block' : 'act', c = (count[card.cls] = count[card.cls] || { n: 0 }), k = st ? st.pose : list + pick(card, id, list);   // a staged hero card counts the pose it is drawn in (hero_comp.js)
     c.n++; c[k] = (c[k] || 0) + 1;
   }
   const lines = [];
@@ -148,9 +148,11 @@ function shares(S, ids) {
 function run(S, ids) {
   ids = ids && ids.length ? ids : Object.keys(S.CARDS).filter(id => !id.endsWith('+'));
   const sh = shares(S, ids), bad = sh.bad.concat(words(), grips(), geometry(), shapes());
+  // the staged hero poses (hero_staging.js): every rig check above plus legs and framings, on every figure
+  bad.push(...require('./hero_staging').validate());
   console.log('pose shares (L5):\n  ' + sh.lines.join('\n  '));
   if (bad.length) throw new Error('pose checks failed (LESSONS L5, L6, L24, L28, L29, L30, L31, L33):\n  ' + bad.join('\n  '));
-  console.log('pose checks pass: shares (L5), block hits (L6), two-handed grips (L24), words (L29), frame (L30), hand FX points (L31), face clear (L28), drape and joint cover (L33)');
+  console.log('pose checks pass: shares (L5), block hits (L6), two-handed grips (L24), words (L29), frame (L30), hand FX points (L31), face clear (L28), drape and joint cover (L33), staged hero poses with legs and framings');
 }
 module.exports = { run, shares, geometry, words, grips, shapes, shapeFaults, shapesOf, FACE, FACE_CLEAR, DRAPE, pick, placed, POSE_SHARE, HEAD_CLEAR };
 if (require.main === module) run(require('./samples'), process.argv.slice(2));

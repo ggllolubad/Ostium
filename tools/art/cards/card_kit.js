@@ -28,6 +28,11 @@ const COURSE = {
 };
 const INK6 = { fire: '#b8341f', frost: '#8fb2c9', lightning: '#c9a43a', water: '#2f4f8f', toxin: '#7d9a3a', void: '#4b2a5c' };
 const BLOOD = '#4c0c08', BLOOD_L = '#661510', BONE = '#d8ccb0', PAPER = '#e4d6b8';
+// a course's FX ink: its bible ink pulled toward the game's ink so it reads as ink, not paint (NOTES rule 7: 0.6 to 0.74).
+// The Elementalist's attuned cards pull less (ATTUNED_PULL, LESSONS L60), so the six element variants of one card
+// (<id>~fire ... <id>~void) can be told apart at 162 x 86.
+const ATTUNED_PULL = 0.3;
+function courseInk(course, o = {}) { if (course === 'physical' || !INK6[course]) return INK; return mix(INK6[course], '#16110e', o.attuned ? ATTUNED_PULL : (o.pull ?? 0.62)); }
 
 // ==== geometry helpers
 function catmull(pts, n = 8) { // open Catmull-Rom resample
@@ -233,7 +238,7 @@ function slash(r, pts, w, col = INK, o = {}) {
 // its upper edge drawn in broken dry ink, a curl or two inside. Never a soft glow.
 let billowN = 0;
 function billow(r, c, w, h, col, o = {}) {
-  const id = 'kBl' + (billowN++), n = 48, lobes = o.lobes || 5, ph = r() * 6, pts = [];
+  const n = 48, lobes = o.lobes || 5, ph = r() * 6, pts = [], id = 'kBl' + Math.round(ph * 1e6) + '_' + Math.round(c[0]) + '_' + Math.round(c[1]); void billowN;   // L57: the clip id comes from the billow itself, not a process-wide counter (the counter made a card differ alone and in a batch); the r() order is unchanged
   for (let i = 0; i < n; i++) { const t = Math.PI * 2 * i / n, up = Math.sin(t) < 0.15; const bump = up ? 0.2 * Math.abs(Math.sin(lobes * t / 2 + ph)) : 0.04 * Math.abs(Math.sin(lobes * t + ph)); pts.push(add(c, [Math.cos(t) * w * (1 + bump), Math.sin(t) * h * (up ? 1 + bump * 1.6 : 0.7)])); }
   let s = `<defs><clipPath id="${id}"><path d="${pathD(pts, true)}"/></clipPath></defs>`;
   s += `<path d="${pathD(pts, true)}" fill="${col}" opacity="${o.op ?? 0.55}" filter="url(#kRag)"/>`;
@@ -463,4 +468,4 @@ function svgDoc(seed, c, defs, body, o = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>${cardDefs(seed, c)}${defs}</defs>${body}${finish(c, o)}</svg>`;
 }
 
-module.exports = { W, H, INK, COURSE, INK6, BLOOD, BLOOD_L, BONE, PAPER, catmull, plen, normals, arc, blob, pathD, polyD, cardDefs, ground, lightShaft, edgeHatch, finish, drybrush, splatter, motionHatch, impact, flick, slash, billow, fxReq, FX, inkFlame, inkSteam, inkBolt, inkRime, inkDrip, D, hero, place, mapPt, objFig, figSVG, svgDoc, E, KIT, f1 };
+module.exports = { W, H, INK, COURSE, INK6, BLOOD, BLOOD_L, BONE, PAPER, ATTUNED_PULL, courseInk, catmull, plen, normals, arc, blob, pathD, polyD, cardDefs, ground, lightShaft, edgeHatch, finish, drybrush, splatter, motionHatch, impact, flick, slash, billow, fxReq, FX, inkFlame, inkSteam, inkBolt, inkRime, inkDrip, D, hero, place, mapPt, objFig, figSVG, svgDoc, E, KIT, f1 };

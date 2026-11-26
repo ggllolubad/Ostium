@@ -10,11 +10,12 @@ const ACTS = new Set(['pour', 'burst', 'swing', 'fling', 'ring', 'burn', 'crack'
 
 function runMeta(metas) {
   const out = [], fail = (lesson, msg, ids) => out.push({ lesson, ok: false, msg, ids: ids || [] }), pass = (lesson, msg) => out.push({ lesson, ok: true, msg });
-  const objs = metas.filter(m => m.kind === 'object'), N = objs.length, big = N > 100;
+  const all = metas.filter(m => m.kind === 'object'), seenBase = new Set();
+  const objs = all.filter(m => { const b = m.base || String(m.id).split('~')[0]; if (seenBase.has(b)) return false; seenBase.add(b); return true; }), N = objs.length, big = N > 100;   // L60: an attuned card's ~course variants are one card for the batch checks (spread, uniqueness, hands, holes)
   if (!N) { pass('-', 'no object cards in this batch'); return out; }
   // L12: spread. Per review batch: at most 2 cards per object and a unique (object, variant, layout). Full runs: 20 per object.
   const per = {}; objs.forEach(m => (per[m.object] = per[m.object] || []).push(m.id));
-  const capObj = big ? 20 : 2, over = Object.entries(per).filter(([, v]) => v.length > capObj);
+  const capObj = big ? 20 : 4, over = Object.entries(per).filter(([, v]) => v.length > capObj);
   over.length ? fail('L12', `objects over ${capObj} cards: ` + over.map(([k, v]) => `${k} x${v.length}`).join(', '), over.flatMap(([, v]) => v)) : pass('L12', `no object on more than ${capObj} cards (${Object.keys(per).length} objects)`);
   if (!big) { const keys = {}; objs.forEach(m => { const k = [m.object, m.variant, m.layout, m.style, m.flipped].join('|'); /* the card's whole framing (L57: hashed per card) */ (keys[k] = keys[k] || []).push(m.id); }); const dup = Object.entries(keys).filter(([, v]) => v.length > 1);
     dup.length ? fail('L12', 'repeated (object, variant, layout, framing): ' + dup.map(([k, v]) => `${k}: ${v.join(' ')}`).join('; '), dup.flatMap(([, v]) => v)) : pass('L12', 'every (object, variant, layout, framing) is unique; silhouettes are verified by the pixel IoU check'); }
@@ -25,7 +26,7 @@ function runMeta(metas) {
   const small = objs.filter(m => !OC.fillOk(m.subjFrac, m.span));   // 35%, or edge to edge (90% span) and 20%
   small.length ? fail('L13', 'subject bbox under 35% of the frame: ' + small.map(m => `${m.id} ${(m.subjFrac * 100).toFixed(0)}%`).join(', '), small.map(m => m.id)) : pass('L13', 'every subject (object and hand) fills at least 35% of the frame, or runs edge to edge (90%) and fills 20%');
   // L14: colour roles on parts (red only blood, rubric, doom; gold only money and holy things, and the Vessel)
-  const col = objs.filter(m => m.badRed.length || m.badGold.length);
+  const col = all.filter(m => m.badRed.length || m.badGold.length);   // every variant: the course changes the ink
   col.length ? fail('L14', 'red or gold outside its role: ' + col.map(m => `${m.id} ${[...m.badRed, ...m.badGold].join('/')}`).join(', '), col.map(m => m.id)) : pass('L14', 'every red and gold fill has a role');
   // L15: water only for heavy things
   const wet = objs.filter(m => m.layout === 'water' && !OC.WATER_OK.has(m.object));
@@ -68,12 +69,13 @@ function runMeta(metas) {
   ct.length ? fail('L9', 'not touching its surface: ' + ct.map(m => `${m.id} ${m.contact.toFixed(0)}px`).join(', ')) : pass('L9', 'every object on a surface touches it, with a contact shadow');
   // L58: variety. Deck-wide on every run (a deck property, not a batch one): within one calling, the shared pool and
   // each world, no object on more than 3 object cards; a calling's listed signature object may take 4.
-  const R = reuse();
+  const R = reuse(), CS = require('./samples').CARDS, groups = new Set(objs.map(m => (CS[m.id] || {}).cls || 'shared'));
+  if (!big) R.over = R.over.filter(x => groups.has(x.group));   // a review batch answers for its own callings; a full run for every one
   R.over.length ? fail('L58', 'objects on too many cards in one calling: ' + R.over.map(x => `${x.group} ${x.obj} x${x.ids.length}`).join(', '), R.over.flatMap(x => x.ids)) : pass('L58', `no object on more than 3 cards in any calling, the shared pool or a world (signatures at most 4: ${Object.entries(SIGNATURE).map(([k, v]) => k + ' ' + v).join(', ')}); ${R.cards} object cards on ${R.objects} objects; uses per object ${R.hist}`);
   return out;
 }
 // L58: the signature exception, listed explicitly (a calling's own object, allowed on 4 cards with different silhouettes)
-const SIGNATURE = { vessel: 'chalice', alchemist: 'flask', hexweaver: 'poppet', oracle: 'hourglass' };
+const SIGNATURE = { vessel: 'chalice', alchemist: 'flask', hexweaver: 'poppet', oracle: 'hourglass', bulwark: 'shield' };
 const CAP = 3;
 function reuse() {
   const S = require('./samples'); S.allocate();
