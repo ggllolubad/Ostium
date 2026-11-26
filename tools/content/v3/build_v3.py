@@ -101,7 +101,7 @@ QU = {"hp", "max_hp", "block", "armor", "ward", "stress", "grit", "omen", "playe
       "held_min"} | ELS | STATUS | {"held_" + e for e in ELS}
 KW = {"Exhaust", "Retain", "Echo", "Rite", "Finisher", "Execute", "Fresh", "Dosed", "Curse", "Affliction", "Flask",
       "Unplayable", "Temporary"}
-RAR = {"S", "C", "U", "R", "X", "L", "K", "F", "N", "W", "A", "Curse"}
+RAR = {"S", "C", "U", "R", "X", "L", "K", "F", "N", "W", "A", "Curse", "T"}   # T: a token a card makes (never offered)
 TGT = {"enemy", "all_enemies", "self", "ally", "ally_other", "adjacent_ally", "all_allies", "none"}
 TO = {"self", "target", "all_enemies", "all_allies", "allies_other", "adjacent", "behind", "in_front", "front_enemy",
       "lowest_ally", "attackers", "front2", "self_adjacent", "killer"}

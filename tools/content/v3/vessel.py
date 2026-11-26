@@ -752,11 +752,11 @@ card("ve_mothers_place", "The Mother's Place", 2, "L", "self", [],
                  "to that foe. Exhaust.", "fx": lack()})
 
 # ------------------------------------------------------------------ tokens (Temporary: removed when the fight ends)
-card("t_ve_spit", "Spit", 0, "Curse", "enemy", [GIVE("largest", 1, attr=VOL), D(2)],
+card("t_ve_spit", "Spit", 0, "T", "enemy", [GIVE("largest", 1, attr=VOL), D(2)],
      "Give 1 Volatile stack of your largest held course to the target. Deal 2. Temporary.", use=ALL, kw=["Temporary"],
      flavour="A drop is enough, if it lands on the right ink.",
      note="The Vessel flicks two fingers and one bright bead flies from the band into a foe's settled ink.")
-card("t_ve_settle", "Settle", 0, "Curse", "self", [B(4)], "Gain 4 Block. Temporary.", use=ALL, kw=["Temporary"],
+card("t_ve_settle", "Settle", 0, "T", "self", [B(4)], "Gain 4 Block. Temporary.", use=ALL, kw=["Temporary"],
      flavour="What would burn you only settles on me. Rest a moment.",
      note="A hero breathes out slowly, shoulders easing, while the Vessel's palm lifts from their back.")
 
@@ -799,6 +799,7 @@ NEEDS = [
     "to the flask's target. Written as Dosed self-holds (ve_drink_the_dregs).",
     "budget.py prices TAKE and GIVE at 1 point per stack whatever the attribute, and 1 point for 'all' (n=0); the "
     "Vessel's numbers were set by hand where the guide under-prices them.",
-    "Interaction pass round 2: ve_pass_through relays Bear It to an ally, whose text reads the Vessel's held courses; "
-    "on another hero it is a plain 4 Block. A relay token written for any hero would read cleaner.",
+    "Tokens t_ve_spit (Gorge) and t_ve_settle (Pass Through) are Temporary cards with rarity 'Curse', the only "
+    "rarity a token can have without counting toward the calling's card counts; a 'Token' rarity would let the "
+    "sheets and reward code tell a helpful token from a foe-made curse.",
 ]

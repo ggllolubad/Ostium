@@ -582,8 +582,9 @@ static func commit_cards(s: Dictionary, plan: Array) -> void:
 		for i in idxs:
 			var cid: String = h.hand[i]
 			h.hand.remove_at(i)
-			if card(cid).get("kw", []).has("Exhaust") or card(cid).get("kw", []).has("Rite"):
-				h.exhaust.append(cid)
+			var ckw: Array = card(cid).get("kw", [])
+			if ckw.has("Exhaust") or ckw.has("Rite") or ckw.has("Temporary"):
+				h.exhaust.append(cid)   # a Temporary card is gone once played
 			else:
 				h.discard.append(cid)
 
@@ -2234,6 +2235,8 @@ static func end_round(s: Dictionary) -> void:
 		for cid in h.hand:
 			if card(cid).get("kw", []).has("Retain") and keep.size() < int(RULES.hand_cap):
 				keep.append(cid)
+			elif card(cid).get("kw", []).has("Temporary"):
+				h.exhaust.append(cid)   # a Temporary card left unplayed fades at round end
 			else:
 				h.discard.append(cid)
 		h.hand = keep

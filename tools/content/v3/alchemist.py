@@ -16,16 +16,17 @@ Flasks (rarity F) live on the company belt: any hero uses one for no vigour, at 
 
 Vigour and the Ordo (Gate 3 interaction pass, docs/design/GATE3_INTERACTION.md). A flask is a free action in the
 Ordo, so drinking one moves every later card down a place and can make the next card a Handoff.
-  transmuter    the stages of the Work run through the Ordo: The Black Work wants to be first, The White Work wants
-                another hero before it, The Red Work wants to be last. Boiling Flood and Calcination grow late in a
+  transmuter    the stages of the Work run through the Ordo: The Black Work wants a Handoff (an ally's Water just
+                laid), The White Work wants another hero before it, The Red Work wants to be last. Spagyric Rain is
+                the X card. Boiling Flood and Calcination grow late in a
                 heavy Ordo; Spagyric Rain reads the heroes before it.
-                Athanor burns hotter for each vigour carried into the round (Restock's Bank, Ripen's patience).
-                Magnum Opus pays off a discount: Thrift or Tincture makes it cost less than printed.
-  plaguewright  patience: Fester and Ripen want vigour left unspent; Miasmatic Cloud opens the round, Marsh Lights
-                closes it; Flash Pan, Kindle the Rot and Quicklime set off what an ally just laid (Handoff).
+                Athanor banks and burns hotter for each vigour carried into the round (with Restock's Bank).
+  plaguewright  patience: Fester and Ripen want vigour left unspent; Miasmatic Cloud wants another hero before
+                it, Marsh Lights closes the round; Flash Pan, Kindle the Rot and Quicklime set off what an ally just laid (Handoff).
   apothecary    Restock banks, Tincture hands a Dosed hero Thrift, War Tonics improves more on a Handoff, and the
                 Clarity Draught grows with vigour left unspent. Steady Hand and Bandolier cost less once the Ordo
-                is under way; Measured Dose hands a Dosed hero a Chaser for their next hand."""
+                is under way; Measured Dose hands a Dosed hero a Fire Pot (it Exhausts) for their next hand. Magnum Opus
+                Improves when Dosed."""
 from dsl import *
 
 set_class("alchemist", [2, 3, 4], [1, 2, 3, 4])
@@ -182,12 +183,12 @@ card("al_decant", "Decant", 1, "S", "self", [BREW("fl_brinejar")], "Brew a Brine
 
 # ------------------------------------------------------------------ common
 # Transmuter
-card("al_greek_fire", "Greek Fire", 1, "C", "enemy", [D(3), D(3, if_="t.water"), A(F, 1, attr="stable")],
-     "Deal 3, and 3 more if the target has Water. Apply 1 Fire.", cat=F, attr="stable", arch=TR,
+card("al_greek_fire", "Greek Fire", 1, "C", "enemy", [D(3), D(3, bonus=True, if_="t.water"), A(F, 1, attr="stable")],
+     "Deal 3. If the target has Water, deal 3 more. Apply 1 Fire.", cat=F, attr="stable", arch=TR,
      flavour="It burns on water. The old recipe says so, and the old recipe is right.",
      note="Fire runs across the soaked flank of an eelkin in the brine grotto.",
-     up={"text": "Deal 4, and 4 more if the target has Water. Apply 1 Fire.",
-         "fx": [D(4), D(4, if_="t.water"), A(F, 1, attr="stable")]})
+     up={"text": "Deal 4. If the target has Water, deal 4 more. Apply 1 Fire.",
+         "fx": [D(4), D(4, bonus=True, if_="t.water"), A(F, 1, attr="stable")]})
 card("al_salt_spray", "Salt Spray", 1, "C", "enemy", [A(WA, 3, attr="stable"), A(WA, 2, attr="stable", to="behind")],
      "Apply 3 Water to the target and 2 to the foe behind it.", cat=WA, attr="stable", arch=TR,
      flavour="Throw it high and the second rank gets the worst of it.",
@@ -269,13 +270,13 @@ card("al_tincture", "Tincture", 1, "C", "ally", [B(2), STRESS(-3), ST("thrift", 
      note="The Alchemist counts drops from a brown dropper onto the Oracle's tongue.",
      up={"text": "A hero gains 3 Block and sheds 4 stress. Dosed: they gain 1 Thrift.",
          "fx": [B(3), STRESS(-4), ST("thrift", 1, if_=DOSED)]})
-card("al_steady_hand", "Steady Hand", 1, "C", "self", [IMPROVE(1, if_=DOSED)],
-     "Costs 1 less if you have already acted this round. Dosed: Improve 1 flask on the belt.",
-     use=ALL, kw=["Dosed"], arch=AP, cost_less={"per": "played", "k": 1, "max": 1},
+card("al_steady_hand", "Steady Hand", 1, "C", "self", [IMPROVE(1)],
+     "Costs 1 less if you have already acted this round. Improve 1 flask on the belt.",
+     use=ALL, arch=AP, cost_less={"per": "played", "k": 1, "max": 1},
      flavour="Hired for a steady hand. Paid for it, too.",
      note="Spectacles down, the Alchemist adds one careful drop to a flask held up to the light.",
      up={"text": "Retain. Costs 1 less if you have already acted this round. Improve 1 flask on the belt.",
-         "kw": ["Retain"], "fx": [IMPROVE(1)]})
+         "kw": ["Retain"]})
 card("al_bandolier", "Bandolier", 2, "C", "self", [BREW("fl_firepot"), BREW("fl_draught")],
      "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught.",
      use=ALL, arch=AP, cost_less={"per": "ordo", "k": 0.34, "max": 1},
@@ -300,22 +301,23 @@ card("al_quench", "Quench", 1, "C", "ally", [CONS(e=F), CONS(e=FR), H(1, per="co
      note="The Alchemist pours cool water over the Elementalist's scorched, rimed hands.",
      up={"text": "Remove all Fire and Frost from a hero. They heal 3, plus 1 per stack removed.",
          "fx": [CONS(e=F), CONS(e=FR), H(3, per="consumed", k=1)]})
-card("al_chaser", "Chaser", 1, "C", "enemy", [D(5), D(3, if_=DOSED)], "Deal 5. Dosed: deal 3 more.",
+card("al_chaser", "Chaser", 1, "C", "enemy", [D(5), D(3, bonus=True, if_=DOSED)], "Deal 5. Dosed: deal 3 more.",
      kw=["Dosed"], arch=AP,
      flavour="One for the hero, one for the foe. Both thrown hard.",
      note="Right after the Duelist drinks, the Alchemist hurls the empty bottle at the same foe.",
-     up={"text": "Deal 6. Dosed: deal 4 more.", "fx": [D(6), D(4, if_=DOSED)]})
+     up={"text": "Deal 6. Dosed: deal 4 more.", "fx": [D(6), D(4, bonus=True, if_=DOSED)]})
 # Core
 card("al_waxed_apron", "Waxed Apron", 1, "C", "self", [B(5), B(3, if_="incoming_me")],
      "Gain 5 Block, and 3 more if a foe means to strike you.", use=ALL, arch="core",
      flavour="Waxed leather to the shin. Acid runs off it. So do most things.",
      note="The Alchemist turns a shoulder and a claw skids off the long waxed apron.",
      up={"text": "Gain 6 Block, and 5 more if a foe means to strike you.", "fx": [B(6), B(5, if_="incoming_me")]})
-card("al_overarm_throw", "Overarm Throw", 1, "C", "enemy", [D(4), D(4, if_="t.moved")],
-     "Deal 4, and 4 more if the target moved this round.", arch="core+duelist_drag",
+card("al_overarm_throw", "Overarm Throw", 1, "C", "enemy", [D(4), D(4, bonus=True, if_="t.moved")],
+     "Deal 4. If the target was moved this round, deal 4 more.", arch="core+duelist_drag",
      flavour="A foe dragged into the open is a foe in range.",
      note="The Executioner hauls a foe forward and the Alchemist's bottle meets it on arrival.",
-     up={"text": "Deal 5, and 5 more if the target moved this round.", "fx": [D(5), D(5, if_="t.moved")]})
+     up={"text": "Deal 5. If the target was moved this round, deal 5 more.",
+         "fx": [D(5), D(5, bonus=True, if_="t.moved")]})
 card("al_cauterize", "Cauterize", 1, "C", "ally", [H(5), A(F, 1, attr="stable")],
      "A hero heals 5 and gains 1 Fire.", use=ALL, cat=F, attr="stable", arch=AP + "+hexweaver_transfer",
      flavour="A hot iron closes what a bandage cannot. It leaves its own mark.",
@@ -337,13 +339,13 @@ card("al_putrefaction", "Putrefaction", 1, "U", "enemy", [D(2), CONV(WA, T), A(F
      up={"text": "Deal 3. Turn all Water on the target into Toxin. Apply 3 Fire.",
          "fx": [D(3), CONV(WA, T), A(F, 3, attr="stable")]})
 card("al_fulminating_gold", "Fulminating Gold", 1, "U", "enemy",
-     [D(2), D(3, if_="reactions"), A(LI, 2, attr="volatile")],
-     "Deal 2, and 3 more if a Conjunction has been set off this round. Apply 2 Volatile Lightning.",
+     [D(2), D(3, bonus=True, if_="reactions"), A(LI, 2, attr="volatile")],
+     "Deal 2. If a Conjunction has been set off this round, deal 3 more. Apply 2 Volatile Lightning.",
      cat=LI, attr="volatile", arch=TR + "+elementalist_conjunction",
      flavour="Gold that explodes. The Transmuter is very proud of it.",
      note="A pinch of yellow powder cracks like a bolt over a soaked choirboy; the spark leaps foe to foe.",
-     up={"text": "Deal 3, and 4 more if a Conjunction has been set off this round. Apply 3 Volatile Lightning.",
-         "fx": [D(3), D(4, if_="reactions"), A(LI, 3, attr="volatile")]})
+     up={"text": "Deal 3. If a Conjunction has been set off this round, deal 4 more. Apply 3 Volatile Lightning.",
+         "fx": [D(3), D(4, bonus=True, if_="reactions"), A(LI, 3, attr="volatile")]})
 card("al_aqua_fortis", "Aqua Fortis", 1, "U", "enemy",
      [CONS(s="block"), CONS(s="ward"), A(WA, 2, attr="stable", per="consumed", k=1, max=8)],
      "Strip the target's Block and Ward. Apply 2 Water, plus 1 per point stripped (8 at most).",
@@ -355,12 +357,12 @@ card("al_aqua_fortis", "Aqua Fortis", 1, "U", "enemy",
 card("al_boiling_flood", "Boiling Flood", 2, "U", "all_enemies",
      [D(3, if_="spent_before>=3"), A(F, 1, attr="volatile", if_="t.water"), A(WA, 2, attr="stable")],
      "If 3 or more vigour was spent before this card this round, deal 3 to every foe. Apply 1 Volatile Fire to "
-     "each foe with Water, then 2 Water to every foe.",
+     "each foe that has Water, then 2 Water to every foe.",
      cat=F, attr="volatile", arch=TR,
      flavour="A cauldron's worth, tipped from the high step.",
      note="The Alchemist tips a cauldron down the belfry stair and steam swallows the foes below.",
      up={"text": "If 3 or more vigour was spent before this card this round, deal 4 to every foe. Apply 1 Volatile "
-                 "Fire to each foe with Water, then 3 Water to every foe.",
+                 "Fire to each foe that has Water, then 3 Water to every foe.",
          "fx": [D(4, if_="spent_before>=3"), A(F, 1, attr="volatile", if_="t.water"), A(WA, 3, attr="stable")]})
 card("al_alkahest", "Alkahest", 1, "U", "enemy", [D(1, per="t.spectrum", k=3)],
      "Deal 1, plus 3 per course on the target (its Spectrum).", arch=TR + "+elementalist_spectrum",
@@ -414,12 +416,12 @@ card("al_restock", "Restock", 1, "U", "self", [REFILL(1), BANK(1)], "Refill 1 fl
      note="The Apothecary snatches an empty bottle from the floor and fills it at the coil.",
      up={"text": "Refill 1 flask. Bank 1. Gain 3 Block.", "fx": [REFILL(1), BANK(1), B(3)]})
 card("al_alembic", "Alembic", 1, "U", "self", [BREW("fl_iron"), B(2)], "Brew an Ironbark Tincture. Gain 2 Block.",
-     use=ALL, arch=AP + "+bulwark_taunt",
+     use=ALL, arch=AP,
      flavour="Copper, glass and patience. The front rank will need it by the third round.",
      note="An alembic drips dark tincture into a flask while the Bulwark holds the door ahead.",
      up={"text": "Brew an Ironbark Tincture. Gain 4 Block.", "fx": [BREW("fl_iron"), B(4)]})
 card("al_liquid_courage", "Liquid Courage", 1, "U", "ally", [STRESS(-4), BREW("fl_rage")],
-     "A hero sheds 4 stress. Brew a Bloodrage Draught.", use=ALL, arch=AP + "+duelist_strike",
+     "A hero sheds 4 stress. Brew a Bloodrage Draught.", use=ALL, arch=AP,
      flavour="For the one who has to go first. Drink it on the way.",
      note="The Alchemist presses a red bottle into the Duelist's free hand at the foot of the stair.",
      up={"text": "A hero sheds 7 stress. Brew a Bloodrage Draught.", "fx": [STRESS(-7), BREW("fl_rage")]})
@@ -448,10 +450,10 @@ card("al_stink_pot", "Stink Pot", 1, "U", "enemy", [D(2), A(T, 2, attr="stable")
      note="A foe in rank 1 reels back from a cracked pot of yellow reek, gagging.",
      up={"text": "Deal 3. Apply 3 Toxin. Push the target back 1.", "fx": [D(3), A(T, 3, attr="stable"), PUSH(1)]})
 card("al_powder_charge", "Powder Charge", 1, "U", "enemy", [D(4, per="prime_count", k=3)],
-     "Deal 4, plus 3 per Prime spent this round.", arch="core+oracle_prime",
+     "Deal 4, plus 3 for each primed action this round.", arch="core+oracle_prime",
      flavour="The Oracle says when. The Alchemist only lights the fuse.",
      note="On the Fatebinder's word, the Alchemist throws a packed charge into the bellringer's tower.",
-     up={"text": "Deal 6, plus 3 per Prime spent this round.", "fx": [D(6, per="prime_count", k=3)]})
+     up={"text": "Deal 6, plus 3 for each primed action this round.", "fx": [D(6, per="prime_count", k=3)]})
 
 # ------------------------------------------------------------------ rare
 # Transmuter
@@ -460,15 +462,15 @@ card("al_superheat", "Superheat", 1, "R", "enemy", [DBL(e=F), DBL(e=WA)], "Doubl
      flavour="Water above its boiling, held there by the glass alone.",
      note="The Transmuter heats a sealed flask until it glows, then hurls it at a steaming foe.",
      up={"text": "Deal 4. Double the Fire and Water on the target.", "fx": [D(4), DBL(e=F), DBL(e=WA)]})
-card("al_athanor", "Athanor", 1, "R", "self", [],
-     "Rite: at the start of each round, apply 1 Fire and 1 Water to the foe in rank 1, plus 1 more of each for each "
+card("al_athanor", "Athanor", 1, "R", "self", [BANK(1)],
+     "Bank 1. Rite: at the start of each round, apply 1 Fire and 1 Water to the foe in rank 1, plus 1 more of each for each "
      "vigour carried into this round, up to 3 of each. Exhaust.",
      use=ALL, cat=F, kw=RITE, arch=TR,
      rite={"on": "round_start", "fx": [A(F, 1, attr="stable", per="carried", k=1, max=3, to="front_enemy"),
                                        A(WA, 1, attr="stable", per="carried", k=1, max=3, to="front_enemy")]},
      flavour="The philosopher's furnace. Once lit it is never let go out.",
      note="The Transmuter sets a squat brass furnace on the flagstones; its mouth faces the front foe.",
-     up={"text": "Rite: at the start of each round, apply 1 Fire and 1 Water to each foe in ranks 1 and 2, plus 1 "
+     up={"text": "Bank 1. Rite: at the start of each round, apply 1 Fire and 1 Water to each foe in ranks 1 and 2, plus 1 "
                  "more of each for each vigour carried into this round, up to 3 of each. Exhaust.",
          "rite": {"on": "round_start",
                   "fx": [A(F, 1, attr="stable", per="carried", k=1, max=3, to="all_enemies", if_=FRONT),
@@ -490,26 +492,27 @@ card("al_catalytic_still", "Catalytic Still", 1, "R", "self", [],
          "rite": {"on": "conjunction", "per_round": 2, "fx": [BREW("fl_steam")]}})
 # Plaguewright
 card("al_miasmatic_cloud", "Miasmatic Cloud", 2, "R", "all_enemies",
-     [D(1), A(T, 3, attr="stable"), A(T, 2, attr="stable", if_="t.water"), A(T, 1, attr="stable", if_="first")],
-     "Deal 1 and apply 3 Toxin to every foe, and 2 more Toxin to each foe with Water. If this is first in the "
-     "Ordo, apply 1 more Toxin to every foe.", cat=T, attr="stable",
+     [D(1), A(T, 3, attr="stable"), A(T, 2, attr="stable", if_="t.water"), A(T, 1, attr="stable", if_="heroes_before")],
+     "Deal 1 and apply 3 Toxin to every foe, and 2 more Toxin to each foe that has Water. If another hero acted "
+     "before this, apply 1 more Toxin to every foe.", cat=T, attr="stable",
      arch=PW + "+" + TR,
      flavour="Damp air carries plague best. Every physician knows it.",
      note="A cloud of green fog sinks over the brine grotto and clings to every wet foe.",
-     up={"text": "Deal 2 and apply 4 Toxin to every foe, and 2 more Toxin to each foe with Water. If this is first "
-                 "in the Ordo, apply 1 more Toxin to every foe.",
-         "fx": [D(2), A(T, 4, attr="stable"), A(T, 2, attr="stable", if_="t.water"), A(T, 1, attr="stable", if_="first")]})
+     up={"text": "Deal 2 and apply 4 Toxin to every foe, and 2 more Toxin to each foe that has Water. If another hero "
+                 "acted before this, apply 1 more Toxin to every foe.",
+         "fx": [D(2), A(T, 4, attr="stable"), A(T, 2, attr="stable", if_="t.water"),
+                A(T, 1, attr="stable", if_="heroes_before")]})
 card("al_black_rot", "Black Rot", 1, "R", "all_enemies", [DBL(e=T)], "Double the Toxin on every foe. Exhaust.",
      cat=T, kw=["Exhaust"], arch=PW,
      flavour="It was green yesterday. It is black today. Tomorrow there is no tomorrow.",
      note="Every sick foe in the ossuary darkens at once as the Plaguewright taps the cane.",
      up={"text": "Apply 1 Toxin to every foe, then double the Toxin on every foe. Exhaust.",
          "fx": [A(T, 1, attr="stable"), DBL(e=T)]})
-card("al_buboes_burst", "Buboes Burst", 2, "R", "all_enemies", [D(1, per="t.toxin", k=2)],
-     "Every foe takes 1, plus 2 per Toxin on it.", cat=T, arch=PW,
+card("al_buboes_burst", "Buboes Burst", 2, "R", "all_enemies", [D(1, per="t.toxin", k=2, max=21)],
+     "Every foe takes 1, plus 2 per Toxin on it, up to 21.", cat=T, arch=PW,
      flavour="The swellings ripen together and break together.",
      note="Along the line every sick foe convulses as its swellings split.",
-     up={"text": "Every foe takes 1, plus 2 per Toxin on it.", "cost": 1})
+     up={"text": "Every foe takes 1, plus 2 per Toxin on it, up to 21.", "cost": 1})
 card("al_draw_the_venom", "Draw the Venom", 1, "R", "enemy",
      [CONS(e=T), D(0, per="consumed", k=1), H(0, per="consumed", k=1, to="lowest_ally")],
      "Remove all Toxin from the target. It takes 1 and the most wounded hero heals 1 per stack removed.",
@@ -520,14 +523,12 @@ card("al_draw_the_venom", "Draw the Venom", 1, "R", "enemy",
          "fx": [CONS(e=T), D(0, per="consumed", k=2), H(0, per="consumed", k=1, to="lowest_ally")]})
 # Apothecary
 card("al_magnum_opus", "Magnum Opus", 2, "R", "self",
-     [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(1, if_="cost<base_cost")],
-     "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost less than its printed cost, "
-     "Improve 1 flask on the belt.", use=ALL, arch=AP,
+     [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(1, if_=DOSED)],
+     "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. Dosed: Improve 1 flask on the belt.", use=ALL, arch=AP,
      flavour="The whole bandolier in one sitting. The coil glows red.",
      note="Three new flasks stand steaming in a row on the flagstones beside the kneeling Alchemist.",
-     up={"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost less than its printed "
-                 "cost, Improve 2 flasks on the belt.",
-         "fx": [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(2, if_="cost<base_cost")]})
+     up={"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. Dosed: Improve 2 flasks on the belt.",
+         "fx": [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(2, if_=DOSED)]})
 card("al_elixir_of_life", "Elixir of Life", 1, "R", "ally", [GRIT(1), H(3), H(3, if_=DOSED)],
      "A hero gains 1 Grit and heals 3. Dosed: they heal 3 more. Exhaust.", use=ALL, kw=["Dosed", "Exhaust"],
      arch=AP, flavour="Not forever. Just long enough.",
@@ -567,19 +568,19 @@ card("al_white_work", "The White Work", 1, "X", "enemy",
                  "acted before this.",
          "fx": [A(WA, 3, attr="stable"), A(WA, 2, attr="stable", to="adjacent"),
                 REACT(2, per="heroes_before", k=1, max=3)]})
-card("al_black_work", "The Black Work", 1, "X", "enemy", [D(4), CONV(WA, V), A(V, 2, attr="stable", if_="first")],
-     "Deal 4. Turn all Water on the target into Void. If this is first in the Ordo, apply 2 Void.", cat=V, sub=TR, arch=TR,
+card("al_black_work", "The Black Work", 1, "X", "enemy", [D(4), CONV(WA, V), A(V, 2, attr="stable", if_="handoff")],
+     "Deal 4. Turn all Water on the target into Void. Handoff: apply 2 Void.", cat=V, sub=TR, arch=TR,
      flavour="Nigredo. First the matter must be blackened, then it can be made.",
      note="The water on a foe goes black as ink while the Transmuter's crucible smokes.",
-     up={"text": "Deal 6. Turn all Water on the target into Void. If this is first in the Ordo, apply 2 Void.",
-         "fx": [D(6), CONV(WA, V), A(V, 2, attr="stable", if_="first")]})
+     up={"text": "Deal 6. Turn all Water on the target into Void. Handoff: apply 2 Void.",
+         "fx": [D(6), CONV(WA, V), A(V, 2, attr="stable", if_="handoff")]})
 card("al_quintessence", "Quintessence", 1, "X", "self", [BREW("fl_focus"), IMPROVE(1)],
      "Brew a Clarity Draught. Improve 1 flask on the belt.", use=ALL, sub=TR, arch=TR + "+" + AP,
      flavour="The fifth essence, drawn off the top. It sharpens whoever drinks it.",
      note="The Transmuter lifts a thin clear flask from the alembic's beak and holds it to the light.",
      up={"text": "Brew a Clarity Draught. Improve 2 flasks on the belt.", "fx": [BREW("fl_focus"), IMPROVE(2)]})
 card("al_calcination", "Calcination", 1, "X", "enemy",
-     [CONS(s="elements"), D(2, per="consumed", k=1), D(0, per="consumed", k=1, if_="spent_before>=3")],
+     [CONS(s="elements"), D(2, per="consumed", k=1), D(0, per="consumed", k=1, bonus=True, if_="spent_before>=3")],
      "Remove every course from the target. Deal 2, plus 1 per stack removed. If 3 or more vigour was spent before "
      "this card this round, deal 1 more per stack removed. Exhaust.", cat=F, kw=["Exhaust"],
      sub=TR, arch=TR,
@@ -587,15 +588,18 @@ card("al_calcination", "Calcination", 1, "X", "enemy",
      note="Every colour on a foe boils off at once into white ash as the crucible swings.",
      up={"text": "Remove every course from the target. Deal 3, plus 2 per stack removed. If 3 or more vigour was "
                  "spent before this card this round, deal 1 more per stack removed. Exhaust.",
-         "fx": [CONS(s="elements"), D(3, per="consumed", k=2), D(0, per="consumed", k=1, if_="spent_before>=3")]})
-card("al_spagyric_rain", "Spagyric Rain", 2, "X", "all_enemies",
-     [A(F, 2, attr="stable"), A(WA, 2, attr="stable"), A(F, 1, attr="stable", if_="heroes_before"),
-      A(WA, 1, attr="stable", if_="heroes_before")],
-     "Apply 2 Fire and 2 Water to every foe. If another hero acted before this, apply 1 more of each.", cat=F, attr="stable", sub=TR, arch=TR,
+         "fx": [CONS(s="elements"), D(3, per="consumed", k=2), D(0, per="consumed", k=1, bonus=True, if_="spent_before>=3")]})
+card("al_spagyric_rain", "Spagyric Rain", -1, "X", "all_enemies",
+     [A(F, 0, attr="stable", per="x", k=1, max=5), A(WA, 0, attr="stable", per="x", k=1, max=5),
+      A(F, 1, attr="stable", if_="heroes_before"), A(WA, 1, attr="stable", if_="heroes_before")],
+     "Apply X Fire and X Water to every foe. If another hero acted before this, apply 1 more of each. X counts up "
+     "to 5.", cat=F, attr="stable", sub=TR, arch=TR,
      flavour="Separate, then rejoin. Rain and ember fall together.",
      note="A rain of hot droplets and brine falls from the belfry ropes onto every foe below.",
-     up={"text": "Apply 2 Fire and 2 Water to every foe. If another hero acted before this, apply 1 more of each.",
-         "cost": 1})
+     up={"text": "Apply X Fire and X Water to every foe, plus 1 of each. If another hero acted before this, apply 1 "
+                 "more of each. X counts up to 5.",
+         "fx": [A(F, 1, attr="stable", per="x", k=1, max=6), A(WA, 1, attr="stable", per="x", k=1, max=6),
+                A(F, 1, attr="stable", if_="heroes_before"), A(WA, 1, attr="stable", if_="heroes_before")]})
 
 # ------------------------------------------------------------------ path: Plaguewright
 card("al_beak_mask", "Beak Mask", 1, "X", "self", [W(3), CLEANSE(1, to="all_allies")],
@@ -633,11 +637,11 @@ card("al_rat_swarm", "Rat Swarm", 1, "X", "enemy",
      up={"text": "Apply 1 Toxin to every foe, then 4 more to the target, and 2 more if it was moved this round.",
          "fx": [A(T, 1, attr="stable", to="all_enemies"), A(T, 4, attr="stable"), A(T, 2, attr="stable", if_="t.moved")]})
 card("al_marsh_lights", "Marsh Lights", 1, "X", "all_enemies", [A(F, 2, attr="volatile", if_="t.toxin"), D(1, if_="last")],
-     "Apply 2 Volatile Fire to every foe with Toxin. If this is last in the Ordo, deal 1 to every foe. Exhaust.", cat=F, attr="volatile",
+     "Apply 2 Volatile Fire to every foe that has Toxin. If this is last in the Ordo, deal 1 to every foe. Exhaust.", cat=F, attr="volatile",
      kw=["Exhaust"], sub=PW, arch=PW,
      flavour="Marsh lights rise over the dead. Here they rise over the dying.",
      note="Pale flames gutter up from every sick foe in the line at once.",
-     up={"text": "Apply 3 Volatile Fire to every foe with Toxin. If this is last in the Ordo, deal 2 to every foe. "
+     up={"text": "Apply 3 Volatile Fire to every foe that has Toxin. If this is last in the Ordo, deal 2 to every foe. "
                  "Exhaust.", "fx": [A(F, 3, attr="volatile", if_="t.toxin"), D(2, if_="last")]})
 
 # ------------------------------------------------------------------ path: Apothecary
@@ -656,12 +660,12 @@ card("al_snatch_from_the_door", "Snatch from the Door", 1, "X", "ally", [H(3), H
      flavour="Not yet. Not on my watch, and not on this floor.",
      note="The Apothecary drags a fallen hero back from the edge of the throne room dais.",
      up={"text": "A hero heals 4. If they are at Death's Door, they heal 8 more.", "fx": [H(4), H(8, if_="t.dd")]})
-card("al_measured_dose", "Measured Dose", 1, "X", "ally", [B(5), ADD("al_chaser", if_=DOSED)],
-     "A hero gains 5 Block. Dosed: put a Chaser into their next hand.", use=ALL, kw=["Dosed"], sub=AP, arch=AP,
+card("al_measured_dose", "Measured Dose", 1, "X", "ally", [B(5), ADD("fl_firepot", if_=DOSED)],
+     "A hero gains 5 Block. Dosed: put a Fire Pot into their next hand.", use=ALL, kw=["Dosed"], sub=AP, arch=AP,
      flavour="The right amount at the right time. That is the whole of the craft.",
      note="The Apothecary marks a line on a flask with a thumbnail and hands it forward.",
-     up={"text": "A hero gains 7 Block. Dosed: put a Chaser into their next hand.",
-         "fx": [B(7), ADD("al_chaser", if_=DOSED)]})
+     up={"text": "A hero gains 7 Block. Dosed: put a Fire Pot into their next hand.",
+         "fx": [B(7), ADD("fl_firepot", if_=DOSED)]})
 card("al_war_tonics", "War Tonics", 2, "X", "self",
      [BREW("fl_rage"), BREW("fl_haste"), IMPROVE(1), IMPROVE(1, if_="handoff")],
      "Brew a Bloodrage Draught and a Haste Draught. Improve 1 flask on the belt, or 2 on a Handoff.", use=ALL, sub=AP,

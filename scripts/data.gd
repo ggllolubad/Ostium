@@ -29,6 +29,7 @@ const REACTIONS := {
 }
 
 const KEYWORDS := {
+	"Temporary": "Gone once played, or at the end of the round if it is not.",
 	"Thrift": "Each Thrift makes this hero's next card cost 1 less vigour (never below 0).",
 	"Bank": "Vigour left unspent this round, up to the number given, carries over to next round.",
 	"Handoff": "This card is played straight after a card from a different hero in the Ordo.",
@@ -100,7 +101,7 @@ static var _UPGRADES_MADE: bool = _make_upgrades()
 static func _make_upgrades() -> bool:
 	for id in CARDS.keys():
 		var c: Dictionary = CARDS[id]
-		if id.ends_with("+") or c.rarity in ["Curse", "Affliction", "A"] or c.target == "none":
+		if id.ends_with("+") or c.rarity in ["Curse", "Affliction", "A", "T"] or c.target == "none":
 			continue
 		var u: Dictionary = c.duplicate(true)
 		if c.has("up"):
