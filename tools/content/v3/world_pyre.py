@@ -344,13 +344,13 @@ card("w_pyre_saints_ash", "Saint's Ash", 1, "W", "ally", [CONS(e="fire"), WARD(1
      note="A hero breaks a lead vial over a burning companion; grey ash settles and the black flame gutters out.",
      up={"text": "Remove all Fire from a hero. They gain 2 Ward, plus 1 per Fire removed.",
          "fx": [CONS(e="fire"), WARD(2, per="consumed", k=1)]})
-card("w_pyre_fire_unending", "The Fire Unending", 2, "W", "none", [],
-     "Rite. At the end of each round, every foe takes 1 per course on it, ignoring Block, and you lose 2 HP. Exhaust.",
+card("w_pyre_fire_unending", "The Fire Unending", 2, "W", "self", [],
+     "Rite: at the end of each round, every foe takes 1 per course on it, ignoring Block, and you lose 2 HP. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",
      rite={"on": "round_end", "fx": [D(0, per="t.spectrum", k=1, pierce=True, to="all_enemies"), SELFDMG(2)]},
      flavour="It gives no light, and it does not go out. It does not care whose it is.",
      note="A hero touches a black taper to the floor; violet-edged flame runs under foes and company alike.",
-     up={"text": "Rite. At the end of each round, every foe takes 1 per course on it, ignoring Block. Exhaust.",
+     up={"text": "Rite: at the end of each round, every foe takes 1 per course on it, ignoring Block. Exhaust.",
          "rite": {"on": "round_end", "fx": [D(0, per="t.spectrum", k=1, pierce=True, to="all_enemies")]}})
 card("w_pyre_black_wax", "Black Wax", 1, "W", "enemy", [A("void", 1), D(2, per="t.ailments", k=1, pierce=True)],
      "Apply 1 Void. Deal 2, plus 1 per ailment on the foe, ignoring Block.", cat="void", attr="stable", world=W, arch="world",

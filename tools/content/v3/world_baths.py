@@ -327,13 +327,13 @@ encounter(W, "baths_r_great_copper", "The Great Copper", "The boiler under every
 
 # ================================================================== world cards (Scald)
 card("w_baths_ladle", "Ladle", 1, "W", "enemy",
-     [A("fire", 1, attr="volatile"), D(2), D(4, if_="t.vulnerable>0")],
+     [A("fire", 1, attr="volatile"), D(2), D(4, if_="t.vulnerable>0", bonus=True)],
      "Apply 1 Volatile Fire. Deal 2, plus 4 more if the foe is Vulnerable.",
      cat="fire", attr="volatile", world=W, arch="world",
      flavour="One ladleful for the guest. One more for anyone who complains.",
      note="A hero swinging a long copper ladle of boiling water at a Scalded Attendant.",
      up={"text": "Apply 1 Volatile Fire. Deal 3, plus 6 more if the foe is Vulnerable.",
-         "fx": [A("fire", 1, attr="volatile"), D(3), D(6, if_="t.vulnerable>0")]})
+         "fx": [A("fire", 1, attr="volatile"), D(3), D(6, if_="t.vulnerable>0", bonus=True)]})
 card("w_baths_cold_plunge", "Cold Plunge", 1, "W", "enemy",
      [D(4), CONV("water", "frost")],
      "Deal 4. Turn the foe's Water into Frost.",
@@ -350,15 +350,15 @@ card("w_baths_fresh_towel", "Fresh Towel", 1, "W", "ally",
      up={"text": "Remove all Fire from a hero. They heal 4, plus 1 per Fire removed.",
          "fx": [CONS(e="fire"), H(4, per="consumed", k=1)]})
 card("w_baths_open_valve", "Open the Valve", 1, "W", "all_enemies",
-     [D(2, if_="vigour_spent>=6"), D(0, per="reactions", k=2, max=8)],
-     "If 6 or more vigour was spent this round, deal 2 to every foe. Then deal 2 to every foe per Conjunction set off "
-     "this round (at most 8).",
+     [D(0, per="reactions", k=2, max=8), D(2, if_="vigour_spent>=vigour_pool", bonus=True)],
+     "Deal 2 to every foe per Conjunction set off this round (at most 8), and 2 more if the company spent all its "
+     "vigour this round.",
      cat="fire", world=W, arch="world",
      flavour="Every pool in the temple boils from one boiler. Turn its wheel the other way.",
      note="A hero hauling on the bronze stopcock wheel as steam rolls out over the foes.",
-     up={"text": "If 6 or more vigour was spent this round, deal 2 to every foe. Then deal 3 to every foe per "
-                 "Conjunction set off this round (at most 12).",
-         "fx": [D(2, if_="vigour_spent>=6"), D(0, per="reactions", k=3, max=12)]})
+     up={"text": "Deal 3 to every foe per Conjunction set off this round (at most 12), and 2 more if the company spent "
+                 "all its vigour this round.",
+         "fx": [D(0, per="reactions", k=3, max=12), D(2, if_="vigour_spent>=vigour_pool", bonus=True)]})
 
 NEEDS = [
     "best_families Complaint: should stress the hero who dealt the heap the most damage last round; written as 2 "

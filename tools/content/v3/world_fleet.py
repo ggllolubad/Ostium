@@ -15,9 +15,9 @@ card("t_fleet_broth", "Ship's Broth", 0, "Curse", "none", [A(F, 1, attr="stable"
      note="The Galley Cook ladles frozen broth into a hero's bowl; something in it has a knuckle.")
 
 # ================================================================== world cards (Freeze; any calling)
-card("w_fleet_ice_breaker", "Ice Breaker", 1, "W", "enemy", [D(5), D(4, if_="t.frost>0")],
+card("w_fleet_ice_breaker", "Ice Breaker", 1, "W", "enemy", [D(5), D(4, if_="t.frost>0", bonus=True)],
      "Deal 5. If the target has Frost, deal 4 more.", world=W, arch="world",
-     up={"text": "Deal 7. If the target has Frost, deal 5 more.", "fx": [D(7), D(5, if_="t.frost>0")]},
+     up={"text": "Deal 7. If the target has Frost, deal 5 more.", "fx": [D(7), D(5, if_="t.frost>0", bonus=True)]},
      flavour="The ice holds them still. It holds them brittle too.",
      note="A hero's blow breaks a rimed Deckhand off the rail in white shards.")
 card("w_fleet_keelhaul", "Keelhaul", 1, "W", "enemy",

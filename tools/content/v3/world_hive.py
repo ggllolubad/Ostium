@@ -37,16 +37,16 @@ card("w_hive_take_the_sting", "Take the Sting", 1, "W", "self",
      up={"text": "Gain 4 Block, plus 2 per ailment on you (max 15).", "fx": [B(4, per="ailments", k=2, max=15)]})
 card("w_hive_spire_storm", "Spire Storm", 2, "W", "all_enemies",
      [D(0, per="t.toxin", k=1, max=6), A("lightning", 1, attr="volatile"),
-      A("lightning", 1, attr="volatile", if_="vigour_spent>=6")],
-     "Each foe takes 1 per Toxin on it (max 6), then gains 1 Volatile Lightning, and 1 more if 6 or more vigour was "
-     "spent this round.", cat="lightning", world=W,
+      A("lightning", 1, attr="volatile", if_="vigour_spent>=vigour_pool")],
+     "Each foe takes 1 per Toxin on it (max 6), then gains 1 Volatile Lightning, and 1 more if the company spent all "
+     "its vigour this round.", cat="lightning", world=W,
      arch="world",
      flavour="The storm came, and the hive caught it, and the plain went still.",
      note="Lightning forks down a spire and runs through every swollen body round its foot at once.",
-     up={"text": "Each foe takes 2, plus 1 per Toxin on it (max 8), then gains 1 Volatile Lightning, and 1 more if 6 or "
-                 "more vigour was spent this round.",
+     up={"text": "Each foe takes 2, plus 1 per Toxin on it (max 8), then gains 1 Volatile Lightning, and 1 more if the "
+                 "company spent all its vigour this round.",
          "fx": [D(2, per="t.toxin", k=1, max=8), A("lightning", 1, attr="volatile"),
-                A("lightning", 1, attr="volatile", if_="vigour_spent>=6")]})
+                A("lightning", 1, attr="volatile", if_="vigour_spent>=vigour_pool")]})
 
 # ================================================================== foes
 creature("spire_wasps", "Spire Wasps", "foe", 30, ranks=[1, 2], role="afflicter", flags=["swarm"],

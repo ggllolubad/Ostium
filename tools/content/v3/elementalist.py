@@ -20,10 +20,9 @@ Vigour and the Ordo (Gate 3 interaction pass, docs/design/GATE3_INTERACTION.md):
   catalyst     relay and cascade: Handoff (Strike the Wet Ink, Feedback, Chain of Ink, Chain of Sigils), late in a
                heavy Ordo (Cascade, Backdraft last), and Thrift from Conjunctions (Double Flick, The Quickened Hand).
                The sparks cost 1 and fall to 0 once the Ordo is under way (Spark, Second Spark, Spark Shower, Hair
-               Trigger). Lend the Nib puts a Sulphur Match in an ally's next hand.
+               Trigger). Lend the Nib gives another hero Focus and Thrift.
   prismatic    reads the company's colours: "for each other hero who acted before this" (Sixth Ink, Fill the Gaps,
                Every Colour at Once); paints first (Turn the Page, Full Ring) and strikes last (Strike the Ring).
-Restraint readers count vigour still unspent when they resolve, so a Bank earlier in the Ordo lowers them.
 
 Text words: "attuned course" is the course the Elementalist is attuned to; "the next course" is the one after it in
 the ring (fire, frost, lightning, water, toxin, void, then fire again). Conjoin n: one Stable stack of the target's
@@ -138,11 +137,11 @@ card("el_pour_out", "Pour Out", 1, "C", "enemy", [AN(2, attr=VOL), D(0, per="spe
 
 # ------------------------------------------------------------------ common: Chain Reaction
 card("el_spark", "Spark", 1, "C", "enemy", [AT(1, attr=VOL)],
-     "Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned course.",
-     cat=ATT, arch=CA, cost_less={"per": "played", "k": 1, "max": 1},
+     "Costs 1 less if another hero is already in the Ordo. Apply 1 Volatile of your attuned course.",
+     cat=ATT, arch=CA, cost_less={"per": "others", "k": 1, "max": 1},
      flavour="A spark is cheap. What it lands on is not.",
      note="A single bright fleck leaves the Elementalist's fingernail and finds the ink already on a foe.",
-     up={"text": "Retain. Costs 1 less if you have already acted this round. Apply 1 Volatile of your attuned "
+     up={"text": "Retain. Costs 1 less if another hero is already in the Ordo. Apply 1 Volatile of your attuned "
                  "course.", "kw": ["Retain"]})
 card("el_twin_sigil", "Twin Sigil", 1, "C", "enemy", [AT(2), AN(2, attr=VOL)],
      "Apply 2 of your attuned course, then 2 Volatile of the next course.", cat=ATT, arch=CA,
@@ -438,7 +437,7 @@ card("el_spark_shower", "Spark Shower", 1, "R", "enemy", [AT(1, attr=VOL)],
      cat=ATT, kw=["Retain", "Echo"], arch=CA, cost_less={"per": "others", "k": 1, "max": 1},
      flavour="Nervous fingers, quick sigils, sparks everywhere.",
      note="The Catalyst's fingers twitch and a shower of tiny sparks patters across a foe.",
-     up={"text": "Retain. Echo. Costs 1 less if you have already acted this round. Apply 2 Volatile of your attuned "
+     up={"text": "Retain. Echo. Costs 1 less if another hero is already in the Ordo. Apply 2 Volatile of your attuned "
                  "course.", "fx": [AT(2, attr=VOL)]})
 card("el_afterglow", "Afterglow", 1, "R", "self", [DRAW(0, per="reactions", k=1, max=3), EN(1, if_="reactions>=2")],
      "Next round, draw 1 more for each Conjunction so far this round, up to 3. If there were 2 or more, gain 1 "
@@ -455,7 +454,7 @@ card("el_full_ring", "Full Ring", 1, "R", "enemy", [D(5), MISSING(1, per="first"
      up={"text": "Deal 8. Apply 1 of each course the target lacks, or 2 of each if this is first in the Ordo. "
                  "Exhaust.", "fx": [D(8), MISSING(1, per="first", k=1)]})
 card("el_strike_the_ring", "Strike the Ring", 1, "R", "enemy",
-     [D(0, per="t.spectrum", k=2), D(0, per="t.spectrum", k=1, if_="last"), AT(1, attr=VOL)],
+     [D(0, per="t.spectrum", k=2), D(0, per="t.spectrum", k=1, bonus=True, if_="last"), AT(1, attr=VOL)],
      "Deal 2 for each course in the target's Spectrum. If this is last in the Ordo, deal 1 more for each. Then "
      "apply 1 Volatile of your attuned course.", cat=ATT,
      arch=PR + "+" + CA,
@@ -463,7 +462,7 @@ card("el_strike_the_ring", "Strike the Ring", 1, "R", "enemy",
      note="A foe painted in five colours rings like struck bronze as the Prismatic's stroke lands.",
      up={"text": "Deal 3 for each course in the target's Spectrum. If this is last in the Ordo, deal 1 more for "
                  "each. Then apply 1 Volatile of your attuned course.",
-         "fx": [D(0, per="t.spectrum", k=3), D(0, per="t.spectrum", k=1, if_="last"), AT(1, attr=VOL)]})
+         "fx": [D(0, per="t.spectrum", k=3), D(0, per="t.spectrum", k=1, bonus=True, if_="last"), AT(1, attr=VOL)]})
 card("el_bright_margin", "Bright Margin", 1, "R", "enemy", [D(3), EN(1, if_="t.spectrum>=4")],
      "Deal 3. If the target holds 4 or more courses, gain 1 vigour next round.", cat=ATT, arch=PR,
      flavour="Brother Lucan illuminates the margins. This scholar illuminates foes.",
@@ -471,14 +470,15 @@ card("el_bright_margin", "Bright Margin", 1, "R", "enemy", [D(3), EN(1, if_="t.s
      up={"text": "Deal 5. If the target holds 4 or more courses, gain 1 vigour next round.",
          "fx": [D(5), EN(1, if_="t.spectrum>=4")]})
 card("el_conflux", "Conflux", 2, "R", "enemy",
-     [CONS(s="elements"), D(0, per="consumed", k=3), D(0, per="consumed", k=1, if_="carried")],
-     "Remove every course from the target. Deal 3 for each stack removed. If any vigour was carried into this "
-     "round, deal 1 more for each.", cat=ATT, arch=AC + "+" + PR,
+     [CONS(s="elements"), D(0, per="consumed", k=3, max=30), D(0, per="consumed", k=1, max=10, bonus=True, if_="carried")],
+     "Remove every course from the target. Deal 3 for each stack removed, up to 30. If any vigour was carried "
+     "into this round, deal 1 more for each, up to 10 more.", cat=ATT, arch=AC + "+" + PR,
      flavour="Every ink on the page, drawn back into the pen at once.",
      note="Every colour on a foe streams back into the Elementalist's raised hand, and the foe crumples.",
-     up={"text": "Remove every course from the target. Deal 2, plus 3 for each stack removed. If any vigour was "
-                 "carried into this round, deal 1 more for each.",
-         "fx": [CONS(s="elements"), D(2, per="consumed", k=3), D(0, per="consumed", k=1, if_="carried")]})
+     up={"text": "Remove every course from the target. Deal 2, plus 3 for each stack removed, up to 30. If any vigour "
+                 "was carried into this round, deal 1 more for each, up to 10 more.",
+         "fx": [CONS(s="elements"), D(2, per="consumed", k=3, max=30),
+                D(0, per="consumed", k=1, max=10, bonus=True, if_="carried")]})
 card("el_draw_the_ink_out", "Draw the Ink Out", 1, "R", "enemy", [TRANSFER(frm="ally_most"), REACT(1), D(3)],
      "Move every ailment from the hero who has the most onto the target. Conjoin 1. Deal 3.", cat=ATT,
      arch=CA + "+foe_ailments",
@@ -535,13 +535,13 @@ card("el_brim_over", "Brim Over", 1, "X", "enemy", [AT(2), SPREAD("all", 2)],
      up={"text": "Apply 3 of your attuned course. Copy up to 3 of each course on the target to the foes beside it.",
          "fx": [AT(3), SPREAD("all", 3)]})
 card("el_weight_of_the_vessel", "Weight of the Vessel", 1, "X", "enemy",
-     [D(3, per="focus", k=2, max=13), D(0, per="vigour_left", k=1, max=3)],
+     [D(3, per="focus", k=2, max=13), D(0, per="vigour_left", k=1, max=3, bonus=True)],
      "Deal 3, plus 2 for each Focus you hold, up to 13. Deal 1 more for each vigour left unspent, up to 3. Your "
      "Focus is not spent.", cat=ATT, sub=AC, arch=AC,
      flavour="It need not be poured. Swung is enough.",
      note="The Accumulator swings round and the brass vessel on its back strikes a foe full in the chest.",
      up={"text": "Deal 5, plus 2 for each Focus you hold, up to 15. Deal 1 more for each vigour left unspent, up to "
-                 "3. Your Focus is not spent.", "fx": [D(5, per="focus", k=2, max=15), D(0, per="vigour_left", k=1, max=3)]})
+                 "3. Your Focus is not spent.", "fx": [D(5, per="focus", k=2, max=15), D(0, per="vigour_left", k=1, max=3, bonus=True)]})
 
 # ------------------------------------------------------------------ path: Catalyst
 card("el_hair_trigger", "Hair Trigger", 1, "X", "enemy", [REACT(1), D(1)],
@@ -552,20 +552,20 @@ card("el_hair_trigger", "Hair Trigger", 1, "X", "enemy", [REACT(1), D(1)],
      up={"text": "Retain. Costs 1 less if 3 or more cards are already in the Ordo. Conjoin 1. Deal 1.",
          "kw": ["Retain"]})
 card("el_sigils_on_the_skin", "Sigils on the Skin", 1, "X", "self",
-     [W(0, per="reactions", k=1, to="all_allies"), B(3)],
-     "Every hero gains 1 Ward for each Conjunction so far this round. Gain 3 Block.", use=ALL, cat=ATT, sub=CA,
+     [W(0, per="reactions", k=1, max=4, to="all_allies"), B(3)],
+     "Every hero gains 1 Ward for each Conjunction so far this round, up to 4. Gain 3 Block.", use=ALL, cat=ATT, sub=CA,
      arch=CA,
      flavour="Ink the ward on the skin and every flare feeds it.",
      note="The sigils on the Catalyst's face and forearms burn bright and copy themselves onto the company.",
-     up={"text": "Every hero gains 1 Ward for each Conjunction so far this round. Gain 5 Block.",
-         "fx": [W(0, per="reactions", k=1, to="all_allies"), B(5)]})
-card("el_backdraft", "Backdraft", 2, "X", "all_enemies", [D(3, per="reactions", k=3), D(2, if_="last")],
-     "Deal 3 to every foe, plus 3 for each Conjunction so far this round. If this is last in the Ordo, deal 2 more "
-     "to every foe.", cat=ATT, sub=CA, arch=CA,
+     up={"text": "Every hero gains 1 Ward for each Conjunction so far this round, up to 4. Gain 5 Block.",
+         "fx": [W(0, per="reactions", k=1, max=4, to="all_allies"), B(5)]})
+card("el_backdraft", "Backdraft", 2, "X", "all_enemies", [D(3, per="reactions", k=3, max=15), D(2, bonus=True, if_="last")],
+     "Deal 3 to every foe, plus 3 for each Conjunction so far this round, up to 15. If this is last in the Ordo, "
+     "deal 2 more to every foe.", cat=ATT, sub=CA, arch=CA,
      flavour="Every fire breathes in before it roars.",
      note="The air in the vault sucks inward, then the whole line of foes is thrown back in a wall of light.",
-     up={"text": "Deal 3 to every foe, plus 3 for each Conjunction so far this round. If this is last in the Ordo, "
-                 "deal 2 more to every foe.", "cost": 1})
+     up={"text": "Deal 3 to every foe, plus 3 for each Conjunction so far this round, up to 15. If this is last in "
+                 "the Ordo, deal 2 more to every foe.", "cost": 1})
 card("el_nervous_hands", "Nervous Hands", 0, "X", "self", [DRAW(1, if_="reactions>=1")],
      "If there has been a Conjunction this round, draw 1 more next round.", use=ALL, cat=ATT, sub=CA, arch=CA,
      flavour="The hands never stop. Neither do the pages.",
@@ -573,15 +573,15 @@ card("el_nervous_hands", "Nervous Hands", 0, "X", "self", [DRAW(1, if_="reaction
      up={"text": "If there has been a Conjunction this round, draw 2 more next round.",
          "fx": [DRAW(2, if_="reactions>=1")]})
 card("el_double_flick", "Double Flick", 1, "X", "enemy",
-     [AT(1, attr=VOL), AN(1, attr=VOL), SELF("thrift", 1, if_="reactions>=1")],
-     "Apply 1 Volatile of your attuned course, then 1 Volatile of the next course. If there has been a "
-     "Conjunction this round, gain 1 Thrift.", cat=ATT, sub=CA,
+     [SELF("thrift", 1, if_="reactions>=1"), AT(1, attr=VOL), AN(1, attr=VOL)],
+     "If there has already been a Conjunction this round, gain 1 Thrift. Apply 1 Volatile of your attuned course, "
+     "then 1 Volatile of the next course.", cat=ATT, sub=CA,
      arch=CA,
      flavour="Left hand, right hand. Two sparks before the foe can blink.",
      note="Both the Catalyst's hands flick at once and two coloured sparks cross in the air.",
-     up={"text": "Apply 2 Volatile of your attuned course, then 1 Volatile of the next course. If there has been a "
-                 "Conjunction this round, gain 1 Thrift.",
-         "fx": [AT(2, attr=VOL), AN(1, attr=VOL), SELF("thrift", 1, if_="reactions>=1")]})
+     up={"text": "If there has already been a Conjunction this round, gain 1 Thrift. Apply 2 Volatile of your attuned "
+                 "course, then 1 Volatile of the next course.",
+         "fx": [SELF("thrift", 1, if_="reactions>=1"), AT(2, attr=VOL), AN(1, attr=VOL)]})
 card("el_steady_nerves", "Steady Nerves", 1, "X", "self", [STRESS(-4, per="reactions", k=-4), B(3)],
      "Shed 4 stress, plus 4 for each Conjunction so far this round. Gain 3 Block.", use=ALL, cat=ATT, sub=CA,
      arch=CA,
@@ -591,12 +591,12 @@ card("el_steady_nerves", "Steady Nerves", 1, "X", "self", [STRESS(-4, per="react
          "fx": [STRESS(-5, per="reactions", k=-5), B(4)]})
 
 # ------------------------------------------------------------------ path: Prismatic
-card("el_prism_lance", "Prism Lance", 1, "X", "enemy", [D(1, per="elements_all", k=2), D(2, if_="heroes_before")],
+card("el_prism_lance", "Prism Lance", 1, "X", "enemy", [D(1, per="elements_all", k=2), D(2, bonus=True, if_="heroes_before")],
      "Deal 1, plus 2 for each different course on the foes. If another hero acted before this, deal 2 more.", cat=ATT, sub=PR, arch=PR,
      flavour="White light, split six ways, gathered back to a point.",
      note="Six thin rays leave the Prismatic's hood halo and meet on one foe.",
      up={"text": "Deal 3, plus 2 for each different course on the foes. If another hero acted before this, deal 2 "
-                 "more.", "fx": [D(3, per="elements_all", k=2), D(2, if_="heroes_before")]})
+                 "more.", "fx": [D(3, per="elements_all", k=2), D(2, bonus=True, if_="heroes_before")]})
 card("el_ring_turn", "Read the Halo", 1, "X", "enemy", [D(4), SELF("focus", 0, per="m.spectrum", k=1), ATTUNE(1)],
      "Deal 4. Gain 1 Focus for each course in the target's Spectrum. Attune to the next course.", cat=ATT, sub=PR,
      arch=PR + "+" + AC,
@@ -621,14 +621,14 @@ card("el_glass_halo", "Glass Halo", 2, "X", "self", [W(0, per="elements_all", k=
      note="The six sigils embroidered on the Prismatic's hood light up and ring every hero.",
      up={"text": "Every hero gains 1 Ward for each different course on the foes.", "cost": 1})
 card("el_every_colour", "Every Colour at Once", 2, "X", "all_enemies",
-     [D(0, per="t.spectrum", k=3), D(0, per="t.spectrum", k=1, if_="heroes_before")],
+     [D(0, per="t.spectrum", k=3), D(0, per="t.spectrum", k=1, bonus=True, if_="heroes_before")],
      "Every foe takes 3 for each course in its Spectrum. If another hero acted before this, each takes 1 more for "
      "each course.", cat=ATT, sub=PR, arch=PR,
      flavour="Each colour a foe wears is a colour it can burn in.",
      note="Across the line, every painted foe flares in all the colours it carries.",
      up={"text": "Every foe takes 4 for each course in its Spectrum. If another hero acted before this, each takes "
                  "1 more for each course.",
-         "fx": [D(0, per="t.spectrum", k=4), D(0, per="t.spectrum", k=1, if_="heroes_before")]})
+         "fx": [D(0, per="t.spectrum", k=4), D(0, per="t.spectrum", k=1, bonus=True, if_="heroes_before")]})
 card("el_clouded_sight", "Clouded Sight", 1, "X", "self",
      [SELF("focus", 0, per="elements_all", k=1), DRAW(1)],
      "Gain 1 Focus for each different course on the foes. Next round, draw 1 more.", use=ALL, cat=ATT, sub=PR,
@@ -732,7 +732,4 @@ NEEDS = [
     "el_brass_reservoir: 'no cap' is written as CAP(99) before the strike and CAP(-99) after; a one-card cap effect "
     "would be cleaner.",
     "Hover text for 'the next course' (the one after the attuned course in the ring).",
-    "Restraint readers (Wax the Mouth, Tip the Vessel, Stored Breath, Brass Bands, Pressure, Weight of the Vessel, "
-    "The Brass Reservoir) read vigour_left, which a Bank earlier in the Ordo lowers. The Ordo preview should show "
-    "the number each reader will see.",
 ]

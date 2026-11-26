@@ -13,13 +13,13 @@ set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 # ================================================================== world cards (Plasma)
 card("w_foundry_arc_weld", "Arc Weld", 1, "W", "enemy",
      [D(3), A("lightning", 2, attr="stable"), A("fire", 1, attr="volatile", if_="same_target&handoff")],
-     "Deal 3. Apply 2 Static. If the action before this one was another hero's and hit the same foe, apply 1 Volatile "
-     "Burn.",
+     "Deal 3. Apply 2 Lightning. If the action before this one was another hero's and hit the same foe, apply 1 Volatile "
+     "Fire.",
      cat="lightning", world=W, arch="world",
      flavour="It welds with its hammer. It welds with you, too.",
      note="Two heroes strike the same Arc-Smith in turn; the second blow closes the arc in a white-gold flash.",
-     up={"text": "Deal 4. Apply 3 Static. If the action before this one was another hero's and hit the same foe, apply "
-                 "1 Volatile Burn.",
+     up={"text": "Deal 4. Apply 3 Lightning. If the action before this one was another hero's and hit the same foe, apply "
+                 "1 Volatile Fire.",
          "fx": [D(4), A("lightning", 3, attr="stable"), A("fire", 1, attr="volatile", if_="same_target&handoff")]})
 card("w_foundry_melt_down", "Melt Down", 1, "W", "enemy",
      [CONS(s="block", to="self"), D(3, per="consumed", k=1, max=15)],
@@ -30,16 +30,18 @@ card("w_foundry_melt_down", "Melt Down", 1, "W", "enemy",
          "fx": [CONS(s="block", to="self"), D(5, per="consumed", k=1, max=18)]})
 card("w_foundry_quench", "Quench and Temper", 1, "W", "self",
      [CONS(e="fire", to="self"), AR(1, if_="consumed>0"), B(3)],
-     "Remove all Burn from yourself. If you removed any, gain 1 Armor for the fight. Gain 3 Block.", world=W, arch="world",
+     "Remove all Fire from yourself. If you removed any, gain 1 Armor for the fight. Gain 3 Block. Exhaust.",
+     kw=["Exhaust"], world=W, arch="world",
      flavour="The smiths quench what the fire has softened. It comes out harder.",
      note="A burning hero plunges an arm into the slack tub; steam bursts up white round the anvil line.",
-     up={"text": "Remove all Burn from yourself. If you removed any, gain 1 Armor for the fight. Gain 6 Block.",
+     up={"text": "Remove all Fire from yourself. If you removed any, gain 1 Armor for the fight. Gain 6 Block. Exhaust.",
          "fx": [CONS(e="fire", to="self"), AR(1, if_="consumed>0"), B(6)]})
-card("w_foundry_out_of_the_splash", "Out of the Splash", 0, "W", "adjacent_ally", [SWAP(), dsl.W(1, to="self")],
-     "Swap with an adjacent hero. Gain 1 Ward.", world=W, arch="world",
+card("w_foundry_out_of_the_splash", "Out of the Splash", 1, "W", "adjacent_ally",
+     [SWAP(), dsl.W(2, to="self"), dsl.W(2)],
+     "Swap with an adjacent hero. Each of you gains 2 Ward.", world=W, arch="world",
      flavour="Burn runs along the line. Do not stand in the line.",
      note="A hero shoulders a companion aside as a gout of burning bronze splashes where they stood.",
-     up={"text": "Swap with an adjacent hero. Gain 2 Ward.", "fx": [SWAP(), dsl.W(2, to="self")]})
+     up={"text": "Swap with an adjacent hero. Each of you gains 3 Ward.", "fx": [SWAP(), dsl.W(3, to="self"), dsl.W(3)]})
 
 # ================================================================== foes
 FORGE = {"fire": "resist", "lightning": "resist", "frost": "weak"}

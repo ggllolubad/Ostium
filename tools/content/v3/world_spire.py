@@ -16,10 +16,10 @@ LOCK = [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile")]
 # ================================================================== world cards (Lockdown)
 card("w_spire_stop_the_watch", "Stop the Watch", 1, "W", "enemy",
      [DELAY(if_="t.attacking"), B(3, to="self", if_="t.attacking")],
-     "If the target means to attack, its action waits until next round and you gain 3 Block.", world=W, arch="world",
+     "If the target means to attack, Delay it and gain 3 Block.", world=W, arch="world",
      flavour="They mostly succeeded. The clocks still tick inside the ice.",
      note="A hero closes a frosted pocket watch, and the foe across from them freezes mid-stride.",
-     up={"text": "If the target means to attack, its action waits until next round and you gain 6 Block.",
+     up={"text": "If the target means to attack, Delay it and gain 6 Block.",
          "fx": [DELAY(if_="t.attacking"), B(6, to="self", if_="t.attacking")]})
 card("w_spire_unwind", "Unwind", 1, "W", "ally",
      [CONS(e="frost"), dsl.W(1, per="consumed", k=1, max=4)],

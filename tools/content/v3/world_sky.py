@@ -324,13 +324,13 @@ card("w_sky_through_the_tear", "Through the Tear", 1, "W", "enemy",
      note="A hero pulls a foe through a rent in the sky; violet burns branch across it as it passes.",
      up={"text": "Deal 3. Apply 1 Void, plus 1 per other hero who has acted before this card this round (max 4), then "
                  "Conjoin.", "fx": [D(3), A("void", 1, per="heroes_before", k=1, max=4), REACT(1)]})
-card("w_sky_something_leans_closer", "Something Leans Closer", 1, "W", "none", [],
-     "Rite. Up to 3 times a round, when the company sets off a Conjunction, deal 1 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
+card("w_sky_something_leans_closer", "Something Leans Closer", 1, "W", "self", [],
+     "Rite: up to 3 times a round, when the company sets off a Conjunction, deal 1 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",
      rite={"on": "conjunction", "fx": [D(1, per="reactions", k=1, pierce=True)], "per_round": 3},
      flavour="The tears in the sky widen, and something leans closer. It likes what it sees.",
      note="The company under a widening tear; an eye the size of a cathedral window looks down on the foes.",
-     up={"text": "Rite. Up to 3 times a round, when the company sets off a Conjunction, deal 2 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
+     up={"text": "Rite: up to 3 times a round, when the company sets off a Conjunction, deal 2 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
          "rite": {"on": "conjunction", "fx": [D(2, per="reactions", k=1, pierce=True)], "per_round": 3}})
 
 NEEDS = [

@@ -593,17 +593,16 @@ card("du_the_headsmans_round", "The Headsman's Round", 1, "L", "enemy", [ST("mar
                  "Exhaust.",
          "rite": {"on": "execute", "per_round": 2,
                   "fx": [EN(1), D(6, to="all_enemies", if_="t.mark>0"), ST("mark", 1, to="front_enemy")]}})
-card("du_the_long_sentence", "The Long Sentence", 1, "L", "enemy", [ST("mark", 99)],
-     "Mark the target for the rest of the fight. Rite: for the rest of the fight, each card you play gives that foe "
-     "2 Doom. Exhaust.",
+card("du_the_long_sentence", "The Long Sentence", 1, "L", "enemy", [ST("mark", 3)],
+     "Mark the target for 3 rounds. Rite: for the rest of the fight, each card you play on a Marked foe gives it 2 "
+     "Doom. Exhaust.",
      hit=ALL, kw=["Rite", "Exhaust"], sub=EX, arch=EX + "+hexweaver_doom",
-     rite={"on": "play", "allies": True, "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=50")]},
+     rite={"on": "play", "fx": [ST("doom", 2, if_="t.mark>0")]},
      flavour="Some sentences take a single stroke. This one takes the whole fight.",
      note="The Executioner names a ruler from across the throne room and begins the count.",
-     up={"text": "Mark the target for the rest of the fight. Rite: for the rest of the fight, each card you play "
-                 "gives that foe 2 Doom and deals 2 to it. Exhaust.",
-         "rite": {"on": "play", "allies": True, "fx": [ST("doom", 2, to="all_enemies", if_="t.mark>=50"),
-                                                       D(2, to="all_enemies", if_="t.mark>=50")]}})
+     up={"text": "Mark the target for 3 rounds. Rite: for the rest of the fight, each card you play on a Marked foe "
+                 "gives it 2 Doom and deals 2 to it. Exhaust.",
+         "rite": {"on": "play", "fx": [ST("doom", 2, if_="t.mark>0"), D(2, if_="t.mark>0")]}})
 card("du_red_tide", "Red Tide", 1, "L", "self", [ST("bleed", 2, to="all_enemies")],
      "Apply 2 Bleed to every foe. Rite: for the rest of the fight, when a foe dies, every foe gains Bleed equal to "
      "the dead foe's Bleed, and you gain 1 Thrift. Exhaust.",
@@ -651,8 +650,8 @@ NEEDS = [
     "du_the_headsmans_round: wanted the Execute to refund its vigour this round and strike only the next Marked foe. "
     "Written as +1 vigour next round and 6 to every Marked foe, twice a round at most.",
     "du_the_long_sentence: wanted its own Sentence counter fed by every hero's hits on one foe. Written as Doom (the "
-    "Hexweaver's status) from this hero's plays, with Mark 99 tagging the sentenced foe (rite reads t.mark>=50). "
-    "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
+    "Hexweaver's status) from this hero's plays on any Marked foe. Needs a 'hit by any hero' rite trigger and a "
+    "way to name one foe for a rite (a status that tags without counting as an ailment).",
     "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
     "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",
     "du_fall_back_in_guard: wanted 'the hero who takes your place'. Written as the hero in front of you after the "

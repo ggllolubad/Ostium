@@ -19,36 +19,36 @@ card("t_pits_lamp", "Lit Lamp", 0, "Curse", "none", [A("fire", 2, attr="stable")
 # ================================================================== world cards (Combust)
 card("w_pits_gas_pocket", "Gas Pocket", 1, "W", "enemy",
      [D(0, per="t.el_total", k=1, max=12), A("fire", 1, attr="volatile")],
-     "Deal 1 for each course stack on the target (max 12). Apply 1 Volatile Burn.", cat="fire", world=W, arch="world",
+     "Deal 1 for each course stack on the target (max 12). Apply 1 Volatile Fire.", cat="fire", world=W, arch="world",
      flavour="The air itself became fuel, and every poison is a fuse.",
      note="A hero tosses a lamp into a yellow drift of gas round a foe; the gallery flashes lamp orange.",
-     up={"text": "Deal 2, plus 1 for each course stack on the target (max 14). Apply 1 Volatile Burn.",
+     up={"text": "Deal 2, plus 1 for each course stack on the target (max 14). Apply 1 Volatile Fire.",
          "fx": [D(2, per="t.el_total", k=1, max=14), A("fire", 1, attr="volatile")]})
 card("w_pits_blasting_charge", "Blasting Charge", 2, "W", "enemy",
-     [CONS(e="toxin"), D(0, per="consumed", k=2, max=14), D(0, per="consumed", k=1, max=7, to="adjacent"),
-      D(3, if_="last")],
-     "Remove all Toxin from the target. Deal 2 per Toxin removed (max 14). Each foe beside it takes 1 per Toxin "
-     "removed (max 7). If this is last in the Ordo, deal 3 more to the target.", cat="fire", world=W, arch="world",
+     [CONS(e="toxin"), D(0, per="consumed", k=2, max=14), D(3, if_="last", bonus=True),
+      D(0, per="consumed", k=1, max=7, to="adjacent")],
+     "Remove all Toxin from the target. Deal 2 per Toxin removed (max 14), and 3 more if this is last in the Ordo. "
+     "Each foe beside it takes 1 per Toxin removed (max 7).", cat="fire", world=W, arch="world",
      flavour="It ground the brimstone for the world's powder.",
      note="A powder keg wedged against a gas-swollen foe goes up, the blast throwing its neighbours aside.",
-     up={"text": "Remove all Toxin from the target. Deal 2, plus 2 per Toxin removed (max 16). Each foe beside it takes "
-                 "1 per Toxin removed (max 8). If this is last in the Ordo, deal 4 more to the target.",
-         "fx": [CONS(e="toxin"), D(2, per="consumed", k=2, max=16), D(0, per="consumed", k=1, max=8, to="adjacent"),
-                D(4, if_="last")]})
+     up={"text": "Remove all Toxin from the target. Deal 2, plus 2 per Toxin removed (max 16), and 4 more if this is "
+                 "last in the Ordo. Each foe beside it takes 1 per Toxin removed (max 8).",
+         "fx": [CONS(e="toxin"), D(2, per="consumed", k=2, max=16), D(4, if_="last", bonus=True),
+                D(0, per="consumed", k=1, max=8, to="adjacent")]})
 card("w_pits_throw_it_back", "Throw It Back", 1, "W", "enemy",
      [TRANSFER(frm="ally_most", n=1), D(2), A("fire", 1, attr="volatile")],
-     "Move the largest ailment of the most afflicted hero onto the target. Deal 2. Apply 1 Volatile Burn.", cat="fire",
+     "Move the largest ailment of the most afflicted other hero onto the target. Deal 2. Apply 1 Volatile Fire.", cat="fire",
      world=W, arch="world",
      flavour="Its lungs are full of yellow gas. Keep it away from the lamp.",
      note="A coughing hero spits the yellow gas back into a Gas-Lung Miner's face as the lamp swings in.",
-     up={"text": "Move the largest ailment of the most afflicted hero onto the target. Deal 4. Apply 1 Volatile Burn.",
+     up={"text": "Move the largest ailment of the most afflicted other hero onto the target. Deal 4. Apply 1 Volatile Fire.",
          "fx": [TRANSFER(frm="ally_most", n=1), D(4), A("fire", 1, attr="volatile")]})
 card("w_pits_wet_hood", "Wet Hood", 1, "W", "ally",
      [CONS(e="fire"), dsl.W(1), B(2, per="consumed", k=1, max=8)],
-     "Remove all Burn from a hero. They gain 1 Ward and 2 Block, plus 1 per Burn removed (max 8).", world=W, arch="world",
+     "Remove all Fire from a hero. They gain 1 Ward and 2 Block, plus 1 per Fire removed (max 8).", world=W, arch="world",
      flavour="Somebody had to go in first with the flame. He wore the hood soaked.",
      note="A hero pulls a steaming, water-soaked sacking hood over a burning companion's head.",
-     up={"text": "Remove all Burn from a hero. They gain 1 Ward and 3 Block, plus 2 per Burn removed (max 13).",
+     up={"text": "Remove all Fire from a hero. They gain 1 Ward and 3 Block, plus 2 per Fire removed (max 13).",
          "fx": [CONS(e="fire"), dsl.W(1), B(3, per="consumed", k=2, max=13)]})
 
 # ================================================================== foes

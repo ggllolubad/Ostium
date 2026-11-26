@@ -32,11 +32,11 @@ card("w_rime_shield_wall", "Shield Wall", 1, "W", "ally_other", [GUARD(), B(1, p
      flavour="The hold's shieldmaidens stood rim to rim. The glass cut them as well.",
      note="A hero steps in front of a burning companion, shield up against the steam.")
 card("w_rime_the_glacier_splits", "The Glacier Splits", 2, "W", "all_enemies",
-     [D(3), D(2, if_="t.fire>0"), A(F, 1, attr="volatile")],
+     [D(3), D(2, if_="t.fire>0", bonus=True), A(F, 1, attr="volatile")],
      "Deal 3 to every foe, and 2 more to each foe that carries Fire. Then apply 1 Volatile Frost to every foe.", cat=F,
      world=W, arch="world",
      up={"text": "Deal 4 to every foe, and 3 more to each foe that carries Fire. Then apply 1 Volatile Frost to every "
-                 "foe.", "fx": [D(4), D(3, if_="t.fire>0"), A(F, 1, attr="volatile")]},
+                 "foe.", "fx": [D(4), D(3, if_="t.fire>0", bonus=True), A(F, 1, attr="volatile")]},
      flavour="The miners dug down and met the fire coming up. The glacier split between.",
      note="A crack runs the length of the glacier floor under the foes, steam bursting through.")
 

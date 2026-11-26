@@ -319,19 +319,19 @@ E("garden_r_green_lion", "The Green Lion", "The hedge at the gate has decided it
 
 # ================================================================== world cards (Blight: glue, each reads or converts state)
 card("w_garden_deadhead", "Deadhead", 1, "W", "enemy",
-     [CONS(s="regen"), D(2, per="consumed", k=1), D(2, if_="vigour_left>=2")],
+     [CONS(s="regen"), D(2, per="consumed", k=1), D(2, if_="vigour_left>=2", bonus=True)],
      "Remove all Regen from the foe. Deal 2, plus 1 per Regen removed. If 2 or more vigour is left unspent this round, "
      "deal 2 more.", world=W, arch="world",
      flavour="He prunes what grows wrong. Learn from him.",
      note="A hero snips a swelling bloom from a foe's shoulder with the Gardener's dropped shears.",
      up={"text": "Remove all Regen from the foe. Deal 3, plus 2 per Regen removed. If 2 or more vigour is left unspent "
                  "this round, deal 3 more.",
-         "fx": [CONS(s="regen"), D(3, per="consumed", k=2), D(3, if_="vigour_left>=2")]})
+         "fx": [CONS(s="regen"), D(3, per="consumed", k=2), D(3, if_="vigour_left>=2", bonus=True)]})
 card("w_garden_take_the_rot", "Take the Rot Out", 1, "W", "enemy", [D(3), TRANSFER(frm="ally_most")],
-     "Deal 3. Move every ailment from the hero who carries the most onto the foe.", world=W, arch="world",
+     "Deal 3. Move every ailment from the other hero who carries the most onto the foe.", world=W, arch="world",
      flavour="The garden gives. Give it back.",
      note="A hero presses a palm to a foe's bark; spore and black dust crawl off a companion and onto it.",
-     up={"text": "Deal 5. Move every ailment from the hero who carries the most onto the foe.",
+     up={"text": "Deal 5. Move every ailment from the other hero who carries the most onto the foe.",
          "fx": [D(5), TRANSFER(frm="ally_most")]})
 card("w_garden_blight_seed", "Blight Seed", 1, "W", "enemy", [D(3), A("void", 2, attr="volatile", if_="t.toxin>0")],
      "Deal 3. If the foe has Toxin, apply 2 Volatile Void.", cat="void", attr="volatile", world=W, arch="world",
@@ -339,13 +339,13 @@ card("w_garden_blight_seed", "Blight Seed", 1, "W", "enemy", [D(3), A("void", 2,
      note="A hero thumbs a black seed into a spore-swollen wound; the bark around it goes grey and still.",
      up={"text": "Deal 5. If the foe has Toxin, apply 3 Volatile Void.",
          "fx": [D(5), A("void", 3, attr="volatile", if_="t.toxin>0")]})
-card("w_garden_nothing_regrows", "Nothing Regrows", 1, "W", "none", [],
-     "Rite. Whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
+card("w_garden_nothing_regrows", "Nothing Regrows", 1, "W", "self", [],
+     "Rite: whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",
      rite={"on": "conjunction", "fx": [CONS(s="block"), CONS(s="regen")]},
      flavour="The blooms open, and the eyes turn toward you. Close them.",
      note="The company stands in a ring of grey, dead loam; the hedge around them has stopped growing.",
-     up={"text": "Rite. Whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
+     up={"text": "Rite: whenever the company sets off a Conjunction, that foe loses all its Block and Regen. Exhaust.",
          "cost": 0})
 
 NEEDS = [
