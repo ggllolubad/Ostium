@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/fg_d.png-a664c22c73c06b5a325be6d79b1a8c36.cte
 
 compress/mode=0
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

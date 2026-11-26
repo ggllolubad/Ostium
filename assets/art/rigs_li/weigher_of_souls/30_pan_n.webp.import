@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/30_pan_n.webp-0267e9b9dbb4b8b4999da88088cbc41
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

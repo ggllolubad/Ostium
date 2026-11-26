@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/19_s5_arm_f.webp-84b3ddc3370b813c2675c969cf2f
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

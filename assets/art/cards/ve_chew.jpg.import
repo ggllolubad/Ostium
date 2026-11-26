@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/ve_chew.jpg-9c3ea8c2df4ce7f249e3a34a6af295c6.
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

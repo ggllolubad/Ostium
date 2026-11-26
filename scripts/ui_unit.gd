@@ -142,7 +142,7 @@ func _setup_info(u: Dictionary) -> void:
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info.add_child(name_l)
 	var bar_space := Control.new()
-	bar_space.custom_minimum_size = Vector2(size.x, 40)
+	bar_space.custom_minimum_size = Vector2(size.x, 54)   # clears the HP bar, its numbers and the stress strip drawn in _draw
 	bar_space.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(bar_space)
 	status_r = UiStyle.rich(14)
@@ -262,7 +262,7 @@ func _draw() -> void:
 		draw_polyline(pts, col, 3.0 if target_mode == 1 else 2.5)
 	# hp bar on a parchment tablet so it reads over the floor
 	var w := size.x * 0.78
-	var tab := Rect2(cx - w / 2 - 18, fy + 8, w + 36, 88)
+	var tab := Rect2(cx - w / 2 - 18, fy + 8, w + 36, 100)
 	draw_rect(tab, Color(UiStyle.PARCH_L, 0.88))
 	draw_rect(tab, Color(UiStyle.INK, 0.55), false, 1.0)
 	var r := Rect2(cx - w / 2, fy + 30, w, 14)

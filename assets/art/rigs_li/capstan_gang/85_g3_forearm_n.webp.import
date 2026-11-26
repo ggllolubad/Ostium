@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/85_g3_forearm_n.webp-f7ab5b8ffc54e692f13a5f35
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

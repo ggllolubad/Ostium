@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/hero_2_n.png-36aa086b0126fdb0c28e88c0228c69b7
 
 compress/mode=0
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

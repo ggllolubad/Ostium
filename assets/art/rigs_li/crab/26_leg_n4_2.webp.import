@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/26_leg_n4_2.webp-d849d1ed0b16d4e7d5f0c6d4a8e7
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

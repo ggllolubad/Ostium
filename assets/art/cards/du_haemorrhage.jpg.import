@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/du_haemorrhage.jpg-b3dd73ca6e9c2d3b943165a68f
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

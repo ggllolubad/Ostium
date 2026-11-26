@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/bg_e.png-841cc27fc2a864ac2fb3da24be90b9a8.cte
 
 compress/mode=0
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

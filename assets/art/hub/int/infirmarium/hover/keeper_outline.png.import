@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/keeper_outline.png-17af1fcaf2e569b842d3e58a38
 
 compress/mode=0
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

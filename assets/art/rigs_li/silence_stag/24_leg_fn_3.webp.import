@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/24_leg_fn_3.webp-0fe98c3fd215c9c2f8a1337bc464
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

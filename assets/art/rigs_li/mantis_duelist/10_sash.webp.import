@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/10_sash.webp-e6a1d2b0f2443d500e5d04f6e0fc1eda
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

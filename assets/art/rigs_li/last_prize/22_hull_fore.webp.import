@@ -17,11 +17,11 @@ dest_files=["res://.godot/imported/22_hull_fore.webp-f30eec0f4d56b3c3d79f9f9c87a
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.82
+compress/lossy_quality=0.92
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
