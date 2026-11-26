@@ -55,9 +55,10 @@ func _screen(title := "", sub := "", bgp := "") -> Control:
 
 func _lbl(text: String, pos: Vector2, sz: Vector2, fs := 17, font: FontFile = null, col := UiStyle.INK, parent: Node = null) -> Label:
 	var l := UiStyle.label(text, fs, font, col)
+	# wrap first: a label sized while unwrapped grows to its one-line width and keeps it
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	l.position = pos
 	l.size = sz
-	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	(parent if parent != null else screen).add_child(l)
 	return l
 
@@ -242,71 +243,185 @@ func _cast_lots() -> void:
 
 func show_prepare() -> void:
 	Run.meta_load()
-	_screen(Data.WORLDS[hub_world].name, "Choose the Prior's commission. The company, its gear and its vows were settled in the abbey.")
+	var w: Dictionary = Data.WORLDS[hub_world]
+	var room: String = w.rooms[1]
+	var bgp := "res://assets/art/rooms/%s_far.webp" % room
+	if not ResourceLoader.exists(bgp):
+		bgp = "res://assets/art/rooms/%s_far.png" % room
+	_screen("", "", bgp)
+	# the writ: one sheet of parchment laid over the world's own backdrop
+	var shade := ColorRect.new()
+	shade.color = Color(0.08, 0.05, 0.03, 0.55)
+	shade.size = size
+	screen.add_child(shade)
+	_tex("res://assets/art/map/sheet.png", Vector2(46, 22), Vector2(1508, 940))
+	# header cartouche: the world, its door and its two courses
+	_tex("res://assets/art/map/cartouche.png", Vector2(470, 40), Vector2(660, 94))
+	var t := _lbl(w.name, Vector2(470, 50), Vector2(660, 70), 40, UiStyle.font_bl, UiStyle.RED_D)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var sub := _lbl("Door %s  ·  %s  ·  %s and %s, the %s" % [ROMAN[int(w.story)], w.act_name, String(w.pair[0]).capitalize(), String(w.pair[1]).capitalize(), w.conjunction],
+		Vector2(300, 136), Vector2(1000, 26), 17, UiStyle.font_it, UiStyle.BROWN)
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var cols := [[110, 440, "The Prior's Commission"], [596, 452, "The Company"], [1094, 400, "Vows and Provisions"]]
+	for c in cols:
+		_lbl(c[2], Vector2(c[0], 178), Vector2(c[1], 30), 22, UiStyle.font_sc, UiStyle.INK)
+		_rule(Vector2(c[0], 210), c[1], 1)
+	_rule(Vector2(573, 186), 690, 1, true)
+	_rule(Vector2(1071, 186), 690, 1, true)
+	# --- the commission: which ruler the Prior sends the company after
 	var coms: Array = Data.COMMISSIONS.get(hub_world, [])
 	if not coms.is_empty():
-		# the commission: which of the world's rulers the Prior sends the company after
-		_lbl("The commission", Vector2(80, 130), Vector2(400, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
 		var known := false
 		for c in coms:
 			if c.ruler == hub_commission:
 				known = true
 		if not known:
 			hub_commission = coms[0].ruler
+		var chosen: Dictionary = coms[0]
 		for ci in coms.size():
 			var c: Dictionary = coms[ci]
-			var b := _btn(c.name, Vector2(80, 166 + ci * 58), Vector2(400, 50), func(): hub_commission = c.ruler; show_prepare(), null, c.text)
-			if c.ruler == hub_commission:
-				b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI, UiStyle.RED, 3))
-			if c.ruler == hub_commission:
-				_lbl("\u201c%s\u201d" % c.text, Vector2(80, 350), Vector2(400, 150), 16, UiStyle.font_it)
+			var on: bool = c.ruler == hub_commission
+			if on:
+				chosen = c
+			var y := 226 + ci * 98
+			var b := _btn("", Vector2(110, y), Vector2(440, 88), func(): hub_commission = c.ruler; show_prepare(), null, c.text)
+			b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI if on else UiStyle.PARCH_L, UiStyle.RED_D if on else UiStyle.BROWN, 3 if on else 1))
+			b.add_theme_stylebox_override("hover", UiStyle.box(UiStyle.HI, UiStyle.RED, 2))
+			_ruler_thumb(c.ruler, Vector2(118, y + 6), Vector2(84, 76))
+			_lbl(c.name, Vector2(212, y + 14), Vector2(260, 30), 21, UiStyle.font_sc, UiStyle.RED_D if on else UiStyle.INK)
+			_lbl("Rank %s of the world's rulers" % ROMAN[ci], Vector2(212, y + 46), Vector2(260, 24), 15, UiStyle.font_it, UiStyle.BROWN)
+			if on:
+				_tex("res://assets/art/ui/seal.png", Vector2(480, y + 12), Vector2(62, 62))
+		# the writ itself, quoted under the choices
+		var qy := 226 + coms.size() * 98 + 14
+		var q := _panel(Vector2(110, qy), Vector2(440, 860 - qy))
+		q.add_theme_stylebox_override("panel", UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 1))
+		var fig := "res://assets/art/rigs_li/%s/full.webp" % chosen.ruler
+		if ResourceLoader.exists(fig) and 860 - qy > 220:
+			var ft := _tex(fig, Vector2(260, qy + 96), Vector2(286, 860 - qy - 100))
+			ft.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			ft.modulate = Color(1, 1, 1, 0.42)
+		_lbl("The writ", Vector2(128, qy + 12), Vector2(400, 24), 16, UiStyle.font_sc, UiStyle.BROWN)
+		_lbl("\u201c%s\u201d" % chosen.text, Vector2(128, qy + 42), Vector2(404, 860 - qy - 54), 18, UiStyle.font_it, UiStyle.INK)
 		hub_obj = "boss"
-	var i := 0
-	for k in (Run.C.objectives if coms.is_empty() else {}):
-		var o: Dictionary = Run.C.objectives[k]
-		var b := _btn(o.name, Vector2(80, 166 + i * 58), Vector2(400, 50), func(): hub_obj = k; show_prepare(), null, o.text)
-		if k == hub_obj:
-			b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI, UiStyle.RED, 3))
-		i += 1
-	if coms.is_empty():
-		_lbl(Run.C.objectives[hub_obj].text, Vector2(80, 404), Vector2(400, 80), 16, UiStyle.font_it)
-	# the company, from the roster
+	else:
+		var i := 0
+		for k in Run.C.objectives:
+			var o: Dictionary = Run.C.objectives[k]
+			var b := _btn(o.name, Vector2(110, 226 + i * 62), Vector2(440, 52), func(): hub_obj = k; show_prepare(), null, o.text)
+			if k == hub_obj:
+				b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI, UiStyle.RED, 3))
+			i += 1
+		_lbl(Run.C.objectives[hub_obj].text, Vector2(110, 240 + i * 62), Vector2(440, 120), 17, UiStyle.font_it)
+	# --- the company: oval portraits, name, calling, the reason they walk, stress and wounds
 	var party := Abbey.party_heroes()
-	_lbl("The company · %d of %d" % [party.size(), int(Abbey.A.party_max)], Vector2(540, 130), Vector2(520, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
-	for j in party.size():
+	_lbl("%d of %d" % [party.size(), int(Abbey.A.party_max)], Vector2(900, 182), Vector2(148, 26), 17, UiStyle.font_it, UiStyle.BROWN).horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	for j in int(Abbey.A.party_max):
+		var x := 596 + (j % 2) * 230
+		var y := 226 + int(j / 2) * 322
+		if j >= party.size():
+			var e := _panel(Vector2(x, y), Vector2(222, 310))
+			e.add_theme_stylebox_override("panel", UiStyle.box(Color(0, 0, 0, 0), UiStyle.PARCH_D, 1))
+			_lbl("An empty place in the line", Vector2(x + 10, y + 140), Vector2(202, 40), 15, UiStyle.font_it, UiStyle.DISABLED_INK).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			continue
 		var h: Dictionary = party[j]
-		var x := 540 + (j % 2) * 262
-		var y := 166 + int(j / 2) * 196
-		_panel(Vector2(x, y), Vector2(252, 186))
-		_portrait(h.key, Vector2(x + 8, y + 8), Vector2(110, 120))
-		_lbl(h.name, Vector2(x + 124, y + 12), Vector2(124, 50), 17, UiStyle.font_sc)
-		_lbl("%s\nlevel %d · %s" % [Data.HEROES[h.key].name, int(h.level), h.reason], Vector2(x + 124, y + 62), Vector2(124, 50), 14, UiStyle.font_it, UiStyle.BROWN)
-		var wounds := "stress %d" % int(h.stress)
-		if not h.injuries.is_empty():
-			wounds += " · %d injur%s" % [h.injuries.size(), "y" if h.injuries.size() == 1 else "ies"]
-		_lbl(wounds, Vector2(x + 8, y + 136), Vector2(236, 40), 14, UiStyle.font_it, UiStyle.RED_D)
+		_tex("res://assets/art/ui/portraits/%s_oval.png" % h.key, Vector2(x + 46, y), Vector2(130, 156))
+		var nm := _lbl(h.name, Vector2(x, y + 160), Vector2(222, 30), 19, UiStyle.font_sc, UiStyle.INK)
+		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var cl := _lbl("%s \u00b7 level %d" % [Data.HEROES[h.key].name, int(h.level)], Vector2(x, y + 190), Vector2(222, 24), 15, UiStyle.font_it, UiStyle.BROWN)
+		cl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var rs := _lbl("walks for %s" % String(h.reason).to_lower(), Vector2(x, y + 212), Vector2(222, 24), 15, UiStyle.font_it, UiStyle.BROWN)
+		rs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_icon_count("s_stress", "stress %d" % int(h.stress), Vector2(x + 30, y + 244), UiStyle.RED_D)
+		var inj: Array = h.get("injuries", [])
+		if inj.is_empty():
+			_lbl("unhurt", Vector2(x + 126, y + 246), Vector2(90, 24), 15, UiStyle.font_it, UiStyle.GREEN)
+		else:
+			_icon_count("broken_ribs", "%d wound%s" % [inj.size(), "" if inj.size() == 1 else "s"], Vector2(x + 120, y + 244), UiStyle.RED_D)
 	if party.size() < int(Abbey.A.party_min):
-		_lbl("Too few. Choose the company at the cross in the garth.", Vector2(540, 560), Vector2(520, 60), 18, UiStyle.font_it, UiStyle.RED_D)
-	# vows and provisions
-	_lbl("Vows sworn in the Chapter House", Vector2(1100, 130), Vector2(440, 30), 22, UiStyle.font_sc, UiStyle.BROWN)
+		_lbl("Too few. Choose the company at the cross in the garth.", Vector2(596, 870), Vector2(452, 30), 16, UiStyle.font_it, UiStyle.RED_D).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# --- vows and provisions
 	var vows: Array = Run.meta.vows.filter(func(v): return Abbey._vow_index(v) < Run.asc_max())
-	var vl := []
+	var vy := 226
+	var any := false
 	for a in Run.C.ascension:
 		if vows.has(a.id):
-			vl.append("%s: %s" % [a.name, a.text])
-	_lbl("\n".join(vl) if not vl.is_empty() else "None.", Vector2(1100, 166), Vector2(440, 300), 15, UiStyle.font_it)
+			any = true
+			_tex("res://assets/art/ui/seal.png", Vector2(1094, vy + 2), Vector2(26, 26))
+			var vl := _lbl("%s. %s" % [a.name, a.text], Vector2(1128, vy), Vector2(366, 60), 15, UiStyle.font_it, UiStyle.INK)
+			vy += max(34, int(vl.get_minimum_size().y) + 8)
+	if not any:
+		_lbl("No vows sworn. The descent is taken at its plainest.", Vector2(1094, vy), Vector2(400, 50), 16, UiStyle.font_it, UiStyle.BROWN)
+		vy += 56
 	var p: Dictionary = Run.meta.provisions
-	_lbl("Carried: %d flask%s, %d relic%s, +%d bread, +%d candles, +%d tinctures, +%d tools" % [max(1, p.belt.size()), "" if max(1, p.belt.size()) == 1 else "s", Run.meta.carried.size(), "" if Run.meta.carried.size() == 1 else "s", int(p.food), int(p.light), int(p.medicine), int(p.tools)],
-		Vector2(1100, 480), Vector2(440, 80), 16, UiStyle.font_it, UiStyle.BROWN)
-	var go := _btn("Descend", Vector2(1100, 620), Vector2(440, 64), _begin_run)
-	go.add_theme_font_size_override("font_size", 28)
+	var py: int = max(vy + 14, 400)
+	_lbl("Carried down", Vector2(1094, py), Vector2(400, 26), 17, UiStyle.font_sc, UiStyle.BROWN)
+	var items := [["fl_heal", max(1, p.belt.size()), "flask"], ["rl_reliquary", Run.meta.carried.size(), "relic"], ["food", int(p.food), "bread"],
+		["light", int(p.light), "candles"], ["medicine", int(p.medicine), "tinctures"], ["tools", int(p.tools), "tools"]]
+	for k in items.size():
+		var it: Array = items[k]
+		var ix := 1094 + (k % 3) * 134
+		var iy := py + 32 + int(k / 3) * 74
+		_tex("res://assets/art/icons/%s.png" % it[0], Vector2(ix, iy), Vector2(50, 50))
+		_lbl("%d" % int(it[1]), Vector2(ix + 54, iy + 2), Vector2(70, 26), 20, UiStyle.font_sc, UiStyle.INK)
+		_lbl(it[2], Vector2(ix + 54, iy + 26), Vector2(80, 22), 14, UiStyle.font_it, UiStyle.BROWN)
+	var go := _btn("Descend", Vector2(1094, 700), Vector2(400, 74), _begin_run)
+	go.add_theme_font_size_override("font_size", 32)
+	go.add_theme_color_override("font_color", UiStyle.HI)
+	go.add_theme_color_override("font_hover_color", UiStyle.HI)
+	go.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.RED_D, UiStyle.INK, 2))
+	go.add_theme_stylebox_override("hover", UiStyle.box(UiStyle.RED, UiStyle.INK, 2))
 	go.disabled = party.size() < int(Abbey.A.party_min)
-	_btn("Back to the doors", Vector2(1100, 694), Vector2(440, 48), show_hub)
-	_btn("Back to the garth", Vector2(1100, 752), Vector2(440, 48), func(): main._show_menu())
-	_lbl("Pick a hero (portrait or keys 1-4), click a card, then its target. Drag Ordo slots to reorder, right-click to remove. The field previews the whole round, foes included. Enter commits; L opens the chronicle.",
-		Vector2(80, 880), Vector2(1440, 50), 15, UiStyle.font_it, UiStyle.BROWN).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_tex("res://assets/art/ui/seal.png", Vector2(1062, 698), Vector2(76, 76))
+	_btn("Back to the doors", Vector2(1094, 790), Vector2(196, 44), show_hub)
+	_btn("Back to the garth", Vector2(1298, 790), Vector2(196, 44), func(): main._show_menu())
 	_toast(msg)
 	msg = ""
+
+## A texture laid on the current screen, scaled to the box.
+func _tex(path: String, pos: Vector2, sz: Vector2) -> TextureRect:
+	var tr := TextureRect.new()
+	tr.texture = load(path) if ResourceLoader.exists(path) else null
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_SCALE
+	tr.position = pos
+	tr.size = sz
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(tr)
+	return tr
+
+## A thin ink rule, horizontal or vertical.
+func _rule(pos: Vector2, length: float, thick: float, vertical := false) -> void:
+	var r := ColorRect.new()
+	r.color = Color(UiStyle.INK, 0.55)
+	r.position = pos
+	r.size = Vector2(thick, length) if vertical else Vector2(length, thick)
+	r.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(r)
+
+## A small status icon with its count beside it.
+func _icon_count(icon: String, text: String, pos: Vector2, col: Color) -> void:
+	_tex("res://assets/art/icons/%s.png" % icon, pos, Vector2(24, 24))
+	_lbl(text, pos + Vector2(28, 0), Vector2(90, 24), 15, UiStyle.font_it, col)
+
+## The ruler's own figure, head and shoulders, as a small engraving beside its commission.
+func _ruler_thumb(key: String, pos: Vector2, sz: Vector2) -> void:
+	var path := "res://assets/art/rigs_li/%s/full.webp" % key
+	if not ResourceLoader.exists(path):
+		return
+	var tex: Texture2D = load(path)
+	var at := AtlasTexture.new()
+	at.atlas = tex
+	at.region = Rect2(tex.get_width() * 0.12, tex.get_height() * 0.08, tex.get_width() * 0.76, tex.get_height() * 0.62)
+	var tr := TextureRect.new()
+	tr.texture = at
+	tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tr.position = pos
+	tr.size = sz
+	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(tr)
 
 func _asc_toggle(mid: String, on: bool) -> void:
 	if on and not hub_asc.has(mid):
