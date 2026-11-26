@@ -100,7 +100,7 @@ card("salt_the_threshold", "Salt the Threshold", 1, "C", "all_allies", [W(1), ST
 
 # ------------------------------------------------------------------ common: pactbound
 card("tithe_of_blood", "Tithe of Blood", 0, "C", "self", [SELFDMG(2), SELF("might", 1)],
-     "Lose 2 HP. Gain 1 Might. Exhaust.", cat=V, kw=["Exhaust"], arch=PB,
+     "Lose 2 HP. Gain 1 Might. Exhaust.", cat=V, kw=["Exhaust"], arch=PB, use=[1, 2, 3, 4],
      flavour="The poppets drink first. Then they work.",
      note="The Pactbound lets blood run down the bone knife onto the poppets at the belt.",
      up={"text": "Lose 1 HP. Gain 1 Might. Exhaust.", "fx": [SELFDMG(1), SELF("might", 1)]})
@@ -126,11 +126,11 @@ card("take_the_rot", "Take the Rot", 1, "C", "enemy", [TRANSFER("ally_most", to=
      note="The Hexweaver lays a palm on a sick hero's chest and the green creeps up their own arm.",
      up={"text": "Move every ailment off the other hero carrying the most onto yourself. Apply 4 Hex.",
          "fx": [TRANSFER("ally_most", to="self"), ST("hex", 4)]})
-card("martyrs_pin", "Martyr's Pin", 1, "C", "enemy", [SELFDMG(2), ST("hex", 6)],
-     "Lose 2 HP. Apply 6 Hex.", cat=V, arch="pactbound+doomsayer",
+card("martyrs_pin", "Martyr's Pin", 1, "C", "enemy", [SELFDMG(2), ST("hex", 4, per="lost", k=1)],
+     "Lose 2 HP. Apply 4 Hex, plus 1 per HP lost.", cat=V, arch="pactbound+doomsayer",
      flavour="Pins go in deeper when they are wet.",
      note="The Pactbound pushes a pin through their own palm and into the poppet beneath.",
-     up={"text": "Lose 2 HP. Apply 8 Hex.", "fx": [SELFDMG(2), ST("hex", 8)]})
+     up={"text": "Lose 2 HP. Apply 6 Hex, plus 1 per HP lost.", "fx": [SELFDMG(2), ST("hex", 6, per="lost", k=1)]})
 
 # ------------------------------------------------------------------ common: doomsayer
 card("handbell", "Handbell", 1, "C", "all_enemies", [ST("hex", 2)],
@@ -258,10 +258,11 @@ card("witchs_ladder", "Witch's Ladder", 1, "U", "enemy", [ST("hex", 1), ST("hex"
 
 # ------------------------------------------------------------------ uncommon: pactbound
 card("blood_moon", "Blood Moon", 2, "U", "enemy", [D(6, per="missing_hp", k=0.5)],
-     "Deal 6, plus 1 per 2 HP you are missing.", cat=P, use=KNIFE, hit=TOUCH, arch=PB,
+     "Costs 1 less once you carry 10 Scars. Deal 6, plus 1 per 2 HP you are missing.", cat=P,
+     cost_less={"per": "scars", "k": 0.1, "max": 1}, use=KNIFE, hit=TOUCH, arch=PB,
      flavour="The thinner I bleed, the sharper the knife.",
      note="The Pactbound, pale and swaying, lunges with the bone knife under a red light.",
-     up={"text": "Deal 8, plus 1 per 2 HP you are missing.", "fx": [D(8, per="missing_hp", k=0.5)]})
+     up={"text": "Costs 1 less once you carry 10 Scars. Deal 8, plus 1 per 2 HP you are missing.", "fx": [D(8, per="missing_hp", k=0.5)]})
 card("spill_the_rot", "Spill the Rot", 2, "U", "enemy", [TRANSFER("self"), D(2, per="consumed", k=2)],
      "Move every ailment you carry onto the target. Deal 2, plus 2 per ailment moved.", cat=V,
      arch="pactbound+mirrorhex",
@@ -279,11 +280,12 @@ card("old_wounds", "Old Wounds", 1, "U", "self", [PRIME(2, per="scars", k=0.5)],
      flavour="Every scar points somewhere. Follow them.",
      note="The Pactbound unwinds the forearm bandage; the old cuts glow like a map.",
      up={"text": "Prime 4, plus 1 per 2 Scars you carry.", "fx": [PRIME(4, per="scars", k=0.5)]})
-card("take_their_wounds", "Take Their Wounds", 1, "U", "ally_other", [GUARD(), B(2, to="self", per="m.targeted", k=1)],
-     "Guard another hero this round. Gain 2 Block, plus 1 per foe that means to attack them.", cat=V, arch="pactbound",
+card("take_their_wounds", "Take Their Wounds", 1, "U", "ally_other", [GUARD(), ADD("tithe_of_blood")],
+     "Guard another hero this round. Next round, a Tithe of Blood is added to their hand.", cat=V, arch="pactbound",
      flavour="Hit me instead. I know what to do with it.",
      note="The Hexweaver steps in front of a fallen hero, arms wide, poppets swinging.",
-     up={"text": "Guard another hero this round. Gain 4 Block, plus 1 per foe that means to attack them.", "fx": [GUARD(), B(4, to="self", per="m.targeted", k=1)]})
+     up={"text": "Guard another hero this round. Gain 3 Block. Next round, a Tithe of Blood is added to their hand.",
+         "fx": [GUARD(), B(3, to="self"), ADD("tithe_of_blood")]})
 
 # ------------------------------------------------------------------ uncommon: doomsayer
 card("toll_the_hour", "Toll the Hour", 1, "U", "enemy", [D(3), EXEC(0, per="ordo_pos", k=3)],
@@ -458,10 +460,12 @@ card("harbinger", "Harbinger", 2, "X", "enemy", [ST("doom", 4), ST("hex", 3), ST
      up={"text": "Apply 5 Doom and 4 Hex. First in the Ordo: the target is Vulnerable for 2 rounds.",
          "fx": [ST("doom", 5), ST("hex", 4), ST("vulnerable", 2, if_="first")]})
 card("the_final_hour", "The Final Hour", 2, "X", "enemy", [D(5), EXEC(6, if_="!last"), EXEC(12, if_="last"), ST("doom", 2, to="all_enemies", if_="killed")],
-     "Deal 5. Execute 6, or 12 if this is last in the Ordo. If this kills, every foe gains 2 Doom.", cat=V, kw=["Execute"], sub=DS, arch=DS,
+     "Costs 1 less once 3 cards are in the Ordo. Deal 5. Execute 6, or 12 if this is last in the Ordo. If this kills, "
+     "every foe gains 2 Doom.", cat=V, kw=["Execute"], sub=DS, arch=DS, cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="The last stroke of the hour. Then quiet.",
      note="The Doomsayer swings the bell staff and the struck foe falls silent mid-cry.",
-     up={"text": "Deal 6. Execute 8, or 15 if this is last in the Ordo. If this kills, every foe gains 3 Doom.",
+     up={"text": "Costs 1 less once 3 cards are in the Ordo. Deal 6. Execute 8, or 15 if this is last in the Ordo. If "
+                 "this kills, every foe gains 3 Doom.",
          "fx": [D(6), EXEC(8, if_="!last"), EXEC(15, if_="last"), ST("doom", 3, to="all_enemies", if_="killed")]})
 card("death_watch", "Death Watch", 1, "X", "self", [],
      "Rite: whenever a foe dies, every foe gains 3 Doom, and 2 more if the dead foe was Marked. Exhaust.", cat=V,
@@ -499,12 +503,12 @@ card("return_to_sender", "Return to Sender", 1, "X", "enemy", [D(0, per="incomin
      up={"text": "Deal 3, plus 1 per 2 damage the foes mean to deal this round.",
          "fx": [D(3, per="incoming", k=0.5)]})
 card("crossed_glass", "Crossed Glass", 2, "X", "enemy", [TURN(), TURN(to="adjacent"), ST("hex", 2)],
-     "If the target or a foe beside it attacks this round, that attack strikes its own neighbour instead. "
-     "Apply 2 Hex.", cat=V, sub=MH, arch=MH,
+     "Costs 1 less once 2 heroes are in the Ordo. If the target or a foe beside it attacks this round, that attack "
+     "strikes its own neighbour instead. Apply 2 Hex.", cat=V, sub=MH, arch=MH, cost_less={"per": "heroes", "k": 0.5, "max": 1},
      flavour="Two mirrors facing. Nobody knows which one is real.",
      note="The Mirrorhex holds up two shards and the foes in the middle turn on each other.",
-     up={"text": "If the target or a foe beside it attacks this round, that attack strikes its own neighbour instead. "
-                 "Apply 4 Hex.", "fx": [TURN(), TURN(to="adjacent"), ST("hex", 4)]})
+     up={"text": "Costs 1 less once 2 heroes are in the Ordo. If the target or a foe beside it attacks this round, "
+                 "that attack strikes its own neighbour instead. Apply 4 Hex.", "fx": [TURN(), TURN(to="adjacent"), ST("hex", 4)]})
 card("mirrored_curse", "Mirrored Curse", 1, "X", "enemy", [ST("hex", 3), ST("hex", 3, to="adjacent", if_="handoff")],
      "Apply 3 Hex. Handoff: also apply 3 Hex to each foe beside the target.", cat=V, sub=MH, arch="mirrorhex+doomsayer",
      flavour="Curse one, and its reflections take it too.",
@@ -608,7 +612,4 @@ NEEDS = [
     "a self-damage Rite trigger carrying the HP lost; written on the play trigger against the card's target.",
     "the_witchs_glass: the brief redirects every ailment a foe lays on a hero, doubled; that needs an 'ailment laid' "
     "trigger. Written on ally_hit; 'consumed' must reset for each trigger.",
-    "the_final_hour, witching_hour ('Last in the Ordo'): a fizzled action returns before ordo_pos is raised "
-    "(resolve_player_action), so after any fizzle the true last card never reads 'last'. Raise ordo_pos for fizzles "
-    "too. 'last' is also always true for Echo replays.",
 ]

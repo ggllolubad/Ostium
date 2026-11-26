@@ -133,10 +133,12 @@ card("or_knot", "Knot", 0, "C", "self", [PRIME(4, if_="handoff"), STRESS(1)], "H
      flavour="A knot in red thread. Someone's fate just tightened.",
      note="Ink-red fingers pull a small knot tight.",
      arch=FB, up={"text": "Handoff: Prime 5. Gain 1 stress.", "fx": [PRIME(5, if_="handoff"), STRESS(1)]})
-card("or_bind_fate", "Bind Fate", 1, "C", "self", [PRIME(6)], "Retain. Prime 6.", cat=V, kw=["Retain"],
+card("or_bind_fate", "Bind Fate", 1, "C", "self", [PRIME(4, per="hand", k=1, max=8)],
+     "Retain. Prime 4, plus 1 per other card in your hand, at most 8.", cat=V, kw=["Retain"],
      flavour="Written now. Paid when it is needed.",
      note="The Fatebinder writes one red word on the wax tablet and holds it closed.",
-     arch=FB, up={"text": "Retain. Prime 8.", "fx": [PRIME(8)]})
+     arch=FB, up={"text": "Retain. Prime 5, plus 1 per other card in your hand, at most 10.",
+                  "fx": [PRIME(5, per="hand", k=1, max=10)]})
 card("or_guiding_word", "Guiding Word", 1, "C", "ally_other", [PRIME(4), ST("focus", 2)],
      "Prime 4. Another hero gains 2 Focus.", cat=V,
      flavour="Say it with me, and it lands.",
@@ -214,7 +216,7 @@ card("or_pendulum", "Pendulum", 2, "U", "enemy", [D(8), A(V, 1), D(4, if_="!vigo
      arch=CH, up={"text": "Echo. Deal 11. Apply 1 Void. If no vigour is left unspent this round, deal 4 more.",
                   "fx": [D(11), A(V, 1), D(4, if_="!vigour_left")]})
 card("or_borrowed_time", "Borrowed Time", 0, "U", "self", [EN(1), STRESS(7)], "Next round, +1 vigour. Gain 7 stress. Exhaust.",
-     cat=V, kw=["Exhaust"],
+     cat=V, kw=["Exhaust"], use=[1, 2, 3, 4],
      flavour="Time borrowed from the dark is paid back with interest.",
      note="The Oracle holds out the hourglass; a hand of shadow pours sand in.",
      arch=CH, up={"text": "Next round, +1 vigour. Gain 4 stress. Exhaust.", "fx": [EN(1), STRESS(4)]})
@@ -270,10 +272,11 @@ card("or_trade_on_tomorrow", "Trade on Tomorrow", 1, "U", "self",
 
 # ------------------------------------------------------------------ uncommon: Fatebinder
 card("or_tapestry", "Tapestry", 2, "U", "all_enemies", [D(3, per="prime_count", k=3)],
-     "Deal 3 to every foe, plus 3 per Prime spent this round.", cat=V,
+     "Costs 1 less once 2 heroes are in the Ordo. Deal 3 to every foe, plus 3 per Prime spent this round.", cat=V,
+     cost_less={"per": "heroes", "k": 0.5, "max": 1},
      flavour="Every thread in the weave runs through them.",
      note="A red tapestry of the company's deeds unrolls, and the foes are in it.",
-     arch=FB, up={"text": "Deal 4 to every foe, plus 4 per Prime spent this round.",
+     arch=FB, up={"text": "Costs 1 less once 2 heroes are in the Ordo. Deal 4 to every foe, plus 4 per Prime spent this round.",
                   "fx": [D(4, per="prime_count", k=4)]})
 card("or_red_ink", "Red Ink", 1, "U", "enemy", [PRIME(3, per="m.bleed", k=1)],
      "Choose a foe. Prime 3, plus 1 per Bleed on it.", cat=V,
@@ -336,11 +339,11 @@ card("or_dread_vision", "Dread Vision", 1, "U", "enemy", [A(V, 1, if_="t.hex"), 
 
 # ------------------------------------------------------------------ rare
 card("or_stop_time", "Stop Time", 3, "R", "all_enemies", [DELAY(), D(4), BANK(2, to="self")],
-     "Delay every foe. Deal 4 to each. Bank 2. Exhaust.",
-     cat=V, kw=["Exhaust"],
+     "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 4 to each. Bank 2. Exhaust.",
+     cat=V, kw=["Exhaust"], cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="Between one grain and the next, I walk among them.",
      note="Every foe hangs motionless in falling sand; the Oracle walks between.",
-     arch=CH, up={"text": "Delay every foe. Deal 6 to each. Bank 2. Exhaust.", "fx": [DELAY(), D(6), BANK(2, to="self")]})
+     arch=CH, up={"text": "Costs 1 less once 3 cards are in the Ordo. Delay every foe. Deal 6 to each. Bank 2. Exhaust.", "fx": [DELAY(), D(6), BANK(2, to="self")]})
 card("or_deja_vu", "Deja Vu", 1, "R", "enemy", [D(2, per="ordo_pos", k=2)],
      "Echo. Retain. Deal 2, plus 2 times this card's place in the Ordo.", cat=V, kw=["Echo", "Retain"],
      flavour="This has happened. It will happen again, harder.",
@@ -446,11 +449,12 @@ card("or_repetition", "Repetition", 2, "X", "all_enemies", [D(3, per="played", k
      note="A ring of afterimages of the Oracle's pointing hand surrounds the foes.",
      arch=CH, up={"text": "Echo. Deal 4 to every foe, plus 1 per other card you have played this round. "
                           "Apply 1 Void to every foe.", "fx": [D(4, per="played", k=1), A(V, 1)]})
-card("or_run_back_the_sand", "Run Back the Sand", 1, "X", "ally", [H(3), DRAW(1)],
-     "A hero heals 3. Next round, they draw 1 more.", cat=V, sub=CH,
+card("or_run_back_the_sand", "Run Back the Sand", 1, "X", "ally", [H(3), ADD("or_borrowed_time")],
+     "A hero heals 3. Next round, a Borrowed Time is added to their hand.", cat=V, sub=CH,
      flavour="A minute ago you were whole. Go back there.",
      note="Grains of sand rise from an ally's wound back into the hourglass.",
-     arch=CH, up={"text": "A hero heals 5. Next round, they draw 1 more.", "fx": [H(5), DRAW(1)]})
+     arch=CH, up={"text": "A hero heals 5. Next round, a Borrowed Time is added to their hand.",
+                  "fx": [H(5), ADD("or_borrowed_time")]})
 
 # ------------------------------------------------------------------ path: Augur
 card("or_read_the_signs", "Read the Signs", 1, "X", "enemy", [D(2), OMEN(2), OMEN(1, if_="m.attacking"), OMEN(1, if_="first")],
@@ -575,15 +579,15 @@ card("or_the_bone_pouch", "The Bone Pouch", 1, "L", "self", [OMEN(3)],
          "rite": {"on": "round_start", "fx": [OMEN(1), B(0, per="omen", k=1, max=8, to="all_allies"),
                                               W(0, per="omen", k=0.5, max=4, to="all_allies")]}})
 card("or_the_rubric", "The Rubric", 1, "L", "self", [PRIME(4)],
-     "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo. Exhaust.", cat=V,
+     "Prime 4. Rite: whenever you play a card, Prime 2, and 2 more if that card was played on a Handoff. Exhaust.", cat=V,
      kw=["Rite", "Exhaust"], sub=FB,
-     rite={"on": "play", "allies": True, "fx": [PRIME(1, per="ordo_pos", k=1)]},
+     rite={"on": "play", "allies": True, "fx": [PRIME(2), PRIME(2, if_="handoff")]},
      flavour="Every line I write in red, the world reads twice.",
      note="Red script crawls off the Fatebinder's arms onto every hero's weapon.",
      arch=FB,
-     up={"text": "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo, and "
+     up={"text": "Prime 4. Rite: whenever you play a card, Prime 2, and 2 more if that card was played on a Handoff, and "
                  "the most wounded hero gains 2 Block. Exhaust.",
-         "rite": {"on": "play", "allies": True, "fx": [PRIME(1, per="ordo_pos", k=1), B(2, to="lowest_ally")]}})
+         "rite": {"on": "play", "allies": True, "fx": [PRIME(2), PRIME(2, if_="handoff"), B(2, to="lowest_ally")]}})
 card("or_the_severed_thread", "The Severed Thread", 2, "L", "enemy",
      [D(6, per="prime_count", k=4), EXEC(0, per="dealt", if_="prime_count>=3")],
      "Deal 6, plus 4 per Prime spent this round. If 3 or more Primes have been spent this round, "
@@ -622,12 +626,5 @@ NEEDS = [
     "prime_count counts actions that spent Prime, so back-to-back Prime cards merge into one and a Block card spends "
     "Prime too. The Fatebinder (Red Letter, Tapestry, Severance, The Severed Thread) wants each Prime placed this "
     "round counted instead.",
-    "Accelerate: wanted 'the next card another hero plays costs 1 less' (Thrift on whichever hero acts next in the "
-    "Ordo); written as Thrift on a chosen hero.",
-    "The Rubric: a 'play' rite's context has no handoff, heroes_before or cost of the card that set it off; wanted "
-    "'whenever you play a card on a Handoff, Prime 3'. Written on the card's place in the Ordo.",
-    "Thrift given during the Ordo (Accelerate, Trade on Tomorrow, Stolen Hour): main.gd fixes a card's cost when it "
-    "enters the plan, so reordering the plan can put a Thrift before a card already priced in full, and "
-    "resolve_player_action then spends the Thrift without the discount. Recompute plan costs after a reorder.",
 ]
 

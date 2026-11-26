@@ -31,12 +31,12 @@ card("du_find_the_gap", "Find the Gap", 1, "K", "enemy", [ST("mark"), SELF("mome
      flavour="Every guard has a gap. The trade is seeing it first.",
      note="The Duelist's blade tip stops circling and settles on one foe's open flank.",
      up={"text": "Mark the target for 2 rounds. Gain 1 Momentum.", "fx": [ST("mark", 2), SELF("momentum", 1)]})
-card("du_quickstep", "Quickstep", 1, "K", "adjacent_ally", [SWAP(), SELF("momentum", 1), SELF("dodge", 1, if_="handoff")],
-     "Swap with an adjacent hero. Gain 1 Momentum. Handoff: Dodge the next hit this round.", use=ALL, sub=BD, arch=BD,
+card("du_quickstep", "Quickstep", 1, "K", "adjacent_ally", [SWAP(), SELF("momentum", 1), SELF("momentum", 1, if_="handoff")],
+     "Swap with an adjacent hero. Gain 1 Momentum. Handoff: gain 1 more.", use=ALL, sub=BD, arch=BD,
      flavour="Never where the blow lands. Always where the next one starts.",
      note="The Bladedancer spins past the Bulwark's door-shield, both blades trailing.",
-     up={"text": "Swap with an adjacent hero. Gain 1 Momentum. Dodge the next hit this round.",
-         "fx": [SWAP(), SELF("momentum", 1), SELF("dodge", 1)]})
+     up={"text": "Swap with an adjacent hero. Gain 1 Momentum. Handoff: gain 1 more. Dodge the next hit this round.",
+         "fx": [SWAP(), SELF("momentum", 1), SELF("momentum", 1, if_="handoff"), SELF("dodge", 1)]})
 card("du_drag_to_the_block", "Drag to the Block", 1, "K", "enemy", [PULL(1), ST("mark")],
      "Pull the target forward 1. Mark it.", hit=[3, 4], sub=EX, arch=EX,
      flavour="The condemned do not walk to the block. They are brought.",
@@ -91,12 +91,12 @@ card("du_two_step", "Two-Step", 1, "C", "enemy", [D(3, times=2), SELF("momentum"
      note="Two quick cuts cross on a foe's chest in the belfry's light.",
      up={"text": "Deal 4 twice. Follow-up: gain 1 Momentum.",
          "fx": [D(4, times=2), SELF("momentum", 1, if_="same_target")]})
-card("du_light_feet", "Light Feet", 1, "C", "self", [SELF("dodge", 1), SELF("momentum", 2), SELF("momentum", 1, if_="first")],
-     "Dodge the next hit this round. Gain 2 Momentum. First in the Ordo: gain 1 more.", use=ALL, arch=BD,
+card("du_light_feet", "Light Feet", 1, "C", "self", [SELF("dodge", 1), SELF("momentum", 1), SELF("momentum", 1, if_="first")],
+     "Dodge the next hit this round. Gain 1 Momentum. First in the Ordo: gain 1 more.", use=ALL, arch=BD,
      flavour="The floor is wet, the foe is heavy, and neither matters to the feet.",
      note="The Duelist skips back from a falling boat hook on the balls of the feet.",
-     up={"text": "Dodge the next 2 hits this round. Gain 2 Momentum. First in the Ordo: gain 1 more.",
-         "fx": [SELF("dodge", 2), SELF("momentum", 2), SELF("momentum", 1, if_="first")]})
+     up={"text": "Dodge the next 2 hits this round. Gain 1 Momentum. First in the Ordo: gain 2 more.",
+         "fx": [SELF("dodge", 2), SELF("momentum", 1), SELF("momentum", 2, if_="first")]})
 card("du_turn_of_the_wrist", "Turn of the Wrist", 1, "C", "enemy", [D(1, per="momentum", k=2, max=13)],
      "Deal 1, plus 2 per Momentum (not spent), up to 13.", arch=BD,
      flavour="The cut is in the wrist. The wrist is in the rhythm.",
@@ -114,11 +114,11 @@ card("du_arc_cut", "Arc Cut", 1, "C", "enemy", [D(5), A(L, 1)],
      up={"text": "Deal 6. Apply 2 Lightning.", "fx": [D(6), A(L, 2)]})
 
 # ------------------------------------------------------------------ common: Executioner
-card("du_pronounce_sentence", "Pronounce Sentence", 0, "C", "enemy", [ST("mark")],
-     "Mark the target.", hit=ALL, arch=EX,
+card("du_pronounce_sentence", "Pronounce Sentence", 0, "C", "enemy", [ST("mark"), PRIME(1)],
+     "Mark the target. Prime 1.", hit=ALL, arch=EX,
      flavour="The sentence is spoken once. It does not need repeating.",
      note="The Executioner points the square-tipped sword down the nave at one foe.",
-     up={"text": "Mark the target for 2 rounds.", "fx": [ST("mark", 2)]})
+     up={"text": "Mark the target for 2 rounds. Prime 1.", "fx": [ST("mark", 2), PRIME(1)]})
 card("du_measure_the_neck", "Measure the Neck", 1, "C", "enemy",
      [D(2, per="t.mark", k=3, max=5), D(3, if_="t.moved")],
      "Deal 2, or 5 if the target is Marked. If it was moved this round, hit it again for 3.",
@@ -223,11 +223,14 @@ card("du_second_intention", "Second Intention", 1, "C", "enemy",
          "fx": [D(5), SELF("momentum", 1), SELF("momentum", 1, if_="handoff")]})
 
 # ------------------------------------------------------------------ uncommon: Bladedancer
-card("du_closing_whirl", "Closing Whirl", 2, "U", "all_enemies", [FIN(), D(2, per="consumed", k=2, if_="t.rank<=2")],
-     "Finisher. Deal 2, plus 2 per Momentum spent, to each foe in ranks 1 and 2.", hit=ALL, kw=["Finisher"], arch=BD,
+card("du_closing_whirl", "Closing Whirl", 2, "U", "all_enemies", [FIN(), D(1, per="consumed", k=2, if_="t.rank<=2")],
+     "Costs 1 less if you have played 2 or more cards this round. Finisher. Deal 1, plus 2 per Momentum spent, to "
+     "each foe in ranks 1 and 2.", hit=ALL, kw=["Finisher"], arch=BD, cost_less={"per": "played", "k": 0.5, "max": 1},
      flavour="Every step of the dance was the windup. This is the swing.",
      note="The Bladedancer turns a full circle at the front of the nave, both blades out.",
-     up={"text": "Finisher. Deal 2, plus 2 per Momentum spent, to each foe in ranks 1 and 2.", "cost": 1})
+     up={"text": "Costs 1 less if you have played 2 or more cards this round. Finisher. Deal 3, plus 2 per Momentum "
+                 "spent, to each foe in ranks 1 and 2.",
+         "fx": [FIN(), D(3, per="consumed", k=2, if_="t.rank<=2")]})
 card("du_quick_hands", "Quick Hands", 1, "U", "enemy", [D(1, per="spent_before", k=1, times=2, max=6)],
      "Twice: deal 1, plus 1 per vigour spent before it this round, up to 6.", arch=BD + "+alchemist_might",
      flavour="Two cuts in the time of one. Three, when the blood is up.",
@@ -271,11 +274,14 @@ card("du_condemned", "Condemned", 1, "U", "all_enemies", [ST("mark", 2, if_="t.h
      note="The Executioner walks the line and taps each bleeding foe with the flat of the blade.",
      up={"text": "Mark every foe below half HP for 2 rounds. Gain 1 Momentum.",
          "fx": [ST("mark", 2, if_="t.hp_pct<50"), SELF("momentum", 1)]})
-card("du_second_stroke", "Second Stroke", 2, "U", "enemy", [D(6, per="t.missing_hp", k=0.5, max=20)],
-     "Deal 6, plus 1 per 2 HP the target is missing, up to 20.", arch=EX,
+card("du_second_stroke", "Second Stroke", 2, "U", "enemy", [D(5, per="t.missing_hp", k=0.5, max=16)],
+     "Costs 1 less if 2 or more attacks are already in the Ordo. Deal 5, plus 1 per 2 HP the target is missing, up "
+     "to 16.", arch=EX, cost_less={"per": "attacks", "k": 0.5, "max": 1},
      flavour="A bad headsman needs a second stroke. A good one plans for it.",
      note="The heading sword falls again on a foe the company has already broken.",
-     up={"text": "Deal 6, plus 1 per 2 HP the target is missing, up to 20.", "cost": 1})
+     up={"text": "Costs 1 less if 2 or more attacks are already in the Ordo. Deal 7, plus 1 per 2 HP the target is "
+                 "missing, up to 20.",
+         "fx": [D(7, per="t.missing_hp", k=0.5, max=20)]})
 card("du_next_in_line", "Next in Line", 1, "U", "enemy", [D(4), SELF("thrift", 1, if_="killed")],
      "Deal 4. If it kills, gain 1 Thrift.", arch=EX,
      flavour="One down. The block is cleaned. Next.",
@@ -420,14 +426,15 @@ card("du_oath_of_the_salle", "Oath of the Salle", 1, "R", "self", [FIN(), SELF("
      note="The Duelist kisses the swept hilt, and the scorch lines on the sword hand glow.",
      up={"text": "Finisher. Gain 1 Might, plus 1 per 2 Momentum spent. Exhaust.",
          "fx": [FIN(), SELF("might", 1, per="consumed", k=0.5)]})
-card("du_fall_back_in_guard", "Fall Back in Guard", 1, "R", "self", [RET(1), SELF("dodge", 1), ST("thrift", 1, to="in_front")],
-     "Retreat 1. Dodge the next hit this round. The hero in front of you then gains 1 Thrift.", use=[1, 2],
+card("du_fall_back_in_guard", "Fall Back in Guard", 1, "R", "self", [RET(1), SELF("dodge", 1), ADD("du_feather_cut", to="in_front")],
+     "Retreat 1. Dodge the next hit this round. Then put a Feather Cut into the next hand of the hero in front of "
+     "you.", use=[1, 2],
      arch="core",
      flavour="Retreat is a step of the dance. The blade never leaves the line.",
      note="The Duelist backs up the stair, parrying two blows on the way.",
-     up={"text": "Retreat 1. Dodge the next 2 hits this round. The hero in front of you then gains 1 Thrift and 4 "
-                 "Block.",
-         "fx": [RET(1), SELF("dodge", 2), ST("thrift", 1, to="in_front"), B(4, to="in_front")]})
+     up={"text": "Retreat 1. Dodge the next 2 hits this round. The hero in front of you then gains 4 Block, and a "
+                 "Feather Cut in their next hand.",
+         "fx": [RET(1), SELF("dodge", 2), B(4, to="in_front"), ADD("du_feather_cut", to="in_front")]})
 card("du_killing_thrust", "Killing Thrust", 2, "R", "enemy",
      [FIN(), D(3, per="consumed", k=3), EXEC(6, if_="t.mark>0")],
      "Finisher. Deal 3, plus 3 per Momentum spent. Then Execute 6 if the target is Marked.",
@@ -649,6 +656,8 @@ NEEDS = [
     "Needs a 'hit by any hero' rite trigger and a way to name one foe for a rite.",
     "du_red_tide: the brief's 'Bleed stops falling' is a second rite (round_end) beside the kill rite; and the dying "
     "foe's Bleed goes to every foe, as there is no 'neighbours of the dead foe' target.",
+    "budget.py prices neither cost_less nor Echo. Second Stroke and Closing Whirl (cost_less) had their numbers "
+    "trimmed to leave room for the discount.",
     "du_fall_back_in_guard: wanted 'the hero who takes your place'. Written as the hero in front of you after the "
     "Retreat (to='in_front'), which is the same hero whenever the Retreat lands.",
     "A 'cost' read only sees Thrift's discount (nothing raises a cost), so no Duelist card reads 'cost'. Wanted: a "

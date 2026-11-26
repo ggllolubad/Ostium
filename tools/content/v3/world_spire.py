@@ -38,11 +38,12 @@ card("w_spire_second_hand", "Second Hand", 0, "W", "self",
          "fx": [PRIME(2, per="ordo_pos", k=1, max=6)]})
 card("w_spire_midnight", "Midnight", 2, "W", "all_enemies",
      [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile"), D(0, per="reactions", k=2, max=8)],
-     "Every foe: apply 1 Frost, then 1 Volatile Lightning. Then deal 2 to every foe per Conjunction set off this round "
-     "(max 8).", cat="lightning", world=W, arch="world",
+     "Costs 1 less if 3 or more cards are already in the Ordo. Every foe: apply 1 Frost, then 1 Volatile Lightning. Then deal 2 to every foe per Conjunction set off this round "
+     "(max 8).", cat="lightning", world=W, arch="world", cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="When it strikes twelve, the world stops. It is one minute to.",
      note="The great clock's hands meet at twelve, and aurora light locks every foe in the hall in place.",
-     up={"text": "Every foe: apply 1 Frost, then 1 Volatile Lightning. Then deal 3 to every foe per Conjunction set off "
+     up={"text": "Costs 1 less if 3 or more cards are already in the Ordo. Every foe: apply 1 Frost, then 1 Volatile "
+                 "Lightning. Then deal 3 to every foe per Conjunction set off "
                  "this round (max 12).",
          "fx": [A("frost", 1, attr="stable"), A("lightning", 1, attr="volatile"), D(0, per="reactions", k=3, max=12)]})
 
