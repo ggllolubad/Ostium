@@ -104,6 +104,9 @@ static func box(bg: Color, border: Color, w: int, shadow := false) -> StyleBoxFl
 	b.bg_color = bg
 	b.border_color = border
 	b.set_border_width_all(w)
+	# a wider feather so edges stay smooth when a card is rotated and scaled down in the hand fan
+	b.anti_aliasing = true
+	b.anti_aliasing_size = 1.6
 	b.content_margin_left = 6
 	b.content_margin_right = 6
 	b.content_margin_top = 4

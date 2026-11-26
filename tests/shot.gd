@@ -63,7 +63,7 @@ func _initialize() -> void:
 		m.hub.visible = false
 		for k in 20:
 			await process_frame
-		if mode == "combat" or mode == "target" or mode == "detail" or mode == "ordo":
+		if mode == "combat" or mode == "target" or mode == "detail" or mode == "ordo" or mode == "ordolong":
 			var h = m.s.heroes
 			var e = m.s.enemies
 			m.set_active(h[2].id)
@@ -75,7 +75,15 @@ func _initialize() -> void:
 			if not m.targeting.is_empty():
 				m.on_unit_clicked(m.valid_targets[0])
 			m.set_active(h[1].id)
-			if mode == "ordo":
+			if mode == "ordolong":
+				# a long chain: the strip must fit it without running into the foes
+				while m.plan.size() < 11:
+					m.plan.append(m.plan[m.plan.size() % 2].duplicate())
+				m.refresh_all()
+				for k in 5:
+					await process_frame
+			if mode == "ordo" or mode == "ordolong":
+				m.ordo_strip = null   # the test has no mouse resting on the strip; keep the view open for the shot
 				m._show_ordo_full()
 				for k in 10:
 					await process_frame

@@ -98,6 +98,21 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(art)
+	# an anti-aliased ink frame over the art's edge: a rotated texture's own edge has no anti-aliasing and stair-steps
+	var af := Panel.new()
+	var afs := StyleBoxFlat.new()
+	afs.draw_center = false
+	afs.border_color = UiStyle.INK
+	afs.set_border_width_all(2)
+	afs.anti_aliasing_size = 1.6
+	afs.expand_margin_left = 1
+	afs.expand_margin_right = 1
+	afs.expand_margin_top = 1
+	afs.expand_margin_bottom = 1
+	af.add_theme_stylebox_override("panel", afs)
+	af.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	af.set_anchors_preset(Control.PRESET_FULL_RECT)
+	art.add_child(af)
 	var attr: String = c.get("attr", "")
 	var cat_name: String = "Physical" if c.cat == "physical" else (("Attuned" + (" (" + elem.capitalize() + ")" if elem != "" else "")) if c.cat == "attuned" else c.cat.capitalize())
 	var line := cat_name + ((" · " + ("steadfast" if attr == "stable" else "volatile")) if attr != "" else "")

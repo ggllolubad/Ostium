@@ -331,11 +331,7 @@ func _layout_overlay(tl: Panel) -> void:
 		l.add_theme_constant_override("outline_size", 5)
 	tl.position = Vector2(16, 36)
 	tl.size = Vector2(1568, 78)
-	var tsb := UiStyle.box(Color(UiStyle.PARCH_L, 0.9), UiStyle.INK, 2)
-	tsb.shadow_color = Color(0, 0, 0, 0.45)
-	tsb.shadow_offset = Vector2(0, 4)
-	tsb.shadow_size = 6
-	tl.add_theme_stylebox_override("panel", tsb)
+	tl.add_theme_stylebox_override("panel", UiStyle.tex_box("btn_parch", 14, Vector2(4, 4)))
 	var sc: ScrollContainer = timeline_plan.get_parent()
 	sc.position = Vector2(104, 8)
 	sc.size = Vector2(840, 62)
@@ -714,6 +710,33 @@ func _rebuild_timeline() -> void:
 	_clear(timeline_plan)
 	_clear(timeline_enemy)
 	var ordered: Array = preview.get("ordered", plan)
+	# fit both chains inside the strip: shrink chips before anything can run past the divider or off the edge
+	var np := plan.size()
+	var nf: int = s.enemy_queue.size()
+	var room := 1568.0 - 104.0 - 74.0 - 16.0
+	var gap := 8.0
+	var pw := 176.0
+	var fw := 176.0
+	# the player's chips give way first (down to art and numeral), then the foes' (down to a short title), then both
+	if np * (pw + gap) + nf * (fw + gap) > room:
+		pw = max(96.0, floor((room - nf * (fw + gap)) / max(1, np)) - gap)
+	if np * (pw + gap) + nf * (fw + gap) > room:
+		fw = max(130.0, floor((room - np * (pw + gap)) / max(1, nf)) - gap)
+	var need: float = np * (pw + gap) + nf * (fw + gap)
+	if need > room:
+		var k: float = room / need
+		pw = floor(pw * k)
+		fw = floor(fw * k)
+	timeline_plan.add_theme_constant_override("separation", int(gap))
+	timeline_enemy.add_theme_constant_override("separation", int(gap))
+	var plan_w: float = max(400.0, np * (pw + gap))
+	var sc: ScrollContainer = timeline_plan.get_parent()
+	sc.size = Vector2(plan_w, 62)
+	var foe_x: float = 1568.0 - 16.0 - nf * (fw + gap)
+	timeline_enemy.position = Vector2(foe_x, 8)
+	for c in ordo_strip.get_children() if ordo_strip != null else []:
+		if c is Label and c.text.begins_with("then"):
+			c.position = Vector2(foe_x - 66, 14)
 	for i in plan.size():
 		var a: Dictionary = plan[i]
 		var h := Combat.find(s, a.hero)
@@ -738,7 +761,7 @@ func _rebuild_timeline() -> void:
 			sub = main_fx if sub == "self" else sub + " · " + main_fx.split(" ", true, 1)[-1]
 		var slot := UiSlot.new()
 		var nm: String = c.name + ((" (X=%d)" % a.x) if c.cost < 0 else "")
-		slot.setup(self, i, true, nm, sub, _roman(i + 1), Color(h.get("color", "ecdfc2")), UiStyle.INK, why)
+		slot.setup(self, i, true, nm, sub, _roman(i + 1), Color(h.get("color", "ecdfc2")), UiStyle.INK, why, pw, "res://assets/art/cards/%s.jpg" % c.art)
 		timeline_plan.add_child(slot)
 	if plan.is_empty():
 		var e := UiStyle.label("click a card, then its target, to begin the Ordo", 15, UiStyle.font_it, UiStyle.BROWN)
@@ -760,7 +783,7 @@ func _rebuild_timeline() -> void:
 			sub += " → " + tgt.name.split(" ")[-1]
 		var kind_col := {"attack": UiStyle.RED, "heal": UiStyle.GREEN, "debuff": UiStyle.VIOLET, "defend": UiStyle.BLUE}
 		var slot := UiSlot.new()
-		slot.setup(self, i, false, it.name, sub, _roman(i + 1), kind_col.get(it.kind, UiStyle.RED), UiStyle.RED_D, "")
+		slot.setup(self, i, false, it.name, sub, _roman(i + 1), kind_col.get(it.kind, UiStyle.RED), UiStyle.RED_D, "", fw)
 		slot.tooltip_text = "%s: %s" % [it.name, it.text]
 		timeline_enemy.add_child(slot)
 
@@ -1002,82 +1025,80 @@ func _main_effect(i: int) -> String:
 	return "%s %s" % [who, what]
 
 # ------------------------------------------------------------------ the full Ordo, shown while the strip is hovered
-var ordo_full: PanelContainer = null
+var ordo_full: Control = null
 var ordo_strip: Panel = null
 
 ## Hovering the Ordo strip opens the whole plan as full cards in order, each with exactly what it does underneath,
 ## then the foes' turn (Cole, 2026-11-25).
 func _show_ordo_full() -> void:
+	# Hovering the Ordo strip drops the queued cards down from it, enlarged, in play order:
+	# no parchment sheet, just the cards with their order, their target and any fizzle.
 	if plan.is_empty() or resolving:
 		return
 	_hide_ordo_full()
-	ordo_full = PanelContainer.new()
-	var sb := UiStyle.box(Color(UiStyle.PARCH_L, 0.97), UiStyle.INK, 3)
-	sb.shadow_color = Color(0, 0, 0, 0.5)
-	sb.shadow_size = 10
-	sb.content_margin_left = 14
-	sb.content_margin_right = 14
-	sb.content_margin_top = 10
-	sb.content_margin_bottom = 10
-	ordo_full.add_theme_stylebox_override("panel", sb)
+	var k := 1.06
+	var cw := UiCard.W * k
+	var ch := UiCard.H * k
+	var gap := 16.0
+	var n := plan.size()
+	var total := n * cw + (n - 1) * gap
+	var fit: float = min(1.0, 1540.0 / total)
+	k *= fit
+	cw *= fit
+	ch *= fit
+	gap *= fit
+	total = n * cw + (n - 1) * gap
+	ordo_full = Control.new()
 	ordo_full.z_index = 50
 	ordo_full.mouse_filter = Control.MOUSE_FILTER_STOP
-	ordo_full.position = Vector2(16, 116)
+	ordo_full.position = Vector2((1600.0 - total) / 2.0, 112)
+	ordo_full.size = Vector2(total, ch + 40)
 	add_child(ordo_full)
-	var col := VBoxContainer.new()
-	col.add_theme_constant_override("separation", 6)
-	ordo_full.add_child(col)
-	col.add_child(UiStyle.label("The Ordo, in order", 18, UiStyle.font_sc, UiStyle.RED_D))
-	var sc := ScrollContainer.new()
-	sc.custom_minimum_size = Vector2(min(1536.0, plan.size() * (UiCard.W * 0.78 + 18.0) + 280.0), 412)
-	sc.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	col.add_child(sc)
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10)
-	sc.add_child(row)
-	var k := 0.78
-	for i in plan.size():
+	for i in n:
 		var a: Dictionary = plan[i]
-		var step := VBoxContainer.new()
-		step.add_theme_constant_override("separation", 2)
-		step.custom_minimum_size = Vector2(UiCard.W * k + 8, 0)
 		var h := Combat.find(s, a.hero)
 		var t := Combat.find(s, a.get("target", -1))
-		var head := UiStyle.label("%s. %s%s" % [_roman(i + 1), h.get("name", "?"), (" → " + t.name) if not t.is_empty() and t.id != h.get("id", -2) else ""], 14, UiStyle.font_sc)
-		head.clip_text = true
-		head.custom_minimum_size = Vector2(UiCard.W * k, 0)
-		step.add_child(head)
-		var holder := Control.new()
-		holder.custom_minimum_size = Vector2(UiCard.W * k, UiCard.H * k)
+		var slot := Control.new()
+		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var final_pos := Vector2(i * (cw + gap), 30)
+		slot.position = final_pos - Vector2(0, 70)
+		slot.modulate = Color(1, 1, 1, 0)
+		ordo_full.add_child(slot)
 		var cv := UiCard.new()
 		cv.setup(self, a.hero, -1, a.card)
 		cv.scale = Vector2(k, k)
 		cv.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		holder.add_child(cv)
-		step.add_child(holder)
-		var r := UiStyle.rich(13)
-		r.fit_content = true
-		r.custom_minimum_size = Vector2(UiCard.W * k, 0)
-		var before: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
-		var after: Dictionary = Combat.simulate(s, plan.slice(0, i + 1), false).state
-		var lines := _diff_lines(before, after)
+		slot.add_child(cv)
+		# order and target on a small inked tag across the card's top edge
 		var oi: int = preview.get("ordered", plan).find(a)
 		var why: String = preview.reasons[oi] if oi >= 0 and oi < preview.reasons.size() else ""
-		r.text = ("[color=#9c3d2b]Fizzles: %s[/color]" % why) if why != "" else ("\n".join(lines) if not lines.is_empty() else "[i]no visible change[/i]")
-		step.add_child(r)
-		row.add_child(step)
-	# then the foes
-	var foes := VBoxContainer.new()
-	foes.custom_minimum_size = Vector2(260, 0)
-	foes.add_child(UiStyle.label("Then the foes", 15, UiStyle.font_sc, UiStyle.RED_D))
-	var fr := UiStyle.rich(13)
-	fr.fit_content = true
-	fr.custom_minimum_size = Vector2(260, 0)
-	var mine: Dictionary = Combat.simulate(s, plan, false).state
-	var fl := _diff_lines(mine, preview.state)
-	fr.text = "\n".join(fl) if not fl.is_empty() else "[i]nothing lands[/i]"
-	foes.add_child(fr)
-	row.add_child(foes)
+		var tag := PanelContainer.new()
+		tag.add_theme_stylebox_override("panel", UiStyle.tex_box("slip_sel" if why != "" else "btn_parch", 10, Vector2(8, 2)))
+		tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tag.position = Vector2(-4, -26)
+		tag.custom_minimum_size = Vector2(cw + 8, 0)
+		var who := String(h.get("name", "?"))
+		if not t.is_empty() and t.id != h.get("id", -2):
+			who += " → " + String(t.name)
+		var tl := UiStyle.label("%s · %s" % [_roman(i + 1), who], 14, UiStyle.font_sc, UiStyle.RED_D if why != "" else UiStyle.INK)
+		tl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tl.clip_text = true
+		tag.add_child(tl)
+		slot.add_child(tag)
+		if why != "":
+			var fz := PanelContainer.new()
+			fz.add_theme_stylebox_override("panel", UiStyle.tex_box("slip_sel", 10, Vector2(8, 3)))
+			fz.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			fz.position = Vector2(-4, ch + 4)
+			fz.custom_minimum_size = Vector2(cw + 8, 0)
+			var fl := UiStyle.label("Fizzles: %s" % why, 13, UiStyle.font_it, UiStyle.RED_D)
+			fl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			fl.custom_minimum_size = Vector2(cw - 8, 0)
+			fz.add_child(fl)
+			slot.add_child(fz)
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(slot, "position", final_pos, 0.22).set_delay(i * 0.04).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(slot, "modulate", Color.WHITE, 0.16).set_delay(i * 0.04)
 	slot_detail.visible = false
 
 func _hide_ordo_full() -> void:
