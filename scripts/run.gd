@@ -91,7 +91,7 @@ static func _migrate_run(v: Dictionary) -> Dictionary:
 static func class_unlocked(key: String) -> bool:
 	return key in ["bulwark", "duelist", "elementalist"] or meta.unlocked.has(key) or playtest_all()
 
-## Playtest switch (hub button): every calling counts as unlocked. Stored in settings, not in the save.
+## Debug switch (doors screen): every calling unlocked and every door open. Stored in settings, not in the save.
 static func playtest_all() -> bool:
 	return bool(UiStyle.settings.get("playtest_all", false))
 
@@ -100,7 +100,10 @@ static func playtest_all() -> bool:
 static func door_open(w: String) -> bool:
 	return all_cleared() or meta.get("doors", ["drowned"]).has(w)
 
+## True when every world is cleared, or while the debug switch is on (all doors open, Cast Lots allowed).
 static func all_cleared() -> bool:
+	if playtest_all():
+		return true
 	for k in Data.STORY.order:
 		if not meta.get("cleared", []).has(k):
 			return false

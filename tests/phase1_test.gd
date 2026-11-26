@@ -81,6 +81,10 @@ func _versions() -> void:
 	ok(not Run.class_unlocked("vessel") and Run.class_unlocked("bulwark"), "playtest off: locked callings stay locked")
 	UiStyle.settings["playtest_all"] = true
 	ok(Data.CLASS_ORDER.all(func(k): return Run.class_unlocked(k)), "playtest on: every calling is unlocked")
+	ok(Data.STORY.order.all(func(w): return Run.door_open(w)), "debug on: every door is open")
+	UiStyle.settings["playtest_all"] = false
+	ok(not Run.door_open(Data.STORY.order[Data.STORY.order.size() - 1]) or Run.meta.cleared.size() == Data.STORY.order.size(), "debug off: the last door is sealed again")
+	UiStyle.settings["playtest_all"] = true
 	UiStyle.settings.erase("playtest_all")
 	# settings go through the same path
 	UiStyle.settings["probe"] = 7

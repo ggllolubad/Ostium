@@ -215,8 +215,8 @@ func show_hub() -> void:
 	else:
 		_btn("Theme: %s" % ("dark" if UiStyle.dark else "light"), Vector2(1010, 808), Vector2(480, 46), _toggle_theme)
 	_btn("Back to the garth", Vector2(1010, 864), Vector2(480, 44), func(): main._show_menu())
-	_btn("Playtest: all callings %s" % ("on" if Run.playtest_all() else "off"), Vector2(1010, 916), Vector2(480, 40), _toggle_playtest, null,
-		"Unlock every calling for testing. Saved with your settings; turn it off to play the unlocks normally.")
+	_btn("Debug: unlock all %s" % ("on" if Run.playtest_all() else "off"), Vector2(1010, 916), Vector2(480, 40), _toggle_playtest, null,
+		"Debug mode: every calling unlocked and every world's door open. Saved with your settings; turn it off to play the unlocks normally. Your real progress is untouched.")
 	_toast(msg)
 	msg = ""
 
