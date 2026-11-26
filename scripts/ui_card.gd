@@ -86,14 +86,20 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	top.add_child(pad)
 	v.add_child(top)
 	var art := TextureRect.new()
-	art.texture = _art(c.art, c.cat)
+	# Attuned cards show the element their hero is attuned to now: art "<art>_<element>.jpg" when it exists,
+	# else the plain art (drawn in the Elementalist's starting element).
+	var elem := _attuned_elem(m, hid) if c.cat == "attuned" else ""
+	var art_key: String = c.art
+	if elem != "" and ResourceLoader.exists("res://assets/art/cards/%s_%s.jpg" % [c.art, elem]):
+		art_key = "%s_%s" % [c.art, elem]
+	art.texture = _art(art_key, c.cat)
 	art.custom_minimum_size = Vector2(W - 18, 86)
 	art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(art)
 	var attr: String = c.get("attr", "")
-	var cat_name: String = "Physical" if c.cat == "physical" else ("Attuned" if c.cat == "attuned" else c.cat.capitalize())
+	var cat_name: String = "Physical" if c.cat == "physical" else (("Attuned" + (" (" + elem.capitalize() + ")" if elem != "" else "")) if c.cat == "attuned" else c.cat.capitalize())
 	var line := cat_name + ((" · " + ("steadfast" if attr == "stable" else "volatile")) if attr != "" else "")
 	if c.has("sub"):
 		line = c.sub.capitalize().replace("_", " ") + " · " + line
@@ -149,6 +155,18 @@ func _kw_off(_meta: Variant) -> void:
 	if _kw_tip != null and is_instance_valid(_kw_tip):
 		_kw_tip.queue_free()
 	_kw_tip = null
+
+## The element a hero is attuned to in the current fight ("" outside a fight or for no hero).
+static func _attuned_elem(m: Node, hid: int) -> String:
+	if m == null or hid < 0 or not ("s" in m):
+		return ""
+	var st: Dictionary = m.s
+	if st.is_empty():
+		return ""
+	var u := Combat.find(st, hid)
+	if u.is_empty():
+		return ""
+	return Data.ELEMENTS[int(u.get("attuned", 0)) % Data.ELEMENTS.size()]
 
 static func _art(key: String, cat := "physical") -> Texture2D:
 	if not _art_cache.has(key):
