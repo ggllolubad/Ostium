@@ -61,7 +61,7 @@ jobs:
         run: |
           gh release delete playtest-latest --cleanup-tag --yes || true
           gh release create playtest-latest dist/Ostium_playtest.zip \
-            --target "$GITHUB_SHA" --prerelease \
+            --target "$GITHUB_SHA" --latest \
             --title "Ostium playtest (latest)" \
             --notes "Built automatically from living-ink at ${GITHUB_SHA::8} on $(date -u '+%Y-%m-%d %H:%M UTC'). Unzip and run Ostium.exe. Debug mode: the 'Debug: unlock all' button on the doors screen."
  
