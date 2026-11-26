@@ -6,9 +6,10 @@ const OB = require('./objects');
 const { O } = require('./objects2');
 const O3 = require('./objects3').O;
 const O4 = require('./objects4').O;
+const O5 = require('./objects5').O;
 (async () => {
   const out = process.argv[2], course = process.argv[3] || 'physical';
-  const all = Object.assign({ flask: OB.flask, hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7 }, o)) }, O, O3, O4);
+  const all = Object.assign({ flask: OB.flask, hourglass: OB.hourglass, mirror: OB.mirror, bell: OB.bell, shield: (f, o) => OB.shield(f, Object.assign({ s: 1.7 }, o)) }, O, O3, O4, O5);
   const only = process.argv[4] ? process.argv[4].split(',') : null;
   const keys = Object.keys(all).filter(k => !only || only.includes(k));
   const sc = +(process.argv[5] || 0.5), cw = Math.round(600 * sc), ch = Math.round(600 * sc), cols = +(process.argv[6] || 7), rows = Math.ceil(keys.length / cols);

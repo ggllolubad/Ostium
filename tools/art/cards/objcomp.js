@@ -21,7 +21,7 @@ const LIB = Object.assign({},
   O2, O3, O4, O5);
 LIB.cauldron = undefined; delete LIB.cauldron; delete LIB.hymnal;
 // per-object defaults: tilt, base scale, long (crossed when counted), allowed water (L15)
-const ANG = { phial: -0.55, feather: -0.6, sword: -0.35, rapier: -0.35, knife: -0.4, needle: -0.5, key: -0.5, brush: -0.6, bone: -0.35, hammer: -0.25, stinger: -0.6, tongs: -0.35, coalpan: -0.1, splint: -0.3, scroll: -0.12, cord: 1.3, shard: 0.15, handbell: -0.35, scourge: 0.1 };
+const ANG = { handbell: 0, phial: -0.55, feather: -0.6, sword: -0.35, rapier: -0.35, knife: -0.4, needle: -0.5, key: -0.5, brush: -0.6, bone: -0.35, hammer: -0.25, stinger: -0.6, tongs: -0.35, coalpan: -0.1, splint: -0.3, scroll: -0.12, cord: 1.3, shard: 0.15, handbell: -0.35, scourge: 0.1 };
 const SCALE = { ring: 1.0, coins: 1.0, feather: 1.05, signet: 1.0, knife: 1.2, needle: 1.15, stinger: 1.1, bone: 1.1, key: 1.05, vial: 1.15, phial: 1.15, jar: 1.15, skull: 1.05, cup: 1.05, shard: 1.15, poppet: 1.05, bread: 1.05, boot: 1.05 };
 const LONG = new Set(['sword', 'rapier', 'brush', 'feather', 'knife', 'needle', 'key', 'bone', 'rod', 'hammer', 'tongs', 'coalpan', 'splint', 'shard', 'stinger', 'candle', 'scourge']);
 const WATER_OK = new Set(['anchor', 'skull', 'bell', 'keg']);   // L15: heavy things only
@@ -29,7 +29,7 @@ const WATER_OK = new Set(['anchor', 'skull', 'bell', 'keg']);   // L15: heavy th
 // ==== picking (L11, L23): the card name's noun first, then the audit table, then word scoring
 const NOUNS = [
   // forced names first: card names whose noun is not the object, or would hit a wrong word below
-  [/wax the mouth/, 'vial'], [/crossed glass/, 'mirror'], [/^bind$/, 'bound'], [/ink band/, 'inkarm'], [/steady hand/, 'vial'], [/wheel turns/, 'hourglass'], [/lens glare/, 'spectacles'],
+  [/wax the mouth/, 'jar'], [/crossed glass/, 'mirror'], [/^bind$/, 'bound'], [/ink band/, 'inkarm'], [/steady hand/, 'vial'], [/wheel turns/, 'hourglass'], [/lens glare/, 'spectacles'],
   [/handbell/, 'handbell'], [/\bbells?\b|knell|toll|tailors/, 'bell'], [/phial/, 'phial'], [/\bflasks?\b|\bopus\b/, 'flask'], [/\bdraught|tincture|bottle|tonic|elixir|simple\b/, 'vial'],
   [/\bjar\b|\bpot\b|firepot/, 'jar'], [/powder|\bkeg\b|blast/, 'keg'], [/hourglass|\bsand\b/, 'hourglass'], [/\bclock|\bwatch\b|second hand|midnight|\bhour\b/, 'clock'],
   [/mirror|\bglass\b/, 'mirror'], [/shard|splinter/, 'shard'], [/bandage|\blinen\b|dressing/, 'bandage'], [/\bwound|festering|\bsores?\b/, 'wrapped'], [/stitch|sewn|suture|barber/, 'suture'],
@@ -53,13 +53,13 @@ const OBJ_BY_CLS = { alchemist: 'vial', oracle: 'hourglass', hexweaver: 'poppet'
 const OBJ_BY_COURSE = { physical: 'boot', fire: 'brazier', frost: 'bandage', water: 'anchor', toxin: 'herbs', void: 'candle', lightning: 'rod', attuned: 'inkpot' };
 // o.device (a per-card override) wins, then the name's noun, then the audit table, then the calling or course
 // L12 in a full run: past 20 cards an object hands its extra cards to its family, in turn (an override, so L23 allows it)
-const FAMILY = { palm: ['offering', 'chalice', 'ewer'], offering: ['chalice', 'palm', 'initial'], ewer: ['chalice', 'offering'], chalice: ['ewer', 'offering'], hearth: ['candle', 'hood'], weights: ['seal', 'initial'], initial: ['book', 'seal'], seal: ['initial', 'weights'], hood: ['laundry', 'reliquary'], vial: ['phial', 'flask', 'jar', 'cup'], hand: ['inkarm', 'signet', 'goldleaf', 'spectacles'], inkpot: ['brush', 'book', 'scroll'], candle: ['lantern', 'brazier'], herbs: ['mortar', 'jar'], knife: ['rapier', 'sword', 'needle'], skull: ['bone', 'knuckles'], bandage: ['wrapped', 'suture'], bell: ['handbell', 'anvil'], book: ['scroll', 'hymnal'], poppet: ['needle', 'cord'], hourglass: ['clock'], boot: ['sack'], shield: ['door'] };
+const FAMILY = { palm: ['chalice', 'ewer', 'initial'], ewer: ['chalice', 'charter'], chalice: ['ewer', 'charter', 'hearth'], hearth: ['candle', 'hood'], weights: ['seal', 'initial'], initial: ['book', 'seal'], seal: ['initial', 'weights'], hood: ['laundry', 'reliquary'], vial: ['phial', 'flask', 'jar', 'cup'], hand: ['inkarm', 'signet', 'goldleaf', 'spectacles'], inkpot: ['brush', 'book', 'scroll'], candle: ['lantern', 'brazier'], herbs: ['mortar', 'jar'], knife: ['rapier', 'sword', 'needle'], skull: ['bone', 'knuckles'], bandage: ['wrapped', 'suture'], bell: ['handbell', 'anvil'], book: ['scroll', 'hymnal'], poppet: ['needle', 'cord'], hourglass: ['clock'], boot: ['sack'], shield: ['door'] };
 const SPREAD = {};
 function spread(list) { // list: [{ id, obj }] of a big batch, in order
   for (const k in SPREAD) delete SPREAD[k];
   const count = {}; list.forEach(e => count[e.obj] = (count[e.obj] || 0) + 1); const seen = {};
   for (const e of list) { seen[e.obj] = (seen[e.obj] || 0) + 1; if (seen[e.obj] <= 20 || !FAMILY[e.obj]) continue;
-    const alt = FAMILY[e.obj].filter(k => LIB[k] && (count[k] || 0) < 20).sort((a, b) => (count[a] || 0) - (count[b] || 0))[0]; if (!alt) continue;
+    const alt = FAMILY[e.obj].filter(k => LIB[k] && !RETIRED[k] && (count[k] || 0) < 20).sort((a, b) => (count[a] || 0) - (count[b] || 0))[0]; if (!alt) continue;
     SPREAD[e.id] = alt; count[alt] = (count[alt] || 0) + 1; count[e.obj] -= 1; e.obj = alt; }
 }
 // the Vessel's object cards (Cole: holy; its themes are held courses, Take, Give and Even, the Hearth, the Mouth and the
@@ -69,7 +69,10 @@ const VESSEL_WORDS = [[/hearth|warm|stove|coal|stoke|fire/, 'hearth'], [/\bseals
   [/take|gather|sponge|draw|carry|soak|conduit|pass through|lend/, 'offering'], [/mantle|robe|shelter|sleeve|spread arms|shoulder|lift/, 'hood'], [/hour|watch|night|vigil|sleep/, 'candle'],
   [/palm|hand|band|touch|unclench|nimbus|ink/, 'palm'], [/upright|stand|place|mother|keep/, 'reliquary']];
 function vesselPick(card) { const n = (card.name || '').toLowerCase(), t = n + ' ' + (card.note || '').toLowerCase(); for (const src of [n, t]) for (const [re, k] of VESSEL_WORDS) if (re.test(src)) return k; return 'offering'; }
-function pickObject(card, id, o = {}) {
+// objects retired after the blind tests (L48): every card that would draw one draws its replacement, deck-wide
+const RETIRED = { bandage: 'shears', wrapped: 'basin', suture: 'knife', stinger: 'wasp', bellrope: 'handbell', tongs: 'brazier', rod: 'hammer', brush: 'scroll', offering: 'chalice', alembic: 'vial', urn: 'flask', bellows: 'flask', vessel: 'jar', seal: 'charter', lens: 'spectacles', splint: 'knife', tourniquet: 'basin' };
+function pickObject(card, id, o = {}) { const k = pickRaw(card, id, o); return (!o.device && RETIRED[k]) || k; }
+function pickRaw(card, id, o = {}) {
   if (o.device && LIB[o.device]) return o.device;
   if (SPREAD[id]) return SPREAD[id];
   if (card.cls === 'vessel') return vesselPick(card);
@@ -192,10 +195,12 @@ function heroPartSVG(hp, turn) {
   const th = -Math.PI / 2 - Math.atan2(v[1], v[0]) + turn, A = [0, 170];
   const tf = `translate(${A[0]},${A[1]}) rotate(${(th * 180 / Math.PI).toFixed(2)}) scale(${s}) translate(${-a[0]},${-a[1]})`;
   const wrist = [0, A[1] - len(v) * s * 0.55]; let bands = '';
+  // the sleeve the forearm comes out of, running off the frame: a hand ending in a cut cuff read as severed (review 5)
+  const sleeve = `<path d="M-96,${A[1] - 20} Q0,${A[1] - 4} 96,${A[1] - 20} L190,520 L-190,520Z" fill="#b8ae96" stroke="#16110e" stroke-width="4"/>` + [-110, -40, 40, 110].map((x, i) => `<path d="M${x * 0.5},${A[1]} L${x * 1.4},520" stroke="${i % 2 ? '#8a8270' : '#e0d8c4'}" stroke-width="${i % 2 ? 10 : 6}" opacity="0.6"/>`).join('');
   [0, 1, 2].forEach(k => { const y = wrist[1] + 70 - k * 34, w = 64 - k * 4, col = INK6[['fire', 'water', 'void'][k]];
-    bands += `<path d="M${-w},${y} Q0,${y + 14} ${w},${y} L${w},${y - 20} Q0,${y - 6} ${-w},${y - 20}Z" fill="${mix(col, '#16110e', 0.45)}" opacity="0.85"/>`;
+    bands += `<path d="M${-w},${y} Q0,${y + 14} ${w},${y} L${w},${y - 20} Q0,${y - 6} ${-w},${y - 20}Z" fill="${mix(col, '#16110e', 0.7)}" opacity="0.9"/>`;
     bands += `<path d="M${-w},${y - 20} Q0,${y - 6} ${w},${y - 20}" stroke="#9a8450" stroke-width="2.4" fill="none"/><path d="M${-w},${y} Q0,${y + 14} ${w},${y}" stroke="#9a8450" stroke-width="2.4" fill="none"/>`; });
-  return { defs: h.defs, body: `<g transform="${tf}">${h.body}</g><g>${bands}</g>` };
+  return { defs: h.defs, body: `<g transform="${tf}">${h.body}</g><g>${sleeve}</g><g>${bands}</g>` };
 }
 
 // ==== act FX in card space (all through card_kit ink FX, L18)
@@ -231,7 +236,8 @@ const LAYOUTS = ['close', 'ledge', 'table', 'floor', 'niche', 'hang', 'water', '
 const ALLOC = {};
 let BATCH = null; const BIG = () => !!BATCH && BATCH.length > 100; const USED_HOLES = [], USED_HANDS = [];
 const edgeOf = a => { const t = a * Math.PI / 180; return Math.abs(Math.cos(t)) > Math.abs(Math.sin(t)) ? (Math.cos(t) > 0 ? 'right' : 'left') : (Math.sin(t) > 0 ? 'bottom' : 'top'); };
-const ONLY = { bell: ['close'], initial: ['close', 'scene'], reliquary: ['close', 'niche'], shears: ['close'], rod: ['close'], palm: ['close'], wasp: ['close', 'table', 'floor'] };   // round 6: layouts these read in
+const NO_TURN = new Set(['handbell', 'lantern', 'chalice']);   // things that must stay upright in the hand (a tilted handbell read as a horn)
+const ONLY = { chalice: ['close', 'held'], ewer: ['close', 'held'], rope: ['close'], anchor: ['close', 'niche'], inkpot: ['close'], cord: ['close'], bell: ['close'], initial: ['close', 'scene'], reliquary: ['close', 'niche'], shears: ['close'], rod: ['close'], palm: ['close'], wasp: ['close', 'table', 'floor'] };   // round 6: layouts these read in
 const SCENE = new Set(['doorajar', 'birds', 'anvil', 'wrapped', 'suture', 'goldleaf', 'inkarm', 'beacon']);
 function optionsFor(obj, pts, n, bb) {
   if (SCENE.has(obj)) return ['scene'];
@@ -297,7 +303,7 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   let lay = o.layout || al.layout || opts[(seed >> 3) % opts.length];
   if (!opts.includes(lay)) lay = 'close';
   // a held card turns its object so the hand enters at the angle the batch allotted it (L20: no two hands alike)
-  if (lay === 'held' && copies[0].pts.grip) { const h0 = heroHand(card.cls, [0, 0], copies[0].pts.grip.thumb, 1, seed % 2), dif = a => ((a - h0.angle + 540) % 360) - 180;
+  if (lay === 'held' && copies[0].pts.grip && !NO_TURN.has(obj)) { const h0 = heroHand(card.cls, [0, 0], copies[0].pts.grip.thumb, 1, seed % 2), dif = a => ((a - h0.angle + 540) % 360) - 180;
     const free = a => USED_HANDS.every(u => edgeOf(u) !== edgeOf(a) || Math.abs(((u - a + 540) % 360) - 180) >= 16);
     const tgt = HAND_ANGS.filter(a => free(a)).sort((a, b) => Math.abs(dif(a)) - Math.abs(dif(b)))[0];
     const d = tgt == null ? 0 : dif(tgt); if (Math.abs(d) > 2) copies = makeCopies(d * Math.PI / 180); USED_HANDS.push(tgt == null ? h0.angle : tgt); }
@@ -364,8 +370,10 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   if (state.frozen && !feats.has('rime')) { fx += K.inkRime(r, [[objBox[0], objBox[3] - 10], [(objBox[0] + objBox[2]) / 2, objBox[3] - 24], [objBox[2], objBox[3] - 8]]); feats.add('rime'); }
   if (state.broken && !feats.has('crack')) { const f2 = K.objFig(seed + 90); D.crack(f2, focus, -1.2, 120, { n: 6, w: 2.6 }); D.crack(f2, add(focus, [10, 6]), 0.6, 80, { n: 4 }); const s3 = K.figSVG(f2); defs += s3.defs; fx += s3.body; feats.add('crack'); }
   // ground and assembly
-  let body = K.ground(r, Object.assign({ room: o.room || ctx.roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c, pool: pool || [focus[0] + (r() - 0.5) * 160, focus[1] - 40 - r() * 60, 380 + r() * 140, 220 + r() * 100], dark: 0.3, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
-  body += under + `<g id="subj">${placed.slice().reverse().join('')}${extra}</g>` + over + fx + courseMarks(r, focus, course);
+  const cool = ['water', 'frost', 'void', 'lightning'].includes(course);   // L49: on the cool grounds the pool is lifted and the subject is back-lit
+  if (cool) defs += '<filter id="kBack" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="22" result="d"/><feGaussianBlur in="d" stdDeviation="14" result="b"/><feFlood flood-color="#d8dce0" flood-opacity="0.62"/><feComposite in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  let body = K.ground(r, Object.assign({ room: o.room || ctx.roomOf(card, course, id), x: 500 + (seed % 900), w: 1400 + (seed % 300), c, pool: pool || [focus[0] + (r() - 0.5) * 160, focus[1] - 40 - r() * 60, 380 + r() * 140 + (cool ? 160 : 0), 220 + r() * 100 + (cool ? 110 : 0)], dark: cool ? 0.08 : 0.3, washOp: cool ? 0.7 : undefined, soot: cool ? 0.45 : undefined, hatchR: 0.9 + r() * 0.3 }, o.ground || {}));
+  body += under + `<g id="subj"${cool ? ' filter="url(#kBack)"' : ''}>${placed.slice().reverse().join('')}${extra}</g>` + over + fx + courseMarks(r, focus, course);
   // metadata for the checks
   const sgc = sigCard(), clip = b => [Math.max(0, b[0]), Math.max(0, b[1]), Math.min(W, b[2]), Math.min(H, b[3])];
   const sb = objBox.slice(); if (hand) { const g = M(P0.grip.c), e = hand.elbow, pad = 60 * sc; sb[0] = Math.min(sb[0], g[0] - pad, e[0] - pad); sb[1] = Math.min(sb[1], g[1] - pad, e[1] - pad); sb[2] = Math.max(sb[2], g[0] + pad, e[0] + pad); sb[3] = Math.max(sb[3], g[1] + pad, e[1] + pad); }
@@ -376,8 +384,8 @@ function deviceCard(card, id, o = {}, ctx = {}) {
   const meta = { id, kind: 'object', object: obj, variant, layout: lay, act, actShown: act !== 'freeze' || feats.has('rime'), hand: hand ? { edge: hand.edge, angle: hand.angle, hand: hand.hand } : null,
     sigInside: inFrame(sgc), hook: !!P0.hook, hookGap, surfaceY, contact: surfaceY && lay !== 'water' ? Math.abs(objBox[3] - surfaceY) : null,
     holes: holes.map(h => h.card), copies: copies.map(cp => cp.key), feats: [...feats], state, ells: P0.ells || null,
-    subjFrac: (cw * ch) / (W * H), span: Math.max(cw / W, ch / H), dbg: { growStop, sc: +sc.toFixed(2), bw: Math.round(bw), bh: Math.round(bh), box: cb.map(Math.round), areaSc: +areaSc.toFixed(2), sigSc: +sigSc.toFixed(2) }, badRed, badGold, noun: card.cls === 'vessel' ? null : nounOf(card), override: !!o.device || !!SPREAD[id], spread: SPREAD[id] || null, course, fxSrc };
+    subjFrac: (cw * ch) / (W * H), span: Math.max(cw / W, ch / H), dbg: { growStop, sc: +sc.toFixed(2), bw: Math.round(bw), bh: Math.round(bh), box: cb.map(Math.round), areaSc: +areaSc.toFixed(2), sigSc: +sigSc.toFixed(2) }, badRed, badGold, noun: card.cls === 'vessel' ? null : nounOf(card), override: !!o.device || !!SPREAD[id] || !!RETIRED[pickRaw(card, id, o)], spread: SPREAD[id] || null, course, fxSrc };
   return { course: c, defs, body, meta };
 }
 
-module.exports = { spread, FAMILY, probe, fillOf, fillOk, SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT };
+module.exports = { RETIRED, spread, FAMILY, probe, fillOf, fillOk, SCENE, deviceCard, pickObject, nounOf, allocate, optionsFor, stateOf, STATE_RULES, LIB, WATER_OK, LAYOUTS, measuredFig, seedOf, countOf, NOUNS, AUDIT };

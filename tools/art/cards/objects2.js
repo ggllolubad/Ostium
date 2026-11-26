@@ -217,19 +217,19 @@ O.lantern = (f, o = {}) => { // an iron storm lantern: horn panes, a guttering f
 };
 O.brazier = (f, o = {}) => { // a deep iron fire basket of grate bars on a tripod: coals glowing between the bars, a low dirty fire, ash lifting
   const F = frame([0, 0], o.ang || 0, 1), r = f.r, glow = o.course === 'void' ? '#2a1a3a' : '#9a4a22';
-  for (const [a, b] of [[[-120, 60], [-190, 250]], [[120, 60], [190, 250]], [[10, 80], [20, 262]]]) { L(f, F, [a, b], 18, INK); L(f, F, [a, b], 12, IRON); L(f, F, [b, add(b, [b[0] < 0 ? -24 : 24, 4])], 14, INK); } // the tripod, splayed feet
-  const rimY = -90, botY = 70;
+  for (const [a, b] of [[[-100, 140], [-200, 320]], [[100, 140], [200, 320]], [[10, 160], [20, 335]]]) { L(f, F, [a, b], 18, INK); L(f, F, [a, b], 12, IRON); L(f, F, [b, add(b, [b[0] < 0 ? -24 : 24, 4])], 14, INK); } // the tripod, splayed feet
+  const rimY = -90, botY = 160;   // a deep basket: a shallow one read as a grill (review 5)
   f.part(F(ell([0, rimY], 170, 34, 0, 30)), { fill: '#120c0a', shade: 0.1, inkW: 1.6, cast: false, hatch: false }); // the dark inside
   for (let i = 0; i < 14; i++) { const c = [-130 + i * 20 + r() * 10, rimY + 4 + r() * 18]; f.part(F(ell(c, 18, 11, r(), 9)), { fill: i % 3 ? '#2a1a14' : glow, shade: 0.4, inkW: 1.1, cast: false }); } // coals heaped above the rim
   f.part(F([[-170, rimY], [170, rimY], [120, botY], [-120, botY]]), { fill: '#16100c', shade: 0.15, inkW: 2, cast: false, hatch: false }); // the basket's inside, seen through the bars
   for (let i = 0; i < 9; i++) { const t = i / 8, p = [-150 + t * 300, rimY + 30 + (r() * 60)]; f.part(F(ell(p, 26, 16, r(), 10)), { fill: r() < 0.5 ? glow : mix(glow, '#e0a060', 0.25), shade: 0.4, inkW: 0.8, cast: false }); } // coals glowing through
-  for (let i = 0; i <= 10; i++) { const t = i / 10, top = [-170 + t * 340, rimY + Math.sin(Math.PI * t) * 32], bot = [-120 + t * 240, botY + Math.sin(Math.PI * t) * 20]; L(f, F, [top, bot], 13, INK); L(f, F, [top, bot], 8, i % 2 ? IRON : mix(IRON, '#000', 0.25)); } // the grate bars
-  for (const [y, k] of [[rimY, 1], [-10, 0.86], [botY, 0.7]]) { const band = ell([0, y], 170 * k + 2, 32 * k, 0, 30).slice(0, 16); L(f, F, band, 15, INK); L(f, F, band, 9, mix(IRON, '#fff', y === rimY ? 0.2 : 0)); } // hoops
+  for (let i = 0; i <= 7; i++) { const t = i / 7, top = [-170 + t * 340, rimY + Math.sin(Math.PI * t) * 32], bot = [-90 + t * 180, botY + Math.sin(Math.PI * t) * 20]; L(f, F, [top, bot], 13, INK); L(f, F, [top, bot], 8, i % 2 ? IRON : mix(IRON, '#000', 0.25)); } // the grate bars
+  for (const [y, k] of [[rimY, 1], [40, 0.78], [botY, 0.55]]) { const band = ell([0, y], 170 * k + 2, 32 * k, 0, 30).slice(0, 16); L(f, F, band, 15, INK); L(f, F, band, 9, mix(IRON, '#fff', y === rimY ? 0.2 : 0)); } // hoops
   for (let i = 0; i < 6; i++) f.rivet(F([[-140 + i * 56, rimY + 26 + Math.sin(Math.PI * i / 5) * 6]])[0], 3, '#6a6a66');
   D.bloom(f, F([[100, 20]])[0], 22, RUST, { n: 4, specks: 10 });
-  if (o.course !== 'void') { flame(f, F, [-40, rimY - 6], 120, '#c86030'); flame(f, F, [50, rimY - 4], 90, '#c86030'); }
+  if (o.course !== 'void') { flame(f, F, [-40, rimY - 6], 170, '#c86030'); flame(f, F, [50, rimY - 4], 130, '#c86030'); }
   for (let i = 0; i < 16; i++) f.flat(F(ell([-140 + r() * 280, -260 - r() * 120], 2 + r() * 2, 1.4, r(), 6)), r() < 0.5 ? '#3a3030' : '#5a4a40', { op: 0.85 });
-  return { focus: F([[0, rimY - 60]])[0], sig: SB(F, [-190, -130, 200, 260]), ells: [34 / 170, 0.188, 0.188] };
+  return { focus: F([[0, rimY - 60]])[0], sig: SB(F, [-200, -130, 210, 330]), ells: [34 / 170, 0.188, 0.188] };
 };
 
 // ==== bone and the dead
@@ -267,9 +267,9 @@ O.chain = (f, o = {}) => { // an iron shackle on a hanging chain, rust and a bro
 };
 O.rope = (f, o = {}) => { // a coil of tarred rope and an iron hook on its end
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
-  for (let i = 0; i < 6; i++) { const e = ell([-40 + i * 4, 40 + i * 6], 150 - i * 6, 70 - i * 2, 0.05, 24); f.line(F(loop(e)), 14, INK); f.line(F(loop(e)), 10, '#5a4a30'); for (let k = 0; k < 24; k += 2) f.line(F([e[k], add(e[k], [4, 6])]), 1.2, INK, { op: 0.7, straight: true }); }
+  for (let i = 0; i < 6; i++) { const e = ell([-40 + i * 4, 40 + i * 6], 150 - i * 6, 70 - i * 2, 0.05, 24); f.line(F(loop(e)), 24, INK); f.line(F(loop(e)), 18, '#a8885a'); /* thick and light: a dark tarred coil sank into the ground (L45) */ for (let k = 0; k < 24; k += 2) f.line(F([e[k], add(e[k], [4, 6])]), 1.2, INK, { op: 0.7, straight: true }); }
   const run = [[100, 30], [150, -60], [140, -160], [80, -220]];
-  f.line(F(run), 14, INK); f.line(F(run), 10, '#5a4a30');
+  f.line(F(run), 24, INK); f.line(F(run), 18, '#a8885a');
   P(f, F, [[70, -230], [60, -280], [40, -320], [0, -330], [-30, -300], [-24, -270], [0, -296], [24, -292], [40, -270], [50, -226]], IRON, { dressO: { op: 0.4 } });
   P(f, F, [[-36, -300], [-60, -280], [-44, -310]], IRON, { dress: false, sharp: true });
   D.bloom(f, F([[30, -300]])[0], 14, RUST, { n: 2 }); D.twine(f, F([[70, -226], [80, -226]]), F([[66, -206], [80, -206]]), 3, TWINE);
@@ -335,6 +335,8 @@ O.purse = (f, o = {}) => { // a fat leather purse, its mouth open, coins spilled
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
   P(f, F, [[-150, 160], [-176, 60], [-150, -50], [-80, -110], [80, -110], [150, -50], [176, 60], [150, 160]], LEATHER, { tex: T(f, 'mottle'), texOp: 0.7 });
   f.stitches(F([[-150, 150], [-170, 60], [-146, -40]]), '#c8b08a', 1.4);
+  for (let i = 0; i < 8; i++) L(f, F, [[-130 + i * 34, -60 + (i % 2) * 20], [-110 + i * 34, 140]], i % 2 ? 2 : 5, i % 2 ? INK : '#8a6a48', { op: 0.45 });   // folds of the leather (L3)
+  for (let i = 0; i < 240; i++) { const p = [-160 + r() * 320, -100 + r() * 250]; L(f, F, [p, add(p, [10 + r() * 20, 4 + r() * 10])], 1.4 + r() * 1.6, r() < 0.5 ? '#8a6a48' : '#1a120c', { op: 0.5 }); }
   D.twine(f, F([[-80, -110], [-80, -100]]), F([[80, -110], [80, -100]]), 3, '#3a2a18', { knot: F([[84, -104]])[0], ends: [F([[110, -70], [118, -30]])] });
   for (let i = 0; i < 9; i++) { const p = F([[-60 + r() * 120, -130 - r() * 20]])[0]; f.part(ell(p, 22, 8, (r() - 0.5) * 0.6, 14), { fill: '#b8902e', shade: 0.4, inkW: 1.3, cast: false }); }
   for (let i = 0; i < 7; i++) { const p = F([[120 + r() * 140, 150 + r() * 30]])[0]; f.part(ell(p, 20, 7, r() - 0.5, 14), { fill: '#a8842a', shade: 0.4, inkW: 1.2, cast: false }); f.line(ell(p, 12, 4, 0, 10).slice(0, 5), 1, '#5a4210', { op: 0.7 }); }
@@ -421,14 +423,16 @@ O.reliquary = (f, o = {}) => { // a small lead reliquary, gilt worn off, a bone 
 };
 O.boot = (f, o = {}) => { // a worn boot mid-step, mud to the ankle, a patch, the sole coming away
   const F = frame([0, 0], o.ang || 0, 1), r = f.r;
-  P(f, F, [[-80, -220], [70, -230], [80, -20], [200, 60], [230, 130], [220, 170], [-110, 170], [-110, 60], [-90, -40]], '#3e2a1c', { tex: T(f, 'mottle'), texOp: 0.7 });
+  P(f, F, [[-80, -220], [70, -230], [80, -20], [200, 60], [230, 130], [220, 170], [-110, 170], [-110, 60], [-90, -40]], '#5e4430', { tex: T(f, 'mottle'), texOp: 1 });
   P(f, F, [[-90, -230], [80, -240], [84, -180], [-94, -170]], '#4a3424', { dressO: { op: 0.4 } });
   P(f, F, [[-120, 170], [230, 170], [236, 196], [-124, 200]], '#1e140c', { dress: false });
   f.flat(F([[200, 172], [236, 168], [240, 190], [210, 186]]), '#0a0604'); // sole coming away
   f.part(F([[-70, -80], [10, -90], [16, -20], [-66, -10]]), { fill: '#5a4430', shade: 0.4, inkW: 1.2 }); f.stitches(F([[-70, -82], [12, -92], [16, -20], [-66, -10], [-70, -82]]), '#c8b08a', 1);
-  f.flat(F([[-110, 60], [230, 120], [236, 196], [-124, 200]]), '#2a2014', { op: 0.55 }); // mud
+  f.flat(F([[-110, 60], [230, 120], [236, 196], [-124, 200]]), '#2a2014', { op: 0.4 }); for (let i = 0; i < 30; i++) f.flat(F(ell([-100 + r() * 320, 80 + r() * 110], 4 + r() * 8, 2 + r() * 4, r(), 8)), r() < 0.5 ? '#4a3a24' : '#1a120c', { op: 0.7 }); // mud, clotted
   for (let i = 0; i < 18; i++) f.flat(F(ell([-130 + r() * 380, 200 + r() * 30], 2 + r() * 5, 1.6 + r() * 2, 0, 8)), '#2a2014', { op: 0.85 });
   for (const y of [-200, -160, -120]) L(f, F, [[-40, y], [40, y + 6]], 2.4, '#1a120c');
+  for (let i = 0; i < 240; i++) { const p = [-100 + r() * 320, -220 + r() * 390]; L(f, F, [p, add(p, [16 + r() * 30, 6 + r() * 14])], 1.6 + r() * 2, r() < 0.5 ? '#7a5a40' : '#1a120c', { op: 0.55 }); }   // creases and scuffs (L3)
+  L(f, F, [[-80, -200], [-84, 40], [-100, 150]], 8, '#8a6a4a', { op: 0.45 });
   return { focus: F([[60, 60]])[0] };
 };
 

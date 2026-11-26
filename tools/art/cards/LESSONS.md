@@ -154,9 +154,27 @@ Every piece of feedback becomes a rule here, so the next input starts from it in
 
   The Vessel's cards pick these by their words (`VESSEL_WORDS` in objcomp.js). vessel_hero_ids.txt (from the pose agent) lists the cards that stay hero cards.
 
+### From the review-5 blind test (29 of 41, 71%)
+- **L49. Dark on a dark cool ground.** The held vial on blue (13), the crossed mirrors (21) and the two bells (22) on purple sank into the ground, yet passed L45: their visible mass was large enough, but their mean value sat within 3 to 20 of the ground. Rule: on the cool grounds (water, frost, void, lightning), the light pool is lifted and the subject is back-lit. The back-light is a soft pale glow round its silhouette (`kBack` in objcomp.js), and it is left out of the masks the checks measure. Check: automated in pixchecks.py. Where the ground ring is blue or purple (hue 170 to 320), the subject's mean luminance must differ from the ring's median by 22 or more. On review 5 it fails 13, 21 and 22. It also failed the birds and the hourglass, both read but dark, which are lit since.
+- **L50. A hand on a long thin thing is still a stick.** The gauntlet holding the rapier read as a poker or a syringe, and holding the scourge as needles or a brush: the hand adds mass but not a name. Rule: show the distinctive part close, with no hand. The rapier is now the swept hilt alone, cropped close (`zoom`); the scourge is now its weighted thongs fanning out. Or choose another subject. Check: L46 on the object without the hand, plus the blind test.
+- **L51. Sets read worse than one.** Two mirrors, two bells, a set of seals and a bowl of six pools were read as pans, boots, a pepper and a palette. Rule: draw one object and show the count as marks on it (six seals hanging from one charter), or two objects clearly separated and lit. Toll of Bells and Crossed Glass now draw one. Check: the blind test; L12's silhouette check covers same-object pairs across cards only.
+- **L52. Retire a misread object for the whole deck.** The blind tests replaced objects card by card, but 70 more cards still drew the bandage, brush, rod, stinger, offering bowl and others. Rule: an object retired after a blind test redirects every card that picks it to its replacement. The table is `RETIRED` in objcomp.js: bandage to shears, wrapped to basin, suture to knife, stinger to wasp, bell rope to handbell, tongs to brazier, rod to hammer, brush to scroll, offering bowl to chalice, alembic to vial, urn to flask, bellows to flask, brass vessel to jar, seal to charter, lens to spectacles, and the splint and tourniquet to the knife and basin. A retirement counts as an override for L23, and family spreading never hands a card to a retired object. Check: automated (the pick); the full run's L12 cap.
+- **Fixed in place:**
+  - broth: no icicles, which read as fangs; an ice skin and rime on the rim instead
+  - anchor: a short thick stock and spade flukes, which had read as a crossbow
+  - handbell: held upright, never turned (`NO_TURN`)
+  - brazier: a deep basket, not a grill
+  - initial: a page with a rolled foot, not a tile
+  - the Vessel's palm: comes out of a sleeve, with dark ink bands, so it no longer looks severed
+  - inkpot: a squat inkwell with a big white quill
+  - cord: one thick knot with tassels and a red binding
+  - feather: a solid vane with two splits
+  - rope: a thick, light coil
+  - purse and boot: leather grain, for L3
+
 ## Checks to run before reporting
 
-1. The build (render.js runs checks.js before rendering and pixchecks.py after, and writes checks.txt): pose limits, props, pour mouths and two-hand turns (L4, L24 to L27, rig.js on load), pose shares, block hits, grips, pose words, frame, hand FX points, face clearance, drape and joint cover (L5, L6, L24, L28 to L31, L33, check_poses.js), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9), visible mass (L45), object mass (L46), planks (L47), same-object silhouettes (L12). All must pass.
+1. The build (render.js runs checks.js before rendering and pixchecks.py after, and writes checks.txt): pose limits, props, pour mouths and two-hand turns (L4, L24 to L27, rig.js on load), pose shares, block hits, grips, pose words, frame, hand FX points, face clearance, drape and joint cover (L5, L6, L24, L28 to L31, L33, check_poses.js), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9), visible mass (L45), object mass (L46), planks (L47), same-object silhouettes (L12), dark on cool grounds (L49). All must pass.
 2. The unlabelled 170 px thumbnail sheet (L8), which render.js now writes as thumbs170.png on every batch with thumbs170_key.txt beside it: a fresh reviewer names each object before reading the key.
 3. The Form checklist at 2x on every new or changed object (L9).
 4. A review beside the hero render (L3, L10).

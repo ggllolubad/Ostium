@@ -365,7 +365,7 @@ const OVR = {
   bw_brace: { kind: 'block', room: 'stair' },
 };
 // counts the name does not carry (L11): set by hand
-Object.assign(OVR, { al_bandolier: { count: 2 }, al_magnum_opus: { count: 3 }, toll_of_bells: { count: 2 }, crossed_glass: { count: 2 } });
+Object.assign(OVR, { al_bandolier: { count: 2 }, al_magnum_opus: { count: 3 }, });   // round 7: Toll of Bells and Crossed Glass draw one object each; sets of two read worse (L51)
 // round 6 (review-4 blind test): an object that could not be made to read at 170 px is replaced for that card by one
 // that does; the card's meaning decides (L48). Each entry says what it shows.
 const READS = {
@@ -380,18 +380,22 @@ const READS = {
   du_catch_the_rhythm: 'handbell',    // the bell it keeps time with
   al_clean_linen: 'laundry',          // clean linen on the line
   al_cauterize: 'brazier',            // the irons heating in the coals
-  w_pyre_saints_ash: 'urn',           // the saint's ash in its urn
+  w_pyre_saints_ash: 'flask',         // the lead vial broken, grey ash bursting out (the urn read as a jug)
   ve_mothers_place: 'reliquary',      // the Mother's place: a shrine casket
   w_drowned_undertow: 'skull',        // the drowned, in the undertow
   al_triage: 'spectacles',            // the surgeon's look
   or_the_last_hour: 'hourglass',      // the last of the sand
-  al_refill: 'alembic',               // the still that refills
+  al_refill: 'vial',                  // the empty bottle to be refilled (the alembic read as a scale)
+  el_stopper_the_jar: 'jar',          // a jar, its mouth waxed shut (the held vial sank into the blue)
+  ve_six_seals: 'charter',            // six seals hanging from one charter (a set of loose seals did not read)
   w_coast_call_the_bolt: 'hammer',   // the iron raised to call the bolt (the rod read as a stick, twice)
-  ve_balance_the_scale: 'weights', ve_illumination: 'initial', ve_six_seals: 'seal', ve_hearthstone: 'hearth',
-  ve_drink_the_dregs: 'chalice', ve_give_back: 'ewer', ve_take_into_me: 'offering', ve_keep_the_hours: 'candle', ve_mantle: 'hood', ve_copy_the_page: 'book',
+  ve_balance_the_scale: 'weights', ve_illumination: 'initial', ve_hearthstone: 'hearth',
+  ve_drink_the_dregs: 'chalice', ve_give_back: 'ewer', ve_take_into_me: 'chalice',   // the offering bowl read as a palette ve_keep_the_hours: 'candle', ve_mantle: 'hood', ve_copy_the_page: 'book',
 };
 for (const [id, dev] of Object.entries(READS)) OVR[id] = Object.assign(OVR[id] || {}, { device: dev });
-OVR.du_parry = Object.assign(OVR.du_parry || {}, { zoom: 1.7, objOpt: { hilt: true } });   // close on the swept hilt: a blade alone reads as a stick (L46)
+OVR.du_parry = Object.assign(OVR.du_parry || {}, { layout: 'close', zoom: 1.9, objOpt: { hilt: true } });   // the swept hilt alone, no hand: a hand on a long blade read as a stick (L50)
+OVR.bw_k_scourge = Object.assign(OVR.bw_k_scourge || {}, { layout: 'close' });
+OVR.ve_ink_band = Object.assign(OVR.ve_ink_band || {}, { zoom: 1.35 });   // the banded hand big, the sleeve running off the frame   // close on the swept hilt: a blade alone reads as a stick (L46)
 OVR.or_augury_of_birds = Object.assign(OVR.or_augury_of_birds || {}, { ground: { dark: 0, washOp: 0.55, soot: 0.3, hatchOp: 0.2, pool: [560, 280, 760, 380] } });   // an open dusk sky behind black birds   // black birds need a lit sky behind them (L45)
 // Cole: most Vessel cards become object cards (its figure can barely move). vessel_hero_ids.txt (the pose agent's) lists the
 // ones that stay hero cards; until it exists, only the Vessel cards above are forced to objects.

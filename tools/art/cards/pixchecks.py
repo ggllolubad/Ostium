@@ -21,6 +21,9 @@ L47 plank: an object mask that touches both side edges (95% of the width), is 1.
   of its box reads as a board (suture, wrapped arm, ink arm, gold leaf); long things (blades, staves) are exempt.
 L12 pairs: two cards with the same object in one batch must differ in silhouette: mask IoU under 0.5 (review 4's
   identical pairs measured 0.61 to 0.98).
+L49 (round 7) cool grounds: where the ground ring round the subject is blue or purple (hue 170 to 320, S > 0.08), the
+  subject's mean luminance must differ from the ring's median by 22 or more. L45 alone passed three dark-on-dark cards
+  of review 5 (13, 21, 22); this fails them, and on review 5 also flagged the birds and the hourglass (lit since).
 """
 import os, sys, colorsys
 import numpy as np
@@ -80,7 +83,7 @@ for fn, cid, desc in rows:
         if km >= 4:
             hue_bad.append(f"{cid} {km} hue clusters on the object")
 LONG = {"sword", "rapier", "knife", "needle", "rod", "brush", "feather", "key", "bone", "tongs", "coalpan", "splint", "stinger", "scourge", "candle", "hammer"}
-vis_bad, mass_bad, plank_bad, masks = [], [], [], {}
+vis_bad, cool_bad, mass_bad, plank_bad, masks = [], [], [], [], {}
 for fn, cid, desc in rows:
     obj = desc.split()[-1] if desc.split() else ""
     full = os.path.join(out, "_full", fn + ".png")
@@ -97,6 +100,11 @@ for fn, cid, desc in rows:
     vis = (np.abs(lum - g) * ms).mean()
     if vis < 2.4:
         vis_bad.append(f"{cid} {vis:.1f}")
+    rgb = img[ring].mean(0) / 255 if ring.any() else img.reshape(-1, 3).mean(0) / 255
+    gh, gs, gv = colorsys.rgb_to_hsv(*rgb)
+    dmean = abs(lum[ms].mean() - g) if ms.any() else 0
+    if 170 <= gh * 360 <= 320 and gs > 0.08 and dmean < 22:   # L49: on a cool (blue or purple) ground the subject's mean must clear the ground by 22
+        cool_bad.append(f"{cid} {dmean:.0f}")
     if mo.mean() < 0.07:
         mass_bad.append(f"{cid} {mo.mean() * 100:.0f}%")
     ys, xs = np.where(mo)
@@ -115,6 +123,7 @@ for i in range(len(ids)):
             if iou >= 0.5:
                 pair_bad.append(f"{ids[i]}/{ids[j]} {oa} IoU {iou:.2f}")
 for lesson, bad, ok, msg in [("L45", vis_bad, "every subject stands off its ground (visible mass 2.4 or more)", "subject sinks into the ground: "),
+                             ("L49", cool_bad, "every subject on a cool ground clears it by 22 in mean luminance", "dark on a dark cool ground: "),
                              ("L46", mass_bad, "every object has mass (7% of the frame or more)", "a stick, not a mass: "),
                              ("L47", plank_bad, "no plank silhouettes", "plank silhouettes: "),
                              ("L12", pair_bad, "same-object cards differ in silhouette (IoU under 0.5)", "near-identical pairs: ")]:

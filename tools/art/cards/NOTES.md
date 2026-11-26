@@ -131,6 +131,10 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
 - Replace an object that will not read after one honest redraw. The per-card replacements are in `READS` in samples.js,
   and the new objects are in objects5.js (wasp, shears, laundry, urn, and the redrawn door, anchor, broth, scourge,
   rat sack, bell, reliquary casket and gold-leaf book).
+- On the cool grounds (water, frost, void, lightning) the pool is lifted and the subject back-lit (L49).
+- A long thin object is shown by its distinctive part, close, with no hand (L50). A count is shown as marks on one object,
+  not as a set (L51).
+- Retired objects (`RETIRED` in objcomp.js) redirect every card that would draw them (L52).
 - **Vessel cards** are object cards, except the ids in vessel_hero_ids.txt. They draw from the Vessel's own set (palm,
   offering bowl, ewer, chalice, weights, initial, seal, hearth, reliquary, candle, mantle), picked by `VESSEL_WORDS`.
   Gold on them is worn gilt (`#9a8450`).

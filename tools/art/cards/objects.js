@@ -195,7 +195,8 @@ function mirror(f, o = {}) {
   for (let i = 0; i < 28; i++) { const a = i / 28 * Math.PI * 2, p = [Math.cos(a) * 146, Math.sin(a) * 177]; if (r() < 0.12) continue; f.rivet(F([p])[0], 3.2, '#9a9c96'); }
   // glass: dark, cold, the room in it, the foe's guard caught inside
   const gl = ell([0, 0], 126, 156, 0, 36);
-  f.part(F(gl), { fill: '#40444c', shade: 0.3, inkW: 2, inkHeavy: 3.4, hatch: false, hi: 0.02, tex: T(f, 'mottle'), texOp: 0.5 });
+  f.part(F(gl), { fill: '#7a828c', shade: 0.3, inkW: 2, inkHeavy: 3.4, hatch: false, hi: 0.02, tex: T(f, 'mottle'), texOp: 0.5 });   // lit glass: dark glass on a dark ground read as a frying pan (review 5)
+  f.flat(F([[-110, -60], [-40, -150], [10, -146], [-80, -40]]), '#e8eef2', { op: 0.55 }); f.flat(F([[40, 60], [100, -20], [110, 10], [60, 90]]), '#e8eef2', { op: 0.4 });
   f.flat(F([[-100, -90], [-60, -140], [20, -150], [-40, -60], [-90, 20]]), '#8a8e96', { op: 0.25 });
   for (let i = 0; i < 9; i++) { const x = -100 + i * 24; f.line(F([[x, -130 + (i % 3) * 20], [x + 30, 120 - (i % 2) * 30]]), 1.4 + (i % 3), i % 2 ? '#9a9ea6' : '#24262c', { op: 0.3 }); }   // the room in the glass
   // the caught guard: a shield warped by the curve of the glass, pale and wrong
