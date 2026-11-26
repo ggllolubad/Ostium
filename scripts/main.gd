@@ -1266,16 +1266,35 @@ func remove_slot(i: int) -> void:
 	if resolving or i < 0 or i >= plan.size():
 		return
 	plan.remove_at(i)
-	# X cards spend what is left, so recompute their X after removals
-	_recompute_x()
+	# later cards may have read the removed one (cost_less, Thrift); X cards spend what is left
+	_recost()
 	refresh_all()
 
 func move_slot(from: int, to: int) -> void:
 	if resolving or from == to or from < 0 or from >= plan.size():
 		return
+	var before := plan.duplicate(true)
 	var a = plan.pop_at(from)
 	plan.insert(clamp(to, 0, plan.size()), a)
+	# costs that read the Ordo (cost_less, Thrift) change with the order: price every card again in its new place
+	if not _recost():
+		plan = before
+		_hint("Not enough vigour for that order.")
 	refresh_all()
+
+## Prices each planned card against the Ordo before it. False when the order no longer fits the round's vigour.
+func _recost() -> bool:
+	var total := 0
+	for i in plan.size():
+		var a: Dictionary = plan[i]
+		var c: Dictionary = Data.CARDS[a.card]
+		if a.source == "hand" and c.cost >= 0:
+			var st: Dictionary = Combat.simulate(s, plan.slice(0, i), false).state
+			a.cost = Combat.cost_of(st, Combat.find(st, a.hero), a.card)
+		if c.cost >= 0:
+			total += int(a.cost)
+	_recompute_x()
+	return total <= s.energy
 
 func _recompute_x() -> void:
 	var spent := 0

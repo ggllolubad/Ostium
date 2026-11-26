@@ -562,6 +562,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	var reason := check_action(s, a)
 	var h := find(s, a.hero)
 	var c := card(a.card)
+	if not a.get("echo", false):
+		s.ordo_pos = int(s.get("ordo_pos", 0)) + 1   # a fizzled card still holds its place, so the true last reads last
 	if reason != "":
 		_ev(s, {"t": "fizzle", "unit": a.hero, "text": "%s fizzles: %s" % [c.name, reason]})
 		_log(s, "%s's %s fizzles (%s)." % [h.get("name", "?"), c.name, reason])
@@ -579,8 +581,6 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 	s.last_actor = h.id
 	s.acted_last = h.id
 	var handoff: bool = s.get("prev_actor", -1) != -1 and s.get("prev_actor", -1) != h.id
-	if not a.get("echo", false):
-		s.ordo_pos = int(s.get("ordo_pos", 0)) + 1
 	var ctx := {"x": a.get("x", 0), "half": a.get("echo", false), "prime": 0 if a.get("echo", false) else s.prime,
 		"follow": a.get("target", -1) != -1 and a.get("target", -1) == s.last_target,
 		"cost": int(a.get("cost", 0)), "base_cost": max(0, int(c.cost)), "handoff": handoff, "heroes_before": s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)}
@@ -616,7 +616,8 @@ static func resolve_player_action(s: Dictionary, a: Dictionary) -> String:
 		_rite_fire(s, "flask", h)
 	elif not a.get("echo", false):
 		var subj: Dictionary = targets[0] if targets.size() > 0 and targets[0] != h else {}
-		_rite_fire(s, "play", subj, h.id, "only", {"kw": c.get("kw", []), "cat": c.get("cat", "physical")})
+		_rite_fire(s, "play", subj, h.id, "only", {"kw": c.get("kw", []), "cat": c.get("cat", "physical"), "handoff": ctx.get("handoff", false),
+			"cost": ctx.get("cost", 0), "base_cost": ctx.get("base_cost", 0), "heroes_before": ctx.get("heroes_before", 0)})
 	if c.get("kw", []).has("Rite") and c.has("rite") and not a.get("echo", false):
 		s.rites.append({"uid": s.next_id, "owner": h.id, "rite": c.rite, "name": c.name, "cat": c.get("cat", "physical"), "from_round": s.round})
 		s.next_id += 1
@@ -788,9 +789,9 @@ static func q(s: Dictionary, actor: Dictionary, t: Dictionary, name: String, ctx
 		"ordo_after": return max(0, int(s.get("ordo_len", 0)) - int(s.get("ordo_pos", 0)))
 		"spent_before": return s.get("ordo_spent_before", 0)
 		"heroes_before": return ctx.get("heroes_before", 0)
-		"handoff": return 1 if ctx.get("handoff", false) else 0
-		"first": return 1 if int(s.get("ordo_pos", 0)) == 1 else 0
-		"last": return 1 if int(s.get("ordo_pos", 0)) >= int(s.get("ordo_len", 0)) else 0
+		"handoff": return 1 if ctx.get("handoff", false) and not ctx.get("half", false) else 0
+		"first": return 1 if int(s.get("ordo_pos", 0)) == 1 and not ctx.get("half", false) else 0
+		"last": return 1 if int(s.get("ordo_pos", 0)) >= int(s.get("ordo_len", 0)) and not ctx.get("half", false) else 0
 		"consumed": return ctx.get("consumed", 0)
 		"dealt": return ctx.get("dealt", 0)
 		"killed": return 1 if ctx.get("killed", false) else 0
@@ -1994,7 +1995,9 @@ static func _rite_fire(s: Dictionary, on: String, subject: Dictionary, owner := 
 		if on == "play" and not subject.is_empty() and subject.get("side", "") == "hero" and not rt.get("allies", false):
 			continue   # a "play" rite answers cards played on foes unless it says allies
 		var t: Dictionary = subject if not subject.is_empty() and not subject.get("dead", false) else h
-		var rctx := {"x": 0, "half": false, "prime": 0, "consumed": 0, "dealt": 0}
+		var rctx := {"x": 0, "half": false, "prime": 0, "consumed": 0, "dealt": 0,
+			"handoff": info.get("handoff", false), "cost": info.get("cost", 0), "base_cost": info.get("base_cost", 0),
+			"heroes_before": info.get("heroes_before", 0)}   # a play rite reads the card that set it off
 		if not subject.is_empty():
 			rctx.main = subject   # m. reads the trigger's subject, even a foe that just died
 		if rt.has("if") and not cond(s, h, t, String(rt["if"]), rctx):
