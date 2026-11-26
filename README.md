@@ -2,6 +2,14 @@
 
 A turn-based roguelike in Godot 4.3 by Grey Lantern Productions. This repository is the single home for the game, its content scripts, both art pipelines and the design docs.
 
+## Play the latest build
+
+**[Download Ostium_playtest.zip](https://github.com/ggllolubad/ostium/releases/latest/download/Ostium_playtest.zip)** (Windows). Unzip it and run `Ostium.exe`.
+
+- It is rebuilt automatically from `living-ink` after every change, so this link is always the newest version.
+- To try every calling and world, turn on **Debug: unlock all** on the doors screen.
+- Windows may warn that the app is unrecognised; choose "More info", then "Run anyway".
+
 ## Layout
 
 | Path | What it is |
