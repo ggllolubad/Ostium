@@ -148,14 +148,15 @@ O.feather = (f, o = {}) => { // a crow's flight feather: curved rachis, vane spl
 };
 O.birds = (f, o = {}) => { // a flight of rooks crossing, wings at different beats, one turning toward us; a feather falling
   const F = frame([0, 0], 0, 1), r = f.r;
-  const rook = (c, s, beat, tilt) => { const G2 = frame(F([c])[0], tilt, s), col = '#1c1a20';
+  const rook = (c, s, beat, tilt) => { const G2 = frame(F([c])[0], tilt, s * 1.25), col = '#1c1a20';
     const wing = side => { const up = side > 0 ? beat : -beat * 0.6; const pts = [[-10, 0], [-40, -60 * up - 10], [-90, -110 * up - 20], [-110, -100 * up - 10], [-100, -80 * up], [-120, -70 * up + 6], [-96, -56 * up + 8], [-110, -40 * up + 14], [-70, -20 * up + 14], [-30, 10]];
       f.part(G2(pts.map(p => [p[0] * side * -1 * -1, p[1]]).map(p => side > 0 ? p : [-p[0] * 0.8, p[1] * 0.7 + 10])), { fill: side > 0 ? col : mix(col, '#000', 0.2), shade: 0.4, inkW: 1.2, inkHeavy: 2, cast: false, k: 0.6, tex: T(f, 'mottle'), texOp: 0.7 }); for (let k = 0; k < 5; k++) f.line(G2([[-30 - k * 12, 4], [-70 - k * 10 * side * side, (side > 0 ? -70 * beat : 30) + k * 6]]), 1.1, '#5a5868', { op: 0.65 }); };
     wing(-1);
     f.part(G2([[-60, 6], [-20, -10], [30, -8], [56, -2], [70, 4], [52, 12], [10, 20], [-50, 22], [-90, 30], [-80, 14]]), { fill: col, shade: 0.4, inkW: 1.3, inkHeavy: 2.2, cast: false , tex: T(f, 'mottle'), texOp: 0.7 }); f.line(G2([[-40, 2], [0, -6], [40, -4]]), 2, '#6a6878', { op: 0.5 });
     f.part(G2([[56, -2], [80, 0], [96, 6], [74, 10]]), { fill: '#8a8a8a', shade: 0.3, inkW: 1, cast: false }); f.flat(G2(ell([58, 1], 2, 2, 0, 6)), '#d8d8d0');
     wing(1);
-    for (let k = 0; k < 4; k++) f.line(G2([[-60 - k * 12, 0], [-80 - k * 14, -40 * beat]]), 0.9, '#5a5868', { op: 0.6 }); };
+    for (let k = 0; k < 4; k++) f.line(G2([[-60 - k * 12, 0], [-80 - k * 14, -40 * beat]]), 0.9, '#5a5868', { op: 0.6 });
+    f.line(G2([[-10, 0], [-40, -60 * beat - 10], [-90, -110 * beat - 20], [-110, -100 * beat - 10]]), 5, '#c8c8d4', { op: 0.65 }); };   // a pale leading edge on the near wing: black birds must stand off a dark sky (L45)
   [[-180, -40, 1.0, 0.9, -0.1], [60, -120, 0.75, -0.4, 0.15], [220, 30, 0.85, 0.3, -0.05], [-20, 120, 0.6, 1.0, 0.1], [300, -150, 0.5, 0.6, 0]].forEach(([x, y, s, b2, t]) => rook([x, y], s, b2, t));
   const fq = [[-60, 200], [10, 180]]; L(f, F, fq, 2, '#d8d0bc'); f.part(F([[-56, 196], [0, 170], [14, 182], [-40, 206]]), { fill: '#22202a', shade: 0.4, inkW: 1, cast: false });
   return { focus: F([[0, -20]])[0], sig: SB(F, [-300, -200, 360, 200]), feat: [], ells: [] };

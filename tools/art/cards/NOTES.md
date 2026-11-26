@@ -123,6 +123,18 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
   - writes checks.txt, the unlabelled thumbs170.png and its key;
   - takes `-r4` for build/emblem2/review4, and `-force` to render a failing batch for a look.
 
+## Read at 170 px (round 6, after the review-4 blind test)
+
+- Draw for the thumbnail first: one big silhouette the eye can name, a lit value or rim against the dark grounds, mass
+  rather than a stick, never a horizontal plank across the frame. render.js enforces this with L45 to L47 and the
+  same-object silhouette check (pixchecks.py).
+- Replace an object that will not read after one honest redraw. The per-card replacements are in `READS` in samples.js,
+  and the new objects are in objects5.js (wasp, shears, laundry, urn, and the redrawn door, anchor, broth, scourge,
+  rat sack, bell, reliquary casket and gold-leaf book).
+- **Vessel cards** are object cards, except the ids in vessel_hero_ids.txt. They draw from the Vessel's own set (palm,
+  offering bowl, ewer, chalice, weights, initial, seal, hearth, reliquary, candle, mantle), picked by `VESSEL_WORDS`.
+  Gold on them is worn gilt (`#9a8450`).
+
 ## Needs a hand-made override
 
 - Rare and odd cards that deserve their own scene: an `ART` entry (the four object samples are examples).

@@ -257,7 +257,7 @@ O.sword = (f, o = {}) => { // a long blade: the executioner's square-tipped swor
   if (rap) G.rapierHilt(f, F([[-60, 0]])[0], (o.ang ?? -0.35), 34, '#7a746a', {});
   else { P(f, F, [[-80, -80], [-60, -80], [-60, 80], [-80, 80]], IRON, { sharp: true, dressO: { op: 0.4 } }); P(f, F, [[-220, -16], [-80, -14], [-80, 14], [-220, 16]], '#2a2018', { tex: T(f, 'mottle'), texOp: 0.6 }); for (let i = 0; i < 8; i++) L(f, F, [[-210 + i * 16, -16], [-200 + i * 16, 16]], 2, '#6a5a44'); f.part(F(ell([-240, 0], 26, 22, 0, 12)), { fill: IRON, shade: 0.45, inkW: 1.4 }); }
   f.spatter(F([[220, 0]])[0], 50, 14);
-  return { focus: F([[150, 0]])[0], grip: { c: F([[rap ? -90 : -150, 0]])[0], thumb: (o.ang ?? -0.35) } };
+  return { focus: F([[150, 0]])[0], grip: { c: F([[rap ? -90 : -150, 0]])[0], thumb: (o.ang ?? -0.35) }, sig: o.hilt ? SB(F, [-200, -90, 120, 90]) : undefined };   // o.hilt: the swept hilt is the signature, the blade may crop
 };
 O.rapier = (f, o) => O.sword(f, Object.assign({ rapier: true }, o));
 

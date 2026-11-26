@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
 const S = require('./samples');
 if (process.argv.includes('-all')) require('./check_poses').run(S);   // L5 pose shares, L6 block hits, frame (L4 runs in rig.js on load)
 const BASE = '/home/claude/ostium/build/emblem2';
-const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
+const OUT = process.argv.includes('-all') ? BASE + '/all' : process.argv.includes('-t') ? BASE + '/_test' : process.argv.includes('-r5') ? BASE + '/review5' : process.argv.includes('-r4') ? BASE + '/review4' : process.argv.includes('-r3') ? BASE + '/review3' : process.argv.includes('-r2') ? BASE + '/review2' : process.argv.includes('-r') ? BASE + '/review' : BASE;
 const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
 
 (async () => {
@@ -33,7 +33,9 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
     await pg.setContent(`<html><body style="margin:0;background:#000">${svg}</body></html>`);
     await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '.png'), clip: { x: 0, y: 0, width: S.W, height: S.H } });
     if (meta.kind === 'object') { // the object alone, for the flatness check (L3)
-      await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } });
+      await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_subj.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });   // the subject, hand and all (L45)
+      await pg.evaluate(() => { const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing (L3, L46, L47)
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_mask.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
     }
     console.log(id, ((Date.now() - t0) / 1000).toFixed(1) + 's');

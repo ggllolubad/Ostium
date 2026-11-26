@@ -10,10 +10,21 @@ than 0.3% of the card. Four or more counted bins fail. That spec missed the rain
 bands lose saturation), so the object mask is tested too, tighter: S > 0.3, V > 0.25, a bin counts above 1% of the
 mask, four or more fail (calibrated on review 3: it flags ve_ink_band, the candy bellrope, the three-hue brews and the
 blue-and-ochre brine flask, and no card the reviewer passed).
+
+Round 6 (the review-4 blind test read 38 of 66; L45 to L48), on a 280 x 153 copy:
+L45 visible: the subject (object and hand, _subj.png) must stand off its ground. Mean over the frame of
+  |luminance - the ground's median luminance in a 7 px ring round the subject|, inside the subject mask: at least 2.4.
+  Calibrated on review 4: it fails the four cards the tester could not see (8, 27, 31, 65) and the thin misreads.
+L46 mass: the object alone (_mask.png) covers at least 7% of the frame; the brush, rapier, bell rope, tongs and
+  scourge (4 to 6%) read as "a stick"; every object read correctly covered more.
+L47 plank: an object mask that touches both side edges (95% of the width), is 1.8 times as wide as tall and fills 40%
+  of its box reads as a board (suture, wrapped arm, ink arm, gold leaf); long things (blades, staves) are exempt.
+L12 pairs: two cards with the same object in one batch must differ in silhouette: mask IoU under 0.5 (review 4's
+  identical pairs measured 0.61 to 0.98).
 """
 import os, sys, colorsys
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 out, listfile = sys.argv[1], sys.argv[2]
 rows = [l.split("\t") for l in open(listfile).read().splitlines() if l.strip()]
@@ -68,6 +79,49 @@ for fn, cid, desc in rows:
         km = clusters(small[mm], 0.3, 0.25, 0.01) if mm.sum() > 50 else 0
         if km >= 4:
             hue_bad.append(f"{cid} {km} hue clusters on the object")
+LONG = {"sword", "rapier", "knife", "needle", "rod", "brush", "feather", "key", "bone", "tongs", "coalpan", "splint", "stinger", "scourge", "candle", "hammer"}
+vis_bad, mass_bad, plank_bad, masks = [], [], [], {}
+for fn, cid, desc in rows:
+    obj = desc.split()[-1] if desc.split() else ""
+    full = os.path.join(out, "_full", fn + ".png")
+    mp, sp = os.path.join(out, "_full", fn + "_mask.png"), os.path.join(out, "_full", fn + "_subj.png")
+    if not os.path.exists(mp):
+        continue
+    img = np.asarray(Image.open(full).convert("RGB").resize((280, 153))).astype(float)
+    lum = 0.299 * img[..., 0] + 0.587 * img[..., 1] + 0.114 * img[..., 2]
+    mo = np.asarray(Image.open(mp).convert("RGBA").getchannel("A").resize((280, 153))) > 128
+    sa = Image.open(sp if os.path.exists(sp) else mp).convert("RGBA").getchannel("A").resize((280, 153)).point(lambda v: 255 if v > 128 else 0)
+    ms = np.asarray(sa) > 128
+    ring = (np.asarray(sa.filter(ImageFilter.MaxFilter(15))) > 128) & ~ms
+    g = np.median(lum[ring]) if ring.any() else lum.mean()
+    vis = (np.abs(lum - g) * ms).mean()
+    if vis < 2.4:
+        vis_bad.append(f"{cid} {vis:.1f}")
+    if mo.mean() < 0.07:
+        mass_bad.append(f"{cid} {mo.mean() * 100:.0f}%")
+    ys, xs = np.where(mo)
+    if len(xs):
+        w, h = xs.max() - xs.min() + 1, ys.max() - ys.min() + 1
+        if w / 280 >= 0.95 and w / h >= 1.8 and mo.sum() / (w * h) >= 0.4 and obj not in LONG:
+            plank_bad.append(f"{cid} {w / h:.1f}:1")
+    masks[cid] = (obj, np.asarray(Image.open(mp).convert("RGBA").getchannel("A").resize((112, 61))) > 128)
+pair_bad = []
+ids = list(masks)
+for i in range(len(ids)):
+    for j in range(i + 1, len(ids)):
+        (oa, a), (ob, b) = masks[ids[i]], masks[ids[j]]
+        if oa == ob:
+            iou = (a & b).sum() / max(1, (a | b).sum())
+            if iou >= 0.5:
+                pair_bad.append(f"{ids[i]}/{ids[j]} {oa} IoU {iou:.2f}")
+for lesson, bad, ok, msg in [("L45", vis_bad, "every subject stands off its ground (visible mass 2.4 or more)", "subject sinks into the ground: "),
+                             ("L46", mass_bad, "every object has mass (7% of the frame or more)", "a stick, not a mass: "),
+                             ("L47", plank_bad, "no plank silhouettes", "plank silhouettes: "),
+                             ("L12", pair_bad, "same-object cards differ in silhouette (IoU under 0.5)", "near-identical pairs: ")]:
+    if bad:
+        lines.append(f"FAIL  {lesson:4s} {msg}" + ", ".join(bad)); failed = True
+    else:
+        lines.append(f"PASS  {lesson:4s} {ok}")
 if flat_bad:
     lines.append("FAIL  L3   flatter than the hero: " + ", ".join(flat_bad)); failed = True
 else:

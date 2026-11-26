@@ -1,0 +1,10 @@
+ve_open_palm
+ve_illuminated_initial
+ve_draw_it_out
+ve_breathe_out
+ve_open_hand
+ve_bitter_gift
+ve_stand_near
+ve_weigh
+ve_bear_it
+ve_shelter

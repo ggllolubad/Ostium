@@ -365,7 +365,38 @@ const OVR = {
   bw_brace: { kind: 'block', room: 'stair' },
 };
 // counts the name does not carry (L11): set by hand
-Object.assign(OVR, { ve_balance_the_scale: { objOpt: { level: true } }, al_bandolier: { count: 2 }, al_magnum_opus: { count: 3 }, toll_of_bells: { count: 2 }, crossed_glass: { count: 2 } });
+Object.assign(OVR, { al_bandolier: { count: 2 }, al_magnum_opus: { count: 3 }, toll_of_bells: { count: 2 }, crossed_glass: { count: 2 } });
+// round 6 (review-4 blind test): an object that could not be made to read at 170 px is replaced for that card by one
+// that does; the card's meaning decides (L48). Each entry says what it shows.
+const READS = {
+  du_barbers_trade: 'knife',          // the barber's lancet, bleeding
+  el_second_spark: 'lantern',         // a lantern throwing a second spark
+  festering: 'basin',                 // a basin of foul dressings
+  aff_hive: 'wasp',                   // the wasp itself
+  bandage_roll: 'shears',             // shears cutting the bandage
+  al_foul_bellows: 'flask',           // a flask venting foul air
+  el_scatter_ink: 'scroll',           // ink flung across a scroll
+  ve_ink_band: 'palm',                // the Vessel's own banded hand
+  du_catch_the_rhythm: 'handbell',    // the bell it keeps time with
+  al_clean_linen: 'laundry',          // clean linen on the line
+  al_cauterize: 'brazier',            // the irons heating in the coals
+  w_pyre_saints_ash: 'urn',           // the saint's ash in its urn
+  ve_mothers_place: 'reliquary',      // the Mother's place: a shrine casket
+  w_drowned_undertow: 'skull',        // the drowned, in the undertow
+  al_triage: 'spectacles',            // the surgeon's look
+  or_the_last_hour: 'hourglass',      // the last of the sand
+  al_refill: 'alembic',               // the still that refills
+  w_coast_call_the_bolt: 'hammer',   // the iron raised to call the bolt (the rod read as a stick, twice)
+  ve_balance_the_scale: 'weights', ve_illumination: 'initial', ve_six_seals: 'seal', ve_hearthstone: 'hearth',
+  ve_drink_the_dregs: 'chalice', ve_give_back: 'ewer', ve_take_into_me: 'offering', ve_keep_the_hours: 'candle', ve_mantle: 'hood', ve_copy_the_page: 'book',
+};
+for (const [id, dev] of Object.entries(READS)) OVR[id] = Object.assign(OVR[id] || {}, { device: dev });
+OVR.du_parry = Object.assign(OVR.du_parry || {}, { zoom: 1.7, objOpt: { hilt: true } });   // close on the swept hilt: a blade alone reads as a stick (L46)
+OVR.or_augury_of_birds = Object.assign(OVR.or_augury_of_birds || {}, { ground: { dark: 0, washOp: 0.55, soot: 0.3, hatchOp: 0.2, pool: [560, 280, 760, 380] } });   // an open dusk sky behind black birds   // black birds need a lit sky behind them (L45)
+// Cole: most Vessel cards become object cards (its figure can barely move). vessel_hero_ids.txt (the pose agent's) lists the
+// ones that stay hero cards; until it exists, only the Vessel cards above are forced to objects.
+const VESSEL_HEROES = (() => { try { return new Set(require('fs').readFileSync(require('path').join(__dirname, 'vessel_hero_ids.txt'), 'utf8').split(/\s+/).filter(Boolean)); } catch (e) { return null; } })();
+for (const id of Object.keys(CARDS)) if (CARDS[id].cls === 'vessel' && (VESSEL_HEROES ? !VESSEL_HEROES.has(id) : READS[id])) OVR[id] = Object.assign(OVR[id] || {}, { kind: 'device' });
 const KIND = { attack: act, cast: act, block };
 // test ids: '@<calling>/<kind>[/<course>]' builds a stand-in card so a rig can be checked without a real card
 function testCard(id) { const [cls, kind, cat = 'physical', v] = id.slice(1).split('/'); return { name: '', cls, cat, target: 'enemy', fx: kind === 'block' ? [{ t: 'block', n: 5 }] : [{ t: 'dmg', n: 5 }], _kind: kind, _v: v == null ? null : +v }; }

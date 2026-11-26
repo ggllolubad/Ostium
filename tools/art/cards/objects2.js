@@ -46,7 +46,8 @@ O.jar = (f, o = {}) => { // clay pot with a waxed cloth cover tied down; a rag f
 O.vial = (f, o = {}) => { // a tall stoppered bottle of draught, label and wax, the brew coloured by its course
   const F = frame([0, 0], o.ang || 0, 1), r = f.r, liq = mix(TINT[o.course] || '#6a2018', '#2a1a10', o.course === 'physical' ? 0.1 : 0.3);
   const out = turned([[62, 170], [70, 120], [70, 0], [54, -50], [26, -80], [24, -150], [30, -160]]);
-  P(f, F, out, mix('#5a4a30', liq, 0.5), { tex: T(f, 'mottle'), texOp: 0.3 });
+  P(f, F, out, mix('#5a4a30', liq, 0.5), { tex: T(f, 'mottle'), texOp: 0.7 });
+  for (let i = 0; i < 5; i++) L(f, F, [[30 + i * 7, -40], [44 + i * 5, 150]], 1.4 + (i % 2), i % 2 ? '#e8e4d0' : '#1a1410', { op: 0.3 });   // reflections down the glass (L3)
   P(f, F, [[-66, 20], [-20, 12], [20, 16], [66, 10], ...turned([[62, 170], [70, 120], [68, 20]]).slice(3, 6).reverse()], liq, { shade: 0.5, dress: false, cast: false, inkW: 1.1 });
   L(f, F, [[-66, 20], [-20, 12], [20, 16], [66, 10]], 1.6, mix(liq, '#fff', 0.45), { op: 0.8 });
   L(f, F, [[-50, -20], [-56, 40], [-52, 110]], 5, '#e8e4d0', { op: 0.45 });
