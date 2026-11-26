@@ -12,14 +12,14 @@ const RED = '#7a1a12';   // the Fatebinder's thread: doom (L14 role)
 
 O.pocketwatch = (f, o = {}) => { // a brass pocket watch sprung open: the hinged lid standing up, the white dial with its hands, the crown and bow, a chain looping away
   const F = frame([0, 0], o.ang ?? -0.1, 1), r = f.r, c = [0, 60], R = 200;
-  const lid = ell(add(c, [0, -2 * R + 30]), R, R * 0.92, 0, 40); P(f, F, lid, C.BRONZE, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, lid, 0.3); for (let k = 0; k < 3; k++) ring(f, F, add(c, [0, -2 * R + 30]), R * (0.8 - k * 0.2), R * 0.92 * (0.8 - k * 0.2), 2, '#5a4a30');
+  const LC = add(c, [-2 * R + 40, -20]), lid = ell(LC, R * 0.92, R, 0, 40); P(f, F, lid, C.BRONZE, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, lid, 0.3); for (let k = 0; k < 3; k++) ring(f, F, LC, R * 0.92 * (0.8 - k * 0.2), R * (0.8 - k * 0.2), 2, '#5a4a30');   // the lid sprung open to the side: a wide watch fills the frame (L13)
   P(f, F, ell(add(c, [8, 10]), R, R, 0, 44), mix(C.BRONZE, '#000', 0.3), { dress: false }); P(f, F, ell(c, R, R, 0, 44), C.BRONZE, { tex: T(f, 'mottle'), texOp: 1 });
   oval(f, F, c, R * 0.84, R * 0.84, '#e8e0cc', { shade: 0.3 }); for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2; L(f, F, [add(c, [Math.cos(a) * R * 0.7, Math.sin(a) * R * 0.7]), add(c, [Math.cos(a) * R * 0.8, Math.sin(a) * R * 0.8])], k % 3 ? 3 : 7, INK); }
   L(f, F, [c, add(c, [60, -90])], 9, INK); L(f, F, [c, add(c, [-20, -140])], 6, INK); L(f, F, [c, add(c, [110, 40])], 2.4, RED); oval(f, F, c, 12, 12, INK);
   P(f, F, [add(c, [-22, -R - 40]), add(c, [22, -R - 40]), add(c, [18, -R + 4]), add(c, [-18, -R + 4])], C.BRONZE, { dress: false }); ring(f, F, add(c, [0, -R - 70]), 40, 30, 10, C.BRONZE);
   tube(f, F, [add(c, [40, -R - 80]), add(c, [200, -R - 40]), add(c, [260, 0]), add(c, [230, 160])], 8, C.BRONZE, { dash: '10 4', lit: false });
   L(f, F, ell(c, R - 6, R - 6, 0, 44).slice(24, 36), 7, '#f0e0b0', { op: 0.5 }); D.crack(f, F([add(c, [-60, 30])])[0], 0.4, 90, { n: 4 }); D.bloom(f, F([add(c, [120, 120])])[0], 20, C.VERD, { n: 2, op: 0.5 });
-  return { focus: F([c])[0], sig: SB(F, [-205, c[1] - 2 * R - 170, 270, c[1] + R + 10]), feat: ['crack'], ells: [] };
+  return { focus: F([c])[0], sig: SB(F, [LC[0] - R, c[1] - R - 110, 270, c[1] + R + 10]), feat: ['crack'], ells: [] };
 };
 META.pocketwatch = { act: 'crack', only: ['close', 'table', 'ledge', 'niche'] };
 
@@ -71,9 +71,9 @@ O.astrolabe = (f, o = {}) => { // a brass astrolabe hung from its ring: the thic
   for (let k = 0; k < 7; k++) { const a = k / 7 * 6.28 + 0.3, p = add(c, [Math.cos(a) * 150, Math.sin(a) * 150]); L(f, F, [c, p], 5, C.BRONZE); f.part(F([p, add(p, [10 * Math.cos(a + 1.6), 10 * Math.sin(a + 1.6)]), add(p, [26 * Math.cos(a), 26 * Math.sin(a)])]), { fill: C.BRONZE, shade: 0.3, inkW: 1.2, cast: false, sharp: true }); }   // star pointers
   tube(f, F, [add(c, [-R * 0.9, 60]), add(c, [R * 0.9, -60])], 18, '#a8946a'); oval(f, F, c, 16, 16, C.BRONZE); f.rivet(F([c])[0], 6, '#d8c8a0');
   L(f, F, ell(c, R - 6, R - 6, 0, 44).slice(24, 36), 6, '#f0e0b0', { op: 0.5 }); D.bloom(f, F([add(c, [120, 140])])[0], 22, C.VERD, { n: 3, op: 0.5 }); D.chip(f, F([add(c, [-R + 10, 60])])[0], 8, 1.6);
-  return { focus: F([c])[0], sig: SB(F, [-225, c[1] - R - 90, 230, c[1] + R + 12]), hook: F([[0, -R - 70]])[0], feat: [], ells: [] };
+  return { focus: F([c])[0], sig: SB(F, [-225, c[1] - R - 90, 230, c[1] + R + 12]), hook: F([[0, -R - 70]])[0], grip: { c: F([[0, -R - 60]])[0], thumb: (o.ang ?? 0) + Math.PI / 2 }, feat: [], ells: [] };
 };
-META.astrolabe = { act: 'turn', only: ['close', 'niche', 'table'] };
+META.astrolabe = { act: 'turn', only: ['close', 'niche', 'table', 'held'] };
 
 O.blindfold = (f, o = {}) => { // the Oracle's blindfold: a band of undyed linen knotted at the back, long tails hanging, an eye painted on its front in dark ink
   const F = frame([0, 0], o.ang ?? -0.05, 1), r = f.r;
@@ -96,7 +96,7 @@ O.weathervane = (f, o = {}) => { // an iron weathervane: a cockerel cut from she
   for (const [x, y] of [[-200, 140], [200, 140]]) f.part(F([[x - 20, y - 26], [x + 20, y - 26], [x, y + 20]]), { fill: C.IRON, shade: 0.4, inkW: 1.6, cast: false, sharp: true });
   oval(f, F, [0, -100], 26, 26, C.IRON);
   const bird = [[-200, -140], [-150, -230], [-100, -170], [-40, -200], [20, -300], [60, -330], [100, -300], [90, -260], [130, -250], [90, -230], [110, -180], [60, -120], [-60, -110], [-150, -100]];
-  D.slab(f, F(bird), [8, 6]); P(f, F, bird, '#4a4c50', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, bird, 0.3, 10);
+  D.slab(f, F(bird), [8, 6]); P(f, F, bird, '#5a5c60', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, bird, 0.4, 8, 0.6, '#c8c8c4'); grain(f, F, bird, 0.3, 12, -0.8);
   for (let k = 0; k < 4; k++) L(f, F, [[-180 + k * 14, -150 + k * 10], [-140 + k * 10, -220 + k * 14]], 3, '#2a2a2c');   // the tail's feathers cut out
   f.part(F([[60, -330], [80, -360], [100, -340], [96, -320]]), { fill: '#5c0f0b', shade: 0.3, inkW: 1.2, cast: false }); oval(f, F, [70, -290], 8, 8, '#d8d8d0');   // comb, eye
   lit(f, F, [[-150, -230], [20, -300], [60, -330]], 4, 0.55); D.bloom(f, F([[-40, -150]])[0], 30, C.RUST, { n: 4 }); D.bloom(f, F([[0, 200]])[0], 16, C.RUST, { n: 2 });
@@ -119,23 +119,23 @@ META.birdskull = { act: 'swing', only: ['close', 'table', 'niche'] };
 
 O.waxtablet = (f, o = {}) => { // the Fatebinder's wax tablet: a hinged pair of oak boards, the dark wax inside, one red word cut into it, the bone stylus laid across
   const F = frame([0, 0], o.ang ?? -0.08, 1), r = f.r;
-  for (const [x0, k] of [[-330, 0], [10, 1]]) { const b = [[x0, -230, 1], [x0 + 320, -230 + k * 10, 1], [x0 + 320, 220 + k * 14, 1], [x0, 220, 1]]; D.slab(f, F(b), [10, 12]); P(f, F, b, C.OAKL, { tex: T(f, 'wood'), texOp: 1 });
-    const w = [[x0 + 30, -200, 1], [x0 + 290, -200 + k * 10, 1], [x0 + 290, 190 + k * 12, 1], [x0 + 30, 190, 1]]; f.part(F(w), { fill: '#3a2e1e', shade: 0.3, inkW: 2, cast: false, tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, w, 0.3, 10, 0.2, '#6a5a3a');
+  for (const [x0, k] of [[-330, 0], [10, 1]]) { const b = [[x0, -230, 1], [x0 + 320, -230 + k * 10, 1], [x0 + 320, 220 + k * 14, 1], [x0, 220, 1]]; D.slab(f, F(b), [10, 12]); P(f, F, b, C.OAKL, { tex: T(f, 'wood'), texOp: 1 }); grain(f, F, b, 0.35, 8, 1.57, '#2a1a10');
+    const w = [[x0 + 30, -200, 1], [x0 + 290, -200 + k * 10, 1], [x0 + 290, 190 + k * 12, 1], [x0 + 30, 190, 1]]; f.part(F(w), { fill: '#3a2e1e', shade: 0.3, inkW: 2, cast: false, tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, w, 0.4, 8, 0.2, '#8a7a5a'); grain(f, F, w, 0.3, 12, -1.2, '#c8b890');
     for (let i = 0; i < 6; i++) L(f, F, [[x0 + 50, -170 + i * 60], [x0 + 270, -170 + i * 60 + k * 8]], 3, '#8a7a5a', { op: 0.7, dash: `${16 + (i * 7) % 20} 6 8 5` }); }
   L(f, F, [[60, -60], [100, -100], [150, -40], [200, -100], [250, -60]], 9, RED);   // the one red word
   for (const y of [-160, 150]) { P(f, F, [[-12, y], [22, y], [22, y + 40], [-12, y + 40]], C.IRON, { dress: false }); f.rivet(F([[5, y + 20]])[0], 4, '#c8c8c4'); }
   tube(f, F, [[-300, 260], [200, 120]], 18, '#d8ccb0'); f.part(F([[200, 120], [270, 96], [206, 132]]), { fill: '#d8ccb0', shade: 0.3, inkW: 1.4, cast: false, sharp: true });
   D.chip(f, F([[-330, 0]])[0], 9, 1.6); D.crack(f, F([[-150, 210]])[0], 0.1, 60, { n: 3 });
-  return { focus: F([[150, -70]])[0], sig: SB(F, [-335, -240, 345, 265]), feat: [], ells: [] };
+  return { focus: F([[150, -70]])[0], sig: SB(F, [-335, -240, 345, 265]), grip: { c: F([[-330, 40]])[0], thumb: (o.ang ?? -0.08) }, feat: [], ells: [] };
 };
-META.waxtablet = { act: 'press', only: ['close', 'table', 'ledge', 'niche'] };
+META.waxtablet = { act: 'press', only: ['close', 'table', 'ledge', 'niche', 'held'] };
 
 O.tapestry = (f, o = {}) => { // a hanging tapestry on its pole: a woven red-bordered field of the company's deeds in blocky figures, the hem fringed and frayed, deep folds
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
   tube(f, F, [[-330, -290], [330, -290]], 26, C.OAK); for (const x of [-340, 340]) oval(f, F, [x, -290], 24, 24, C.OAKL);
   const cloth = [[-290, -280], [290, -280], [300, 240], [200, 260], [100, 236], [0, 262], [-100, 236], [-200, 260], [-300, 240]];
   P(f, F, cloth.map(p => [p[0], p[1], 1]), '#6a4a3a', { tex: T(f, 'weave'), texOp: 1 }); grain(f, F, cloth, 0.3, 8, 0);
-  f.part(F([[-250, -240], [250, -240], [256, 200], [-256, 200]]), { fill: '#4a4a3a', shade: 0.4, inkW: 1.6, cast: false, tex: T(f, 'weave'), texOp: 1 });
+  f.part(F([[-250, -240], [250, -240], [256, 200], [-256, 200]]), { fill: '#5a5a48', shade: 0.4, inkW: 1.6, cast: false, tex: T(f, 'weave'), texOp: 1 }); grain(f, F, [[-250, -240], [250, -240], [256, 200], [-256, 200]], 0.4, 7, 0.1, '#d8d0b8'); grain(f, F, [[-250, -240], [250, -240], [256, 200], [-256, 200]], 0.35, 9, 1.4, '#1a1812');
   L(f, F, [[-270, -260], [270, -260], [276, 220], [-276, 220], [-270, -260]], 14, RED, { op: 0.9, straight: true });
   for (const [x, col] of [[-170, '#c8bca0'], [-40, '#8a8270'], [90, '#c8bca0'], [200, '#6a7a84']]) { f.part(F([[x - 30, -60], [x + 30, -60], [x + 40, 140], [x - 40, 140]]), { fill: col, shade: 0.4, inkW: 1.4, cast: false }); oval(f, F, [x, -100], 26, 30, col, { inkW: 1.4 }); L(f, F, [[x + 30, -40], [x + 70, -160]], 6, '#3a3a3c'); }   // the figures, weapons raised
   for (let k = 0; k < 5; k++) L(f, F, [[-230 + k * 110, -200], [-220 + k * 110, 180]], 9, '#2a2018', { op: 0.35 });   // folds
@@ -144,5 +144,16 @@ O.tapestry = (f, o = {}) => { // a hanging tapestry on its pole: a woven red-bor
   return { focus: F([[0, -40]])[0], sig: SB(F, [-345, -315, 345, 300]), hook: F([[0, -300]])[0], feat: [], ells: [] };
 };
 META.tapestry = { act: 'drip', only: ['close', 'niche'] };
+
+
+O.bonepile = (f, o = {}) => { // knucklebones cast in one heap on a scrap of hide (the scattered set failed L56): five knucklebones touching and stacked, waisted and knobbed, one standing on end
+  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, BN = '#d8ccb0';
+  const hide = [[-330, 120], [-200, 60], [0, 50], [220, 70], [340, 140], [250, 230], [0, 250], [-250, 230]]; P(f, F, hide, '#6a5038', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, hide, 0.3, 9, 0.2, '#c8a878');
+  const bone = (c, a, s) => { const G = frame(c, a, s), Fp = pts => F(G(pts)); const b = [[-90, -40], [-40, -54], [0, -30], [40, -54], [90, -40], [100, 0], [90, 40], [40, 54], [0, 30], [-40, 54], [-90, 40], [-100, 0]]; f.part(Fp(b), { fill: BN, shade: 0.45, inkW: 2.2, cast: true, tex: T(f, 'mottle'), texOp: 1 }); f.part(Fp(ell([0, 0], 22, 14, 0, 12)), { fill: '#8a7a5a', shade: 0.3, inkW: 1.2, cast: false }); f.line(Fp([[-80, -30], [-20, -44]]), 3, '#f8f2e0', { op: 0.6 }); };
+  bone([-170, 120], 0.3, 1.1); bone([150, 130], -0.4, 1.05); bone([-10, 150], 0.05, 1.15); bone([60, 30], 1.2, 1.0); bone([-60, -10], -1.4, 1.05);
+  for (let i = 0; i < 6; i++) f.flat(F(ell([-200 + i * 80, 190 + (i % 2) * 20], 4, 3, 0, 6)), '#2a1a10', { op: 0.6 });
+  return { focus: F([[0, 80]])[0], sig: SB(F, [-335, -100, 345, 255]), feat: [], ells: [] };
+};
+META.bonepile = { act: 'fling', only: ['close', 'table', 'floor', 'ledge'] };
 
 module.exports = { O, META };

@@ -6,7 +6,8 @@ const { chromium } = require('playwright');
 const K = require('./card_kit');
 (async () => {
   const out = process.argv[2], course = process.argv[3] || 'physical';
-  const all = {}; for (const fn of fs.readdirSync(__dirname).filter(n => /^objects([6-9]|\d\d)\.js$/.test(n)).sort()) Object.assign(all, require('./' + fn).O);
+  const all = {}; for (const fn of fs.readdirSync(__dirname).filter(n => /^objects([6-9]|\d\d)\.js$/.test(n)).sort((a, b) => parseInt(a.slice(7)) - parseInt(b.slice(7)))) Object.assign(all, require('./' + fn).O);
+  if (process.argv[4] && process.argv[4] !== '-') { require('./samples'); Object.assign(all, Object.fromEntries(Object.entries(require('./objcomp').LIB).filter(([k]) => !(k in all)))); }   // named keys may come from the whole library
   const only = process.argv[4] && process.argv[4] !== '-' ? process.argv[4].split(',') : null;
   const keys = Object.keys(all).filter(k => !only || only.includes(k));
   const sc = +(process.argv[5] || 0.4), cw = Math.round(800 * sc), ch = Math.round(800 * sc), cols = +(process.argv[6] || 8), rows = Math.ceil(keys.length / cols);

@@ -42,6 +42,7 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!~]/g, '_');   // <id>
     if (meta.kind === 'object') { // the object alone, for the flatness check (L3)
       await pg.evaluate(() => { document.body.style.background = 'transparent'; let n = document.getElementById('subj'); n.removeAttribute('filter'); while (n && n.parentNode && n.tagName !== 'svg') { for (const sib of n.parentNode.children) if (sib !== n && sib.tagName !== 'defs') sib.style.display = 'none'; n = n.parentNode; } });
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_subj.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });   // the subject, hand and all (L45)
+      if (!meta.hand) { try { fs.unlinkSync(path.join(OUT, '_full', fname(id) + '_hand.png')); } catch (e) {} }   // a stale hand mask from an earlier held render would fail L53 on a card that no longer has a hand
       if (meta.hand) { // the hand alone, to weigh it against the object it holds (L53)
         await pg.evaluate(() => { for (const c of document.getElementById('subj').children) if (c.id !== 'hand') c.style.visibility = 'hidden'; });
         await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_hand.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
@@ -50,9 +51,16 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!~]/g, '_');   // <id>
       await pg.evaluate(() => { const h = document.getElementById('hand'); if (h) h.style.display = 'none'; });   // the object alone: the hand is the hero's own drawing (L3, L46, L47)
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_mask.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
     }
-    if (meta.course) { // an attuned variant's FX layer alone (the .cfx groups), for the greyscale element check (attuned_check.py, L61)
-      await pg.evaluate(() => { document.body.style.background = 'transparent'; for (const c of document.querySelector('svg').children) if (c.tagName !== 'defs' && !(c.classList && c.classList.contains('cfx'))) c.style.display = 'none'; });
+    if (meta.course || meta.elem) { // an attuned variant's (or any element card's) FX layer alone (the .cfx groups), for the greyscale element check (attuned_check.py, L61)
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; for (const c of document.querySelector('svg').children) if (c.tagName !== 'defs') c.style.display = c.classList && c.classList.contains('cfx') ? '' : 'none'; });   // object cards hid their siblings of #subj above, the cfx layers too: show them again
       await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_fx.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
+      await pg.evaluate(() => { const st = document.createElement('style'); st.id = 'impOnly'; st.textContent = '.cfx *{visibility:hidden} .cimp, .cimp *{visibility:visible}'; document.head.appendChild(st); });
+      await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_imp.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });   // the element impact alone (L61 symmetry)
+      await pg.evaluate(() => { document.getElementById('impOnly').remove(); for (const c of document.querySelector('svg').children) c.style.display = ''; });
+    }
+    if (meta.kind === 'hero' && meta.cue) { // the name cue alone (L67, cue_check.py): its solid pixels, beside the card and the hero mask
+      await pg.evaluate(() => { document.body.style.background = 'transparent'; for (const c of document.querySelector('svg').children) if (c.tagName !== 'defs') c.style.display = c.classList && c.classList.contains('cue') ? '' : 'none'; });
+      await pg.screenshot({ path: path.join(OUT, '_full', fname(id) + '_cue.png'), clip: { x: 0, y: 0, width: S.W, height: S.H }, omitBackground: true });
       await pg.evaluate(() => { for (const c of document.querySelector('svg').children) c.style.display = ''; });
     }
     if (meta.kind === 'hero' && meta.frame) { // the hero figure alone, for the silhouette check (herosim.py)
@@ -68,9 +76,14 @@ const fname = id => id.replace(/^@/, 'test_').replace(/[\/!~]/g, '_');   // <id>
   // pixel checks after rendering (L3 flatness, L14 hue clusters) and the unlabelled thumbs170.png
   let pix = '', pixOk = true;
   try { pix = execFileSync('python3', [path.join(__dirname, 'pixchecks.py'), OUT, listFile]).toString(); } catch (e) { pix = (e.stdout || '').toString(); pixOk = false; }
+  try { pix += execFileSync('python3', [path.join(__dirname, 'lookalike.py'), OUT, listFile]).toString(); } catch (e) { pix += (e.stdout || '').toString(); pixOk = false; }   // L70: visual look-alikes within a calling (the variety pass)
   report += '\n' + pix.trim();
   // hero cards of a calling must each be their own picture: silhouette and band-pass picture distance (herosim.py)
   if (built.some(x => x.meta.kind === 'hero' && x.meta.frame)) { let hs = ''; try { hs = execFileSync('python3', [path.join(__dirname, 'herosim.py'), OUT, listFile, '--report', path.join(OUT, 'herosim.tsv')]).toString(); } catch (e) { hs = (e.stdout || '').toString(); pixOk = false; } report += '\n' + hs.trim(); pix += '\n' + hs.trim(); }
+  // every hero card's name cue reads at game size (cue_check.py, L67)
+  if (built.some(x => x.meta.kind === 'hero' && x.meta.cue)) { let cc = ''; try { cc = execFileSync('python3', [path.join(__dirname, 'cue_check.py'), OUT, listFile]).toString(); } catch (e) { cc = (e.stdout || '').toString(); pixOk = false; } report += '\n' + cc.trim(); pix += '\n' + cc.trim(); }
+  // attuned variants and element FX (attuned_check.py: L60 colour, L61 greyscale shape and size)
+  if (built.some(x => x.meta.course || x.meta.elem)) { let ac = ''; try { ac = execFileSync('python3', [path.join(__dirname, 'attuned_check.py'), OUT, listFile]).toString(); } catch (e) { ac = (e.stdout || '').toString(); pixOk = false; } report += '\n' + ac.trim(); pix += '\n' + ac.trim(); }
   fs.writeFileSync(path.join(OUT, 'checks.txt'), report + '\n');
   // L57: a sample of the batch rebuilt alone in fresh processes must match the batch SVGs byte for byte (not on -all)
   if (!process.argv.includes('-all')) { let det = ''; try { det = execFileSync('node', [path.join(__dirname, 'check_determinism.js'), OUT]).toString(); } catch (e) { det = (e.stdout || '').toString(); pixOk = false; } report += '\n' + det.trim(); pix += det; }

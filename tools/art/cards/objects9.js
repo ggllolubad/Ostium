@@ -6,13 +6,13 @@
 const K = require('./card_kit');
 const { E, D, INK } = K;
 const { add, sub, mul, lerp, rot, mix, ell, frame, limb, norm } = E;
-const { C, INKS, SIX, T, loop, L, P, turned, lit, tube, oval, ring, sweep, SB, arcs, shadeR } = require('./objects6').helpers;
+const { C, INKS, SIX, T, loop, L, P, turned, lit, tube, oval, ring, sweep, SB, arcs, shadeR, grain } = require('./objects6').helpers;
 const O = {}, META = {};
 const inkOf = o => INKS[o.course] || '#1e1612';
 // a small bronze bell, mouth down: used on the staff and the wheel
 function bellAt(f, F, c, s, o = {}) {
   const G = frame(F([c])[0], 0, s), BR = o.col || '#7a6a48';
-  const prof = turned([[20, -100], [44, -90], [56, -40], [70, 30], [100, 80], [104, 96]], 0.22); f.part(G(prof), { fill: BR, shade: 0.45, inkW: 2 / Math.max(0.5, s), cast: true, tex: T(f, 'mottle'), texOp: 0.7 });
+  const prof = turned([[20, -100], [44, -90], [56, -40], [70, 30], [100, 80], [104, 96]], 0.22); f.part(G(prof), { fill: BR, shade: 0.45, inkW: 2 / Math.max(0.5, s), cast: true, tex: T(f, 'mottle'), texOp: 0.7 }); grain(f, G, prof, 0.35, 10, 0.9, '#2a2014');
   f.line(G([[-40, -70], [-52, 0], [-80, 70]]), 6, '#e8d8a8', { op: 0.5 }); f.part(G(ell([0, 96], 100, 22, 0, 24)), { fill: '#120c08', shade: 0.1, inkW: 1.6, cast: false, hatch: false });
   f.line(G(ell([0, 92], 100, 20, 0, 24).slice(0, 13)), 4, '#c8b080', { op: 0.6 }); f.part(G(ell([10, 110], 14, 14, 0, 10)), { fill: '#3a3a3c', shade: 0.4, inkW: 1.2, cast: false });
   f.part(G([[-18, -100], [18, -100], [14, -130], [-14, -130]]), { fill: BR, shade: 0.4, inkW: 1.4, cast: false });
@@ -20,7 +20,7 @@ function bellAt(f, F, c, s, o = {}) {
 
 O.staffbell = (f, o = {}) => { // the Doomsayer's bell staff: a tall blackthorn crook, a bronze bell hung from the crook's end on an iron link, the staff's foot shod in iron
   const F = frame([0, 0], o.ang ?? -0.12, 1), r = f.r;
-  const st = [[-60, 420], [-50, 100], [-40, -200], [-20, -330], [60, -400], [160, -390], [210, -320], [200, -250]]; tube(f, F, st, 40, '#3a2a22'); for (let i = 0; i < 6; i++) { const p = K.catmull(st, 3)[2 + i * 2]; if (p) f.part(F(ell(add(p, [18, 0]), 10, 6, 0.6, 8)), { fill: '#3a2a22', shade: 0.4, inkW: 1.2, cast: false }); }   // the thorns' stubs
+  const st = [[-60, 420], [-50, 100], [-40, -200], [-20, -330], [60, -400], [160, -390], [210, -320], [200, -250]]; tube(f, F, st, 40, '#4a3a2e'); for (let i = 0; i < 14; i++) { const p = K.catmull(st, 3)[i]; if (p) L(f, F, [add(p, [-14, -6]), add(p, [14, 8])], 2, '#a89070', { op: 0.6 }); } for (let i = 0; i < 6; i++) { const p = K.catmull(st, 3)[2 + i * 2]; if (p) f.part(F(ell(add(p, [18, 0]), 10, 6, 0.6, 8)), { fill: '#3a2a22', shade: 0.4, inkW: 1.2, cast: false }); }   // the thorns' stubs
   P(f, F, [[-82, 380], [-38, 380], [-40, 430], [-80, 430]], C.IRON, { dress: false });
   ring(f, F, [200, -228], 16, 22, 7, C.IRON); bellAt(f, F, [200, -80], 1.5);
   for (let i = 0; i < 3; i++) { const y = -60 + i * 60; tube(f, F, [[-48, y], [-120, y + 30 + i * 10], [-140, y + 90 + i * 20]], 6, i === 1 ? '#5c0f0b' : '#2a2a2a', { lit: false }); }   // black and red rags tied on
@@ -73,7 +73,7 @@ META.chevalmirror = { act: 'crack', only: ['close', 'floor', 'niche'] };
 O.witchball = (f, o = {}) => { // a witch ball hung in a window to turn curses back: a great silvered glass sphere on a cord, the room bent round in it, a dark star of a crack
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, c = [0, 40], R = 230;
   L(f, F, [[0, -380], [0, -220]], 7, INK); L(f, F, [[0, -380], [0, -220]], 4, '#2a2a2a'); P(f, F, [[-30, -230], [30, -230], [26, -180], [-26, -180]], '#5a5c60', { dress: false }); ring(f, F, [0, -246], 16, 12, 6, '#5a5c60');
-  P(f, F, ell(c, R, R, 0, 48), '#7a848c', { tex: T(f, 'mottle'), texOp: 0.6 });
+  P(f, F, ell(c, R, R, 0, 48), '#7a848c', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, ell(c, R, R, 0, 48), 0.3, 10, 0.5, '#e8ecf0');
   f.flat(F([...ell(c, R - 6, R - 6, 0, 48).slice(26, 46), add(c, [0, 30])]), '#3a3e44', { op: 0.6 });   // the room reflected in a band of dark
   for (let k = 0; k < 4; k++) L(f, F, ell(c, R * (0.86 - k * 0.12), R * (0.5 - k * 0.06), 0, 40).slice(0, 21), 2, '#2a2e34', { op: 0.6 });
   for (let i = 0; i < 5; i++) { const x = -150 + i * 70; L(f, F, [add(c, [x * 0.9, -100 + Math.abs(x) * 0.4]), add(c, [x, 80 - Math.abs(x) * 0.3])], 4, '#c8ccd0', { op: 0.5 }); }   // the bent window bars
@@ -118,8 +118,8 @@ O.rowan = (f, o = {}) => { // a rowan cross charm: two forked rowan twigs bound 
   for (const [a, b] of [[[0, 260], [-70, 340]], [[0, 260], [60, 350]], [[260, -48], [330, -110]], [[260, -48], [330, 10]], [[-260, -32], [-320, 30]]]) tube(f, F, [a, b], 16, BK, { lit: false });
   for (let i = 0; i < 10; i++) L(f, F, [[-40 + (i % 2) * 6, -80 + i * 10], [40 - (i % 2) * 6, -20 + i * 6 - 60]], 6, '#5c0f0b');   // the binding
   L(f, F, [[-40, -10], [50, -90]], 7, '#5c0f0b'); L(f, F, [[-40, -90], [50, -10]], 7, '#5c0f0b');
-  for (let i = 0; i < 9; i++) { const c = [-320 + (i % 3) * 22 + (i > 5 ? 10 : 0), 50 + Math.floor(i / 3) * 22]; oval(f, F, c, 13, 13, '#7a2418', { shade: 0.4, inkW: 1.2 }); f.flat(F(ell(add(c, [-4, -4]), 4, 3, 0, 6)), '#e8a090', { op: 0.8 }); }
-  for (const [x, y] of [[100, -300], [-120, 200]]) f.part(F(ell([x, y], 40, 14, 0.7, 12)), { fill: '#5a6a3a', shade: 0.4, inkW: 1.2, cast: false });   // a leaf left on
+  for (let i = 0; i < 9; i++) { const c = [-300 + (i % 3) * 22 + (i > 5 ? 10 : 0), -16 + Math.floor(i / 3) * 22]; oval(f, F, c, 13, 13, '#7a2418', { shade: 0.4, inkW: 1.2 }); f.flat(F(ell(add(c, [-4, -4]), 4, 3, 0, 6)), '#e8a090', { op: 0.8 }); }
+  for (const [x, y] of [[40, -300], [-40, 200]]) f.part(F(ell([x, y], 40, 14, 0.7, 12)), { fill: '#5a6a3a', shade: 0.4, inkW: 1.2, cast: false });   // a leaf left on
   oval(f, F, [0, -340], 14, 14, C.IRON); L(f, F, [[0, -340], [0, -390]], 8, C.IRON);
   for (let i = 0; i < 8; i++) L(f, F, [[-10 + (i % 2) * 20, -300 + i * 70], [10 - (i % 2) * 20, -290 + i * 70]], 2, '#3a2a1e', { op: 0.6 });
   return { focus: F([[0, -50]])[0], sig: SB(F, [-335, -390, 335, 355]), hook: F([[0, -388]])[0], feat: [], ells: [] };
@@ -128,8 +128,8 @@ META.rowan = { act: 'swing', only: ['close', 'niche'] };
 
 O.spade = (f, o = {}) => { // a gravedigger's spade driven into a heap of dark grave earth: an iron-shod oak blade, a long shaft with a T grip, clods falling
   const F = frame([0, 0], o.ang ?? -0.08, 1), r = f.r;
-  const heap = [[-330, 320], [-240, 200], [-100, 140], [60, 150], [220, 190], [330, 320]]; P(f, F, heap, '#3a2e24', { tex: T(f, 'mottle'), texOp: 1 }); for (let i = 0; i < 14; i++) f.part(F(ell([-260 + (i * 41) % 520, 200 + (i * 23) % 100], 18, 12, 0, 8)), { fill: i % 3 ? '#4a3a2e' : '#5a4a30', shade: 0.4, inkW: 1, cast: false });
-  const blade = [[-120, -40, 1], [120, -40, 1], [110, 200, 1], [-110, 200, 1]]; D.slab(f, F(blade), [10, 6]); P(f, F, blade, C.OAKL, { tex: T(f, 'wood'), texOp: 1 });
+  const heap = [[-330, 320], [-240, 200], [-100, 140], [60, 150], [220, 190], [330, 320]]; P(f, F, heap, '#3a2e24', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, heap, 0.35, 9, 0.4, '#8a7a60'); for (let i = 0; i < 14; i++) f.part(F(ell([-260 + (i * 41) % 520, 200 + (i * 23) % 100], 18, 12, 0, 8)), { fill: i % 3 ? '#4a3a2e' : '#5a4a30', shade: 0.4, inkW: 1, cast: false });
+  const blade = [[-120, -40, 1], [120, -40, 1], [110, 200, 1], [-110, 200, 1]]; D.slab(f, F(blade), [10, 6]); P(f, F, blade, C.OAKL, { tex: T(f, 'wood'), texOp: 1 }); grain(f, F, blade, 0.3, 9, 1.57);
   f.part(F([[-114, 120], [114, 120], [110, 200], [-110, 200]]), { fill: C.IRON, shade: 0.4, inkW: 1.6, cast: false }); for (const x of [-80, 0, 80]) f.rivet(F([[x, 140]])[0], 4, '#9a9a96');
   P(f, F, [[-50, -40], [50, -40], [30, -80], [-30, -80]], C.OAK, { dress: false }); tube(f, F, [[0, -80], [0, -400]], 40, C.OAK); tube(f, F, [[-90, -420], [90, -420]], 36, C.OAKL);
   P(f, F, [[-110, 180], [110, 180], [120, 240], [-120, 240]], '#3a2e24', { dress: false });   // the blade bitten into the earth

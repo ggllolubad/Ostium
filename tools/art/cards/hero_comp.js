@@ -1,4 +1,4 @@
-// Hero card compositions, round 9 (hero-card agent, 2026-11-25; LESSONS L59). The hero cards that remain after the
+// Hero card compositions, round 9 (hero-card agent, 2026-11-25; LESSONS L66). The hero cards that remain after the
 // re-route (hero_routes.HERO) are each staged as their own picture:
 //   - a framing (full, three, close, low, ots) and a placement, a pose and a room view, allocated once over the whole
 //     deck (never per batch, L57) so that no two hero cards of a calling share a silhouette (IoU 0.42 here; herosim.py
@@ -15,6 +15,7 @@ const HR = require('./hero_routes');
 const HS = require('./hero_staging');
 const CP = require('./check_poses');
 const EF = require('./element_fx');
+const CUES = require('./hero_cues'), CUE_TABLE = require('./hero_cues.json');   // round 11 (L67): one name cue per hero card
 const ELEMENT_SHAPES = true;   // L61: course FX drawn as their element (false only to calibrate the check on the old recolour)
 const { RIG, FIGURES } = require('./rig');
 const { E, W, H, INK, COURSE, INK6, BLOOD, PAPER } = K;
@@ -51,7 +52,10 @@ function raster(cls, key, P, pname, A, at, scale) {
     const q = poly.map(r => [(at[0] + (r[0] - A[0]) * scale) * sx, (at[1] + (r[1] - A[1]) * scale) * sy]);
     let x0 = W, x1 = -1, y0 = H, y1 = -1; for (const p of q) { x0 = Math.min(x0, p[0]); x1 = Math.max(x1, p[0]); y0 = Math.min(y0, p[1]); y1 = Math.max(y1, p[1]); }
     x0 = Math.max(0, Math.floor(x0)); x1 = Math.min(GW - 1, Math.ceil(x1)); y0 = Math.max(0, Math.floor(y0)); y1 = Math.min(GH - 1, Math.ceil(y1));
-    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { if (g[y * GW + x]) continue; const px = x + 0.5, py = y + 0.5; let c = false; for (let i = 0, j = q.length - 1; i < q.length; j = i++) { const a = q[i], b = q[j]; if ((a[1] > py) !== (b[1] > py) && px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } if (c) g[y * GW + x] = 1; }
+    // a cell counts when any of five sample points in it falls inside (the centre alone missed edge cells that a render covers,
+    // so the allocator under-read overlaps by about 0.06 on small figures)
+    const inside = (px, py) => { let c = false; for (let i = 0, j = q.length - 1; i < q.length; j = i++) { const a = q[i], b = q[j]; if ((a[1] > py) !== (b[1] > py) && px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { if (g[y * GW + x]) continue; for (const [ox, oy] of [[0.5, 0.5], [0.25, 0.25], [0.75, 0.25], [0.25, 0.75], [0.75, 0.75]]) if (inside(x + ox, y + oy)) { g[y * GW + x] = 1; break; } }
   }
   return g;
 }
@@ -60,10 +64,14 @@ const SIL_TARGET = 0.44;   // herosim.py fails at 0.5; the polygon raster tracks
 
 // ==== the deck-level allocation, cached on disk by a hash of everything it depends on
 const ALLOC_FILE = path.join(__dirname, 'hero_alloc.json');
-const VERSION = 9;
+const VERSION = 17;
+const ALT_ROOMS = { physical: ['stair', 'nave', 'belfry', 'ossuary', 'throne', 'brine_grotto'], frost: ['fleet_ice', 'rime_hall', 'rime_glacier'], void: ['throne', 'spire_orrery', 'silence_shrine'], toxin: ['mire_hut', 'mire_bog'], fire: ['pyre_nave', 'pyre_crypt'] };
+ALT_ROOMS.attuned = ['pyre_nave', 'pyre_crypt', 'stair', 'ossuary', 'belfry'];   /* an attuned card's base course is fire: a separated pair takes a pyre room in its fire version (round 11: two fire casts in one nave read alike) */   // the calling's world rooms for a card of a separated pair
 const POSE_CAP = 0.38;
 // pairs a render showed to read alike (herosim.py B fails, written by herosim.py --separate): kept out of one framing
 const SEPARATE_FILE = path.join(__dirname, 'hero_separate.json');
+// per-card element size factors measured on a render (attuned_check.py --fxscale): the cover a card's element FX took, brought into 15 to 30%
+const FXSCALE = (() => { try { return JSON.parse(fs.readFileSync(path.join(__dirname, 'hero_fxscale.json'), 'utf8')); } catch (e) { return {}; } })();
 const SEPARATE = (() => { try { return JSON.parse(fs.readFileSync(SEPARATE_FILE, 'utf8')); } catch (e) { return []; } })();
 const sepKey = (a, b) => a < b ? a + '|' + b : b + '|' + a, SEP = new Set(SEPARATE.map(p => sepKey(p[0], p[1])));
 let ALLOC = null;
@@ -82,7 +90,7 @@ function allocation(S) {
     const C = ids.map(id => {
       const card = S.CARDS[id], key = figKey(card), [frame, mech] = HR.HERO[id], r = rng(seedOf(id)), isBlock = S.kindOf(card) === 'block';
       const own = pool.filter(p => p.mech.includes(mech)), kin = pool.filter(p => p.block === isBlock && !own.includes(p));
-      const whole = /\brope|tally/.test(HR.HERO[id][2]);   // a motif drawn on the door (rope, tally) needs the door in view
+      const whole = /\brope|tally/.test(HR.HERO[id][2]), elemCast = S.kindOf(card) === 'cast' && (EF.isElement(card.cat) || card.cat === 'attuned');   // a motif drawn on the door (rope, tally) needs the door in view
       const list = [];
       for (const fr of ['three', 'full', 'low', 'close', 'ots']) {
         if (whole && (fr === 'close' || fr === 'ots')) continue;
@@ -90,10 +98,11 @@ function allocation(S) {
           if (pc.frames && !pc.frames.includes(fr) && fr !== 'close') continue;
           const pls = HS.placements(cls, key, pc.P, fr, true); if (!pls.length) continue;
           const u = HS.placeIn(cls, key, pc.P, fr, [0, 0], 1);
-          const keep = fr === frame ? 70 : 24;
+          const keep = fr === frame ? 110 : 45;
           for (let i = 0; i < Math.min(keep, pls.length); i++) {
             const p = pls[Math.floor((i + r()) * pls.length / Math.min(keep, pls.length)) % pls.length];
-            list.push({ pose: pc.name, frame: fr, at: p.at.map(v => Math.round(v)), scale: +p.scale.toFixed(3), base: (fr === frame ? 0 : 0.25) + pen + r() * 0.02,
+            const ax = p.at[0] + u.act[0] * p.scale, ahead = elemCast && fr !== 'ots' && ax > W - 330 ? 0.6 : 0;   /* round 10b: an element cast needs room ahead of the hand for the throw and the hit (Spend the Breath sat at the right edge and its fire had 4% of the frame) */
+            list.push({ pose: pc.name, frame: fr, at: p.at.map(v => Math.round(v)), scale: +p.scale.toFixed(3), base: (fr === frame ? 0 : 0.25) + pen + ahead + r() * 0.02,
               act: [p.at[0] + u.act[0] * p.scale, p.at[1] + u.act[1] * p.scale], m: raster(cls, key, pc.P, pc.name, u.A, p.at, p.scale) });
           }
         }
@@ -103,21 +112,22 @@ function allocation(S) {
     // 2. the cost of a candidate against the cards already placed: silhouette overlap, framing cap, two acts at one spot
     const costOf = (ci, cand) => {
       let mx = 0, near = 0, used = 0, sep = 0, same = 0;
-      C.forEach((o, j) => { if (j === ci || !o.pick) return; mx = Math.max(mx, iou(o.pick.m, cand.m)); if (o.pick.pose === cand.pose) same++; if (o.pick.frame === cand.frame) { used++; if (Math.hypot(o.pick.act[0] - cand.act[0], o.pick.act[1] - cand.act[1]) < 160) near++; if (SEP.has(sepKey(o.id, C[ci].id))) sep++; } });
+      C.forEach((o, j) => { if (j === ci || !o.pick) return; mx = Math.max(mx, iou(o.pick.m, cand.m)); if (o.pick.pose === cand.pose) same++; if (o.pick.frame === cand.frame) { used++; if (Math.hypot(o.pick.act[0] - cand.act[0], o.pick.act[1] - cand.act[1]) < 160) near++; } if (SEP.has(sepKey(o.id, C[ci].id)) && (o.pick.frame === cand.frame || iou(o.pick.m, cand.m) > 0.3)) sep++; });   // a pair a render showed alike: apart in framing and in silhouette
       return { mx, cost: (mx >= SIL_TARGET ? 1 + mx : mx * 0.3) + cand.base + (used >= capOf(cand.frame) ? 0.5 : 0) + near * 0.2 + sep * 0.8 + (same + 1 > POSE_CAP * ids.length ? 0.9 : 0) };   // L5: no pose on more than 40% of a calling's hero cards
     };
     const choose = ci => { let best = null; for (const cand of C[ci].list) { const v = costOf(ci, cand); if (!best || v.cost < best.cost) best = Object.assign({ cand }, v); } C[ci].pick = best.cand; return best.mx; };
     C.forEach((_, ci) => choose(ci));   // greedy, in id order
     // 3. repair: re-place the worst offenders against all the others until every pair is under the target
-    for (let pass = 0; pass < 20; pass++) {
+    for (let pass = 0; pass < 40; pass++) {
       const worst = C.map((o, ci) => [ci, Math.max(0, ...C.map((q, cj) => cj === ci ? 0 : iou(o.pick.m, q.pick.m)))]).filter(x => x[1] >= SIL_TARGET).sort((a, b) => b[1] - a[1]);
       if (!worst.length) break;
       for (const [ci] of worst) choose(ci);
     }
-    // 4. the room view: a crop of the room no other card of the calling shows (L59, ground)
+    // 4. the room view: a crop of the room no other card of the calling shows (L66, ground)
     const views = [];
     C.forEach((o, ci) => {
-      const id = o.id, best = o.pick, r = o.r, room = HR.HERO[id][3] || null, W0 = { full: [1500, 1757], three: [1200, 1600], close: [900, 1150], low: [1100, 1400], ots: [1250, 1600] }[best.frame];
+      const id = o.id, best = o.pick, r = o.r, partners = C.filter(q => q.id !== id && SEP.has(sepKey(q.id, id))).map(q => out[q.id] && out[q.id].view.room).filter(Boolean),
+        alt = (ALT_ROOMS[S.CARDS[id].cat] || []).filter(x => !partners.includes(x)), room = HR.HERO[id][3] || (partners.length && alt.length ? alt[seedOf(id) % alt.length] : null), W0 = { full: [1500, 1757], three: [1200, 1600], close: [900, 1150], low: [1100, 1400], ots: [1250, 1600] }[best.frame];
       let view = null;
       for (let t = 0; t < 40 && !view; t++) {
         const w = Math.round(W0[0] + r() * (W0[1] - W0[0])), x = Math.round(r() * (2960 - w)), visH = w * H / W;
@@ -226,9 +236,16 @@ function heroCard(card, id, o, ctx) {
   const fwd = A.frame === 'ots' ? [1, -0.05] : [1, 0.1];
   const motifText = HR.HERO[id][2], motifs = motifsOf(motifText), mech = A.mech;
   // the ground: this card's own view of its room (allocated), the pool where the act is (low: behind the head)
-  const room = card.cat === 'attuned' ? ctx.roomOf(card, course, id) : A.view.room || ctx.roomOf(card, course, id);   // an attuned card's room follows its course (L60)
+  const room = card.cat === 'attuned' ? ((course === 'fire' && A.view.room) || ctx.roomOf(card, course, id)) : A.view.room || ctx.roomOf(card, course, id);   // an attuned card's room follows its course (L60)
   const pool = A.frame === 'low' ? [head[0] + 60, head[1] + 80, 520, 330] : A.frame === 'ots' ? [Math.min(900, act[0] + 120), act[1], 460, 280] : A.frame === 'full' ? [lerp(hip, act, 0.5)[0], 320, 520, 300] : [act[0] + 40, act[1], 440, 280];
   let body = K.ground(r, Object.assign({ room, x: A.view.x, y: A.view.y, w: A.view.w, c, pool, dark: A.frame === 'ots' ? 0.18 : 0.3 }, o.ground || {}));
+  // a full figure standing above the bottom edge stands on something: a stone ledge (a stair edge of the room) at its feet
+  if (A.frame === 'full' && feet) { const fy = M(feet)[1] + 6; if (fy < H - 24) { const x0 = -20, x1 = W + 20, edge = [[x0, fy + 4], [W * 0.5, fy - 2], [x1, fy + 6]];
+    body += `<path d="M${x0},${f1(fy)}L${x1},${f1(fy + 4)}L${x1},${H + 10}L${x0},${H + 10}Z" fill="${mix(c.deep, c.wash, 0.35)}" opacity="0.92"/>`;
+    body += K.motionHatch(r, [[x0, fy + 30], [W * 0.5, fy + 26], [x1, fy + 32]], Math.min(80, H - fy), INK, { lw: 1.6, op: 0.55, grow: false, slant: 0.6, step: 7 });
+    body += K.drybrush(r, edge, 7, mix(c.pool, c.wash, 0.4), { dry: 0.8, op: 0.8, body: false, bristles: 4 });
+    const hx = M(feet)[0]; body += `<ellipse cx="${f1(hx)}" cy="${f1(fy + 2)}" rx="${f1(110 * A.scale)}" ry="10" fill="#0c0806" opacity="0.55" filter="url(#kSoft)"/>`; } }
+  const groundEnd = body.length;   // a setting cue (L67) goes in here: behind the figure and its FX, on the room
   // where the act lands: a point ahead of the anchor, out in the room for the ots view
   const hit = A.frame === 'ots' ? [Math.min(W - 120, act[0] + 260), act[1] + 30] : add(act, mul(fwd, 70 * k));
   let back = '', front = '';
@@ -237,21 +254,56 @@ function heroCard(card, id, o, ctx) {
   const piv = J(P.pivot) || J('upperarm_n') || J('torso') || head;
   // an element is a shape, not a hue (L61): on a course card the stroke leaves the hand as ink and becomes the element
   // where it travels and lands (element_fx.js); physical cards and the doom threads stay ink
-  let done = false;
+  let done = false; const elemHits = [];
   if (ELEMENT_SHAPES && EF.isElement(course)) {
     const floorY = Math.min(H - 30, feet ? M(feet)[1] : H - 40), hitP = A.frame === 'ots' ? hit : [Math.min(W - 170, act[0] + 380 * k), Math.min(H - 130, act[1] + 40 * k)];
     const arcPath = (a, b, lift) => { const mid = [lerp(a, b, 0.5)[0], Math.min(a[1], b[1]) - lift]; return [a, lerp(a, mid, 0.5), mid, lerp(mid, b, 0.55), b]; };
+    // the element takes about a fifth of the frame on a cast (Cole: 15 to 25%), sized by the frame, not the figure; it
+    // never lands on the face (L28): moved clear along the line of the act, and the build fails if it cannot be
+    const ER = (FXSCALE[id + '~' + course] || FXSCALE[id] || 1) * 220 * ({ full: 1.0, three: 1, close: 0.95, low: 1, ots: 0.8 }[A.frame] || 1), faceP = M(h.at('head', CP.FACE[A.key] || CP.FACE[cls]));
+    const segD = (p, a, b) => { const ab = sub(b, a), t = Math.max(0, Math.min(1, ((p[0] - a[0]) * ab[0] + (p[1] - a[1]) * ab[1]) / (ab[0] * ab[0] + ab[1] * ab[1] || 1))); return len(sub(p, add(a, mul(ab, t)))); };
+    const pathFace = pts => { const P = K.catmull(pts, 6); let m = 1e9; for (let i = 1; i < P.length; i++) m = Math.min(m, segD(faceP, P[i - 1], P[i])); return m; };
+    const FACE_FX = 70;   // card px the element's path keeps from the face point (L28); breath leaves the mouth and is exempt
+    // how far each element spreads round its path, in stroke widths (frost shards fly widest): the face margin covers the spread, not just the line (round 10)
+    const SPREAD = { fire: 2.4, frost: 3.6, lightning: 4.5, water: 2.2, toxin: 2.8, void: 2.0 }, margin = w => FACE_FX + w * (SPREAD[course] || 1);
+    const ePath = (pts, w, o) => { try { return ePath1(pts, w, o); } catch (e) { return ePath1(pts, w * 0.6, o); } };   /* a narrower projectile before giving up */
+    const ePath1 = (pts, w, o) => {
+      if (mech === 'gust' || mech === 'spit' || pathFace(pts) >= margin(w)) return EF.stroke(r, course, pts, w, o);
+      if (mech === 'gather' || mech === 'rays' || mech === 'blast') return '';   // one stream (or ray) fewer, never across the face
+      // the projectile starts just past the face: the longest clear run of the path, if enough is left to read
+      const P = K.catmull(pts, 6), ok = P.map(q => len(sub(q, faceP)) >= margin(w));
+      let best = [0, -1], st = -1; ok.forEach((v, i) => { if (v && st < 0) st = i; if ((!v || i === ok.length - 1) && st >= 0) { const e = v ? i : i - 1; if (e - st > best[1] - best[0]) best = [st, e]; st = -1; } });
+      const run = P.slice(best[0], best[1] + 1);
+      if (run.length < P.length * 0.45 || run.length < 4) throw new Error(`L28: ${id}: the ${course} ${mech} path crosses the face`);
+      return EF.stroke(r, course, run.filter((q, i) => i % 3 === 0 || i === run.length - 1), w, o);
+    };
+    const eImp = (p, R0, o) => {
+      // the impact stays off the face: try where it was aimed, then beside, below and toward the far edge, then a little smaller
+      const R1 = Math.min(course === 'fire' ? H / 2.9 : 1e9, ER * Math.max(0.6, Math.min(1.25, R0 / (92 * k))));   // a fire mass (tongues 2R over a base 0.7R low) must fit the frame's height whole
+      // first on the act's own side, shrinking; only then round the face, and only on its forward half (never back onto the body)
+      for (const [sc, wide] of [[1, 0], [0.85, 0], [0.7, 0], [0.6, 0], [0.6, 1], [0.5, 1], [0.45, 2]]) {
+        const R = R1 * sc, need = R * ({ frost: 2.0, fire: 1.6, lightning: 1.9, water: 1.35, toxin: 1.3, void: 1.3 }[course] || 1.15) + 30, top = course === 'fire' ? R * 1.55 : course === 'frost' ? R * 1.5 : R * 0.9, bot = course === 'fire' ? H - R * 0.85 : course === 'frost' ? H - R * 0.7 : H - R * 0.4, xm = course === 'frost' ? R * 1.5 : R * 0.7, cl = q => [Math.max(xm, Math.min(W - xm, q[0])), Math.max(top, Math.min(bot, q[1]))];   /* a frost heap's long splinters reach 2 to 3 R: it keeps that room inside the frame (round 11: heaps at the edge had their splinters cut or shortened to even, small rays) */
+        const around = wide ? (wide === 2 ? [0, 1, 2, 3, 4, 5, 6, 7] : [-2, -1, 0, 1, 2]).map(k => add(faceP, [Math.cos(k * Math.PI / 4) * need, -Math.sin(k * Math.PI / 4) * need])) : [];   /* wide 2: the last resort, all round */
+        for (const q0 of [p, [faceP[0] + need, p[1]], [p[0], faceP[1] + need], [faceP[0] + need * 0.75, faceP[1] + need * 0.75], [W, p[1]], [W, H], ...around]) {
+          const q = cl(q0); if (len(sub(q, faceP)) >= need && (wide === 2 || q[0] >= Math.min(p[0], faceP[0]))) { elemHits.push([q, R]); return `<g class="cimp">${EF.impact(r, course, q, R, o)}</g>`; }
+        }
+      }
+      throw new Error(`L28: ${id}: the ${course} impact cannot clear the face`);
+    };
     done = true;
     switch (mech) {
-      case 'flick': case 'dart': case 'bolt': case 'lance': { const straight = mech !== 'flick'; back += EF.stroke(r, course, straight ? [act, lerp(act, hitP, 0.5), hitP] : arcPath(act, hitP, 90 * k), (mech === 'bolt' || mech === 'lance' ? 30 : mech === 'dart' ? 16 : 22) * k); front += EF.impact(r, course, hitP, (mech === 'bolt' ? 105 : 92) * k, { floorY, dir: [1, 0] }); break; }
-      case 'flung': back += EF.stroke(r, course, arcPath(act, hitP, 90 * k), 16 * k, { inkPart: 0.55 }); front += bead(r, lerp(act, hitP, 0.6), [1, 0.3], 22 * k, '#6a5a34') + shards(r, hitP, 120 * k, [1, -0.2], '#b8c4a8', 7, 6 * k) + EF.impact(r, course, hitP, 95 * k, { floorY, dir: [1, 0] }); break;
-      case 'stroke': back += EF.stroke(r, course, [add(hitP, [-170 * k, -100 * k]), hitP, add(hitP, [150 * k, 90 * k])], 24 * k, { inkPart: 0.3 }) + EF.stroke(r, course, [add(hitP, [-160 * k, 110 * k]), hitP, add(hitP, [160 * k, -80 * k])], 18 * k, { inkPart: 0.3 }); front += EF.impact(r, course, hitP, 85 * k, { floorY, dir: [1, 0] }); break;
-      case 'strike': case 'press': { back += mech === 'strike' ? K.motionHatch(r, [add(act, [-230 * k, 30 * k]), add(act, [-120 * k, 14 * k]), add(act, [-20, 4])], 44 * k, INK, { lw: 2.4, op: 0.75 }) : ''; front += EF.impact(r, course, add(act, [(mech === 'strike' ? 110 : 40) * k, 10 * k]), 85 * k, { floorY, dir: [1, 0] }); break; }
-      case 'drop': { const p = add(act, [30 * k, 60 * k]); front += bead(r, add(p, [0, 80 * k]), [0, 1], 22 * k, '#c8d0c8') + EF.impact(r, course, [p[0], Math.min(floorY - 40, p[1] + 220 * k)], 54 * k, { floorY, dir: [0, -1] }); break; }
-      case 'pour': front += EF.pour(r, course, act, [act[0] + 170 * k, floorY], 16 * k); break;
-      case 'gust': case 'spit': { const m = add(head, [60 * k, 20 * k]); back += EF.stroke(r, course, [m, add(m, [170 * k, -20 * k]), add(m, [360 * k, 20 * k])], 30 * k, { inkPart: 0.2 }); front += EF.impact(r, course, add(m, [400 * k, 30 * k]), 90 * k, { floorY, dir: [1, 0] }); break; }
-      case 'blast': { for (let i = 0; i < 5; i++) { const a = -1.1 + i * 0.5; back += EF.stroke(r, course, [act, add(act, [Math.cos(a) * 160 * k, Math.sin(a) * 130 * k]), add(act, [Math.cos(a) * 320 * k, Math.sin(a) * 250 * k])], 18 * k, { inkPart: 0.25 }); } front += EF.impact(r, course, add(act, [120 * k, 0]), 105 * k, { floorY, dir: [1, 0] }); break; }
-      case 'gather': case 'rays': { const tgt = mech === 'rays' ? hitP : act; for (let i = 0; i < 5; i++) { const a = (-140 + i * 55) * Math.PI / 180, far = add(tgt, [Math.cos(a) * 300 * k + (mech === 'rays' ? -200 * k : 240 * k), Math.sin(a) * 220 * k]); back += EF.stroke(r, course, mech === 'gather' ? [tgt, lerp(tgt, far, 0.5), far] : [far, lerp(far, tgt, 0.5), tgt], (mech === 'rays' ? 8 : 14) * k, { inkPart: mech === 'gather' ? 0.25 : 0.4 }); } front += EF.impact(r, course, tgt, (mech === 'rays' ? 85 : 70) * k, { floorY, dir: [1, 0] }); break; }
+      case 'flick': case 'dart': case 'bolt': case 'lance': { if (mech === 'lance') hitP[0] = W - ER * 0.9;   /* the lance runs to the far side, clear of the face */ const straight = mech !== 'flick' || course === 'lightning';   /* a flicked bolt goes straight: its arc rose past the face and the trimmed fork still seemed to leave the mouth (Sigil Flick, round 12) */ back += ePath(straight ? [act, lerp(act, hitP, 0.5), hitP] : arcPath(act, hitP, 90 * k), (mech === 'bolt' || mech === 'lance' ? 30 : mech === 'dart' ? 16 : 22) * k); front += eImp(hitP, (mech === 'bolt' || mech === 'lance' ? 105 : 92) * k, { floorY, dir: [1, 0] }); break; }
+      case 'flung': back += ePath(arcPath(act, hitP, 90 * k), 16 * k, { inkPart: 0.55 }); front += bead(r, lerp(act, hitP, 0.6), [1, 0.3], 22 * k, '#6a5a34') + shards(r, hitP, 120 * k, [1, -0.2], '#b8c4a8', 7, 6 * k) + eImp(hitP, 95 * k, { floorY, dir: [1, 0] }); break;
+      case 'stroke': back += ePath([add(hitP, [-170 * k, -100 * k]), hitP, add(hitP, [150 * k, 90 * k])], 24 * k, { inkPart: 0.3 }) + ePath([add(hitP, [-160 * k, 110 * k]), hitP, add(hitP, [160 * k, -80 * k])], 18 * k, { inkPart: 0.3 }); front += eImp(hitP, 85 * k, { floorY, dir: [1, 0] }); break;
+      case 'strike': case 'press': { back += mech === 'strike' ? K.motionHatch(r, [add(act, [-230 * k, 30 * k]), add(act, [-120 * k, 14 * k]), add(act, [-20, 4])], 44 * k, INK, { lw: 2.4, op: 0.75 }) : ''; front += eImp(add(act, [(mech === 'strike' ? 110 : 40) * k, 10 * k]), (course === 'toxin' && mech === 'press' ? 80 : 105) * k, { floorY, dir: [1, 0] }); break; }
+      case 'drop': { const p = add(act, [30 * k, 60 * k]); front += bead(r, add(p, [0, 80 * k]), [0, 1], 22 * k, '#c8d0c8') + eImp([p[0], Math.min(floorY - 40, p[1] + 220 * k)], 54 * k, { floorY, dir: [0, -1] }); break; }
+      case 'pour': front += EF.pour(r, course, act, [Math.min(W - ER * 0.9, act[0] + 300 * k), floorY], ER / 7.5); break;
+      case 'gust': case 'spit': { const m = add(head, [60 * k, 20 * k]); back += ePath([m, add(m, [170 * k, -20 * k]), add(m, [360 * k, 20 * k])], 30 * k, { inkPart: 0.2 }); front += eImp(add(m, [400 * k, 30 * k]), 110 * k, { floorY, dir: [1, 0] }); break; }
+      case 'blast': { for (let i = 0; i < 5; i++) { const a = -1.1 + i * 0.5; back += ePath([act, add(act, [Math.cos(a) * 160 * k, Math.sin(a) * 130 * k]), add(act, [Math.cos(a) * 320 * k, Math.sin(a) * 250 * k])], 18 * k, { inkPart: 0.25 }); } front += eImp(add(act, [120 * k, 0]), 105 * k, { floorY, dir: [1, 0] }); break; }
+      case 'lash': case 'thread': { if (cls === 'oracle') { done = false; break; }   /* the Oracle's thread is red doom, not an element */
+        const tgt = A.frame === 'ots' ? hit : [Math.min(W - 160, act[0] + 400 * k), act[1] + 40 * k], mid = lerp(act, tgt, 0.5), wob = 70 * k;
+        back += ePath([act, add(lerp(act, mid, 0.5), [0, -wob]), mid, add(lerp(mid, tgt, 0.5), [0, wob]), tgt], 10 * k); front += eImp(tgt, 70 * k, { floorY, dir: [1, 0] }); break; }   // an Elementalist's lash is its element: a void tendril into the hole
+      case 'gather': case 'rays': { const tgt = mech === 'rays' ? hitP : act; for (let i = 0; i < (course === 'toxin' ? 3 : 5); i++) { /* a toxin stream is a whole cloud: three fill a close crop */ const a = (-140 + i * 55) * Math.PI / 180, far = add(tgt, [Math.cos(a) * 300 * k + (mech === 'rays' ? -200 * k : 240 * k), Math.sin(a) * 220 * k]); back += ePath(mech === 'gather' ? [tgt, lerp(tgt, far, 0.5), far] : [far, lerp(far, tgt, 0.5), tgt], (mech === 'rays' ? 8 : course === 'toxin' ? 6 : A.frame === 'close' ? 9 : 14) * k, { inkPart: mech === 'gather' ? 0.25 : 0.4 }); } front += eImp(tgt, (mech === 'rays' ? 95 : course === 'toxin' ? 45 : A.frame === 'close' ? 55 : 70) * k, { floorY, dir: [1, 0] }); break; }
       default: done = false;
     }
   }
@@ -319,7 +371,7 @@ function heroCard(card, id, o, ctx) {
     if (mk === 'sand' && mech !== 'sand') front += grains(r, add(act, [0, 20]), [0.3, 1], 240 * k, 0.5, 120);
     if (mk === 'frost') { front += K.inkRime(r, [add(act, [-50 * k, -12 * k]), act, add(act, [50 * k, 14 * k])], 22 * k) + shards(r, mp, 140 * k, fwd, '#d8e6ec', 9, 8 * k); }
     if (mk === 'blood') front += K.splatter(r, add(mp, [30 * k, 20 * k]), 130 * k, BLOOD, { dir: [1, 0.4], spread: 1.4, n: 18, blotR: 0.16, op: 0.9 });
-    if (mk === 'spark') front += K.inkBolt(r, add(act, [0, -10]), add(mp, [140 * k, -50 * k]), '#efe6c2');
+    if (mk === 'spark' && !(done && EF.isElement(course)) && len(sub(act, M(h.at('head', CP.FACE[A.key] || CP.FACE[cls])))) > 120) front += K.inkBolt(r, add(act, [0, -10]), add(mp, [140 * k, -50 * k]), '#efe6c2');   /* round 12: on an element card the element is the spark; this ink bolt drew from the mouth on Sigil Flick, outside the element's face margin */
     if (mk === 'rope') front += ropeWraps(r, M(h.J.door ? h.at('door', [526, 330]) : refPt), 130 * k);
     if (mk === 'barbs' && mech !== 'pin') front += barbs(r, mp, 130 * k, fwd, 12);
     if (mk === 'tally') front += tally(r, add(M(h.J.door ? h.at('door', [480, 380]) : refPt), [-40 * k, 0]), 3, 30 * k);
@@ -333,13 +385,31 @@ function heroCard(card, id, o, ctx) {
     if (mk === 'shards') front += shards(r, mp, 170 * k, fwd, '#c0c4d0', 10, 8 * k);
     if (mk === 'flame') front += K.inkFlame(r, add(mp, [40 * k, 40 * k]), 120 * k, INK6.fire);
   }
-  if (!(done && course === 'void')) front += courseMarks(r, course, mp, feet ? M(feet)[1] : H - 40, k);   // one hole only (L38): the element impact already bored it
-  // the hero: the figure layer alone is the hero mask render.js writes for herosim.py (L59)
+  if (!(done && (course === 'void' || course === 'toxin' || course === 'fire'))) front += courseMarks(r, course, mp, feet ? M(feet)[1] : H - 40, k);   // one hole only (L38): the element impact already bored it
+  // the hero: the figure layer alone is the hero mask render.js writes for herosim.py (L66)
   const figSvg = K.place(h.body, A0, A.at, A.scale);
   let echo = '';
   if (mech === 'echo' || motifs.includes('echo')) for (const [dx, op] of [[-90, 0.22], [-46, 0.34]]) echo += `<g opacity="${op}">${K.place(h.body, A0, add(A.at, [dx * k, -6]), A.scale)}</g>`;
-  body += `<g class="cfx">${back}</g>` + echo + `<g id="hero"${F.shade ? ' filter="url(#hShade)"' : ''}>${figSvg}</g>` + `<g class="cfx">${front}</g>`;   // cfx: the act's FX layer (attuned_check.py L61 reads it alone)
-  return { course: c, defs: h.defs + SHADE, body, meta: { id, kind: 'hero', frame: A.frame, pose: A.pose, mech, sil: A.sil, room } };
+  body += `<g class="cfx">${back}</g>` + echo + `<g id="hero"${F.shade ? ' filter="url(#hShade)"' : ''}>${figSvg}</g>` + `<g class="cfx">${front}</g>`;
+  // the name cue (L67): one object, state, setting or action a reader ties to the card's final name (hero_cues.json). It lives
+  // in the scene (hero_cues.js stage: held, effect, ground, hang or weather), outside cfx so the element checks never see it
+  const cueT = CUE_TABLE[id]; let cueKind;
+  if (cueT) {
+    cueKind = cueT.cue;
+    const occ = raster(cls, A.key, P, A.pose, A0, A.at, A.scale).slice(), cellW = W / GW, cellH = H / GH;
+    const mark = (q, rad) => { if (!q) return; for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) if (Math.hypot((x + 0.5) * cellW - q[0], (y + 0.5) * cellH - q[1]) < rad) occ[y * GW + x] = 1; };
+    for (let t = 0; t <= 1.001; t += 0.25) mark(lerp(act, A.frame === 'ots' ? hit : lerp(act, hit, 0.6), t), 90 * k);
+    mark(hit, 120 * k); mark(mp, 110 * k);
+    for (const [q, R] of elemHits) mark(q, R * 1.35);
+    const face = M(h.at('head', CP.FACE[A.key] || CP.FACE[cls])), fl = Math.min(H - 6, feet ? M(feet)[1] + (A.frame === 'full' ? 6 : 0) : H - 6);
+    // the figure's own measures, so a cue is drawn to its scale (L68): head height, forearm length, figure height
+    const SH = CP.shapesOf(cls, A.key), bbOf = bones => { let y0 = 1e9, y1 = -1e9, x0 = 1e9, x1 = -1e9; for (const bn of bones) for (const poly of (SH.polys[bn] || [])) for (const q of poly) { if (!h.J[bn]) continue; const m = M(h.at(bn, q)); y0 = Math.min(y0, m[1]); y1 = Math.max(y1, m[1]); x0 = Math.min(x0, m[0]); x1 = Math.max(x1, m[0]); } return [x0, y0, x1, y1]; };
+    const hb = bbOf(['head']), fb = bbOf(Object.keys(SH.polys).filter(bn => !(P.hide || []).includes(bn))), headH = hb[3] > hb[1] ? hb[3] - hb[1] : 60 * A.scale;
+    const foreL = J('forearm_n') && handN ? len(sub(J('forearm_n'), handN)) : headH * 1.6, FH = fb[3] > fb[1] ? fb[3] - fb[1] : H * 0.8;
+    const st = CUES.stage(cueKind, cueT.mode, rng(seedOf(id) * 13 + 5), { W, H, act, hit: elemHits.length ? elemHits[0][0] : hit, head, face, handN, handF: J('hand_f'), hip, floor: fl, occ, GW, GH, frame: A.frame, headH, foreL: Math.max(foreL, headH * 1.2), FH, course, cls, seed: seedOf(id), holy: cls === 'vessel' });
+    body = body.slice(0, groundEnd) + st.back + body.slice(groundEnd) + st.front;
+  }
+  return { course: c, defs: h.defs + SHADE, body, meta: { id, kind: 'hero', frame: A.frame, pose: A.pose, mech, sil: A.sil, room, cue: cueKind, elem: done && EF.isElement(course) ? course : undefined } };
 }
 const has = id => !!HR.HERO[id];
-module.exports = { heroCard, has, allocation, posesFor, motifsOf, MECH, SIL_TARGET };
+module.exports = { heroCard, has, allocation, posesFor, motifsOf, MECH, SIL_TARGET, _raster: raster };

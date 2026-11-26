@@ -1,0 +1,1066 @@
+{
+ "bw_answer_the_blow": {
+  "name": "Reprisal",
+  "cue": "returnarc",
+  "why": "Reprisal: a blow caught and struck back, an incoming arc met by a return arc",
+  "mode": "effect",
+  "label": "an incoming arc met and sent back by a return arc"
+ },
+ "bw_barbed_haft": {
+  "name": "Barbed Haft",
+  "cue": "barbedwrap",
+  "why": "Barbed Haft: the haft itself, wound with barbed wire (the wire coil alone read as Repel)",
+  "mode": "effect",
+  "label": "barbed wire wound round a weapon handle"
+ },
+ "bw_barbed_shove": {
+  "name": "Repel",
+  "cue": "glanceblade",
+  "why": "Repel: a blow turned aside (blown dust fitted no name)",
+  "mode": "effect",
+  "label": "a sword blade glancing off the door, with a curved deflection arc"
+ },
+ "bw_barbs_left_in": {
+  "name": "Wrench",
+  "cue": "pincers",
+  "why": "Wrench: the barb wrenched out with pincers (flying barbs read as Vengeance)",
+  "mode": "held",
+  "label": "pincers yanking a barbed spike out"
+ },
+ "bw_break_the_ice": {
+  "name": "Brunt",
+  "cue": "forcewave",
+  "why": "Brunt: he takes the full weight of it (the floor crack read as Shatter)",
+  "mode": "effect",
+  "label": "a force wave slamming into the knight and knocking him back"
+ },
+ "bw_brittle": {
+  "name": "Brittle",
+  "cue": "thinice",
+  "why": "Brittle: ice too thin to hold (the icicle could swap with Shatter)",
+  "mode": "ground",
+  "label": "thin ice cracking under a boot"
+ },
+ "bw_come_and_finish_it": {
+  "name": "Last Stand",
+  "cue": "brokenweapons",
+  "why": "Last Stand: where the last of them stood (the grave could swap with Still Standing)",
+  "mode": "ground",
+  "label": "a heap of broken swords and shields piled round one spot"
+ },
+ "bw_frostbite_bash": {
+  "name": "Hailstone",
+  "cue": "hail",
+  "why": "Hailstone: round hailstones falling",
+  "mode": "weather",
+  "label": "round hailstones falling"
+ },
+ "bw_hoarfrost_blow": {
+  "name": "Rimed Mace",
+  "cue": "rimefur",
+  "why": "Rimed Mace: a thick fur of rime on the mace head, shown big",
+  "mode": "effect",
+  "label": "a mace head furred thick with rime"
+ },
+ "bw_hook_and_drag": {
+  "name": "Billhook",
+  "cue": "billhook",
+  "why": "Billhook: the hooked polearm blade",
+  "mode": "ground",
+  "label": "a hooked polearm blade"
+ },
+ "bw_mace_blow": {
+  "name": "Mace Blow",
+  "cue": "macehead",
+  "why": "Mace Blow: a flanged mace head, big",
+  "mode": "effect",
+  "label": "a big flanged mace head"
+ },
+ "bw_over_the_rim": {
+  "name": "Overhand",
+  "cue": "overarc",
+  "why": "Overhand: a great overhead arc coming down from above",
+  "mode": "effect",
+  "label": "a great overhead arc coming down from above"
+ },
+ "bw_penitents_blow": {
+  "name": "Penance",
+  "cue": "scourge",
+  "why": "Penance: the scourge",
+  "mode": "hang",
+  "label": "a knotted penitent's whip hanging on a peg"
+ },
+ "bw_rake_of_thorns": {
+  "name": "Rake",
+  "cue": "rake",
+  "why": "Rake: the tool of the name (the claw gouges read as welts, Penance)",
+  "mode": "ground",
+  "label": "a garden rake leaning on the wall"
+ },
+ "bw_ring_the_helm": {
+  "name": "Ring the Helm",
+  "cue": "helm",
+  "why": "Ring the Helm: a great helm ringing",
+  "mode": "ground",
+  "label": "a great helm ringing like a bell"
+ },
+ "bw_shatter_the_line": {
+  "name": "Shatter",
+  "cue": "glasswindow",
+  "why": "Shatter: glass, the thing that shatters (the stone slab could swap with Brittle)",
+  "mode": "effect",
+  "label": "a glass window shattering into pieces"
+ },
+ "bw_shatterguard": {
+  "name": "Shatterguard",
+  "cue": "shieldburst",
+  "why": "Shatterguard: the guard itself shatters (the split shield read as Brittle)",
+  "mode": "effect",
+  "label": "a shield bursting into shards that fly outward"
+ },
+ "bw_shield_rim": {
+  "name": "Shield Rim",
+  "cue": "rimband",
+  "why": "Shield Rim: an iron rim band throwing sparks",
+  "mode": "effect",
+  "label": "an iron rim band throwing sparks"
+ },
+ "bw_spiked_boss": {
+  "name": "Spiked Boss",
+  "cue": "spikeboss",
+  "why": "Spiked Boss: drawn as a shield, not a barrel lid (read as Stave In)",
+  "mode": "effect",
+  "label": "a round shield with one long spike in its centre"
+ },
+ "bw_the_door_swings": {
+  "name": "Stave In",
+  "cue": "barrel",
+  "why": "Stave In: a barrel staved in, its staves sprung",
+  "mode": "ground",
+  "label": "a barrel staved in, its staves sprung"
+ },
+ "bw_the_ledger_of_wounds": {
+  "name": "Reckoning",
+  "cue": "ledger",
+  "why": "Reckoning: an open ledger of tallies",
+  "mode": "ground",
+  "label": "an open ledger of tallies"
+ },
+ "bw_toll_of_the_tower": {
+  "name": "Alarum",
+  "cue": "belltower",
+  "why": "Alarum: a tower with its bell swinging",
+  "mode": "ground",
+  "label": "a tower with its bell swinging"
+ },
+ "bw_vengeance": {
+  "name": "Vengeance",
+  "cue": "bloodydagger",
+  "why": "Vengeance: the blood repaid (the upright sword read as Last Stand or Penance)",
+  "mode": "effect",
+  "label": "a raised fist gripping a bloody dagger"
+ },
+ "bw_weight_of_the_door": {
+  "name": "Battering Ram",
+  "cue": "ramlog",
+  "why": "Battering Ram: an iron-capped ram log driven ahead of the door (no beast head: no foes)",
+  "mode": "effect",
+  "label": "an iron-capped ram log driven ahead of the door"
+ },
+ "bw_brace": {
+  "name": "Brace",
+  "cue": "propbeam",
+  "why": "Brace: a beam propping the door",
+  "mode": "effect",
+  "label": "a beam propping the door"
+ },
+ "bw_dig_in": {
+  "name": "Dig In",
+  "cue": "spade",
+  "why": "Dig In: a spade bitten into the ground",
+  "mode": "ground",
+  "label": "a spade bitten into the ground"
+ },
+ "bw_hunker": {
+  "name": "Hunker",
+  "cue": "tortoise",
+  "why": "Hunker: drawn in (the empty shell worked against it)",
+  "mode": "ground",
+  "label": "a tortoise drawn into its shell"
+ },
+ "bw_interpose": {
+  "name": "Interpose",
+  "cue": "shelteredhelm",
+  "why": "Interpose: the door put between the shot and what it shelters (no second figure: hero only)",
+  "mode": "effect",
+  "label": "arrows stuck in the door, a dropped helm sheltered behind it"
+ },
+ "bw_still_here": {
+  "name": "Endure",
+  "cue": "stormcandle",
+  "why": "Endure: it keeps burning (the anvil fitted Brunt as well)",
+  "mode": "ground",
+  "label": "a candle still burning in driving rain"
+ },
+ "bw_still_standing": {
+  "name": "Still Standing",
+  "cue": "pillar",
+  "why": "Still Standing: one pillar standing among rubble",
+  "mode": "ground",
+  "label": "one pillar standing among rubble"
+ },
+ "bw_vanguard": {
+  "name": "Vanguard",
+  "cue": "banner",
+  "why": "Vanguard: readers tied a banner to Vanguard (the pennant on a pole read as a wrench)",
+  "mode": "ground",
+  "label": "a war banner planted out in front"
+ },
+ "du_answering_steel": {
+  "name": "Answering Steel",
+  "cue": "crossedblades",
+  "why": "Answering Steel: steel met by steel",
+  "mode": "effect",
+  "label": "two swords meeting edge to edge with a spark"
+ },
+ "du_arc_cut": {
+  "name": "Arc Cut",
+  "cue": "crescent",
+  "why": "Arc Cut: a bright crescent arc",
+  "mode": "effect",
+  "label": "a bright crescent-shaped sweep of a cut"
+ },
+ "du_arterial_cut": {
+  "name": "Jugular",
+  "cue": "bloodarc",
+  "why": "Jugular: the arterial spray, drawn as a spray (the first read as a red fork)",
+  "mode": "effect",
+  "label": "a high arc of blood spurting from a cut"
+ },
+ "du_blade_wheel": {
+  "name": "Blade Wheel",
+  "cue": "wheel",
+  "why": "Blade Wheel: a wheel ringed with blades",
+  "mode": "effect",
+  "label": "a wheel ringed with blades"
+ },
+ "du_bled_pale": {
+  "name": "Pallor",
+  "cue": "lily",
+  "why": "Pallor: readers tied the pale lily to Pallor",
+  "mode": "held",
+  "label": "a white lily"
+ },
+ "du_carry_out_the_sentence": {
+  "name": "Behead",
+  "cue": "headsblock",
+  "why": "Behead: the block and the basket (the plain block read as a box)",
+  "mode": "ground",
+  "label": "a headsman's block with a basket before it"
+ },
+ "du_charged_point": {
+  "name": "Charged Point",
+  "cue": "crackle",
+  "why": "Charged Point: lightning crackling off a point",
+  "mode": "effect",
+  "label": "lightning crackling off a point"
+ },
+ "du_close_the_measure": {
+  "name": "Close the Measure",
+  "cue": "dividers",
+  "why": "Close the Measure: dividers (the folding rule clashed with Square Tip's set-square)",
+  "mode": "held",
+  "label": "a pair of measuring dividers closing"
+ },
+ "du_closing_whirl": {
+  "name": "Closing Whirl",
+  "cue": "whirlwind",
+  "why": "Closing Whirl: a whirlwind",
+  "mode": "effect",
+  "label": "a whirlwind"
+ },
+ "du_cut_between_beats": {
+  "name": "Tempo",
+  "cue": "drum",
+  "why": "Tempo: a drum and its beater",
+  "mode": "ground",
+  "label": "a drum and its beater"
+ },
+ "du_drink_and_dance": {
+  "name": "Bravado",
+  "cue": "plumedhat",
+  "why": "Bravado: swagger (the tipped bottle was weak)",
+  "mode": "effect",
+  "label": "a plumed hat tipped at a jaunty angle"
+ },
+ "du_echo_of_steel": {
+  "name": "Reprise",
+  "cue": "ghostblade",
+  "why": "Reprise: the stroke again and again (read as Answering Steel)",
+  "mode": "effect",
+  "label": "the same sword swing shown three times, each fainter"
+ },
+ "du_encore": {
+  "name": "Encore",
+  "cue": "rose",
+  "why": "Encore: a thrown rose",
+  "mode": "effect",
+  "label": "a thrown rose"
+ },
+ "du_feather_cut": {
+  "name": "Flourish",
+  "cue": "flourish",
+  "why": "Flourish: the flourish itself (the plumed hat now goes to Bravado)",
+  "mode": "effect",
+  "label": "an elaborate curling flourish written in ink"
+ },
+ "du_first_touch": {
+  "name": "First Touch",
+  "cue": "firstblood",
+  "why": "First Touch: the first touch scored (the glove read as a challenge, like Bout and En Garde)",
+  "mode": "effect",
+  "label": "a single drop of blood on a sword tip"
+ },
+ "du_follow_through": {
+  "name": "Press",
+  "cue": "vise",
+  "why": "Press: an iron screw press clamped shut on a block (an object; chevrons read as arrows on a screen)",
+  "mode": "ground",
+  "label": "an iron screw press clamped shut on a block"
+ },
+ "du_forked_blade": {
+  "name": "Forked Blade",
+  "cue": "forkedsword",
+  "why": "Forked Blade: the fork in the blade (the lightning fork read as Two-Step)",
+  "mode": "effect",
+  "label": "a sword blade split into two prongs at the tip"
+ },
+ "du_foul_blood": {
+  "name": "Foul Blood",
+  "cue": "greenblood",
+  "why": "Foul Blood: green-black blood drops",
+  "mode": "effect",
+  "label": "green-black blood drops"
+ },
+ "du_haul_forward": {
+  "name": "Haul Forward",
+  "cue": "grapnel",
+  "why": "Haul Forward: a grapnel hauled in (redrawn: the first read as antlers)",
+  "mode": "effect",
+  "label": "a grappling hook on a taut rope"
+ },
+ "du_heading_stroke": {
+  "name": "Two-Hander",
+  "cue": "greatsword",
+  "why": "Two-Hander: a great two-handed sword",
+  "mode": "ground",
+  "label": "a great two-handed sword"
+ },
+ "du_heavy_sentence": {
+  "name": "Forfeit",
+  "cue": "coins",
+  "why": "Forfeit: coins forfeited, scattering",
+  "mode": "ground",
+  "label": "coins scattering"
+ },
+ "du_hundred_touches": {
+  "name": "Bout",
+  "cue": "fightring",
+  "why": "Bout: where a bout is fought (the cut ribbons read as nothing)",
+  "mode": "ground",
+  "label": "a roped fighting ring with corner posts"
+ },
+ "du_in_the_wake": {
+  "name": "Flurry",
+  "cue": "leaves",
+  "why": "Flurry: a flurry of leaves",
+  "mode": "weather",
+  "label": "a flurry of leaves"
+ },
+ "du_killing_thrust": {
+  "name": "Killing Thrust",
+  "cue": "dummy",
+  "why": "Killing Thrust: the thrust that goes through (the skull could swap with Mercy Stroke)",
+  "mode": "ground",
+  "label": "a sword driven clean through a straw training dummy"
+ },
+ "du_letting_cut": {
+  "name": "Letting Cut",
+  "cue": "barberpole",
+  "why": "Letting Cut: the barber-surgeon's bloodletting (the basin overlapped Jugular)",
+  "mode": "ground",
+  "label": "a red-and-white barber's pole"
+ },
+ "du_lunge": {
+  "name": "Lunge",
+  "cue": "stride",
+  "why": "Lunge: the length of the lunge on the floor (the splash read as a pincushion)",
+  "mode": "ground",
+  "label": "one huge stride: a back footprint far behind the front one"
+ },
+ "du_make_an_example": {
+  "name": "Gibbet",
+  "cue": "gibbet",
+  "why": "Gibbet: a gibbet",
+  "mode": "ground",
+  "label": "a gibbet"
+ },
+ "du_measure_the_neck": {
+  "name": "Measure the Neck",
+  "cue": "noose",
+  "why": "Measure the Neck: a noose",
+  "mode": "hang",
+  "label": "a noose"
+ },
+ "du_mercy_stroke": {
+  "name": "Mercy Stroke",
+  "cue": "misericorde",
+  "why": "Mercy Stroke: the misericorde (a white flag means surrender)",
+  "mode": "ground",
+  "label": "a thin, long dagger standing point-down in the floor, one drop at its point"
+ },
+ "du_next_in_line": {
+  "name": "Notch",
+  "cue": "notches",
+  "why": "Notch: a post cut with notches",
+  "mode": "ground",
+  "label": "a post cut with notches"
+ },
+ "du_quick_hands": {
+  "name": "Quick Hands",
+  "cue": "knives",
+  "why": "Quick Hands: three thrown knives in the air",
+  "mode": "effect",
+  "label": "three thrown knives in the air"
+ },
+ "du_red_hands": {
+  "name": "Gore",
+  "cue": "horn",
+  "why": "Gore: what gores (the handprint read as a red crown)",
+  "mode": "ground",
+  "label": "a bull's horn with a bloody tip"
+ },
+ "du_second_blade": {
+  "name": "Main-Gauche",
+  "cue": "dagger",
+  "why": "Main-Gauche: the left-hand dagger",
+  "mode": "held",
+  "label": "a parrying dagger held in the left hand"
+ },
+ "du_second_intention": {
+  "name": "Second Intention",
+  "cue": "maskknife",
+  "why": "Second Intention: the real aim behind the show (the chess knight was weak)",
+  "mode": "held",
+  "label": "a smiling mask held up, a knife hidden behind it"
+ },
+ "du_second_stroke": {
+  "name": "Hew",
+  "cue": "splitlog",
+  "why": "Hew: hewn wood (the stump with an axe read as Behead)",
+  "mode": "ground",
+  "label": "a log split in two with chips flying"
+ },
+ "du_shatter_point": {
+  "name": "Shiver",
+  "cue": "bladeshards",
+  "why": "Shiver: the blade shivered to pieces (the ice shards read as Supple Wrist)",
+  "mode": "effect",
+  "label": "a sword blade shivering into pieces"
+ },
+ "du_sighting_cut": {
+  "name": "Sighting Cut",
+  "cue": "sightline",
+  "why": "Sighting Cut: the aim line run from the eye along the blade to the mark (the action; a floating eye read as a creature)",
+  "mode": "effect",
+  "label": "an aiming line from the eye along the blade to a target mark"
+ },
+ "du_slip_and_cut": {
+  "name": "Slip",
+  "cue": "cloak",
+  "why": "Slip: an empty cloak left falling",
+  "mode": "effect",
+  "label": "an empty cloak left falling"
+ },
+ "du_square_tip": {
+  "name": "Square Tip",
+  "cue": "setsquare",
+  "why": "Square Tip: the square of the name (the boxed tip read as a spirit level)",
+  "mode": "ground",
+  "label": "a carpenter's set-square"
+ },
+ "du_sweep": {
+  "name": "Sweep",
+  "cue": "grassswath",
+  "why": "Sweep: the scythe's swath, explicit (a broom read as slapstick)",
+  "mode": "ground",
+  "label": "a swath cut through tall grass"
+ },
+ "du_the_crowd_watches": {
+  "name": "Spectacle",
+  "cue": "stage",
+  "why": "Spectacle: a stage (the curtain alone read as pink lungs)",
+  "mode": "ground",
+  "label": "a theatre stage with its curtains drawn open"
+ },
+ "du_thunder_lunge": {
+  "name": "Thunderbolt",
+  "cue": "stormcloud",
+  "why": "Thunderbolt: a storm cloud with its bolt",
+  "mode": "weather",
+  "label": "a storm cloud with its bolt"
+ },
+ "du_turn_of_the_wrist": {
+  "name": "Supple Wrist",
+  "cue": "willow",
+  "why": "Supple Wrist: supple (the loop would now compete with Flourish)",
+  "mode": "held",
+  "label": "a willow switch bending without breaking"
+ },
+ "du_two_step": {
+  "name": "Two-Step",
+  "cue": "footprints",
+  "why": "Two-Step: dance steps on the floor",
+  "mode": "ground",
+  "label": "two pairs of footprints in a dance pattern"
+ },
+ "du_en_garde": {
+  "name": "En Garde",
+  "cue": "fencingmask",
+  "why": "En Garde: fencing (the piste lines read as a ladder)",
+  "mode": "ground",
+  "label": "a fencing mask with its mesh face"
+ },
+ "du_give_ground": {
+  "name": "Give Ground",
+  "cue": "dusttrail",
+  "why": "Give Ground: heels dragging back through the dust",
+  "mode": "ground",
+  "label": "heels dragging back through the dust"
+ },
+ "el_ink_bolt": {
+  "name": "Ink Bolt",
+  "cue": "inkbolt",
+  "why": "Ink Bolt: the ink and the bolt (the quill pulled it to Ink Dart)",
+  "mode": "held",
+  "label": "an inkpot with a bolt of ink leaping out of it"
+ },
+ "el_ink_dart": {
+  "name": "Ink Dart",
+  "cue": "dart",
+  "why": "Ink Dart: a feathered dart",
+  "mode": "effect",
+  "label": "a feathered dart"
+ },
+ "el_sigil_flick": {
+  "name": "Sigil Flick",
+  "cue": "sigilslip",
+  "why": "Sigil Flick: a sigil slip flicked off the fingertips, spinning (the action)",
+  "mode": "effect",
+  "label": "a small card marked with a sigil, flicked spinning off the fingertips"
+ },
+ "el_spectrum_bolt": {
+  "name": "Refraction",
+  "cue": "prism",
+  "why": "Refraction: a prism",
+  "mode": "held",
+  "label": "a prism"
+ },
+ "el_heavy_pour": {
+  "name": "Deluge",
+  "cue": "rain",
+  "why": "Deluge: sheets of rain",
+  "mode": "weather",
+  "label": "sheets of rain"
+ },
+ "el_full_measure": {
+  "name": "Full Measure",
+  "cue": "brimjug",
+  "why": "Full Measure: brim-full (the jug alone read as Pour Out)",
+  "mode": "held",
+  "label": "a jug filled exactly to the brim"
+ },
+ "el_pour_out": {
+  "name": "Pour Out",
+  "cue": "tippedpot",
+  "why": "Pour Out: tipped and pouring (drawn as a pot this time)",
+  "mode": "ground",
+  "label": "a pot tipped over, spilling out"
+ },
+ "el_weight_of_the_vessel": {
+  "name": "Heft",
+  "cue": "weight",
+  "why": "Heft: an iron weight with a handle",
+  "mode": "ground",
+  "label": "an iron weight with a handle"
+ },
+ "el_spend_the_breath": {
+  "name": "Vent",
+  "cue": "ventsteam",
+  "why": "Vent: the vent (the bellows was weak, and the furnace fitted it)",
+  "mode": "ground",
+  "label": "steam blasting from a vent pipe"
+ },
+ "el_hair_trigger": {
+  "name": "Hair Trigger",
+  "cue": "crossbow",
+  "why": "Hair Trigger: the trigger",
+  "mode": "held",
+  "label": "a cocked crossbow whose trigger is a single hair"
+ },
+ "el_split_nib": {
+  "name": "Split Nib",
+  "cue": "nib",
+  "why": "Split Nib: a split pen nib, big",
+  "mode": "held",
+  "label": "a big pen nib split down the middle"
+ },
+ "el_strike_across": {
+  "name": "Strike Across",
+  "cue": "strikeacross",
+  "why": "Strike Across: one long stroke struck across the whole scene through the target (the action)",
+  "mode": "effect",
+  "label": "one long ink stroke struck across the whole scene"
+ },
+ "el_backdraft": {
+  "name": "Backdraft",
+  "cue": "furnace",
+  "why": "Backdraft",
+  "mode": "ground",
+  "label": "flames blasting back out of a furnace door"
+ },
+ "el_conflux": {
+  "name": "Conflux",
+  "cue": "confluence",
+  "why": "Conflux has no object to draw: the action is the cue, two element streams from the two hands meeting in one",
+  "mode": "effect",
+  "label": "two streams of different elements, one from each hand, meeting in one"
+ },
+ "el_feedback": {
+  "name": "Backlash",
+  "cue": "rebound",
+  "why": "Backlash has no object to draw: the effect is the cue, the cast bouncing off and coming back at the caster",
+  "mode": "effect",
+  "label": "a cast bouncing off and flying back at the caster"
+ },
+ "el_full_ring": {
+  "name": "Every Colour",
+  "cue": "sixring",
+  "why": "Every Colour: six element marks circling the casting hand (the effect)",
+  "mode": "effect",
+  "label": "six marks of different elements circling the hand"
+ },
+ "el_draw_the_ink_out": {
+  "name": "Siphon",
+  "cue": "siphon",
+  "why": "Siphon: a siphon tube from a jar",
+  "mode": "held",
+  "label": "a siphon tube drawing liquid out of a jar"
+ },
+ "el_weight_and_measure": {
+  "name": "Assay",
+  "cue": "scales",
+  "why": "Assay: weighing",
+  "mode": "ground",
+  "label": "a pair of balance scales"
+ },
+ "el_prism_lance": {
+  "name": "Prism Lance",
+  "cue": "lance",
+  "why": "Prism Lance: a lance with its pennon",
+  "mode": "effect",
+  "label": "a lance with its pennon"
+ },
+ "el_ring_turn": {
+  "name": "Corona",
+  "cue": "crown",
+  "why": "Corona: a crown",
+  "mode": "held",
+  "label": "a crown"
+ },
+ "el_blotting_sand": {
+  "name": "Blotting Sand",
+  "cue": "shaker",
+  "why": "Blotting Sand: a sand shaker",
+  "mode": "held",
+  "label": "a sand shaker"
+ },
+ "el_steady_nerves": {
+  "name": "Steady Nerves",
+  "cue": "candle",
+  "why": "Steady Nerves: a candle flame standing straight",
+  "mode": "ground",
+  "label": "a candle flame standing perfectly straight"
+ },
+ "el_under_the_weight": {
+  "name": "Ballast",
+  "cue": "anchor",
+  "why": "Ballast: an anchor",
+  "mode": "ground",
+  "label": "an anchor"
+ },
+ "al_alkahest": {
+  "name": "Alkahest",
+  "cue": "meltflask",
+  "why": "Alkahest: the universal solvent dissolving what holds it (the retort read as Chaser)",
+  "mode": "ground",
+  "label": "a flask eating through its own iron stand"
+ },
+ "al_chaser": {
+  "name": "Chaser",
+  "cue": "chaser",
+  "why": "Chaser: the small drink after the drink (the bottle read as Overarm Throw)",
+  "mode": "held",
+  "label": "a tankard and a small shot glass after it"
+ },
+ "al_overarm_throw": {
+  "name": "Overarm Throw",
+  "cue": "claypot",
+  "why": "Overarm Throw: the throw itself (read as Alkahest)",
+  "mode": "effect",
+  "label": "a clay pot hurled in a high arc overhead"
+ },
+ "al_powder_charge": {
+  "name": "Powder Charge",
+  "cue": "bomb",
+  "why": "Powder Charge: a round bomb with a lit fuse",
+  "mode": "effect",
+  "label": "a round bomb with a lit fuse"
+ },
+ "al_black_bile": {
+  "name": "Black Bile",
+  "cue": "bile",
+  "why": "Black Bile: black drops pooling",
+  "mode": "effect",
+  "label": "black drops pooling on the floor"
+ },
+ "al_calcination": {
+  "name": "Calcination",
+  "cue": "ashheap",
+  "why": "Calcination: a heap of white ash",
+  "mode": "ground",
+  "label": "a heap of white ash"
+ },
+ "al_draw_the_venom": {
+  "name": "Bezoar",
+  "cue": "stone",
+  "why": "Bezoar: a bezoar stone",
+  "mode": "held",
+  "label": "a bezoar stone"
+ },
+ "al_lance_the_boil": {
+  "name": "Lance the Boil",
+  "cue": "lancet",
+  "why": "Lance the Boil: a lancet",
+  "mode": "held",
+  "label": "a lancet"
+ },
+ "al_transmute": {
+  "name": "Transmute",
+  "cue": "sigil",
+  "why": "Transmute: the alchemist's circle and triangle",
+  "mode": "ground",
+  "label": "an alchemical circle and triangle chalked on the floor"
+ },
+ "al_waxed_apron": {
+  "name": "Waxed Apron",
+  "cue": "apron",
+  "why": "Waxed Apron: a waxed apron, drips on it",
+  "mode": "hang",
+  "label": "a waxed apron, drips on it"
+ },
+ "or_broken_pendulum": {
+  "name": "Hitch",
+  "cue": "hitchknot",
+  "why": "Hitch: the knot of the name (the snapped pendulum was weak)",
+  "mode": "held",
+  "label": "a thread tied in a hitch knot"
+ },
+ "or_pendulum": {
+  "name": "Pendulum",
+  "cue": "pendulum",
+  "why": "Pendulum: a pendulum swinging",
+  "mode": "hang",
+  "label": "a pendulum swinging"
+ },
+ "or_omen_bolt": {
+  "name": "Portent",
+  "cue": "blackcat",
+  "why": "Portent: the ill omen (the raven competed with Seen Coming)",
+  "mode": "ground",
+  "label": "a black cat with its back arched"
+ },
+ "or_void_lance": {
+  "name": "Void Lance",
+  "cue": "lance",
+  "why": "Void Lance: a lance",
+  "mode": "effect",
+  "label": "a lance"
+ },
+ "or_time_shear": {
+  "name": "Time Shear",
+  "cue": "shearsclock",
+  "why": "Time Shear: time cut (the shears alone read as Severed Thread)",
+  "mode": "effect",
+  "label": "shears cutting a clock face in half"
+ },
+ "or_severance": {
+  "name": "Severance",
+  "cue": "brokenchain",
+  "why": "Severance: a bond parted",
+  "mode": "effect",
+  "label": "a chain with one link snapped"
+ },
+ "or_pull_the_thread": {
+  "name": "Unravel",
+  "cue": "yarn",
+  "why": "Unravel: a ball of yarn unravelling",
+  "mode": "held",
+  "label": "a ball of yarn unravelling"
+ },
+ "or_red_harvest": {
+  "name": "Red Harvest",
+  "cue": "sheaf",
+  "why": "Red Harvest: a bound sheaf of wheat",
+  "mode": "ground",
+  "label": "a bound sheaf of wheat"
+ },
+ "or_fates_edge": {
+  "name": "Fate's Edge",
+  "cue": "edgecoin",
+  "why": "Fate's Edge: chance balanced on an edge (the spindle was weak)",
+  "mode": "ground",
+  "label": "a coin standing on its edge"
+ },
+ "or_scatter_the_bones": {
+  "name": "Cast Lots",
+  "cue": "dice",
+  "why": "Cast Lots: dice cast",
+  "mode": "effect",
+  "label": "dice cast"
+ },
+ "or_foretold_ruin": {
+  "name": "Foretold Ruin",
+  "cue": "ruin",
+  "why": "Foretold Ruin: a broken column",
+  "mode": "ground",
+  "label": "a broken column"
+ },
+ "or_cold_star": {
+  "name": "Cold Star",
+  "cue": "star",
+  "why": "Cold Star: one pale star falling",
+  "mode": "weather",
+  "label": "one pale star falling to the ground"
+ },
+ "or_rebuke_the_seen": {
+  "name": "Rebuke",
+  "cue": "raisedhand",
+  "why": "Rebuke: the gesture of rebuke (the falling stars read as Portent)",
+  "mode": "effect",
+  "label": "a raised open hand, palm out, saying stop"
+ },
+ "or_void_glimpse": {
+  "name": "Void Glimpse",
+  "cue": "rift",
+  "why": "Void Glimpse: a tear in the wall behind, the void showing through it (the setting)",
+  "mode": "ground",
+  "label": "a tear in the wall with a black, starry void behind it"
+ },
+ "or_event_horizon": {
+  "name": "Abyss",
+  "cue": "abysspit",
+  "why": "Abyss: the pit drawn as a pit (the first read as a white dish)",
+  "mode": "ground",
+  "label": "a bottomless black pit in the floor with stones falling in"
+ },
+ "or_the_severed_thread": {
+  "name": "Severed Thread",
+  "cue": "cutthread",
+  "why": "Severed Thread: the thread of the name (the three threads read as Repetition)",
+  "mode": "effect",
+  "label": "one red thread cut through, its two ends hanging"
+ },
+ "or_stop_time": {
+  "name": "Stop Time",
+  "cue": "frozenwatch",
+  "why": "Stop Time: time stopped (a clock face is Time Shear's now)",
+  "mode": "held",
+  "label": "a pocket watch frozen in a block of ice"
+ },
+ "or_repetition": {
+  "name": "Repetition",
+  "cue": "stamps",
+  "why": "Repetition: the same mark again and again (the hands could swap with Deja Vu)",
+  "mode": "ground",
+  "label": "a stamp and a row of identical stamped marks"
+ },
+ "or_deja_vu": {
+  "name": "Deja Vu",
+  "cue": "twinpictures",
+  "why": "Deja Vu: the same scene twice (the mirror read as a stopwatch)",
+  "mode": "hang",
+  "label": "two identical framed pictures hung side by side"
+ },
+ "or_seen_coming": {
+  "name": "Seen Coming",
+  "cue": "spyglass",
+  "why": "Seen Coming: a spyglass",
+  "mode": "held",
+  "label": "a spyglass"
+ },
+ "or_drawn_veil": {
+  "name": "Drawn Veil",
+  "cue": "curtain",
+  "why": "Drawn Veil: a curtain drawn",
+  "mode": "hang",
+  "label": "a curtain drawn"
+ },
+ "or_quicken": {
+  "name": "Quicken",
+  "cue": "hourglass",
+  "why": "Quicken: time running fast (read as Time Shear)",
+  "mode": "held",
+  "label": "an hourglass with its sand pouring fast"
+ },
+ "blood_for_blood": {
+  "name": "Feud",
+  "cue": "crossedknives",
+  "why": "Feud: two bone knives crossed",
+  "mode": "effect",
+  "label": "two bone knives crossed"
+ },
+ "blood_moon": {
+  "name": "Blood Moon",
+  "cue": "bloodmoon",
+  "why": "Blood Moon: a red moon",
+  "mode": "weather",
+  "label": "a red moon in the sky"
+ },
+ "drink_deep": {
+  "name": "Drink Deep",
+  "cue": "goblet",
+  "why": "Drink Deep: a goblet",
+  "mode": "held",
+  "label": "a goblet"
+ },
+ "knock_at_the_door": {
+  "name": "Knock",
+  "cue": "knocker",
+  "why": "Knock: an iron door knocker",
+  "mode": "ground",
+  "label": "an iron door knocker"
+ },
+ "scar_tally": {
+  "name": "Scar Tally",
+  "cue": "tally",
+  "why": "Scar Tally: tally marks",
+  "mode": "ground",
+  "label": "tally marks"
+ },
+ "pin_the_poppet": {
+  "name": "Pin the Poppet",
+  "cue": "poppet",
+  "why": "Pin the Poppet: a straw poppet with a pin through it",
+  "mode": "held",
+  "label": "a straw poppet with a pin through it"
+ },
+ "spite": {
+  "name": "Spite",
+  "cue": "nettle",
+  "why": "Spite: stinging nettles grown up at the hero's feet (the setting; a viper read as a beast)",
+  "mode": "ground",
+  "label": "stinging nettles growing at his feet"
+ },
+ "spill_the_rot": {
+  "name": "Unburden",
+  "cue": "droppedpack",
+  "why": "Unburden: the load set down (the flies fitted Canker or Rotting Word)",
+  "mode": "ground",
+  "label": "a heavy pack dropped from the shoulders onto the floor"
+ },
+ "rot_from_within": {
+  "name": "Canker",
+  "cue": "rottenapple",
+  "why": "Canker: a rotten apple",
+  "mode": "held",
+  "label": "a rotten apple"
+ },
+ "rotting_word": {
+  "name": "Rotting Word",
+  "cue": "scroll",
+  "why": "Rotting Word: a rotting scroll",
+  "mode": "held",
+  "label": "a rotting scroll"
+ },
+ "hasten_the_end": {
+  "name": "Coffin Nail",
+  "cue": "nail",
+  "why": "Coffin Nail: a coffin nail",
+  "mode": "ground",
+  "label": "a coffin nail"
+ },
+ "the_final_hour": {
+  "name": "Snuff Out",
+  "cue": "snuffedcandle",
+  "why": "Snuff Out: a candle snuffed, its smoke rising",
+  "mode": "ground",
+  "label": "a candle snuffed, its smoke rising"
+ },
+ "drain": {
+  "name": "Drain",
+  "cue": "cup",
+  "why": "Drain: a cup filling",
+  "mode": "held",
+  "label": "a cup filling from a trickle"
+ },
+ "glass_splinters": {
+  "name": "Glass Splinters",
+  "cue": "shards",
+  "why": "Glass Splinters: glass shards",
+  "mode": "effect",
+  "label": "glass shards"
+ },
+ "return_to_sender": {
+  "name": "Recoil",
+  "cue": "mirror",
+  "why": "Recoil: a cracked mirror",
+  "mode": "held",
+  "label": "a cracked mirror"
+ },
+ "salt_the_threshold": {
+  "name": "Salted Threshold",
+  "cue": "threshold",
+  "why": "Salted Threshold: a doorway arch over a salt line",
+  "mode": "ground",
+  "label": "a doorway arch over a salt line"
+ },
+ "take_their_wounds": {
+  "name": "Proxy",
+  "cue": "effigy",
+  "why": "Proxy: a straw effigy standing in",
+  "mode": "ground",
+  "label": "a straw effigy standing upright"
+ },
+ "ve_open_palm": {
+  "name": "Benediction",
+  "cue": "lightshaft",
+  "why": "Benediction: a shaft of holy light falling onto the open palm (the effect; a halo read as a badge)",
+  "mode": "weather",
+  "label": "a shaft of holy light falling onto an open palm"
+ },
+ "ve_breathe_out": {
+  "name": "Breathe Out",
+  "cue": "breathcloud",
+  "why": "Breathe Out: the breath itself (the dove was weak)",
+  "mode": "effect",
+  "label": "a cloud of breath leaving the mouth"
+ },
+ "ve_draw_it_out": {
+  "name": "Crosier",
+  "cue": "crosier",
+  "why": "Crosier: a crosier",
+  "mode": "held",
+  "label": "a crosier"
+ }
+}

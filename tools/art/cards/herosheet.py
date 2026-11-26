@@ -1,4 +1,4 @@
-"""Hero card review sheets (hero-card agent, L59).
+"""Hero card review sheets (hero-card agent, L66).
   python3 herosheet.py <out dir>                       labelled contact sheet per calling: <out>/sheets/<calling>.jpg
   python3 herosheet.py <out dir> --blind <dir> <calling> [<calling> ...] [--key <file>]
       the matching test: <dir>/sheet.png (numbered, unlabelled, at game size 162 x 86 and at 2x) and <dir>/names.txt
@@ -12,6 +12,13 @@ out = sys.argv[1]
 rows = [l.split("\t") for l in open(os.path.join(out, "_full", "_list.txt")).read().splitlines() if l.strip()]
 rows = [r for r in rows if r[2].split()[0] in ("attack", "cast", "block") and "hand-made" not in r[2]]
 cards = json.load(open("/home/claude/ostium/data/cards.json"))
+# round 11: the test uses each card's FINAL name (docs/design/names/renames.csv, carried in hero_cues.json), the names the cues were chosen for
+try:
+    for cid, t in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hero_cues.json"))).items():
+        if cid in cards:
+            cards[cid] = dict(cards[cid], name=t["name"])
+except Exception:
+    pass
 alloc = {}
 try:
     alloc = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hero_alloc.json")))["cards"]
@@ -36,6 +43,21 @@ def sheet(items, cols, tw, th, label):
     return S
 
 
+if "--score" in sys.argv:
+    # python3 herosheet.py <out> --score <answers> --key <key>: answers are lines "<number> <name>" (any separator)
+    import re as _re
+    key = {int(l.split("\t")[0]): l.split("\t")[2].strip() for l in open(sys.argv[sys.argv.index("--key") + 1]) if l.strip()}
+    norm_ = lambda t: _re.sub(r"[^a-z]", "", t.lower())
+    got = {}
+    for l in open(sys.argv[sys.argv.index("--score") + 1]):
+        m = _re.match(r"\s*(\d+)\W+(.+?)\s*$", l)
+        if m:
+            got[int(m.group(1))] = m.group(2)
+    hit = [n for n in key if n in got and norm_(got[n]) == norm_(key[n])]
+    miss = [f"{n}: answered '{got.get(n, '-')}', was '{key[n]}'" for n in sorted(key) if n not in hit]
+    print(f"matched {len(hit)} of {len(key)} ({100 * len(hit) / len(key):.0f}%)")
+    print("\n".join(miss))
+    sys.exit(0)
 if "--blind" not in sys.argv:
     os.makedirs(os.path.join(out, "sheets"), exist_ok=True)
     by = {}

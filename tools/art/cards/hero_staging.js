@@ -16,8 +16,8 @@ const { W, H } = K;
 // ==== framings. at/scale are per card from a seeded choice inside these ranges (and the deck-level spread, phase 2).
 // anchor: what lands on `at`; 'feet' = the lowest ankle on the floor line.
 const FRAMES = {
-  full: { anchor: 'feet', scale: [0.74, 0.92], at: [[120, 960], [596, 640]], face: 'in', note: 'whole figure on a visible floor, the act wide round it; the room seen deep' },
-  three: { anchor: 'head', scale: [1.25, 1.8], at: [[180, 780], [140, 230]], face: 'in', note: 'cut at mid thigh, figure half the frame wide (was 1.2 to 1.45 in the left third)' },
+  full: { anchor: 'feet', scale: [0.66, 0.92], at: [[120, 960], [470, 640]], face: 'in', note: 'whole figure on a visible floor, the act wide round it; the room seen deep' },
+  three: { anchor: 'head', scale: [1.25, 1.8], at: [[180, 780], [110, 300]], face: 'in', note: 'cut at mid thigh, figure half the frame wide (was 1.2 to 1.45 in the left third)' },
   close: { anchor: 'grip', scale: [1.7, 2.6], at: [[420, 720], [240, 380]], face: 'either', note: 'the hand and the weapon or prop together filling the frame (anchored between the grip and the act); the FX big' },
   low: { anchor: 'head', scale: [1.35, 1.9], at: [[220, 760], [90, 140]], face: 'in', horizon: 0.82, note: 'feet below the bottom edge, horizon low, the pool behind the head so the figure towers back-lit' },
   ots: { anchor: 'head', scale: [2.0, 2.8], at: [[90, 220], [190, 300]], face: 'in', shade: 0.55, fxScale: 0.6, note: 'head and shoulder huge at the left edge in shadow, looking into the lit room where the act lands small and far' },

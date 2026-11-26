@@ -1,4 +1,4 @@
-"""Hero card similarity within a calling (LESSONS.md L59).
+"""Hero card similarity within a calling (LESSONS.md L66).
 Usage: python3 herosim.py <out dir> <list file> [--masks <dir>] [--report <file>] [--separate <hero_separate.json>]
 Prints PASS/FAIL lines; exit 1 on any FAIL.
 
@@ -79,18 +79,18 @@ failing = {x for _, a, b in sil_bad + pic_bad for x in (a, b)}
 by_cal = {}
 for cid, cal, _, _ in cards:
     t = by_cal.setdefault(cal, [0, 0]); t[0] += 1; t[1] += cid in failing
-lines = [f"INFO  L59  {len(cards)} hero cards; cards with a twin in their calling: " + ", ".join(f"{c} {f}/{n}" for c, (n, f) in sorted(by_cal.items()))]
+lines = [f"INFO  L66  {len(cards)} hero cards; cards with a twin in their calling: " + ", ".join(f"{c} {f}/{n}" for c, (n, f) in sorted(by_cal.items()))]
 if missing:
-    lines.append(f"FAIL  L59  no hero mask for {len(missing)} cards (silhouette check needs <id>_hero.png): " + ", ".join(missing[:8]))
+    lines.append(f"FAIL  L66  no hero mask for {len(missing)} cards (silhouette check needs <id>_hero.png): " + ", ".join(missing[:8]))
 show = lambda L, f: ", ".join(f"{a}/{b} {v:.2f}" for v, a, b in sorted(L, key=f)[:12]) + (f" (+{len(L) - 12} more)" if len(L) > 12 else "")
 if sil_bad:
-    lines.append(f"FAIL  L59  same figure, same staging (silhouette IoU {SIL_MAX} or more), {len(sil_bad)} pairs: " + show(sil_bad, lambda r: -r[0]))
+    lines.append(f"FAIL  L66  same figure, same staging (silhouette IoU {SIL_MAX} or more), {len(sil_bad)} pairs: " + show(sil_bad, lambda r: -r[0]))
 else:
-    lines.append(f"PASS  L59  every hero pair in a calling differs in silhouette (IoU under {SIL_MAX})")
+    lines.append(f"PASS  L66  every hero pair in a calling differs in silhouette (IoU under {SIL_MAX})")
 if pic_bad:
-    lines.append(f"FAIL  L59  near-identical pictures (band-pass distance under {PIC_MIN}), {len(pic_bad)} pairs: " + show(pic_bad, lambda r: r[0]))
+    lines.append(f"FAIL  L66  near-identical pictures (band-pass distance under {PIC_MIN}), {len(pic_bad)} pairs: " + show(pic_bad, lambda r: r[0]))
 else:
-    lines.append(f"PASS  L59  every hero pair in a calling differs as a picture (distance {PIC_MIN} or more)")
+    lines.append(f"PASS  L66  every hero pair in a calling differs as a picture (distance {PIC_MIN} or more)")
 if report:
     with open(report, "w") as fh:
         fh.write("id\tcalling\tnearest\tdistance\tsilhouette_iou\n")
@@ -107,6 +107,6 @@ if separate and (sil_bad or pic_bad):
     for _, a, b in sil_bad + pic_bad:
         seen.add(tuple(sorted((a, b))))
     json.dump(sorted(list(p) for p in seen), open(separate, "w"))
-    lines.append(f"INFO  L59  {len(seen)} pairs on the allocator's separation list ({separate})")
+    lines.append(f"INFO  L66  {len(seen)} pairs on the allocator's separation list ({separate})")
 print("\n".join(lines))
 sys.exit(1 if (sil_bad or pic_bad or missing) else 0)

@@ -199,6 +199,188 @@ Every piece of feedback becomes a rule here, so the next input starts from it in
 
   Check: automated. check_determinism.js rebuilds a sample of the batch, each card alone in a fresh node process, and compares the SVG byte for byte with the one the batch render wrote; render.js runs it on every review batch, which fails on any difference. On review 7: 10 of 10 match in the render's own check, and all 30 match when run by hand.
 
+### The variety pass (object-variety agent, 2026-11-25; objects6.js to objects11.js, picks.json)
+- **L58. Legible is not enough: each card needs its own picture.** After review 7 the deck read at 93%, but 466 object cards drew on 68 objects: 20 Alchemist vials, 20 Vessel chalices, 16 Elementalist scrolls, 11 Hexweaver bells, 25 Bulwark doors once the hero cards were re-routed. Two cards of one calling with one object look like the same picture at 162 x 86. Cause: objects were picked by family default (a calling's object, a course's object) and the cap (L12) was 20 per object across the deck. Rules:
+  - within a calling, the shared pool and each world, no object on more than 3 object cards; a calling's listed signature object (`SIGNATURE` in checks.js: chalice, flask, poppet, hourglass, shield) may take 4;
+  - pick each card's object from the card itself, its name first ("Tasting Spoon" gets the spoon, "Pass Through" the funnel, "Keep Her Quiet" the padlock, "Skipped Tooth" a cog with a missing tooth), so the name can be guessed from the picture; per-card picks live in picks.json;
+  - grow the library from the game's world (abbey, apothecary, scriptorium, reliquary, foundry, crypt) rather than reusing a near fit: 151 new objects;
+  - leave headroom for re-routed cards: aim at 1 or 2 uses.
+
+  Check: automated. checks.js L58 counts every object card in the deck by `card.cls` on every run (a review batch answers for its own callings; a full run for all). Before: 31 objects over the cap. After: 590 object cards (with the 127 re-routed hero cards) on 411 calling-objects, used 266 x1, 114 x2, 28 x3, 3 x4 (signatures), none over.
+- **L59. A process-wide counter breaks L57.** ve_even_breath rendered differently alone and in its batch: `billow()` in card_kit.js named its clip path from a module-level counter, so the id depended on how many billows the process had drawn before (it showed up when the variety objects started using the `blow` act). Rule: an SVG id is derived from the thing it names (the billow's own phase and centre), never from a running count; any helper with module state is a determinism bug. Check: automated by L57 (check_determinism.js); also `grep -n "N++" card_kit.js` before adding an id helper.
+- **L62. A per-card layout drops the per-card style.** picks with both `layout` and `style` silently lost the style (objcomp keeps only layout, variant and hand angle when `layout` or `zoom` is set), so two held books still came out alike. Rule: to separate two same-object cards that share a forced layout, use `flip` (honoured with any layout) or a different layout, not `style`. Check: by the L12 uniqueness check (it caught deaths_ledger/blood_debt); the variety pass lists any pick carrying both.
+- **L63. Hands come from grips, and walls have none.** Each calling still needs 20% of object cards in a hand (L20), and several new objects are wall-like (door hardware, portcullis, icicles) or furniture, so the Bulwark fell to 9% hands and 45% close-ups. Rule: carried things get a `grip` where a hand would really hold them (a bucket's bail, a basket's handle, a censer's ring, a stem, a cuff, a staff), a held pick only goes on an object with a grip and with `held` in its layouts, and NO_TURN objects (handbell, lantern, candle) are held on at most one card per calling, since every held copy enters at the same angle (L20 clash). Check: automated by L20 and L13 per calling batch.
+- **L64. Big smooth fills read flat, even when hatched on the shadow side.** The cauldron, kettle, glass vessels, the dropper, the bandolier and the diptych's panels failed L3 (0.24 to 0.42): their bodies were single fills with hatching only down one side. Rule: every large part carries an even ground of fine dashed grain over its whole area (`grain()` in objects6.js), dark ink on light parts and pale lines on dark ones, besides the form arcs (`arcs()`) and shadow hatching (`shadeR()`). Glass keeps a low texture so it still reads as glass. Check: automated by L3 (pixchecks.py).
+- **L65. The brown-subject test misses brown things with grey parts.** The flash pan (bronze with grey powder) and the roemer averaged to a grey mean fill, so they kept the warm ground and failed L54 at 1 to 3. Rule: a per-card `slate: true` in picks.json forces the cool slate ground (objcomp honours `o.slate`); a `ground` override does not, because it switches the slate off. Check: automated by L54.
+- **L68. A shared module is load-bearing for every agent.** A precedence slip in objcomp.js (`a ?? b || c`) was a syntax error for about a minute, and every render started in that window, this agent's queued batches and possibly the hero agent's, died on load. Rule: edit a shared module (card_kit.js, objcomp.js, samples.js, checks.js, render.js) with a script, then run `node -e "require('./samples')"` at once, before any render or long job; use explicit parentheses when mixing `??` with `||`. Check: the require smoke test after every shared edit (by hand; a render fails loudly, but late).
+- **L69. Attuned object cards carry their course as a shape, large.** el_scatter_ink's six variants differed by 7 in colour and 0.01 to 0.06 in greyscale: the object (a scroll) ignores the course, and its course marks were small specks, so the variants differed only in tint. Rules (with L60 and L61):
+  - on an attuned object card the course leaves the object and lands beside it as its element (element_fx `stroke` and `impact` at R 104, in the `.cfx` layer);
+  - on void the landing is the card's one hole (L38);
+  - the slate ground keeps half the course wash, and a pale subject gets a darker, fully tinted ground;
+  - prefer objects that hold or throw ink (nib, quill, shell, sigil stone, inkhorn, inkwell, reservoir).
+
+  Also, render.js hid the `.cfx` layer while it masked an object, so every object card's `_fx.png` came out empty and L61 read "no FX layers"; the FX capture now shows `.cfx` again. Check: automated by attuned_check.py (L60, L61). el_scatter_ink: closest colour pair 12.3, FX greyscale min 0.42.
+- **L70. Look-alikes under different names count together** (the coordinator's "L66, visual look-alikes"; renumbered, since L66 is the hero agent's). The variety blind tests read Vessel 93% and Alchemist 87%, but the matching tests read only 44% and 38%. The testers could name each object, yet could not tell which of four scales, four bells, two horns, three pitchers, the glowing round flasks, the furnaces or the stills went with which name. The name-based cap (L58) counted weights and scales, bell and handbell, still and retort as different things. Rules:
+  - objects that read alike at card size form a family (`FAMILIES` in checks.js: scales, bell, horn, cup, furnace, still, round flask, slim bottle, pot, pitcher, knife, sword, bowl, book, sheet, lamp, torch, door);
+  - per calling, at most 3 cards per family (4 when it holds the calling's signature), and at most 2 cards of one rarity in any family or object;
+  - lookalike.py is a pixel backstop: bounding-box-aligned silhouettes at 48 x 48 with IoU 0.9 or more and a matching aspect ratio and hue are clustered, with the same caps. Calibrated on the variety sheets: the clones the testers named (two yokes 0.97, two handbells 0.98, the weights 0.90) reach 0.9. At 0.85, round things of different kinds (an initial, an eye, a wheel, an astrolabe) chained together, and at 0.5 every round object chained into one cluster of 71 to 88 cards. A silhouette metric cannot see kinds, so the family table carries the rule and the pixels only catch clones.
+
+  Check: automated (checks.js L70 deck-wide; lookalike.py on every review batch).
+- **L71. What made the blind misreads** (variety tests, Vessel and Alchemist):
+  - a small round or oblong object held at an angle in a gauntlet loses its outline (warming pan, aspergillum, mirror read as a magnifying glass, oil lamp);
+  - round brown vessels with no feature blur together (fire pot, gourd, onion bottle): a label, handle, liquid line or flame is what makes a container read;
+  - a glare halo flattens the shape (ampoule, decanter, athanor);
+  - an object read as its best-known neighbour (L55): the albarello as a bound cylinder, a clay watering pot as a plain pot, a flat clay lamp as a wooden thing, a single antler as a dead branch, the spade as a plunger, the crock as a mug, a ewer as a watering can.
+
+  Rules:
+  - draw the best-known silhouette: the watering can with spout and rose, the brass lamp with spout and lid, antlers on their skull plate, a fire pot as an open pot full of flame, a powder pot as a black bomb with a fuse;
+  - drop the hand, or show the object large and upright;
+  - no glare act on glass;
+  - for abstract names, picture the meaning, not the calling's default: Panacea a unicorn horn, Quintessence a fifth phial apart from four, Second Dose a measuring spoon with two scored lines, The Great Work the philosophers' egg, Haste Draught an hourglass, Clarity Draught spectacles, Stand Near the hearth.
+
+  Check: the blind and matching tests (fresh agents); L70 for the look-alikes.
+- **L72. One object per card within a calling** (matching tests after the variety re-render, 2026-11-26). The blind test passed: Vessel 88 of 88, Alchemist about 90 of 94. Matching still failed: Vessel 47% and Alchemist 37% on the current names, and 47% and 45% on the proposed names. Split by object:
+  - cards whose object no other card in the calling used matched at 56% (Vessel) and 61% (Alchemist);
+  - cards that shared an object matched at only 37% and 36%.
+
+  Both readers said the same thing. Twins are one object on two cards, differing only in ground, hand or the corner element icon, and readers split their names by coin flip. 40 of 88 Vessel cards and 58 of 94 Alchemist cards were twins under the cap of 3.
+
+  Rules:
+  - within a calling, the shared pool and each world, every object card shows its own object. The cap is 1 and there is no signature exception.
+  - Two cards may share an object only as declared twins whose names are a pair and whose pictures show the difference (Tasting Spoon, one spoon, against Spoonful, two spoons for the second dose; Hourglass, upright, against Turned Glass, caught mid-turn).
+    - picks.json marks both cards with `twin` (the other id) and `shows` (the difference in words).
+    - The two picks must differ in `objOpt`, `count`, `act` or `ang`.
+    - Ground, room, hand, framing and the corner element icon are not differences.
+  - A token that copies a card (`t_<id>` beside `<id>`) is that card.
+  - Draw to the name. Where the proposed name (renames.csv, picture column) names an object, the card shows that object (Pentecost tongues of flame, Last Rites the oil stock, Plague Pit the lime pit, Blowfly the fly).
+    - The old pick stays in picks.json as `_was`, so a pick is easy to switch back if a rename is refused.
+  - Objects are shared across callings freely: the bellows serve the Vessel's Draw Breath and the Alchemist's Foul Bellows, the spigot the Vessel's Conduit and the Elementalist's Sluice.
+  - The look-alike families (L70) stay at 3 per calling, each card on its own object. alembic joins the stills, greatbell the bells, and hand and palm form a family. The fire pot left the pots once it was drawn as an open pot of flame.
+  - A drawn flame is part of the object (objects12.js `flame`), with a pale core. A fxReq flame is a dry-brush wisp and did not show on the Vessel's torch at card size. A saturated yellow core counts as gold (L14).
+  - Object files load in numeric order (objects6.js before objects12.js). A later part's redraw of a key wins; lexical order had let objects7's torch override its redraw in objects12.
+  - Reaching into the old library for more objects shows why some were never picked. Several were scattered sets that fail L56: knucklebones, a pile of coins, a flock of birds, an anvil with its hammer apart, a wax seal beside its stamp. Others were thin sticks that fail L46: chain, needle, bell rope, rowan cross, tongs. The fixes:
+    - draw one connected object: knucklebones heaped on a cloth, one raven, manacles, the stamp standing in its seal;
+    - or redraw an old key that no card uses (crucible, alembic, coal pan).
+  - Twins must differ at thumbnail size, not just in the data. The first spoon twin, empty against two scored lines, read as two plain spoons. A brimming spoon then broke L21, since the card text says the flask is empty. Spoonful now shows two spoons (`objOpt `pair`, two spoons crossed in one object; two loose copies failed L56).
+
+  Check: automated (checks.js L72, deck-wide on every run, failing the batch on its own groups); then the matching test.
+
+### Hero cards, round 9 (hero-card agent, 2026-11-25; hero_routes.js, hero_staging.js, hero_comp.js, element_fx.js)
+- **L66. Each hero card is its own picture.** All 280 hero cards rendered as one figure per calling in three act and two block poses, small in the left third of the same room, with the same ink stream and splat. bw_aegis_of_the_door, bw_brace, bw_close_ranks, bw_dig_in and bw_draw_their_eyes were one image; bw_bound_with_rope showed no rope. At 162 x 86 a calling read as one picture repeated 50 times. Cause: the hero went on every attack, cast and block, and the pose table decided the picture. Rules:
+  - A card earns its hero only when the act is the point. 127 of the 280 cards went to objects (hero_routes.OBJ, each with its reason, listed in reroutes.json), so 152 heroes remain (20.4% of 746). Attacks stay heroes, except where the name names the object (Drain the Bowl, Weigh the Wound, Lancet, the Illuminated Initial).
+  - Every hero card carries its own motif from its name or note (rope, barbs, tally, threads, bones, sand, frost, a ringing bell), drawn as the prop or the FX, and one FX per mechanic, never a stray blob.
+  - Five framings (full, three-quarter, close on hand and weapon, low angle, over the shoulder), a placement, a pose and a room view are allocated once over the whole deck (hero_alloc.json, so L57 holds). The allocation is greedy plus repair on a 64 x 35 raster of the figure's own part polygons, which tracks the rendered masks closely (r 0.997, mean difference -0.02). Pairs a render shows to read alike go on the separation list (hero_separate.json) and are kept out of one framing.
+  - 31 new poses (hero_staging.POSES) pass every rig check on every figure. Two new checks cover them: a leg rule (a knee bends one way, 0 to 140 degrees; the hip stays in range) and a frame rule (each framing must offer a placement that keeps the act on the card and the face whole or wholly out).
+
+  Check: automated, herosim.py (render.js runs it on every batch with hero cards). Hero pairs of a calling fail when their figure masks overlap at IoU 0.5 or more (the L12 bar), or when their band-pass grey pictures at 64 x 35 come within 0.55 of each other. Calibrated on build/emblem2/all: the five cards above measured IoU 0.76 to 1.00 across all ten pairs, and every one of the 279 hero cards had a twin. No two object cards that passed blind tests 5 to 7 come closer than 0.514. The L5 pose shares now count the pose each staged card is drawn in.
+
+  Three things the loop itself taught:
+  - A predictor must be checked against the render it predicts. The allocator's raster tested only pixel centres and under-read overlaps by about 0.06 on small figures. Pairs it placed at 0.44 rendered at 0.52. Counting a cell when any of five sample points falls inside brought it to r 0.998 against the rendered masks.
+  - Measured feedback beats hand tuning. Pairs a render shows alike go to hero_separate.json, measured FX cover goes to hero_fxscale.json (`attuned_check.py --fxscale`), and both feed the next allocation and drawing.
+  - Packing has a price. The Bulwark's door fills any close crop, so 23 of its 31 hero cards ended up in full framing, at varied heights on a stone ledge.
+- **L60. An attuned card shows its element, and its six variants must read apart.** The game now loads `<id>_<element>.jpg` for the element the hero is attuned to. Rules:
+  - `<id>~<course>` builds the base card under its base id, with only the course changed, so it is deterministic under L57; render.js writes it as `<id>_<course>.jpg`.
+  - The base art is the starting element (data/heroes.json, which is fire), and an attuned card's room follows its course.
+  - The Elementalist's course ink pulls only 0.3 toward black (`K.courseInk(course, { attuned: true })`, `ATTUNED_PULL`), not rule 7's 0.6 to 0.74. At 0.62 the ink is near-black and frost and water read alike; at 0.25 to 0.3 the element's colour shows and still reads as ink.
+
+  Check: automated, attuned_check.py (render.js runs it on batches with variants or element cards). The six variants must differ pairwise by CIE76 12 or more, either in ground colour (the median) or in ink colour (the 4% most chromatic pixels), at 162 x 86. Calibrated on el_ink_bolt, el_heavy_pour and el_scatter_ink: at pull 0.62 el_ink_bolt frost/water measured 10.1 and failed; at 0.25 it passed at 13.6. el_scatter_ink failed at every pull (fire/void 6.5), because its slate ground (L54) erased the course, which is the object agent's fix.
+- **L61. An element is a shape, not a hue.** Cole on the attuned strips: "fire reads more like blood, i want them to look like that ELEMENT not just that color". Cause: every course FX was the same ink stroke and splat, recoloured. A first fix (ink for the first third of the stroke, the element after) was corrected by Cole: "the WHOLE projectile should be the elemental effect, so the fire should look like it's shooting out bits of flame and fire and the ice should look like a stream of ice shards". Rule: from the moment it leaves the hand or nib, the projectile is the element; the ink lives in the drawing (woodcut line and hatching), never in a liquid stroke leading in. Pours, breath, sprays and rays follow the same rule (element_fx.js `stroke`, `impact`, `pour`). No glows:
+  - fire: a gout of flame tongues and fire bits along the path, thickest at the hand, with a smoke trail and embers; it lands as an orange-ochre flame mass with a lighter core and woodcut strokes in each tongue, a dark smoke plume and a char ring, and the pour lands as a burning pool; never a round splat;
+  - frost: a stream of angular ice splinters with cold vapour and specks, landing as an irregular shard cluster with a rime crust and icicles, never a radial snowflake (rule 8: no clean crystals);
+  - lightning: the bolt itself, forked, from the hand to the target, with a burnt branching scar;
+  - water: a jet with a dark underside, a light core and droplets, cresting as it hits, and a pooled spill;
+  - toxin: a rolling dark-edged grey-green fume cloud with spatters along the whole path, with mould blotches where it lands (a ring and dot read as an eye);
+  - void: a ragged dark rift travelling along the path, its lips lit and the air hatched in toward it, ending in one bored hole with its wall showing.
+
+  The element takes 15 to 25% of the frame on a cast, sized by the frame (not the figure), so it reads at 162 x 86. It never lands on the face (L28): the impact moves clear, and the build throws if it cannot (it caught el_ink_dart).
+
+  Check: automated, attuned_check.py:
+  - FX layer: each card's FX layer is rendered alone (`_fx.png`, the `.cfx` groups) and compared in greyscale between variants, by band-pass distance at 64 x 35, which must be 0.33 or more. The old recolour fell to 0.06 (a fire pour and a water pour are one shape); the whole-projectile element shapes measure 0.37 and up (median 0.98) on the hero strip cards.
+  - Whole card: whole-card greyscale cannot carry this test, because the figure and room dominate it. It is used only for cards with no FX layer, at 0.12.
+  - Size: a cast card's element layer must cover 15 to 30% of the frame. At the first roll-out it measured 5 to 22% and failed; one pass later the void hole took half the frame (up to 48% on close crops); it now sits at 16 to 27%.
+  - Symmetry, a floor only. Each impact is rendered alone (`_imp.png`, the `.cimp` groups). Its main mass must not match itself flipped, turned half a turn or turned by 360/n at IoU 0.7 or more. Void is exempt, because its hole is an ellipse by rule. This caught a toxin cloud built as a symmetric row of billows (0.75; the cloud now rolls with its travel). It would not have caught the two mistakes Cole's review found, so these two were made into checks:
+    - Fire evenness: the first fire impact was a row of even triangles (a picket fence, a crown). Over the largest flame mass, a top edge with 3 or more peaks must vary in peak height (CV 0.25 or more) and in spacing (CV 0.25 or more). The picket measured 0.21 and 0.23 and fails; the redrawn licking flames pass. On the first roll-out it also failed four flames that ran off the top of a close crop, where the frame edge cut them to one height. An impact now keeps room above for its tongues.
+    - Frost rays: the first frost impact was a starburst. Its ice spikes (peaks of the radial extent of the pale ice round the centroid) must vary in length (CV 0.2 or more), and with 5 or more rays their angular gaps must be uneven (CV 0.3 or more). The starburst measured a length CV of 0.17 and fails. Its gaps were already uneven (0.70), so the angular-gap test proposed first would have missed it.
+  - The habit this lesson records: when an eye finds a mistake that the checks passed, calibrate a measure on the kept bad render and on the fix, and keep it only if it fails the one and passes the other.
+  - A measure can be wrong too. The first fire measure read a column with no flame as a peak the height of the frame (numpy's argmax of an empty column is 0), and it flagged good fires at random for three rounds. It was found by drawing the mask with the detected peaks over it. Rule: look at what a new measure sees on one card before trusting its numbers. The flames are now placed by their tips (what the measure and the eye read), not by their bases.
+  - Round 10 (the coordinator's eye review of the strips): the element shapes were still emblems of the element. What changed, and what each fix taught:
+    - Fire was a row of standing teardrops. It is now a jet that widens from the hand with licks peeling off its top, and a burst thrown out in a fan from a hot core (element_fx `flameJet`, `fireBurst`). The fan leans the way the throw went and its far tongues run longer: a fan centred straight up is its own mirror, and Strike Across measured 0.70 on the symmetry floor until it leaned. Fire evenness is information only now: there is no row of standing flames left for it to read.
+    - Water was a crown of cones, as pointed as the frost. It is now a wave curl with a foam edge, a low crown whose tips end in round beads, and round droplets (`waterCurl`). The coordinator asked for a water against frost greyscale check; L61 already compares all 15 element pairs, water and frost included, and they passed at 0.41 or more, so the missing check was a shape one. Water roundness: over the impact's top edge, peaks are scored by prominence over their width at half prominence, and water fails with 2 or more peaks of 1.5 or more. Calibrated on the kept cones in `_heroes/elem_r9` (Heavy Pour 2 spikes at 3.7 and 4.6, Ink Bolt 2 at 4.2 and 1.7, both fail) against the curl (no peak over 1.5).
+    - Toxin was a bushy outlined cloud. It is now a see-through fume with no outline, read by long dry-brush wisps of a sickly lit green drifting off it and a darker belly, with ooze hanging from it, dropping, and pooling on the floor (`fumeCloud`, `ooze`). Two wrong turns: the dark fume alone vanished on the green rooms at strip size, and lighter blob crowns on each lobe read as bushes. Wisps carry the tone without an outline. The pool was drawn under the hit, so a high hit left it floating; it now lands on the floor line.
+    - Frost: the splinters keep clear of the face by the spread of the whole heap, not its centre. A frost heap at the frame edge was the hardest case. A splinter the edge cuts ends at the edge, and cut tips read as rays of one length (Heavy Pour, length CV 0.07). What failed, in order:
+      - setting the lengths by hand made the heap swallow the figure;
+      - turning cut splinters until they fit sent every long one straight up on a floor hit, and Backdraft's heap became two even spikes (0.76 on the symmetry floor);
+      - shortening alone left an edge heap small and even (Ink Bolt cover 0.09).
+
+      What holds now:
+      - the impact keeps 1.5 R of room from the frame sides and top (hero_comp);
+      - a splinter turns up to 7 steps, either way first at random, then is shortened by a random share of its room;
+      - a hit on the floor sends half its splinters up and half skidding forward low;
+      - the long tier is set uneven (one long, the rest stepping down) and springs from near the hit;
+      - the rime crust lies see-through under the heap (as solid white it measured as two more rays along the floor).
+
+      The ray measure stays noisy on heaps of 4 or 5 rays: it sits near its 0.2 floor on some heaps that read as heaps by eye.
+    - Void: a purple-black tendril from the hand into the hole, not a red line, on every calling (the Oracle's red thread is its own doom, not void).
+    - Water, second pass (the coordinator's eye): the foam marks were paired arcs ("m" chevrons) and read as seagulls, and the body was one flat blue tube that could read as a tentacle or a slide. Foam is now broken single crests curling over along the lip with spray dots, and the body carries a lighter band and thin streaks running with the flow. Rule: never draw foam, spray or sparks as a repeated paired mark; a pair of arcs is a bird.
+    - Water, third pass (round 12): five frayed strands fanned from one point at the jet's end drew a little stick figure at the wave's tip, and pale flow lines crossing the white foam drew more. The strands are gone, flow lines are mid-blue, and crest curls go only where the crest runs across, never on top of each other. Check (attuned_check.py): a pale spray component that fails has all of these:
+      - 4 or more skeleton ends and a branch point;
+      - strokes 12 px wide or less;
+      - 40 px or more across;
+      - no more than 1.8 times as long as wide.
+      Bead clumps and hooked crests pass.
+    - The "spark" motif drew an ink bolt from the act point, outside the element's face margin, and on Sigil Flick it left the mouth. On an element card the element is the spark; elsewhere the motif keeps 120 px from the face. A flicked lightning bolt goes straight.
+    - Lightning keeps the face margin by its forks, not its line: its spread is 4.5 stroke widths (it was 1.6), because Sigil Flick's bolt started at the mouth.
+    - Size: a cast with its act at the right edge had no room to throw (Spend the Breath at 4%, even with a 1.6 size factor). The allocator now charges a cast whose act sits within 330 px of the right edge. The measured size factors are kept per variant (`<id>~<course>`) as well as per card.
+- **L67. Every hero card carries a name cue, and the cue lives in the scene.** The first hero matching test read 11 of 53 (21%). Every Bulwark card had the mace and the door, and every Oracle card had the hourglass and the hole, so nothing in a picture pointed at its name.
+  - Rule: each hero card carries one cue a reader can tie to its final name. It can be an object, a state, a setting or an action. The cues are kept in hero_cues.json as `{name, cue, mode, why}`, and no two cards of a calling share one.
+  - Where the cue lives (the coordinator's rule): it is part of the scene, never a badge. The first pass drew every cue in a lit disc in the clearest corner, and the discs read as UI stickers pasted on the picture.
+  - A cue now has one of five modes (hero_cues.js `stage`):
+    - held in the hero's off hand (the inkpot for Ink Bolt, the jug for Full Measure);
+    - part of the act's effect at the hand (two streams meeting for Conflux, the cast bouncing back at the caster for Backlash);
+    - standing on the floor line behind the figure (the furnace for Backdraft, the bell tower for Alarum, cracks under the blow for Brunt);
+    - hanging from the top of the frame (a noose, a pendulum, a curtain);
+    - weather across the scene (rain for Deluge, hail for Hailstone, a falling star reaching the ground for Cold Star).
+  - Architecture is drawn at its own size, not a token's: the first bell tower was a pale pill. A dark object takes a crisp lit edge up and to the left. This is an offset copy with no blur, so it reads as an edge and never as a halo.
+  - Names with no drawable object use the action or the effect, and hero_cues.json says why. Symbols that read as creatures were replaced, because there are no foes: the viper (Spite) became nettles, the floating eye (Sighting Cut) became the aim line from the eye to the mark, the eye in the dark (Void Glimpse) became a rift in the wall, and the ram's head became a ram log.
+  - Check: automated, cue_check.py on every hero batch. render.js writes `<fn>_cue.png`. The check fails a cue that:
+    - has a halo filter, or a large, filled, roundish see-through patch in its layer (a flat floor shadow is not one);
+    - does not touch the hero (within 10 px), the floor line (within 16 px), the frame top, or half the frame's width;
+    - covers under 1.2% of the frame at 162 x 86;
+    - stands off its surround by under 0.22;
+    - shows under 60% of itself from behind the figure.
+  - The contrast floor was set by eye on an 18-card test. A bell tower (0.26), an inkpot (0.26) and a ram log (0.27) read; a red moon behind the figure (0.14) did not, and the moon now goes to the side of the sky the figure leaves open.
+  - The matching test uses the final names (renames.csv, through hero_cues.json). It is packaged one calling per sheet.
+- **L68. A cue is drawn as the scene is drawn, and to the figure's scale.** Round 11's cues were flat single-fill cutouts with a plain outline and no ink texture, shading or wear. They read as stickers or clip art (a grey inkpot blob as big as the torso, a house-shaped furnace icon, a jug cutout, a computer mouse), and most were oversized against the figure.
+  - Rules (hero_cues.js `stage`):
+    - Where the object library has the thing, the cue is the library object, drawn by objcomp's own renderer (58 kinds, some as two objects together).
+    - Anything else is a kit drawing passed through the cueInk filter: mottled texture, grain, and soft shading from the upper left.
+    - Sizes come from the figure, measured on each card from its own polygons:
+      - a held thing is about 1.25 head heights, and a long one about a forearm;
+      - an effect is 1.5 head heights, or 2.6 for an effect shape;
+      - a room object is a set share of the figure's height.
+    - A setting cue stands a little back from the floor line, behind the figure, seen through the room's air (cueHaze).
+    - Effect cues are drawn in the element FX style. Conflux is two element streams; Strike Across is a stroke of the card's own element.
+    - Never draw a billow as a small cloud: its curls drew a face.
+  - Check: automated, cue_check.py.
+    - Flat fill: over the inside of the cue alone against the figure alone, the cue fails when its share of dead-flat pixels (local standard deviation under 0.006 in 5 px, a pure single fill) passes the figure's by 0.3. The first setting (under 0.02 in 9 px, a 0.25 margin) caught the round 11 cutouts (median 0.50 against the figure's 0.24). On the full round 12 render it also failed library objects the coordinator had passed (a pendulum, a plumed hat): painted areas and the room's haze are smooth but not flat. At the dead-flat setting the library objects reach 0.25 at most. Dark fills stayed flat under a multiplied texture, so the cueInk filter also screens on a faint light speck.
+    - Small things at room scale were specks at 162 px on the first full render: a tortoise, a black cat, two effigy dolls, a door knocker. A small room object (under 0.36 of the figure's height) now comes forward to the picture's front plane, as a still life does. It is larger (up to 2.4 times, at most 0.42 of the frame's height), stands at the frame's foot partly cut by the frame, sits in front of the figure but off it and the face, and has no haze.
+    - Contrast is waived for a cue covering 3% of the frame or more: a big shape reads in the room's dimness (a hanging pendulum at 0.06 read), and a speck does not.
+    - A setting cue's floor line is its own depth line (3% of the figure's height above the front floor); the touch test reads that line.
+    - Size cap: a held cue's height is at most 1.35 head heights, or its length at most 1.35 forearms for a long thing.
+    - Area and contrast floors go by mode, set by eye on the round 12 sheet.
+  - The coordinator's eye check of the first L68 sheet found four more:
+    - A held name carrier may reach 1.8 head heights; at 1.25, the Ink Bolt pot was a dark speck.
+    - An action in the label must be drawn: the ink leaving the pot and feeding the element at the hand, flames blasting out of the furnace door, the cast stream curving back in its own element, ink running through the siphon's tube. cue_check fails a cue whose label says blasting, leaping, bouncing or drawing and whose SVG has no `cueact` group.
+    - No arrow glyphs: a rebound, a returned blow or an overhead swing is an effect stroke, and a stride is a scuffed drag, never a triangle-headed arrow. The golden rebound arrow was a sticker in a new shape.
+    - A thin effect stroke is judged like a hazed cue for contrast (0.15), and it is exempt from the flat-fill test: a brush stroke is solid ink by nature, like the act's own FX.
+  - The cue box measure (`bbox`) skips clip paths and what they clip: a billow's hatching runs far past the billow, and it once put a vent pipe in mid-air.
+- **L69. Pretest the cue words before drawing.** Round 11's pictures read at 64% overall, and Bulwark (42%) and Duelist (57%) failed. Most misses were cues that two names could own: four breakage cues (a crack star, an ice burst, a split shield, an ice sheet), a grave against a banner, a lily against a snuffed candle.
+  - Rule: for each calling, write every cue as plain words, shuffle them with the calling's names, and have a fresh text-only reader match them. Any label that misses, ties, or wins only by elimination is re-picked before anything is drawn. Pictures read worse than words.
+  - Strong picks name the word in the name (a rake for Rake, a set-square for Square Tip, a hitch knot for Hitch, a barber's pole for Letting Cut) or its most common image (a tortoise drawn in for Hunker, a black cat for Portent).
+  - No second figure: no foes and no extra people, so Interpose shelters a dropped helm, not a child.
+  - Keep the tone: a broom read as slapstick against the grim ink, and a white flag means surrender, not a coup de grace.
+  - Check: the text pretest, packaged per calling by the hero-card agent (labels.txt and names.txt; keys only in the scratchpad) and run by the coordinator. Round 12: 152 of 152, then 27 of 27 on the strengthened labels.
+
 ## Checks to run before reporting
 
 1. The build (render.js runs checks.js before rendering and pixchecks.py after, and writes checks.txt): pose limits, props, pour mouths and two-hand turns (L4, L24 to L27, rig.js on load), pose shares, block hits, grips, pose words, frame, hand FX points, face clearance, drape and joint cover (L5, L6, L24, L28 to L31, L33, check_poses.js), object counts and per-batch uniqueness (L12), layout shares, repeats and subject size (L13), hue clusters and colour roles (L14), water allow-list (L15), signature crops (L16), hook points (L17), FX source (L18), count variants (L19), act and hand shares (L20), state words (L21), void holes (L22), name nouns (L23), flatness (L3), ellipse ratios and contact (L9), visible mass (L45), object mass (L46), planks (L47), same-object silhouettes (L12), dark on cool grounds (L49), hand against object (L53), brown on brown (L54), one object (L56), and alone equals batch (L57). All must pass.
@@ -206,3 +388,10 @@ Every piece of feedback becomes a rule here, so the next input starts from it in
 3. The Form checklist at 2x on every new or changed object (L9).
 4. A review beside the hero render (L3, L10).
 5. A colour check (L14).
+6. Hero cards and attuned variants (render.js runs all three on any batch that has them):
+   - herosim.py: one picture per hero card in a calling (L66).
+   - attuned_check.py: the six element variants read apart in colour, in greyscale shape and in size (L60, L61).
+   - cue_check.py: each hero card's name cue is in the scene, drawn with the scene's texture and to the figure's scale, and reads at game size (L67, L68).
+   Before drawing new cues: the L69 text pretest.
+   - `node hero_staging.js`: legs and framings for the staged poses (also run by check_poses.js on `-all`).
+   Then the matching test (L66, L67): a fresh reader gets one calling's hero cards unlabelled (`herosheet.py --blind`) and the shuffled final names; 60% is the bar.

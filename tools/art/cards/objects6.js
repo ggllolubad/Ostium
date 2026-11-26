@@ -143,7 +143,7 @@ O.aspergillum = (f, o = {}) => { // a holy-water sprinkler: a pierced gilt ball 
   for (let i = 0; i < 14; i++) { const a = -0.3 + (i % 7) * 0.5, y = i < 7 ? -100 : -190, rr = 150 * Math.cos(Math.asin((y + 120) / 150)) * 0.9, x = Math.sin(a) * rr; if (Math.cos(a) > 0.2) f.part(F(ell([x, y], 9 * Math.cos(a) + 3, 9, 0, 10)), { fill: '#120c08', shade: 0.1, inkW: 1.2, cast: false }); }
   P(f, F, [[-12, -270], [12, -270], [10, -300], [-10, -300]], C.GILT, { dress: false }); oval(f, F, [0, -306], 18, 14, C.GILT);
   f.scratches(F([[60, -80]])[0], 40, 8, '#f0e0a8'); D.bloom(f, F([[-60, -40]])[0], 20, '#3a3020', { n: 2, op: 0.5 }); D.chip(f, F([[110, -150]])[0], 8, 0.7);
-  for (let i = 0; i < 3; i++) K.fxReq(f, 'drip', F([[40 + i * 40, -40 + i * 20]])[0], 3, { col: '#2e3e5a' });
+  for (let i = 0; i < 7; i++) K.fxReq(f, 'drip', F([[-120 + i * 45, -260 + (i % 3) * 30]])[0], 3, { col: '#8aa4b4' });   // holy water flung off the ball, so it reads as a sprinkler (blind test: a perforated ball)
   return { focus: F([[0, -120]])[0], sig: SB(F, [-160, -320, 160, 180]), grip: { c: F([[0, 240]])[0], thumb: (o.ang ?? -0.7) - Math.PI / 2 }, feat: ['contents'], ells: [12 / 44] };
 };
 META.aspergillum = { act: 'fling', gold: true, ang: -0.7 };
@@ -163,17 +163,21 @@ O.swallow = (f, o = {}) => { // a swallow in flight from below and to the side: 
 };
 META.swallow = { act: 'fling', only: ['close'] };
 
-O.spoon = (f, o = {}) => { // a carved horn spoon, its deep bowl brimming with one dark drop of the brew, the handle ending in a knop
-  const F = frame([0, 0], o.ang ?? -0.5, 1), r = f.r, ink = INKS[o.course] || '#2a1e16';
+O.spoon = (f, o = {}) => { // a carved horn spoon, its deep bowl brimming with one dark drop of the brew, the handle ending in a knop (objOpt pair: a second spoon crossed behind it, the second dose, L72)
+  let back = null; if (o.pair) back = O.spoon(f, Object.assign({}, o, { pair: false, marks: 0, ang: (o.ang ?? -0.5) + 0.7 }));
+  const F = frame([0, 0], o.ang ?? -0.5, 1), r = f.r, ink = INKS[o.course] || '#2a1e16', empty = (o.state || {}).empty;
   const bowl = ell([0, -150], 120, 165, 0, 40); P(f, F, bowl, C.HORN, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, bowl, 0.3);
-  f.part(F(ell([6, -160], 96, 136, 0, 36)), { fill: mix(C.HORN, '#000', 0.35), shade: 0.4, inkW: 1.6, cast: false });   // the hollow
-  f.part(F(ell([16, -130], 70, 90, 0, 30)), { fill: ink, shade: 0.2, inkW: 1.2, cast: false }); f.flat(F(ell([-6, -160], 24, 30, 0.2, 12)), '#9a96a0', { op: 0.5 });
+  f.part(F(ell([6, -160], 96, 136, 0, 36)), { fill: mix(C.HORN, '#000', 0.35), shade: 0.4, inkW: 1.6, cast: false }); grain(f, F, ell([6, -160], 96, 136, 0, 36), 0.4, 8, -0.4, '#e8d0a8');   // the hollow
+  if (!empty && o.fill) { f.part(F(ell([6, -160], 94, 132, 0, 36)), { fill: o.fill, shade: 0.25, inkW: 1.4, cast: false }); f.flat(F(ell([-30, -200], 30, 40, 0.2, 12)), '#f8ecc8', { op: 0.6 }); D.wax(f, F([[90, -110], [100, -80]]), o.fill, { thick: 8, drips: 1, dripL: 60 }); }   // objOpt fill: brimming over with a bright dose (L72 twin: Spoonful against the empty Tasting Spoon)
+  else if (!empty) { f.part(F(ell([16, -130], 70, 90, 0, 30)), { fill: ink, shade: 0.2, inkW: 1.2, cast: false }); f.flat(F(ell([-6, -160], 24, 30, 0.2, 12)), '#9a96a0', { op: 0.5 }); }
   L(f, F, ell([0, -150], 110, 155, 0, 40).slice(14, 26), 7, '#f0dcb0', { op: 0.5 });
   const h = sweep([[0, 10], [6, 120], [10, 240], [8, 330]], 56, 34); P(f, F, h.poly, C.HORN, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, h.poly, 0.3, 10, -0.3);
   oval(f, F, [8, 350], 40, 36, mix(C.HORN, '#000', 0.15), { shade: 0.4 }); for (let i = 0; i < 4; i++) L(f, F, [[-20, 290 - i * 40], [30, 286 - i * 40]], 2, INK, { op: 0.5 });
   lit(f, F, h.A.slice(2, -2), 4, 0.45); D.crack(f, F([[60, -250]])[0], 1.4, 60, { n: 3 }); D.chip(f, F([[-110, -120]])[0], 8, -1.5); D.stain(f, F([[30, 150]])[0], 20, '#3a2414', { op: 0.3 });
-  K.fxReq(f, 'drip', F([[100, -60]])[0], 2, { col: ink });
-  return { focus: F([[0, -150]])[0], sig: SB(F, [-125, -320, 125, 120]), grip: { c: F([[8, 260]])[0], thumb: (o.ang ?? -0.5) - Math.PI / 2 }, feat: ['contents'], ells: [] };
+  if (!empty) K.fxReq(f, 'drip', F([[100, -60]])[0], 2, { col: ink });
+  if (o.marks) { for (let k = 0; k < o.marks; k++) { L(f, F, [[-34, 60 + k * 50], [34, 56 + k * 50]], 7, INK); L(f, F, [[-30, 64 + k * 50], [30, 60 + k * 50]], 2, '#f0dcb0', { op: 0.7 }); } if (!empty) f.part(F(ell([60, -230], 14, 18, 0, 10)), { fill: ink, shade: 0.3, inkW: 1.2, cast: false }); }   // a measuring spoon: one scored line per dose
+  const sig = SB(F, [-125, -320, 125, 120]), both = back ? [Math.min(sig[0], back.sig[0]), Math.min(sig[1], back.sig[1]), Math.max(sig[2], back.sig[2]), Math.max(sig[3], back.sig[3])] : sig;
+  return { focus: F([[0, -150]])[0], sig: both, grip: { c: F([[8, 260]])[0], thumb: (o.ang ?? -0.5) - Math.PI / 2 }, feat: empty ? [] : ['contents'], ells: [] };
 };
 META.spoon = { act: 'drip', ang: -0.5 };
 
@@ -425,7 +429,7 @@ META.font = { act: 'pour', only: ['close', 'floor', 'niche'] };
 O.padlock = (f, o = {}) => { // a heavy iron padlock, shut: a round-shouldered body with a keyhole under a swinging cover, a thick shackle
   const F = frame([0, 0], o.ang ?? -0.12, 1), r = f.r;
   const sh = [[-110, -40], [-110, -190], [-60, -290], [60, -290], [110, -190], [110, -40]]; L(f, F, sh, 66, INK); L(f, F, sh, 54, '#6a6c70'); L(f, F, sh.map(p => add(p, [-12, -10])), 10, '#c8c8c4', { op: 0.5 });
-  const body = [[-200, -60], [200, -60], [210, 120], [130, 260], [-130, 260], [-210, 120]]; D.slab(f, F(body), [16, 12]); P(f, F, body, C.IRON, { tex: T(f, 'mottle'), texOp: 0.8 });
+  const body = [[-200, -60], [200, -60], [210, 120], [130, 260], [-130, 260], [-210, 120]]; D.slab(f, F(body), [16, 12]); P(f, F, body, C.IRON, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, body, 0.4, 8, 0.8, '#c8c8c4'); grain(f, F, body, 0.3, 12, -0.7, '#16110e');
   lit(f, F, [[-190, -50], [-196, 110]], 6, 0.5); lit(f, F, [[-180, -66], [180, -66]], 4, 0.5);
   f.part(F([[-26, 50], [26, 50], [30, 90], [12, 100], [20, 190], [-20, 190], [-12, 100], [-30, 90]]), { fill: '#0a0806', shade: 0.1, inkW: 2, cast: false, hatch: false });   // the keyhole
   P(f, F, [[30, 0], [110, -10], [120, 60], [40, 70]], '#6a6c70', { dress: false }); f.rivet(F([[44, 10]])[0], 6, '#c8c8c4');   // the cover swung aside
@@ -491,7 +495,7 @@ META.orb = { act: 'press', gold: true, noTurn: true };
 
 O.kettle = (f, o = {}) => { // a black iron kettle on its bail: round belly, a lid with a knob, a curved spout, steam from the spout
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, frozen = (o.state || {}).frozen;
-  const body = turned([[150, -100], [200, -40], [220, 40], [190, 130], [120, 180]], 0.23); P(f, F, body, '#4a4b4e', { tex: T(f, 'mottle'), texOp: 1 });
+  const body = turned([[150, -100], [200, -40], [220, 40], [190, 130], [120, 180]], 0.23); P(f, F, body, '#4a4b4e', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, body, 0.4, 8, 0.8, '#b8b8b4'); grain(f, F, body, 0.3, 12, -0.7);
   arcs(f, F, body, [-60, -20, 20, 60, 100, 140], y => 200 + 20 * Math.cos((y - 40) / 140), 0.23, { op: 0.45 }); shadeR(f, F, body, 70, 220, -100, 190, 12, { op: 0.5 });
   L(f, F, [[-190, -30], [-200, 60], [-160, 140]], 10, '#b0b0b0', { op: 0.5 }); L(f, F, [[-150, -70], [-120, -90]], 6, '#c0c0c0', { op: 0.5 });
   oval(f, F, [0, -100], 150, 34, '#4a4a4e'); oval(f, F, [0, -108], 110, 24, '#2e2f32'); P(f, F, [[-20, -110], [20, -110], [14, -150], [-14, -150]], '#2e2f32', { dress: false }); oval(f, F, [0, -154], 24, 12, '#4a4a4e');
@@ -603,8 +607,8 @@ META.cruet = { act: 'pour', only: ['close', 'ledge', 'table', 'niche'] };
 
 O.onionbottle = (f, o = {}) => { // a squat green onion bottle: a wide flattened belly, a short neck with a string rim, the cork pulled, its stream running out
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, glass = '#3e5a44', liq = INKS[o.course] ? mix(INKS[o.course], '#2a3a2a', 0.4) : '#2a3a26', unstop = !!o.open;
-  const body = turned([[40, -260], [44, -220], [40, -160], [60, -110], [180, -30], [230, 60], [210, 150], [120, 200], [140, 220]]); P(f, F, body, glass, { tex: T(f, 'mottle'), texOp: 1 }); arcs(f, F, body, [-80, -30, 20, 80, 130, 180], y => y < -100 ? 60 : 210, 0.22, { op: 0.4, col: '#0e1a10' });
-  f.part(F([[-200, 40], [-80, 24], [80, 30], [220, 50], [230, 60], [210, 150], [120, 200], [-120, 200], [-210, 150], [-228, 60]]), { fill: liq, shade: 0.5, inkW: 1, cast: false });
+  const body = turned([[40, -260], [44, -220], [40, -160], [60, -110], [180, -30], [230, 60], [210, 150], [120, 200], [140, 220]]); P(f, F, body, glass, { tex: T(f, 'mottle'), texOp: 1 }); arcs(f, F, body, [-80, -30, 20, 80, 130, 180], y => y < -100 ? 60 : 210, 0.22, { op: 0.4, col: '#0e1a10' }); grain(f, F, body, 0.3, 10, 1.1, '#c8dcc8');
+  f.part(F([[-200, 40], [-80, 24], [80, 30], [220, 50], [230, 60], [210, 150], [120, 200], [-120, 200], [-210, 150], [-228, 60]]), { fill: liq, shade: 0.5, inkW: 1, cast: false }); grain(f, F, [[-200, 40], [220, 50], [210, 150], [120, 200], [-120, 200], [-210, 150]], 0.3, 9, -0.6, '#c8dcc8');
   L(f, F, [[-200, 40], [-80, 24], [80, 30], [220, 50]], 2, '#8aa890', { op: 0.7 }); shadeR(f, F, body, 90, 220, -60, 200, 12, { op: 0.5 }); for (let i = 0; i < 14; i++) f.flat(F(ell([-150 + (i * 41) % 260, 70 + (i * 29) % 110], 4, 3, 0, 6)), '#c8dcc8', { op: 0.45 });
   L(f, F, [[-150, -40], [-200, 60], [-170, 150]], 12, '#e8f0e8', { op: 0.45 }); L(f, F, [[-26, -250], [-30, -150]], 5, '#e8f0e8', { op: 0.45 });
   ring(f, F, [0, -232], 48, 12, 6, mix(glass, '#000', 0.2)); oval(f, F, [0, -262], 40, 10, '#0e120e');

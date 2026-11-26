@@ -143,6 +143,64 @@ Shared, world and foe-added cards have no hero, so their hero kinds become objec
   offering bowl, ewer, chalice, weights, initial, seal, hearth, reliquary, candle, mantle), picked by `VESSEL_WORDS`.
   Gold on them is worn gilt (`#9a8450`).
 
+## Variety pass (L58 to L65, 2026-11-25)
+
+- **Every object card has its own pick** in `picks.json` (id to object key, or id to `{ device, layout, flip, zoom, act,
+  count, slate, objOpt }`), chosen from the card's name first. The block marked VARIETY PASS in samples.js loads it and
+  the new libraries; it runs before the pick logic, so a pick overrides the family defaults, READS and VESSEL_WORDS.
+- **New libraries**, each `{ O, META }` with META holding an object's defaults (tilt, act, allowed layouts, gold, no-turn):
+  objects6.js (the Vessel's holy things and the shared helpers `tube`, `oval`, `ring`, `sweep`, `arcs`, `shadeR`,
+  `grain`), objects7.js (the Alchemist's vessels and tools, `glass()` with a liquid level), objects8.js (the
+  Elementalist's ink carriers), objects9.js (Hexweaver), objects10.js (Oracle), objects11.js (Bulwark and Duelist).
+  `varsheet.js <out.png> [course] [keys|-] [scale] [cols]` draws them on tiles.
+- **One object per card (L72, replacing the L58 cap of 3)**: within a calling, the shared pool or a world every object
+  card shows its own object. Declared twins are the one exception: both picks carry `twin` and `shows`, and differ in
+  objOpt, count, act or ang. checks.js counts the whole deck on every run. objects12.js to objects16.js (2026-11-26) hold
+  the objects this needed, drawn to the proposed names in docs/design/names/renames.csv; a pick changed for a rename
+  keeps the old object as `_was`. Object files load in numeric order, so a later part's redraw wins.
+- **Separating two same-object cards** of a calling: a different layout, or `flip: true`; `style` is dropped when a
+  `layout` is set (L62). A held pick needs a grip and `held` in the object's layouts (L63).
+- **Attuned object cards** write their course: ink leaves the object and lands, large, as the element (element_fx.js,
+  L61); on void the landing is the card's one hole. Their slate ground keeps half the course wash (L60).
+- Review batches: `node cards/render.js -rv=<name> ids...` writes to emblem2/variety/<name>/.
+
+## Hero cards, round 9 (L60, L61, L66, 2026-11-25)
+
+- **Who gets a hero** (hero_routes.js): a card earns its hero only when the act is the point. `HERO` lists the 152 hero cards (20.4% of the deck), each with a framing, an act mechanic, a motif and a room. `OBJ` lists the 127 re-routed cards with a suggested object and the reason; the object agent's picks.json makes the final pick, and reroutes.json carries the list. `node hero_routes.js` asserts every hero card is routed once. This replaces the hero rule in "What gets a hero and what gets an object" above, which now applies only to test ids.
+- **Staging** (hero_staging.js, hero_comp.js):
+  - Five framings: full, three-quarter, close on hand and weapon, low angle, over the shoulder.
+  - The rig's poses plus 31 new ones, tagged by mechanic. The Executioner's grip is solved exactly (`solveGrip`).
+  - A deck-level allocation (hero_alloc.json, cached by a hash of its inputs) gives each card a pose, framing, placement and room view, so no two hero cards of a calling share a silhouette (IoU under 0.5) or a view of a room.
+  - Pairs a render shows to read alike go into hero_separate.json (`python3 herosim.py <out> <list> --separate hero_separate.json`) and are kept out of one framing.
+- **Elements** (element_fx.js): on a course card the whole projectile is the element from the hand (L61). `stroke(r, course, pts, w)`, `impact(r, course, point, R, { floorY, dir })` and `pour(r, course, mouth, floor, w)` are shared with objcomp.
+  - Element FX cover 15 to 30% of the frame on a cast, sized by the frame, and never land on the face (the build throws).
+  - The figure is `<g id="hero">`, the FX layers are `<g class="cfx">` and impacts are `<g class="cimp">`, so render.js can write `_hero.png`, `_fx.png` and `_imp.png` for the checks.
+- **Attuned cards** (L60): `<id>~<course>` is the base card in another course (render.js writes `<id>_<course>.jpg`, which the game loads for the hero's current element).
+  - The base is the starting element (fire, from data/heroes.json), and the room follows the course.
+  - Their ink pulls 0.3 toward black (`K.courseInk(course, { attuned: true })`).
+- **Run:**
+  - `node render.js -h -heroes[=bulwark,duelist]` renders the staged heroes to emblem2/_heroes.
+  - `-h=<name>` writes to a subfolder of _heroes.
+  - `-dry` checks without rendering (`-h=dry -all -dry` is the full-deck dry run).
+  - `python3 herosheet.py <out>` makes labelled contact sheets per calling, and `--blind <dir> <calling...> --key <file>` makes the matching test.
+  - render.js runs herosim.py (L66) and attuned_check.py (L60, L61) on any batch that has hero or variant cards.
+
+## Hero cards, rounds 10 and 11 (element shapes, name cues; 2026-11-26)
+
+- **Round 10** (element_fx.js): fire is a jet (`flameJet`) and a burst (`fireBurst`, leaning with the throw); water is a curl with beads (`waterCurl`); toxin is a see-through fume of wisps (`fumeCloud`) with ooze dropping to a pool on the floor (`ooze`); frost splinters keep inside the frame; void is a dark tendril into the hole. The API is unchanged; `fireBurst` takes an optional `dir`. attuned_check.py adds water roundness (L61) and keeps fire evenness as information only.
+- Size factors (`attuned_check.py <out> <list> --fxscale hero_fxscale.json`) are read per variant (`<id>~<course>`) before per card. The allocator (VERSION 15) charges a cast whose act sits within 330 px of the right edge.
+- **Round 11, name cues** (L67): every hero card carries one cue a reader can tie to its final name.
+  - The table is hero_cues.json: `{id: {name, cue, why}}`, built from docs/design/names/renames.csv. No cue repeats within a calling; `node hero_cues.js` checks the table and every drawer.
+  - hero_cues.js stages each cue in the scene by its mode (hero_cues.json `mode`): held in the off hand, part of the act's effect, on the floor line behind the figure, hanging from the frame top, or weather across the scene. Never a badge or halo. It is drawn outside `.cfx`, in `<g class="cue" data-mode data-floor data-layer>`; setting cues are spliced in behind the figure, just after the room.
+  - render.js writes `_cue.png`. cue_check.py fails a halo, a cue that touches neither the hero, the floor line, the frame top nor half the frame's width, and a cue under 1.2% of the frame or 0.22 contrast at 162 x 86.
+  - The matching test now uses the final names (herosheet.py reads them from hero_cues.json).
+- **Round 12 (L68, L69):**
+  - hero_cues.json carries a plain `label` per card, the words of the L69 text pretest. Packages are in `_heroes/pretest12*/<calling>/`, with keys only in the scratchpad.
+  - `LIBCUE` maps a cue kind to library objects (objcomp `LIB`, after samples.js has registered objects6+), with optional second objects and `OVER` overlays.
+  - Other cues are kit drawings through the `cueInk` filter. Setting cues go through `cueHaze`.
+  - Sizes come from the figure: heroCard passes `headH`, `foreL` and `FH`.
+  - cue_check.py adds the flat-fill share against the figure, the held size cap, and floors by mode.
+
 ## Needs a hand-made override
 
 - Rare and odd cards that deserve their own scene: an `ART` entry (the four object samples are examples).

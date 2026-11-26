@@ -15,7 +15,7 @@ function clipBelow(poly, yl) { const out = []; for (let i = 0; i < poly.length; 
 // a glass body: tinted, mottled, the liquid to a level, form arcs, reflections on the lit side, a few bubbles
 function glass(f, F, body, o) {
   P(f, F, body, o.glass || C.GLASS, { tex: T(f, 'mottle'), texOp: 0.4, opacity: 0.94, dressO: { op: 0.25, wear: false } });
-  if (o.level != null && !o.empty) { const q = clipBelow(body, o.level); if (q.length > 2) { f.part(F(q), { fill: o.liq, shade: 0.5, inkW: 1.1, cast: false, tex: T(f, 'mottle'), texOp: 0.6 }); const top = q.filter(p => Math.abs(p[1] - o.level) < 0.5); if (top.length > 1) { const xs = top.map(p => p[0]); L(f, F, [[Math.min(...xs) + 4, o.level], [Math.max(...xs) - 4, o.level]], 2.4, mix(o.liq, '#fff', 0.5), { op: 0.8 }); } } }
+  if (o.level != null && !o.empty) { const q = clipBelow(body, o.level); if (q.length > 2) { f.part(F(q), { fill: o.liq, shade: 0.5, inkW: 1.1, cast: false, tex: T(f, 'mottle'), texOp: 0.6 }); grain(f, F, q, 0.3, 11, 1.1, '#e8ece4'); const top = q.filter(p => Math.abs(p[1] - o.level) < 0.5); if (top.length > 1) { const xs = top.map(p => p[0]); L(f, F, [[Math.min(...xs) + 4, o.level], [Math.max(...xs) - 4, o.level]], 2.4, mix(o.liq, '#fff', 0.5), { op: 0.8 }); } } }
   grain(f, F, body, 0.2, 12, 1.1, '#1a2420'); grain(f, F, body, 0.22, 17, -0.5, '#e8ece4');
   if (o.arcs) arcs(f, F, body, o.arcs[0], o.arcs[1], o.k || 0.22, { op: 0.35, col: '#1a2a20' });
   if (o.shade) shadeR(f, F, body, ...o.shade, 10, { op: 0.4 });
@@ -25,17 +25,17 @@ function glass(f, F, body, o) {
 const cork = (f, F, c, w, h) => { P(f, F, [[c[0] - w, c[1]], [c[0] + w, c[1]], [c[0] + w * 0.86, c[1] - h], [c[0] - w * 0.86, c[1] - h]], '#8a6a44', { dress: false, tex: T(f, 'mottle'), texOp: 0.9 }); oval(f, F, [c[0], c[1] - h], w * 0.86, w * 0.3, '#a8885a'); };
 const liqOf = (o, dflt) => o.brew || (INKS[o.course] ? mix(INKS[o.course], '#2a1a10', 0.25) : dflt);
 
-O.firepot = (f, o = {}) => { // a round clay fire pot with a rag fuse burning in its mouth: a grenade of the stair, its belly scored, a cord net round it
+O.firepot = (f, o = {}) => { // a fire pot read as one (blind test: the corked round pot read as a flask): a wide-mouthed clay pot on three stubby feet, two lug handles, flames boiling up out of its open mouth, scorch down its sides
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
-  const body = turned([[60, -170], [70, -150], [150, -90], [200, 0], [190, 100], [130, 170], [70, 190]], 0.22); P(f, F, body, C.CLAY, { tex: T(f, 'mottle'), texOp: 1 });
-  arcs(f, F, body, [-60, -10, 40, 90, 140], y => 200 - Math.abs(y - 20) * 0.4, 0.22, { op: 0.45 }); shadeR(f, F, body, 80, 200, -120, 190, 12, { op: 0.5 });
-  for (let i = -3; i <= 3; i++) L(f, F, [[i * 22, -160], [i * 50, 0], [i * 34, 180]], 5, INK); for (let i = -3; i <= 3; i++) L(f, F, [[i * 22, -160], [i * 50, 0], [i * 34, 180]], 3, C.TWINE);   // the cord net
-  for (const y of [-60, 60]) { const q = ell([0, y], 194 - Math.abs(y) * 0.3, 40, 0, 24).slice(0, 13); L(f, F, q, 5, INK); L(f, F, q, 3, C.TWINE); }
-  oval(f, F, [0, -170], 60, 16, '#2a1a10'); L(f, F, [[-160, -40], [-180, 60]], 9, '#e8c8a0', { op: 0.45 });
-  const rag = [[-20, -176], [-40, -240], [-10, -300], [30, -260], [20, -180]]; P(f, F, rag, '#b8ae96', { tex: T(f, 'weave'), texOp: 0.8, dress: false }); f.flat(F([[-30, -250], [-6, -296], [24, -262], [0, -240]]), '#1a120c', { op: 0.7 });
-  D.chip(f, F([[150, -80]])[0], 9, 0.6); D.crack(f, F([[90, 60]])[0], 1.2, 70, { n: 4 }); D.stain(f, F([[-60, 120]])[0], 30, '#2a1a0c');
-  K.fxReq(f, 'flame', F([[-6, -290]])[0], 90, { col: '#c86030' });
-  return { focus: F([[0, 0]])[0], sig: SB(F, [-205, -310, 205, 200]), feat: ['fire'], ells: [16 / 60, 0.22] };
+  for (const x of [-120, 0, 120]) P(f, F, [[x - 26, 150], [x + 26, 150], [x + 18, 230], [x - 18, 230]], C.CLAY, { dress: false });
+  const body = turned([[230, -110], [240, -80], [250, 0], [220, 90], [150, 160], [90, 180]], 0.22); P(f, F, body, C.CLAY, { tex: T(f, 'mottle'), texOp: 1 });
+  grain(f, F, body, 0.3, 10); arcs(f, F, body, [-40, 20, 80, 130], y => 245 - Math.max(0, y) * 0.6, 0.22, { op: 0.45 }); shadeR(f, F, body, 100, 250, -110, 180, 12, { op: 0.5 });
+  for (const s2 of [-1, 1]) ring(f, F, [s2 * 252, -60], 26, 36, 10, C.CLAY);
+  oval(f, F, [0, -110], 232, 50, mix(C.CLAY, '#fff', 0.15)); oval(f, F, [0, -106], 206, 40, '#3a1a0a', { shade: 0.2 }); f.flat(F(ell([0, -104], 160, 26, 0, 20)), '#d8803a', { op: 0.8 }); f.flat(F(ell([-20, -106], 90, 14, 0, 16)), '#f0c070', { op: 0.7 });   // the coals in its mouth
+  for (let i = 0; i < 5; i++) L(f, F, [[-180 + i * 90, -96], [-170 + i * 86, 60 + (i % 2) * 40]], 14, '#1a120c', { op: 0.55 });   // scorch running down
+  L(f, F, [[-220, -70], [-236, 40], [-190, 130]], 10, '#e8c8a0', { op: 0.4 }); D.chip(f, F([[200, -110]])[0], 10, 0); D.crack(f, F([[100, 60]])[0], 1.2, 70, { n: 4 });
+  K.fxReq(f, 'flame', F([[-60, -130]])[0], 230, { col: '#c86030' }); K.fxReq(f, 'flame', F([[70, -126]])[0], 190, { col: '#c86030' });
+  return { focus: F([[0, -110]])[0], sig: SB(F, [-280, -160, 280, 235]), feat: ['fire'], ells: [50 / 232, 40 / 206, 0.22] };
 };
 META.firepot = { act: 'burn' };
 
@@ -121,7 +121,7 @@ O.ampoule = (f, o = {}) => { // a sealed glass ampoule, tear-shaped, its neck dr
   D.chip(f, F([[120, 160]])[0], 7, 0);
   return { focus: F([[0, 40]])[0], sig: SB(F, [-165, -390, 165, 245]), feat: ['contents'], ells: [0.22] };
 };
-META.ampoule = { act: 'glare', ang: -0.3, only: ['close', 'ledge', 'niche', 'table'] };
+META.ampoule = { act: 'drip', ang: -0.3, only: ['close', 'ledge', 'niche', 'table'] };
 
 O.decanter = (f, o = {}) => { // a clear glass decanter: a broad flat-shouldered base, a long neck with a ring, a ball stopper, the clear draught catching light
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, liq = o.brew || '#a8a890';
@@ -133,7 +133,7 @@ O.decanter = (f, o = {}) => { // a clear glass decanter: a broad flat-shouldered
   D.chip(f, F([[200, 200]])[0], 7, 0); D.stain(f, F([[60, 160]])[0], 20, '#5a5a4a');
   return { focus: F([[0, 60]])[0], sig: SB(F, [-235, -400, 235, 230]), feat: ['contents'], ells: [10 / 44, 0.22] };
 };
-META.decanter = { act: 'glare', only: ['close', 'ledge', 'table', 'niche'] };
+META.decanter = { act: 'pour', only: ['close', 'ledge', 'table', 'niche'] };
 
 O.torch = (f, o = {}) => { // a pitch torch: a stave wrapped in tarred rags bound with iron, the head burning and dripping black pitch
   const F = frame([0, 0], o.ang ?? -0.35, 1), r = f.r;
@@ -177,19 +177,18 @@ O.crock = (f, o = {}) => { // a grey salt-glazed stoneware crock: a squat straig
 };
 META.crock = { act: 'pour' };
 
-O.oillamp = (f, o = {}) => { // a clay oil lamp: a round body with a long nozzle, a filling hole and a ring handle, its wick burning at the nozzle tip
-  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
-  const body = [[-240, 40], [-250, -10], [-200, -70], [-80, -100], [40, -96], [140, -70], [300, -40], [330, 0], [300, 30], [140, 60], [-80, 100], [-200, 90]];
-  P(f, F, body, '#9a6a44', { tex: T(f, 'mottle'), texOp: 1 }); shadeR(f, F, body, -100, 280, 0, 100, 14, { op: 0.45, slant: 2 });
-  f.part(F(ell([-60, -76], 140, 28, 0, 28)), { fill: '#b8845a', shade: 0.35, inkW: 1.6, cast: false }); oval(f, F, [-60, -78], 40, 8, '#120c08');
-  for (let k = 0; k < 10; k++) { const a = k / 10 * 6.28; f.flat(F(ell(add([-60, -78], [Math.cos(a) * 90, Math.sin(a) * 18]), 6, 3, 0, 6)), '#6a4a2e', { op: 0.8 }); }   // stamped rosette
-  oval(f, F, [310, -10], 24, 10, '#120c08');
-  const hd = [[-230, -30], [-330, -60], [-340, 40], [-240, 50]]; tube(f, F, hd, 22, '#8a5a3a');
-  L(f, F, [[-200, -60], [100, -86], [280, -50]], 6, '#f0d0a8', { op: 0.45 }); D.chip(f, F([[100, 50]])[0], 9, 0); D.crack(f, F([[-140, 40]])[0], 0.3, 70, { n: 3 }); D.stain(f, F([[200, 0]])[0], 30, '#1a120c', { op: 0.4 });
-  K.fxReq(f, 'flame', F([[312, -16]])[0], 130, { col: '#c86030' });
-  return { focus: F([[100, -20]])[0], sig: SB(F, [-345, -110, 335, 105]), grip: { c: F([[-320, 0]])[0], thumb: (o.ang ?? 0) }, feat: ['fire'], ells: [28 / 140, 8 / 40] };
+O.oillamp = (f, o = {}) => { // a brass oil lamp with its best-known outline (blind test: the flat clay lamp read as a wooden thing): a low swelling body, a long tapering spout with the wick burning at its tip, a domed lid with a knob, a curled handle
+  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, BR = C.BRONZE;
+  const body = [[-200, 60], [-230, 0], [-190, -60], [-60, -90], [80, -80], [180, -40], [330, -60], [400, -90], [410, -70], [340, -20], [220, 40], [120, 90], [-80, 100]];
+  P(f, F, body, BR, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, body, 0.3, 10); shadeR(f, F, body, -40, 300, -40, 110, 14, { op: 0.45, slant: 2 });
+  P(f, F, turned([[30, -200], [60, -170], [110, -120], [130, -86]], 0.22).map(([x, y]) => [x - 40, y]), mix(BR, '#fff', 0.1), { tex: T(f, 'mottle'), texOp: 1 }); oval(f, F, [-40, -210], 22, 22, BR);   // the domed lid and knob
+  P(f, F, [[-120, 100], [80, 100], [100, 150], [-140, 150]], BR, { dress: false }); oval(f, F, [-20, 150], 120, 22, mix(BR, '#000', 0.2));   // the foot
+  tube(f, F, [[-210, -20], [-330, -70], [-360, 30], [-280, 80], [-220, 40]], 22, BR);
+  L(f, F, [[-200, -40], [-60, -80], [100, -70], [300, -60]], 7, '#f0e0b0', { op: 0.55 }); D.bloom(f, F([[40, 40]])[0], 26, C.VERD, { n: 3, op: 0.5 }); D.chip(f, F([[120, 90]])[0], 8, 0);
+  K.fxReq(f, 'flame', F([[400, -96]])[0], 170, { col: '#c86030' });
+  return { focus: F([[60, -20]])[0], sig: SB(F, [-365, -235, 415, 175]), feat: ['fire'], ells: [0.22] };
 };
-META.oillamp = { act: 'burn' };
+META.oillamp = { act: 'burn', only: ['close', 'ledge', 'table', 'niche'] };
 
 O.gourd = (f, o = {}) => { // a dried bottle gourd used as a flask: two swollen lobes, a cord tied round the waist, a corncob stopper, fen water leaking from a crack
   const F = frame([0, 0], o.ang ?? 0.15, 1), r = f.r, liq = '#4a4a2a';
@@ -219,19 +218,19 @@ O.bandolier = (f, o = {}) => { // an alchemist's bandolier laid in a curve: a br
 };
 META.bandolier = { act: 'drip', only: ['close', 'table', 'floor'] };
 
-O.antler = (f, o = {}) => { // a hart's antler, shed and cut at the burr: a curved beam with tines, a rasp's raw scoring at the base where the horn is ground
+O.antler = (f, o = {}) => { // a hart's antlers on their skull plate, as a trophy (blind test: one shed antler read as a dead branch): two branching beams spreading wide from a pale bone frontlet, brow tines forward, shavings rasped off one beam
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, AN = '#b8a07a';
-  const beam = sweep([[-60, 300], [-80, 160], [-40, 0], [40, -140], [60, -300]], 110, 46); P(f, F, beam.poly, AN, { tex: T(f, 'mottle'), texOp: 1 });
-  for (const [a, b, w] of [[[-70, 200], [-250, 140], 64], [[-60, 60], [-280, -50], 58], [[0, -60], [-170, -250], 50], [[40, -150], [240, -290], 48]]) { const tn = sweep([a, lerp(a, b, 0.5).map((v, i) => v + (i ? -30 : 0)), b], w, 14); P(f, F, tn.poly, AN, { tex: T(f, 'mottle'), texOp: 1 }); L(f, F, tn.A.slice(1, -2), 3, '#f0e4c8', { op: 0.5 }); }
-  oval(f, F, [-60, 300], 50, 20, '#d8c8a0'); for (let i = 0; i < 10; i++) f.flat(F(ell([-60 + (i * 13) % 60 - 30, 296 + (i % 3) * 4], 3, 2, 0, 6)), '#8a7050', { op: 0.7 });
-  ring(f, F, [-70, 250], 80, 22, 10, '#8a7a5a');   // the burr
-  for (let i = 0; i < 12; i++) { const y = 100 - i * 30; L(f, F, [[-60 + y * 0.1, y], [-30 + y * 0.12, y - 8]], 2, '#5a4430', { op: 0.6 }); }   // the grain
-  L(f, F, beam.A.slice(2, -3), 6, '#f4ecd8', { op: 0.5 });
-  for (let i = 0; i < 20; i++) f.flat(F(ell([-90 + (i * 23) % 70, 270 + (i * 11) % 40], 2, 1.5, 0, 6)), '#e8e0c8', { op: 0.8 });   // horn shavings
-  D.stain(f, F([[0, 0]])[0], 30, '#5a4430'); D.chip(f, F([[-250, -40]])[0], 6, 0);
-  return { focus: F([[-40, 0]])[0], sig: SB(F, [-270, -300, 230, 320]), feat: [], ells: [0.4] };
+  for (const s2 of [-1, 1]) { const X = p => [p[0] * s2, p[1]];
+    const beam = sweep([[30, 140], [130, 60], [210, -60], [250, -200], [260, -330]].map(X), 70, 26); P(f, F, beam.poly, AN, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, beam.poly, 0.3, 9, 1.2, '#5a4430'); L(f, F, beam.A.slice(2, -3), 5, '#f4ecd8', { op: 0.45 });
+    for (const [a, b, w] of [[[110, 80], [60, -40], 40], [[200, -40], [120, -170], 34], [[240, -170], [330, -270], 30], [[250, -250], [180, -350], 26]]) { const tn = sweep([X(a), X(lerp(a, b, 0.5)), X(b)], w, 9); P(f, F, tn.poly, AN, { tex: T(f, 'mottle'), texOp: 1 }); L(f, F, tn.A.slice(1, -2), 3, '#f0e4c8', { op: 0.5 }); }
+    ring(f, F, X([40, 130]), 46, 30, 8, '#8a7a5a'); }   // the burrs
+  const plate = [[-90, 90], [-60, 60], [60, 60], [90, 90], [70, 200], [30, 260], [-30, 260], [-70, 200]]; P(f, F, plate, '#d8ccb0', { tex: T(f, 'mottle'), texOp: 1 }); shadeR(f, F, plate, 10, 90, 60, 260, 8, { op: 0.4 });
+  for (const s2 of [-1, 1]) f.part(F(ell([s2 * 40, 150], 18, 12, 0, 10)), { fill: '#2a1e14', shade: 0.1, inkW: 1.4, cast: false, hatch: false });
+  for (let i = 0; i < 16; i++) f.flat(F(ell([200 + (i * 23) % 80, -20 + (i * 17) % 60], 3, 2, 0, 6)), '#efe6cc', { op: 0.85 });   // rasped shavings
+  D.crack(f, F([[0, 200]])[0], 1.6, 50, { n: 3 }); D.stain(f, F([[-150, -100]])[0], 24, '#5a4430');
+  return { focus: F([[0, 60]])[0], sig: SB(F, [-345, -360, 345, 265]), feat: [], ells: [] };
 };
-META.antler = { act: 'crack', only: ['close', 'table', 'ledge', 'niche'] };
+META.antler = { act: 'crack', only: ['close', 'niche', 'ledge'] };
 
 O.retort = (f, o = {}) => { // a glass retort over a flame: a round bulb, its long neck bent down and away, a drop forming at the beak
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, liq = liqOf(o, '#5a3a22');
@@ -342,18 +341,19 @@ O.roemer = (f, o = {}) => { // a green roemer: a wide round bowl of glass on a h
 };
 META.roemer = { act: 'pour', noTurn: true };
 
-O.wateringcan = (f, o = {}) => { // a clay watering pot: a round-bellied jar pierced with holes in its base, a thumb hole on top, rain falling from the holes in streaks
-  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
-  const body = turned([[24, -300], [40, -260], [60, -220], [160, -130], [210, -20], [200, 90], [150, 170], [90, 200]], 0.22); P(f, F, body, '#9a6a48', { tex: T(f, 'mottle'), texOp: 1 });
-  arcs(f, F, body, [-120, -60, 0, 60, 120], y => 205 - Math.abs(y) * 0.2, 0.22, { op: 0.45 }); shadeR(f, F, body, 80, 210, -200, 200, 12, { op: 0.45 });
-  for (let k = 0; k < 3; k++) L(f, F, ell([0, -100 + k * 70], 200, 44, 0, 30).slice(0, 16), 3, INK, { op: 0.65 });
-  oval(f, F, [0, -300], 32, 7, '#120c08'); oval(f, F, [0, -300], 44, 10, '#9a6a48', { opacity: 0.4 });
-  for (let i = 0; i < 9; i++) { const x = -70 + i * 18; f.part(F(ell([x, 196 + Math.abs(x) * -0.08], 4, 3, 0, 6)), { fill: '#120c08', shade: 0.1, inkW: 0.8, cast: false, hatch: false }); }
-  L(f, F, [[-150, -100], [-190, 20], [-160, 130]], 10, '#f0d8b8', { op: 0.45 }); D.chip(f, F([[150, -120]])[0], 9, 0); D.crack(f, F([[60, 60]])[0], 1.2, 70, { n: 4 }); D.stain(f, F([[-40, 120]])[0], 30, '#2a1a0c');
-  for (let i = 0; i < 5; i++) K.fxReq(f, 'drip', F([[-60 + i * 30, 214]])[0], 3, { col: '#2e3e4a' });
-  return { focus: F([[0, 0]])[0], sig: SB(F, [-215, -310, 215, 215]), grip: { c: F([[0, -280]])[0], thumb: (o.ang ?? 0) + Math.PI / 2 }, feat: ['contents'], ells: [7 / 32, 0.22] };
+O.wateringcan = (f, o = {}) => { // a copper watering can (blind test: the pierced clay pot read as a plain round vessel): a drum body, a long spout ending in a pierced rose, a strap handle over the top, rain falling from the rose
+  const F = frame([0, 0], o.ang ?? 0.12, 1), r = f.r, CU = C.COPPER;
+  const body = turned([[170, -150], [180, -120], [190, 120], [180, 160]], 0.22); P(f, F, body, CU, { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, body, 0.3, 10); shadeR(f, F, body, 90, 190, -150, 170, 10, { op: 0.45 });
+  for (const y of [-110, 130]) { L(f, F, ell([0, y], 184, 40, 0, 30).slice(0, 16), 10, INK); L(f, F, ell([0, y], 184, 40, 0, 30).slice(0, 16), 6, mix(CU, '#000', 0.25)); }
+  oval(f, F, [0, -150], 170, 38, mix(CU, '#fff', 0.15)); oval(f, F, [0, -146], 120, 26, '#1a120c');
+  const sp = sweep([[150, 60], [250, -20], [350, -110], [430, -190]], 54, 26); P(f, F, sp.poly, CU, { tex: T(f, 'mottle'), texOp: 1 }); L(f, F, sp.A.slice(1, -2), 4, '#f0c8a0', { op: 0.5 });
+  const rc = [452, -212]; oval(f, F, rc, 54, 30, mix(CU, '#fff', 0.1), { a: -0.8 }); for (let i = 0; i < 9; i++) f.flat(F(ell(add(rc, [Math.cos(i) * 30, Math.sin(i * 1.7) * 14]), 4, 3, 0, 6)), '#120c08');   // the rose
+  tube(f, F, [[-170, -60], [-250, -160], [-120, -300], [60, -280], [120, -150]], 22, CU);
+  L(f, F, [[-150, -100], [-160, 40], [-150, 140]], 10, '#f0d0b0', { op: 0.45 }); D.bloom(f, F([[60, 60]])[0], 30, C.VERD, { n: 4, op: 0.55 }); D.chip(f, F([[170, -150]])[0], 9, 0);
+  for (let i = 0; i < 6; i++) K.fxReq(f, 'drip', F([add(rc, [20 + i * 14, 40 + (i % 3) * 16])])[0], 3, { col: '#2e3e4a' });
+  return { focus: F([[100, -60]])[0], sig: SB(F, [-275, -315, 510, 200]), grip: { c: F([[-180, -230]])[0], thumb: (o.ang ?? 0.12) + 1.2 }, feat: ['contents'], ells: [38 / 170, 26 / 120, 0.22] };
 };
-META.wateringcan = { act: 'drip' };
+META.wateringcan = { act: 'drip', ang: 0.12 };
 
 O.matula = (f, o = {}) => { // a physician's matula held up to the light: a round-bottomed clear flask with a wide flared neck, cloudy urine in it, a wicker carrying basket below
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, liq = '#8a7e5a';
@@ -465,5 +465,42 @@ O.screwpress = (f, o = {}) => { // a wooden screw press: two oak posts and a hea
   return { focus: F([[0, 60]])[0], sig: SB(F, [-320, -405, 320, 325]), feat: [], ells: [] };
 };
 META.screwpress = { act: 'press', only: ['close', 'floor', 'niche'] };
+
+
+O.bomb = (f, o = {}) => { // a powder pot as everyone knows it: a round black iron shell, a short neck with a cap, a fuse burning down, rivet seam round its middle
+  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, c = [0, 40], R = 220;
+  P(f, F, ell(c, R, R, 0, 48), '#46474a', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, ell(c, R, R, 0, 48), 0.4, 8, 0.9, '#b8b8b4'); grain(f, F, ell(c, R, R, 0, 48), 0.3, 12, -0.6, '#16110e'); arcs(f, F, ell(c, R, R, 0, 48), [c[1] - 120, c[1] - 60, c[1] + 60, c[1] + 120], y => Math.sqrt(Math.max(0, R * R - (y - c[1]) ** 2)), 0.22, { op: 0.45 });
+  L(f, F, ell(c, R - 20, R - 20, 0, 48).slice(26, 40), 14, '#b8b8b4', { op: 0.5 }); f.flat(F(ell(add(c, [-90, -100]), 40, 26, -0.6, 16)), '#e0e0dc', { op: 0.6 });
+  const eq = ell(c, R, 46, 0, 40).slice(0, 21); L(f, F, eq, 14, INK); L(f, F, eq, 8, '#5a5c60'); for (let i = 1; i < 20; i += 2) f.rivet(F([eq[i]])[0], 4, '#9a9a96');
+  P(f, F, [[-50, c[1] - R - 50], [50, c[1] - R - 50], [56, c[1] - R + 20], [-56, c[1] - R + 20]], '#4a4c50', { dress: false }); oval(f, F, [0, c[1] - R - 50], 50, 14, '#5a5c60');
+  const fuse = [[0, c[1] - R - 56], [30, c[1] - R - 120], [80, c[1] - R - 150], [120, c[1] - R - 140]]; L(f, F, fuse, 12, INK); L(f, F, fuse, 7, '#a89470');
+  D.bloom(f, F([add(c, [100, 80])])[0], 30, C.RUST, { n: 3 }); D.chip(f, F([add(c, [-180, 80])])[0], 9, 1.2);
+  K.fxReq(f, 'flame', F([[124, c[1] - R - 146]])[0], 90, { col: '#d89040' });
+  return { focus: F([c])[0], sig: SB(F, [-225, c[1] - R - 160, 225, c[1] + R + 5]), feat: ['fire'], ells: [46 / R] };
+};
+META.bomb = { act: 'burn', only: ['close', 'floor', 'ledge', 'table'] };
+
+O.unicornhorn = (f, o = {}) => { // the panacea of the apothecaries: a long spiralled unicorn's horn, ivory, its base capped in a silver mount, laid on a cloth with a few grains rasped from its tip
+  const F = frame([0, 0], o.ang ?? -0.55, 1), r = f.r, IV = '#e0d6bc';
+  const S = sweep([[0, 330], [0, 100], [0, -150], [0, -380]], 170, 22); P(f, F, S.poly, IV, { tex: T(f, 'mottle'), texOp: 1 }); shadeR(f, F, S.poly, 0, 60, -380, 330, 9, { op: 0.4 });
+  for (let k = 0; k < 15; k++) { const y0 = 320 - k * 46, w = 82 - k * 4.4; L(f, F, [[-w, y0 + 20], [0, y0 - 4], [w, y0 - 30]], 5, '#7a6a4a', { op: 0.8 }); L(f, F, [[-w + 6, y0 + 12], [0, y0 - 12]], 2.4, '#fff8e8', { op: 0.6 }); }   // the spiral grooves
+  P(f, F, [[-96, 300], [96, 300], [100, 380], [-100, 380]], '#a8aaa8', { dress: false }); for (const y of [312, 368]) L(f, F, [[-72, y], [72, y]], 4, '#5a5c5a'); f.rivet(F([[0, 340]])[0], 7, '#e8e8e4');
+  L(f, F, S.A.slice(2, -3), 4, '#fffaf0', { op: 0.5 }); D.stain(f, F([[20, 120]])[0], 24, '#8a7a5a', { op: 0.3 });
+  for (let i = 0; i < 10; i++) f.flat(F(ell([-30 + (i * 13) % 60, -400 - (i * 7) % 30], 3, 2, 0, 6)), '#f0e8d4', { op: 0.85 });
+  return { focus: F([[0, -100]])[0], sig: SB(F, [-80, -390, 80, 385]), grip: { c: F([[0, 340]])[0], thumb: (o.ang ?? -0.55) - Math.PI / 2 }, feat: [], ells: [] };
+};
+META.unicornhorn = { act: 'glare', ang: -0.55 };
+
+O.quintrack = (f, o = {}) => { // the quintessence: an oak rack of four dull phials of the four elements, and a fifth, tall and clear, standing apart on the rack's raised end
+  const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
+  const rk = [[-340, 120, 1], [340, 120, 1], [340, 200, 1], [-340, 200, 1]]; D.slab(f, F(rk), [0, 16]); P(f, F, rk, C.OAKL, { tex: T(f, 'wood'), texOp: 1 }); grain(f, F, rk, 0.3, 9, 0.05);
+  P(f, F, [[160, 120, 1], [340, 120, 1], [340, 60, 1], [160, 60, 1]], C.OAK, { tex: T(f, 'wood'), texOp: 1 });   // the raised end
+  ['#6a3a22', '#3e4e5a', '#7a7050', '#4a5a36'].forEach((liq, k) => { const G = frame([-290 + k * 110, 0], 0, 1), Fp = pts => F(G(pts)); const b = turned([[18, -90], [20, -40], [40, 0], [42, 130]], 0.22); glass(f, Fp, b, { glass: '#6a7a6a', liq, level: 20, bubbles: 2 }); cork(f, Fp, [0, -90], 16, 24); });
+  const G5 = frame([250, -10], 0, 1), F5 = pts => F(G5(pts)); const b5 = turned([[22, -330], [24, -220], [60, -150], [70, 60], [64, 70]], 0.22);
+  glass(f, F5, b5, { glass: '#d0d8d0', liq: '#c8ccc0', level: -120, bubbles: 6, hi: [[[-46, -130], [-52, 40]], [[-10, -310], [-12, -230]]] }); cork(f, F5, [0, -330], 20, 30);
+  L(f, F, [[160, 116], [340, 116]], 3, '#e8d0a8', { op: 0.6 }); D.chip(f, F([[-200, 200]])[0], 8, 0); D.crack(f, F([[0, 170]])[0], 0.05, 80, { n: 3 });
+  return { focus: F([[250, -150]])[0], sig: SB(F, [-345, -370, 345, 215]), feat: ['contents'], ells: [0.22] };
+};
+META.quintrack = { act: 'drip', only: ['close', 'table', 'ledge', 'niche'] };
 
 module.exports = { O, META, helpers: { clipBelow, glass, cork } };

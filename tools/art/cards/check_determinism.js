@@ -11,7 +11,7 @@ const { execFileSync } = require('child_process');
 
 const out = process.argv[2];
 let ids = process.argv.slice(3);
-const fname = id => id.replace(/^@/, 'test_').replace(/[\/!]/g, '_');
+const fname = id => id.replace(/^@/, 'test_').replace(/[\/!~]/g, '_');   // ~: attuned course variants (hero-card agent), as render.js
 if (!ids.length) {
   const rows = fs.readFileSync(path.join(out, '_full', '_list.txt'), 'utf8').split('\n').filter(Boolean).map(l => l.split('\t')[1]);
   const step = Math.max(1, Math.floor(rows.length / 10));

@@ -408,7 +408,7 @@ for (const id of Object.keys(CARDS)) if (CARDS[id].cls === 'vessel' && (VESSEL_H
 // object (id -> key, or id -> { device, act, ang, layout, style, zoom, count, objOpt }). Applied before the pick logic.
 (() => {
   const OCv = require('./objcomp'), fsv = require('fs'), pv = require('path');
-  for (const fn of fsv.readdirSync(__dirname).filter(n => /^objects([6-9]|\d\d)\.js$/.test(n)).sort()) {
+  for (const fn of fsv.readdirSync(__dirname).filter(n => /^objects([6-9]|\d\d)\.js$/.test(n)).sort((a, b) => parseInt(a.slice(7)) - parseInt(b.slice(7)))) {   // numeric: a later part's redraw wins
     const m = require('./' + fn); Object.assign(OCv.LIB, m.O);
     for (const [k, d] of Object.entries(m.META || {})) { if (d.ang != null) OCv.ANG[k] = d.ang; if (d.scale) OCv.SCALE[k] = d.scale; if (d.long) OCv.LONG.add(k); if (d.only) OCv.ONLY[k] = d.only; if (d.noTurn) OCv.NO_TURN.add(k); if (d.act) OCv.ACT_DEFAULT[k] = d.act; if (d.gold) OCv.GOLD_OBJECTS.add(k); if (d.water) OCv.WATER_OK.add(k); if (d.scene) OCv.SCENE.add(k); }
   }

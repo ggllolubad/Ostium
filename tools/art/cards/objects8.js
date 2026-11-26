@@ -6,7 +6,7 @@
 const K = require('./card_kit');
 const { E, D, INK } = K;
 const { add, sub, mul, lerp, rot, mix, ell, frame, limb, norm } = E;
-const { C, INKS, SIX, T, loop, L, P, turned, lit, tube, oval, ring, sweep, SB, arcs, shadeR } = require('./objects6').helpers;
+const { C, INKS, SIX, T, loop, L, P, turned, lit, tube, oval, ring, sweep, SB, arcs, shadeR, grain } = require('./objects6').helpers;
 const { glass, cork } = require('./objects7').helpers;
 const O = {}, META = {};
 const inkOf = o => INKS[o.course] || '#1e1612';                   // the course's ink, pulled to ink (L14)
@@ -43,10 +43,10 @@ META.quill = { act: 'drip', ang: 0.5 };
 O.shell = (f, o = {}) => { // a scribe's mussel shell used as a paint dish: the ridged dark outside, the pearly hollow pooled with the course's ink, a dab of a second colour at the lip
   const F = frame([0, 0], o.ang ?? -0.15, 1), r = f.r, ink = inkOf(o);
   const out = [[-300, 40], [-260, -80], [-160, -170], [0, -200], [160, -170], [270, -90], [310, 30], [260, 120], [120, 170], [-60, 170], [-220, 130]];
-  P(f, F, out, '#2e2a34', { tex: T(f, 'mottle'), texOp: 1 }); for (let k = 1; k < 6; k++) L(f, F, out.map(p => lerp(p, [-280, 120], k * 0.14)).slice(0, 8), 2.4, '#5a5664', { op: 0.6 });   // growth ridges
-  const hol = out.map(p => lerp(p, [10, -20], 0.16)); f.part(F(hol), { fill: '#c8c4c8', shade: 0.35, inkW: 2, cast: false, tex: T(f, 'mottle'), texOp: 0.6 });
+  P(f, F, out, '#2e2a34', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, out, 0.3, 10, -0.5, '#a8a4b0'); for (let k = 1; k < 6; k++) L(f, F, out.map(p => lerp(p, [-280, 120], k * 0.14)).slice(0, 8), 2.4, '#5a5664', { op: 0.6 });   // growth ridges
+  const hol = out.map(p => lerp(p, [10, -20], 0.16)); f.part(F(hol), { fill: '#c8c4c8', shade: 0.35, inkW: 2, cast: false, tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, hol, 0.35, 9, 0.6);
   for (let i = 0; i < 6; i++) L(f, F, [[-200 + i * 70, -120], [-150 + i * 60, 100]], 3, i % 2 ? '#e8e8f0' : '#a8a0b0', { op: 0.5 });   // nacre
-  const pool = [[-200, 30], [-120, -60], [40, -90], [180, -40], [220, 50], [100, 110], [-100, 110]]; f.part(F(pool), { fill: ink, shade: 0.25, inkW: 1.6, cast: false }); L(f, F, [[-130, -30], [20, -60]], 6, wetOf(o), { op: 0.6 }); f.flat(F(ell([-60, 0], 40, 12, -0.2, 12)), '#f0f0f0', { op: 0.35 });
+  const pool = [[-200, 30], [-120, -60], [40, -90], [180, -40], [220, 50], [100, 110], [-100, 110]]; f.part(F(pool), { fill: ink, shade: 0.25, inkW: 1.6, cast: false }); grain(f, F, pool, 0.3, 10, 0.2, '#e8e4dc'); L(f, F, [[-130, -30], [20, -60]], 6, wetOf(o), { op: 0.6 }); f.flat(F(ell([-60, 0], 40, 12, -0.2, 12)), '#f0f0f0', { op: 0.35 });
   f.part(F(ell([240, -60], 34, 20, 0.4, 14)), { fill: mix(SIX[(Math.round((o.variant || 0)) + 2) % 6], '#16110e', 0.4), shade: 0.3, inkW: 1.2, cast: false });
   L(f, F, [[-290, 30], [-250, -80], [-150, -165]], 5, '#a8a4b0', { op: 0.6 }); D.chip(f, F([[300, 30]])[0], 9, 0); D.chip(f, F([[-60, 168]])[0], 8, 0);
   K.fxReq(f, 'drip', F([[250, 110]])[0], 3, { col: ink });
@@ -70,7 +70,7 @@ META.firesteel = { act: 'burst', only: ['close', 'table', 'ledge'] };
 O.sigilstone = (f, o = {}) => { // a round slate sigil stone, thick and chipped, a six-armed sigil painted on its face in the course's ink, still wet and running
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, ink = inkOf(o), c = [0, 0], R = 230, ry = 190;
   f.part(F([...ell(c, R, ry, 0, 40).slice(0, 21), ...ell(add(c, [0, 50]), R, ry, 0, 40).slice(0, 21).reverse()]), { fill: '#2a2c30', shade: 0.3, inkW: 2, cast: true });
-  P(f, F, ell(c, R, ry, 0, 48), '#4e525a', { tex: T(f, 'mottle'), texOp: 1 }); for (let i = 0; i < 6; i++) L(f, F, [[-200 + i * 70, -120], [-190 + i * 70, 140]], 1.4, '#3a3c42', { op: 0.6 });   // the slate's grain
+  P(f, F, ell(c, R, ry, 0, 48), '#4e525a', { tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, ell(c, R, ry, 0, 48), 0.35, 9, 0.3, '#a8acb4'); for (let i = 0; i < 6; i++) L(f, F, [[-200 + i * 70, -120], [-190 + i * 70, 140]], 1.4, '#3a3c42', { op: 0.6 });   // the slate's grain
   L(f, F, ell(c, R - 10, ry - 10, 0, 48).slice(26, 40), 6, '#c8ccd4', { op: 0.5 });
   for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2 + 0.3, p = add(c, [Math.cos(a) * 150, Math.sin(a) * 124]); L(f, F, [add(c, [Math.cos(a) * 30, Math.sin(a) * 24]), p], 26, ink); f.part(F(ell(p, 22, 18, 0, 12)), { fill: ink, shade: 0.2, inkW: 1.2, cast: false }); }
   L(f, F, loop(ell(c, 70, 58, 0, 24)), 20, ink); L(f, F, ell(c, 70, 58, 0, 24).slice(12, 20), 4, wetOf(o), { op: 0.6 });
@@ -99,7 +99,7 @@ META.inkhorn = { act: 'drip', only: ['close', 'table', 'ledge', 'niche'] };
 O.inkwell = (f, o = {}) => { // a square glass inkwell, thick-walled and bevelled, filled to the brim with the course's ink, a pewter hinged lid thrown back
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, ink = inkOf(o);
   const front = [[-190, -60, 1], [130, -60, 1], [150, 200, 1], [-170, 200, 1]], side = [[130, -60, 1], [230, -120, 1], [250, 130, 1], [150, 200, 1]], top = [[-190, -60, 1], [-90, -130, 1], [230, -120, 1], [130, -60, 1]];
-  P(f, F, side, mix(ink, '#202428', 0.5), { tex: T(f, 'mottle'), texOp: 0.5, dress: false }); P(f, F, front, mix(ink, '#3a4448', 0.35), { tex: T(f, 'mottle'), texOp: 0.6 }); P(f, F, top, '#8a949a', { dress: false });
+  P(f, F, side, mix(ink, '#202428', 0.5), { tex: T(f, 'mottle'), texOp: 0.5, dress: false }); P(f, F, front, mix(ink, '#3a4448', 0.35), { tex: T(f, 'mottle'), texOp: 0.6 }); grain(f, F, front, 0.35, 9, 1.2, '#e8ecee'); grain(f, F, side, 0.3, 9, -0.4, '#c8ccd0'); P(f, F, top, '#8a949a', { dress: false });
   shadeR(f, F, front, 20, 140, -50, 200, 8, { op: 0.4 }); L(f, F, [[-170, -40], [-152, 180]], 8, '#f0f4f4', { op: 0.55 }); L(f, F, [[-160, -48], [120, -48]], 3, '#f0f4f4', { op: 0.6 });
   oval(f, F, [20, -96], 76, 22, '#3a3e42'); oval(f, F, [20, -96], 58, 15, ink, { shade: 0.2 }); f.flat(F(ell([4, -100], 22, 5, 0, 10)), wetOf(o), { op: 0.7 });
   const lid = [[-40, -100], [-80, -220], [40, -260], [100, -150]]; P(f, F, lid, C.PEWTER, { tex: T(f, 'mottle'), texOp: 0.8 }); oval(f, F, [-50, -110], 16, 12, C.PEWTER);
@@ -126,7 +126,7 @@ O.abacus = (f, o = {}) => { // an oak counting frame: heavy rails and posts, rod
   const F = frame([0, 0], o.ang ?? -0.08, 1), r = f.r;
   const fr = [[-330, -230, 1], [330, -230, 1], [330, 230, 1], [-330, 230, 1]]; D.slab(f, F(fr), [12, 10]);
   for (const [a, b] of [[[-330, -230], [330, -230]], [[-330, 230], [330, 230]]]) tube(f, F, [a, b], 44, C.OAKL); for (const x of [-330, 330]) tube(f, F, [[x, -250], [x, 250]], 40, C.OAK);
-  for (let k = 0; k < 6; k++) { const y = -170 + k * 68; L(f, F, [[-310, y], [310, y]], 5, INK); L(f, F, [[-310, y], [310, y]], 3, '#a89470'); const n = 1 + (k * 5) % 7; const col = mix(SIX[k], '#d8ccb0', 0.15);
+  for (let k = 0; k < 6; k++) { const y = -170 + k * 68; L(f, F, [[-310, y], [310, y]], 5, INK); L(f, F, [[-310, y], [310, y]], 3, '#a89470'); const n = 1 + (k * 5) % 7; const col = mix(mix(SIX[k], '#8a8478', 0.72), '#d8ccb0', 0.15);   // muted (L14 on the attuned variants: four hue clusters at 0.45): six saturated bead colours made four hue clusters (L14)
     for (let i = 0; i < 8; i++) { const x = i < n ? -280 + i * 52 : 280 - (7 - i) * 52; oval(f, F, [x, y], 26, 28, col, { shade: 0.45, inkW: 1.6 }); f.flat(F(ell([x - 8, y - 10], 8, 6, 0, 8)), '#f0ece0', { op: 0.55 }); } }
   for (const [x, y] of [[-330, -230], [330, -230], [-330, 230], [330, 230]]) f.rivet(F([[x, y]])[0], 6, '#8a8a86');
   D.chip(f, F([[0, -250]])[0], 9, 0); D.crack(f, F([[-200, 240]])[0], 0.1, 60, { n: 3 }); D.stain(f, F([[200, 230]])[0], 24, '#1a120c');

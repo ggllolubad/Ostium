@@ -67,23 +67,51 @@ function runMeta(metas) {
   el.length ? fail('L9', 'ellipse ratios disagree: ' + el.map(m => `${m.id} ${m.ells.map(x => x.toFixed(2)).join('/')}`).join(', ')) : pass('L9', 'ellipse ratios agree within 1.3 on every object that declares them');
   const ct = objs.filter(m => m.contact != null && m.contact > 8);
   ct.length ? fail('L9', 'not touching its surface: ' + ct.map(m => `${m.id} ${m.contact.toFixed(0)}px`).join(', ')) : pass('L9', 'every object on a surface touches it, with a contact shadow');
-  // L58: variety. Deck-wide on every run (a deck property, not a batch one): within one calling, the shared pool and
-  // each world, no object on more than 3 object cards; a calling's listed signature object may take 4.
+  // L58 and L72: variety. Deck-wide on every run (a deck property, not a batch one). L72 (matching tests, 2026-11-26):
+  // within one calling, the shared pool and each world, every object card shows a different object; two cards may share
+  // one only as declared twins whose pictures show the names' difference (see twinOk).
   const R = reuse(), CS = require('./samples').CARDS, groups = new Set(objs.map(m => (CS[m.id] || {}).cls || 'shared'));
   if (!big) R.over = R.over.filter(x => groups.has(x.group));   // a review batch answers for its own callings; a full run for every one
-  R.over.length ? fail('L58', 'objects on too many cards in one calling: ' + R.over.map(x => `${x.group} ${x.obj} x${x.ids.length}`).join(', '), R.over.flatMap(x => x.ids)) : pass('L58', `no object on more than 3 cards in any calling, the shared pool or a world (signatures at most 4: ${Object.entries(SIGNATURE).map(([k, v]) => k + ' ' + v).join(', ')}); ${R.cards} object cards on ${R.objects} objects; uses per object ${R.hist}`);
+  const LA = lookalikes(R).filter(x => big || groups.has(x.group));
+  LA.length ? fail('L70', `look-alike families over ${FAM_CAP} cards or 2 of one rarity: ` + LA.map(x => `${x.group} ${x.fam} [${x.ids.join(' ')}]`).join('; '), LA.flatMap(x => x.ids)) : pass('L70', 'no look-alike family (' + Object.keys(FAMILIES).join(', ') + `) over ${FAM_CAP} cards in a calling or 2 of one rarity`);
+  R.over.length ? fail('L72', 'one object on two or more cards of a calling (not declared twins that show their difference): ' + R.over.map(x => `${x.group} ${x.obj} [${x.ids.join(' ')}]${x.why ? ' (' + x.why + ')' : ''}`).join(', '), R.over.flatMap(x => x.ids)) : pass('L72', `every object card in a calling, the shared pool or a world shows its own object (${R.twins} declared twin pairs); ${R.cards} object cards on ${R.objects} objects; uses per object ${R.hist}`);
   return out;
 }
-// L58: the signature exception, listed explicitly (a calling's own object, allowed on 4 cards with different silhouettes)
-const SIGNATURE = { vessel: 'chalice', alchemist: 'flask', hexweaver: 'poppet', oracle: 'hourglass', bulwark: 'shield' };
-const CAP = 3;
+// L70: look-alike families. Objects under different names that read as the same thing at card size (the blind and
+// matching tests: weights and scales, bell and handbell, still and retort, a flask and an onion bottle) count together.
+// Per calling (and shared pool and world): at most FAM_CAP cards per family (each on its own object, L72), and at most
+// 2 cards of one rarity in a family.
+const FAMILIES = { scales: 'weights scales steelyard', bell: 'bell handbell greatbell', horn: 'oliphant drinkinghorn', cup: 'chalice cup roemer', furnace: 'athanor hearth', still: 'still retort alembic', roundflask: 'flask onionbottle matula demijohn', slimbottle: 'vial phial ampoule decanter', pot: 'jar crock albarello', pitcher: 'ewer cruet', knife: 'knife lancet razor', sword: 'sword rapier maingauche', bowl: 'basin bowl', book: 'book initial', sheet: 'charter scroll', lamp: 'lantern oillamp', torch: 'torch match', door: 'door doorajar knocker hinge drawbar', hand: 'hand palm' };
+const FAMILY_OF = {}; for (const [fam, ks] of Object.entries(FAMILIES)) for (const k of ks.split(' ')) FAMILY_OF[k] = fam;
+function lookalikes(R) {
+  const S = require('./samples'), over = [];
+  for (const [g, m] of Object.entries(R.per)) { const fam = {};
+    for (const [obj, ids] of Object.entries(m)) { const fk = FAMILY_OF[obj] || obj; (fam[fk] = fam[fk] || { objs: new Set(), ids: [] }).objs.add(obj); fam[fk].ids.push(...ids); }
+    for (const [fk, v] of Object.entries(fam)) { const rar = {}; v.ids.forEach(id => { const q = S.CARDS[id].rarity; rar[q] = (rar[q] || 0) + 1; });
+      if (v.ids.length > FAM_CAP || Math.max(...Object.values(rar)) > 2) over.push({ group: g, fam: fk, ids: v.ids }); } }
+  return over;
+}
+// L58 -> L72: one object per card within a group. The old cap (3, a signature object 4) is kept only as history.
+const SIGNATURE = {}, CAP = 1, FAM_CAP = 3;
+// Declared twins (L72): two cards may share an object only when the picture shows the difference between their names
+// (Second Dose: two spoons or a second measure; Exhale and Draw Breath: breath going out and in). picks.json marks both
+// cards with twin (the other card's id) and shows (the difference, in words), and the two picks must differ in what is
+// drawn: objOpt, count or act. A different course or corner icon, room, hand or framing is not a difference.
+function twinOk(ids) {
+  const P = require('./picks.json'); if (ids.length !== 2) return 'more than two cards';
+  const [a, b] = ids.map(i => P[i]); if (!a || !b || typeof a === 'string' || typeof b === 'string') return 'not declared as twins';
+  if (a.twin !== ids[1] || b.twin !== ids[0] || !a.shows || !b.shows) return 'twin and shows must name each other';
+  const vis = q => JSON.stringify([q.objOpt || null, q.count || null, q.act || null, q.ang ?? null]);
+  return vis(a) === vis(b) ? 'the twins draw the same picture (objOpt, count, act and ang agree)' : '';
+}
 function reuse() {
   const S = require('./samples'); S.allocate();
   const per = {}; let cards = 0;
   for (const id of Object.keys(S.CARDS)) { const [k, obj] = S.describe(id).split(' '); if (['attack', 'cast', 'block'].includes(k) || obj === 'hand-made' || !obj) continue; cards++; const g = S.CARDS[id].cls || 'shared'; ((per[g] = per[g] || {})[obj] = per[g][obj] || []).push(id); }
-  const over = [], hist = {}; let objects = 0;
-  for (const [g, m] of Object.entries(per)) for (const [obj, ids] of Object.entries(m)) { objects++; hist[ids.length] = (hist[ids.length] || 0) + 1; if (ids.length > (SIGNATURE[g] === obj ? CAP + 1 : CAP)) over.push({ group: g, obj, ids }); }
-  return { per, over, cards, objects, hist: Object.entries(hist).map(([n, c]) => `${n}:${c}`).join(' ') };
+  const over = [], hist = {}; let objects = 0, twins = 0;
+  for (const [g, m] of Object.entries(per)) for (const [obj, ids] of Object.entries(m)) { objects++; hist[ids.length] = (hist[ids.length] || 0) + 1; const own = ids.filter(i => !(i.startsWith('t_') && ids.includes(i.slice(2))));   // a token copy counts as its card
+    if (own.length > CAP) { const why = twinOk(own); why ? over.push({ group: g, obj, ids: own, why }) : twins++; } }
+  return { per, over, cards, objects, twins, hist: Object.entries(hist).map(([n, c]) => `${n}:${c}`).join(' ') };
 }
 function report(results) { return results.map(r => `${r.ok ? 'PASS' : 'FAIL'}  ${r.lesson.padEnd(4)} ${r.msg}`).join('\n'); }
-module.exports = { runMeta, report, reuse, SIGNATURE, CAP };
+module.exports = { runMeta, report, reuse, lookalikes, twinOk, FAMILIES, SIGNATURE, CAP, FAM_CAP };

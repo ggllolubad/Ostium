@@ -138,8 +138,8 @@ META.bramble = { act: 'swing', only: ['close', 'floor', 'niche'] };
 O.caltrops = (f, o = {}) => { // one big forged caltrop on the flagstones: four iron spikes welded at the centre so one always stands up, barbed and rusted
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r, c = [0, 40];
   const tips = [[0, -320], [-280, 220], [280, 200], [40, 150]];
-  tips.slice().sort((a, b) => a[1] - b[1]).forEach(t => { const d = norm(sub(t, c)), n = [-d[1], d[0]], w = t[1] > 100 && t[0] > 0 && t[0] < 100 ? 34 : 50; f.part(F([add(c, mul(n, w)), t, add(c, mul(n, -w))]), { fill: '#5a5c60', shade: 0.45, inkW: 2.2, cast: true, sharp: true, tex: T(f, 'mottle'), texOp: 1 }); L(f, F, [add(c, mul(n, w * 0.5)), lerp(c, t, 0.9)], 3, '#c8c8c4', { op: 0.6 }); const b = lerp(c, t, 0.6); f.part(F([add(b, mul(n, w * 0.4)), add(b, add(mul(n, w * 0.4 + 30), mul(d, -30))), add(b, add(mul(n, w * 0.3), mul(d, 20)))]), { fill: '#4a4c50', shade: 0.3, inkW: 1.2, cast: false, sharp: true }); });
-  oval(f, F, c, 50, 44, '#4a4c50', { shade: 0.45 });
+  tips.slice().sort((a, b) => a[1] - b[1]).forEach(t => { const d = norm(sub(t, c)), n = [-d[1], d[0]], w = t[1] > 100 && t[0] > 0 && t[0] < 100 ? 60 : 88; f.part(F([add(c, mul(n, w)), t, add(c, mul(n, -w))]), { fill: '#6a6c70', shade: 0.45, inkW: 2.2, cast: true, sharp: true, tex: T(f, 'mottle'), texOp: 1 }); grain(f, F, [add(c, mul(n, w)), t, add(c, mul(n, -w))], 0.4, 8, Math.atan2(d[1], d[0]), '#c8c8c4'); L(f, F, [add(c, mul(n, w * 0.5)), lerp(c, t, 0.9)], 3, '#c8c8c4', { op: 0.6 }); const b = lerp(c, t, 0.6); f.part(F([add(b, mul(n, w * 0.4)), add(b, add(mul(n, w * 0.4 + 30), mul(d, -30))), add(b, add(mul(n, w * 0.3), mul(d, 20)))]), { fill: '#4a4c50', shade: 0.3, inkW: 1.2, cast: false, sharp: true }); });
+  oval(f, F, c, 80, 70, '#4a4c50', { shade: 0.45 });
   D.bloom(f, F([[60, 0]])[0], 30, C.RUST, { n: 4 }); D.bloom(f, F([[-140, 140]])[0], 20, C.RUST, { n: 2 }); f.flat(F(ell([0, -280], 10, 14, 0, 8)), BLOOD, { op: 0.8 });
   return { focus: F([c])[0], sig: SB(F, [-285, -325, 285, 225]), feat: ['blood'], ells: [] };
 };
@@ -162,7 +162,7 @@ O.banner = (f, o = {}) => { // a torn war banner on a pole, still flying: a tall
   const F = frame([0, 0], o.ang ?? 0, 1), r = f.r;
   tube(f, F, [[-260, -380], [-260, 380]], 26, C.OAK); P(f, F, [[-276, -380], [-244, -380], [-260, -440]], C.IRON, { sharp: true, dress: false }); tube(f, F, [[-260, -330], [200, -320]], 14, C.OAK);
   const cl = [[-250, -330, 1], [190, -320, 1], [240, -150], [200, 40], [260, 240], [120, 160], [20, 280], [-40, 140], [-250, 200, 1]];
-  P(f, F, cl, '#4a4a3a', { tex: T(f, 'weave'), texOp: 1 }); grain(f, F, cl, 0.3, 9, 0);
+  P(f, F, cl, '#5a5a46', { tex: T(f, 'weave'), texOp: 1 }); grain(f, F, cl, 0.35, 8, 0); grain(f, F, cl, 0.35, 11, 1.3, '#d8d0b8');
   for (let k = 0; k < 4; k++) L(f, F, [[-200 + k * 100, -320], [-170 + k * 100, 0], [-210 + k * 110, 180]], 9, k % 2 ? '#2a2a20' : '#7a7a68', { op: 0.45 });   // the cloth's waves
   f.part(F([[-120, -200, 1], [40, -200, 1], [40, 60, 1], [-120, 60, 1]]), { fill: '#16110e', shade: 0.2, inkW: 1.6, cast: false }); for (const y of [-140, -10]) L(f, F, [[-120, y], [40, y]], 6, '#6a6a60');   // the door blazon
   for (const [x, y, w] of [[100, -100, 40], [150, 80, 30], [-180, 120, 26]]) f.part(F(K.blob(r, [x, y], w, 9, 0.5)), { fill: '#120c08', shade: 0.1, inkW: 1.6, cast: false, hatch: false });   // holes
