@@ -86,3 +86,33 @@ Hero cards (Bulwark + Oracle, 53 cards): 11/53 (21%). The same props appear on e
 Failures come from cue collisions: the Bulwark breakage family, holding versus standing, grave versus banner, and death symbols on the Duelist. Unidentifiable cues on the Duelist and Oracle also miss.
 
 Next: L69, a text-only pretest of cue labels against names before any render. L68 brings the cue style in line with the scene (textured, hand-scaled, lit).
+
+## Hero cards, round 12 (L68 restyled cues, L69 pretested labels)
+
+| calling | r11 | r12 |
+|---|---|---|
+| Hexweaver | 17/17 | 14/17 (82%) |
+| Elementalist | 19/23 | 21/23 (91%) |
+| Alchemist | 7/10 | 8/10 (80%) |
+| Oracle | 14/22 | 15/22 (68%) |
+| Duelist | 26/46 | 34/46 (74%) |
+| Bulwark | 13/31 | 24/31 (77%) |
+| Total | 96/149 (64%) | 116/149 (78%) |
+
+Every calling clears the 60% bar. The remaining misses are pair swaps, listed below for a later polish pass:
+- Ink Dart / Prism Lance
+- Overarm Throw / Transmute
+- First Touch / Killing Thrust
+- Pallor (the lily read as a fleur-de-lis)
+- Flourish (the ink curl read as a rope)
+- Sweep (read as reeds)
+- Two-Step (the footprints read as stones)
+- Abyss / Cast Lots / Foretold Ruin
+- Portent (the black cat read as Deja Vu)
+- Repetition (the stamp marks read as up-arrows)
+- the Bulwark frost set: Rimed Mace, Brittle, Brunt
+- Ring the Helm / Interpose / Stave In / Repel
+- Drink Deep / Drain / Spite (the nettles were not identified)
+
+Elements: done (fire, frost, lightning, water, toxin, void). The frost ray-measure noise is logged.
+herosim: 6 pairs at 0.50 to 0.55. The readers did not confuse those pairs, so they are accepted.
