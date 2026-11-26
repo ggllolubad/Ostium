@@ -1,6 +1,6 @@
 id,current,proposed,why,picture
 malediction,Malediction,Cracked Skull,the skull fits no curse name; name the skull,skull
-ring_the_bell,Ring the Bell,Church Bell,six bell names read alike; name the church bell,bell
+ring_the_bell,Ring the Bell,Clapper,two bell names in one calling tie (text pretest: Church Bell read as The Great Bell); the clapper taken down is its own object; overrides renames.csv (Ring the Bell),clapper
 knell,Knell,Bell-Cote,six bell names read alike; name the bell-cote,belfry
 nine_tailors,Nine Tailors,Running Sand,a bell term on an hourglass; name the sand,hourglass
 backed_with_silver,Silvering,Silvered Shield,name the shield; overrides renames.csv (Silvering),shield
