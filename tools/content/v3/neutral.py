@@ -106,8 +106,10 @@ affliction("sky", "Seen", "become Vulnerable this round, then draw a replacement
 NC, NU, NR = "neutral_common", "neutral_uncommon", "neutral_rare"
 
 # common strength (8)
-card("step_through", "Step Through", 1, "N", "self", [ADV(1), B(4), PRIME(2)], "Advance 1. Gain 4 Block. Prime 2.",
-     arch=NC + "+ordo_prime", up={"text": "Advance 1. Gain 5 Block. Prime 3.", "fx": [ADV(1), B(5), PRIME(3)]},
+card("step_through", "Step Through", 1, "N", "self", [ADV(1), B(4), PRIME(2), PRIME(2, if_="first")],
+     "Advance 1. Gain 4 Block. Prime 2, or 4 if this is first in the Ordo.",
+     arch=NC + "+ordo_prime", up={"text": "Advance 1. Gain 5 Block. Prime 3, or 5 if this is first in the Ordo.",
+                                  "fx": [ADV(1), B(5), PRIME(3), PRIME(2, if_="first")]},
      flavour="The order keeps the doors. The company goes through them.",
      note="A hero stepping across a broken doorway into the front rank, a comrade's blow coming in behind.")
 card("fall_back", "Fall Back", 1, "N", "self", [RET(1), B(4), B(3, if_="targeting_me")],
@@ -135,8 +137,10 @@ card("off_key_hymn", "Off-Key Hymn", 1, "N", "ally", [STRESS(-6, per="played", k
                                    "fx": [STRESS(-8, per="played", k=-4)]},
      flavour="Mother Hild hums it over the anvil, badly. It helps anyway.",
      note="Two heroes back to back mid-fight, one humming under the breath, the other's shoulders easing.")
-card("bandage_roll", "Bandage Roll", 1, "N", "ally", [H(6), STRESS(3)], "A hero heals 6 and gains 3 stress.",
-     arch=NC + "+converter_stress_hp", up={"text": "A hero heals 6.", "fx": [H(6)]},
+card("bandage_roll", "Bandage Roll", 1, "N", "ally", [H(6), STRESS(3, if_="!vigour_left")],
+     "A hero heals 6. If no vigour is left unspent this round, it also gains 3 stress.",
+     arch=NC + "+converter_stress_hp", up={"text": "A hero heals 7. If no vigour is left unspent this round, it also "
+                                                   "gains 3 stress.", "fx": [H(7), STRESS(3, if_="!vigour_left")]},
      flavour='"Sit. Bleed quietly."',
      note="A hero winding linen round a comrade's forearm, the roll unspooling into the mud.")
 card("candle_bundle", "Candle Bundle", 1, "N", "self", [DRAW(1), DRAW(1, if_="played>=2")],
@@ -146,11 +150,11 @@ card("candle_bundle", "Candle Bundle", 1, "N", "self", [DRAW(1), DRAW(1, if_="pl
          "fx": [B(3), DRAW(1), DRAW(1, if_="played>=2")]},
      flavour='"Twelve candles. I counted. I\'ll count again when you\'re back."',
      note="A hero lighting a cellar candle from another, the rest tied in a bundle at the belt.")
-card("into_the_gap", "Into the Gap", 1, "N", "enemy", [D(3), D(3, if_="same_target"), PUSH(1, if_="same_target")],
-     "Deal 3. If the action before this hit the same foe, deal 3 more and push it back 1.",
+card("into_the_gap", "Into the Gap", 1, "N", "enemy", [D(3), D(3, if_="same_target"), PUSH(1, if_="handoff")],
+     "Deal 3. If the action before this hit the same foe, deal 3 more. Handoff: push it back 1.",
      arch=NC + "+ordo_follow_up",
-     up={"text": "Deal 4. If the action before this hit the same foe, deal 4 more and push it back 1.",
-         "fx": [D(4), D(4, if_="same_target"), PUSH(1, if_="same_target")]},
+     up={"text": "Deal 4. If the action before this hit the same foe, deal 4 more. Handoff: push it back 1.",
+         "fx": [D(4), D(4, if_="same_target"), PUSH(1, if_="handoff")]},
      flavour="Hired hands, not chosen ones. They fight like it.",
      note="A hero stepping into the gap a comrade's blow just opened, driving the foe back a rank.")
 
@@ -161,11 +165,14 @@ card("rope_and_hook", "Rope and Hook", 1, "N", "enemy", [D(5, if_="t.moved"), PU
      up={"text": "Deal 7 if the target was moved this round. Pull it forward 2.", "fx": [D(7, if_="t.moved"), PULL(2)]},
      flavour="What hides at the back comes to the front, one way or another.",
      note="A rope snaking over the front rank to hook a staggered back-rank foe and haul it forward.")
-card("change_of_watch", "Change of Watch", 1, "N", "adjacent_ally", [SWAP(), B(3), B(3, to="self"), PRIME(1)],
-     "Trade places with an adjacent hero. Each of you gains 3 Block. Prime 1.",
+card("change_of_watch", "Change of Watch", 1, "N", "adjacent_ally",
+     [SWAP(), B(3), B(3, to="self"), ST("thrift", 1, if_="last")],
+     "Trade places with an adjacent hero. Each of you gains 3 Block. If this is last in the Ordo, that hero gains 1 "
+     "Thrift.",
      arch=NU + "+rank_swap",
-     up={"text": "Trade places with an adjacent hero. Each of you gains 4 Block. Prime 1.",
-         "fx": [SWAP(), B(4), B(4, to="self"), PRIME(1)]},
+     up={"text": "Trade places with an adjacent hero. Each of you gains 4 Block. If this is last in the Ordo, that hero "
+                 "gains 1 Thrift.",
+         "fx": [SWAP(), B(4), B(4, to="self"), ST("thrift", 1, if_="last")]},
      flavour="Someone always keeps the door. Tonight it is your turn.",
      note="Two heroes passing in the line, shields overlapping as they trade ranks.")
 card("the_vigil", "The Vigil", 1, "N", "self", [CONS(s="block", to="self"), STRESS(0, to="all_allies", per="consumed", k=-1)],
@@ -181,11 +188,11 @@ card("round_the_brazier", "Round the Brazier", 2, "N", "all_allies", [STRESS(-4)
      up={"text": "Every hero sheds 5 stress. Every hero at Death's Door heals 5.", "fx": [STRESS(-5), H(5, if_="t.dd")]},
      flavour="In the garth, one iron brazier burns by the broken cross. Remember it.",
      note="The company crouched round a guttering brazier, a fallen hero dragged close to the coals.")
-card("cellar_bread", "Cellar Bread", 1, "N", "self", [STRESS(-4), EN(1, if_="rank>=3")],
-     "Shed 4 stress. Next round, +1 vigour if you stand in rank 3 or 4.",
+card("cellar_bread", "Cellar Bread", 1, "N", "self", [STRESS(-4), BANK(1, to="self"), BANK(1, to="self", if_="rank>=3")],
+     "Shed 4 stress. Bank 1, or 2 if you stand in rank 3 or 4.",
      arch=NU + "+rank_back",
-     up={"text": "Shed 4 stress. Next round, +1 vigour if you stand in rank 2, 3 or 4.",
-         "fx": [STRESS(-4), EN(1, if_="rank>=2")]},
+     up={"text": "Shed 4 stress. Bank 1, or 2 if you stand in rank 2, 3 or 4.",
+         "fx": [STRESS(-4), BANK(1, to="self"), BANK(1, to="self", if_="rank>=2")]},
      flavour='"Bread keeps. People don\'t."',
      note="A back-rank hero tearing dark bread from the cellar stores and passing it forward.")
 card("codex_page", "Codex Page", 1, "N", "enemy", [DRAW(1, to="self"), DRAW(1, to="self", if_="m.spectrum>=2")],
@@ -228,8 +235,11 @@ card("chalk_the_names", "Chalk the Names", 2, "N", "all_allies", [STRESS(-6), ST
          "fx": [STRESS(-8), STRESS(-8, if_="hero_dd")]},
      flavour="The names of the dead are chalked on the cross. Not yours. Not today.",
      note="A hero chalking a name onto a stone step while a comrade lies at Death's Door beside them.")
-card("fenns_alms", "Fenn's Alms", 1, "N", "self", [STRESS(4), EN(2)], "Gain 4 stress. Next round, +2 vigour. Exhaust.",
-     kw=["Exhaust"], arch=NR + "+converter_stress_vigour", up={"text": "Next round, +2 vigour. Exhaust.", "fx": [EN(2)]},
+card("fenns_alms", "Fenn's Alms", 1, "N", "self", [STRESS(4), EN(1), EN(0, per="vigour_left", k=1, max=2)],
+     "Gain 4 stress. Next round, +1 vigour, plus 1 per vigour left unspent this round (at most 2 more). Exhaust.",
+     kw=["Exhaust"], arch=NR + "+converter_stress_vigour",
+     up={"text": "Next round, +1 vigour, plus 1 per vigour left unspent this round (at most 2 more). Exhaust.",
+         "fx": [EN(1), EN(0, per="vigour_left", k=1, max=2)]},
      flavour='"Alms are free, friend. The handling is extra."',
      note="A fat purse pressed into a hero's gauntlet, a red entry blotting in a ledger behind.")
 card("red_strip", "The Red Strip", 1, "N", "ally", [GRIT(1), H(6, if_="t.dd")],

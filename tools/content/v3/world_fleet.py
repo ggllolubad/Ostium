@@ -21,10 +21,11 @@ card("w_fleet_ice_breaker", "Ice Breaker", 1, "W", "enemy", [D(5), D(4, if_="t.f
      flavour="The ice holds them still. It holds them brittle too.",
      note="A hero's blow breaks a rimed Deckhand off the rail in white shards.")
 card("w_fleet_keelhaul", "Keelhaul", 1, "W", "enemy",
-     [D(3), PULL(1), A(WA, 2, attr="stable", if_="t.rank<=1")],
-     "Deal 3. Pull the target forward 1. If it is now in rank 1, apply 2 Water.", cat=WA, world=W, arch="world",
-     up={"text": "Deal 4. Pull the target forward 1. If it is now in rank 1, apply 3 Water.",
-         "fx": [D(4), PULL(1), A(WA, 3, attr="stable", if_="t.rank<=1")]},
+     [D(2), PULL(1), PULL(1, if_="handoff"), A(WA, 2, attr="stable", if_="t.rank<=1")],
+     "Deal 2. Pull the target forward 1, or 2 on a Handoff. If it is now in rank 1, apply 2 Water.", cat=WA, world=W,
+     arch="world",
+     up={"text": "Deal 3. Pull the target forward 1, or 2 on a Handoff. If it is now in rank 1, apply 3 Water.",
+         "fx": [D(3), PULL(1), PULL(1, if_="handoff"), A(WA, 3, attr="stable", if_="t.rank<=1")]},
      flavour="Under the keel and up the other side, if the ice allows.",
      note="A hero hauls a Frozen Whaler across the deck on his own harpoon line.")
 card("w_fleet_frozen_to_the_rail", "Frozen to the Rail", 1, "W", "self", [B(3, per="frost", k=2)],

@@ -316,11 +316,14 @@ card("w_sky_gold_leaf", "Gold Leaf", 1, "W", "ally", [WARD(2, per="t.spectrum", 
      flavour="Gold leaf cracked over black. It still holds, for a while.",
      note="A hero presses a flake of heaven's gold over a companion's crackling burns.",
      up={"text": "A hero gains 3 Ward, plus 2 per different course on them.", "fx": [WARD(3, per="t.spectrum", k=2)]})
-card("w_sky_through_the_tear", "Through the Tear", 1, "W", "enemy", [D(2), A("void", 2), REACT(1)],
-     "Deal 2. Apply 2 Void, then Conjoin.", cat="void", attr="stable", world=W, arch="world",
+card("w_sky_through_the_tear", "Through the Tear", 1, "W", "enemy",
+     [A("void", 1, per="heroes_before", k=1, max=4), REACT(1)],
+     "Apply 1 Void, plus 1 per other hero who has acted before this card this round (max 4), then Conjoin.",
+     cat="void", attr="stable", world=W, arch="world",
      flavour="Something leans in through the tear. Show it where to look.",
      note="A hero pulls a foe through a rent in the sky; violet burns branch across it as it passes.",
-     up={"text": "Deal 3. Apply 3 Void, then Conjoin.", "fx": [D(3), A("void", 3), REACT(1)]})
+     up={"text": "Deal 3. Apply 1 Void, plus 1 per other hero who has acted before this card this round (max 4), then "
+                 "Conjoin.", "fx": [D(3), A("void", 1, per="heroes_before", k=1, max=4), REACT(1)]})
 card("w_sky_something_leans_closer", "Something Leans Closer", 1, "W", "none", [],
      "Rite. Up to 3 times a round, when the company sets off a Conjunction, deal 1 to that foe, plus 1 per Conjunction set off this round (this one included), ignoring Block. Exhaust.",
      kw=["Rite", "Exhaust"], world=W, arch="world",

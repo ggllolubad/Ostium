@@ -356,13 +356,15 @@ card("w_drowned_wring_out", "Wring Out", 1, "W", "ally",
      up={"text": "Remove all Water from a hero. They gain 4 Block, plus 2 per Water removed.",
          "fx": [CONS(e="water"), B(4, per="consumed", k=2)]})
 card("w_drowned_bells_silent", "The Bells Fall Silent", 1, "W", "all_allies",
-     [STRESS(-2, per="reactions", k=-3)],
-     "Every hero sheds 2 stress, plus 3 per Conjunction set off this round.",
+     [STRESS(0, per="reactions", k=-3), STRESS(-3, if_="vigour_left>=2")],
+     "Every hero sheds 3 stress per Conjunction set off this round. If 2 or more vigour is left unspent this round, "
+     "every hero sheds 3 more.",
      world=W, arch="world",
      flavour="For one breath the belfry is quiet. Take it.",
      note="The company in the belfry, the great bell hanging still and silent above them.",
-     up={"text": "Every hero sheds 3 stress, plus 4 per Conjunction set off this round.",
-         "fx": [STRESS(-3, per="reactions", k=-4)]})
+     up={"text": "Every hero sheds 4 stress per Conjunction set off this round. If 2 or more vigour is left unspent "
+                 "this round, every hero sheds 4 more.",
+         "fx": [STRESS(0, per="reactions", k=-4), STRESS(-4, if_="vigour_left>=2")]})
 card("w_drowned_deep_pressure", "Deep Pressure", 1, "W", "enemy",
      [D(3), DBL(e="water")],
      "Deal 3. Double the Water on the foe.",

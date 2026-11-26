@@ -12,13 +12,15 @@ set_class("world_" + W, [1, 2, 3, 4], [1, 2, 3, 4])
 
 # ================================================================== world cards (Plasma)
 card("w_foundry_arc_weld", "Arc Weld", 1, "W", "enemy",
-     [D(3), A("lightning", 2, attr="stable"), A("fire", 1, attr="volatile", if_="same_target")],
-     "Deal 3. Apply 2 Static. If the action before this one hit the same foe, apply 1 Volatile Burn.",
+     [D(3), A("lightning", 2, attr="stable"), A("fire", 1, attr="volatile", if_="same_target&handoff")],
+     "Deal 3. Apply 2 Static. If the action before this one was another hero's and hit the same foe, apply 1 Volatile "
+     "Burn.",
      cat="lightning", world=W, arch="world",
      flavour="It welds with its hammer. It welds with you, too.",
      note="Two heroes strike the same Arc-Smith in turn; the second blow closes the arc in a white-gold flash.",
-     up={"text": "Deal 4. Apply 3 Static. If the action before this one hit the same foe, apply 1 Volatile Burn.",
-         "fx": [D(4), A("lightning", 3, attr="stable"), A("fire", 1, attr="volatile", if_="same_target")]})
+     up={"text": "Deal 4. Apply 3 Static. If the action before this one was another hero's and hit the same foe, apply "
+                 "1 Volatile Burn.",
+         "fx": [D(4), A("lightning", 3, attr="stable"), A("fire", 1, attr="volatile", if_="same_target&handoff")]})
 card("w_foundry_melt_down", "Melt Down", 1, "W", "enemy",
      [CONS(s="block", to="self"), D(3, per="consumed", k=1, max=15)],
      "Spend all your Block. Deal 3, plus 1 per Block spent (max 15).", world=W, arch="world",

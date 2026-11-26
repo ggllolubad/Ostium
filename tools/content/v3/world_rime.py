@@ -12,10 +12,11 @@ FI, F, WA = "fire", "frost", "water"
 BOTH = {FI: "resist", F: "resist"}
 
 # ================================================================== world cards (Thermal Shock; any calling)
-card("w_rime_fire_setting", "Fire-Setting", 1, "W", "enemy", [D(2), A(FI, 2, attr="stable"), REACT(1, if_="t.frost>0")],
-     "Deal 2. Apply 2 Fire. If the target has Frost, Conjoin it.", cat=FI, world=W, arch="world",
-     up={"text": "Deal 3. Apply 3 Fire. If the target has Frost, Conjoin it.",
-         "fx": [D(3), A(FI, 3, attr="stable"), REACT(1, if_="t.frost>0")]},
+card("w_rime_fire_setting", "Fire-Setting", 1, "W", "enemy",
+     [D(2), A(FI, 2, attr="stable"), A(FI, 1, attr="stable", if_="handoff"), REACT(1, if_="t.frost>0")],
+     "Deal 2. Apply 2 Fire, or 3 on a Handoff. If the target has Frost, Conjoin it.", cat=FI, world=W, arch="world",
+     up={"text": "Deal 3. Apply 3 Fire, or 4 on a Handoff. If the target has Frost, Conjoin it.",
+         "fx": [D(3), A(FI, 3, attr="stable"), A(FI, 1, attr="stable", if_="handoff"), REACT(1, if_="t.frost>0")]},
      flavour="Stack the fire against the stone, then the cold water. The rock does the rest.",
      note="A hero drives a burning bundle into a rimed Thrall; the ice on its back cracks orange.")
 card("w_rime_wedge_and_feather", "Wedge and Feather", 1, "W", "enemy",
@@ -31,9 +32,11 @@ card("w_rime_shield_wall", "Shield Wall", 1, "W", "ally_other", [GUARD(), B(1, p
      flavour="The hold's shieldmaidens stood rim to rim. The glass cut them as well.",
      note="A hero steps in front of a burning companion, shield up against the steam.")
 card("w_rime_the_glacier_splits", "The Glacier Splits", 2, "W", "all_enemies",
-     [A(F, 1, attr="volatile"), D(3)],
-     "Apply 1 Volatile Frost to every foe. Deal 3 to every foe.", cat=F, world=W, arch="world",
-     up={"text": "Apply 1 Volatile Frost to every foe. Deal 5 to every foe.", "fx": [A(F, 1, attr="volatile"), D(5)]},
+     [D(3), D(2, if_="t.fire>0"), A(F, 1, attr="volatile")],
+     "Deal 3 to every foe, and 2 more to each foe that carries Fire. Then apply 1 Volatile Frost to every foe.", cat=F,
+     world=W, arch="world",
+     up={"text": "Deal 4 to every foe, and 3 more to each foe that carries Fire. Then apply 1 Volatile Frost to every "
+                 "foe.", "fx": [D(4), D(3, if_="t.fire>0"), A(F, 1, attr="volatile")]},
      flavour="The miners dug down and met the fire coming up. The glacier split between.",
      note="A crack runs the length of the glacier floor under the foes, steam bursting through.")
 

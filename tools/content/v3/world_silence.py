@@ -29,12 +29,14 @@ card("w_silence_say_it_aloud", "Say It Aloud", 1, "W", "ally",
      up={"text": "Remove all Void from a hero. They gain 2 Block, plus 1 per Void removed (max 8), and shed 8 stress.",
          "fx": [CONS(e="void"), B(2, per="consumed", k=1, max=8), STRESS(-8)]})
 card("w_silence_hold_your_breath", "Hold Your Breath", 0, "W", "self",
-     [CONS(s="block"), dsl.W(0, per="consumed", k=0.34, max=3)],
-     "Lose all your Block. Gain 1 Ward per 3 Block lost (max 3).", world=W, arch="world",
+     [CONS(s="block"), dsl.W(0, per="consumed", k=0.25, max=3), dsl.W(1, if_="vigour_left>=2")],
+     "Lose all your Block. Gain 1 Ward per 4 Block lost (max 3). If 2 or more vigour is left unspent this round, gain 1 "
+     "more Ward.", world=W, arch="world",
      flavour="Nothing makes a sound here. Make none.",
      note="A hero lowers a rimed shield and goes utterly still under the black sun.",
-     up={"text": "Lose all your Block. Gain 1 Ward, plus 1 per 3 Block lost (max 4).",
-         "fx": [CONS(s="block"), dsl.W(1, per="consumed", k=0.34, max=4)]})
+     up={"text": "Lose all your Block. Gain 1 Ward, plus 1 per 4 Block lost (max 4). If 2 or more vigour is left "
+                 "unspent this round, gain 1 more Ward.",
+         "fx": [CONS(s="block"), dsl.W(1, per="consumed", k=0.25, max=4), dsl.W(1, if_="vigour_left>=2")]})
 card("w_silence_star_comes_down", "The Star Comes Down", 2, "W", "all_enemies",
      [D(0, per="t.el_total", k=1, max=3), A("frost", 1, attr="stable"), A("void", 1, attr="volatile")],
      "Each foe takes 1 per course stack on it (max 3). Every foe: apply 1 Frost, then 1 Volatile Void.", cat="void",

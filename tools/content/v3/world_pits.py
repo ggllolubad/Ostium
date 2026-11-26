@@ -25,14 +25,16 @@ card("w_pits_gas_pocket", "Gas Pocket", 1, "W", "enemy",
      up={"text": "Deal 2, plus 1 for each course stack on the target (max 14). Apply 1 Volatile Burn.",
          "fx": [D(2, per="t.el_total", k=1, max=14), A("fire", 1, attr="volatile")]})
 card("w_pits_blasting_charge", "Blasting Charge", 2, "W", "enemy",
-     [CONS(e="toxin"), D(2, per="consumed", k=2, max=14), D(0, per="consumed", k=1, max=7, to="adjacent")],
-     "Remove all Toxin from the target. Deal 2, plus 2 per Toxin removed (max 14). Each foe beside it takes 1 per "
-     "Toxin removed (max 7).", cat="fire", world=W, arch="world",
+     [CONS(e="toxin"), D(0, per="consumed", k=2, max=14), D(0, per="consumed", k=1, max=7, to="adjacent"),
+      D(3, if_="last")],
+     "Remove all Toxin from the target. Deal 2 per Toxin removed (max 14). Each foe beside it takes 1 per Toxin "
+     "removed (max 7). If this is last in the Ordo, deal 3 more to the target.", cat="fire", world=W, arch="world",
      flavour="It ground the brimstone for the world's powder.",
      note="A powder keg wedged against a gas-swollen foe goes up, the blast throwing its neighbours aside.",
-     up={"text": "Remove all Toxin from the target. Deal 4, plus 2 per Toxin removed (max 16). Each foe beside it takes "
-                 "1 per Toxin removed (max 8).",
-         "fx": [CONS(e="toxin"), D(4, per="consumed", k=2, max=16), D(0, per="consumed", k=1, max=8, to="adjacent")]})
+     up={"text": "Remove all Toxin from the target. Deal 2, plus 2 per Toxin removed (max 16). Each foe beside it takes "
+                 "1 per Toxin removed (max 8). If this is last in the Ordo, deal 4 more to the target.",
+         "fx": [CONS(e="toxin"), D(2, per="consumed", k=2, max=16), D(0, per="consumed", k=1, max=8, to="adjacent"),
+                D(4, if_="last")]})
 card("w_pits_throw_it_back", "Throw It Back", 1, "W", "enemy",
      [TRANSFER(frm="ally_most", n=1), D(2), A("fire", 1, attr="volatile")],
      "Move the largest ailment of the most afflicted hero onto the target. Deal 2. Apply 1 Volatile Burn.", cat="fire",

@@ -318,12 +318,15 @@ E("garden_r_green_lion", "The Green Lion", "The hedge at the gate has decided it
   "Fire every round or it grows back.", props="green_lion")
 
 # ================================================================== world cards (Blight: glue, each reads or converts state)
-card("w_garden_deadhead", "Deadhead", 1, "W", "enemy", [CONS(s="regen"), D(3, per="consumed", k=1)],
-     "Remove all Regen from the foe. Deal 3, plus 1 per Regen removed.", world=W, arch="world",
+card("w_garden_deadhead", "Deadhead", 1, "W", "enemy",
+     [CONS(s="regen"), D(2, per="consumed", k=1), D(2, if_="vigour_left>=2")],
+     "Remove all Regen from the foe. Deal 2, plus 1 per Regen removed. If 2 or more vigour is left unspent this round, "
+     "deal 2 more.", world=W, arch="world",
      flavour="He prunes what grows wrong. Learn from him.",
      note="A hero snips a swelling bloom from a foe's shoulder with the Gardener's dropped shears.",
-     up={"text": "Remove all Regen from the foe. Deal 4, plus 2 per Regen removed.",
-         "fx": [CONS(s="regen"), D(4, per="consumed", k=2)]})
+     up={"text": "Remove all Regen from the foe. Deal 3, plus 2 per Regen removed. If 2 or more vigour is left unspent "
+                 "this round, deal 3 more.",
+         "fx": [CONS(s="regen"), D(3, per="consumed", k=2), D(3, if_="vigour_left>=2")]})
 card("w_garden_take_the_rot", "Take the Rot Out", 1, "W", "enemy", [D(3), TRANSFER(frm="ally_most")],
      "Deal 3. Move every ailment from the hero who carries the most onto the foe.", world=W, arch="world",
      flavour="The garden gives. Give it back.",

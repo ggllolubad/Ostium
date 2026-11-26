@@ -350,13 +350,15 @@ card("w_baths_fresh_towel", "Fresh Towel", 1, "W", "ally",
      up={"text": "Remove all Fire from a hero. They heal 4, plus 1 per Fire removed.",
          "fx": [CONS(e="fire"), H(4, per="consumed", k=1)]})
 card("w_baths_open_valve", "Open the Valve", 1, "W", "all_enemies",
-     [D(1, per="reactions", k=2)],
-     "Deal 1 to every foe, plus 2 per Conjunction set off this round.",
+     [D(0, per="vigour_spent", k=0.5, max=4), D(0, per="reactions", k=2, max=8)],
+     "Deal 1 to every foe per 2 vigour spent this round (at most 4). Then deal 2 to every foe per Conjunction set off "
+     "this round (at most 8).",
      cat="fire", world=W, arch="world",
      flavour="Every pool in the temple boils from one boiler. Turn its wheel the other way.",
      note="A hero hauling on the bronze stopcock wheel as steam rolls out over the foes.",
-     up={"text": "Deal 2 to every foe, plus 3 per Conjunction set off this round.",
-         "fx": [D(2, per="reactions", k=3)]})
+     up={"text": "Deal 1 to every foe per 2 vigour spent this round (at most 4). Then deal 3 to every foe per "
+                 "Conjunction set off this round (at most 12).",
+         "fx": [D(0, per="vigour_spent", k=0.5, max=4), D(0, per="reactions", k=3, max=12)]})
 
 NEEDS = [
     "best_families Complaint: should stress the hero who dealt the heap the most damage last round; written as 2 "

@@ -360,13 +360,13 @@ card("w_mire_flood_cuttings", "Flood the Cuttings", 1, "W", "all_enemies",
      up={"text": "Deal 3 to every foe. Apply 1 Volatile Water to every foe with Toxin.",
          "fx": [D(3), A("water", 1, attr="volatile", if_="t.toxin>0")]})
 card("w_mire_into_the_pool", "Into the Pool", 1, "W", "enemy",
-     [PUSH(1), D(2, per="t.toxin", k=1)],
-     "Push the foe back 1. Deal 2, plus 1 per Toxin on it.",
+     [PUSH(1), PUSH(1, if_="first"), D(1, per="t.toxin", k=1)],
+     "Push the foe back 1, or 2 if this is first in the Ordo. Deal 1, plus 1 per Toxin on it.",
      world=W, arch="world",
      flavour="Every rank of the Rotmire is poisoned. Choose which one they stand in.",
      note="A hero shoving an Eel-Catcher backward off the duckboards into a pool that blisters as he lands.",
-     up={"text": "Push the foe back 1. Deal 2, plus 2 per Toxin on it.",
-         "fx": [PUSH(1), D(2, per="t.toxin", k=2)]})
+     up={"text": "Push the foe back 1, or 2 if this is first in the Ordo. Deal 1, plus 2 per Toxin on it.",
+         "fx": [PUSH(1), PUSH(1, if_="first"), D(1, per="t.toxin", k=2)]})
 
 NEEDS = [
     "stilt_hall Inside the Hall: a hero pulled inside should leave the line and hit only the hall until it breaks out "

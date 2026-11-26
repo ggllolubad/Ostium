@@ -25,9 +25,11 @@ card("w_barrow_grave_cold", "Grave Cold", 1, "W", "enemy", [D(2, per="t.ailments
          "fx": [D(3, per="t.ailments", k=1), A(TX, 2, attr="stable")]},
      flavour="The cold kept everything in the barrow fresh. The plague too.",
      note="A hero's blade comes away from a Draugr furred with grey-green mould.")
-card("w_barrow_burial_axe", "Burial Axe", 1, "W", "enemy", [D(4), EXEC(6)],
-     "Deal 4. Execute 6.", kw=["Execute"], world=W, arch="world",
-     up={"text": "Deal 5. Execute 8.", "fx": [D(5), EXEC(8)]},
+card("w_barrow_burial_axe", "Burial Axe", 1, "W", "enemy", [D(3), EXEC(4, per="heroes_before", k=2)],
+     "Deal 3. Execute 4, plus 2 per other hero who has acted before this card this round.", kw=["Execute"], world=W,
+     arch="world",
+     up={"text": "Deal 4. Execute 6, plus 2 per other hero who has acted before this card this round.",
+         "fx": [D(4), EXEC(6, per="heroes_before", k=2)]},
      flavour="Buried with its axe so it could keep fighting. Borrow it, and end that.",
      note="A hero wrenches a bearded axe from a grave niche and swings it at a rising Draugr.")
 card("w_barrow_vinegar_rag", "Vinegar Rag", 1, "W", "ally",

@@ -39,11 +39,12 @@ card("w_coast_call_the_bolt", "Call the Bolt", 2, "W", "all_enemies",
      note="A bolt comes down on the wet rocks and runs through every soaked body on the strand.",
      up={"text": "Deal 6 to every foe. Apply 1 Volatile Static to each Soaked foe.",
          "fx": [D(6), A("lightning", 1, attr="volatile", if_="t.water>0")]})
-card("w_coast_lash_it_down", "Lash It Down", 1, "W", "self", [B(1, per="hand", k=2, max=11)],
-     "Retain. Gain 1 Block, plus 2 per card in your hand (max 11).", kw=["Retain"], world=W, arch="world",
+card("w_coast_lash_it_down", "Lash It Down", 1, "W", "self", [B(1, per="hand", k=2, max=11), BANK(1, to="self")],
+     "Retain. Gain 1 Block, plus 2 per card in your hand (max 11). Bank 1.", kw=["Retain"], world=W, arch="world",
      flavour="On this coast the sea takes whatever is not tied down.",
      note="A hero lashes a satchel to their belt with tarred line as a false beam sweeps the gallery.",
-     up={"text": "Retain. Gain 3 Block, plus 2 per card in your hand (max 13).", "fx": [B(3, per="hand", k=2, max=13)]})
+     up={"text": "Retain. Gain 3 Block, plus 2 per card in your hand (max 13). Bank 1.",
+         "fx": [B(3, per="hand", k=2, max=13), BANK(1, to="self")]})
 
 # ================================================================== foes
 creature("wrecker", "Wrecker", "foe", 34, ranks=[2, 3], role="afflicter",

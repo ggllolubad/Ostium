@@ -330,12 +330,14 @@ E("pyre_r_confessor", "The Confessor", "The confessional hears your sins from ac
 
 # ================================================================== world cards (Hollow Flame: glue, each reads or converts state)
 card("w_pyre_penitent_lash", "Penitent's Lash", 1, "W", "enemy",
-     [SELFDMG(3), D(0, per="scars", k=1, max=10, pierce=True)],
-     "Lose 3 HP. Deal 1 per Scar you carry, up to 10, ignoring Block.", world=W, arch="world",
+     [SELFDMG(3), D(0, per="scars", k=1, max=9, pierce=True), SELF("thrift", 1, if_="!vigour_left")],
+     "Lose 3 HP. Deal 1 per Scar you carry, up to 9, ignoring Block. If no vigour is left unspent this round, gain 1 "
+     "Thrift.", world=W, arch="world",
      flavour="It whips itself between swings at you. It does not notice the difference.",
      note="A hero lays a chain flail across their own back, then across a Pyre Knight's shield, ash flying.",
-     up={"text": "Lose 3 HP. Deal 1 per Scar you carry, up to 14, ignoring Block.",
-         "fx": [SELFDMG(3), D(0, per="scars", k=1, max=14, pierce=True)]})
+     up={"text": "Lose 3 HP. Deal 1 per Scar you carry, up to 13, ignoring Block. If no vigour is left unspent this "
+                 "round, gain 1 Thrift.",
+         "fx": [SELFDMG(3), D(0, per="scars", k=1, max=13, pierce=True), SELF("thrift", 1, if_="!vigour_left")]})
 card("w_pyre_saints_ash", "Saint's Ash", 1, "W", "ally", [CONS(e="fire"), WARD(1, per="consumed", k=1)],
      "Remove all Fire from a hero. They gain 1 Ward, plus 1 per Fire removed.", world=W, arch="world",
      flavour="A pinch of her, sealed in lead. Genuine, this time.",
