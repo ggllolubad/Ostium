@@ -530,14 +530,14 @@ card("doubled_image", "Doubled Image", 1, "X", "ally", [ST("dodge", 1), W(2), ST
 
 # ------------------------------------------------------------------ legendary
 card("signed_in_blood", "Signed in Blood", 1, "L", "self", [],
-     "Rite: whenever you play a card on a foe, lose 1 HP, deal 5 to that foe, ignoring Block, and it gains 1 Bleed. "
-     "Exhaust.",
+     "Rite: whenever you play a card on a foe, lose 1 HP, deal 4 to that foe plus 1 per HP lost, ignoring Block, and it "
+     "gains 1 Bleed. Exhaust.",
      cat=V, kw=["Rite", "Exhaust"], sub=PB, arch="pactbound+duelist_bleed",
-     rite={"on": "play", "fx": [SELFDMG(1), D(5, pierce=True), ST("bleed", 1)]},
+     rite={"on": "play", "fx": [SELFDMG(1), D(4, per="lost", k=1, pierce=True), ST("bleed", 1)]},
      flavour="My name, in my blood, on your contract. Every line costs us both.",
      note="The Pactbound signs a long scroll with the bone knife, and a foe bleeds at every stroke.",
-     up={"text": "Gain 2 Might. Rite: whenever you play a card on a foe, lose 1 HP, deal 5 to that foe, ignoring "
-                 "Block, and it gains 1 Bleed. Exhaust.",
+     up={"text": "Gain 2 Might. Rite: whenever you play a card on a foe, lose 1 HP, deal 4 to that foe plus 1 per HP "
+                 "lost, ignoring Block, and it gains 1 Bleed. Exhaust.",
          "fx": [SELF("might", 2)]})
 card("the_open_door", "The Open Door", 1, "L", "self", [GRIT(1, to="self")],
      "Gain 1 Grit. Rite: at the start of each round, if you are at Death's Door, gain 2 Thrift and 1 Grit. Exhaust.",

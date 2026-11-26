@@ -215,7 +215,7 @@ for cid, c in dsl.CARDS.items():
         check_fx(cid, c["on_draw"])
     if c.get("cost_less"):
         cl = c["cost_less"]
-        if cl.get("per") not in ("ordo", "heroes", "attacks") | QU:
+        if cl.get("per") not in {"ordo", "heroes", "others", "attacks"} | QU:
             err(cid, "cost_less reads an unknown quantity: %s" % cl.get("per"))
         if not isinstance(c["cost"], int) or c["cost"] < 1:
             err(cid, "cost_less needs a card that costs 1 or more")

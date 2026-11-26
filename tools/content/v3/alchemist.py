@@ -18,12 +18,14 @@ Vigour and the Ordo (Gate 3 interaction pass, docs/design/GATE3_INTERACTION.md).
 Ordo, so drinking one moves every later card down a place and can make the next card a Handoff.
   transmuter    the stages of the Work run through the Ordo: The Black Work wants to be first, The White Work wants
                 another hero before it, The Red Work wants to be last. Boiling Flood and Calcination grow late in a
-                heavy Ordo; Spagyric Rain reads the heroes before it; Athanor burns what the company left unspent.
-                Magnum Opus reads its own cost, so Thrift on it costs the Improve.
+                heavy Ordo; Spagyric Rain reads the heroes before it.
+                Athanor burns hotter for each vigour carried into the round (Restock's Bank, Ripen's patience).
+                Magnum Opus pays off a discount: Thrift or Tincture makes it cost less than printed.
   plaguewright  patience: Fester and Ripen want vigour left unspent; Miasmatic Cloud opens the round, Marsh Lights
                 closes it; Flash Pan, Kindle the Rot and Quicklime set off what an ally just laid (Handoff).
   apothecary    Restock banks, Tincture hands a Dosed hero Thrift, War Tonics improves more on a Handoff, and the
-                Clarity Draught grows with vigour left unspent."""
+                Clarity Draught grows with vigour left unspent. Steady Hand and Bandolier cost less once the Ordo
+                is under way; Measured Dose hands a Dosed hero a Chaser for their next hand."""
 from dsl import *
 
 set_class("alchemist", [2, 3, 4], [1, 2, 3, 4])
@@ -267,16 +269,20 @@ card("al_tincture", "Tincture", 1, "C", "ally", [B(2), STRESS(-3), ST("thrift", 
      note="The Alchemist counts drops from a brown dropper onto the Oracle's tongue.",
      up={"text": "A hero gains 3 Block and sheds 4 stress. Dosed: they gain 1 Thrift.",
          "fx": [B(3), STRESS(-4), ST("thrift", 1, if_=DOSED)]})
-card("al_steady_hand", "Steady Hand", 0, "C", "self", [IMPROVE(1)], "Improve 1 flask on the belt.",
-     use=ALL, arch=AP,
+card("al_steady_hand", "Steady Hand", 1, "C", "self", [IMPROVE(1), IMPROVE(1, if_=DOSED)],
+     "Costs 1 less if you have already acted this round. Improve 1 flask on the belt. Dosed: Improve 1 more.",
+     use=ALL, kw=["Dosed"], arch=AP, cost_less={"per": "played", "k": 1, "max": 1},
      flavour="Hired for a steady hand. Paid for it, too.",
      note="Spectacles down, the Alchemist adds one careful drop to a flask held up to the light.",
-     up={"text": "Retain. Improve 1 flask on the belt.", "kw": ["Retain"]})
+     up={"text": "Retain. Costs 1 less if you have already acted this round. Improve 1 flask on the belt. Dosed: "
+                 "Improve 1 more.", "kw": ["Retain", "Dosed"]})
 card("al_bandolier", "Bandolier", 2, "C", "self", [BREW("fl_firepot"), BREW("fl_draught"), B(2)],
-     "Brew a Fire Pot and a Plain Draught. Gain 2 Block.", use=ALL, arch=AP,
+     "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught. Gain 2 Block.",
+     use=ALL, arch=AP, cost_less={"per": "ordo", "k": 0.34, "max": 1},
      flavour="Every loop filled before the door opens. Every loop.",
      note="The Alchemist slots two fresh bottles into the bandolier, corks still warm.",
-     up={"text": "Brew a Fire Pot and a Plain Draught. Gain 2 Block.", "cost": 1})
+     up={"text": "Costs 1 less if 3 or more cards are already in the Ordo. Brew a Fire Pot and a Plain Draught. Gain "
+                 "5 Block.", "fx": [BREW("fl_firepot"), BREW("fl_draught"), B(5)]})
 card("al_poultice", "Poultice", 1, "C", "ally", [ST("regen", 1, per="t.ailments", k=1), CLEANSE(1)],
      "A hero gains Regen 1, plus 1 per ailment on them. Remove 1 ailment from them.", use=ALL,
      arch=AP, flavour="Bread, milk and comfrey, hot as they can bear. It draws the bad out.",
@@ -455,18 +461,18 @@ card("al_superheat", "Superheat", 1, "R", "enemy", [DBL(e=F), DBL(e=WA)], "Doubl
      note="The Transmuter heats a sealed flask until it glows, then hurls it at a steaming foe.",
      up={"text": "Deal 4. Double the Fire and Water on the target.", "fx": [D(4), DBL(e=F), DBL(e=WA)]})
 card("al_athanor", "Athanor", 1, "R", "self", [],
-     "Rite: at the end of each round, apply 1 Fire and 1 Water to the foe in rank 1, plus 1 more of each for each "
-     "vigour left unspent, up to 3 of each. Exhaust.",
+     "Rite: at the start of each round, apply 1 Fire and 1 Water to the foe in rank 1, plus 1 more of each for each "
+     "vigour carried into this round, up to 3 of each. Exhaust.",
      use=ALL, cat=F, kw=RITE, arch=TR,
-     rite={"on": "round_end", "fx": [A(F, 1, attr="stable", per="vigour_left", k=1, max=3, to="front_enemy"),
-                                     A(WA, 1, attr="stable", per="vigour_left", k=1, max=3, to="front_enemy")]},
+     rite={"on": "round_start", "fx": [A(F, 1, attr="stable", per="carried", k=1, max=3, to="front_enemy"),
+                                       A(WA, 1, attr="stable", per="carried", k=1, max=3, to="front_enemy")]},
      flavour="The philosopher's furnace. Once lit it is never let go out.",
      note="The Transmuter sets a squat brass furnace on the flagstones; its mouth faces the front foe.",
-     up={"text": "Rite: at the end of each round, apply 1 Fire and 1 Water to each foe in ranks 1 and 2, plus 1 more "
-                 "of each for each vigour left unspent, up to 3 of each. Exhaust.",
-         "rite": {"on": "round_end",
-                  "fx": [A(F, 1, attr="stable", per="vigour_left", k=1, max=3, to="all_enemies", if_=FRONT),
-                         A(WA, 1, attr="stable", per="vigour_left", k=1, max=3, to="all_enemies", if_=FRONT)]}})
+     up={"text": "Rite: at the start of each round, apply 1 Fire and 1 Water to each foe in ranks 1 and 2, plus 1 "
+                 "more of each for each vigour carried into this round, up to 3 of each. Exhaust.",
+         "rite": {"on": "round_start",
+                  "fx": [A(F, 1, attr="stable", per="carried", k=1, max=3, to="all_enemies", if_=FRONT),
+                         A(WA, 1, attr="stable", per="carried", k=1, max=3, to="all_enemies", if_=FRONT)]}})
 card("al_prima_materia", "Prima Materia", 1, "R", "enemy", [REACT(1, per="t.spectrum", k=1)],
      "Conjoin 1, plus 1 per course on the target (its Spectrum).", cat=F, arch=TR + "+elementalist_spectrum",
      flavour="The first matter, from which all six courses came. A spoonful is plenty.",
@@ -514,14 +520,14 @@ card("al_draw_the_venom", "Draw the Venom", 1, "R", "enemy",
          "fx": [CONS(e=T), D(0, per="consumed", k=2), H(0, per="consumed", k=1, to="lowest_ally")]})
 # Apothecary
 card("al_magnum_opus", "Magnum Opus", 2, "R", "self",
-     [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(1, if_="cost>=2")],
-     "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost 2 or more vigour, Improve 1 "
-     "flask on the belt.", use=ALL, arch=AP,
+     [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(1, if_="cost<base_cost")],
+     "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost less than its printed cost, "
+     "Improve 1 flask on the belt.", use=ALL, arch=AP,
      flavour="The whole bandolier in one sitting. The coil glows red.",
      note="Three new flasks stand steaming in a row on the flagstones beside the kneeling Alchemist.",
-     up={"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost 2 or more vigour, "
-                 "Improve 2 flasks on the belt.",
-         "fx": [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(2, if_="cost>=2")]})
+     up={"text": "Brew Blasting Powder, a Healing Draught and a Bloodrage Draught. If this cost less than its printed "
+                 "cost, Improve 2 flasks on the belt.",
+         "fx": [BREW("fl_blast"), BREW("fl_heal"), BREW("fl_rage"), IMPROVE(2, if_="cost<base_cost")]})
 card("al_elixir_of_life", "Elixir of Life", 1, "R", "ally", [GRIT(1), H(3), H(3, if_=DOSED)],
      "A hero gains 1 Grit and heals 3. Dosed: they heal 3 more. Exhaust.", use=ALL, kw=["Dosed", "Exhaust"],
      arch=AP, flavour="Not forever. Just long enough.",
@@ -544,8 +550,8 @@ card("al_panacea", "Panacea", 2, "R", "ally", [CLEANSE(5), H(6), STRESS(-5)],
      up={"text": "Remove 5 ailments from a hero. They heal 6 and shed 5 stress.", "cost": 1})
 
 # ------------------------------------------------------------------ path: Transmuter
-card("al_red_work", "The Red Work", 1, "X", "enemy", [A(F, 1, attr="stable"), REACT(2), D(3, if_="last")],
-     "Apply 1 Fire, then Conjoin 2. If this is last in the Ordo, deal 3.", cat=F, attr="stable", sub=TR, arch=TR,
+card("al_red_work", "The Red Work", 1, "X", "enemy", [A(F, 1, attr="stable"), REACT(2), D(2, if_="last")],
+     "Apply 1 Fire, then Conjoin 2. If this is last in the Ordo, deal 2.", cat=F, attr="stable", sub=TR, arch=TR,
      flavour="Rubedo, the last stage. The matter reddens and is done.",
      note="The Transmuter's crucible glows red on its chain as a foe flares from within.",
      up={"text": "Apply 2 Fire, then Conjoin 3. If this is last in the Ordo, deal 3.",
@@ -626,8 +632,8 @@ card("al_rat_swarm", "Rat Swarm", 1, "X", "enemy",
      note="Black rats boil out of the Plaguewright's coat and run the length of the enemy line.",
      up={"text": "Apply 1 Toxin to every foe, then 4 more to the target, and 2 more if it was moved this round.",
          "fx": [A(T, 1, attr="stable", to="all_enemies"), A(T, 4, attr="stable"), A(T, 2, attr="stable", if_="t.moved")]})
-card("al_marsh_lights", "Marsh Lights", 1, "X", "all_enemies", [A(F, 2, attr="volatile", if_="t.toxin"), D(2, if_="last")],
-     "Apply 2 Volatile Fire to every foe with Toxin. If this is last in the Ordo, deal 2 to every foe. Exhaust.", cat=F, attr="volatile",
+card("al_marsh_lights", "Marsh Lights", 1, "X", "all_enemies", [A(F, 2, attr="volatile", if_="t.toxin"), D(1, if_="last")],
+     "Apply 2 Volatile Fire to every foe with Toxin. If this is last in the Ordo, deal 1 to every foe. Exhaust.", cat=F, attr="volatile",
      kw=["Exhaust"], sub=PW, arch=PW,
      flavour="Marsh lights rise over the dead. Here they rise over the dying.",
      note="Pale flames gutter up from every sick foe in the line at once.",
@@ -650,12 +656,12 @@ card("al_snatch_from_the_door", "Snatch from the Door", 1, "X", "ally", [H(3), H
      flavour="Not yet. Not on my watch, and not on this floor.",
      note="The Apothecary drags a fallen hero back from the edge of the throne room dais.",
      up={"text": "A hero heals 4. If they are at Death's Door, they heal 8 more.", "fx": [H(4), H(8, if_="t.dd")]})
-card("al_measured_dose", "Measured Dose", 1, "X", "ally", [B(4), DRAW(1, to="self", if_=DOSED)],
-     "A hero gains 4 Block. Dosed: you draw 1 more card next round.", use=ALL, kw=["Dosed"], sub=AP, arch=AP,
+card("al_measured_dose", "Measured Dose", 1, "X", "ally", [B(5), ADD("al_chaser", if_=DOSED)],
+     "A hero gains 5 Block. Dosed: put a Chaser into their next hand.", use=ALL, kw=["Dosed"], sub=AP, arch=AP,
      flavour="The right amount at the right time. That is the whole of the craft.",
      note="The Apothecary marks a line on a flask with a thumbnail and hands it forward.",
-     up={"text": "A hero gains 6 Block. Dosed: you draw 1 more card next round.",
-         "fx": [B(6), DRAW(1, to="self", if_=DOSED)]})
+     up={"text": "A hero gains 7 Block. Dosed: put a Chaser into their next hand.",
+         "fx": [B(7), ADD("al_chaser", if_=DOSED)]})
 card("al_war_tonics", "War Tonics", 2, "X", "self",
      [BREW("fl_rage"), BREW("fl_haste"), IMPROVE(1), IMPROVE(1, if_="handoff")],
      "Brew a Bloodrage Draught and a Haste Draught. Improve 1 flask on the belt, or 2 on a Handoff.", use=ALL, sub=AP,
@@ -758,8 +764,4 @@ NEEDS = [
     "al_the_physick_garden: brew an Improved flask of the player's choice; written as a Garden Simple (an "
     "all-purpose flask) plus Improve 1 (a picker).",
     "al_steady_hand: the brief wanted 'the next flask used this round counts as Improved'; written as Improve 1.",
-    "al_athanor: wanted 'at the start of each round, more for each vigour banked into this round'. No quantity says "
-    "how much vigour was carried over (Bank, EN), so the Rite moved to round end and reads vigour left unspent.",
-    "al_magnum_opus: 'If this cost 2 or more' reads cost, which Thrift lowers. A Thrift-proof version would need a "
-    "quantity for the card's printed cost.",
 ]

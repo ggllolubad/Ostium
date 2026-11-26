@@ -14,11 +14,13 @@ the Prismatic; Conflux and the largest-course readers join the Accumulator and t
 Vigour and the Ordo (Gate 3 interaction pass, docs/design/GATE3_INTERACTION.md):
   accumulator  restraint and release: Bank and "for each vigour left unspent" in quiet rounds (Turn the Ring, Hold
                the Breath, Wax the Mouth, Tip the Vessel, Stored Breath, Brass Bands, Pressure, The Brass Reservoir),
-               then "if the company spent all its vigour" and "spent before this card" on the release (Pour Out,
-               Heavy Pour, Conflux) and the X card Full Measure, which doubles its stacks at X 4 or more. Weigh the
-               Stacks wants to be last.
+               then "for each vigour carried into this round" on the release (Heavy Pour, Conflux, The Brass
+               Reservoir), "spent before this card" (Pour Out) and the X card Full Measure, which doubles its stacks
+               at X 4 or more. Weigh the Stacks wants to be last.
   catalyst     relay and cascade: Handoff (Strike the Wet Ink, Feedback, Chain of Ink, Chain of Sigils), late in a
                heavy Ordo (Cascade, Backdraft last), and Thrift from Conjunctions (Double Flick, The Quickened Hand).
+               The sparks cost 1 and fall to 0 once the Ordo is under way (Spark, Second Spark, Spark Shower, Hair
+               Trigger). Lend the Nib puts a Sulphur Match in an ally's next hand.
   prismatic    reads the company's colours: "for each other hero who acted before this" (Sixth Ink, Fill the Gaps,
                Every Colour at Once); paints first (Turn the Page, Full Ring) and strikes last (Strike the Ring).
 Restraint readers count vigour still unspent when they resolve, so a Bank earlier in the Ordo lowers them.
@@ -728,9 +730,6 @@ NEEDS = [
     "el_brass_reservoir: 'no cap' is written as CAP(99) before the strike and CAP(-99) after; a one-card cap effect "
     "would be cleaner.",
     "Hover text for 'the next course' (the one after the attuned course in the ring).",
-    "Heavy Pour, Conflux: the release reads 'if the company spent all its vigour' (vigour_spent>=vigour_pool). A "
-    "quantity for vigour carried into this round (Bank and EN) would let the Accumulator pay off 'spent more than "
-    "the company's base', which absolute numbers cannot say for companies of 2 to 4.",
     "Restraint readers (Wax the Mouth, Tip the Vessel, Stored Breath, Brass Bands, Pressure, Weight of the Vessel, "
     "The Brass Reservoir) read vigour_left, which a Bank earlier in the Ordo lowers. The Ordo preview should show "
     "the number each reader will see.",

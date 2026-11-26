@@ -620,11 +620,14 @@ NEEDS = [
     "The Last Hour: wanted Echoes at full power that can echo once more; written as Prime 5 per Echo card played.",
     "The Turned Glass: wanted to Delay the foe with the strongest intent (a to='strongest_intent' target) and void "
     "damage to a foe pushed into next round; written on the front foe. The rite must fire after intents are chosen.",
-    "The Rubric: wanted every Prime to also strengthen the action after it; written as Prime 3 per card played.",
+    "The Rubric: wanted every Prime to also strengthen the action after it; written as Prime 2 per card played, 2 more on a Handoff.",
     "The Severed Thread: wanted 'the action that spends the round's third Prime resolves twice'; written as an "
     "Execute at the damage dealt once 3 Primes are spent.",
     "prime_count counts actions that spent Prime, so back-to-back Prime cards merge into one and a Block card spends "
     "Prime too. The Fatebinder (Red Letter, Tapestry, Severance, The Severed Thread) wants each Prime placed this "
     "round counted instead.",
+    "Bind Fate reads 'hand': the real Ordo runs after commit_cards (main.gd), but Combat.simulate (the Ordo preview) "
+    "never removes planned cards, so the preview counts them and shows more Prime than resolves. simulate should "
+    "take the planned cards out of the clone's hands first.",
 ]
 

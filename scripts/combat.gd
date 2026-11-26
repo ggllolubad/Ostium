@@ -434,7 +434,8 @@ static func _deals_damage(c: Dictionary) -> bool:
 ## The vigour a card costs this hero now: Thrift takes 1 off each of its next cards (never below 0). X costs return -1.
 ## `s` is the state with the Ordo planned so far already simulated (the UI's preview, the planner's state), so a
 ## card's own `cost_less` can read the Ordo: {"per": quantity, "k": n, "max": m} takes k per unit off its cost.
-## Quantities: "ordo" (cards already in the Ordo), "heroes" (heroes already in it), "attacks" (attack cards in it),
+## Quantities: "ordo" (cards already in the Ordo), "heroes" (heroes already in it), "others" (heroes other than this
+## one already in it), "attacks" (attack cards in it),
 ## and any of the hero's own (hand, discard, exhaust, draw, played, scars, and its statuses).
 static func cost_of(s: Dictionary, h: Dictionary, cid: String) -> int:
 	var c := card(cid)
@@ -447,6 +448,7 @@ static func cost_of(s: Dictionary, h: Dictionary, cid: String) -> int:
 		match String(cl.get("per", "")):
 			"ordo": v = int(s.get("ordo_pos", 0))
 			"heroes": v = s.get("ordo_heroes", []).size()
+			"others": v = s.get("ordo_heroes", []).size() - (1 if s.get("ordo_heroes", []).has(h.id) else 0)
 			"attacks": v = int(s.get("ordo_attacks", 0))
 			_: v = q(s, h, h, String(cl.get("per", "")), {})
 		var off := int(floor(v * float(cl.get("k", 1))))

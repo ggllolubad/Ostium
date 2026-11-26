@@ -42,6 +42,7 @@ Each pattern is a way a card's value comes from somewhere other than its own num
 - **P18 `cost_less`:** a card field `{"per": q, "k": n, "max": m}` takes k per unit of q off the card's cost while you plan. q is one of:
   - `ordo`: cards already in the Ordo;
   - `heroes`: heroes already in it;
+  - `others`: heroes other than this one already in it;
   - `attacks`: attack cards in it;
   - any hero quantity, such as `hand`, `discard`, `exhaust`, `played`, `scars` or a status.
 
