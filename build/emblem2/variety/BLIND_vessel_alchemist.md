@@ -116,3 +116,26 @@ Every calling clears the 60% bar. The remaining misses are pair swaps, listed be
 
 Elements: done (fire, frost, lightning, water, toxin, void). The frost ray-measure noise is logged.
 herosim: 6 pairs at 0.50 to 0.55. The readers did not confuse those pairs, so they are accepted.
+
+## Object cards, L72 (one object per card within a calling), matching against proposed names
+
+| group | matched |
+|---|---|
+| Vessel | 61/88 (69%) |
+| Alchemist | 63/94 (67%) |
+| Hexweaver | 39/71 (54%) |
+| Bulwark | 31/58 (53%) |
+| Shared | 20/38 (52%) |
+| Oracle | 29/66 (43%) |
+| Duelist | 17/43 (39%) |
+| Elementalist | 21/65 (32%) |
+| Worlds (15 worlds mixed in one sheet, an unfair test) | 27/67 (40%) |
+
+The callings whose names were reworked around objects pass. The rest fail on name clusters:
+- bells, mirrors, bleeding, red writing, frost;
+- process names (Elementalist);
+- pictures that do not point at the name.
+
+On Elementalist object cards, the fire attuned stroke dominates the object.
+
+Next, L73: a plain-word label per object card with a text pretest. Interchangeable name families go to Cole as round 2 renames. The install render comes first, for the playtest.
