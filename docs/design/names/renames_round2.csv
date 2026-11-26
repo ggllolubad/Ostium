@@ -1,32 +1,85 @@
 id,current,proposed,why,picture
-el_clouded_sight,Spectacles,Witch Ball,the art is a silvered witch ball (spectacles are wire and clear glass and sank into the attuned frost and water grounds; L49); clashes with the Hexweaver's Witch Ball (the_witchs_glass): one of the two must change (Glass Globe here would avoid it),witchball
-knell,Knell,Bell-Cote,six Hexweaver bell names read alike (matching test); name the bell tower drawn,belfry
-passing_bell,Passing Bell,Bell Staff,six bell names read alike; name the bell on its staff,staffbell
-death_knell,Death Toll,Open Coffin,six bell names read alike; the art is a coffin with its lid slid off,coffin
-toll_of_bells,Peal,Bell Wheel,six bell names read alike; name the wheel of little bells,bellwheel
-toll_the_hour,Curfew,Smother,a curfew is a fire cover but readers take it as a bell; the cover smothers the coals (an Execute card),firecover
-nine_tailors,Nine Tailors,Running Sand,a bell term on an hourglass picture; name the sand,hourglass
-cracked_glass,Fracture,Cracked Glass,six mirror names read alike; its old name says the crack drawn,chevalmirror
-mirrored_curse,Reflection,Scrying Bowl,six mirror names read alike; name the bowl of black water,scryingbowl
+malediction,Malediction,Cracked Skull,the skull fits no curse name; name the skull,skull
+ring_the_bell,Ring the Bell,Church Bell,six bell names read alike; name the church bell,bell
+knell,Knell,Bell-Cote,six bell names read alike; name the bell-cote,belfry
+nine_tailors,Nine Tailors,Running Sand,a bell term on an hourglass; name the sand,hourglass
+backed_with_silver,Silvering,Silvered Shield,name the shield; overrides renames.csv (Silvering),shield
+hand_it_back,Ill-Wishing,Hand of Glory,Ill-Wishing pointed at no object; the hand of glory is the witch's own object; overrides renames.csv (Ill-Wishing),handofglory
+bind_the_fear,Banishing,Horseshoe,four protection charms read alike; name the horseshoe; overrides renames.csv (Banishing),horseshoe
+pact_of_bones,Pact of Bones,Crow Skull,name the skull charm,birdskull
+doubled_image,Fetch,Twin Panels,Fetch pointed at no object; Diptych is taken by the Vessel; overrides renames.csv (Fetch),diptych
 mirror_skin,Mirror Skin,Cowl,six mirror names read alike; the art is a hood,hood
-glint,Glint,Spectacles,frees the name the Elementalist no longer uses; the art is spectacles,spectacles
-turn_the_glass,Glamour,False Face,six mirror names read alike; the art is a smiling mask over a grim face,mask
-crossed_glass,Bewilder,Blindfold,six mirror names read alike; the art is a blindfold,blindfold
-backed_with_silver,Silvering,Silver Shield,six mirror names read alike; the art is a shield,shield
+take_the_curse_in,Curse-Breaking,Shears,four protection charms read alike; name the shears; overrides renames.csv (Curse-Breaking),shears
+twist_the_pin,Twist the Pin,Wax Heart,Twist the Pin and Bodkin both name a pin; name the wax heart,waxheart
+blood_on_the_poppets,Bodkin,Poppet,Twist the Pin and Bodkin both name a pin; name the poppet; overrides renames.csv (Bodkin),poppet
+bear_the_burden,Rancour,Heavy Sack,Rancour pointed at no object; Burden is taken by the Vessel; overrides renames.csv (Rancour),sack
 hedge_charm,Hedge Charm,Hag Stone,four protection charms read alike; name the holed stone,hagstone
-bind_the_fear,Banishing,Horseshoe,four protection charms read alike; name the horseshoe,horseshoe
-or_the_rubric,The Rubric,Book of Hours,five red-writing names read alike; name the open book,book
-or_red_ink,Vermilion,Red Quill,five red-writing names read alike; name the quill,quill
-or_scarlet_line,Scarlet Line,Reed Pen,five red-writing names read alike; name the reed pen,reedpen
-or_red_letter,Red Letter,Sealed Letter,five red-writing names read alike; the art is a sheet with a row of seals,charter
-or_written_ahead,Written Ahead,Long Scroll,five red-writing names read alike; name the scroll,scroll
+bw_scar_tissue,Scar Tissue,Great Helm,name the helm,greathelm
+bw_close_ranks,Close Ranks,Oak Settle,Close Ranks pointed at no object; Settle is a Vessel token,settle
+bw_shed_the_rime,Sleet,Icicle Fringe,fifteen frost names read alike; name the icicles; overrides renames.csv (Sleet),icicles
+bw_glacier_wall,Glacier Wall,Ice Shard,fifteen frost names read alike; name the shard,shard
+bw_barbed_plate,Barbed Plate,Spiked Buckler,two barbed names read alike; name the buckler,buckler
+bw_defiance,Defiance,Drawn Sword,Defiance pointed at no object; name the sword,sword
+bw_spiteful_guard,Spiteful Guard,Caltrop,name the caltrop,caltrops
+bw_k_come_on_then,Provoke,War Drum,Provoke pointed at no object; the drum is beaten to taunt; overrides renames.csv (Provoke),drum
+bw_martyrdom,Martyrdom,Catherine Wheel,the martyr's wheel,wheel
+bw_hold_the_line,Hold Fast,Pillar,Hold Fast pointed at no object; name the pillar; overrides renames.csv (Hold Fast),column
+bw_grit_your_teeth,Fortitude,Iron Gauntlet,Fortitude pointed at no object; name the gauntlet; overrides renames.csv (Fortitude),gauntlet
+bw_the_door_does_not_fall,Indomitable,Lion Knocker,Indomitable pointed at no object; name the knocker; overrides renames.csv (Indomitable),knocker
+bw_scourged_back,Welts,Stained Bandage,Welts pointed at no object; Bandage Roll is taken by a neutral card; overrides renames.csv (Welts),bandage
+bw_bound_with_rope,Bindings,Grapnel,Bindings pointed at no object; Rope and Hook is taken; overrides renames.csv (Bindings),rope
+bw_into_the_breach,Stopgap,Muddy Boot,Stopgap pointed at no object; name the boot; overrides renames.csv (Stopgap),boot
+du_nick_the_vein,Nick,Thorn,seven bleeding names read alike; the art is a thorn; overrides renames.csv (Nick),bramble
+du_bloodmist,Bloodmist,Blood Cup,seven bleeding names read alike; name the cup,cup
+du_two_blades_one_heart,Ambidexter,Two Blades,Ambidexter pointed at no object; the two blades are drawn; overrides renames.csv (Ambidexter),shears
+du_haemorrhage,Haemorrhage,Blood Pail,seven bleeding names read alike; name the pail,bucket
+du_deep_cut,Gash,Long Blade,Gash pointed at no object; the axe goes to Headsman; overrides renames.csv (Gash),sword
+du_condemned,Condemned,Noose,execution names read alike; name the noose,noose
+du_full_letting,Full Letting,Bleeding Basin,seven bleeding names read alike; name the basin,basin
+du_fall_back_in_guard,Disengage,Buckler,fencing verbs read alike; name the buckler; overrides renames.csv (Disengage),buckler
+du_open_every_vein,Bloodbath,Fleam,seven bleeding names read alike; name the fleam; overrides renames.csv (Bloodbath),fleam
+du_drag_to_the_block,Collar,Headsman's Block,execution names read alike; name the block; overrides renames.csv (Collar),block
+du_turn_the_parry,Turnabout,Round Shield,fencing verbs read alike; name the shield; overrides renames.csv (Turnabout),shield
+du_find_the_gap,Feint,Rapier,fencing verbs read alike; name the rapier (the parrying dagger goes to Parry); overrides renames.csv (Feint),rapier
+du_red_tide,Red Tide,Sea Anchor,Red Tide pointed at no object; name the anchor,anchor
+or_quiet_hour,Quiet Hour,Vigil Candles,four light names read alike; name the candles; overrides renames.csv (Quiet Hour),candle
+or_borrowed_time,Sleepless,Night Lamp,four light names read alike; name the lamp; overrides renames.csv (Sleepless),oillamp
+or_the_last_hour,The Last Hour,Snuffer,four light names read alike; name the snuffer,snuffer
+or_read_the_signs,Auspices,Weathercock,Auspices and Augury both name bird signs; name the weathercock; overrides renames.csv (Auspices),weathervane
+or_cassandra,Cassandra,Antlers,Cassandra pointed at no object; name the antlers,antler
+or_stopped_sand,Stopped Sand,Stilled Pendulum,the stopped clock takes the clock face; Pendulum is taken by another Oracle card,pendulum
+or_fulfil_the_omen,Prophecy,Swift,five bird names read alike; Swallow is taken by the Vessel; overrides renames.csv (Prophecy),swallow
+or_the_rubric,The Rubric,Book of Hours,five red-writing names read alike; name the book,book
+or_late_blow,Late Blow,Smith's Hammer,Late Blow pointed at no object; name the hammer,hammer
+or_reverse_the_glass,Retrograde,Armillary Sphere,Retrograde and Eclipse read alike; name the sphere; overrides renames.csv (Retrograde),armillary
+or_accelerate,Accelerate,Whip,Hasten takes the spur; name the whip,scourge
+or_ill_omen,Ill Omen,Magpie,five bird names read alike; name the magpie,magpie
+or_knot,Knot,Hangman's Knot,binding names read alike; Noose goes to the Duelist,noose
 or_bind_fate,Bind Fate,Padlock,binding names read alike; name the padlock,padlock
-or_knot,Knot,Noose,binding names read alike; the art is a hangman's noose,noose
-or_starlit_ward,Starlight,Lantern,light names read alike; name the lantern,lantern
-or_borrowed_time,Sleepless,Night Lamp,light names read alike; name the lamp,oillamp
-or_the_last_hour,The Last Hour,Snuffer,light names read alike; name the snuffer on the candle,snuffer
-du_nick_the_vein,Nick,Thorn,seven bleeding names read alike; the art is a thorny briar,bramble
-du_open_the_vein,Open the Vein,Bone Knife,seven bleeding names read alike; name the knife,knife
-du_full_letting,Full Letting,Bleeding Basin,seven bleeding names read alike; name the basin of blood,basin
-du_open_every_vein,Bloodbath,Fleam,seven bleeding names read alike; name the three-bladed fleam,fleam
-du_bloodmist,Bloodmist,Blood Cup,seven bleeding names read alike; the art is a cup brimming dark,cup
+or_unmaking,Unmaking,Breastplate,Unmaking pointed at no object; name the breastplate,breastplate
+or_rewind,Rewind,Winding Key,Rewind pointed at no object; name the key,key
+or_run_back_the_sand,Reprieve,Sand Funnel,Reprieve pointed at no object; name the funnel; overrides renames.csv (Reprieve),funnel
+or_forestalled,Forestalled,Door Bar,Forestalled pointed at no object; name the bar,drawbar
+el_cross_stroke,Cross Stroke,Dividers,Cross Stroke pointed at no object; name the dividers,dividers
+el_brass_bands,Brass Bands,Astrolabe,Brass Bands pointed at no object; name the astrolabe,astrolabe
+el_lay_the_ground,Undercoat,Watering Can,Undercoat pointed at no object; name the can; overrides renames.csv (Undercoat),wateringcan
+el_nervous_hands,Nervous Hands,Guttering Candles,Nervous Hands pointed at no object; name the candles,candle
+el_scatter_ink,Scatter Ink,Scroll,ink-spray names read alike; name the scroll,scroll
+el_conjoin,Strikethrough,Reed Pen,ink names read alike; name the pen; overrides renames.csv (Strikethrough),reedpen
+el_read_the_colours,Survey,Reading Desk,Survey pointed at no object; Lectern is taken by the Vessel; overrides renames.csv (Survey),lectern
+el_spark_shower,Spark Shower,Coal Pan,three spark names read alike; name the pan,coalpan
+el_second_spark,Tinder,Lantern,three spark names read alike; name the lantern; overrides renames.csv (Tinder),lantern
+el_turn_the_page,Overleaf,Open Book,Overleaf pointed at no object; name the book; overrides renames.csv (Overleaf),book
+el_hold_the_breath,Patience,Gourd,Patience pointed at no object; name the gourd; overrides renames.csv (Patience),gourd
+el_steep,Steep,Black Cauldron,pot names read alike; Cauldron is taken by the Alchemist,cauldron
+el_brim_over,Brim Over,Font,pot names read alike; name the font,font
+el_cold_for_the_void,Starless Cold,Ice Phial,Starless Cold pointed at no object; Frost Phial is taken by the Alchemist; overrides renames.csv (Starless Cold),phial
+el_sigil_on_the_door,Lintel,Warded Door,Lintel pointed at no object; name the door; overrides renames.csv (Lintel),door
+el_twin_sigil,Ligature,Shield,Ward Sigil takes the sigil stone; name the shield; overrides renames.csv (Ligature),shield
+el_sigils_on_the_skin,Inked Skin,Wax Tablet,Inked Skin pointed at no object; name the tablet; overrides renames.csv (Inked Skin),waxtablet
+el_wet_the_line,Drench,Kettle,ink-spray names read alike; name the kettle; overrides renames.csv (Drench),kettle
+el_rime_and_brine,Freezing Spray,Sprinkler,ink-spray names read alike; name the sprinkler; overrides renames.csv (Freezing Spray),aspergillum
+el_stopper_the_jar,Stopper,Covered Jar,Stopper pointed at no object; name the jar; overrides renames.csv (Stopper),jar
+el_wash_of_colour,Wash,Wash Bowl,ink-spray names read alike; name the bowl; overrides renames.csv (Wash),bowl
+el_glass_halo,Glass Halo,Hand Mirror,Glass Halo pointed at no object; name the mirror,mirror
+el_clouded_sight,Spectacles,Glass Globe,"the coordinator asked for Witch Ball, but the Hexweaver's the_witchs_glass already has it; Glass Globe names the same art; overrides renames.csv (Spectacles)",witchball
