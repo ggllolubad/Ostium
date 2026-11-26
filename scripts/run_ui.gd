@@ -286,8 +286,9 @@ func show_prepare() -> void:
 				chosen = c
 			var y := 226 + ci * 98
 			var b := _btn("", Vector2(110, y), Vector2(440, 88), func(): hub_commission = c.ruler; show_prepare(), null, c.text)
-			b.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.HI if on else UiStyle.PARCH_L, UiStyle.RED_D if on else UiStyle.BROWN, 3 if on else 1))
-			b.add_theme_stylebox_override("hover", UiStyle.box(UiStyle.HI, UiStyle.RED, 2))
+			if on:
+				b.add_theme_stylebox_override("normal", UiStyle.tex_box("slip_sel"))
+				b.add_theme_stylebox_override("hover", UiStyle.tex_box("slip_sel"))
 			_ruler_thumb(c.ruler, Vector2(118, y + 6), Vector2(84, 76))
 			_lbl(c.name, Vector2(212, y + 14), Vector2(260, 30), 21, UiStyle.font_sc, UiStyle.RED_D if on else UiStyle.INK)
 			_lbl("Rank %s of the world's rulers" % ROMAN[ci], Vector2(212, y + 46), Vector2(260, 24), 15, UiStyle.font_it, UiStyle.BROWN)
@@ -368,10 +369,7 @@ func show_prepare() -> void:
 		_lbl(it[2], Vector2(ix + 54, iy + 26), Vector2(80, 22), 14, UiStyle.font_it, UiStyle.BROWN)
 	var go := _btn("Descend", Vector2(1094, 700), Vector2(400, 74), _begin_run)
 	go.add_theme_font_size_override("font_size", 32)
-	go.add_theme_color_override("font_color", UiStyle.HI)
-	go.add_theme_color_override("font_hover_color", UiStyle.HI)
-	go.add_theme_stylebox_override("normal", UiStyle.box(UiStyle.RED_D, UiStyle.INK, 2))
-	go.add_theme_stylebox_override("hover", UiStyle.box(UiStyle.RED, UiStyle.INK, 2))
+	UiStyle.red_button(go)
 	go.disabled = party.size() < int(Abbey.A.party_min)
 	_tex("res://assets/art/ui/seal.png", Vector2(1062, 698), Vector2(76, 76))
 	_btn("Back to the doors", Vector2(1094, 790), Vector2(196, 44), show_hub)

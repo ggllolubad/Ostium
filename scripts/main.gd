@@ -297,16 +297,7 @@ func _build_static() -> void:
 	add_child(deck_l)
 	commit_btn = _button("Play the Ordo", Vector2(1410, 924), Vector2(176, 48))
 	commit_btn.add_theme_font_size_override("font_size", 22)
-	var csb := UiStyle.box(UiStyle.RED, UiStyle.INK, 3)
-	csb.shadow_color = UiStyle.INK
-	csb.shadow_offset = Vector2(4, 5)
-	csb.shadow_size = 1
-	commit_btn.add_theme_stylebox_override("normal", csb)
-	var csh := csb.duplicate()
-	csh.bg_color = Color("d4664c")
-	commit_btn.add_theme_stylebox_override("hover", csh)
-	commit_btn.add_theme_color_override("font_color", UiStyle.CREAM)
-	commit_btn.add_theme_color_override("font_hover_color", UiStyle.CREAM)
+	UiStyle.red_button(commit_btn)
 	commit_btn.pressed.connect(_commit)
 	undo_btn = _button("strike the last", Vector2(1190, 966), Vector2(200, 28))
 	undo_btn.add_theme_font_override("font", UiStyle.font_it)

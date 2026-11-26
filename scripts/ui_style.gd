@@ -76,17 +76,12 @@ static func make_theme() -> Theme:
 	t.set_font("normal_font", "RichTextLabel", font_rm)
 	t.set_font("italics_font", "RichTextLabel", font_it)
 	t.set_font("bold_font", "RichTextLabel", font_sc)
-	for st in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var b := box(PARCH_L if st != "hover" else HI, INK, 2)
-		if st == "pressed":
-			b.bg_color = PARCH_D
-		if st == "disabled":
-			b.bg_color = DISABLED
-			b.border_color = DISABLED_INK
-		if st == "focus":
-			b.draw_center = false
-			b.border_color = RED
-		t.set_stylebox(st, "Button", b)
+	# textured parchment buttons (tools/art/ui_tex.py), not flat fills
+	for st in ["normal", "hover", "pressed", "disabled"]:
+		t.set_stylebox(st, "Button", tex_box({"normal": "btn_parch", "hover": "btn_parch_hover", "pressed": "btn_parch_down", "disabled": "btn_parch_off"}[st]))
+	var fb := box(PARCH_L, RED, 2)
+	fb.draw_center = false
+	t.set_stylebox("focus", "Button", fb)
 	t.set_color("font_color", "Button", INK)
 	t.set_color("font_hover_color", "Button", INK)
 	t.set_color("font_pressed_color", "Button", INK)
@@ -141,6 +136,28 @@ static func icon_rect(id: String, pos: Vector2, px := 64) -> TextureRect:
 	t.size = Vector2(px, px)
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return t
+
+## A 9-slice textured box from assets/art/ui/tex/<name>.png.
+static func tex_box(name: String, margin := 14, pad := Vector2(12, 6)) -> StyleBoxTexture:
+	var sb := StyleBoxTexture.new()
+	sb.texture = load("res://assets/art/ui/tex/%s.png" % name)
+	sb.texture_margin_left = margin
+	sb.texture_margin_right = margin
+	sb.texture_margin_top = margin
+	sb.texture_margin_bottom = margin
+	sb.content_margin_left = pad.x
+	sb.content_margin_right = pad.x
+	sb.content_margin_top = pad.y
+	sb.content_margin_bottom = pad.y
+	return sb
+
+## The red lacquered style for a main action (Descend, Play the Ordo).
+static func red_button(b: Button) -> void:
+	b.add_theme_stylebox_override("normal", tex_box("btn_red", 16))
+	b.add_theme_stylebox_override("hover", tex_box("btn_red_hover", 16))
+	b.add_theme_stylebox_override("pressed", tex_box("btn_red_down", 16))
+	for c in ["font_color", "font_hover_color", "font_pressed_color"]:
+		b.add_theme_color_override(c, HI)
 
 static func label(text: String, size := 17, font: FontFile = null, color := INK) -> Label:
 	load_fonts()

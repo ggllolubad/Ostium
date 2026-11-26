@@ -1,5 +1,11 @@
 class_name UiUnit
 extends Control
+const BAR_TRACK := preload("res://assets/art/ui/tex/bar_track.png")
+const BAR_RED := preload("res://assets/art/ui/tex/bar_red.png")
+const BAR_GREEN := preload("res://assets/art/ui/tex/bar_green.png")
+const BAR_VIOLET := preload("res://assets/art/ui/tex/bar_violet.png")
+const BAR_BLUE := preload("res://assets/art/ui/tex/bar_blue.png")
+static var TAB_BOX: StyleBoxTexture
 ## One hero or enemy on the field: sprite, intent banner (enemies), name, HP bar with preview, statuses.
 
 var FEET := 0.966
@@ -262,14 +268,16 @@ func _draw() -> void:
 		draw_polyline(pts, col, 3.0 if target_mode == 1 else 2.5)
 	# hp bar on a parchment tablet so it reads over the floor
 	var w := size.x * 0.78
-	var tab := Rect2(cx - w / 2 - 18, fy + 8, w + 36, 100)
-	draw_rect(tab, Color(UiStyle.PARCH_L, 0.88))
-	draw_rect(tab, Color(UiStyle.INK, 0.55), false, 1.0)
+	var tab := Rect2(cx - w / 2 - 18, fy + 2, w + 36, 106)
+	if TAB_BOX == null:
+		TAB_BOX = UiStyle.tex_box("btn_parch")
+	draw_style_box(TAB_BOX, tab)
 	var r := Rect2(cx - w / 2, fy + 30, w, 14)
-	draw_rect(r, UiStyle.HI)
+	draw_texture_rect(BAR_TRACK, r, false)
 	var frac: float = clamp(float(hp) / max(1, max_hp), 0.0, 1.0)
-	var fill := UiStyle.RED if side == "hero" else UiStyle.GREEN
-	draw_rect(Rect2(r.position, Vector2(r.size.x * frac, r.size.y)), fill)
+	var fill: Texture2D = BAR_RED if side == "hero" else BAR_GREEN
+	if frac > 0.0:
+		draw_texture_rect_region(fill, Rect2(r.position, Vector2(r.size.x * frac, r.size.y)), Rect2(0, 0, fill.get_width() * frac, fill.get_height()))
 	if pred_hp >= 0 and pred_hp < hp:
 		var pf: float = clamp(float(pred_hp) / max(1, max_hp), 0.0, 1.0)
 		var lost := Rect2(r.position + Vector2(r.size.x * pf, 0), Vector2(r.size.x * (frac - pf), r.size.y))
@@ -287,13 +295,15 @@ func _draw() -> void:
 	draw_string(f, Vector2(cx - 120, r.end.y + 15), txt, HORIZONTAL_ALIGNMENT_CENTER, 240, 15, UiStyle.RED_D if (pred_hp >= 0 and pred_hp < hp) or dd else UiStyle.INK)
 	if block > 0:
 		var b := Rect2(r.position.x - 30, r.position.y - 6, 26, 26)
-		draw_rect(b, Color("7f9cc6"))
+		draw_texture_rect(BAR_BLUE, b, false)
 		draw_rect(b, UiStyle.INK, false, 2.0)
 		draw_string(f, Vector2(b.position.x, b.position.y + 19), str(block), HORIZONTAL_ALIGNMENT_CENTER, 26, 15, UiStyle.INK)
 	if side == "hero":
 		var sr := Rect2(cx - w / 2, r.end.y + 20, w, 5)
-		draw_rect(sr, UiStyle.HI)
-		draw_rect(Rect2(sr.position, Vector2(sr.size.x * clamp(stress / 100.0, 0.0, 1.0), 5)), UiStyle.VIOLET)
+		draw_texture_rect(BAR_TRACK, sr, false)
+		var sf: float = clamp(stress / 100.0, 0.0, 1.0)
+		if sf > 0.0:
+			draw_texture_rect_region(BAR_VIOLET, Rect2(sr.position, Vector2(sr.size.x * sf, 5)), Rect2(0, 0, BAR_VIOLET.get_width() * sf, BAR_VIOLET.get_height()))
 		draw_rect(sr, UiStyle.INK, false, 1.0)
 
 func _gui_input(ev: InputEvent) -> void:
