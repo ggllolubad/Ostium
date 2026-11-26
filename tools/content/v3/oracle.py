@@ -575,13 +575,15 @@ card("or_the_bone_pouch", "The Bone Pouch", 1, "L", "self", [OMEN(3)],
          "rite": {"on": "round_start", "fx": [OMEN(1), B(0, per="omen", k=1, max=8, to="all_allies"),
                                               W(0, per="omen", k=0.5, max=4, to="all_allies")]}})
 card("or_the_rubric", "The Rubric", 1, "L", "self", [PRIME(4)],
-     "Prime 4. Rite: whenever you play a card, Prime 3. Exhaust.", cat=V, kw=["Rite", "Exhaust"], sub=FB,
-     rite={"on": "play", "fx": [PRIME(3)]},
+     "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo. Exhaust.", cat=V,
+     kw=["Rite", "Exhaust"], sub=FB,
+     rite={"on": "play", "fx": [PRIME(1, per="ordo_pos", k=1)]},
      flavour="Every line I write in red, the world reads twice.",
      note="Red script crawls off the Fatebinder's arms onto every hero's weapon.",
      arch=FB,
-     up={"text": "Prime 4. Rite: whenever you play a card, Prime 3 and the most wounded hero gains 2 Block. Exhaust.",
-         "rite": {"on": "play", "fx": [PRIME(3), B(2, to="lowest_ally")]}})
+     up={"text": "Prime 4. Rite: whenever you play a card, Prime 1, plus 1 per place that card stands in the Ordo, and "
+                 "the most wounded hero gains 2 Block. Exhaust.",
+         "rite": {"on": "play", "fx": [PRIME(1, per="ordo_pos", k=1), B(2, to="lowest_ally")]}})
 card("or_the_severed_thread", "The Severed Thread", 2, "L", "enemy",
      [D(6, per="prime_count", k=4), EXEC(0, per="dealt", if_="prime_count>=3")],
      "Deal 6, plus 4 per Prime spent this round. If 3 or more Primes have been spent this round, "
