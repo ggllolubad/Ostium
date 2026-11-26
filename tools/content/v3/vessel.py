@@ -25,7 +25,7 @@ Vigour and the Ordo (interaction pass, GATE3_INTERACTION.md): each path reads th
           Split Tongue) or adds damage (Chew, Lend Weight); big turns pay (Speak to All) and Flood the Line is the X
           card (Volatile at X 4 or more); Double Spit doubles a foe's largest course;
           Lay It Down sets it all off when last.
-  whole   the whole company: payoffs for heroes who acted before it (The Weighing, which also costs less once 2 heroes
+  whole   the whole company: payoffs for heroes who acted before it (The Weighing, which also costs less once 2 other heroes
           are in the Ordo, and Six Rays), position (Illuminated
           Initial first, Balanced Hands in the middle), Bank (Weigh, Still Centre, Keep the Hours) and Thrift when
           Whole (Gilt Edge, The Whole Conjunction).
@@ -288,12 +288,12 @@ card("ve_sponge", "Sponge", 1, "U", "all_allies", [TAKE("all"), B(0, per="consum
          "fx": [TAKE("all"), B(2, per="consumed", k=1, max=14, to="self")]})
 card("ve_unclench", "Unclench", 2, "U", "enemy",
      [GIVE("all"), H(0, per="consumed", k=0.5, max=5, to="all_allies"), STRESS(-4, to="all_allies")],
-     "Costs 1 less if 2 or more heroes are already in the Ordo. Give everything you hold to the target. Every hero "
+     "Costs 1 less if 2 or more other heroes are already in the Ordo. Give everything you hold to the target. Every hero "
      "heals 1 per 2 stacks given, at most 5, and sheds 4 stress.",
-     arch="hearth+mouth", cost_less={"per": "heroes", "k": 0.5, "max": 1},
+     arch="hearth+mouth", cost_less={"per": "others", "k": 0.5, "max": 1},
      flavour="Let go. It was never mine to keep.",
      note="The Vessel opens a clenched fist for the first time; every seal flies off the skin toward a foe.",
-     up={"text": "Costs 1 less if 2 or more heroes are already in the Ordo. Give everything you hold to the target. Every "
+     up={"text": "Costs 1 less if 2 or more other heroes are already in the Ordo. Give everything you hold to the target. Every "
                  "hero heals 1 per 2 stacks given, at most 7, and sheds 6 stress.",
          "fx": [GIVE("all"), H(0, per="consumed", k=0.5, max=7, to="all_allies"), STRESS(-6, to="all_allies")]})
 card("ve_warm_room", "The Warm Room", 1, "U", "self",
@@ -445,12 +445,12 @@ card("ve_upright", "Upright", 1, "U", "self",
 # ------------------------------------------------------------------ rare
 card("ve_the_weighing", "The Weighing", 2, "R", "enemy",
      [EVEN(), D(0, per="held_kinds", k=2), D(0, per="held_kinds", k=2, if_=WHOLE), D(0, per="heroes_before", k=2)],
-     "Costs 1 less if 2 or more heroes are already in the Ordo. Even out your held stacks across the courses you hold. "
+     "Costs 1 less if 2 or more other heroes are already in the Ordo. Even out your held stacks across the courses you hold. "
      "Deal 2 per different course you hold. If you are Whole, deal 12 more. Deal 2 more per other hero who has acted "
-     "before this card this round.", arch=WH, cost_less={"per": "heroes", "k": 0.5, "max": 1},
+     "before this card this round.", arch=WH, cost_less={"per": "others", "k": 0.5, "max": 1},
      flavour="She weighed every course against the others. None was found wanting.",
      note="The Vessel holds a level palm over a foe and six inks press down on it with equal weight.",
-     up={"text": "Costs 1 less if 2 or more heroes are already in the Ordo. Even out your held stacks across the courses "
+     up={"text": "Costs 1 less if 2 or more other heroes are already in the Ordo. Even out your held stacks across the courses "
                  "you hold. Deal 3 per different course you hold. If you are Whole, deal 12 more. Deal 2 more per other "
                  "hero who has acted before this card this round.",
          "fx": [EVEN(), D(0, per="held_kinds", k=3), D(0, per="held_kinds", k=2, if_=WHOLE),
@@ -789,11 +789,6 @@ NEEDS = [
     "to the flask's target. Written as Dosed self-holds (ve_drink_the_dregs).",
     "budget.py prices TAKE and GIVE at 1 point per stack whatever the attribute, and 1 point for 'all' (n=0); the "
     "Vessel's numbers were set by hand where the guide under-prices them.",
-    "Interaction pass round 2: build_v3.py line 218 ORs a tuple with a set (('ordo', 'heroes', 'attacks') | QU), so "
-    "any module with a cost_less card crashes the build. ve_unclench and ve_the_weighing (and w_spire_midnight) were "
-    "checked with that one line fixed in memory; the fix is {'ordo', 'heroes', 'attacks'} | QU.",
-    "Interaction pass round 2: cost_less 'heroes' counts every hero already in the Ordo, the Vessel included, so "
-    "'other heroes already in the Ordo' cannot be written; Unclench and The Weighing say '2 or more heroes'.",
     "Interaction pass round 2: ve_pass_through relays Bear It to an ally, whose text reads the Vessel's held courses; "
     "on another hero it is a plain 4 Block. A relay token written for any hero would read cleaner.",
 ]
