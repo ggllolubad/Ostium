@@ -213,9 +213,9 @@ func show_hub() -> void:
 	cont.disabled = not Run.has_save()
 	if OS.is_debug_build():
 		_btn("Practice a single room", Vector2(1010, 808), Vector2(235, 46), _practice, null, "Development builds only.")
-		_btn("Theme: %s" % ("dark" if UiStyle.dark else "light"), Vector2(1255, 808), Vector2(235, 46), _toggle_theme)
+		_btn("Settings", Vector2(1255, 808), Vector2(235, 46), func(): SettingsPanel.open(screen))
 	else:
-		_btn("Theme: %s" % ("dark" if UiStyle.dark else "light"), Vector2(1010, 808), Vector2(480, 46), _toggle_theme)
+		_btn("Settings", Vector2(1010, 808), Vector2(480, 46), func(): SettingsPanel.open(screen))
 	_btn("Back to the garth", Vector2(1010, 864), Vector2(480, 44), func(): main._show_menu())
 	_btn("Debug: unlock all %s" % ("on" if Run.playtest_all() else "off"), Vector2(1010, 916), Vector2(480, 40), _toggle_playtest, null,
 		"Debug mode: every calling unlocked and every world's door open. Saved with your settings; turn it off to play the unlocks normally. Your real progress is untouched.")
@@ -447,11 +447,6 @@ func _toggle_playtest() -> void:
 	UiStyle.settings["playtest_all"] = not Run.playtest_all()
 	UiStyle.save_settings()
 	show_hub()
-
-func _toggle_theme() -> void:
-	UiStyle.apply_theme(not UiStyle.dark)
-	UiStyle.save_settings()
-	get_tree().reload_current_scene()
 
 func _begin_run() -> void:
 	var err := Abbey.start_descent(hub_obj, hub_world, int(Time.get_unix_time_from_system()) % 1000000)

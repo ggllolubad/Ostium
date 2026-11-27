@@ -31,7 +31,7 @@ static func load_settings() -> void:
 	var v := SaveIO.read_json(SaveIO.path(SETTINGS_FILE))
 	if not v.is_empty():
 		settings = v
-	apply_theme(settings.get("theme", "light") == "dark")
+	apply_theme(false)   # one look only: the light parchment theme (the dark option was removed 2026-11-26)
 
 static func save_settings() -> void:
 	SaveIO.write_json(SaveIO.path(SETTINGS_FILE), settings)

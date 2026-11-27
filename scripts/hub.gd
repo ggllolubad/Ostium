@@ -419,6 +419,7 @@ func show_title() -> void:
 	var items := [["Enter the abbey", _play]]
 	if Run.has_save():
 		items.push_front(["Continue the descent", _continue])
+	items.append(["Settings", func(): SettingsPanel.open(title_ui if title_ui != null else self)])
 	items.append(["Leave", func(): get_tree().quit()])
 	for it in items:
 		var b := ShopPanel.make_button(it[0], Vector2(620, y), Vector2(360, 64), it[1], 26)

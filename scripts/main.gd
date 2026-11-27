@@ -67,6 +67,7 @@ var hovered_card: UiCard = null
 
 func _ready() -> void:
 	UiStyle.load_settings()
+	SettingsPanel.apply_display()
 	theme = UiStyle.make_theme()
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build_static()
@@ -1342,6 +1343,12 @@ func _hint(t: String) -> void:
 
 func _toggle_log() -> void:
 	log_panel.visible = not log_panel.visible
+
+func _input(ev: InputEvent) -> void:
+	# F11 or Alt+Enter: windowed / borderless fullscreen, anywhere in the game
+	if ev is InputEventKey and ev.pressed and not ev.echo and (ev.keycode == KEY_F11 or (ev.keycode == KEY_ENTER and ev.alt_pressed)):
+		SettingsPanel.toggle_display()
+		get_viewport().set_input_as_handled()
 
 func _unhandled_input(ev: InputEvent) -> void:
 	if ev is InputEventKey and ev.pressed and not ev.echo and not s.is_empty() and overlay == null:
