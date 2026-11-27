@@ -243,6 +243,14 @@ func _effect_list(u: Dictionary) -> Array:
 		out.append(["s_block", "Guarded", -1, "Guarded%s: single-target attacks on this hero strike the guard instead." % ((" by " + String(g.name)) if not g.is_empty() else ""), UiStyle.INK])
 	if u.get("hollow", false):
 		out.append(["", "Hollow", -1, _status_tip("hollow", "Hollow", u), Color("6d5a8a")])
+	# the two Conjunctions that leave something behind without a status of their own
+	if int(u.get("cryo", 0)) > 0:
+		out.append(["", "Cryo-rot", int(u.cryo), "Cryo-rot\nFrost + Toxin\nMax HP -%d for this fight." % int(u.cryo), Data.ELEMENT_COLOR.frost])
+	var hz: Dictionary = main.s.get("hazards", {}).get(u.side, {})
+	var rk := Combat.rank_of(main.s, u)
+	if int(hz.get(rk, 0)) > 0:
+		var left := int(hz[rk])
+		out.append(["", "Toxic Pool", left, "Toxic Pool\nToxin + Water\nWhoever stands in this rank takes 1 Toxin at round end, %d round%s." % [left, "" if left == 1 else "s"], Data.ELEMENT_COLOR.toxin])
 	return out
 
 ## The hover text for a status chip: its name and count, where it came from (for a Conjunction's lasting mark),

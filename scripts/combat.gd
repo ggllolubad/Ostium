@@ -2019,6 +2019,7 @@ static func _reaction(s: Dictionary, src: Dictionary, t: Dictionary, a: String, 
 				t.st.freeze = 2 if t.side == "hero" else 1
 				t.st.freeze_bonus = p * 2
 		"frost+toxin":
+			t.cryo = int(t.get("cryo", 0)) + (t.max_hp - max(1, t.max_hp - p))   # shown on the unit as Cryo-rot
 			t.max_hp = max(1, t.max_hp - p)
 			t.hp = min(t.hp, t.max_hp)
 		"frost+void":
@@ -2194,8 +2195,13 @@ static func end_round(s: Dictionary) -> void:
 		var arr: Array = s.heroes if side == "hero" else s.enemies
 		var hz: Dictionary = s.hazards[side]
 		for r in hz.keys():
-			if hz[r] > 0 and r - 1 < arr.size():
-				_apply_element(s, {"side": "hazard", "st": {"focus": 0}}, arr[r - 1], "toxin", 1, "stable")
+			var occ: Dictionary = {}
+			for o in arr:   # the unit standing in rank r, counting wide foes' spans (the same ranks rank_of uses)
+				var r0 := rank_of(s, o)
+				if not o.dead and int(r) >= r0 and int(r) < r0 + int(o.get("span", 1)):
+					occ = o
+			if hz[r] > 0 and not occ.is_empty():
+				_apply_element(s, {"side": "hazard", "st": {"focus": 0}}, occ, "toxin", 1, "stable")
 			hz[r] -= 1
 			if hz[r] <= 0:
 				hz.erase(r)

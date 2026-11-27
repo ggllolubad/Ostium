@@ -84,6 +84,8 @@ func _initialize() -> void:
 			h[0].block = 9; h[0].st.bleed = 3; h[0].st.mark = 1; h[0].ward = 2
 			h[1].st.stun = 1; h[1].elements.frost = 2; h[1].st.might = 2
 			h[-1].st.regen = 3
+			h[2].cryo = 4
+			m.s.hazards.hero[2] = 3
 			for en in e:
 				en.elements.fire = 3; en.st.vulnerable = 2; en.st.hex = 4
 			e[0].st.thorns = 2; e[0].st.might = 1; e[0].block = 12; e[0].st.taunt = 1; e[0].elements.toxin = 5
