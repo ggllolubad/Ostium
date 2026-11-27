@@ -1,6 +1,6 @@
 # Ostium roadmap and to-do (from 2026-11-26)
 
-The running to-do list. Phases run in Cole's order. Each item is marked Cole or Claude, and [x] means done.
+The running to-do list. Phase order agreed 2026-11-26: card art, a quick display options pass, a card-locking balance pass, animations, sound, the full options menu, tutorial, final balance, Steam release. Each item is marked Cole or Claude, and [x] means done.
 Decisions still open are under "Open questions".
 
 ## 0. Playtest pipeline (in place)
@@ -21,31 +21,36 @@ Decisions still open are under "Open questions".
 - [ ] Card text tightening: 41 cards. Needs Cole's answers on dropping "Exhaust." from Rite cards and on the three new phrasings (Cole, then Claude)
 - [ ] Remaining flat UI pieces textured: hand plates, Ordo summary, intent tags, camp screen (Claude)
 
-## 2. Animations
+## 2. Display options (quick pass)
+- [ ] Fullscreen or windowed, resolution, UI scale, on the doors screen or the pause menu (Claude)
+
+## 3. Card-locking balance pass
+- [ ] Simulator pass against the 50% clear target; fix company F, the outlier at 17% (Claude)
+- [ ] Fold in Cole's and friends' playtest notes; cut or rework cards now, so no animation work is wasted (Cole, then Claude)
+- [ ] No dominant deck, no dead cards (redesign plan exit criteria); card list locked at the end
+
+## 4. Animations
 - [ ] Per-calling motion sets in Godot bone rigs: idle, attack, hit and cast exist in basic form; build per-card timing and effects (Claude)
 - [ ] Card effects: element impacts, block, buffs and debuffs, Conjunctions (Claude)
 - [ ] Enemy intents and abilities animated, rulers' signature moves (Claude)
 - [ ] The Elementalist's hand sign changes with attunement (Claude)
 
-## 3. Sound
+## 5. Sound
 - [ ] Sound effects for cards, hits, elements, UI, map and hub (sourcing plan to be agreed with Cole: library, commissioned or generated)
 - [ ] Music: hub, map, combat, rulers (same decision)
 
-## 4. Options menu
-- [ ] Display: fullscreen or windowed, resolution, UI scale (Claude)
+## 6. Full options menu
 - [ ] Audio: master, music and effects volume (Claude)
 - [ ] Gameplay: text speed, combat speed, Debug mode moved here (Claude)
 
-## 5. Tutorial
+## 7. Tutorial
 - [ ] First descent guidance: Ordo, vigour, Conjunctions, Swap, kit skills (Claude, with Cole's review of wording)
 - [ ] Hover help everywhere (keywords already in place)
 
-## 6. Balance pass
-- [ ] Simulator pass against the 50% clear target; fix company F, the outlier at 17% (Claude)
-- [ ] Fold in Cole's and friends' playtest notes (Cole, then Claude)
-- [ ] No dominant deck, no dead cards (redesign plan exit criteria)
+## 8. Final balance
+- [ ] A lighter tuning pass after animations, sound and tutorial, from fresh playtests (Cole, then Claude)
 
-## 7. Steam release
+## 9. Steam release
 - [ ] Steamworks account, app fee, App ID (Cole)
 - [ ] CI upload to Steam: beta branch per push, default branch on approval (Claude, after Cole adds credentials)
 - [ ] Steam Playtest for friends (removes the SmartScreen warning); Steam Cloud saves
@@ -55,4 +60,3 @@ Decisions still open are under "Open questions".
 ## Open questions
 - Card text: drop "Exhaust." from Rite cards? Approve "attuned Volatile", "each course you lack", "belt flask"?
 - Company F (Thornguard, Prismatic, Transmuter) clears 17%: leave or tune?
-- Claude's suggested order changes (see the 2026-11-26 chat): a first options pass now; a card-locking balance pass before animations.
