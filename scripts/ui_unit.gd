@@ -252,30 +252,29 @@ func _status_tip(k: String, nm: String, u: Dictionary) -> String:
 	var hero: bool = u.side == "hero"
 	var n := int(st.get(k, 0))
 	var rounds := func(x: int) -> String:
-		return "%d more round%s" % [x, "" if x == 1 else "s"]
+		return "%d round%s" % [x, "" if x == 1 else "s"]
 	var from := func(conj: String) -> String:
-		var pair := ""
 		for key in Data.REACTIONS:
 			if Data.REACTIONS[key].name == conj:
-				pair = " + ".join(Array(key.split("+")).map(func(e): return String(e).capitalize()))
-		return "Conjunction: %s (%s).\n" % [conj, pair]
+				var pair: String = " + ".join(Array(key.split("+")).map(func(e): return String(e).capitalize()))
+				return (pair if conj == nm else "%s: %s" % [conj, pair]) + "\n"
+		return ""
+	var bonus := int(st.get("freeze_bonus", 0))
 	match k:
 		"hollow":
-			return "Hollow\n" + from.call("Hollow Flame") + "Burn on this unit does not fade at the end of the round, and its damage ignores Block. Ends once the Burn is gone (cleansing Burn ends it)."
+			return "Hollow\n" + from.call("Hollow Flame") + "Burn won't fade and ignores Block."
 		"freeze":
-			if hero:
-				return "Frozen\n" + from.call("Freeze") + "Can play only kit skills and flasks, not hand cards, for %s. A physical hit shatters the ice for +%d damage and ends it." % [rounds.call(n), int(st.get("freeze_bonus", 0))]
-			return "Frozen\n" + from.call("Freeze") + "Skips its next action. A physical hit first shatters the ice for +%d damage and ends it." % int(st.get("freeze_bonus", 0))
+			return "Frozen\n" + from.call("Freeze") + ("Kit and flasks only, %s. Physical hit shatters: +%d." % [rounds.call(n), bonus] if hero else "Skips its next action. Physical hit shatters: +%d." % bonus)
 		"lockdown":
-			return "Lockdown\n" + from.call("Lockdown") + "This hero's cards resolve at the end of the Ordo, for %s." % rounds.call(n)
+			return "Lockdown\n" + from.call("Lockdown") + "Cards resolve last in the Ordo, %s." % rounds.call(n)
 		"neuro":
-			return "Neurotoxin\n" + from.call("Neurotoxin") + ("This hero's next card keeps only its first effect." if hero else "Its next action keeps only its first effect.")
+			return "Neurotoxin\n" + from.call("Neurotoxin") + "Next action: first effect only."
 		"silence":
-			return "Drowned\n" + from.call("Drown") + "Its next action is replaced by a Choked Blow: 3 damage, nothing else."
+			return "Drowned\n" + from.call("Drown") + "Next action is a 3-damage Choked Blow."
 		"blight":
-			return "Blight\n" + from.call("Blight") + ("Cannot be healed for %s." % rounds.call(n) if hero else "Cannot be healed or gain Block for %s." % rounds.call(n))
+			return "Blight\n" + from.call("Blight") + ("No healing, %s." % rounds.call(n) if hero else "No healing or Block, %s." % rounds.call(n))
 		"regen":
-			return "Regen %d\nHeals %d at the end of the round, then drops by 1." % [n, n]
+			return "Regen %d\nHeals %d at round end, then -1." % [n, n]
 		"anchor":
 			return "Anchored\n" + String(Data.KEYWORDS.get("Anchor", ""))
 	var head: String = nm + ("" if n <= 1 and k in ["stun", "taunt", "fortify"] else " %d" % n)
