@@ -205,18 +205,8 @@ func refresh(u: Dictionary, pred: Dictionary, s: Dictionary) -> void:
 			intent_panel.visible = false
 		else:
 			intent_panel.visible = true
-			var tgt := Combat.find(s, u.intent_target)
-			var tname: String = tgt.name if not tgt.is_empty() and it.target in ["front", "back"] else ""
 			var kind_col := {"attack": UiStyle.RED_D, "heal": UiStyle.GREEN, "debuff": UiStyle.VIOLET, "defend": UiStyle.BLUE}
-			var tail := ""
-			if tname != "":
-				tail = "→ " + tname
-			elif it.target == "all_heroes":
-				tail = "· all heroes"
-			elif it.target == "self":
-				tail = "· self"
-			elif not tgt.is_empty():
-				tail = "→ " + tgt.name.split(" ")[-1]
+			var tail: String = main.intent_tail(u)
 			intent_r.text = "[font_size=14]%s[color=#%s][b]%s[/b][/color]  [b]%s[/b] [i]%s[/i][/font_size]" % [UiStyle.icon_tag("i_" + str(it.kind), 20), kind_col.get(it.kind, UiStyle.INK).to_html(false), ["i", "ii", "iii", "iv"][min(order - 1, 3)], it.name, tail]
 			tooltip_text = "%s intends %s: %s" % [u.name, it.name, it.text]
 	if intent_panel != null:

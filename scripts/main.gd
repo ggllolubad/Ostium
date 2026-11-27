@@ -670,6 +670,44 @@ func energy_left() -> int:
 		used += a.cost
 	return s.energy - used
 
+## Who this foe's intent will hit once the planned Ordo has played out (Swaps, pushes, Guard and Taunt included).
+## During resolution, who it would hit right now.
+func predicted_victims(eid: int) -> Array:
+	var e := Combat.find(s, eid)
+	if e.is_empty():
+		return []
+	if not resolving and preview.has("victims") and preview.victims.has(eid):
+		var out := []
+		for id in preview.victims[eid]:
+			var u := Combat.find(s, id)
+			if not u.is_empty():
+				out.append(u)
+		return out
+	var v := Combat.victim_of(s, e)
+	return [] if v.is_empty() else [v]
+
+## The short "→ Name" tail for a foe's intent, from the prediction. Notes when the Ordo changed who it hits.
+func intent_tail(e: Dictionary) -> String:
+	var it := Combat.intent_of(e)
+	if it.is_empty():
+		return ""
+	match String(it.target):
+		"all_heroes": return "· all heroes"
+		"self": return "· self"
+		"all_allies": return "· all foes"
+	var vs := predicted_victims(e.id)
+	if vs.is_empty():
+		return ""
+	var names := []
+	for v in vs:
+		names.append(String(v.name).split(" ")[0] if v.side == "hero" else String(v.name).split(" ")[-1])
+	var tail := "→ " + ", ".join(names)
+	if vs.size() == 1 and vs[0].side == "hero":
+		var now := Combat.victim_of(s, e)
+		if not now.is_empty() and now.id != vs[0].id:
+			tail += " (moved in)"
+	return tail
+
 func refresh_all() -> void:
 	if s.is_empty():
 		return
@@ -777,18 +815,13 @@ func _rebuild_timeline() -> void:
 		if en.is_empty():
 			continue
 		var it := Combat.intent_of(en)
-		var tgt := Combat.find(s, en.intent_target)
-		var sub: String = en.name.split(" ")[-1]
-		if it.target in ["front", "back"] and not tgt.is_empty():
-			sub += " → " + tgt.name
-		elif it.target == "all_heroes":
-			sub += " · all heroes"
-		elif it.target == "ally_lowest" and not tgt.is_empty():
-			sub += " → " + tgt.name.split(" ")[-1]
+		var sub: String = en.name.split(" ")[-1] + " " + intent_tail(en)
 		var kind_col := {"attack": UiStyle.RED, "heal": UiStyle.GREEN, "debuff": UiStyle.VIOLET, "defend": UiStyle.BLUE}
 		var slot := UiSlot.new()
 		slot.setup(self, i, false, it.name, sub, _roman(i + 1), kind_col.get(it.kind, UiStyle.RED), UiStyle.RED_D, "", fw)
 		slot.tooltip_text = "%s: %s" % [it.name, it.text]
+		if String(it.get("target", "")) in Combat.RANK_TARGETS and not en.get("intent_lock", false):
+			slot.tooltip_text += "\nAims at a rank: it hits whoever stands there when it lands. Swap to change who."
 		timeline_enemy.add_child(slot)
 
 func _rebuild_party() -> void:
@@ -1336,7 +1369,10 @@ func highlight_slot(i: int, on: bool) -> void:
 			var qi := -100 - i
 			if qi < s.enemy_queue.size():
 				var e := Combat.find(s, s.enemy_queue[qi])
-				for id in [e.get("id", -1), e.get("intent_target", -1)]:
+				var ids := [e.get("id", -1)]
+				for v in predicted_victims(e.get("id", -1)):
+					ids.append(v.id)
+				for id in ids:
 					if unit_views.has(id):
 						unit_views[id].hovered = true
 	for id in unit_views:

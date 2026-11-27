@@ -58,7 +58,7 @@ static func _make_hero(s: Dictionary, key: String) -> Dictionary:
 static func _make_enemy(s: Dictionary, key: String) -> Dictionary:
 	var d: Dictionary = Data.ENEMIES[key]
 	var u := _blank_unit(s)
-	u.merge({"side": "enemy", "key": key, "name": d.name, "max_hp": d.hp, "hp": d.hp, "armor": d.armor, "intent": "", "intent_target": -1,
+	u.merge({"side": "enemy", "key": key, "name": d.name, "max_hp": d.hp, "hp": d.hp, "armor": d.armor, "intent": "", "intent_target": -1, "intent_lock": false,
 		"art": d.art, "personality": d.get("personality", "ai"), "last_intent": "", "span": int(d.get("span", 1)), "phase": 0, "ai_override": [],
 		"resist": d.get("resist", {}).duplicate(), "flags": d.get("flags", []).duplicate(), "used_once": {},
 		"postponed_last": false}, true)
@@ -329,10 +329,12 @@ static func choose_intents(s: Dictionary) -> void:
 	s.enemy_queue = q
 
 static func _intent_target(s: Dictionary, e: Dictionary, intent: Dictionary) -> int:
+	e.intent_lock = false
 	match intent.target:
 		"front":
 			for h in s.heroes:
 				if h.deaths_door and e.personality == "mindless":
+					e.intent_lock = true   # it has smelled blood: this one hero, wherever they stand
 					return h.id
 			return s.heroes[0].id if s.heroes.size() > 0 else -1
 		"back":
@@ -391,6 +393,33 @@ static func _intent_target(s: Dictionary, e: Dictionary, intent: Dictionary) -> 
 		"all_allies", "all_heroes", "front2", "back2":
 			return -1
 	return -1
+
+## Positional intents name a rank, not a hero: they strike whoever stands there when the blow lands, so Swap,
+## push and pull move heroes into or out of them. Every other single-target intent keeps the hero it chose.
+const RANK_TARGETS := ["front", "rank2", "rank3", "back"]
+
+static func rank_victim(s: Dictionary, target: String) -> Dictionary:
+	var live := []
+	for h in s.heroes:
+		if not h.dead:
+			live.append(h)
+	if live.is_empty():
+		return {}
+	match target:
+		"front": return live[0]
+		"rank2": return live[min(1, live.size() - 1)]
+		"rank3": return live[min(2, live.size() - 1)]
+		"back": return live[-1]
+	return {}
+
+## The hero (or foe, for ally intents) this enemy's intent would hit if it landed now, before Guard and Taunt.
+static func victim_of(s: Dictionary, e: Dictionary) -> Dictionary:
+	var it := intent_of(e)
+	if it.is_empty():
+		return {}
+	if String(it.get("target", "")) in RANK_TARGETS and not e.get("intent_lock", false):
+		return rank_victim(s, it.target)
+	return find(s, e.intent_target)
 
 static func _most_stressed(s: Dictionary) -> Dictionary:
 	var best: Dictionary = {}
@@ -552,11 +581,18 @@ static func simulate(s: Dictionary, plan: Array, include_enemies := true) -> Dic
 	var reasons := []
 	for a in ordered:
 		reasons.append(resolve_player_action(c, a))
+	var victims := {}
 	if include_enemies:
 		resolve_echoes(c)
 		for id in c.enemy_queue.duplicate():
+			var n0: int = c.events.size()
 			resolve_enemy_action(c, id)
-	return {"state": c, "reasons": reasons, "ordered": ordered}
+			for k in range(n0, c.events.size()):
+				var ev: Dictionary = c.events[k]
+				if ev.get("t", "") == "act" and ev.get("unit", -1) == id:
+					victims[id] = ev.get("targets", [])
+					break
+	return {"state": c, "reasons": reasons, "ordered": ordered, "victims": victims}
 
 ## Removes played cards from hands at commit; they go to discard or exhaust.
 static func commit_cards(s: Dictionary, plan: Array) -> void:
@@ -746,7 +782,7 @@ static func resolve_enemy_action(s: Dictionary, id: int) -> void:
 				t = e
 			targets = [t]
 		_:
-			var t := find(s, e.intent_target)
+			var t := victim_of(s, e)
 			if t.is_empty() or t.dead:
 				if s.heroes.is_empty():
 					return
@@ -1011,7 +1047,7 @@ static func strikes(s: Dictionary, e: Dictionary, h: Dictionary) -> bool:
 		"all_heroes": return true
 		"front2": return rank_of(s, h) <= 2
 		"back2": return rank_of(s, h) >= 3
-	var victim: Dictionary = find(s, e.intent_target)
+	var victim: Dictionary = victim_of(s, e)
 	if it.target in SINGLE_TARGETS:
 		for th in s.heroes:
 			if not th.dead and th.st.get("taunt", 0) > 0:

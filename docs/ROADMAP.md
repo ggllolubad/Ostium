@@ -26,6 +26,7 @@ Decisions still open are under "Open questions".
 
 ## 3. Card-locking balance pass
 - [ ] Simulator pass against the 50% clear target; fix company F, the outlier at 17% (Claude)
+- [ ] Re-measure after the 2026-11-27 targeting change: front, rank 2, rank 3 and back intents now hit whoever holds that rank when they land, so Swap can move heroes into or out of a blow (Claude)
 - [ ] Fold in Cole's and friends' playtest notes; cut or rework cards now, so no animation work is wasted (Cole, then Claude)
 - [ ] No dominant deck, no dead cards (redesign plan exit criteria); card list locked at the end
 

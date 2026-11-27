@@ -21,6 +21,7 @@ func _initialize() -> void:
 	_resume_logic()
 	_selling()
 	_resolve_cap()
+	_rank_targets()
 	await _resume_ui()
 	print("FAILS: %d" % fails)
 	quit(1 if fails > 0 else 0)
@@ -190,6 +191,39 @@ func _resume_logic() -> void:
 	Run.end_run()
 
 # ------------------------------------------------------------------ selling
+## Positional intents hit whoever holds the rank when they land; Swap in the Ordo changes who, and the preview says so.
+func _rank_targets() -> void:
+	_fresh()
+	ok(Abbey.start_descent("boss", "drowned", 4242) == "", "descent for the rank-target tests")
+	var setup := Run.combat_setup()
+	var found := false
+	for ei in Data.ENCOUNTERS.size():
+		var s := Combat.new_state_run(setup, Data.ENCOUNTERS[ei].enemies, 5)
+		Combat.start_round(s)
+		for e in s.enemies:
+			var ints: Dictionary = Data.ENEMIES[e.key].intents
+			for k in ints:
+				if String(ints[k].get("target", "")) == "front" and ints[k].kind == "attack" and s.heroes.size() >= 2:
+					e.intent = k
+					var first: Dictionary = s.heroes[0]
+					var second: Dictionary = s.heroes[1]
+					e.intent_target = first.id
+					e.intent_lock = false
+					s.enemy_queue = [e.id]
+					ok(Combat.victim_of(s, e).id == first.id, "a front intent aims at the hero in front")
+					s.heroes[0] = second
+					s.heroes[1] = first
+					ok(Combat.victim_of(s, e).id == second.id, "after a Swap the front intent aims at the new front hero")
+					var sim := Combat.simulate(s, [])
+					ok(sim.victims.get(e.id, []) == [second.id], "the preview predicts the hero who moved into the front")
+					e.intent_lock = true
+					ok(Combat.victim_of(s, e).id == first.id, "a locked intent (blood-scent) keeps its hero")
+					found = true
+					break
+			if found: break
+		if found: break
+	ok(found, "found a front attack intent to test")
+
 func _selling() -> void:
 	_fresh()
 	var m: Dictionary = Run.meta
