@@ -20,6 +20,8 @@ func _ready() -> void:
 
 # ================================================================== helpers
 func _screen(title := "", sub := "", bgp := "") -> Control:
+	if main != null and main.board != null:
+		main.board.visible = false   # the fight's HP plates draw on a high layer; never let them show through a screen
 	if bgp == "":
 		# inside a run, the screens sit on the current world's backdrop
 		bgp = "res://assets/art/hub/hub_bg.png"
@@ -334,7 +336,7 @@ func show_prepare() -> void:
 		cl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var rs := _lbl("walks for %s" % String(h.reason).to_lower(), Vector2(x, y + 212), Vector2(222, 24), 15, UiStyle.font_it, UiStyle.BROWN)
 		rs.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_icon_count("s_stress", "stress %d" % int(h.stress), Vector2(x + 30, y + 244), UiStyle.RED_D)
+		_icon_count("s_stress", "Stress %d" % int(h.stress), Vector2(x + 30, y + 244), UiStyle.RED_D)
 		var inj: Array = h.get("injuries", [])
 		if inj.is_empty():
 			_lbl("unhurt", Vector2(x + 126, y + 246), Vector2(90, 24), 15, UiStyle.font_it, UiStyle.GREEN)
@@ -376,6 +378,45 @@ func show_prepare() -> void:
 	_btn("Back to the garth", Vector2(1298, 790), Vector2(196, 44), func(): main._show_menu())
 	_toast(msg)
 	msg = ""
+
+## The writ layout shared by the commission, victory and spoils screens: the world's backdrop shaded, one parchment
+## sheet, a cartouche with the title in blackletter, an italic line beneath. Returns nothing; draw on `screen`.
+func _writ(title: String, sub: String, world := "") -> void:
+	var wk: String = world if world != "" else String(Run.r.get("world", hub_world)) if not Run.r.is_empty() else hub_world
+	var room: String = Data.WORLDS[wk].rooms[1]
+	var bgp := "res://assets/art/rooms/%s_far.webp" % room
+	if not ResourceLoader.exists(bgp):
+		bgp = "res://assets/art/rooms/%s_far.png" % room
+	_screen("", "", bgp)
+	var shade := ColorRect.new()
+	shade.color = Color(0.08, 0.05, 0.03, 0.55)
+	shade.size = size
+	screen.add_child(shade)
+	_tex("res://assets/art/map/sheet.png", Vector2(46, 22), Vector2(1508, 940))
+	_tex("res://assets/art/map/cartouche.png", Vector2(470, 40), Vector2(660, 94))
+	var t := _lbl(title, Vector2(470, 50), Vector2(660, 70), 40, UiStyle.font_bl, UiStyle.RED_D)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if sub != "":
+		var sl := _lbl(sub, Vector2(240, 136), Vector2(1120, 26), 17, UiStyle.font_it, UiStyle.BROWN)
+		sl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+## A textured bar (HP, stress) with its value written over it.
+func _tbar(pos: Vector2, w: float, frac: float, fill: String, text: String) -> void:
+	const BH := 26.0
+	_tex("res://assets/art/ui/tex/bar_track.png", pos, Vector2(w, BH))
+	if frac > 0.0:
+		var f := _tex("res://assets/art/ui/tex/%s.png" % fill, pos, Vector2(w * clamp(frac, 0.0, 1.0), BH))
+		f.stretch_mode = TextureRect.STRETCH_SCALE
+	_rule(Vector2(pos.x, pos.y), w, 1.5)
+	_rule(Vector2(pos.x, pos.y + BH - 1.5), w, 1.5)
+	_rule(Vector2(pos.x, pos.y), BH, 1.5, true)
+	_rule(Vector2(pos.x + w - 1.5, pos.y), BH, 1.5, true)
+	var l := _lbl(text, pos + Vector2(0, 1), Vector2(w, BH), 17, UiStyle.font_sc, UiStyle.HI)
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_color_override("font_outline_color", UiStyle.INK)
+	l.add_theme_constant_override("outline_size", 4)
 
 ## A texture laid on the current screen, scaled to the box.
 func _tex(path: String, pos: Vector2, sz: Vector2) -> TextureRect:
@@ -768,20 +809,55 @@ func after_fight(s: Dictionary) -> void:
 	var sum := Run.after_combat(s, n)
 	Run.r.resolving = ""
 	Run.save()
-	_screen("Victory" if sum.won else "The company is lost", n.get("room_name", ""))
-	var lines := []
-	if sum.won:
-		lines.append("+%d gold · +%d experience" % [sum.gold, sum.xp])
-	for t in sum.levels + sum.injuries:
-		lines.append(t)
-	for d in sum.deaths:
-		lines.append("[color=#9c3d2b]%s is dead.[/color]" % d)
-	_rich("[center]" + "\n".join(lines) + "[/center]", Vector2(300, 200), Vector2(1000, 300), 20)
+	var where: String = String(n.get("room_name", ""))
+	_writ("Victory" if sum.won else "The Company Is Lost", ("%s  \u00b7  " % where if where != "" else "") + "layer %d" % (Run.current_layer() + 1))
 	if sum.won and n.get("type", "") == "waypoint":
 		n.guarded = true
 		Run.r.pending.append({"kind": "waypoint"})   # the camp opens after the guardian's spoils
 		Run.save()
-	_btn("Onward", Vector2(660, 560), Vector2(280, 56), show_map)
+	# what the room paid: gold and experience as inked tallies
+	if sum.won:
+		_tex("res://assets/art/icons/gold.png", Vector2(600, 180), Vector2(54, 54))
+		_lbl("+%d gold" % sum.gold, Vector2(660, 190), Vector2(160, 36), 26, UiStyle.font_sc, UiStyle.INK)
+		_tex("res://assets/art/icons/ostia.png", Vector2(830, 180), Vector2(54, 54))
+		_lbl("+%d experience" % sum.xp, Vector2(890, 190), Vector2(220, 36), 26, UiStyle.font_sc, UiStyle.INK)
+	_rule(Vector2(110, 256), 1380, 1)
+	# the company as it stands after the room: portrait, HP, stress, and what changed
+	var heroes: Array = Run.r.heroes
+	var cols := heroes.size()
+	var cw: float = 1380.0 / max(1, cols)
+	var notes := {}
+	for t in sum.levels + sum.injuries:
+		for hi in heroes.size():
+			if String(t).begins_with(String(heroes[hi].name)):
+				notes[hi] = notes.get(hi, []) + [t]
+	for hi in cols:
+		var h: Dictionary = heroes[hi]
+		var x := 110.0 + hi * cw
+		var cx := x + cw / 2.0
+		var dead: bool = h.get("dead", false)
+		var por := _tex("res://assets/art/ui/portraits/%s_oval.png" % h.key, Vector2(cx - 100, 284), Vector2(200, 240))
+		if dead:
+			por.modulate = Color(0.45, 0.4, 0.38, 1.0)
+		var nm := _lbl(h.name, Vector2(x, 534), Vector2(cw, 34), 26, UiStyle.font_sc, UiStyle.INK)
+		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var cl := _lbl("%s \u00b7 level %d" % [Data.HEROES[h.key].name, int(h.level)], Vector2(x, 570), Vector2(cw, 24), 18, UiStyle.font_it, UiStyle.BROWN)
+		cl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if dead:
+			var dl := _lbl("Fallen", Vector2(x, 606), Vector2(cw, 40), 32, UiStyle.font_bl, UiStyle.RED_D)
+			dl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			continue
+		var bw: float = min(280.0, cw - 40.0)
+		_tbar(Vector2(cx - bw / 2, 608), bw, float(h.hp) / Run.max_hp(h), "bar_red", "HP %d / %d" % [int(h.hp), Run.max_hp(h)])
+		_tbar(Vector2(cx - bw / 2, 642), bw, float(h.stress) / 100.0, "bar_violet", "Stress %d" % int(h.stress))
+		var ny := 682.0
+		for t in notes.get(hi, []):
+			var nl := _lbl(String(t).get_slice(": ", 1) if ": " in String(t) else String(t), Vector2(x + 10, ny), Vector2(cw - 20, 44), 19, UiStyle.font_it, UiStyle.RED_D)
+			nl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			ny += max(24.0, nl.get_minimum_size().y + 4)
+	var go := _btn("Onward", Vector2(600, 828), Vector2(400, 70), show_map)
+	go.add_theme_font_size_override("font_size", 30)
+	UiStyle.red_button(go)
 
 # ================================================================== events
 func show_event(n: Dictionary) -> void:
@@ -1043,6 +1119,34 @@ func show_forge() -> void:
 	_btn("Back", Vector2(1300, 920), Vector2(240, 46), show_waypoint)
 
 # ================================================================== rewards queue
+## Spoils: the hero in their oval frame on the left, the offered cards large and centred, Take nothing beneath.
+func _spoils_pick(h: Dictionary, picks: Array, legendary: bool, take: Callable, skip: Callable) -> void:
+	_writ("A Legend" if legendary else "Spoils", ("The guardian falls. One legendary card for %s, or none." if legendary else "One card into %s's deck, or none.") % h.name)
+	_tex("res://assets/art/ui/portraits/%s_oval.png" % h.key, Vector2(115, 300), Vector2(200, 240))
+	var nm := _lbl(h.name, Vector2(80, 552), Vector2(270, 34), 24, UiStyle.font_sc, UiStyle.INK)
+	nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var cl := _lbl("%s \u00b7 level %d" % [Data.HEROES[h.key].name, int(h.level)], Vector2(80, 590), Vector2(270, 24), 18, UiStyle.font_it, UiStyle.BROWN)
+	cl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var dk := _lbl("%d cards in the deck" % h.deck.size(), Vector2(80, 618), Vector2(270, 24), 18, UiStyle.font_it, UiStyle.BROWN)
+	dk.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_rule(Vector2(370, 200), 680, 1, true)
+	var sc := 1.75
+	var cw: float = UiCard.W * sc
+	var gap := 48.0
+	var n := picks.size()
+	var x0 := 390.0 + (1110.0 - (n * cw + (n - 1) * gap)) / 2.0
+	for i in n:
+		var cid: String = picks[i]
+		var c: Dictionary = Data.CARDS[cid]
+		var x := x0 + i * (cw + gap)
+		var rar := String(c.get("rarity", "C"))
+		var tag := _lbl({"C": "common", "U": "uncommon", "R": "rare", "L": "legendary"}.get(rar, ""), Vector2(x, 196), Vector2(cw, 26), 19, UiStyle.font_sc, UiStyle.RED_D if rar in ["R", "L"] else UiStyle.BROWN)
+		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_card(cid, Vector2(x, 228), sc, func(): take.call(cid))
+	var nb := _btn("Take nothing", Vector2(1110, 838), Vector2(300, 56), skip)
+	nb.add_theme_font_size_override("font_size", 22)
+	_lbl("Click a card to take it into the deck.", Vector2(400, 852), Vector2(600, 30), 19, UiStyle.font_it, UiStyle.BROWN)
+
 func show_reward() -> void:
 	var p: Dictionary = Run.r.pending[0]
 	var next := func():
@@ -1055,12 +1159,8 @@ func show_reward() -> void:
 			if h.dead:
 				next.call()
 				return
-			_screen("Spoils · " + h.name, "Take one card into %s's deck, or none." % h.name)
 			var picks := Run.card_choices(h)
-			for i in picks.size():
-				var cid: String = picks[i]
-				_card(cid, Vector2(800 - picks.size() * 130 + i * 260, 200), 1.25, func(): h.deck.append(cid); next.call())
-			_btn("Take nothing", Vector2(660, 620), Vector2(280, 50), next)
+			_spoils_pick(h, picks, false, func(cid): h.deck.append(cid); next.call(), next)
 		"waypoint":
 			Run.r.pending.pop_front()
 			Run.save()
@@ -1070,12 +1170,8 @@ func show_reward() -> void:
 			if h.dead:
 				next.call()
 				return
-			_screen("A Legend · " + h.name, "The guardian falls. Take one legendary card into %s's deck, or none." % h.name)
 			var picks := Run.legendary_choices(h)
-			for i in picks.size():
-				var cid: String = picks[i]
-				_card(cid, Vector2(800 - picks.size() * 130 + i * 260, 200), 1.25, func(): h.deck.append(cid); next.call())
-			_btn("Take nothing", Vector2(660, 620), Vector2(280, 50), next)
+			_spoils_pick(h, picks, true, func(cid): h.deck.append(cid); next.call(), next)
 		"relic":
 			var rl := Run.relic_drop()
 			if rl == "" or Run.r.relics.size() >= Run.relic_cap():

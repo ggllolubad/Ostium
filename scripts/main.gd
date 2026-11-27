@@ -417,6 +417,8 @@ func _leave() -> void:
 ## Back to the abbey: the garth, with the company at the cross.
 func _show_menu() -> void:
 	resolving = false
+	if board != null:
+		board.visible = false
 	_clear_overlay()
 	run_mode = false
 	_ensure_run_ui()
@@ -601,6 +603,7 @@ func resume_run_fight(f: Dictionary) -> void:
 		_commit.call_deferred()
 
 func _begin_fight(e: Dictionary, fresh := true) -> void:
+	board.visible = true
 	if run_ui != null:
 		run_ui.visible = false
 	for v in unit_views.values():
@@ -1643,6 +1646,7 @@ func _show_result() -> void:
 	_clear_overlay()
 	overlay = Control.new()
 	overlay.size = Vector2(1600, 1000)
+	overlay.z_index = 40   # above the fight's HP plates
 	add_child(overlay)
 	var dim := ColorRect.new()
 	dim.color = UiStyle.DIM

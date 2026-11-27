@@ -22,7 +22,7 @@ func _initialize() -> void:
 		await process_frame
 		await process_frame
 		SaveIO.remove(Run.meta_path())
-	elif mode == "map" or mode == "map2" or mode == "camp" or mode == "sub" or mode == "prepare":
+	elif mode == "map" or mode == "map2" or mode == "camp" or mode == "sub" or mode == "prepare" or mode == "victory" or mode == "spoils" or mode == "legend":
 		m.hub.visible = false
 		m.run_ui.visible = true
 		m.run_ui.hub_world = OS.get_environment("WORLD") if OS.get_environment("WORLD") != "" else "drowned"
@@ -57,6 +57,18 @@ func _initialize() -> void:
 			m.run_ui.show_waypoint()
 		if mode == "sub":
 			Run.r.pending.append({"kind": "subclass", "hero": 0})
+			m.run_ui.show_reward()
+		if mode == "victory":
+			var hs := []
+			for i in Run.r.heroes.size():
+				if i == 2:
+					continue   # one falls, to show the dead column
+				var h: Dictionary = Run.r.heroes[i]
+				hs.append({"run_index": i, "hp": Run.max_hp(h) - 7 * (i + 1), "stress": 20 + 15 * i, "resolve": 0, "discard": [], "draw": [], "hand": [], "exhaust": [], "deaths_door": i == 1, "id": "h%d" % i})
+			Run.move_to(Run.next_nodes()[0])
+			m.run_ui.after_fight({"outcome": "victory", "heroes": hs, "enemies": [], "belt": [], "round": 4, "log": []})
+		if mode == "spoils" or mode == "legend":
+			Run.r.pending.append({"kind": "legendary" if mode == "legend" else "card", "hero": 0})
 			m.run_ui.show_reward()
 	elif mode != "menu":
 		m._start_encounter(int(OS.get_environment("ENC")) if OS.get_environment("ENC") != "" else 3)
@@ -97,6 +109,11 @@ func _initialize() -> void:
 					await process_frame
 			if mode == "target":
 				m.on_card_clicked(h[1].id, 0)
+		if mode == "leave":
+			m._leave()
+			m.open_church()
+			for k in 4:
+				await process_frame
 		if mode == "resolve":
 			m.on_card_clicked(m.s.heroes[0].id, 0)
 			if not m.targeting.is_empty():
