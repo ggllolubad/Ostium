@@ -7,7 +7,7 @@ config/name="Ostium"
 config/description="Ostium"
 config/version="0.10.0"
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.3", "Mobile")
+config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/icon.png"
 
 [display]
@@ -24,7 +24,7 @@ window/stretch/aspect="keep"
 
 rendering_device/fallback_to_opengl3=true
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="forward_plus"
 textures/canvas_textures/default_texture_filter=3
 anti_aliasing/quality/msaa_2d=2
 renderer/rendering_method.mobile="mobile"
