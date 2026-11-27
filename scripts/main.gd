@@ -815,7 +815,8 @@ func _rebuild_hand() -> void:
 	var colw := (x1 - x0) / n_h
 	for hi in n_h:
 		var h: Dictionary = s.heroes[hi]
-		var cx := x0 + colw * (hi + 0.5)
+		# hands sit under their heroes: rank I stands rightmost on the board, so its hand is rightmost too
+		var cx := x0 + colw * (n_h - 1 - hi + 0.5)
 		_headshot(h, hi, Vector2(cx - 112, ROW_Y))
 		# kit skill and Swap beside the head
 		var ky := ROW_Y
