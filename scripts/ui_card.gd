@@ -42,7 +42,7 @@ func setup(m: Node, hid: int, idx: int, cid: String) -> void:
 	sb.shadow_size = 1
 	add_theme_stylebox_override("panel", sb)
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	tooltip_text = UiStyle.keyword_tip(c)
+	# no card-wide tooltip: a keyword's definition shows only while that keyword is hovered (_kw_on)
 	# inner colour rule
 	var rule := Panel.new()
 	var rsb := StyleBoxFlat.new()
@@ -177,7 +177,7 @@ func _kw_on(meta: Variant) -> void:
 	if d == "":
 		return
 	_kw_tip = PanelContainer.new()
-	_kw_tip.add_theme_stylebox_override("panel", UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 2))
+	_kw_tip.add_theme_stylebox_override("panel", UiStyle.tex_box("btn_parch", 14, Vector2(12, 8)))
 	_kw_tip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var r := UiStyle.rich(14)
 	r.text = "[b]%s[/b]: %s" % [k, d]
