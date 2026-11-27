@@ -50,10 +50,14 @@ Decisions still open are under "Open questions".
 ## 8. Final balance
 - [ ] A lighter tuning pass after animations, sound and tutorial, from fresh playtests (Cole, then Claude)
 
-## 9. Steam release
+## 9. Release decision (later, once the game is finished)
+- [ ] Decide whether to sell it at all: market check (comparable games, wishlists or interest from a free playtest), price, effort to launch. Until then, playtests go through the public GitHub link (Cole and Claude)
+- [ ] Only if selling: business setup (individual or LLC, accountant check), then the Steam steps below
+
+## 10. Steam release (only if the decision above is yes)
 - [ ] Steamworks account, app fee, App ID (Cole)
 - [ ] CI upload to Steam: beta branch per push, default branch on approval (Claude, after Cole adds credentials)
-- [ ] Steam Playtest for friends (removes the SmartScreen warning); Steam Cloud saves
+- [ ] Steam Playtest (removes the SmartScreen warning); Steam Cloud saves
 - [ ] Store page: capsule art, screenshots, trailer, description; live as Coming Soon at least 2 weeks before release
 - [ ] Optional code signing (Azure Artifact Signing, about $10 a month) for copies downloaded outside Steam
 
