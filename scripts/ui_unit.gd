@@ -6,6 +6,7 @@ const BAR_GREEN := preload("res://assets/art/ui/tex/bar_green.png")
 const BAR_VIOLET := preload("res://assets/art/ui/tex/bar_violet.png")
 const BAR_BLUE := preload("res://assets/art/ui/tex/bar_blue.png")
 static var TAB_BOX: StyleBoxTexture
+var plate: Control
 ## One hero or enemy on the field: sprite, intent banner (enemies), name, HP bar with preview, statuses.
 
 var FEET := 0.966
@@ -136,6 +137,13 @@ func _setup_bone(u: Dictionary, key: String) -> void:
 
 func _setup_info(u: Dictionary) -> void:
 	set_process(true)
+	# the plate and its text sit above the room's foreground layer, which otherwise cuts across them
+	plate = Control.new()
+	plate.size = size
+	plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	plate.z_index = 10
+	plate.draw.connect(_draw_plate)
+	add_child(plate)
 	info = VBoxContainer.new()
 	info.position = Vector2(0, sprite_size.y * FEET + 8)
 	info.size = Vector2(size.x, 100)
@@ -143,6 +151,7 @@ func _setup_info(u: Dictionary) -> void:
 	info.scale = Vector2(0.84, 0.84)   # the board is drawn at 1.2: keep the plates compact over the floor
 	info.pivot_offset = Vector2(info.size.x / 2, 0)
 	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.z_index = 11
 	add_child(info)
 	name_l = UiStyle.label(u.name, 17, UiStyle.font_sc)
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -266,45 +275,52 @@ func _draw() -> void:
 			var a := TAU * i / 48.0
 			pts.append(Vector2(cx + cos(a) * sprite_size.x * 0.38, fy + sin(a) * 12))
 		draw_polyline(pts, col, 3.0 if target_mode == 1 else 2.5)
+	# the plate (HP, block, stress) draws on its own child above the room's foreground layer
+	if plate != null:
+		plate.queue_redraw()
+
+func _draw_plate() -> void:
+	var fy := feet_y()
+	var cx := size.x / 2
 	# hp bar on a parchment tablet so it reads over the floor
 	var w := size.x * 0.78
 	var tab := Rect2(cx - w / 2 - 18, fy + 2, w + 36, 106)
 	if TAB_BOX == null:
 		TAB_BOX = UiStyle.tex_box("btn_parch")
-	draw_style_box(TAB_BOX, tab)
+	plate.draw_style_box(TAB_BOX, tab)
 	var r := Rect2(cx - w / 2, fy + 30, w, 14)
-	draw_texture_rect(BAR_TRACK, r, false)
+	plate.draw_texture_rect(BAR_TRACK, r, false)
 	var frac: float = clamp(float(hp) / max(1, max_hp), 0.0, 1.0)
 	var fill: Texture2D = BAR_RED if side == "hero" else BAR_GREEN
 	if frac > 0.0:
-		draw_texture_rect_region(fill, Rect2(r.position, Vector2(r.size.x * frac, r.size.y)), Rect2(0, 0, fill.get_width() * frac, fill.get_height()))
+		plate.draw_texture_rect_region(fill, Rect2(r.position, Vector2(r.size.x * frac, r.size.y)), Rect2(0, 0, fill.get_width() * frac, fill.get_height()))
 	if pred_hp >= 0 and pred_hp < hp:
 		var pf: float = clamp(float(pred_hp) / max(1, max_hp), 0.0, 1.0)
 		var lost := Rect2(r.position + Vector2(r.size.x * pf, 0), Vector2(r.size.x * (frac - pf), r.size.y))
-		draw_rect(lost, Color(0.17, 0.11, 0.07, 0.55))
+		plate.draw_rect(lost, Color(0.17, 0.11, 0.07, 0.55))
 		for x in range(int(lost.position.x), int(lost.end.x), 5):
-			draw_line(Vector2(x, lost.position.y), Vector2(x + 6, lost.end.y), UiStyle.HI, 1.0)
-	draw_rect(r, UiStyle.INK, false, 2.0)
+			plate.draw_line(Vector2(x, lost.position.y), Vector2(x + 6, lost.end.y), UiStyle.HI, 1.0)
+	plate.draw_rect(r, UiStyle.INK, false, 2.0)
 	var f := UiStyle.font_sc
 	var txt := "%d / %d" % [hp, max_hp]
 	if dd:
 		txt = "DEATH'S DOOR · grit %d" % grit
 	if pred_hp >= 0 and pred_hp != hp:
 		txt += "  →  %s" % (str(pred_hp) if pred_hp > 0 else "✝")
-	draw_string(f, Vector2(r.position.x, r.position.y - 2 - 0), "", HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
-	draw_string(f, Vector2(cx - 120, r.end.y + 15), txt, HORIZONTAL_ALIGNMENT_CENTER, 240, 15, UiStyle.RED_D if (pred_hp >= 0 and pred_hp < hp) or dd else UiStyle.INK)
+	plate.draw_string(f, Vector2(r.position.x, r.position.y - 2 - 0), "", HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
+	plate.draw_string(f, Vector2(cx - 120, r.end.y + 15), txt, HORIZONTAL_ALIGNMENT_CENTER, 240, 15, UiStyle.RED_D if (pred_hp >= 0 and pred_hp < hp) or dd else UiStyle.INK)
 	if block > 0:
 		var b := Rect2(r.position.x - 30, r.position.y - 6, 26, 26)
-		draw_texture_rect(BAR_BLUE, b, false)
-		draw_rect(b, UiStyle.INK, false, 2.0)
-		draw_string(f, Vector2(b.position.x, b.position.y + 19), str(block), HORIZONTAL_ALIGNMENT_CENTER, 26, 15, UiStyle.INK)
+		plate.draw_texture_rect(BAR_BLUE, b, false)
+		plate.draw_rect(b, UiStyle.INK, false, 2.0)
+		plate.draw_string(f, Vector2(b.position.x, b.position.y + 19), str(block), HORIZONTAL_ALIGNMENT_CENTER, 26, 15, UiStyle.INK)
 	if side == "hero":
 		var sr := Rect2(cx - w / 2, r.end.y + 20, w, 5)
-		draw_texture_rect(BAR_TRACK, sr, false)
+		plate.draw_texture_rect(BAR_TRACK, sr, false)
 		var sf: float = clamp(stress / 100.0, 0.0, 1.0)
 		if sf > 0.0:
-			draw_texture_rect_region(BAR_VIOLET, Rect2(sr.position, Vector2(sr.size.x * sf, 5)), Rect2(0, 0, BAR_VIOLET.get_width() * sf, BAR_VIOLET.get_height()))
-		draw_rect(sr, UiStyle.INK, false, 1.0)
+			plate.draw_texture_rect_region(BAR_VIOLET, Rect2(sr.position, Vector2(sr.size.x * sf, 5)), Rect2(0, 0, BAR_VIOLET.get_width() * sf, BAR_VIOLET.get_height()))
+		plate.draw_rect(sr, UiStyle.INK, false, 1.0)
 
 func _gui_input(ev: InputEvent) -> void:
 	if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_LEFT:
