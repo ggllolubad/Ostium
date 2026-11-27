@@ -30,8 +30,8 @@ const MAX_RISE := 400.0   # display px a figure may stand above its feet
 var info: VBoxContainer
 var name_l: Label
 var status_r: RichTextLabel
-var intent_panel: PanelContainer
-var intent_r: RichTextLabel
+var effects: Control
+var _fx_sig := ""
 var hp := 0
 var max_hp := 1
 var pred_hp := -1
@@ -164,21 +164,11 @@ func _setup_info(u: Dictionary) -> void:
 	status_r.custom_minimum_size = Vector2(size.x, 20)
 	status_r.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info.add_child(status_r)
-	if side == "enemy":
-		intent_panel = PanelContainer.new()
-		var sb := UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 2)
-		sb.shadow_color = UiStyle.INK
-		sb.shadow_offset = Vector2(3, 3)
-		sb.shadow_size = 1
-		intent_panel.add_theme_stylebox_override("panel", sb)
-		intent_r = UiStyle.rich(14)
-		intent_r.custom_minimum_size = Vector2(196, 0)
-		intent_r.autowrap_mode = TextServer.AUTOWRAP_OFF
-		intent_r.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		intent_panel.add_child(intent_r)
-		intent_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		intent_panel.position = Vector2((size.x - 208) / 2, -42)
-		add_child(intent_panel)
+	# active effects ride above the figure's head as icon chips; the plate keeps what the unit is (armor, resistances)
+	effects = Control.new()
+	effects.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	effects.z_index = 11
+	add_child(effects)
 
 func feet_y() -> float:
 	return sprite_size.y * FEET
@@ -198,47 +188,18 @@ func refresh(u: Dictionary, pred: Dictionary, s: Dictionary) -> void:
 	elif main.preview_has_died(unit_id):
 		pred_hp = 0
 	status_r.text = "[center]" + _status_text(u) + "[/center]"
-	if side == "enemy" and intent_r != null:
+	_build_effects(_effect_list(u))
+	if side == "enemy":
 		var it := Combat.intent_of(u)
-		var order: int = s.enemy_queue.find(u.id) + 1
-		if it.is_empty() or order == 0:
-			intent_panel.visible = false
-		else:
-			intent_panel.visible = true
-			var kind_col := {"attack": UiStyle.RED_D, "heal": UiStyle.GREEN, "debuff": UiStyle.VIOLET, "defend": UiStyle.BLUE}
-			var tail: String = main.intent_tail(u)
-			intent_r.text = "[font_size=14]%s[color=#%s][b]%s[/b][/color]  [b]%s[/b] [i]%s[/i][/font_size]" % [UiStyle.icon_tag("i_" + str(it.kind), 20), kind_col.get(it.kind, UiStyle.INK).to_html(false), ["i", "ii", "iii", "iv"][min(order - 1, 3)], it.name, tail]
-			tooltip_text = "%s intends %s: %s" % [u.name, it.name, it.text]
-	if intent_panel != null:
-		intent_panel.position.y = max(-42.0, 100.0 - position.y)
+		tooltip_text = ("%s intends %s: %s" % [u.name, it.name, it.text]) if not it.is_empty() else u.name
 	queue_redraw()
 
 func _status_text(u: Dictionary) -> String:
+	## What the unit is, not what is on it: Armor, resistances and weaknesses, the Elementalist's attunement.
+	## Everything that comes and goes (Block, Ward, element stacks, statuses) is an icon above the head.
 	var parts := []
-	if u.block > 0:
-		parts.append(UiStyle.icon_tag("s_block", 18) + "[color=#3f6fa0]Block %d[/color]" % u.block)
 	if u.armor > 0:
 		parts.append(UiStyle.icon_tag("s_armor", 18) + "Armor %d" % u.armor)
-	if u.ward > 0:
-		parts.append(UiStyle.icon_tag("s_ward", 18) + "[color=#6d5a8a]Ward %d[/color]" % u.ward)
-	for e in Data.ELEMENTS:
-		if u.elements[e] > 0:
-			parts.append(UiStyle.icon_tag("e_" + e, 18) + "[color=#%s]%s %d[/color]" % [Data.ELEMENT_COLOR[e].to_html(false), Data.ELEMENT_STATUS[e], u.elements[e]])
-	var st: Dictionary = u.st
-	for k in ["bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "thorns", "dodge", "regen", "hex", "doom", "taunt", "fortify", "anchor", "freeze", "neuro", "silence", "blight", "lockdown"]:
-		if st.get(k, 0) > 0:
-			var nm: String = {"neuro": "Neurotoxin", "freeze": "Frozen", "silence": "Drowned", "anchor": "Anchored"}.get(k, k.capitalize())
-			var col: String = {"hex": "#6d5a8a", "doom": "#4a3a5a", "bleed": "#9c3d2b", "regen": "#62804f", "thorns": "#6f5036"}.get(k, "")
-			var txt := nm + ("" if k in ["stun", "taunt", "freeze", "neuro", "silence", "lockdown", "anchor", "fortify"] else " %d" % st[k])
-			parts.append(UiStyle.icon_tag("s_" + k, 18) + (("[color=%s]%s[/color]" % [col, txt]) if col != "" else txt))
-	if u.get("omen", 0) > 0:
-		parts.append("Omen %d" % u.omen)
-	if u.get("postponed", false):
-		parts.append("[color=#6d5a8a]Postponed[/color]")
-	if u.guarded_by != -1:
-		parts.append("Guarded")
-	if u.get("hollow", false):
-		parts.append("[color=#6d5a8a]Hollow[/color]")
 	var rs: Dictionary = u.get("resist", {})
 	if not rs.is_empty():
 		var groups := {"immune": [], "resist": [], "weak": []}
@@ -253,6 +214,119 @@ func _status_text(u: Dictionary) -> String:
 		var e: String = Data.ELEMENTS[u.attuned]
 		parts.append("[color=#%s]attuned: %s[/color]" % [Data.ELEMENT_COLOR[e].to_html(false), e])
 	return " · ".join(parts)
+
+## Active effects as [icon id or "", label, number (-1 for none), tooltip, colour].
+func _effect_list(u: Dictionary) -> Array:
+	var out := []
+	var tip := func(k: String, extra := "") -> String:
+		return k + (": " + String(Data.KEYWORDS[k]) if Data.KEYWORDS.has(k) else "") + extra
+	# Block is already the blue tally on the HP bar
+	if u.ward > 0:
+		out.append(["s_ward", "Ward", u.ward, tip.call("Ward"), Color("6d5a8a")])
+	for e in Data.ELEMENTS:
+		if u.elements[e] > 0:
+			var nm: String = Data.ELEMENT_STATUS[e]
+			out.append(["e_" + e, nm, u.elements[e], tip.call(nm, " (%s)" % e.capitalize()), Data.ELEMENT_COLOR[e]])
+	var st: Dictionary = u.st
+	const FLAGS := ["stun", "taunt", "freeze", "neuro", "silence", "lockdown", "anchor", "fortify"]
+	for k in ["bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "thorns", "dodge", "regen", "hex", "doom", "taunt", "fortify", "anchor", "freeze", "neuro", "silence", "blight", "lockdown"]:
+		if st.get(k, 0) > 0:
+			var nm: String = {"neuro": "Neurotoxin", "freeze": "Frozen", "silence": "Drowned", "anchor": "Anchored"}.get(k, k.capitalize())
+			var col: Color = {"hex": Color("6d5a8a"), "doom": Color("4a3a5a"), "bleed": Color("9c3d2b"), "regen": Color("62804f"), "thorns": Color("6f5036")}.get(k, UiStyle.INK)
+			out.append(["s_" + k, nm, -1 if k in FLAGS else int(st[k]), tip.call(nm), col])
+	if u.get("omen", 0) > 0:
+		out.append(["", "Omen", u.omen, tip.call("Omen"), Color("6d5a8a")])
+	if u.get("postponed", false):
+		out.append(["", "Postponed", -1, "Postponed: it acts later.", Color("6d5a8a")])
+	if u.guarded_by != -1:
+		var g := Combat.find(main.s, u.guarded_by)
+		out.append(["s_block", "Guarded", -1, "Guarded%s: single-target attacks on this hero strike the guard instead." % ((" by " + String(g.name)) if not g.is_empty() else ""), UiStyle.INK])
+	if u.get("hollow", false):
+		out.append(["", "Hollow", -1, tip.call("Hollow"), Color("6d5a8a")])
+	return out
+
+## Lays the effect chips out above the head: centred rows as wide as the figure, wrapping upward, kept below the Ordo.
+func _build_effects(list: Array) -> void:
+	var sig := JSON.stringify(list.map(func(x): return [x[0], x[1], x[2]]))
+	if sig == _fx_sig:
+		_place_effects()
+		return
+	_fx_sig = sig
+	for c in effects.get_children():
+		effects.remove_child(c)
+		c.queue_free()
+	if list.is_empty():
+		return
+	var chips := []
+	for x in list:
+		var tex: Texture2D = UiStyle.icon(x[0]) if x[0] != "" else null
+		var chip: Control
+		if tex != null:
+			# an icon on a small parchment tab, its stack count in the corner like a die's pip
+			chip = Panel.new()
+			chip.add_theme_stylebox_override("panel", UiStyle.tex_box("btn_parch", 6, Vector2(0, 0)))
+			chip.custom_minimum_size = Vector2(38, 38)
+			var tr := TextureRect.new()
+			tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE   # before the size, or the texture's own size wins
+			tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			tr.texture = tex
+			tr.position = Vector2(4, 4)
+			tr.size = Vector2(30, 30)
+			tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			chip.add_child(tr)
+			if int(x[2]) >= 0:
+				var l := UiStyle.label(str(x[2]), 21, UiStyle.font_sc, UiStyle.HI)
+				l.add_theme_color_override("font_outline_color", x[4] if x[4] != UiStyle.INK else UiStyle.INK)
+				l.add_theme_constant_override("outline_size", 6)
+				l.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+				l.position = Vector2(8, 16)
+				l.size = Vector2(34, 26)
+				l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				chip.add_child(l)
+		else:
+			chip = PanelContainer.new()
+			chip.add_theme_stylebox_override("panel", UiStyle.tex_box("btn_parch", 6, Vector2(6, 2)))
+			var l := UiStyle.label(String(x[1]) + ((" %d" % int(x[2])) if int(x[2]) >= 0 else ""), 15, UiStyle.font_sc, x[4])
+			l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			chip.custom_minimum_size = Vector2(0, 38)
+			chip.add_child(l)
+		chip.tooltip_text = x[3]
+		chip.mouse_filter = Control.MOUSE_FILTER_PASS
+		effects.add_child(chip)
+		chips.append(chip)
+	_place_effects()
+
+func _place_effects() -> void:
+	var chips := effects.get_children()
+	if chips.is_empty():
+		return
+	var maxw: float = max(130.0, room - 6.0 if room > 0.0 else sprite_size.x)
+	var gap := 3.0
+	var rows := [[]]
+	var rw := 0.0
+	for c in chips:
+		var w: float = c.get_combined_minimum_size().x
+		if not rows[-1].is_empty() and rw + gap + w > maxw:
+			rows.append([])
+			rw = 0.0
+		rows[-1].append(c)
+		rw += (gap if rw > 0.0 else 0.0) + w
+	var rh := 38.0
+	var top: float = -6.0 - rows.size() * (rh + 2.0)
+	top = max(top, 104.0 - position.y)   # never up into the Ordo strip, however tall the figure
+	var cx := size.x / 2.0
+	for ri in rows.size():
+		var tw := 0.0
+		for c in rows[ri]:
+			tw += c.get_combined_minimum_size().x
+		tw += gap * (rows[ri].size() - 1)
+		var x := cx - tw / 2.0
+		for c in rows[ri]:
+			var w: float = c.get_combined_minimum_size().x
+			c.position = Vector2(x, top + ri * (rh + 2.0))
+			c.size = Vector2(w, rh)
+			x += w + gap
 
 func _draw() -> void:
 	var fy := feet_y()

@@ -77,6 +77,19 @@ func _initialize() -> void:
 		m.hub.visible = false
 		for k in 20:
 			await process_frame
+		if mode == "effects":
+			# a spread of active effects on heroes and foes, to check the chips above the heads
+			var h = m.s.heroes
+			var e = m.s.enemies
+			h[0].block = 9; h[0].st.bleed = 3; h[0].st.mark = 1; h[0].ward = 2
+			h[1].st.stun = 1; h[1].elements.frost = 2; h[1].st.might = 2
+			h[-1].st.regen = 3
+			for en in e:
+				en.elements.fire = 3; en.st.vulnerable = 2; en.st.hex = 4
+			e[0].st.thorns = 2; e[0].st.might = 1; e[0].block = 12; e[0].st.taunt = 1; e[0].elements.toxin = 5
+			m.refresh_all()
+			for k in 6:
+				await process_frame
 		if mode == "combat" or mode == "target" or mode == "detail" or mode == "ordo" or mode == "ordolong":
 			var h = m.s.heroes
 			var e = m.s.enemies
