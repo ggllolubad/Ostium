@@ -15,7 +15,7 @@ const REACTIONS := {
 	"fire+lightning": {"name": "Plasma", "desc": "Heavy damage; splashes Burn to adjacent ranks."},
 	"fire+water": {"name": "Scald", "desc": "Damage and Vulnerable for 1 round."},
 	"fire+toxin": {"name": "Combust", "desc": "Toxin detonates as damage."},
-	"fire+void": {"name": "Hollow Flame", "desc": "Burn becomes unremovable and ignores Ward."},
+	"fire+void": {"name": "Hollow Flame", "desc": "Adds Burn and leaves the target Hollow: its Burn stops fading and ignores Block."},
 	"frost+lightning": {"name": "Lockdown", "desc": "Target's action is delayed to the end of the queue."},
 	"frost+water": {"name": "Freeze", "desc": "Target skips its next action. Next physical hit shatters for bonus damage."},
 	"frost+toxin": {"name": "Cryo-rot", "desc": "Max HP reduced for the fight."},

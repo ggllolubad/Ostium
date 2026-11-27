@@ -219,21 +219,21 @@ func _status_text(u: Dictionary) -> String:
 func _effect_list(u: Dictionary) -> Array:
 	var out := []
 	var tip := func(k: String, extra := "") -> String:
-		return k + (": " + String(Data.KEYWORDS[k]) if Data.KEYWORDS.has(k) else "") + extra
+		return k + extra + (": " + String(Data.KEYWORDS[k]) if Data.KEYWORDS.has(k) else "")
 	# Block is already the blue tally on the HP bar
 	if u.ward > 0:
-		out.append(["s_ward", "Ward", u.ward, tip.call("Ward"), Color("6d5a8a")])
+		out.append(["s_ward", "Ward", u.ward, "Ward %d\n%s" % [u.ward, Data.KEYWORDS.get("Ward", "")], Color("6d5a8a")])
 	for e in Data.ELEMENTS:
 		if u.elements[e] > 0:
 			var nm: String = Data.ELEMENT_STATUS[e]
-			out.append(["e_" + e, nm, u.elements[e], tip.call(nm, " (%s)" % e.capitalize()), Data.ELEMENT_COLOR[e]])
+			out.append(["e_" + e, nm, u.elements[e], "%s %d (%s)\n%s" % [nm, u.elements[e], e.capitalize(), Data.KEYWORDS.get(nm, "")], Data.ELEMENT_COLOR[e]])
 	var st: Dictionary = u.st
 	const FLAGS := ["stun", "taunt", "freeze", "neuro", "silence", "lockdown", "anchor", "fortify"]
 	for k in ["bleed", "stun", "mark", "vulnerable", "might", "focus", "momentum", "riposte", "thorns", "dodge", "regen", "hex", "doom", "taunt", "fortify", "anchor", "freeze", "neuro", "silence", "blight", "lockdown"]:
 		if st.get(k, 0) > 0:
 			var nm: String = {"neuro": "Neurotoxin", "freeze": "Frozen", "silence": "Drowned", "anchor": "Anchored"}.get(k, k.capitalize())
 			var col: Color = {"hex": Color("6d5a8a"), "doom": Color("4a3a5a"), "bleed": Color("9c3d2b"), "regen": Color("62804f"), "thorns": Color("6f5036")}.get(k, UiStyle.INK)
-			out.append(["s_" + k, nm, -1 if k in FLAGS else int(st[k]), tip.call(nm), col])
+			out.append(["s_" + k, nm, -1 if k in FLAGS else int(st[k]), _status_tip(k, nm, u), col])
 	if u.get("omen", 0) > 0:
 		out.append(["", "Omen", u.omen, tip.call("Omen"), Color("6d5a8a")])
 	if u.get("postponed", false):
@@ -242,8 +242,44 @@ func _effect_list(u: Dictionary) -> Array:
 		var g := Combat.find(main.s, u.guarded_by)
 		out.append(["s_block", "Guarded", -1, "Guarded%s: single-target attacks on this hero strike the guard instead." % ((" by " + String(g.name)) if not g.is_empty() else ""), UiStyle.INK])
 	if u.get("hollow", false):
-		out.append(["", "Hollow", -1, tip.call("Hollow"), Color("6d5a8a")])
+		out.append(["", "Hollow", -1, _status_tip("hollow", "Hollow", u), Color("6d5a8a")])
 	return out
+
+## The hover text for a status chip: its name and count, where it came from (for a Conjunction's lasting mark),
+## and what it does on this side of the field, read from how the combat rules actually treat it.
+func _status_tip(k: String, nm: String, u: Dictionary) -> String:
+	var st: Dictionary = u.st
+	var hero: bool = u.side == "hero"
+	var n := int(st.get(k, 0))
+	var rounds := func(x: int) -> String:
+		return "%d more round%s" % [x, "" if x == 1 else "s"]
+	var from := func(conj: String) -> String:
+		var pair := ""
+		for key in Data.REACTIONS:
+			if Data.REACTIONS[key].name == conj:
+				pair = " + ".join(Array(key.split("+")).map(func(e): return String(e).capitalize()))
+		return "Conjunction: %s (%s).\n" % [conj, pair]
+	match k:
+		"hollow":
+			return "Hollow\n" + from.call("Hollow Flame") + "Burn on this unit does not fade at the end of the round, and its damage ignores Block. Ends once the Burn is gone (cleansing Burn ends it)."
+		"freeze":
+			if hero:
+				return "Frozen\n" + from.call("Freeze") + "Can play only kit skills and flasks, not hand cards, for %s. A physical hit shatters the ice for +%d damage and ends it." % [rounds.call(n), int(st.get("freeze_bonus", 0))]
+			return "Frozen\n" + from.call("Freeze") + "Skips its next action. A physical hit first shatters the ice for +%d damage and ends it." % int(st.get("freeze_bonus", 0))
+		"lockdown":
+			return "Lockdown\n" + from.call("Lockdown") + "This hero's cards resolve at the end of the Ordo, for %s." % rounds.call(n)
+		"neuro":
+			return "Neurotoxin\n" + from.call("Neurotoxin") + ("This hero's next card keeps only its first effect." if hero else "Its next action keeps only its first effect.")
+		"silence":
+			return "Drowned\n" + from.call("Drown") + "Its next action is replaced by a Choked Blow: 3 damage, nothing else."
+		"blight":
+			return "Blight\n" + from.call("Blight") + ("Cannot be healed for %s." % rounds.call(n) if hero else "Cannot be healed or gain Block for %s." % rounds.call(n))
+		"regen":
+			return "Regen %d\nHeals %d at the end of the round, then drops by 1." % [n, n]
+		"anchor":
+			return "Anchored\n" + String(Data.KEYWORDS.get("Anchor", ""))
+	var head: String = nm + ("" if n <= 1 and k in ["stun", "taunt", "fortify"] else " %d" % n)
+	return head + ("\n" + String(Data.KEYWORDS[nm]) if Data.KEYWORDS.has(nm) else "")
 
 ## Lays the effect chips out above the head: centred rows as wide as the figure, wrapping upward, kept below the Ordo.
 func _build_effects(list: Array) -> void:
