@@ -636,8 +636,12 @@ func _make_view(u: Dictionary) -> void:
 	unit_views[u.id] = v
 
 func _layout_units(animate := true) -> void:
+	var hx: Array = HERO_X[clamp(s.heroes.size(), 1, 4)]
+	var hroom: float = 0.0 if hx.size() < 2 else abs(float(hx[0]) - float(hx[1])) * 0.86
 	for i in s.heroes.size():
-		_place(s.heroes[i], HERO_X[clamp(s.heroes.size(), 1, 4)][i], animate)
+		_place(s.heroes[i], hx[i], animate)
+		if unit_views.has(s.heroes[i].id):
+			unit_views[s.heroes[i].id].set_room(hroom)
 	var total := 0
 	for e in s.enemies:
 		total += int(e.get("span", 1))
@@ -649,6 +653,8 @@ func _layout_units(animate := true) -> void:
 		for k in sp:
 			x += xs[min(slot + k, xs.size() - 1)]
 		_place(e, x / sp, animate)
+		if unit_views.has(e.id):
+			unit_views[e.id].set_room(0.0 if xs.size() < 2 else abs(float(xs[1]) - float(xs[0])) * 0.86 * sp)
 		slot += sp
 
 func _place(u: Dictionary, cx: float, animate: bool) -> void:

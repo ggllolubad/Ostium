@@ -71,6 +71,8 @@ func _initialize() -> void:
 			Run.r.pending.append({"kind": "legendary" if mode == "legend" else "card", "hero": 0})
 			m.run_ui.show_reward()
 	elif mode != "menu":
+		if OS.get_environment("PARTY") != "":
+			m.party = Array(OS.get_environment("PARTY").split(","))
 		m._start_encounter(int(OS.get_environment("ENC")) if OS.get_environment("ENC") != "" else 3)
 		m.hub.visible = false
 		for k in 20:

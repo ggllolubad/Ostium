@@ -269,11 +269,33 @@ func _draw() -> void:
 	if plate != null:
 		plate.queue_redraw()
 
+## The width this unit's plate may use, set by the board from the spacing to its neighbours (0 = no limit).
+var room := 0.0
+
+func set_room(r: float) -> void:
+	room = r
+	if info == null:
+		return
+	var iw: float = size.x if room <= 0.0 else min(size.x, (room - 8.0) / 0.84)
+	info.size.x = iw
+	info.position.x = (size.x - iw) / 2.0
+	info.pivot_offset = Vector2(iw / 2.0, 0)
+	for c in info.get_children():
+		if c is Control:
+			c.custom_minimum_size.x = min(c.custom_minimum_size.x, iw)
+	if name_l != null:
+		name_l.clip_text = true
+		name_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		name_l.add_theme_font_size_override("font_size", 17 if iw >= 200.0 else 15)
+	plate.queue_redraw()
+
 func _draw_plate() -> void:
 	var fy := feet_y()
 	var cx := size.x / 2
-	# hp bar on a parchment tablet so it reads over the floor
+	# hp bar on a parchment tablet so it reads over the floor; never wider than the gap to the next unit
 	var w := size.x * 0.78
+	if room > 0.0:
+		w = min(w, room - 48.0)
 	var tab := Rect2(cx - w / 2 - 18, fy + 2, w + 36, 106)
 	if TAB_BOX == null:
 		TAB_BOX = UiStyle.tex_box("btn_parch")
