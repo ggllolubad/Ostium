@@ -277,9 +277,8 @@ func set_room(r: float) -> void:
 	if info == null:
 		return
 	var iw: float = size.x if room <= 0.0 else min(size.x, (room - 8.0) / 0.84)
-	info.size.x = iw
-	info.position.x = (size.x - iw) / 2.0
-	info.pivot_offset = Vector2(iw / 2.0, 0)
+	# narrow the children first: a container can never be set narrower than its children's minimum width,
+	# and a box left wider than intended sits off-centre once it is shifted by the intended width
 	for c in info.get_children():
 		if c is Control:
 			c.custom_minimum_size.x = min(c.custom_minimum_size.x, iw)
@@ -287,6 +286,10 @@ func set_room(r: float) -> void:
 		name_l.clip_text = true
 		name_l.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		name_l.add_theme_font_size_override("font_size", 17 if iw >= 200.0 else 15)
+	info.size = Vector2(iw, info.size.y)
+	var aw: float = info.size.x   # the width it actually took
+	info.position.x = (size.x - aw) / 2.0
+	info.pivot_offset = Vector2(aw / 2.0, 0)
 	plate.queue_redraw()
 
 func _draw_plate() -> void:
