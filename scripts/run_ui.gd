@@ -19,9 +19,16 @@ func _ready() -> void:
 	Run.meta_load()
 
 # ================================================================== helpers
-func _screen(title := "", sub := "", bgp := "") -> Control:
+func _screen(title := "", sub := "", bgp := "", bare := false) -> Control:
 	if main != null and main.board != null:
 		main.board.visible = false   # the fight's HP plates draw on a high layer; never let them show through a screen
+	if bgp == "" and not Run.r.is_empty():
+		# inside a run no screen is bare parchment: titled ones are writs, the rest sit on the sheet over the world
+		if title != "":
+			_writ(title, sub)
+			return screen
+		_writ("", "")
+		return screen
 	if bgp == "":
 		# inside a run, the screens sit on the current world's backdrop
 		bgp = "res://assets/art/hub/hub_bg.png"
@@ -43,7 +50,7 @@ func _screen(title := "", sub := "", bgp := "") -> Control:
 	bg.size = size
 	screen.add_child(bg)
 	var veil := ColorRect.new()
-	veil.color = Color(0, 0, 0, 0.18) if hub else UiStyle.DIM
+	veil.color = Color(0, 0, 0, 0.18) if hub or bare else UiStyle.DIM
 	veil.size = size
 	screen.add_child(veil)
 	if title != "":
@@ -84,11 +91,8 @@ func _btn(text: String, pos: Vector2, sz: Vector2, cb: Callable, parent: Node = 
 
 func _panel(pos: Vector2, sz: Vector2, parent: Node = null) -> Panel:
 	var p := Panel.new()
-	var sb := UiStyle.box(UiStyle.PARCH_L, UiStyle.INK, 2)
-	sb.shadow_color = Color(0, 0, 0, 0.35)
-	sb.shadow_offset = Vector2(3, 4)
-	sb.shadow_size = 1
-	p.add_theme_stylebox_override("panel", sb)
+	p.add_theme_stylebox_override("panel", UiStyle.tex_box("btn_parch", 14))
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	p.position = pos
 	p.size = sz
 	(parent if parent != null else screen).add_child(p)
@@ -381,25 +385,58 @@ func show_prepare() -> void:
 
 ## The writ layout shared by the commission, victory and spoils screens: the world's backdrop shaded, one parchment
 ## sheet, a cartouche with the title in blackletter, an italic line beneath. Returns nothing; draw on `screen`.
-func _writ(title: String, sub: String, world := "") -> void:
+func _writ(title: String, sub: String, world := "", ink := "") -> void:
 	var wk: String = world if world != "" else String(Run.r.get("world", hub_world)) if not Run.r.is_empty() else hub_world
 	var room: String = Data.WORLDS[wk].rooms[1]
 	var bgp := "res://assets/art/rooms/%s_far.webp" % room
 	if not ResourceLoader.exists(bgp):
 		bgp = "res://assets/art/rooms/%s_far.png" % room
-	_screen("", "", bgp)
+	_screen("", "", bgp, true)
 	var shade := ColorRect.new()
-	shade.color = Color(0.08, 0.05, 0.03, 0.55)
+	shade.color = Color(0.08, 0.05, 0.03, 0.42)
 	shade.size = size
 	screen.add_child(shade)
+	if title == "":
+		return   # untitled run screens (the map) bring their own sheet
 	_tex("res://assets/art/map/sheet.png", Vector2(46, 22), Vector2(1508, 940))
 	_tex("res://assets/art/map/cartouche.png", Vector2(470, 40), Vector2(660, 94))
+	if ink != "":
+		for x in [370, 1140]:
+			var em := _tex("res://assets/art/map/ink_%s.png" % ink, Vector2(x, 42), Vector2(90, 90))
+			em.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			em.modulate = Color(1, 1, 1, 0.85)
 	var t := _lbl(title, Vector2(470, 50), Vector2(660, 70), 40, UiStyle.font_bl, UiStyle.RED_D)
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if sub != "":
 		var sl := _lbl(sub, Vector2(240, 136), Vector2(1120, 26), 17, UiStyle.font_it, UiStyle.BROWN)
 		sl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+## A counter with its icon, for gold, food and the like: icon then value, in small caps.
+func _counter(icon_id: String, text: String, pos: Vector2, fs := 22) -> void:
+	screen.add_child(UiStyle.icon_rect(icon_id, pos, fs + 18))
+	_lbl(text, pos + Vector2(fs + 24, 4), Vector2(220, fs + 12), fs, UiStyle.font_sc, UiStyle.INK)
+
+## A section heading on the sheet: small caps with a hairline rule running to the right.
+func _section(text: String, pos: Vector2, w: float) -> void:
+	_lbl(text, pos, Vector2(w, 26), 19, UiStyle.font_sc, UiStyle.RED_D)
+	_rule(pos + Vector2(0, 30), w, 1)
+
+## A hero's oval portrait with name beneath; darkened if dead.
+func _oval(h: Dictionary, pos: Vector2, w: float, with_name := true) -> void:
+	var por := _tex("res://assets/art/ui/portraits/%s_oval.png" % h.key, pos, Vector2(w, w * 1.2))
+	if h.get("dead", false):
+		por.modulate = Color(0.45, 0.4, 0.38, 1.0)
+	if with_name:
+		var nm := _lbl(h.name, pos + Vector2(-40, w * 1.2 + 2), Vector2(w + 80, 26), 17, UiStyle.font_sc, UiStyle.INK)
+		nm.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+## The big red lacquer button that moves the run on.
+func _go(text: String, pos: Vector2, sz: Vector2, cb: Callable) -> Button:
+	var b := _btn(text, pos, sz, cb)
+	b.add_theme_font_size_override("font_size", 24)
+	UiStyle.red_button(b)
+	return b
 
 ## A textured bar (HP, stress) with its value written over it.
 func _tbar(pos: Vector2, w: float, frac: float, fill: String, text: String) -> void:
@@ -509,7 +546,7 @@ func _continue_run() -> void:
 		show_map()
 
 # ================================================================== map
-func _header(parent: Control) -> void:
+func _header(parent: Control, at := Vector2(60, 20)) -> void:
 	var r := Run.r
 	var sup: Dictionary = r.supplies
 	var obj: Dictionary = Run.C.objectives[r.objective]
@@ -521,11 +558,11 @@ func _header(parent: Control) -> void:
 	var I := func(k: String) -> String: return UiStyle.icon_tag(k, 26)
 	_rich("[b]%s[/b] · %s%s\n%s gold [b]%d[/b]   %s food [b]%d[/b]   %s light [b]%d[/b]   %s medicine [b]%d[/b]   %s tools [b]%d[/b]   ·   doom [b]%d[/b] (level %d)%s" %
 		[("Commission: " + Data.ENEMIES[r.commission].name) if String(r.get("commission", "")) != "" and Data.ENEMIES.has(r.commission) else obj.name, Run.world_name(), extra, I.call("gold"), r.gold, I.call("food"), sup.food, I.call("light"), sup.light, I.call("medicine"), sup.medicine, I.call("tools"), sup.tools, r.doom, Run.doom_level(), "   ·   [color=#9c3d2b]darkness: foes +1 Might[/color]" if sup.light <= 0 else ""],
-		Vector2(60, 20), Vector2(1100, 60), 17, parent)
+		at, Vector2(1100, 60), 17, parent)
 	var rl := []
 	for id in r.relics:
 		rl.append(UiStyle.icon_tag(id, 24) + " " + Run.C.relics[id].name)
-	_rich("[i]relics (%d/%d):[/i] %s" % [r.relics.size(), Run.relic_cap(), ", ".join(rl) if rl.size() > 0 else "none"], Vector2(60, 72), Vector2(1100, 26), 15, parent)
+	_rich("[i]relics (%d/%d):[/i] %s" % [r.relics.size(), Run.relic_cap(), ", ".join(rl) if rl.size() > 0 else "none"], at + Vector2(0, 52), Vector2(1100, 26), 15, parent)
 
 const MAP_INK := Color("2b1d12")
 const MAP_RUB := Color("9c3d2b")
@@ -862,33 +899,39 @@ func after_fight(s: Dictionary) -> void:
 # ================================================================== events
 func show_event(n: Dictionary) -> void:
 	var e := Run.event_for(n)
-	_screen(e.title)
-	_panel(Vector2(300, 140), Vector2(1000, 220))
-	_lbl(e.text, Vector2(330, 160), Vector2(940, 180), 21, UiStyle.font_it)
-	var y := 400
+	_writ(e.title, Run.world_name(), "", "event")
+	_illumination(Vector2(200, 196), Vector2(1200, 300))
+	var t := _lbl(e.text, Vector2(660, 216), Vector2(710, 260), 23, UiStyle.font_it)
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var y := 540
 	for o in e.options:
 		var ok := Run.option_ok(o)
-		var b := _btn(o.label, Vector2(400, y), Vector2(800, 52), func(): _resolve_option(n, o))
+		var b := _btn(o.label, Vector2(350, y), Vector2(900, 58), func(): _resolve_option(n, o))
 		b.disabled = not ok
-		b.add_theme_font_size_override("font_size", 19)
-		y += 64
+		b.add_theme_font_size_override("font_size", 20)
+		y += 72
 
 func _resolve_option(n: Dictionary, o: Dictionary) -> void:
 	var res := Run.apply_option(o)
-	_screen(Run.event_for(n).title)
-	_lbl(res.text, Vector2(300, 180), Vector2(1000, 120), 22, UiStyle.font_it).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_lbl(" · ".join(res.notes), Vector2(300, 320), Vector2(1000, 60), 18, UiStyle.font_sc, UiStyle.BROWN).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_writ(Run.event_for(n).title, Run.world_name(), "", "event")
+	_illumination(Vector2(200, 196), Vector2(1200, 300))
+	var t := _lbl(res.text, Vector2(660, 216), Vector2(710, 260), 23, UiStyle.font_it)
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	if not res.notes.is_empty():
+		_lbl(" \u00b7 ".join(res.notes), Vector2(200, 540), Vector2(1200, 70), 21, UiStyle.font_sc, UiStyle.RED_D).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if res.get("fight", false):
 		n.type = "combat"
-		_btn("Fight", Vector2(660, 440), Vector2(280, 56), func(): _fight(n))
+		_go("Fight", Vector2(600, 660), Vector2(400, 70), func(): _fight(n))
 	else:
-		_btn("Onward", Vector2(660, 440), Vector2(280, 56), func(): _done_node(""))
+		_go("Onward", Vector2(600, 660), Vector2(400, 70), func(): _done_node(""))
 
 # ================================================================== merchant
 func show_merchant() -> void:
 	var st := Run.merchant_stock()
-	_screen("The Merchant", "He trades in what %s gives back. Gold: %d" % [Run.world_name().replace("The ", "the "), Run.r.gold])
-	var x := 60
+	_writ("The Merchant", "He trades in what %s gives back." % Run.world_name().replace("The ", "the "), "", "merchant")
+	_counter("gold", str(Run.r.gold), Vector2(1260, 150))
+	_section("Cards", Vector2(90, 178), 1420)
+	var x := 90
 	for c in st.cards:
 		if c.get("sold", false):
 			continue
@@ -896,47 +939,53 @@ func show_merchant() -> void:
 		if h.dead:
 			continue
 		var cc: Dictionary = c
-		_card(c.card, Vector2(x, 140), 0.62, func(): _buy_card(cc))
-		_lbl("%s · %d" % [h.name, c.price], Vector2(x, 300), Vector2(116, 40), 14, UiStyle.font_sc).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		x += 124
-	var y := 380
+		_card(c.card, Vector2(x, 218), 0.62, func(): _buy_card(cc))
+		var pl := _lbl(h.name.split(" ")[0], Vector2(x - 4, 378), Vector2(124, 22), 15, UiStyle.font_it, UiStyle.BROWN)
+		pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		screen.add_child(UiStyle.icon_rect("gold", Vector2(x + 28, 400), 26))
+		_lbl(str(c.price), Vector2(x + 58, 400), Vector2(60, 26), 18, UiStyle.font_sc, UiStyle.INK)
+		x += 128
+	_section("Wares", Vector2(90, 448), 700)
+	var y := 490
 	for g in st.gear:
 		if g.get("sold", false):
 			continue
 		var gd: Dictionary = Run.C.gear[g.item.id]
 		var gg: Dictionary = g
-		_ibtn(g.item.id, "%s (%s, %s) · %d" % [gd.name, gd.slot, gd.rarity, g.price], Vector2(60, y), Vector2(560, 42), func(): _buy_gear(gg), null, gd.text + ("\nClass: " + Data.HEROES[gd.cls].name if gd.cls != null else ""))
-		y += 50
+		_ibtn(g.item.id, "%s (%s, %s) \u00b7 %d gold" % [gd.name, gd.slot, gd.rarity, g.price], Vector2(90, y), Vector2(700, 46), func(): _buy_gear(gg), null, gd.text + ("\nClass: " + Data.HEROES[gd.cls].name if gd.cls != null else ""))
+		y += 54
 	if not st.relic.is_empty() and not st.relic.get("sold", false):
 		var rl: Dictionary = Run.C.relics[st.relic.id]
-		_ibtn(st.relic.id, "Relic: %s · %d" % [rl.name, st.relic.price], Vector2(60, y), Vector2(560, 42), func(): _buy_relic(st.relic), null, rl.text)
-		y += 50
+		_ibtn(st.relic.id, "Relic: %s \u00b7 %d gold" % [rl.name, st.relic.price], Vector2(90, y), Vector2(700, 46), func(): _buy_relic(st.relic), null, rl.text)
+		y += 54
 	if not st.rune.get("sold", false):
-		_ibtn(st.rune.id, "%s · %d" % [Run.C.runes[st.rune.id].name, st.rune.price], Vector2(60, y), Vector2(560, 42), func(): _buy_rune(st.rune), null, Run.C.runes[st.rune.id].text)
-		y += 50
+		_ibtn(st.rune.id, "%s \u00b7 %d gold" % [Run.C.runes[st.rune.id].name, st.rune.price], Vector2(90, y), Vector2(700, 46), func(): _buy_rune(st.rune), null, Run.C.runes[st.rune.id].text)
+		y += 54
 	for f in st.flasks:
 		if f.get("sold", false):
 			continue
 		var ff: Dictionary = f
-		_ibtn(f.card, "Belt: %s · %d" % [Data.CARDS[f.card].name, f.price], Vector2(60, y), Vector2(560, 42), func(): _buy_flask(ff), null, Data.CARDS[f.card].text)
-		y += 50
-	var sy := 380
+		_ibtn(f.card, "Belt: %s \u00b7 %d gold" % [Data.CARDS[f.card].name, f.price], Vector2(90, y), Vector2(700, 46), func(): _buy_flask(ff), null, Data.CARDS[f.card].text)
+		y += 54
+	_section("Services", Vector2(850, 448), 660)
+	var sy := 490
 	for k in st.supplies:
 		var kk: String = k
-		_ibtn(k, "+1 %s · %d" % [k, st.supplies[k]], Vector2(700, sy), Vector2(260, 42), func(): _buy_supply(kk, st.supplies[kk]))
-		sy += 50
-	_btn("Strike a card from a deck · %d" % Run.price(50), Vector2(700, sy), Vector2(360, 42), func(): _pick_removal(Run.price(50), show_merchant))
+		_ibtn(k, "+1 %s \u00b7 %d gold" % [k, st.supplies[k]], Vector2(850, sy), Vector2(300, 46), func(): _buy_supply(kk, st.supplies[kk]))
+		sy += 54
+	# the right half of Services: deck work (strike, then one upgrade per hero)
+	_btn("Strike a card \u00b7 %d gold" % Run.price(50), Vector2(1170, 490), Vector2(340, 46), func(): _pick_removal(Run.price(50), show_merchant))
 	# Rules v2, rule 19: the merchant also upgrades a card for 60 gold
-	var uy := sy + 50
+	var uy := 544
 	for h in Run.living():
 		var hh: Dictionary = h
-		_btn("Upgrade a card of %s · %d" % [h.name, Run.price(60)], Vector2(700, uy), Vector2(360, 42), func():
+		_btn("Upgrade: %s \u00b7 %d gold" % [h.name.split(" ")[0], Run.price(60)], Vector2(1170, uy), Vector2(340, 46), func():
 			if Run.r.gold < Run.price(60):
 				_toast("Not enough gold.")
 				return
 			_pick_upgrade(hh, show_merchant, Run.price(60)))
-		uy += 50
-	_btn("Leave", Vector2(1300, 900), Vector2(240, 50), func(): _done_node(""))
+		uy += 54
+	_go("Leave", Vector2(1290, 862), Vector2(220, 60), func(): _done_node(""))
 	Run.save()
 
 func _buy_rune(rn: Dictionary) -> void:
@@ -996,14 +1045,14 @@ func _buy_flask(f: Dictionary) -> void:
 	show_merchant()
 
 func _pick_removal(cost: int, back: Callable) -> void:
-	_screen("Strike a card", "Choose a card to remove (%d gold)." % cost)
-	var y := 140
+	_writ("Strike a Card", "Choose a card to remove from a deck (%d gold)." % cost)
+	var y := 190
 	for i in Run.r.heroes.size():
 		var h: Dictionary = Run.r.heroes[i]
 		if h.dead:
 			continue
-		_lbl(h.name, Vector2(40, y), Vector2(200, 30), 20, UiStyle.font_sc)
-		var x := 200
+		_oval(h, Vector2(96, y), 74)
+		var x := 220
 		var seen := {}
 		for cid in h.deck:
 			if seen.has(cid):
@@ -1011,33 +1060,56 @@ func _pick_removal(cost: int, back: Callable) -> void:
 			seen[cid] = true
 			var hh: Dictionary = h
 			var cc: String = cid
-			_card(cid, Vector2(x, y - 10), 0.42, func(): _toast(Run.remove_card(hh, cc, cost)); back.call())
-			x += 82
-			if x > 1500:
+			_card(cid, Vector2(x, y - 4), 0.5, func(): _toast(Run.remove_card(hh, cc, cost)); back.call())
+			x += 100
+			if x > 1420:
 				break
-		y += 130
-	_btn("Back", Vector2(1300, 920), Vector2(240, 46), back)
+		y += 160
+	_btn("Back", Vector2(1290, 870), Vector2(220, 52), back)
 
 # ================================================================== shrine and camps
 func show_shrine() -> void:
-	_screen("A Shrine", "A font of black water before a saint with no face. Something of %s has seeped into it." % Run.world_name().replace("The ", "the "))
-	_btn("Offer blood: the hardiest hero loses 6 max HP; receive a relic", Vector2(300, 260), Vector2(1000, 56), func(): _done_node(Run.shrine("blood")))
-	_btn("Gaze into the font: every hero gains 18 stress; receive gear", Vector2(300, 330), Vector2(1000, 56), func(): _done_node(Run.shrine("fear")))
-	_btn("Pray (%d gold): heal 10 and shed 10 stress" % Run.price(30), Vector2(300, 400), Vector2(1000, 56), func(): _done_node(Run.shrine("prayer")))
-	_btn("Leave", Vector2(660, 500), Vector2(280, 50), func(): _done_node(""))
+	_writ("A Shrine", "A font of black water before a saint with no face.", "", "shrine")
+	_panel(Vector2(300, 190), Vector2(1000, 110))
+	var t := _lbl("Something of %s has seeped into it." % Run.world_name().replace("The ", "the "), Vector2(330, 200), Vector2(940, 90), 22, UiStyle.font_it)
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_counter("gold", str(Run.r.gold), Vector2(1260, 150))
+	var opts := [["Offer blood: the hardiest hero loses 6 max HP; receive a relic", "blood"], ["Gaze into the font: every hero gains 18 stress; receive gear", "fear"], ["Pray (%d gold): heal 10 and shed 10 stress" % Run.price(30), "prayer"]]
+	var y := 350
+	for o in opts:
+		var k: String = o[1]
+		var b := _btn(o[0], Vector2(300, y), Vector2(1000, 60), func(): _done_node(Run.shrine(k)))
+		b.add_theme_font_size_override("font_size", 20)
+		y += 74
+	_go("Leave", Vector2(600, 620), Vector2(400, 66), func(): _done_node(""))
 
 func show_field_camp() -> void:
-	_screen("Field Camp", "Two food to make camp. Food: %d" % Run.r.supplies.food)
-	_btn("Tend wounds: heal 30% of max HP", Vector2(500, 260), Vector2(600, 56), func(): _done_node(Run.field_camp("rest")))
-	_btn("Talk through the night: shed 25 stress", Vector2(500, 330), Vector2(600, 56), func(): _done_node(Run.field_camp("talk")))
+	_writ("Field Camp", "Two food to make camp. Choose how the night is spent.", "", "camp")
+	_counter("food", str(Run.r.supplies.food), Vector2(1260, 150))
+	var x := 160
+	for h in Run.living():
+		_oval(h, Vector2(x, 200), 110)
+		var bw := 150.0
+		_tbar(Vector2(x - 20, 362), bw, float(h.hp) / Run.max_hp(h), "bar_red", "%d / %d" % [int(h.hp), Run.max_hp(h)])
+		_tbar(Vector2(x - 20, 394), bw, float(h.stress) / 100.0, "bar_violet", "Stress %d" % int(h.stress))
+		x += 340
+	var opts := [["Tend wounds: heal 30% of max HP", "rest"], ["Talk through the night: shed 25 stress", "talk"]]
+	var y := 470
+	for o in opts:
+		var k: String = o[1]
+		var b := _btn(o[0], Vector2(450, y), Vector2(700, 60), func(): _done_node(Run.field_camp(k)))
+		b.add_theme_font_size_override("font_size", 20)
+		y += 74
 	# Rules v2, rule 19: the company may instead hone its cards, one upgrade per hero
-	_btn("Hone: each hero upgrades one card", Vector2(500, 400), Vector2(600, 56), func():
+	var hb := _btn("Hone: each hero upgrades one card", Vector2(450, y), Vector2(700, 60), func():
 		if Run.r.supplies.food < 2:
 			_toast("Not enough food to make camp (2 needed).")
 			return
 		Run.r.supplies.food -= 2
 		_upgrade_each(Run.living().duplicate(), func(): _done_node("The company hones its craft by the fire.")))
-	_btn("Press on", Vector2(660, 490), Vector2(280, 50), func(): _done_node(""))
+	hb.add_theme_font_size_override("font_size", 20)
+	_go("Press on", Vector2(600, y + 100), Vector2(400, 66), func(): _done_node(""))
 
 ## One upgrade for each hero in turn, then `done`. A hero may pass.
 func _upgrade_each(hs: Array, done: Callable) -> void:
@@ -1055,12 +1127,13 @@ func _pick_upgrade(h: Dictionary, after: Callable, cost := 0) -> void:
 		if not seen.has(cid) and not String(cid).ends_with("+") and Data.CARDS.has(String(cid) + "+"):
 			seen[cid] = true
 			ids.append(cid)
-	_screen("Upgrade · " + h.name, "Choose one card to upgrade, or pass. %d can be upgraded." % ids.size())
+	_writ("Upgrade a Card", "%s: choose one card to upgrade, or pass. %d can be upgraded." % [h.name, ids.size()])
+	_oval(h, Vector2(84, 196), 90)
 	for i in ids.size():
 		var cid: String = ids[i]
-		var x := 60 + (i % 10) * 148
-		var y := 130 + int(i / 10) * 230
-		_card(cid, Vector2(x, y), 0.62, func():
+		var x := 230 + (i % 7) * 182
+		var y := 196 + int(i / 7) * 232
+		_card(cid, Vector2(x, y), 0.88, func():
 			if cost > 0:
 				if Run.r.gold < cost:
 					_toast("Not enough gold.")
@@ -1071,52 +1144,76 @@ func _pick_upgrade(h: Dictionary, after: Callable, cost := 0) -> void:
 				h.deck[k] = cid + "+"
 			Run.save()
 			after.call())
-	_btn("Pass", Vector2(660, 900), Vector2(280, 50), after)
+	_btn("Pass", Vector2(1290, 870), Vector2(220, 52), after)
 
 func show_waypoint() -> void:
-	_screen("The Camp", "A dry chapter house the living still hold. Gold %d · medicine %d" % [Run.r.gold, Run.r.supplies.medicine])
-	var y := 150
+	_writ("The Camp", "A dry chapter house the living still hold.", "", "waypoint")
+	_counter("gold", str(Run.r.gold), Vector2(1180, 150))
+	_counter("medicine", str(Run.r.supplies.medicine), Vector2(1360, 150))
+	var y := 196
 	for h in Run.living():
 		var hh: Dictionary = h
-		_panel(Vector2(60, y), Vector2(1480, 96))
-		_portrait(h.key, Vector2(70, y + 6), Vector2(90, 84))
-		_rich("[b]%s[/b] · level %d %s\nHP %d/%d · stress %d%s" % [h.name, h.level, ("· " + Data.HEROES[h.key].subclasses[h.subclass]) if h.subclass != "" else "", h.hp, Run.max_hp(h), h.stress,
-			("\ninjuries: " + ", ".join(h.injuries.map(func(k): return Run.C.injuries[k].name))) if h.injuries.size() > 0 else ""], Vector2(170, y + 8), Vector2(420, 84), 16)
-		_btn("Infirmary: full heal · %d" % Run.price(20), Vector2(600, y + 10), Vector2(300, 36), func(): _toast(Run.infirmary_heal(hh)); show_waypoint())
-		_btn("Treat injury · %d gold" % Run.price(35), Vector2(600, y + 50), Vector2(300, 36), func(): _toast(Run.treat_injury(hh, false)); show_waypoint())
-		_btn("Treat injury · 1 medicine", Vector2(910, y + 50), Vector2(260, 36), func(): _toast(Run.treat_injury(hh, true)); show_waypoint())
-		_btn("Respite: -40 stress, lift Dread · %d" % Run.price(15), Vector2(910, y + 10), Vector2(380, 36), func(): _toast(Run.respite(hh)); show_waypoint())
-		y += 106
-	_btn("Forge: set runes", Vector2(60, y + 10), Vector2(300, 46), show_forge)
-	_btn("Market", Vector2(370, y + 10), Vector2(300, 46), func(): show_merchant())
-	_btn("Strike a card · %d" % Run.price(50), Vector2(680, y + 10), Vector2(300, 46), func(): _pick_removal(Run.price(50), show_waypoint))
-	_btn("The company", Vector2(990, y + 10), Vector2(240, 46), show_roster)
-	_btn("Leave the Camp", Vector2(1240, y + 10), Vector2(300, 46), func(): _done_node(""))
+		_panel(Vector2(80, y), Vector2(1440, 118))
+		_oval(h, Vector2(96, y + 10), 82, false)
+		_lbl(h.name, Vector2(194, y + 12), Vector2(330, 28), 22, UiStyle.font_sc, UiStyle.INK)
+		_lbl("%s \u00b7 level %d" % [Data.HEROES[h.key].subclasses[h.subclass] if h.subclass != "" else Data.HEROES[h.key].name, h.level], Vector2(194, y + 42), Vector2(330, 24), 17, UiStyle.font_it, UiStyle.BROWN)
+		_tbar(Vector2(194, y + 76), 170, float(h.hp) / Run.max_hp(h), "bar_red", "%d / %d" % [int(h.hp), Run.max_hp(h)])
+		_tbar(Vector2(374, y + 76), 150, float(h.stress) / 100.0, "bar_violet", "Stress %d" % int(h.stress))
+		if h.injuries.size() > 0:
+			_lbl("Injured: " + ", ".join(h.injuries.map(func(k): return Run.C.injuries[k].name)), Vector2(540, y + 14), Vector2(270, 90), 16, UiStyle.font_it, UiStyle.RED_D)
+		_btn("Infirmary: full heal \u00b7 %d gold" % Run.price(20), Vector2(820, y + 14), Vector2(330, 42), func(): _toast(Run.infirmary_heal(hh)); show_waypoint())
+		_btn("Respite: -40 stress, lift Dread \u00b7 %d" % Run.price(15), Vector2(1160, y + 14), Vector2(345, 42), func(): _toast(Run.respite(hh)); show_waypoint())
+		_btn("Treat injury \u00b7 %d gold" % Run.price(35), Vector2(820, y + 62), Vector2(330, 42), func(): _toast(Run.treat_injury(hh, false)); show_waypoint())
+		_btn("Treat injury \u00b7 1 medicine", Vector2(1160, y + 62), Vector2(345, 42), func(): _toast(Run.treat_injury(hh, true)); show_waypoint())
+		y += 130
+	_btn("Forge: set runes", Vector2(80, 862), Vector2(260, 56), show_forge)
+	_btn("Market", Vector2(352, 862), Vector2(220, 56), func(): show_merchant())
+	_btn("Strike a card \u00b7 %d" % Run.price(50), Vector2(584, 862), Vector2(280, 56), func(): _pick_removal(Run.price(50), show_waypoint))
+	_btn("The company", Vector2(876, 862), Vector2(220, 56), show_roster)
+	_go("Leave the Camp", Vector2(1200, 856), Vector2(310, 66), func(): _done_node(""))
 
 func show_forge() -> void:
-	_screen("The Forge", "Set runes into gear sockets. Runes held: %s" % (", ".join(Run.r.runes.map(func(k): return Run.C.runes[k].name)) if Run.r.runes.size() > 0 else "none"))
-	var y := 150
+	_writ("The Forge", "Set runes into gear sockets. A set rune stays for the run.", "", "forge")
+	_section("Runes held", Vector2(90, 178), 1420)
+	var rx := 90
+	if Run.r.runes.is_empty():
+		_lbl("None. Runes come from spoils and the Market.", Vector2(90, 218), Vector2(800, 30), 18, UiStyle.font_it, UiStyle.BROWN)
+	for rn in Run.r.runes:
+		screen.add_child(UiStyle.icon_rect(rn, Vector2(rx, 214), 40))
+		_lbl(Run.C.runes[rn].name, Vector2(rx + 46, 222), Vector2(210, 28), 17, UiStyle.font_sc).tooltip_text = Run.C.runes[rn].text
+		rx += 260
+	var y := 290
 	for h in Run.living():
-		_lbl(h.name, Vector2(60, y), Vector2(200, 30), 20, UiStyle.font_sc)
-		var x := 260
+		_panel(Vector2(80, y), Vector2(1440, 120))
+		_oval(h, Vector2(96, y + 12), 80, false)
+		_lbl(h.name, Vector2(190, y + 44), Vector2(170, 30), 20, UiStyle.font_sc)
+		var x := 370
+		var any := false
+		for slot in Run.SLOTS:
+			if not h.gear[slot].is_empty():
+				any = true
+		if not any:
+			_lbl("No gear to set runes in. Gear comes from spoils and the Market.", Vector2(370, y + 44), Vector2(800, 30), 18, UiStyle.font_it, UiStyle.BROWN)
 		for slot in Run.SLOTS:
 			var it: Dictionary = h.gear[slot]
 			if it.is_empty():
 				continue
 			var gd: Dictionary = Run.C.gear[it.id]
-			_lbl("%s [%d/%d]" % [gd.name, it.runes.size(), gd.sockets], Vector2(x, y), Vector2(260, 24), 15)
-			var bx := x
+			screen.add_child(UiStyle.icon_rect(it.id, Vector2(x, y + 14), 44))
+			var gl := _lbl("%s\nsockets %d / %d" % [gd.name, it.runes.size(), gd.sockets], Vector2(x + 50, y + 12), Vector2(230, 50), 15)
+			gl.tooltip_text = gd.text
+			gl.mouse_filter = Control.MOUSE_FILTER_PASS
 			for rn in Run.r.runes.duplicate():
 				if it.runes.size() >= gd.sockets:
 					break
 				var hh: Dictionary = h
 				var sl: String = slot
 				var rr: String = rn
-				_btn("+ " + Run.C.runes[rn].name, Vector2(bx, y + 26), Vector2(250, 32), func(): _toast(Run.socket_rune(hh, sl, rr)); show_forge())
+				_btn("+ " + Run.C.runes[rn].name, Vector2(x, y + 70), Vector2(270, 38), func(): _toast(Run.socket_rune(hh, sl, rr)); show_forge())
 				break
 			x += 290
-		y += 90
-	_btn("Back", Vector2(1300, 920), Vector2(240, 46), show_waypoint)
+		y += 132
+	_btn("Back", Vector2(1290, 870), Vector2(220, 52), show_waypoint)
 
 # ================================================================== rewards queue
 ## Spoils: the hero in their oval frame on the left, the offered cards large and centred, Take nothing beneath.
@@ -1146,6 +1243,37 @@ func _spoils_pick(h: Dictionary, picks: Array, legendary: bool, take: Callable, 
 	var nb := _btn("Take nothing", Vector2(1110, 838), Vector2(300, 56), skip)
 	nb.add_theme_font_size_override("font_size", 22)
 	_lbl("Click a card to take it into the deck.", Vector2(400, 852), Vector2(600, 30), 19, UiStyle.font_it, UiStyle.BROWN)
+
+## A slip with a framed painting of the current world on its left, for text that tells of a place.
+func _illumination(pos: Vector2, sz: Vector2) -> void:
+	_panel(pos, sz)
+	var wk: String = String(Run.r.get("world", hub_world)) if not Run.r.is_empty() else hub_world
+	var rooms: Array = Data.WORLDS[wk].rooms
+	var room: String = rooms[(Run.r.get("at", 0) if not Run.r.is_empty() else 0) % rooms.size()] if typeof(Run.r.get("at", 0)) == TYPE_INT else rooms[0]
+	var p := "res://assets/art/rooms/%s_far.webp" % room
+	if not ResourceLoader.exists(p):
+		p = "res://assets/art/rooms/%s_far.png" % room
+	var ih := sz.y - 40
+	var pic := _tex(p, pos + Vector2(20, 20), Vector2(ih * 1.4, ih))
+	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	pic.clip_contents = true
+	var fr := ReferenceRect.new()
+	fr.border_color = UiStyle.INK
+	fr.border_width = 2.0
+	fr.editor_only = false
+	fr.position = pic.position
+	fr.size = pic.size
+	fr.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	screen.add_child(fr)
+
+## A reward shown as an object: its icon large on a parchment slip, the name beneath, then what it does.
+func _reward_icon(icon_id: String, name: String, text: String) -> void:
+	_panel(Vector2(670, 210), Vector2(260, 260))
+	screen.add_child(UiStyle.icon_rect(icon_id, Vector2(705, 245), 190))
+	var nl := _lbl(name, Vector2(300, 490), Vector2(1000, 44), 34, UiStyle.font_sc, UiStyle.INK)
+	nl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var tl := _lbl(text, Vector2(350, 540), Vector2(900, 110), 22, UiStyle.font_it, UiStyle.BROWN)
+	tl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 func show_reward() -> void:
 	var p: Dictionary = Run.r.pending[0]
@@ -1177,55 +1305,57 @@ func show_reward() -> void:
 			if rl == "" or Run.r.relics.size() >= Run.relic_cap():
 				next.call()
 				return
-			_screen("A Relic", Run.C.relics[rl].name)
-			screen.add_child(UiStyle.icon_rect(rl, Vector2(748, 112), 104))
-			_lbl(Run.C.relics[rl].text, Vector2(300, 220), Vector2(1000, 80), 24, UiStyle.font_it).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			_btn("Take it", Vector2(560, 360), Vector2(220, 52), func(): Run.r.relics.append(rl); next.call())
-			_btn("Leave it", Vector2(820, 360), Vector2(220, 52), next)
+			_writ("A Relic", "Found among the dead.")
+			_reward_icon(rl, Run.C.relics[rl].name, Run.C.relics[rl].text)
+			_go("Take it", Vector2(560, 700), Vector2(230, 62), func(): Run.r.relics.append(rl); next.call())
+			_btn("Leave it", Vector2(810, 704), Vector2(230, 56), next)
 		"gear":
 			var it := Run.gear_drop()
 			var gd: Dictionary = Run.C.gear[it.id]
-			_screen("Gear", "%s · %s · %s" % [gd.name, gd.slot, {"C": "common", "U": "uncommon", "R": "rare"}[gd.rarity]])
-			screen.add_child(UiStyle.icon_rect(it.id, Vector2(756, 110), 88))
-			_lbl(gd.text + ("\nOnly the %s can use it." % Data.HEROES[gd.cls].name if gd.cls != null else "") + "\nSockets: %d" % gd.sockets, Vector2(300, 200), Vector2(1000, 120), 22, UiStyle.font_it).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			var x := 400
+			_writ("Gear", "%s \u00b7 %s" % [gd.slot.capitalize(), {"C": "common", "U": "uncommon", "R": "rare"}[gd.rarity]])
+			_reward_icon(it.id, gd.name, gd.text + ("\nOnly the %s can use it." % Data.HEROES[gd.cls].name if gd.cls != null else "") + "\nSockets: %d" % gd.sockets)
+			var who := []
 			for h in Run.living():
-				if gd.cls != null and gd.cls != h.key:
-					continue
+				if gd.cls == null or gd.cls == h.key:
+					who.append(h)
+			var x := 800 - who.size() * 140
+			for h in who:
 				var hh: Dictionary = h
-				_btn("Give to " + h.name, Vector2(x, 360), Vector2(240, 48), func(): Run.r.stash.append(it); _toast(Run.equip(hh, it)); next.call())
-				x += 250
-			_btn("Into the pack", Vector2(660, 430), Vector2(280, 48), func(): Run.r.stash.append(it); next.call())
+				_oval(h, Vector2(x + 95, 652), 90, false)
+				_btn("Give to " + h.name.split(" ")[0], Vector2(x + 10, 766), Vector2(260, 50), func(): Run.r.stash.append(it); _toast(Run.equip(hh, it)); next.call())
+				x += 280
+			_btn("Into the pack", Vector2(1290, 870), Vector2(220, 52), func(): Run.r.stash.append(it); next.call())
 		"rune":
 			var rn: String = Run.pick(Run.C.runes.keys())
 			Run.r.runes.append(rn)
-			_screen("A Rune", Run.C.runes[rn].name)
-			screen.add_child(UiStyle.icon_rect(rn, Vector2(748, 112), 104))
-			_lbl(Run.C.runes[rn].text + "\nSet it at the Forge in the Camp.", Vector2(300, 220), Vector2(1000, 80), 22, UiStyle.font_it).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			_btn("Onward", Vector2(660, 340), Vector2(280, 50), next)
+			_writ("A Rune", "Set it at the Forge in the Camp.")
+			_reward_icon(rn, Run.C.runes[rn].name, Run.C.runes[rn].text)
+			_go("Onward", Vector2(600, 700), Vector2(400, 66), next)
 		"subclass":
 			var h: Dictionary = Run.r.heroes[p.hero]
-			_screen("%s reaches level 4" % h.name, "Choose a calling. It unlocks its cards in spoils and grants a passive that grows at levels 7 and 10.")
+			_writ("A Calling", "%s reaches level 4. The calling unlocks its cards in spoils and grants a passive that grows at levels 7 and 10." % h.name)
 			var subs: Dictionary = Data.HEROES[h.key].subclasses
 			var i := 0
+			var x0 := 800 - subs.size() * 235
 			for sk in subs:
-				var x := 120 + i * 470
-				_panel(Vector2(x, 160), Vector2(440, 560))
-				_lbl(subs[sk], Vector2(x, 176), Vector2(440, 40), 28, UiStyle.font_bl, UiStyle.RED_D).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				var x := x0 + i * 470
+				_panel(Vector2(x, 210), Vector2(440, 600))
+				_lbl(subs[sk], Vector2(x, 228), Vector2(440, 44), 30, UiStyle.font_bl, UiStyle.RED_D).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				var tx: Array = Run.C.subclass_text[sk]
-				_rich("[b]Level 4:[/b] %s\n[b]Level 7:[/b] %s\n[b]Level 10:[/b] %s" % tx, Vector2(x + 20, 230), Vector2(400, 150), 16)
+				_rich("[b]Level 4:[/b] %s\n[b]Level 7:[/b] %s\n[b]Level 10:[/b] %s" % tx, Vector2(x + 24, 284), Vector2(392, 160), 16)
 				var cards := []
 				for cid in Data.CARDS:
 					if Data.CARDS[cid].get("sub", "") == sk:
 						cards.append(cid)
 				for j in min(3, cards.size()):
-					_card(cards[j], Vector2(x + 20 + j * 136, 400), 0.68)
+					_card(cards[j], Vector2(x + 26 + j * 132, 456), 0.66)
 				var key: String = sk
-				_btn("Become " + subs[sk], Vector2(x + 70, 660), Vector2(300, 48), func(): h.subclass = key; next.call())
+				_go("Become " + subs[sk], Vector2(x + 60, 732), Vector2(320, 60), func(): h.subclass = key; next.call())
 				i += 1
 		"talent":
 			var h: Dictionary = Run.r.heroes[p.hero]
-			_screen("%s reaches level %d" % [h.name, p.level], "+4 max HP. Choose a talent.")
+			_writ("Level %d" % p.level, "%s grows: +4 max HP, and one talent of three." % h.name)
+			_oval(h, Vector2(700, 190), 200)
 			var keys: Array = Run.C.talents.keys()
 			var picks := []
 			while picks.size() < 3:
@@ -1235,45 +1365,48 @@ func show_reward() -> void:
 			for i in 3:
 				var k: String = picks[i]
 				var t: Dictionary = Run.C.talents[k]
-				_btn("%s\n%s" % [t.name, t.text], Vector2(200 + i * 410, 260), Vector2(390, 120), func():
+				var tb := _btn("%s\n%s" % [t.name, t.text], Vector2(170 + i * 430, 500), Vector2(400, 150), func():
 					h.talents.append(k)
 					if t.has("remove"):
 						Run.r.pending.insert(1, {"kind": "remove", "hero": p.hero})
 					next.call())
+				tb.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				tb.add_theme_font_size_override("font_size", 19)
 		"remove":
 			var h: Dictionary = Run.r.heroes[p.hero]
-			_screen("Cull the Deck", "Remove one card from %s's deck." % h.name)
-			var x := 60
-			var y := 160
+			_writ("Cull the Deck", "Remove one card from %s's deck." % h.name)
+			_oval(h, Vector2(84, 196), 90)
+			var x := 230
+			var y := 196
 			var seen := {}
 			for cid in h.deck:
 				if seen.has(cid):
 					continue
 				seen[cid] = true
 				var cc: String = cid
-				_card(cid, Vector2(x, y), 0.6, func(): h.deck.erase(cc); next.call())
-				x += 120
-				if x > 1460:
-					x = 60
-					y += 170
-			_btn("Keep them all", Vector2(660, 900), Vector2(280, 46), next)
+				_card(cid, Vector2(x, y), 0.88, func(): h.deck.erase(cc); next.call())
+				x += 182
+				if x > 1350:
+					x = 230
+					y += 232
+			_btn("Keep them all", Vector2(1290, 870), Vector2(220, 52), next)
 		_:
 			next.call()
 
 # ================================================================== roster
 func show_roster() -> void:
-	_screen()
-	_header(screen)
+	_writ("The Company", "")
+	_header(screen, Vector2(90, 132))
 	var back := func(): (show_waypoint() if Run.node(Run.r.at).type == "waypoint" and Run.r.get("resolving", "") != "" else show_map())
-	_btn("Back", Vector2(1360, 20), Vector2(180, 44), back)
-	var y := 110
+	_btn("Back", Vector2(1330, 56), Vector2(180, 48), back)
+	var y := 214
 	for i in Run.r.heroes.size():
 		var h: Dictionary = Run.r.heroes[i]
-		_panel(Vector2(40, y), Vector2(1520, 186))
-		_portrait(h.key, Vector2(50, y + 8), Vector2(120, 120))
+		_panel(Vector2(80, y), Vector2(1440, 156))
+		_oval(h, Vector2(96, y + 12), 100, false)
 		if h.dead:
-			_lbl("%s · dead" % h.name, Vector2(180, y + 10), Vector2(400, 30), 22, UiStyle.font_sc, UiStyle.RED_D)
-			y += 196
+			_lbl("%s \u00b7 dead" % h.name, Vector2(214, y + 14), Vector2(400, 30), 22, UiStyle.font_sc, UiStyle.RED_D)
+			y += 164
 			continue
 		var st := Run.stats(h)
 		var stl := []
@@ -1281,33 +1414,35 @@ func show_roster() -> void:
 			if st[k] != 0 and k != "max_hp":
 				stl.append("%s %+d" % [k.replace("_", " "), st[k]])
 		var need: int = Run.C.xp_levels[min(9, int(h.level))] if h.level < 10 else 0
-		_rich("[b]%s[/b] · level %d%s · xp %d%s\nHP %d/%d · stress %d · grit %d\n%s\n%s" % [h.name, h.level, (" · " + Data.HEROES[h.key].subclasses[h.subclass]) if h.subclass != "" else "", h.xp, (" / %d" % need) if need > 0 else "",
-			h.hp, Run.max_hp(h), h.stress, Run.grit(h), ("[i]" + ", ".join(stl) + "[/i]") if stl.size() > 0 else "",
-			("[color=#9c3d2b]injuries: " + ", ".join(h.injuries.map(func(k): return Run.C.injuries[k].name)) + "[/color]") if h.injuries.size() > 0 else ""], Vector2(180, y + 8), Vector2(460, 170), 15)
+		_lbl(h.name, Vector2(214, y + 10), Vector2(420, 28), 21, UiStyle.font_sc, UiStyle.INK)
+		_lbl("%s \u00b7 level %d \u00b7 xp %d%s \u00b7 grit %d" % [Data.HEROES[h.key].subclasses[h.subclass] if h.subclass != "" else Data.HEROES[h.key].name, h.level, h.xp, (" / %d" % need) if need > 0 else "", Run.grit(h)], Vector2(214, y + 38), Vector2(420, 24), 16, UiStyle.font_it, UiStyle.BROWN)
+		_tbar(Vector2(214, y + 68), 200, float(h.hp) / Run.max_hp(h), "bar_red", "%d / %d" % [int(h.hp), Run.max_hp(h)])
+		_tbar(Vector2(424, y + 68), 170, float(h.stress) / 100.0, "bar_violet", "Stress %d" % int(h.stress))
+		_rich(("[i]" + ", ".join(stl) + "[/i]\n" if stl.size() > 0 else "") + (("[color=#9c3d2b]Injured: " + ", ".join(h.injuries.map(func(k): return Run.C.injuries[k].name)) + "[/color]") if h.injuries.size() > 0 else ""), Vector2(214, y + 100), Vector2(420, 50), 14)
 		var gx := 650
 		for slot in Run.SLOTS:
 			var it: Dictionary = h.gear[slot]
-			var txt: String = slot.capitalize() + ": " + (Run.C.gear[it.id].name if not it.is_empty() else "empty")
-			var tip := ""
+			var gy: int = y + 12 + Run.SLOTS.find(slot) * 34
 			if not it.is_empty():
-				tip = Run.C.gear[it.id].text + "\nRunes: " + ", ".join(it.runes.map(func(k): return Run.C.runes[k].name))
-			_lbl(txt, Vector2(gx, y + 10 + Run.SLOTS.find(slot) * 26), Vector2(330, 24), 15).tooltip_text = tip
-		var cx := 990
-		var shown := 0
+				screen.add_child(UiStyle.icon_rect(it.id, Vector2(gx, gy), 30))
+			var gl := _lbl(slot.capitalize() + ": " + (Run.C.gear[it.id].name if not it.is_empty() else "empty"), Vector2(gx + 36, gy + 3), Vector2(290, 26), 15, null, UiStyle.INK if not it.is_empty() else UiStyle.BROWN)
+			if not it.is_empty():
+				gl.tooltip_text = Run.C.gear[it.id].text + "\nRunes: " + ", ".join(it.runes.map(func(k): return Run.C.runes[k].name))
+				gl.mouse_filter = Control.MOUSE_FILTER_PASS
 		var counts := {}
 		for cid in Run.full_deck(h):
 			counts[cid] = counts.get(cid, 0) + 1
-		_rich("[i]deck (%d):[/i] " % Run.full_deck(h).size() + ", ".join(counts.keys().map(func(k): return Data.CARDS[k].name + ((" x%d" % counts[k]) if counts[k] > 1 else ""))), Vector2(cx, y + 8), Vector2(560, 170), 14)
-		y += 196
-	var sx := 40
-	_lbl("Pack:", Vector2(40, 900), Vector2(80, 26), 17, UiStyle.font_sc)
-	sx = 110
+		_rich("[i]Deck (%d):[/i] " % Run.full_deck(h).size() + ", ".join(counts.keys().map(func(k): return Data.CARDS[k].name + ((" x%d" % counts[k]) if counts[k] > 1 else ""))), Vector2(990, y + 12), Vector2(515, 136), 14)
+		y += 164
+	var sx := 100
+	_lbl("Pack:", Vector2(100, 874), Vector2(80, 26), 17, UiStyle.font_sc)
+	sx = 170
 	for it in Run.r.stash:
 		var gd: Dictionary = Run.C.gear[it.id]
 		var mb := MenuButton.new()
 		mb.text = gd.name
 		mb.tooltip_text = gd.text
-		mb.position = Vector2(sx, 896)
+		mb.position = Vector2(sx, 870)
 		mb.size = Vector2(200, 34)
 		mb.flat = false
 		var pm := mb.get_popup()
@@ -1320,7 +1455,7 @@ func show_roster() -> void:
 		pm.id_pressed.connect(func(idx): _toast(Run.equip(opts[idx], itt)); show_roster())
 		screen.add_child(mb)
 		sx += 210
-	_lbl("Belt: %s" % (", ".join(Run.r.belt.map(func(k): return Data.CARDS[k].name)) if Run.r.belt.size() > 0 else "empty"), Vector2(40, 940), Vector2(900, 26), 16, UiStyle.font_it)
+	_lbl("Belt: %s" % (", ".join(Run.r.belt.map(func(k): return Data.CARDS[k].name)) if Run.r.belt.size() > 0 else "empty"), Vector2(100, 908), Vector2(900, 26), 16, UiStyle.font_it)
 	_toast(msg)
 	msg = ""
 
@@ -1341,6 +1476,11 @@ func show_end() -> void:
 		lines.append("[color=#8a7fb0]At the edge of the torn sky the Prismatic stops, and the six inks run up the skin and do not fuse. Something comes home that is not quite the one who left. The Vessel joins the order.[/color]")
 	lines += Run.r.get("home_lines", [])
 	lines += Run.r.log.slice(max(0, Run.r.log.size() - 6))
-	_rich("[center]" + "\n".join(lines) + "[/center]", Vector2(300, 200), Vector2(1000, 400), 19)
-	_btn("Return to the abbey", Vector2(640, 640), Vector2(320, 56), func(): Run.r = {}; main._show_menu())
+	var hs: Array = Run.r.heroes
+	var x := 800 - hs.size() * 110
+	for h in hs:
+		_oval(h, Vector2(x + 40, 190), 140)
+		x += 220
+	_rich("[center]" + "\n".join(lines) + "[/center]", Vector2(250, 400), Vector2(1100, 430), 19)
+	_go("Return to the abbey", Vector2(580, 852), Vector2(440, 70), func(): Run.r = {}; main._show_menu())
 

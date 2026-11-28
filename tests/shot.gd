@@ -9,6 +9,29 @@ func _initialize() -> void:
 	var m = load("res://scenes/main.tscn").instantiate()
 	root.add_child(m)
 	await process_frame
+	if mode == "garth" or mode == "guest":
+		# the Abbey with the company's current figures; GUEST leaves the third hero in the guesthouse
+		SaveIO.remove(Run.meta_path())
+		Run.meta_load()
+		if mode == "guest" and Run.meta.party.size() > 2:
+			Run.meta.party = Run.meta.party.slice(0, 2)
+			Run.meta_save()
+		m.hub.visible = true
+		if m.hub.title_ui:
+			m.hub.title_ui.queue_free()
+			m.hub.title_ui = null
+		m.hub._set_pan(0.0)
+		m.hub.hud.visible = true
+		if mode == "garth":
+			m.hub.show_garth()
+		else:
+			m.hub.show_room("guesthouse")
+		for k in 30:
+			await process_frame
+		root.get_texture().get_image().save_png(out)
+		print("saved ", out)
+		quit()
+		return
 	if mode == "hub":
 		# ROAD=n: the first n worlds on the road are cleared (in the test save folder, removed afterwards)
 		var n := int(OS.get_environment("ROAD")) if OS.get_environment("ROAD") != "" else 4
@@ -22,7 +45,7 @@ func _initialize() -> void:
 		await process_frame
 		await process_frame
 		SaveIO.remove(Run.meta_path())
-	elif mode == "map" or mode == "map2" or mode == "camp" or mode == "sub" or mode == "prepare" or mode == "victory" or mode == "spoils" or mode == "legend":
+	elif mode == "map" or mode == "map2" or mode == "camp" or mode == "sub" or mode == "prepare" or mode == "victory" or mode == "spoils" or mode == "legend" or mode == "scr":
 		m.hub.visible = false
 		m.run_ui.visible = true
 		m.run_ui.hub_world = OS.get_environment("WORLD") if OS.get_environment("WORLD") != "" else "drowned"
@@ -53,6 +76,36 @@ func _initialize() -> void:
 			m.run_ui.show_map()
 			for k in 4:
 				await process_frame
+		if mode == "scr":
+			# any run screen by name, with a little of everything to show
+			var ui = m.run_ui
+			Run.r.gold = 240
+			Run.r.runes = Run.C.runes.keys().slice(0, 2)
+			Run.r.heroes[1].injuries = [Run.C.injuries.keys()[0]]
+			Run.r.heroes[0].hp = int(Run.max_hp(Run.r.heroes[0]) * 0.6)
+			Run.r.heroes[2].stress = 45
+			var n: Dictionary = Run.node(Run.next_nodes()[0])
+			match OS.get_environment("SCR"):
+				"event": ui.show_event(n)
+				"resolve":
+					var e := Run.event_for(n)
+					ui._resolve_option(n, e.options[0])
+				"merchant": ui.show_merchant()
+				"removal": ui._pick_removal(50, ui.show_map)
+				"shrine": ui.show_shrine()
+				"fieldcamp": ui.show_field_camp()
+				"upgrade": ui._pick_upgrade(Run.r.heroes[0], ui.show_map)
+				"forge": ui.show_forge()
+				"relic", "gear", "rune", "talent", "remove":
+					var p := {"kind": OS.get_environment("SCR"), "hero": 0, "level": 5}
+					Run.r.pending.append(p)
+					ui.show_reward()
+				"end":
+					Run.r.outcome = "defeat"
+					Run.r.heroes[2].dead = true
+					ui.show_end()
+				"roster": ui.show_roster()
+				"map": ui.show_map()
 		if mode == "camp":
 			m.run_ui.show_waypoint()
 		if mode == "sub":

@@ -68,13 +68,14 @@ func show_garth() -> void:
 	var slots: Array = party.party.filter(func(p): return int(p.slot) < n)
 	slots.sort_custom(func(a, b): return a.z > b.z)
 	_layer(GARTH, "bg")
+	var company: Array = Abbey.party_heroes()
 	for p in slots:
 		if p.z > mz:
-			_garth_hero(p)
+			_garth_hero(p, company)
 	_layer(GARTH, "monument")
 	for p in slots:
 		if p.z <= mz:
-			_garth_hero(p)
+			_garth_hero(p, company)
 	_layer(GARTH, "fg")
 	var J: Dictionary = Lighting._json(GARTH + "garth_hotspots.json")
 	var hs: Dictionary = J.get("hotspots", {})
@@ -94,7 +95,11 @@ func show_garth() -> void:
 		spots.append({"id": k, "poly": _poly(h.poly), "label": h.label if not str(k).begins_with("company") else "The company", "outline": ol})
 	_hud()
 
-func _garth_hero(p: Dictionary) -> void:
+func _garth_hero(p: Dictionary, company: Array) -> void:
+	# the company as they look in a fight: each slot draws its hero's own figure, standing where the old painting stood
+	var slot := int(p.slot)
+	if slot < company.size() and _hero_figure(company[slot], Vector2(p.feet[0], p.feet[1] + 6), float(p.h), float(p.z)):
+		return
 	var s := Sprite2D.new()
 	s.centered = false
 	s.texture = Lighting.tex_at(GARTH + p.png)
@@ -123,8 +128,13 @@ func show_room(room: String) -> void:
 		if s.id == "keeper":
 			keeper = s
 		elif str(s.id).begins_with("hero_"):
-			if int(str(s.id).trim_prefix("hero_")) < guests.size():
-				_room_sprite(dir, s, -1)
+			var gi := int(str(s.id).trim_prefix("hero_"))
+			if gi < guests.size():
+				var old: Texture2D = Lighting.tex_at(dir + s.png)
+				var w: float = old.get_width() if old else 150.0
+				var hgt: float = old.get_height() if old else 300.0
+				if not _hero_figure(guests[gi], Vector2(s.pos[0] + w / 2.0, s.pos[1] + hgt), hgt, float(s.z)):
+					_room_sprite(dir, s, -1)
 		else:
 			_room_sprite(dir, s, -1)
 	_room_sprite(dir, keeper, -1)
@@ -162,6 +172,42 @@ func _room_sprite(dir: String, p: Dictionary, cut: int) -> void:
 		s.region_rect = Rect2(0, 0, s.texture.get_width(), max(0, cut - p.pos[1]))
 	Lighting.light_sprite(s, Lighting.tex_at(dir + p.png.replace(".png", "_n.png")), p.z, false)
 	world.add_child(s)
+
+## Draws a hero's Living Ink figure (their path's rig if they have one) with its feet at `feet`, `height` px tall,
+## rendered once into a texture and lit like the painted scene around it. False when the hero has no rig.
+func _hero_figure(h: Dictionary, feet: Vector2, height: float, z: float) -> bool:
+	var key: String = h.key
+	if String(h.get("subclass", "")) != "" and BoneRig.has_rig("%s__%s" % [h.key, h.subclass]):
+		key = "%s__%s" % [h.key, h.subclass]
+	if not BoneRig.has_rig(key):
+		return false
+	var j: Dictionary = Data._load_json(BoneRig.path_for(key))
+	var ink: Array = j.get("ink", [0, 0, j.canvas[0], j.canvas[1]])
+	var gy := float(j.ground)
+	var k: float = height / (gy - float(ink[1]) + 4.0)
+	# render the whole canvas (with a margin): a rig's recorded ink box can be tighter than its posed layers
+	var pad := 40.0
+	var cw := float(j.canvas[0]) + pad * 2.0
+	var ch := float(j.canvas[1]) + pad * 2.0
+	var vp := SubViewport.new()
+	vp.transparent_bg = true
+	vp.size = Vector2i(ceili(cw * k), ceili(ch * k))
+	vp.render_target_update_mode = SubViewport.UPDATE_ONCE
+	var bone := BoneRig.new()
+	bone.setup(key, Vector2(j.canvas[0], j.canvas[1]) * k)
+	bone.base_offset = Vector2(pad, pad) * k
+	if j.has("variants"):
+		bone.set_variant(Data.ELEMENTS[0])
+	vp.add_child(bone)
+	world.add_child(vp)
+	var s := Sprite2D.new()
+	s.centered = false
+	s.texture = vp.get_texture()
+	var cx := (float(ink[0]) + float(ink[2])) / 2.0
+	s.position = feet - Vector2((cx + pad) * k, (gy + pad) * k)
+	Lighting.light_sprite(s, null, z, false)
+	world.add_child(s)
+	return true
 
 # ================================================================== shared scene bits
 func _clear_scene() -> void:
