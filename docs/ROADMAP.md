@@ -51,6 +51,10 @@ Decisions still open are under "Open questions".
 ## 8. Final balance
 - [ ] A lighter tuning pass after animations, sound and tutorial, from fresh playtests (Cole, then Claude)
 
+## Later: art refresh (no phase yet)
+- [ ] An environment painting for every event in every world, so each event screen shows its own place instead of the world's shared room (Cole's call, 2026-11-28)
+- [ ] A larger Abbey refresh: the hero figures are now the current Living Ink rigs, the rest of the Abbey art is still the older set (Cole's call, 2026-11-28)
+
 ## 9. Release decision (later, once the game is finished)
 - [ ] Decide whether to sell it at all: market check (comparable games, wishlists or interest from a free playtest), price, effort to launch. Until then, playtests go through the public GitHub link (Cole and Claude)
 - [ ] Only if selling: business setup (individual or LLC, accountant check), then the Steam steps below
